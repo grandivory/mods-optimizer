@@ -1,0 +1,19 @@
+{
+  "name": "mods-manager",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.1.0"
+  },
+  "scripts": {
+    "start": "NODE_PATH=src,src/components react-scripts start",
+    "build": "NODE_PATH=src,src/components react-scripts build",
+    "test": "NODE_PATH=src,src/components react-scripts test --env=jsdom",
+    "eject": "NODE_PATH=src,src/components react-scripts eject"
+  },
+  "devDependencies": {
+    "webpack": "^3.10.0"
+  }
+}
