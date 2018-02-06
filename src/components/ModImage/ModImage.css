@@ -1,0 +1,18 @@
+.mod-image {
+  display: inline-block;
+  text-align: right;
+}
+
+.mod-image img {
+  width: 64px;
+  display: block;
+}
+
+.mod-level {
+  box-shadow: -2px 2px #796f3e, 2px 2px #796f3e, 0 0 0 2px #afa992;
+  background-color: black;
+  display: inline-block;
+  padding: 1px;
+  position: relative;
+  top: -5px;
+}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ModDetail from '../components/ModDetail/ModDetail.js';
+import ModDetail from '../components/ModDetail/ModDetail';
 import './App.css';
 
 class App extends Component {
@@ -11,15 +11,15 @@ class App extends Component {
   }
 
   render() {
-    console.log('foo');
-    console.log(this.state);
+    const modElements = this.state.mods.map((mod) => <ModDetail mod={mod} />);
+
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Matt's Mod Manager for SWGOH</h1>
         </header>
         <div>
-          <ModDetail mod={this.state.mods[0]} />
+          {modElements}
         </div>
       </div>
     );

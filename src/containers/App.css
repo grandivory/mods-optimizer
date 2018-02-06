@@ -1,3 +1,23 @@
+.gold {
+  color: #eeca44;
+}
+
+.purple {
+  color: #a35ef9;
+}
+
+.blue {
+  color: #2997f1;
+}
+
+.green {
+  color: #8fff3a;
+}
+
+.gray {
+  color: #ccfffe;
+}
+
 .App {
   text-align: center;
 }
