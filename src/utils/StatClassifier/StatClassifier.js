@@ -13,13 +13,17 @@ class StatClassifier {
    * @param type string
    * @returns {string}
    */
-  getStatClass(value, type) {
+  classify(value, type) {
+    if ('' === value) {
+      return '';
+    }
+
     const statRange = this.statRanges[type];
     const step = (statRange.max - statRange.min)/this.classes.length;
     const statValue = +value.replace(/[+%]/g, '');
 
     const classIndex = Math.floor((statValue - statRange.min)/step);
-    return this.classes[classIndex];
+    return statValue === statRange.max ? this.classes[this.classes.length - 1] : this.classes[classIndex];
   }
 }
 

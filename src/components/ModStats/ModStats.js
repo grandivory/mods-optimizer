@@ -4,16 +4,15 @@ import './ModStats.css';
 class ModStats extends React.Component {
   render() {
     const mod = this.props.mod;
-    const classifier = this.props.classifier;
     const secondaryStats = [
-      {'value': mod.secondaryValue_1, 'type': mod.secondaryType_1},
-      {'value': mod.secondaryValue_2, 'type': mod.secondaryType_2},
-      {'value': mod.secondaryValue_3, 'type': mod.secondaryType_3},
-      {'value': mod.secondaryValue_4, 'type': mod.secondaryType_4},
+      {'value': mod.secondaryValue_1, 'type': mod.secondaryType_1, 'class': mod.secondaryClass_1},
+      {'value': mod.secondaryValue_2, 'type': mod.secondaryType_2, 'class': mod.secondaryClass_2},
+      {'value': mod.secondaryValue_3, 'type': mod.secondaryType_3, 'class': mod.secondaryClass_3},
+      {'value': mod.secondaryValue_4, 'type': mod.secondaryType_4, 'class': mod.secondaryClass_4},
     ];
     const statsDisplay = '' !== secondaryStats[0].value ?
       secondaryStats.map(
-        (stat, index) => ModStats.showStatElement(stat, classifier, index)
+        (stat, index) => ModStats.showStatElement(stat, index)
       ) : [<li key={0}>None</li>, <li key={1}></li>, <li key={2}></li>, <li key={3}></li>];
 
     return (
@@ -37,14 +36,12 @@ class ModStats extends React.Component {
    * @param classifier The stat classifier used to determine the class of a stat
    */
   static showStatElement(stat, classifier, index) {
-    if ('' === stat.value) {
-      return <li key={index}></li>;
-    }
-
     const displayStat = this.processStatValue(stat.value, stat.type);
-    const statClass = classifier.getStatClass(stat.value, stat.type);
 
-    return <li key={index}>{displayStat.value}{displayStat.modifier} {displayStat.category} <span className={'class class-' + statClass}>{statClass}</span></li>;
+    return <li key={index} className={'class-' + stat.class}>
+      {displayStat.value}{displayStat.modifier} {displayStat.category}
+      <span className={'class class-' + stat.class}>{stat.class}</span>
+    </li>;
   }
 
   /**
@@ -56,7 +53,7 @@ class ModStats extends React.Component {
    */
   static processStatValue(statValue, statType) {
     const numericValue = statValue.endsWith('%') ? statValue.substr(0, statValue.length - 1) : statValue;
-    const category = statType.endsWith('%') ? statType.substr(0, statType.length - 1) : statType;
+    const category = statType.endsWith('%') ? statType.substr(0, statType.length - 1).trim() : statType;
     const modifier = statValue.endsWith('%') || statType.endsWith('%') ? '%' : '';
 
     return {

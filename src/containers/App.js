@@ -13781,6 +13781,14 @@ class App extends Component {
     };
 
     this.statClassifier = new StatClassifier(this.calculateStatCategoryRanges(this.state.mods));
+    for (let i = 0; i < this.state.mods.length; i++) {
+      let mod = this.state.mods[i];
+
+      mod.secondaryClass_1 = this.statClassifier.classify(mod.secondaryValue_1, mod.secondaryType_1);
+      mod.secondaryClass_2 = this.statClassifier.classify(mod.secondaryValue_2, mod.secondaryType_2);
+      mod.secondaryClass_3 = this.statClassifier.classify(mod.secondaryValue_3, mod.secondaryType_3);
+      mod.secondaryClass_4 = this.statClassifier.classify(mod.secondaryValue_4, mod.secondaryType_4);
+    }
   }
 
   calculateStatCategoryRanges(mods) {

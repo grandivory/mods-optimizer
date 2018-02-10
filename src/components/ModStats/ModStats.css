@@ -23,3 +23,29 @@
 .mod-stats ul li {
   height: 1em;
 }
+
+.mod-stats .class {
+  display: inline-block;
+  float: right;
+  height: 1em;
+}
+
+.mod-stats .class-S {
+  color: #eeca44;
+}
+
+.mod-stats .class-A {
+  color: #a35ef9;
+}
+
+.mod-stats .class-B {
+  color: #2997f1;
+}
+
+.mod-stats .class-C {
+  color: #8fff3a;
+}
+
+.mod-stats .class-D {
+  color: #ccfffe;
+}
