@@ -5,7 +5,8 @@
   background-color: black;
   border-radius: 2px;
   text-align: left;
-  box-shadow: -2px 2px #afa992, -2px -2px #796f3e, 0 0 0 2px #2f2a13;
+  border-style: solid;
+  border-image: linear-gradient(20deg,#afa992 10%, #796f3e 70%, #2f2a13) 1 / 1px;
 }
 
 .pip {

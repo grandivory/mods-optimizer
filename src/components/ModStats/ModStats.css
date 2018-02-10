@@ -1,0 +1,25 @@
+.mod-stats {
+  text-align: left;
+  margin: 0 1em;
+  width: 13em;
+}
+
+.mod-stats h4 {
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.mod-stats ul {
+  list-style: none;
+  padding-left: 1em;
+  margin: 0 0 .5em 0;
+  font-weight: lighter;
+}
+
+.mod-stats ul.secondary {
+  color: #c5f5f5;
+}
+
+.mod-stats ul li {
+  height: 1em;
+}

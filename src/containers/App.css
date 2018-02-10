@@ -19,7 +19,7 @@
 }
 
 .App {
-  text-align: center;
+  text-align: left;
 }
 
 .App-logo {
@@ -32,6 +32,14 @@
   height: 150px;
   padding: 20px;
   color: white;
+}
+
+.app-body {
+  background-color: black;
+  background-image: url('/space.jpg');
+  background-position: center center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 .App-title {

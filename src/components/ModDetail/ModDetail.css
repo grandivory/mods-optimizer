@@ -1,0 +1,18 @@
+.mod-detail {
+  display: inline-block;
+  border: 1px solid dodgerblue;
+  background-color: rgba(0, 0, 64, .9);
+  color: white;
+  text-shadow: 2px 2px 1px black;
+  margin: .5em;
+  padding: 1em;
+}
+
+.mod-detail .mod-image {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.mod-detail .mod-stats {
+  display: inline-block;
+}
