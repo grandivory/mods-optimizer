@@ -1,0 +1,5 @@
+.avatar img {
+  max-width: 100%;
+  border-radius: 50%;
+  border: 1px solid #eeca44;
+}

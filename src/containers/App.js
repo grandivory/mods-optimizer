@@ -13898,7 +13898,9 @@ class App extends Component {
           <h1 className="App-title">Matt's Mod Manager for SWGOH</h1>
         </header>
         <div className='app-body'>
-          {modElements}
+          <div className='mods'>
+            {modElements}
+          </div>
         </div>
       </div>
     );

@@ -20,6 +20,7 @@
 
 .App {
   text-align: left;
+  height: 100%;
 }
 
 .App-logo {
@@ -35,11 +36,9 @@
 }
 
 .app-body {
-  background-color: black;
-  background-image: url('/space.jpg');
-  background-position: center center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  background: black url('/cantina-background.jpg') no-repeat fixed;
+  background-size: cover;
+  height: 100%;
 }
 
 .App-title {
