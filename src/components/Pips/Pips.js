@@ -8,7 +8,7 @@ class Pips extends React.Component {
 
 
     return (
-      <div className='pips'>
+      <div className='pips inset'>
         {pipElements}
       </div>
     );

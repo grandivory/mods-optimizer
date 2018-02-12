@@ -18,9 +18,47 @@
   color: #ccfffe;
 }
 
+.inset {
+  z-index: 100;
+  position: relative;
+}
+
+.inset::after {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: black;
+  border-radius: 2px;
+  z-index: -1;
+}
+
+.inset::before {
+  position: absolute;
+  content: '';
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background-image: linear-gradient(30deg,#afa992 10%, /*#796f3e 30%, #2f2a13 50%, */black 70%);
+  border-radius: 2px;
+  z-index:-2;
+}
+
+html, body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
 .App {
   text-align: left;
   height: 100%;
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .App-logo {
@@ -30,15 +68,16 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
   padding: 20px;
   color: white;
+  height: 100px;
+  box-sizing: border-box;
 }
 
 .app-body {
-  background: black url('/cantina-background.jpg') no-repeat fixed;
+  background: black url('/img/cantina-background.jpg') no-repeat fixed;
   background-size: cover;
-  height: 100%;
+  height: calc(100% - 100px);
 }
 
 .App-title {

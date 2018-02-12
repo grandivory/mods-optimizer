@@ -1,6 +1,6 @@
 .mod-detail {
   display: inline-grid;
-  grid-template-columns: 64px 1fr;
+  grid-template-columns: 85px 1fr;
   grid-template-rows: 1fr 40px;
   grid-gap: 1em;
   align-items: start;
@@ -10,7 +10,7 @@
   text-shadow: 2px 2px 1px black;
   margin: 1em;
   padding: 1em;
-  width: 290px;
+  width: 310px;
 }
 
 .mod-detail .mod-image {

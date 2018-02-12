@@ -2,11 +2,7 @@
   font-size: 0;
   padding: 1px;
   margin: 5px;
-  background-color: black;
-  border-radius: 2px;
   text-align: left;
-  border-style: solid;
-  border-image: linear-gradient(20deg,#afa992 10%, #796f3e 70%, #2f2a13) 1 / 1px;
 }
 
 .pip {
