@@ -7,13 +7,12 @@ import './ModDetail.css';
 class ModDetail extends React.Component {
   render() {
     const mod = this.props.mod;
-    const classifier = this.props.classifier;
 
     return (
       <div className='mod-detail'>
         <ModImage mod={mod}/>
-        <CharacterAvatar name={mod.characterName}/>
-        <ModStats mod={mod} classifier={classifier}/>
+        <CharacterAvatar name={mod.currentCharacter}/>
+        <ModStats mod={mod} />
       </div>
     );
   }

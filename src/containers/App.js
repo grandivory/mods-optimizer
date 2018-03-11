@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import ModDetail from '../components/ModDetail/ModDetail';
 import StatClassifier from '../utils/StatClassifier';
-import Stat from '../utils/Stat';
+import Stat from '../components/domain/Stat';
 import './boilerplate.css';
 import './App.css';
+import Mod from "../components/domain/Mod";
 
 class App extends Component {
   constructor(props) {
@@ -133,47 +134,38 @@ class App extends Component {
     let mods = [];
 
     for (let i = 0; i < fileInput.length; i++) {
-      let mod = fileInput[i];
+      const fileMod = fileInput[i];
+      const primaryStat = new Stat(fileMod.primaryBonusType, fileMod.primaryBonusValue);
+      let secondaryStats = [];
 
-      mod.id = mod.mod_uid;
-      delete mod.mod_uid;
+      if ('' !== fileMod.secondaryValue_1) {
+        secondaryStats.push(new Stat(fileMod.secondaryType_1, fileMod.secondaryValue_1));
+      }
+      if ('' !== fileMod.secondaryValue_2) {
+        secondaryStats.push(new Stat(fileMod.secondaryType_2, fileMod.secondaryValue_2));
+      }
+      if ('' !== fileMod.secondaryValue_3) {
+        secondaryStats.push(new Stat(fileMod.secondaryType_3, fileMod.secondaryValue_3));
+      }
+      if ('' !== fileMod.secondaryValue_4) {
+        secondaryStats.push(new Stat(fileMod.secondaryType_4, fileMod.secondaryValue_4));
+      }
 
-      mod.primaryStat = new Stat(mod.primaryBonusType, mod.primaryBonusValue);
-      delete mod.primaryBonusType
-      delete mod.primaryBonusValue;
-
-      mod.secondaryStats = [];
-      if ('' !== mod.secondaryValue_1) {
-        mod.secondaryStats.push(new Stat(mod.secondaryType_1, mod.secondaryValue_1));
-      }
-      if ('' !== mod.secondaryValue_2) {
-        mod.secondaryStats.push(new Stat(mod.secondaryType_2, mod.secondaryValue_2));
-      }
-      if ('' !== mod.secondaryValue_3) {
-        mod.secondaryStats.push(new Stat(mod.secondaryType_3, mod.secondaryValue_3));
-      }
-      if ('' !== mod.secondaryValue_4) {
-        mod.secondaryStats.push(new Stat(mod.secondaryType_4, mod.secondaryValue_4));
-      }
-      delete mod.secondaryType_1;
-      delete mod.secondaryValue_1;
-      delete mod.secondaryType_2;
-      delete mod.secondaryValue_2;
-      delete mod.secondaryType_3;
-      delete mod.secondaryValue_3;
-      delete mod.secondaryType_4;
-      delete mod.secondaryValue_4;
-
-      mods.push(mod);
+      mods.push(new Mod(
+        fileMod.id,
+        fileMod.slot,
+        fileMod.set,
+        fileMod.level,
+        fileMod.pips,
+        primaryStat,
+        secondaryStats,
+        fileMod.characterName
+      ));
     }
 
     const statClassifier = new StatClassifier(App.calculateStatCategoryRanges(mods));
     for (let i = 0; i < mods.length; i++) {
-      let mod = mods[i];
-      for (let j = 0; j < mod.secondaryStats.length; j++) {
-        let stat = mod.secondaryStats[j];
-        stat.setClass(statClassifier.classify(stat));
-      }
+      mods[i].classifyStats(statClassifier);
     }
 
     return mods;
@@ -227,7 +219,7 @@ class App extends Component {
 
   render() {
     const modElements = this.state.mods.map(
-      (mod) => <ModDetail key={mod.id} mod={mod} classifier={this.statClassifier}/>
+      (mod) => <ModDetail key={mod.id} mod={mod}/>
     );
 
     return (
