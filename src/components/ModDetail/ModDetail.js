@@ -11,7 +11,7 @@ class ModDetail extends React.Component {
     return (
       <div className='mod-detail'>
         <ModImage mod={mod}/>
-        <CharacterAvatar name={mod.currentCharacter}/>
+        <CharacterAvatar name={mod.currentCharacter.name}/>
         <ModStats mod={mod} />
       </div>
     );

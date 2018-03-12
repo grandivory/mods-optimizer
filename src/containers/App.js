@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import ModDetail from '../components/ModDetail/ModDetail';
 import StatClassifier from '../utils/StatClassifier';
-import Stat from '../components/domain/Stat';
+import Stat from '../domain/Stat';
 import './boilerplate.css';
 import './App.css';
-import Mod from "../components/domain/Mod";
+import Mod from "../domain/Mod";
+import characters from "../constants/characters";
 
 class App extends Component {
   constructor(props) {
@@ -159,7 +160,7 @@ class App extends Component {
         fileMod.pips,
         primaryStat,
         secondaryStats,
-        fileMod.characterName
+        characters[fileMod.characterName]
       ));
     }
 
