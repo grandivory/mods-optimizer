@@ -4,6 +4,7 @@ class Stat {
     this.type = type;
     this.displayType = type.endsWith('%') ? type.substr(0, type.length - 1).trim() : type;
     this.value = +value.replace(/[+%]/g, '');
+    this.isPercent = '%' === this.displayModifier && Stat.percentTypes.includes(this.displayType);
   }
 
   /**
@@ -15,5 +16,7 @@ class Stat {
     this.class = clazz;
   }
 }
+
+Stat.percentTypes = ['Health', 'Protection', 'Offense', 'Speed', 'Defense'];
 
 export default Stat;

@@ -29,7 +29,7 @@ class ModImage extends React.Component {
 
   // TODO: Update mod images to include mod color as well
   modImageName(mod) {
-    return mod.set + '_' + mod.slot;
+    return mod.set.name + '_' + mod.slot;
   }
 
   modColor(mod) {

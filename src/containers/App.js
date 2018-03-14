@@ -6,6 +6,9 @@ import './boilerplate.css';
 import './App.css';
 import Mod from "../domain/Mod";
 import characters from "../constants/characters";
+import modSets from "../constants/sets"
+import OptimizationPlan from "../domain/OptimizationPlan";
+import Optimizer from "../utils/Optimizer";
 
 class App extends Component {
   constructor(props) {
@@ -123,6 +126,21 @@ class App extends Component {
     };
 
     this.state.mods = App.readMods(fileContents.mods);
+    new Optimizer(this.state.mods).findBestModSetForCharacter(
+      this.state.mods,
+      characters['Darth Vader'],
+      new OptimizationPlan(
+        0,
+        0,
+        10,
+        5,
+        2,
+        0,
+        2,
+        2,
+        0
+      )
+    )
   }
 
   /**
@@ -153,9 +171,9 @@ class App extends Component {
       }
 
       mods.push(new Mod(
-        fileMod.id,
+        fileMod.mod_uid,
         fileMod.slot,
-        fileMod.set,
+        modSets[fileMod.set],
         fileMod.level,
         fileMod.pips,
         primaryStat,

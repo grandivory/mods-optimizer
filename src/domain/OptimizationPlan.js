@@ -11,7 +11,8 @@ class OptimizationPlan {
               tenacity,
               offense,
               critChance,
-              defense
+              defense,
+              accuracy
   ) {
     this.health = health;
     this.protection = protection;
@@ -22,6 +23,7 @@ class OptimizationPlan {
     this.offense = offense;
     this.critChance = critChance;
     this.defense = defense;
+    this.accuracy = accuracy;
   }
 }
 

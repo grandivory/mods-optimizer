@@ -2,10 +2,11 @@ import Character from "../domain/Character";
 import BaseStats from "../domain/BaseStats";
 
 let charactersArray = [
-  new Character('Aayla Secura', new BaseStats(125, 2756, 41, 26236, (291+116)/2, 41, 28731)),
-  new Character('Admiral Ackbar', new BaseStats(119, 2642, 36, 26856, (301+222)/2, 40, 19200)),
-  new Character('Colonel Starck', new BaseStats(155, 2264, 40, 28193, (291+133)/2, 25, 33480)),
-  new Character('Royal Guard', new BaseStats(110, 2608, 44, 32248, (371+313)/2, 39, 38614))
+  new Character('Aayla Secura', new BaseStats(26236, 28731, 2756, 125, (291+116)/2)),
+  new Character('Admiral Ackbar', new BaseStats(26856, 19200, 2642, 119, (301+222)/2)),
+  new Character('Colonel Starck', new BaseStats(28193, 33480, 2264, 155, (291+133)/2)),
+  new Character('Royal Guard', new BaseStats(32248, 38614, 2608, 110, (371+313)/2)),
+  new Character('Darth Vader', new BaseStats(26646, 35283, 2514, 121, (371+334)/2))
 ];
 
 const characters = {};

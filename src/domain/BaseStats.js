@@ -6,24 +6,21 @@ class BaseStats {
   /**
    * Constructor for the BaseStats class
    *
-   * @param speed The base speed of the character
+   * @param health The base health pool of the character
+   * @param protection The base protection of the character
    * @param offense The value to use as the base "offense" of the character. This should be a combination of physical
    *    damage and special damage modified by how the character's abilities are spread among the two
+   * @param speed The base speed of the character
    * @param potency The base potency of the character
-   * @param health The base health pool of the character
    * @param defense The value to use as the base "defense" of the character. This should be a combination of armor and
    *     resistance
-   * @param tenacity The base tenacity of the character
-   * @param protection The base protection of the character
    */
-  constructor(speed, offense, potency, health, defense, tenacity, protection) {
-    this.speed = speed;
-    this.offense = offense;
-    this.potency = potency;
+  constructor(health, protection, offense, speed, defense) {
     this.health = health;
-    this.defense = defense;
-    this.tenacity = tenacity;
     this.protection = protection;
+    this.offense = offense;
+    this.speed = speed;
+    this.defense = defense
   }
 }
 
