@@ -1,4 +1,5 @@
 import ModSet from "../domain/ModSet";
+import Stat from "../domain/Stat";
 
 let setsArray = [
   new ModSet('health', 2, new Stat('Health', '5%')),
