@@ -18,4 +18,6 @@ for (let i = 0; i < setsArray.length; i++) {
   modSets[setsArray[i].name] = setsArray[i];
 }
 
+Object.freeze(modSets);
+
 export default modSets;

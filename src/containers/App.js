@@ -130,15 +130,16 @@ class App extends Component {
       this.state.mods,
       characters['Darth Vader'],
       new OptimizationPlan(
-        0,
-        0,
-        10,
-        5,
-        2,
-        0,
-        2,
-        2,
-        0
+        0, // health
+        0, // protection
+        100, // speed
+        30, // crit damage
+        100, // potency
+        0, // tenacity
+        2, // offense
+        65, // crit chance
+        0, // defense
+        0 // accuracy
       )
     )
   }

@@ -15,4 +15,6 @@ for (let i = 0; i < charactersArray.length; i++) {
   characters[charactersArray[i].name] = charactersArray[i];
 }
 
+Object.freeze(characters);
+
 export default characters;
