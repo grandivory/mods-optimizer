@@ -11,8 +11,8 @@ let charactersArray = [
 
 const characters = {};
 
-for (let i = 0; i < charactersArray.length; i++) {
-  characters[charactersArray[i].name] = charactersArray[i];
+for (let character of charactersArray) {
+  characters[character.name] = character;
 }
 
 Object.freeze(characters);

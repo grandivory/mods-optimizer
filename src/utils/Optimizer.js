@@ -23,8 +23,8 @@ class Optimizer {
     let candidateSets = [];
 
     // Go through all mods and assign a value to them based on the optimization plan
-    for (let i = 0; i < mods.length; i++) {
-      modValues.set(mods[i], this.scoreMod(mods[i], optimizationPlan, character.baseStats));
+    for (let mod of mods) {
+      modValues.set(mod, this.scoreMod(mod, optimizationPlan, character.baseStats));
     }
 
     // Sort all the mods by score, then break them into sets
@@ -59,8 +59,8 @@ class Optimizer {
     // Go through each set bonus with a positive value, and find the best mod sub-sets (all possible pairs or quads)
     // Make each possible set of 6 from the sub-sets found above, including filling in with the "base" set
     // Choose the set with the highest value
-    for (let i = 0; i < candidateSets.length; i++) {
-      candidateValues.set(candidateSets[i], this.valueOfSet(candidateSets[i], modValues));
+    for (let candidateSet of candidateSets) {
+      candidateValues.set(candidateSet, this.valueOfSet(candidateSet, modValues));
     }
     candidateSets.sort((left, right) => candidateSets.get(right) - candidateSets.get(left));
 

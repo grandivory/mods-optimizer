@@ -153,8 +153,7 @@ class App extends Component {
   static readMods(fileInput) {
     let mods = [];
 
-    for (let i = 0; i < fileInput.length; i++) {
-      const fileMod = fileInput[i];
+    for (let fileMod of fileInput) {
       const primaryStat = new Stat(fileMod.primaryBonusType, fileMod.primaryBonusValue);
       let secondaryStats = [];
 
@@ -184,8 +183,8 @@ class App extends Component {
     }
 
     const statClassifier = new StatClassifier(App.calculateStatCategoryRanges(mods));
-    for (let i = 0; i < mods.length; i++) {
-      mods[i].classifyStats(statClassifier);
+    for (let mod of mods) {
+      mod.classifyStats(statClassifier);
     }
 
     return mods;
@@ -203,14 +202,12 @@ class App extends Component {
     let statRanges = {};
 
     // Collect all stat values on all mods
-    for (let i = 0; i < mods.length; i++) {
-      allStats = allStats.concat(mods[i].secondaryStats);
+    for (let mod of mods) {
+      allStats = allStats.concat(mod.secondaryStats);
     }
 
     // Group the stat values by the stat type
-    for (let i = 0; i < allStats.length; i++) {
-      let stat = allStats[i];
-
+    for (let stat of allStats) {
       if ('undefined' !== typeof statGroups[stat.type]) {
         statGroups[stat.type].push(stat.value);
       } else {

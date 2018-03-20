@@ -14,8 +14,8 @@ let setsArray = [
 
 const modSets = {};
 
-for (let i = 0; i < setsArray.length; i++) {
-  modSets[setsArray[i].name] = setsArray[i];
+for (let set of setsArray) {
+  modSets[set.name] = set;
 }
 
 Object.freeze(modSets);
