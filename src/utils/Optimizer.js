@@ -5,6 +5,29 @@ import firstOrNull from "./firstOrNull";
 class Optimizer {
   constructor(mods) {
     this.mods = mods;
+
+    // This will be used later. It's calculated here in the constructor so that it only needs to be calculated once
+    let slotOptions = [SQUARE, ARROW, DIAMOND, TRIANGLE, CIRCLE, CROSS];
+    let fourSlotOptions = this.chooseFromArray(slotOptions, 4);
+
+    this.chooseFourOptions = [];
+    for (let usedSlots of fourSlotOptions) {
+      this.chooseFourOptions.push([usedSlots, slotOptions.filter(slot => !usedSlots.includes(slot))]);
+    }
+
+    let twoSlotOptions = this.chooseFromArray(slotOptions, 2);
+    this.chooseTwoOptions = [];
+    for (let firstSetSlots of twoSlotOptions) {
+      let remainingSlots = slotOptions.filter(slot => !firstSetSlots.includes(slot));
+      let secondSetOptions = this.chooseFromArray(remainingSlots, 2);
+      for (let secondSetSlots of secondSetOptions) {
+        this.chooseTwoOptions.push([
+          firstSetSlots,
+          secondSetSlots,
+          remainingSlots.filter(slot => !secondSetSlots.includes(slot))
+        ]);
+      }
+    }
   }
 
   /**
@@ -15,12 +38,15 @@ class Optimizer {
    * @param character A Character object that represents all of the base stats required for percentage calculations
    * @param optimizationPlan An OptimizationPlan object that gives values to all stats.
    */
-  findBestModSetForCharacter(mods, character, optimizationPlan){
+  findBestModSetForCharacter(mods, character, optimizationPlan) {
+    let squares, arrows, diamonds, triangles, circles, crosses;
     let modValues = new WeakMap();
     let setValues = new WeakMap();
-    let candidateValues = new WeakMap();
-    let squares, arrows, diamonds, triangles, circles, crosses;
+    let potentialUsedSets = [];
+    let baseSets = new WeakMap();
+    let setlessMods = {};
     let candidateSets = [];
+    let candidateValues = new WeakMap();
 
     // Go through all mods and assign a value to them based on the optimization plan
     for (let mod of mods) {
@@ -39,34 +65,55 @@ class Optimizer {
     // Assign a value to each set bonus based on the optimization plan
     for (let setName in modSets) {
       if (modSets.hasOwnProperty(setName)) {
+        let modSet = modSets[setName];
         setValues.set(
-          modSets[setName],
-          this.valueOfStat(modSets[setName].bonus, optimizationPlan, character.baseStats)
+          modSet,
+          this.valueOfStat(modSet.bonus, optimizationPlan, character.baseStats)
         );
+
+        if (setValues.get(modSet) > 0) {
+          potentialUsedSets.push(modSet);
+        }
       }
     }
 
     // Start with the highest-value mod in each slot
-    candidateSets.push({
-      SQUARE: firstOrNull(squares),
-      ARROW: firstOrNull(arrows),
-      DIAMOND: firstOrNull(diamonds),
-      TRIANGLE: firstOrNull(triangles),
-      CIRCLE: firstOrNull(circles),
-      CROSS: firstOrNull(crosses)
-    });
+    setlessMods = {
+      [SQUARE]: firstOrNull(squares),
+      [ARROW]: firstOrNull(arrows),
+      [DIAMOND]: firstOrNull(diamonds),
+      [TRIANGLE]: firstOrNull(triangles),
+      [CIRCLE]: firstOrNull(circles),
+      [CROSS]: firstOrNull(crosses)
+    };
 
     // Go through each set bonus with a positive value, and find the best mod sub-sets (all possible pairs or quads)
-    // Make each possible set of 6 from the sub-sets found above, including filling in with the "base" set
+    for (let modSet of potentialUsedSets) {
+      if ((setValues.get(modSet) || 0) > 0) {
+        baseSets.set(modSet, {
+          [SQUARE]: firstOrNull(squares.filter(mod => modSet === mod.set)),
+          [ARROW]: firstOrNull(arrows.filter(mod => modSet === mod.set)),
+          [DIAMOND]: firstOrNull(diamonds.filter(mod => modSet === mod.set)),
+          [TRIANGLE]: firstOrNull(triangles.filter(mod => modSet === mod.set)),
+          [CIRCLE]: firstOrNull(circles.filter(mod => modSet === mod.set)),
+          [CROSS]: firstOrNull(crosses.filter(mod => modSet === mod.set))
+        });
+      }
+    }
+
+    // Make each possible set of 6 from the sub-sets found above, including filling in with the "base" set formed
+    // without taking sets into account
+    candidateSets = this.getCandidateSets(potentialUsedSets, baseSets, setlessMods);
+    candidateSets.push(setlessMods);
+
     // Choose the set with the highest value
     for (let candidateSet of candidateSets) {
-      candidateValues.set(candidateSet, this.valueOfSet(candidateSet, modValues));
+      candidateValues.set(candidateSet, this.valueOfSet(candidateSet, modValues, setValues));
     }
-    candidateSets.sort((left, right) => candidateSets.get(right) - candidateSets.get(left));
+    candidateSets.sort((left, right) => candidateValues.get(right) - candidateValues.get(left));
 
-    console.log(candidateSets);
-    console.log(modValues);
-    console.log(candidateValues.get(candidateSets[0]));
+    console.log(candidateSets[0]);
+    return candidateSets[0];
   }
 
   /**
@@ -82,7 +129,7 @@ class Optimizer {
     score += this.valueOfStat(mod.primaryStat, optimizationPlan, baseStats);
     score += mod.secondaryStats.map(
       stat => this.valueOfStat(stat, optimizationPlan, baseStats)
-    ).reduce((a, b) => a + b);
+    ).reduce((a, b) => a + b, 0);
 
     return score;
   }
@@ -108,16 +155,174 @@ class Optimizer {
    *
    * @param set Object an object containing mods under each of the keys in sets.js
    * @param modValues WeakMap A Weakmap containing the scores for each mod
+   * @param setValues WeakMap A Weakmap containing the scores for each set type
    */
-  valueOfSet(set, modValues) {
-    return (modValues.get(set.SQUARE) || 0) +
-      (modValues.get(set.ARROW) || 0) +
-      (modValues.get(set.DIAMOND) || 0) +
-      (modValues.get(set.TRIANGLE) || 0) +
-      (modValues.get(set.CIRCLE) || 0) +
-      (modValues.get(set.CROSS) || 0);
+  valueOfSet(set, modValues, setValues) {
+    let setCounts = new WeakMap();
+    let setsValue = 0;
+
+    // Figure out how many mods of each set are in this set
+    for (let slot of [SQUARE, ARROW, DIAMOND, TRIANGLE, CIRCLE, CROSS]) {
+      let modSet = set[slot] ? set[slot].set : null;
+      let currentCount = setCounts.get(modSet) || 0;
+      if (modSet) {
+        setCounts.set(modSet, currentCount + 1);
+      }
+    }
+
+    // Calculate the added value that the sets themselves bring
+    for (let setKey in modSets) {
+      let modSet = modSets[setKey];
+      setsValue += Math.floor((setCounts.get(modSet) || 0) / modSet.numberOfModsRequired) *
+        (setValues.get(modSet) || 0);
+    }
+
+    // Add in the value of the raw mods
+    return (modValues.get(set[SQUARE]) || 0) +
+      (modValues.get(set[ARROW]) || 0) +
+      (modValues.get(set[DIAMOND]) || 0) +
+      (modValues.get(set[TRIANGLE]) || 0) +
+      (modValues.get(set[CIRCLE]) || 0) +
+      (modValues.get(set[CROSS]) || 0) +
+      setsValue;
   }
 
+  /**
+   * Find all the potential combinations of mods to consider by taking into account mod sets and keeping set bonuses
+   *
+   * @param potentialUsedSets Array[ModSet] The ModSets that have sets provided for use
+   * @param baseSets WeakMap(ModSet -> {}) The best mods available for each ModSet in potentialUsedSets
+   * @param setlessMods {} The best raw mod for each slot, regardless of set
+   */
+  getCandidateSets(potentialUsedSets, baseSets, setlessMods) {
+    /**
+     * Possible sets:
+     *
+     * base set (already added)
+     *
+     * 4-mod sets
+     * Set(4) + base set
+     * Set(4) + Set(2)
+     *
+     * 2-mod sets
+     * Set(2) + base set
+     * Set(2 * 2) + base set
+     * Set(2 * 3)
+     * Set(2) + Set(2) + base set
+     * Set(2 * 2) + Set(2)
+     * Set(2) + Set(2) + Set(2)
+     */
+    let fourModSets = potentialUsedSets.filter(modSet => 4 === modSet.numberOfModsRequired);
+    let twoModSets = potentialUsedSets.filter(modSet => 2 === modSet.numberOfModsRequired);
+    let candidateSets = [];
+
+    for (let firstSetType of fourModSets) {
+      let firstSet = baseSets.get(firstSetType);
+
+      // the whole set plus setless mods
+      candidateSets = candidateSets.concat(this.combineSets(firstSet, setlessMods));
+
+      // the whole set plus any 2-mod set
+      for (let secondSetType of twoModSets) {
+        let secondSet = baseSets.get(secondSetType);
+        candidateSets = candidateSets.concat(this.combineSets(firstSet, secondSet));
+      }
+    }
+
+    for (let i = 0; i < twoModSets.length; i++) {
+      let firstSet = baseSets.get(twoModSets[i]);
+
+      // the whole set plus setless mods
+      candidateSets = candidateSets.concat(this.combineSets(setlessMods, firstSet));
+
+      // the whole set plus a set of 4 from any 2-mod sets and the base set
+      for (let j = i; j < twoModSets.length; j++) {
+        let secondSet = baseSets.get(twoModSets[j]);
+
+        // the first set plus the second set plus setless mods
+        candidateSets = candidateSets.concat(this.combineSets(setlessMods, firstSet, secondSet));
+
+        // the first set plus the second set plus another set
+        for (let k = j; k < twoModSets.length; k++) {
+          let thirdSet = baseSets.get(twoModSets[k]);
+
+          candidateSets = candidateSets.concat(this.combineSets(firstSet, secondSet, thirdSet));
+        }
+      }
+    }
+
+    return candidateSets;
+  }
+
+  /**
+   * Given 2 or 3 sets of mods, find all possible combinations of those mods that maintain set bonuses. In order to do
+   * this simply, the first set given is assumed to require 4 mods if only 2 sets are given, and 2 mods if 3 are given.
+   * All other sets are assumed to require 2 mods.
+   *
+   * @param firstSet
+   * @param secondSet
+   * @param [thirdSet]
+   */
+  combineSets(firstSet, secondSet, thirdSet) {
+    let combinations = [];
+
+    if ('undefined' === typeof thirdSet) {
+      for (let [firstSetSlots, secondSetSlots] of this.chooseFourOptions) {
+        let set = {};
+        for (let slot of firstSetSlots) {
+          set[slot] = firstSet[slot];
+        }
+
+        for (let slot of secondSetSlots) {
+          set[slot] = secondSet[slot];
+        }
+
+        combinations.push(set);
+      }
+    } else {
+      for (let [firstSetSlots, secondSetSlots, thirdSetSlots] of this.chooseTwoOptions) {
+        let set = {};
+        for (let slot of firstSetSlots) {
+          set[slot] = firstSet[slot];
+        }
+
+        for (let slot of secondSetSlots) {
+          set[slot] = secondSet[slot];
+        }
+
+        for (let slot of thirdSetSlots) {
+          set[slot] = thirdSet[slot];
+        }
+
+        combinations.push(set);
+      }
+    }
+
+    return combinations;
+  }
+
+  /**
+   * Return all possible combinations of choices items from the input array
+   * @param input Array the array to choose items from
+   * @param choices Integer the number of items to choose
+   *
+   * @return Array[Array[Integer]]
+   */
+  chooseFromArray(input, choices) {
+    let combinations = [];
+
+    for (let i = 0; i <= input.length - choices; i++) {
+      if (1 >= choices) {
+        combinations.push([input[i]]);
+      } else {
+        for (let subResult of this.chooseFromArray(input.slice(i + 1), choices - 1)) {
+          combinations.push([input[i]].concat(subResult));
+        }
+      }
+    }
+
+    return combinations;
+  }
 }
 
 Optimizer.statTypeMap = {
