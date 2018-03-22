@@ -27,7 +27,7 @@ class CharacterAvatar extends React.Component {
   }
 
   static imageName(name) {
-    return name.trim().toLowerCase().replace(/\s/g, '_').replace(/(["']|&amp;#39;)/g, '');
+    return name.trim().toLowerCase().replace(/\s/g, '_').replace(/["']/g, '');
   }
 }
 

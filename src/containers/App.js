@@ -9,6 +9,8 @@ import characters from "../constants/characters";
 import modSets from "../constants/sets"
 import OptimizationPlan from "../domain/OptimizationPlan";
 import Optimizer from "../utils/Optimizer";
+import BaseStats from "../domain/BaseStats";
+import Character from "../domain/Character";
 
 class App extends Component {
   constructor(props) {
@@ -178,7 +180,7 @@ class App extends Component {
         fileMod.pips,
         primaryStat,
         secondaryStats,
-        characters[fileMod.characterName]
+        characters[fileMod.characterName.replace(/&amp;#39;/g, "'")] || new Character ('???', new BaseStats())
       ));
     }
 

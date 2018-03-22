@@ -8,19 +8,20 @@ class BaseStats {
    *
    * @param health The base health pool of the character
    * @param protection The base protection of the character
-   * @param offense The value to use as the base "offense" of the character. This should be a combination of physical
-   *    damage and special damage modified by how the character's abilities are spread among the two
+   * @param physDmg The physical damage of the character
+   * @param specDmg The special damage of the character
+   * @param physDmgPercent The percent of total offense that the character uses for physical damage (the rest is
+   *  considered special damage)
    * @param speed The base speed of the character
-   * @param potency The base potency of the character
-   * @param defense The value to use as the base "defense" of the character. This should be a combination of armor and
-   *     resistance
+   * @param armor The armor of the character
+   * @param resistance The resistance of the character
    */
-  constructor(health, protection, offense, speed, defense) {
+  constructor(health, protection, physDmg, specDmg, physDmgPercent, speed, armor, resistance) {
     this.health = health;
     this.protection = protection;
-    this.offense = offense;
+    this.offense = physDmg * physDmgPercent + specDmg * (1 - physDmgPercent);
     this.speed = speed;
-    this.defense = defense
+    this.defense = (armor + resistance) / 2;
   }
 }
 

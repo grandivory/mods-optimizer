@@ -78,6 +78,7 @@ html, body {
   background: black url('/img/cantina-background.jpg') no-repeat fixed;
   background-size: cover;
   height: calc(100% - 100px);
+  overflow-y: scroll;
 }
 
 .App-title {
