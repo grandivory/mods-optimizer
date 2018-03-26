@@ -11,6 +11,7 @@ import OptimizationPlan from "../domain/OptimizationPlan";
 import Optimizer from "../utils/Optimizer";
 import BaseStats from "../domain/BaseStats";
 import Character from "../domain/Character";
+import characterOptimizations from "../constants/characterOptimizations";
 
 class App extends Component {
   constructor(props) {
@@ -128,22 +129,75 @@ class App extends Component {
     };
 
     this.state.mods = App.readMods(fileContents.mods);
-    new Optimizer(this.state.mods).findBestModSetForCharacter(
-      this.state.mods,
-      characters['Darth Vader'],
-      new OptimizationPlan(
-        0, // health
-        0, // protection
-        100, // speed
-        30, // crit damage
-        100, // potency
-        0, // tenacity
-        2, // offense
-        65, // crit chance
-        0, // defense
-        0 // accuracy
-      )
-    )
+    let assignedMods = new Optimizer(this.state.mods).optimizeMods(
+      [
+        characterOptimizations['CT-7567 "Rex"'],
+        characterOptimizations['Wampa'],
+        characterOptimizations['Mother Talzin'],
+        characterOptimizations['Darth Nihilus'],
+        characterOptimizations['General Kenobi'],
+        characterOptimizations['Darth Vader'],
+        characterOptimizations['BB-8'],
+        characterOptimizations['Grand Admiral Thrawn'],
+        characterOptimizations['Commander Luke Skywalker'],
+        characterOptimizations['Rey (Jedi Training)'],
+        characterOptimizations['Resistance Trooper'],
+        characterOptimizations['Rey (Scavenger)'],
+        characterOptimizations['R2-D2'],
+        characterOptimizations['Han Solo'],
+        characterOptimizations['Chirrut Îmwe'],
+        characterOptimizations['Jedi Knight Anakin'],
+        characterOptimizations['General Veers'],
+        characterOptimizations['Shoretrooper'],
+        characterOptimizations['Death Trooper'],
+        characterOptimizations['Snowtrooper'],
+        characterOptimizations['Colonel Starck'],
+        characterOptimizations['Boba Fett'],
+        characterOptimizations['Zam Wesell'],
+        characterOptimizations['Greedo'],
+        characterOptimizations['Jawa Engineer'],
+        characterOptimizations['Ewok Elder'],
+        characterOptimizations['Admiral Ackbar'],
+        characterOptimizations['Stormtrooper Han'],
+        characterOptimizations['Princess Leia'],
+        characterOptimizations['Ezra Bridger'],
+        characterOptimizations['Hoth Rebel Scout'],
+        characterOptimizations['Hoth Rebel Soldier'],
+        characterOptimizations['Jyn Erso'],
+        characterOptimizations['Baze Malbus'],
+        characterOptimizations['Cassian Andor'],
+        characterOptimizations['K-2SO'],
+        characterOptimizations['Poe Dameron'],
+        characterOptimizations['Finn'],
+        characterOptimizations['Resistance Pilot'],
+        characterOptimizations['Darth Sidious'],
+        characterOptimizations['Chopper'],
+        characterOptimizations['Hera Syndulla'],
+        characterOptimizations['Garazeb "Zeb" Orrelios'],
+        characterOptimizations['Kanan Jarrus'],
+        characterOptimizations['Rebel Officer Leia Organa'],
+        characterOptimizations['Captain Han Solo'],
+        characterOptimizations['Grand Master Yoda'],
+        characterOptimizations['Biggs Darklighter'],
+        characterOptimizations['Wedge Antilles'],
+        characterOptimizations['Emperor Palpatine'],
+        characterOptimizations['TIE Fighter Pilot'],
+        characterOptimizations['Stormtrooper'],
+        characterOptimizations['IG-88'],
+        characterOptimizations['Dengar'],
+        characterOptimizations['Sith Assassin'],
+        characterOptimizations['Count Dooku'],
+        characterOptimizations['Sith Trooper'],
+        characterOptimizations['Asajj Ventress'],
+        characterOptimizations['Old Daka'],
+        characterOptimizations['Nightsister Acolyte'],
+        characterOptimizations['Talia'],
+        characterOptimizations['Nightsister Initiate'],
+        characterOptimizations['Darth Maul']
+      ]
+    );
+
+    console.log(assignedMods.filter(mod => mod.assignTo !== mod.currentCharacter));
   }
 
   /**
@@ -180,7 +234,8 @@ class App extends Component {
         fileMod.pips,
         primaryStat,
         secondaryStats,
-        characters[fileMod.characterName.replace(/&amp;#39;/g, "'")] || new Character ('???', new BaseStats())
+        characters[fileMod.characterName.replace(/&amp;#39;/g, "'")] ||
+          new Character(fileMod.characterName, new BaseStats())
       ));
     }
 

@@ -31,6 +31,91 @@ class Optimizer {
   }
 
   /**
+   * Find the optimum configuration for mods for a list of characters by optimizing mods for the first character,
+   * optimizing mods for the second character after removing those used for the first, etc.
+   *
+   * @param characterList Array An array of objects with character and optimizationPlan properties
+   *
+   * @return Array an array of Mods with assignTo properties filled in for where to move each mod
+   */
+  optimizeMods(characterList) {
+    let assignedMods = [];
+    // First, filter out any mods that have already been assigned
+    let considerationSet = this.mods.filter(mod => null === mod.assignTo);
+
+    // For each character in the list, find the best mod set for that character
+    for (let characterPlan of characterList) {
+      let character = characterPlan.character;
+      let optimizationPlan = characterPlan.optimizationPlan;
+      let modSet = this.findBestModSetForCharacter(considerationSet, character, optimizationPlan);
+
+      // Assign the character to each mod, then remove the mods from the consideration set
+      // While doing this, collect the mods into an array to return
+      for (let slot of [SQUARE, ARROW, DIAMOND, TRIANGLE, CIRCLE, CROSS]) {
+        modSet[slot].assignTo = character;
+        assignedMods.push(modSet[slot]);
+      }
+      considerationSet = considerationSet.filter(mod => null === mod.assignTo);
+    }
+
+    return assignedMods;
+  }
+
+  /**
+   * Get a summary of the stats given by a set of mods for a character
+   *
+   * @param modSet
+   * @param character
+   */
+  getSetSummary(modSet, character) {
+    let summary = {};
+    let setCounts = new WeakMap();
+    let foo = modSet;
+
+    for (let slot of [SQUARE, ARROW, DIAMOND, TRIANGLE, CIRCLE, CROSS]) {
+      let mod = foo[slot];
+      // let mod = modSet[slot];
+      let set = mod ? mod.set : null;
+
+      // Update the summary for each stat on each mod
+      this.updateSummary(summary, mod.primaryStat, character);
+      for (let secondaryStat of mod.secondaryStats) {
+        this.updateSummary(summary, secondaryStat, character);
+      }
+
+      // Get a count of how many mods are in each set
+      let currentCount = setCounts.get(set) || 0;
+      if (set) {
+        setCounts.set(set, currentCount + 1);
+      }
+    }
+
+    // Update the summary for each stat from each complete mod set
+    for (let setKey in modSets) {
+      let setDescription = modSets[setKey];
+      let setMultiplier = Math.floor((setCounts.get(setDescription) || 0) / setDescription.numberOfModsRequired);
+
+      for (let i = 0; i < setMultiplier; i++) {
+        this.updateSummary(summary, setDescription.bonus, character);
+      }
+    }
+
+    return summary;
+  }
+
+  updateSummary(summary, stat, character) {
+    let statType = Optimizer.statTypeMap[stat.displayType];
+    if (!summary.hasOwnProperty(statType)) {
+      summary[statType] = 0;
+    }
+    if (stat.isPercent) {
+      summary[statType] += stat.value * character.baseStats[statType] / 100;
+    } else {
+      summary[statType] += stat.value;
+    }
+  }
+
+  /**
    * Given a specific character and an optimization plan, figure out what the best set of mods for that character are
    * such that the values in the plan are optimized.
    *
@@ -39,6 +124,7 @@ class Optimizer {
    * @param optimizationPlan An OptimizationPlan object that gives values to all stats.
    */
   findBestModSetForCharacter(mods, character, optimizationPlan) {
+    let availableMods;
     let squares, arrows, diamonds, triangles, circles, crosses;
     let modValues = new WeakMap();
     let setValues = new WeakMap();
@@ -48,19 +134,26 @@ class Optimizer {
     let candidateSets = [];
     let candidateValues = new WeakMap();
 
+    // If the optimization plan says to only use 5-dot mods, then filter out any mods with fewer dots
+    if (optimizationPlan.useOnly5dotMods) {
+      availableMods = mods.filter(mod => 5 === mod.pips);
+    } else {
+      availableMods = mods;
+    }
+
     // Go through all mods and assign a value to them based on the optimization plan
-    for (let mod of mods) {
+    for (let mod of availableMods) {
       modValues.set(mod, this.scoreMod(mod, optimizationPlan, character.baseStats));
     }
 
     // Sort all the mods by score, then break them into sets
-    mods.sort((left, right) => modValues.get(right) - modValues.get(left));
-    squares = mods.filter(mod => 'square' === mod.slot);
-    arrows = mods.filter(mod => 'arrow' === mod.slot);
-    diamonds = mods.filter(mod => 'diamond' === mod.slot);
-    triangles = mods.filter(mod => 'triangle' === mod.slot);
-    circles = mods.filter(mod => 'circle' === mod.slot);
-    crosses = mods.filter(mod => 'cross' === mod.slot);
+    availableMods.sort((left, right) => modValues.get(right) - modValues.get(left));
+    squares = availableMods.filter(mod => 'square' === mod.slot);
+    arrows = availableMods.filter(mod => 'arrow' === mod.slot);
+    diamonds = availableMods.filter(mod => 'diamond' === mod.slot);
+    triangles = availableMods.filter(mod => 'triangle' === mod.slot);
+    circles = availableMods.filter(mod => 'circle' === mod.slot);
+    crosses = availableMods.filter(mod => 'cross' === mod.slot);
 
     // Assign a value to each set bonus based on the optimization plan
     for (let setName in modSets) {
@@ -112,7 +205,6 @@ class Optimizer {
     }
     candidateSets.sort((left, right) => candidateValues.get(right) - candidateValues.get(left));
 
-    console.log(candidateSets[0]);
     return candidateSets[0];
   }
 

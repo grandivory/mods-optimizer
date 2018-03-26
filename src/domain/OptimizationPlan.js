@@ -12,18 +12,20 @@ class OptimizationPlan {
               offense,
               critChance,
               defense,
-              accuracy
+              accuracy,
+              useOnly5dotMods
   ) {
-    this.health = health;
-    this.protection = protection;
-    this.speed = speed;
-    this.critDmg = critDmg;
-    this.potency = potency;
-    this.tenacity = tenacity;
-    this.offense = offense;
-    this.critChance = critChance;
-    this.defense = defense;
-    this.accuracy = accuracy;
+    this.health = health || 0;
+    this.protection = protection || 0;
+    this.speed = speed || 0;
+    this.critDmg = critDmg || 0;
+    this.potency = potency || 0;
+    this.tenacity = tenacity || 0;
+    this.offense = offense || 0;
+    this.critChance = critChance || 0;
+    this.defense = defense || 0;
+    this.accuracy = accuracy || 0;
+    this.useOnly5dotMods = useOnly5dotMods || false;
   }
 }
 

@@ -8,6 +8,7 @@ class Mod {
     this.primaryStat = primaryStat;
     this.secondaryStats = secondaryStats;
     this.currentCharacter = currentCharacter;
+    this.assignTo = null;
   }
 
   /**
