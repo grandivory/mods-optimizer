@@ -1,25 +1,26 @@
-import modSets from "../constants/sets";
-import {SQUARE, ARROW, DIAMOND, TRIANGLE, CIRCLE, CROSS} from "../constants/slots";
+import setBonuses from "../constants/setbonuses";
 import firstOrNull from "./firstOrNull";
+import statTypeMap from "../constants/statTypeMap";
+import chooseFromArray from "./chooseFromArray";
+import ModSet from "../domain/ModSet";
 
 class Optimizer {
   constructor(mods) {
     this.mods = mods;
 
     // This will be used later. It's calculated here in the constructor so that it only needs to be calculated once
-    let slotOptions = [SQUARE, ARROW, DIAMOND, TRIANGLE, CIRCLE, CROSS];
-    let fourSlotOptions = this.chooseFromArray(slotOptions, 4);
+    let fourSlotOptions = chooseFromArray(ModSet.slots, 4);
 
     this.chooseFourOptions = [];
     for (let usedSlots of fourSlotOptions) {
-      this.chooseFourOptions.push([usedSlots, slotOptions.filter(slot => !usedSlots.includes(slot))]);
+      this.chooseFourOptions.push([usedSlots, ModSet.slots.filter(slot => !usedSlots.includes(slot))]);
     }
 
-    let twoSlotOptions = this.chooseFromArray(slotOptions, 2);
+    let twoSlotOptions = chooseFromArray(ModSet.slots, 2);
     this.chooseTwoOptions = [];
     for (let firstSetSlots of twoSlotOptions) {
-      let remainingSlots = slotOptions.filter(slot => !firstSetSlots.includes(slot));
-      let secondSetOptions = this.chooseFromArray(remainingSlots, 2);
+      let remainingSlots = ModSet.slots.filter(slot => !firstSetSlots.includes(slot));
+      let secondSetOptions = chooseFromArray(remainingSlots, 2);
       for (let secondSetSlots of secondSetOptions) {
         this.chooseTwoOptions.push([
           firstSetSlots,
@@ -36,7 +37,7 @@ class Optimizer {
    *
    * @param characterList Array An array of objects with character and optimizationPlan properties
    *
-   * @return Array an array of Mods with assignTo properties filled in for where to move each mod
+   * @return Array an array of objects with character and modSet properties
    */
   optimizeMods(characterList) {
     let assignedMods = [];
@@ -51,68 +52,19 @@ class Optimizer {
 
       // Assign the character to each mod, then remove the mods from the consideration set
       // While doing this, collect the mods into an array to return
-      for (let slot of [SQUARE, ARROW, DIAMOND, TRIANGLE, CIRCLE, CROSS]) {
-        modSet[slot].assignTo = character;
-        assignedMods.push(modSet[slot]);
-      }
+      modSet.assignTo(character);
+      assignedMods.push({
+        character: character,
+        modSet: modSet
+      });
+      // for (let slot of ModSet.slots) {
+      //   modSet[slot].assignTo = character;
+      //   assignedMods.push(modSet[slot]);
+      // }
       considerationSet = considerationSet.filter(mod => null === mod.assignTo);
     }
 
     return assignedMods;
-  }
-
-  /**
-   * Get a summary of the stats given by a set of mods for a character
-   *
-   * @param modSet
-   * @param character
-   */
-  getSetSummary(modSet, character) {
-    let summary = {};
-    let setCounts = new WeakMap();
-    let foo = modSet;
-
-    for (let slot of [SQUARE, ARROW, DIAMOND, TRIANGLE, CIRCLE, CROSS]) {
-      let mod = foo[slot];
-      // let mod = modSet[slot];
-      let set = mod ? mod.set : null;
-
-      // Update the summary for each stat on each mod
-      this.updateSummary(summary, mod.primaryStat, character);
-      for (let secondaryStat of mod.secondaryStats) {
-        this.updateSummary(summary, secondaryStat, character);
-      }
-
-      // Get a count of how many mods are in each set
-      let currentCount = setCounts.get(set) || 0;
-      if (set) {
-        setCounts.set(set, currentCount + 1);
-      }
-    }
-
-    // Update the summary for each stat from each complete mod set
-    for (let setKey in modSets) {
-      let setDescription = modSets[setKey];
-      let setMultiplier = Math.floor((setCounts.get(setDescription) || 0) / setDescription.numberOfModsRequired);
-
-      for (let i = 0; i < setMultiplier; i++) {
-        this.updateSummary(summary, setDescription.bonus, character);
-      }
-    }
-
-    return summary;
-  }
-
-  updateSummary(summary, stat, character) {
-    let statType = Optimizer.statTypeMap[stat.displayType];
-    if (!summary.hasOwnProperty(statType)) {
-      summary[statType] = 0;
-    }
-    if (stat.isPercent) {
-      summary[statType] += stat.value * character.baseStats[statType] / 100;
-    } else {
-      summary[statType] += stat.value;
-    }
   }
 
   /**
@@ -127,7 +79,7 @@ class Optimizer {
     let availableMods;
     let squares, arrows, diamonds, triangles, circles, crosses;
     let modValues = new WeakMap();
-    let setValues = new WeakMap();
+    let setBonusValues = new WeakMap();
     let potentialUsedSets = [];
     let baseSets = new WeakMap();
     let setlessMods = {};
@@ -156,41 +108,41 @@ class Optimizer {
     crosses = availableMods.filter(mod => 'cross' === mod.slot);
 
     // Assign a value to each set bonus based on the optimization plan
-    for (let setName in modSets) {
-      if (modSets.hasOwnProperty(setName)) {
-        let modSet = modSets[setName];
-        setValues.set(
-          modSet,
-          this.valueOfStat(modSet.bonus, optimizationPlan, character.baseStats)
+    for (let setName in setBonuses) {
+      if (setBonuses.hasOwnProperty(setName)) {
+        let setBonus = setBonuses[setName];
+        setBonusValues.set(
+          setBonus,
+          this.valueOfStat(setBonus.bonus, optimizationPlan, character.baseStats)
         );
 
-        if (setValues.get(modSet) > 0) {
-          potentialUsedSets.push(modSet);
+        if (setBonusValues.get(setBonus) > 0) {
+          potentialUsedSets.push(setBonus);
         }
       }
     }
 
     // Start with the highest-value mod in each slot
-    setlessMods = {
-      [SQUARE]: firstOrNull(squares),
-      [ARROW]: firstOrNull(arrows),
-      [DIAMOND]: firstOrNull(diamonds),
-      [TRIANGLE]: firstOrNull(triangles),
-      [CIRCLE]: firstOrNull(circles),
-      [CROSS]: firstOrNull(crosses)
-    };
+    setlessMods = new ModSet([
+      firstOrNull(squares),
+      firstOrNull(arrows),
+      firstOrNull(diamonds),
+      firstOrNull(triangles),
+      firstOrNull(circles),
+      firstOrNull(crosses)
+    ]);
 
     // Go through each set bonus with a positive value, and find the best mod sub-sets (all possible pairs or quads)
-    for (let modSet of potentialUsedSets) {
-      if ((setValues.get(modSet) || 0) > 0) {
-        baseSets.set(modSet, {
-          [SQUARE]: firstOrNull(squares.filter(mod => modSet === mod.set)),
-          [ARROW]: firstOrNull(arrows.filter(mod => modSet === mod.set)),
-          [DIAMOND]: firstOrNull(diamonds.filter(mod => modSet === mod.set)),
-          [TRIANGLE]: firstOrNull(triangles.filter(mod => modSet === mod.set)),
-          [CIRCLE]: firstOrNull(circles.filter(mod => modSet === mod.set)),
-          [CROSS]: firstOrNull(crosses.filter(mod => modSet === mod.set))
-        });
+    for (let setBonus of potentialUsedSets) {
+      if (setBonusValues.get(setBonus) > 0) {
+        baseSets.set(setBonus, new ModSet([
+          firstOrNull(squares.filter(mod => setBonus === mod.set)),
+          firstOrNull(arrows.filter(mod => setBonus === mod.set)),
+          firstOrNull(diamonds.filter(mod => setBonus === mod.set)),
+          firstOrNull(triangles.filter(mod => setBonus === mod.set)),
+          firstOrNull(circles.filter(mod => setBonus === mod.set)),
+          firstOrNull(crosses.filter(mod => setBonus === mod.set))
+        ]));
       }
     }
 
@@ -201,7 +153,7 @@ class Optimizer {
 
     // Choose the set with the highest value
     for (let candidateSet of candidateSets) {
-      candidateValues.set(candidateSet, this.valueOfSet(candidateSet, modValues, setValues));
+      candidateValues.set(candidateSet, candidateSet.optimizationValue(optimizationPlan, character));
     }
     candidateSets.sort((left, right) => candidateValues.get(right) - candidateValues.get(left));
 
@@ -234,7 +186,7 @@ class Optimizer {
    * @param baseStats BaseStats
    */
   valueOfStat(stat, optimizationPlan, baseStats) {
-    const statType = Optimizer.statTypeMap[stat.displayType];
+    const statType = statTypeMap[stat.displayType];
     if (stat.isPercent) {
       return optimizationPlan[statType] * Math.floor(baseStats[statType] * stat.value / 100);
     } else {
@@ -243,48 +195,13 @@ class Optimizer {
   }
 
   /**
-   * Given a set of already scored mods, tabulate the total value of the set
-   *
-   * @param set Object an object containing mods under each of the keys in sets.js
-   * @param modValues WeakMap A Weakmap containing the scores for each mod
-   * @param setValues WeakMap A Weakmap containing the scores for each set type
-   */
-  valueOfSet(set, modValues, setValues) {
-    let setCounts = new WeakMap();
-    let setsValue = 0;
-
-    // Figure out how many mods of each set are in this set
-    for (let slot of [SQUARE, ARROW, DIAMOND, TRIANGLE, CIRCLE, CROSS]) {
-      let modSet = set[slot] ? set[slot].set : null;
-      let currentCount = setCounts.get(modSet) || 0;
-      if (modSet) {
-        setCounts.set(modSet, currentCount + 1);
-      }
-    }
-
-    // Calculate the added value that the sets themselves bring
-    for (let setKey in modSets) {
-      let modSet = modSets[setKey];
-      setsValue += Math.floor((setCounts.get(modSet) || 0) / modSet.numberOfModsRequired) *
-        (setValues.get(modSet) || 0);
-    }
-
-    // Add in the value of the raw mods
-    return (modValues.get(set[SQUARE]) || 0) +
-      (modValues.get(set[ARROW]) || 0) +
-      (modValues.get(set[DIAMOND]) || 0) +
-      (modValues.get(set[TRIANGLE]) || 0) +
-      (modValues.get(set[CIRCLE]) || 0) +
-      (modValues.get(set[CROSS]) || 0) +
-      setsValue;
-  }
-
-  /**
    * Find all the potential combinations of mods to consider by taking into account mod sets and keeping set bonuses
    *
-   * @param potentialUsedSets Array[ModSet] The ModSets that have sets provided for use
-   * @param baseSets WeakMap(ModSet -> {}) The best mods available for each ModSet in potentialUsedSets
-   * @param setlessMods {} The best raw mod for each slot, regardless of set
+   * @param potentialUsedSets Array[SetBonus] The SetBonuses that have sets provided for use
+   * @param baseSets WeakMap(SetBonus -> ModSet) The best mods available for each SetBonus in potentialUsedSets
+   * @param setlessMods ModSet The best raw mod for each slot, regardless of set
+   *
+   * @return Array[ModSet]
    */
   getCandidateSets(potentialUsedSets, baseSets, setlessMods) {
     /**
@@ -351,83 +268,29 @@ class Optimizer {
    * this simply, the first set given is assumed to require 4 mods if only 2 sets are given, and 2 mods if 3 are given.
    * All other sets are assumed to require 2 mods.
    *
-   * @param firstSet
-   * @param secondSet
-   * @param [thirdSet]
+   * @param firstSet ModSet
+   * @param secondSet ModSet
+   * @param [thirdSet] ModSet
+   *
+   * @return Array[ModSet]
    */
   combineSets(firstSet, secondSet, thirdSet) {
     let combinations = [];
 
     if ('undefined' === typeof thirdSet) {
       for (let [firstSetSlots, secondSetSlots] of this.chooseFourOptions) {
-        let set = {};
-        for (let slot of firstSetSlots) {
-          set[slot] = firstSet[slot];
-        }
-
-        for (let slot of secondSetSlots) {
-          set[slot] = secondSet[slot];
-        }
-
-        combinations.push(set);
+        let set = firstSet.copy();
+        combinations.push(set.replaceSlots(secondSetSlots, secondSet));
       }
     } else {
       for (let [firstSetSlots, secondSetSlots, thirdSetSlots] of this.chooseTwoOptions) {
-        let set = {};
-        for (let slot of firstSetSlots) {
-          set[slot] = firstSet[slot];
-        }
-
-        for (let slot of secondSetSlots) {
-          set[slot] = secondSet[slot];
-        }
-
-        for (let slot of thirdSetSlots) {
-          set[slot] = thirdSet[slot];
-        }
-
-        combinations.push(set);
-      }
-    }
-
-    return combinations;
-  }
-
-  /**
-   * Return all possible combinations of choices items from the input array
-   * @param input Array the array to choose items from
-   * @param choices Integer the number of items to choose
-   *
-   * @return Array[Array[Integer]]
-   */
-  chooseFromArray(input, choices) {
-    let combinations = [];
-
-    for (let i = 0; i <= input.length - choices; i++) {
-      if (1 >= choices) {
-        combinations.push([input[i]]);
-      } else {
-        for (let subResult of this.chooseFromArray(input.slice(i + 1), choices - 1)) {
-          combinations.push([input[i]].concat(subResult));
-        }
+        let set = firstSet.copy();
+        combinations.push(set.replaceSlots(secondSetSlots, secondSet).replaceSlots(thirdSetSlots, thirdSet));
       }
     }
 
     return combinations;
   }
 }
-
-Optimizer.statTypeMap = {
-  'Health': 'health',
-  'Protection': 'protection',
-  'Speed': 'speed',
-  'Critical Damage': 'critDmg',
-  'Potency': 'potency',
-  'Tenacity': 'tenacity',
-  'Offense': 'offense',
-  'Critical Chance': 'critChance',
-  'Defense': 'defense',
-  'Accuracy': 'accuracy'
-};
 
 export default Optimizer;

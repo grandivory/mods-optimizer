@@ -197,7 +197,13 @@ class App extends Component {
       ]
     );
 
-    console.log(assignedMods.filter(mod => mod.assignTo !== mod.currentCharacter));
+    console.log(assignedMods);
+    console.log(assignedMods.reduce(
+      (allMods, characterMods) => allMods.concat(characterMods.modSet.mods()),
+      []
+    ).filter(
+      mod => mod.assignTo !== mod.currentCharacter)
+    );
   }
 
   /**
@@ -229,7 +235,7 @@ class App extends Component {
       mods.push(new Mod(
         fileMod.mod_uid,
         fileMod.slot,
-        modSets[fileMod.set],
+        setBonuses[fileMod.set],
         fileMod.level,
         fileMod.pips,
         primaryStat,
