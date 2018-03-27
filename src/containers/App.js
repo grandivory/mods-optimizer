@@ -6,8 +6,7 @@ import './boilerplate.css';
 import './App.css';
 import Mod from "../domain/Mod";
 import characters from "../constants/characters";
-import modSets from "../constants/sets"
-import OptimizationPlan from "../domain/OptimizationPlan";
+import setBonuses from "../constants/setbonuses"
 import Optimizer from "../utils/Optimizer";
 import BaseStats from "../domain/BaseStats";
 import Character from "../domain/Character";
