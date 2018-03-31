@@ -1,0 +1,80 @@
+import React from 'react';
+import ModDetail from "../../components/ModDetail/ModDetail";
+import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
+
+import './ReviewList.css';
+import Arrow from "../../components/Arrow/Arrow";
+
+class ReviewList extends React.Component {
+
+  constructor() {
+    super();
+    this.state = {'sortBy': 'assignTo'};
+  }
+
+  render() {
+    let movingMods = this.props.mods.filter(mod => mod.currentCharacter !== mod.assignTo);
+
+    if ('currentCharacter' === this.state.sortBy) {
+      movingMods.sort((left, right) => {
+        let leftCharName = left.currentCharacter.name;
+        let rightCharName = right.currentCharacter.name;
+
+        if (leftCharName < rightCharName) {
+          return -1;
+        } else if (leftCharName > rightCharName) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    }
+
+    console.log(movingMods.length + ' mods are being moved.');
+
+    const modRows = movingMods.map(mod =>
+      <div className={'mod-row'} key={mod.id} >
+        <ModDetail key={mod.id} mod={mod}/>
+        <Arrow />
+        <CharacterAvatar name={mod.assignTo.name}/>
+        <div className={'actions'}>
+          <button onClick={this.removeMod.bind(this, mod)}>Remove Mod</button>
+          <button onClick={this.reassignMod.bind(this, mod)}>Reassign Mod</button>
+        </div>
+      </div>
+    );
+
+    return (
+      <div className={'review-list'}>
+        <div className={'sort-options'}>
+          Sort By:
+          <button onClick={this.sortByCurrent.bind(this)}>Currently Equipped</button>
+          <button onClick={this.sortByAssigned.bind(this)}>Assigned Character</button>
+        </div>
+        <div className={'mods-list'}>
+          {modRows}
+        </div>
+      </div>
+    );
+  }
+
+  removeMod(mod) {
+    mod.currentCharacter = null;
+    this.setState({});
+  }
+
+  reassignMod(mod) {
+    mod.currentCharacter = mod.assignTo;
+    this.setState({});
+  }
+
+  sortByCurrent() {
+    this.setState({'sortBy': 'currentCharacter'});
+  }
+
+  sortByAssigned() {
+    this.setState({'sortBy': 'assignTo'});
+  }
+}
+
+export default ReviewList;

@@ -1,0 +1,30 @@
+.sort-options {
+  text-align: center;
+  font-size: 24px;
+}
+
+.mod-row {
+  margin: 10px auto;
+  text-align: center;
+}
+
+.mod-row .mod-detail {
+  vertical-align: middle;
+  margin-right: 30px;
+}
+
+.mod-row .avatar {
+  display: inline-block;
+  margin: 0 30px;
+}
+
+.mod-row .actions {
+  display: inline-block;
+  text-align: center;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.mod-row .actions button {
+  display: block;
+}

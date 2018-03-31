@@ -82,8 +82,8 @@ class Optimizer {
     let setBonusValues = new WeakMap();
     let potentialUsedSets = [];
     let baseSets = new WeakMap();
-    let setlessMods = {};
-    let candidateSets = [];
+    let setlessMods;
+    let candidateSets;
     let candidateValues = new WeakMap();
 
     // If the optimization plan says to only use 5-dot mods, then filter out any mods with fewer dots
@@ -277,6 +277,7 @@ class Optimizer {
   combineSets(firstSet, secondSet, thirdSet) {
     let combinations = [];
 
+    /* eslint-disable no-unused-vars */
     if ('undefined' === typeof thirdSet) {
       for (let [firstSetSlots, secondSetSlots] of this.chooseFourOptions) {
         let set = firstSet.copy();
@@ -288,6 +289,7 @@ class Optimizer {
         combinations.push(set.replaceSlots(secondSetSlots, secondSet).replaceSlots(thirdSetSlots, thirdSet));
       }
     }
+    /* eslint-enable no-unused-vars */
 
     return combinations;
   }

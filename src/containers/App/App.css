@@ -61,11 +61,6 @@ html, body {
   font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
 .App-header {
   background-color: #222;
   padding: 20px;
@@ -79,17 +74,21 @@ html, body {
   background-size: cover;
   height: calc(100% - 100px);
   overflow-y: scroll;
+  color: white;
+  text-shadow: 2px 2px 1px black;
 }
 
 .App-title {
   font-size: 1.5em;
 }
 
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+button {
+  display: inline-block;
+  margin: 5px;
+  background-color: #46801a;
+  border: none;
+  border-radius: 5px;
+  font-size: 18pt;
+  font-weight: 300;
+  color: white;
 }
