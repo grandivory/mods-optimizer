@@ -85,7 +85,7 @@
   display: block;
   position: absolute;
   border: 1px solid dodgerblue;
-  background-color: rgb(0, 0, 96);
+  background-color: rgb(0, 0, 66);
   padding: 1em;
   z-index: 1000;
 }
