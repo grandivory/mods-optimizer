@@ -4,6 +4,8 @@ import Arrow from "../../components/Arrow/Arrow";
 import ModSet from "../../domain/ModSet";
 import ModSetDetail from "../../components/ModSetDetail/ModSetDetail";
 
+import './ReviewSets.css';
+
 class ReviewSets extends React.Component {
   render() {
     const characterSets = this.props.characterSets;

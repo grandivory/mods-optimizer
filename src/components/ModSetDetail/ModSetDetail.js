@@ -2,6 +2,8 @@ import React from "react";
 import ModStats from "../ModStats/ModStats";
 import ModImage from "../ModImage/ModImage";
 
+import './ModSetDetail.css';
+
 class ModSetDetail extends React.Component {
   render() {
     const modSet = this.props.set;
@@ -16,7 +18,10 @@ class ModSetDetail extends React.Component {
 
     const statSummary = modSet.getSummary(character);
     const statsDisplay = Object.values(statSummary).map((stat, index) =>
-      <li key={index}>{stat.show()}</li>
+      <tr key={index}>
+        <td className={'stat-type'}>{stat.displayType}</td>
+        <td className={'stat-value'}>{stat.showValue()}</td>
+      </tr>
     );
 
     return (
@@ -25,10 +30,16 @@ class ModSetDetail extends React.Component {
           {modDetails}
         </div>
         <div className={'summary'}>
-          <h4>Stats Summary</h4>
-          <ul>
-            {statsDisplay}
-          </ul>
+          <table>
+            <thead>
+              <tr>
+                <th colSpan="2">Stats Summary</th>
+              </tr>
+            </thead>
+            <tbody>
+              {statsDisplay}
+            </tbody>
+          </table>
         </div>
       </div>
     );

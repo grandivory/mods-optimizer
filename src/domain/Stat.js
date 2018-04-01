@@ -17,10 +17,18 @@ class Stat {
   }
 
   /**
-   * Return the value of this stat as a string
+   * Return a string that represents this stat
    */
   show() {
-    return `${this.value}${this.displayModifier} ${this.displayType}`;
+    return `${this.showValue()} ${this.displayType}`;
+  }
+
+  /**
+   * Return only the value of this stat as a string
+   * @returns {string}
+   */
+  showValue() {
+    return `${this.value}${this.displayModifier}`;
   }
 }
 
