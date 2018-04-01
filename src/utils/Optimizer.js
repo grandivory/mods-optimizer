@@ -198,8 +198,8 @@ class Optimizer {
    * @param character
    */
   valueOfSet(set, optimizationPlan, character) {
-    Object.values(set.getSummary(character))
-      .reduce((setValue, stat) => setValue + this.valueOfStat(stat, optimizationPlan, character.baseStats));
+    return Object.values(set.getSummary(character))
+      .reduce((setValue, stat) => setValue + this.valueOfStat(stat, optimizationPlan, character.baseStats), 0);
   }
 
   /**
