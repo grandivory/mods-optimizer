@@ -12,6 +12,7 @@ import BaseStats from "../../domain/BaseStats";
 import Character from "../../domain/Character";
 import characterOptimizations from "../../constants/characterOptimizations";
 import ReviewList from "../ReviewList/ReviewList";
+import ReviewSets from "../ReviewSets/ReviewSets";
 
 class App extends Component {
   constructor(props) {
@@ -311,7 +312,7 @@ class App extends Component {
           <h1 className="App-title">Matt's Mod Manager for SWGOH</h1>
         </header>
         <div className='app-body'>
-          <ReviewList mods={assignedMods} />
+          <ReviewSets characterSets={this.state.modAssignments} mods={this.state.mods} />
           {/*<div className='mods'>*/}
             {/*{modElements}*/}
           {/*</div>*/}

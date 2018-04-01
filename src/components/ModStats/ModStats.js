@@ -31,7 +31,7 @@ class ModStats extends React.Component {
    */
   static showStatElement(stat, index) {
     return <li key={index} className={'class-' + stat.class}>
-      {stat.value}{stat.displayModifier} {stat.displayType}
+      {stat.show()}
       <span className='class'>{stat.class}</span>
     </li>;
   }

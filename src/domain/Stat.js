@@ -15,6 +15,13 @@ class Stat {
   setClass(clazz) {
     this.class = clazz;
   }
+
+  /**
+   * Return the value of this stat as a string
+   */
+  show() {
+    return `${this.value}${this.displayModifier} ${this.displayType}`;
+  }
 }
 
 Stat.percentTypes = ['Health', 'Protection', 'Offense', 'Speed', 'Defense'];

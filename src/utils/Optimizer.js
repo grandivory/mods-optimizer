@@ -57,10 +57,6 @@ class Optimizer {
         character: character,
         modSet: modSet
       });
-      // for (let slot of ModSet.slots) {
-      //   modSet[slot].assignTo = character;
-      //   assignedMods.push(modSet[slot]);
-      // }
       considerationSet = considerationSet.filter(mod => null === mod.assignTo);
     }
 
@@ -153,7 +149,7 @@ class Optimizer {
 
     // Choose the set with the highest value
     for (let candidateSet of candidateSets) {
-      candidateValues.set(candidateSet, candidateSet.optimizationValue(optimizationPlan, character));
+      candidateValues.set(candidateSet, this.valueOfSet(candidateSet, optimizationPlan, character));
     }
     candidateSets.sort((left, right) => candidateValues.get(right) - candidateValues.get(left));
 
@@ -192,6 +188,18 @@ class Optimizer {
     } else {
       return optimizationPlan[statType] * stat.value
     }
+  }
+
+  /**
+   * Find the scored value for a full Mod Set
+   *
+   * @param set
+   * @param optimizationPlan
+   * @param character
+   */
+  valueOfSet(set, optimizationPlan, character) {
+    Object.values(set.getSummary(character))
+      .reduce((setValue, stat) => setValue + this.valueOfStat(stat, optimizationPlan, character.baseStats));
   }
 
   /**

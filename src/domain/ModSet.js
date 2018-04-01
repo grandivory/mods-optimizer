@@ -1,5 +1,6 @@
 import setBonuses from "../constants/setbonuses";
 import statTypeMap from "../constants/statTypeMap";
+import Stat from "./Stat";
 
 class ModSet {
   constructor(mods) {
@@ -64,23 +65,6 @@ class ModSet {
   }
 
   /**
-   * Get the value of this set of mods for a given character based on a provided optimization plan
-   *
-   * @param optimizationPlan OptimizationPlan
-   * @param character Character
-   */
-  optimizationValue(optimizationPlan, character) {
-    let summary = this.getSummary(character);
-    let value = 0;
-
-    for (let statType in summary) {
-      value += optimizationPlan[statType] * summary[statType];
-    }
-
-    return value;
-  }
-
-  /**
    * Give a summary of the absolute stat increase given by this mod set for a given character
    *
    * @param character
@@ -121,6 +105,17 @@ class ModSet {
       }
     }
 
+    // Update the summary to mark the stats that should always be displayed as percentages
+    // Also update all stats to be the correct precision
+    Object.values(summary).forEach(stat => {
+      if (!Stat.percentTypes.includes(stat.displayType)) {
+        stat.value = Math.floor(stat.value * 100) / 100;
+        stat.displayModifier = '%';
+      } else {
+        stat.value = Math.trunc(stat.value);
+      }
+    });
+
     return summary;
   }
 
@@ -132,14 +127,21 @@ class ModSet {
    * @param character Character A character to use for calculations involving percentages
    */
   updateSummary(summary, stat, character) {
-    let statType = statTypeMap[stat.displayType];
-    if (!summary.hasOwnProperty(statType)) {
-      summary[statType] = 0;
+    let propertyName = statTypeMap[stat.displayType];
+
+    if (!summary.hasOwnProperty(stat.displayType)) {
+      let statType =
+        // We only include a '%' if the stat is NOT in percentTypes, because those are the only stats that will always
+        // display as a percentage
+        Stat.percentTypes.includes(stat.displayType) ?
+          stat.displayType :
+          stat.displayType + '%';
+      summary[stat.displayType] = new Stat(statType, '0');
     }
     if (stat.isPercent) {
-      summary[statType] += stat.value * character.baseStats[statType] / 100;
+      summary[stat.displayType].value += stat.value * character.baseStats[propertyName] / 100;
     } else {
-      summary[statType] += stat.value;
+      summary[stat.displayType].value += stat.value;
     }
   }
 }
