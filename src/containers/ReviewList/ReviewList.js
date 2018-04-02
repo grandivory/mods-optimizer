@@ -30,8 +30,6 @@ class ReviewList extends React.Component {
       });
     }
 
-    console.log(movingMods.length + ' mods are being moved.');
-
     const modRows = movingMods.map(mod =>
       <div className={'mod-row'} key={mod.id} >
         <ModDetail key={mod.id} mod={mod}/>
@@ -46,6 +44,7 @@ class ReviewList extends React.Component {
 
     return (
       <div className={'review-list'}>
+        <h2>Reassigning {movingMods.length} mods</h2>
         <div className={'sort-options'}>
           Sort By:
           <button onClick={this.sortByCurrent.bind(this)}>Currently Equipped</button>
@@ -64,6 +63,9 @@ class ReviewList extends React.Component {
   }
 
   reassignMod(mod) {
+    this.props.mods
+      .filter(m => m.currentCharacter === mod.assignTo && m.slot === mod.slot)
+      .forEach(m => m.currentCharacter = null);
     mod.currentCharacter = mod.assignTo;
     this.setState({});
   }

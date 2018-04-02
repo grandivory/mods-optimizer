@@ -300,9 +300,6 @@ class App extends Component {
       []
     );
 
-    console.log(this.state.modAssignments);
-    this.state.modAssignments.forEach(modAssignment =>
-      console.log(modAssignment.character, modAssignment.modSet.getSummary(modAssignment.character))
     );
 
 
