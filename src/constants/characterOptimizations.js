@@ -18,7 +18,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -46,7 +47,8 @@ const characterOptimizations = {
       4, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy,
+      0 // crit avoidance
     )
   },
   'B2 Super Battle Droid': {
@@ -69,7 +71,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy,
+      0 // crit avoidance
     )
   },
   'BB-8': {
@@ -84,7 +87,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy,
+      0 // crit avoidance
     )
   },
   'Biggs Darklighter': {
@@ -99,7 +103,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -119,7 +124,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -143,7 +149,8 @@ const characterOptimizations = {
       .5, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy,
+      0 // crit avoidance
     )
   },
   'Captain Phasma': {
@@ -162,7 +169,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -190,7 +198,8 @@ const characterOptimizations = {
       5, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy,
+      0,// crit avoidance
     )
   },
   'Chopper': {
@@ -205,7 +214,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -229,7 +239,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy,
+      0 // crit avoidance
     )
   },
   'Commander Luke Skywalker': {
@@ -244,7 +255,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy,
+      0 // crit avoidance
     )
   },
   'Coruscant Underworld Police': {
@@ -263,7 +275,8 @@ const characterOptimizations = {
       5, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'CT-21-0408 "Echo"': {
@@ -286,7 +299,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance, \n0, // crit avoidance
       true
     )
   },
@@ -302,7 +316,8 @@ const characterOptimizations = {
       5, // offense
       0, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance,\n0, // crit avoidance
       true
     )
   },
@@ -318,7 +333,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Darth Sidious': {
@@ -333,7 +349,8 @@ const characterOptimizations = {
       5, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Darth Sion': {
@@ -356,7 +373,8 @@ const characterOptimizations = {
       2, // offense
       65, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -376,7 +394,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -392,7 +411,8 @@ const characterOptimizations = {
       1, // offense
       75, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Director Krennic': {
@@ -415,7 +435,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Ewok Elder': {
@@ -430,7 +451,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Ewok Scout': {
@@ -449,7 +471,8 @@ const characterOptimizations = {
       1, // offense
       50, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -465,7 +488,8 @@ const characterOptimizations = {
       0, // offense
       33, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -509,7 +533,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -529,7 +554,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       1, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'General Veers': {
@@ -544,7 +570,8 @@ const characterOptimizations = {
       0, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Geonosian Soldier': {
@@ -567,7 +594,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -583,7 +611,8 @@ const characterOptimizations = {
       0, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Grand Moff Tarkin': {
@@ -602,7 +631,8 @@ const characterOptimizations = {
       0, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Han Solo': {
@@ -617,7 +647,8 @@ const characterOptimizations = {
       5, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Hera Syndulla': {
@@ -632,7 +663,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -656,7 +688,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Hoth Rebel Soldier': {
@@ -671,7 +704,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'IG-100 MagnaGuard': {
@@ -694,7 +728,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Ima-Gun Di': {
@@ -725,7 +760,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Jawa Scavenger': {
@@ -748,7 +784,8 @@ const characterOptimizations = {
       5, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Jedi Knight Guardian': {
@@ -767,7 +804,8 @@ const characterOptimizations = {
       0, // offense
       75, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'K-2SO': {
@@ -782,7 +820,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Kanan Jarrus': {
@@ -797,7 +836,8 @@ const characterOptimizations = {
       0, // offense
       50, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -857,7 +897,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Nightsister Acolyte': {
@@ -872,7 +913,8 @@ const characterOptimizations = {
       2, // offense
       75, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Nightsister Initiate': {
@@ -887,7 +929,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Nightsister Spirit': {
@@ -918,7 +961,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Pao': {
@@ -945,7 +989,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -965,7 +1010,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Qui-Gon Jinn': {
@@ -984,7 +1030,8 @@ const characterOptimizations = {
       1, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Rebel Officer Leia Organa': {
@@ -999,7 +1046,8 @@ const characterOptimizations = {
       5, // offense
       20, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Resistance Pilot': {
@@ -1014,7 +1062,8 @@ const characterOptimizations = {
       2, // offense
       75, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -1030,7 +1079,8 @@ const characterOptimizations = {
       1, // offense
       50, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Rey (Jedi Training)': {
@@ -1045,7 +1095,8 @@ const characterOptimizations = {
       2, // offense
       100, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Rey (Scavenger)': {
@@ -1060,7 +1111,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -1096,7 +1148,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -1112,7 +1165,8 @@ const characterOptimizations = {
       5, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Sith Marauder': {
@@ -1131,7 +1185,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       20, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Snowtrooper': {
@@ -1146,7 +1201,8 @@ const characterOptimizations = {
       2, // offense
       75, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Stormtrooper': {
@@ -1161,7 +1217,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       10, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Stormtrooper Han': {
@@ -1176,7 +1233,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       3, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Sun Fac': {
@@ -1195,7 +1253,8 @@ const characterOptimizations = {
       4, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Teebo': {
@@ -1210,7 +1269,8 @@ const characterOptimizations = {
       0, // offense
       0, // crit chance
       5, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'TIE Fighter Pilot': {
@@ -1225,7 +1285,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -1269,7 +1330,8 @@ const characterOptimizations = {
       5, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
   'Wedge Antilles': {
@@ -1284,7 +1346,8 @@ const characterOptimizations = {
       2, // offense
       50, // crit chance
       0, // defense
-      0, // accuracy
+      0, // accuracy,
+      0, // crit avoidance
       true
     )
   },
@@ -1304,7 +1367,8 @@ const characterOptimizations = {
       1, // offense
       0, // crit chance
       0, // defense
-      0 // accuracy
+      0, // accuracy
+      0 // crit avoidance
     )
   },
 };

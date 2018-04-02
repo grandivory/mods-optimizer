@@ -10,7 +10,8 @@ const statTypeMap = {
   'Offense': 'offense',
   'Critical Chance': 'critChance',
   'Defense': 'defense',
-  'Accuracy': 'accuracy'
+  'Accuracy': 'accuracy',
+  'Critical Avoidance': 'critAvoid'
 };
 
 Object.freeze(statTypeMap);

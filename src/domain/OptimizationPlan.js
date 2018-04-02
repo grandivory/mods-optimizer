@@ -13,6 +13,7 @@ class OptimizationPlan {
               critChance,
               defense,
               accuracy,
+              critAvoid,
               useOnly5dotMods
   ) {
     this.health = health || 0;
@@ -25,6 +26,7 @@ class OptimizationPlan {
     this.critChance = critChance || 0;
     this.defense = defense || 0;
     this.accuracy = accuracy || 0;
+    this.critAvoid = critAvoid || 0;
     this.useOnly5dotMods = useOnly5dotMods || false;
   }
 }
