@@ -1126,7 +1126,20 @@ const characterOptimizations = {
   },
   'Sabine Wren': {
     character: characters['Sabine Wren'],
-    optimizationPlan: new OptimizationPlan()
+    optimizationPlan: new OptimizationPlan(
+      .1, // health
+      .05, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      0, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   },
   'Savage Opress': {
     character: characters['Savage Opress'],

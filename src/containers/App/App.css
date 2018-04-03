@@ -63,10 +63,37 @@ html, body {
 
 .App-header {
   background-color: #222;
-  padding: 20px;
+  padding: 0;
   color: white;
   height: 100px;
   box-sizing: border-box;
+  position: relative;
+  border-bottom: 1px solid gray;
+}
+
+.App-header nav {
+  position: absolute;
+  bottom: -1px;
+  padding: 0;
+  margin: 0;
+}
+
+.App-header nav button {
+  margin-bottom: 0;
+  border-radius: 5px 5px 0 0;
+  border: 1px solid gray;
+  background-color: #202020;
+  color: lightgray;
+}
+
+.App-header nav button:hover {
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+  margin: 0;
+  padding: 20px 20px 0;
 }
 
 .app-body {
@@ -78,8 +105,17 @@ html, body {
   text-shadow: 2px 2px 1px black;
 }
 
-.App-title {
-  font-size: 1.5em;
+nav.sub-nav {
+  border-bottom: 1px solid dodgerblue;
+  position: relative;
+}
+
+nav.sub-nav button {
+  border-radius: 5px 5px 0 0;
+  border: 1px solid dodgerblue;
+  background-color: #202020;
+  margin-bottom: -1px;
+  color: lightgray;
 }
 
 button {
@@ -91,4 +127,11 @@ button {
   font-size: 18pt;
   font-weight: 300;
   color: white;
+}
+
+nav button.active {
+  border-bottom: none;
+  color: white;
+  bottom: -1px;
+  position: relative;
 }

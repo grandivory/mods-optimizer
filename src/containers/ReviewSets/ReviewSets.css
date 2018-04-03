@@ -2,6 +2,15 @@
   padding-bottom: 12em;
 }
 
+.review-sets h2 {
+  text-align: center;
+}
+
+.review-sets .display-options {
+  text-align: center;
+  font-size: 24px;
+}
+
 .review-sets .mod-set-detail {
   display: inline-block;
   vertical-align: middle;

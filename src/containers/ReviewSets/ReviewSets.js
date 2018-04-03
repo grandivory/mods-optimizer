@@ -7,9 +7,22 @@ import ModSetDetail from "../../components/ModSetDetail/ModSetDetail";
 import './ReviewSets.css';
 
 class ReviewSets extends React.Component {
+  constructor() {
+    super();
+    this.state = {'view': 'all'};
+  }
+
   render() {
-    const characterSets = this.props.characterSets;
+    let characterSets = this.props.characterSets;
     const mods = this.props.mods;
+    const numOptimizedCharacters = characterSets.length;
+
+    // Filter out sets based on the view settings
+    if ('move' === this.state.view) {
+      characterSets = characterSets.filter(characterSet =>
+        undefined !== characterSet.modSet.mods().find(mod => mod.currentCharacter !== mod.assignTo)
+      );
+    }
 
     // Create sets for everything each character already has equipped
     const rows = characterSets.map(characterSet => {
@@ -25,13 +38,37 @@ class ReviewSets extends React.Component {
       );
     });
 
-    return (
-      <div className={'review-sets'}>
-        <div className={'sets-list'}>
-          {rows}
+    if (0 === characterSets.length) {
+      return (
+        <div className={'review-sets'}>
+          <h2>No mods have been assigned yet. ↑Try hitting the Optimize button up there↑</h2>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className={'review-sets'}>
+          <h2>Showing mod sets for {characterSets.length} out of {numOptimizedCharacters} characters</h2>
+          <div className={'display-options'}>
+            <button onClick={this.showSets.bind(this, 'all')}>Show all sets</button>
+            <button onClick={this.showSets.bind(this, 'move')}>Show only sets with moving mods</button>
+          </div>
+          <div className={'sets-list'}>
+            {rows}
+          </div>
+        </div>
+      );
+    }
+  }
+
+  /**
+   * Limit the view to only some sets
+   *
+   * @param filter string The indicator of what sets to show
+   */
+  showSets(filter) {
+    this.setState({
+      'view': filter
+    })
   }
 }
 

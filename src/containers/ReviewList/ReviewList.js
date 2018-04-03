@@ -13,12 +13,25 @@ class ReviewList extends React.Component {
   }
 
   render() {
-    let movingMods = this.props.mods.filter(mod => mod.currentCharacter !== mod.assignTo);
+    let movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
 
     if ('currentCharacter' === this.state.sortBy) {
       movingMods.sort((left, right) => {
         let leftCharName = left.currentCharacter.name;
         let rightCharName = right.currentCharacter.name;
+
+        if (leftCharName < rightCharName) {
+          return -1;
+        } else if (leftCharName > rightCharName) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else if ('assignTo' === this.state.sortBy) {
+      movingMods.sort((left, right) => {
+        let leftCharName = left.assignTo.name;
+        let rightCharName = right.assignTo.name;
 
         if (leftCharName < rightCharName) {
           return -1;
@@ -42,19 +55,27 @@ class ReviewList extends React.Component {
       </div>
     );
 
-    return (
-      <div className={'review-list'}>
-        <h2>Reassigning {movingMods.length} mods</h2>
-        <div className={'sort-options'}>
-          Sort By:
-          <button onClick={this.sortByCurrent.bind(this)}>Currently Equipped</button>
-          <button onClick={this.sortByAssigned.bind(this)}>Assigned Character</button>
+    if (0 === movingMods.length) {
+      return (
+        <div className={'review-list'}>
+          <h2>You don't have any mods left to move! Great job!</h2>
         </div>
-        <div className={'mods-list'}>
-          {modRows}
+      )
+    } else {
+      return (
+        <div className={'review-list'}>
+          <h2>Reassigning {movingMods.length} mods</h2>
+          <div className={'sort-options'}>
+            Sort By:
+            <button onClick={this.sortByCurrent.bind(this)}>Currently Equipped</button>
+            <button onClick={this.sortByAssigned.bind(this)}>Assigned Character</button>
+          </div>
+          <div className={'mods-list'}>
+            {modRows}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   removeMod(mod) {
