@@ -3,7 +3,8 @@ class Stat {
     this.displayModifier = type.endsWith('%') || value.endsWith('%') ? '%' : '';
     this.type = type;
     this.displayType = type.endsWith('%') ? type.substr(0, type.length - 1).trim() : type;
-    this.value = +value.replace(/[+%]/g, '');
+    this.displayValue = value.replace(/[+%]/g, '');
+    this.value = +this.displayValue;
     this.isPercent = '%' === this.displayModifier && Stat.percentTypes.includes(this.displayType);
   }
 
@@ -28,7 +29,7 @@ class Stat {
    * @returns {string}
    */
   showValue() {
-    return `${this.value}${this.displayModifier}`;
+    return `${this.displayValue}${this.displayModifier}`;
   }
 }
 
