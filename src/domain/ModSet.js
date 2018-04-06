@@ -114,6 +114,7 @@ class ModSet {
       } else {
         stat.value = Math.trunc(stat.value);
       }
+      stat.updateDisplayValue();
     });
 
     return summary;

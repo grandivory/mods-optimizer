@@ -18,6 +18,14 @@ class Stat {
   }
 
   /**
+   * Update the displayed value for this stat to match the value held in the stat. This is useful if the stat
+   * value was updated
+   */
+  updateDisplayValue() {
+    this.displayValue = `${this.value}`;
+  }
+
+  /**
    * Return a string that represents this stat
    */
   show() {

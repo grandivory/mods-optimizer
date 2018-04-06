@@ -13,7 +13,7 @@ class ModStats extends React.Component {
       <div className='mod-stats'>
         <h4>Primary Stat</h4>
         <ul>
-          <li>{mod.primaryStat.value}{mod.primaryStat.displayModifier} {mod.primaryStat.displayType}</li>
+          <li>{mod.primaryStat.show()}</li>
         </ul>
         <h4>Secondary Stats</h4>
         <ul className='secondary'>

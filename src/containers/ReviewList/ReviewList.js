@@ -17,8 +17,8 @@ class ReviewList extends React.Component {
 
     if ('currentCharacter' === this.state.sortBy) {
       movingMods.sort((left, right) => {
-        let leftCharName = left.currentCharacter.name;
-        let rightCharName = right.currentCharacter.name;
+        let leftCharName = left.currentCharacter ? left.currentCharacter.name : '';
+        let rightCharName = right.currentCharacter ? right.currentCharacter.name : '';
 
         if (leftCharName < rightCharName) {
           return -1;
@@ -30,8 +30,8 @@ class ReviewList extends React.Component {
       });
     } else if ('assignTo' === this.state.sortBy) {
       movingMods.sort((left, right) => {
-        let leftCharName = left.assignTo.name;
-        let rightCharName = right.assignTo.name;
+        let leftCharName = left.assignTo ? left.assignTo.name : '';
+        let rightCharName = right.assignTo ? right.assignTo.name : '';
 
         if (leftCharName < rightCharName) {
           return -1;
@@ -59,6 +59,7 @@ class ReviewList extends React.Component {
       return (
         <div className={'review-list'}>
           <h2>You don't have any mods left to move! Great job!</h2>
+          <h3>Don't forget to assign mods to all your pilots!</h3>
         </div>
       )
     } else {
