@@ -1,0 +1,14 @@
+.drop-target {
+  font-size: 2em;
+  height: 4em;
+  line-height: 4em;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px dashed white;
+  color: #a35ef9;
+}
+
+.drop-target.drag-active {
+  border-color: #eeca44;
+  background-color: black;
+}

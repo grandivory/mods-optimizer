@@ -11,6 +11,7 @@ import Character from "../../domain/Character";
 import OptimizerView from "../OptimizerView/OptimizerView";
 import ExploreView from "../ExploreView/ExploreView";
 import FileInput from "../../components/FileInput/FileInput";
+import FileDropZone from "../../components/FileDropZone/FileDropZone";
 
 class App extends Component {
   constructor(props) {
@@ -129,30 +130,70 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Grandivory's Mod Optimizer for SWGOH</h1>
-          <nav>
-            <button className={'explore' === this.state.view ? 'active' : ''}
-                    onClick={this.showPage.bind(this, 'explore')}>Explore Mods</button>
-            <button className={'optimize' === this.state.view ? 'active' : ''}
-                    onClick={this.showPage.bind(this, 'optimize')}>Optimize my Mods</button>
-          </nav>
-          <div className={'actions'}>
-            <FileInput handler={this.readModsFile.bind(this)}/>
-          </div>
-        </header>
-        <div className='app-body'>
-          {'explore' === this.state.view &&
+    if (this.state.mods.length > 0) {
+      return (
+        <div className={'App'}>
+          <header className={'App-header'}>
+            <h1 className={'App-title'}>Grandivory's Mod Optimizer for Star Wars: Galaxy of Heroes™</h1>
+            <nav>
+              <button className={'explore' === this.state.view ? 'active' : ''}
+                      onClick={this.showPage.bind(this, 'explore')}>Explore my mods</button>
+              <button className={'optimize' === this.state.view ? 'active' : ''}
+                      onClick={this.showPage.bind(this, 'optimize')}>Optimize my mods</button>
+            </nav>
+            <div className={'actions'}>
+              <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
+            </div>
+          </header>
+          <div className={'app-body'}>
+            {'explore' === this.state.view &&
             <ExploreView mods={this.state.mods} />
-          }
-          {'optimize' === this.state.view &&
+            }
+            {'optimize' === this.state.view &&
             <OptimizerView mods={this.state.mods}/>
-          }
+            }
+          </div>
+          <footer className={'App-footer'}>
+            Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.
+          </footer>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className={'App'}>
+          <header className={'App-header'}>
+            <h1 className={'App-title'}>Grandivory's Mod Optimizer for Star Wars: Galaxy of Heroes™</h1>
+            <div className={'actions'}>
+              <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
+            </div>
+          </header>
+          <div className={'app-body'}>
+            <div className={'welcome'}>
+              <h2>Welcome to the mod optimizer for Star Wars: Galaxy of Heroes™!</h2>
+              <p>
+                This application will allow you to equip the optimum mod set on every character you have by assigning
+                a value to each stat that a mod can confer. You'll give it a list of characters to optimize for along
+                with the stats that you're looking for, and it will determine the best mods to equip, one character at a
+                time, until your list is exhausted.
+              </p>
+              <p>
+                To get started, copy the google sheet <a className={'call-out'}
+                href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy">here</a>
+                , courtesy of <a href="http://apps.crouchingrancor.com">Crouching Rancor</a>.
+                It will allow you to export your mods from <a href="https://swgoh.gg">SWGOH.gg</a> in order to import
+                them into this tool. When you're ready, you can click the button above, or drag your mods file into the
+                box below.
+              </p>
+              <FileDropZone handler={this.readModsFile.bind(this)} label={'Drop your mods file here!'} />
+            </div>
+          </div>
+          <footer className={'App-footer'}>
+            Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.
+          </footer>
+        </div>
+      );
+    }
+
   }
 
   /**

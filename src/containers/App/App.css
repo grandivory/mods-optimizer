@@ -86,8 +86,24 @@ html, body {
   color: lightgray;
 }
 
-.App-header nav button:hover {
+.App-header nav button:hover, .App-header nav button:focus {
   color: white;
+}
+
+.App-header .actions {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.App-footer {
+  background-color: #222;
+  padding: 0;
+  color: lightgray;
+  height: 1.5em;
+  box-sizing: border-box;
+  border-top: 1px solid gray;
+  text-align: center;
 }
 
 .App-title {
@@ -99,10 +115,20 @@ html, body {
 .app-body {
   background: black url('/img/cantina-background.jpg') no-repeat fixed;
   background-size: cover;
-  height: calc(100% - 100px);
-  overflow-y: scroll;
+  height: calc(100% - 100px - 1.5em);
+  overflow-y: auto;
   color: white;
   text-shadow: 2px 2px 1px black;
+}
+
+.app-body a {
+  color: white;
+  text-decoration: underline;
+}
+
+.app-body a.call-out {
+  font-weight: bold;
+  color: #eeca44;
 }
 
 nav.sub-nav {
@@ -118,15 +144,27 @@ nav.sub-nav button {
   color: lightgray;
 }
 
-button {
+button, .button {
   display: inline-block;
   margin: 5px;
   background-color: #46801a;
-  border: none;
+  border: 1px outset limegreen;
   border-radius: 5px;
   font-size: 18pt;
   font-weight: 300;
   color: white;
+  padding: 1px .25em;
+  opacity: .9;
+}
+
+button:active, .button:active {
+  border: 1px inset limegreen;
+}
+
+button:hover, button:focus,
+.button:hover, .button:focus {
+  outline: 0;
+  opacity: 1;
 }
 
 nav button.active {
@@ -134,4 +172,10 @@ nav button.active {
   color: white;
   bottom: -1px;
   position: relative;
+}
+
+.welcome {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 800px;
 }
