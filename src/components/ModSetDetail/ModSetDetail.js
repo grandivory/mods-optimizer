@@ -7,6 +7,7 @@ import './ModSetDetail.css';
 class ModSetDetail extends React.Component {
   render() {
     const modSet = this.props.set;
+    const optimizationPlan = this.props.optimizationPlan;
     const character = this.props.character;
 
     let modDetails = Object.keys(modSet).filter(slot => null !== modSet[slot]).map(slot => (
@@ -40,6 +41,9 @@ class ModSetDetail extends React.Component {
               {statsDisplay}
             </tbody>
           </table>
+          <div className={'set-value'}>
+            Total Value of Set: {modSet.getOptimizationValue(optimizationPlan, character).toFixed(2)}
+          </div>
         </div>
       </div>
     );

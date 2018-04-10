@@ -29,6 +29,17 @@ class ModSet {
   }
 
   /**
+   * Check to see if this mod set contains a given mod
+   *
+   * @param mod
+   *
+   * @return boolean
+   */
+  contains(mod) {
+    return this.mods().includes(mod);
+  }
+
+  /**
    * Create a new instance of ModSet with the same mods
    */
   copy() {
@@ -144,6 +155,17 @@ class ModSet {
     } else {
       summary[stat.displayType].value += stat.value;
     }
+  }
+
+  /**
+   * Get the value of this full mod set for optimization
+   *
+   * @param optimizationPlan
+   * @param character
+   */
+  getOptimizationValue(optimizationPlan, character) {
+    return Object.values(this.getSummary(character))
+      .reduce((setValue, stat) => setValue + stat.getOptimizationValue(optimizationPlan, character), 0);
   }
 }
 

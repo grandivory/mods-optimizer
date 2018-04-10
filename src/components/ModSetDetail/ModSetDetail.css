@@ -61,6 +61,12 @@
   text-align: right;
 }
 
+.mod-set-detail .summary .set-value {
+  position: absolute;
+  right: 1em;
+  bottom: 1em;
+}
+
 .mod-set-detail .mod {
   position: absolute;
 }

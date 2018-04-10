@@ -5,6 +5,7 @@ import ModSet from "../../domain/ModSet";
 import ModSetDetail from "../../components/ModSetDetail/ModSetDetail";
 
 import './ReviewSets.css';
+import characterOptimizations from "../../constants/characterOptimizations";
 
 class ReviewSets extends React.Component {
   constructor() {
@@ -27,13 +28,17 @@ class ReviewSets extends React.Component {
     // Create sets for everything each character already has equipped
     const rows = characterSets.map(characterSet => {
       const currentSet = new ModSet(mods.filter(mod => mod.currentCharacter === characterSet.character));
+      const optimizationPlan = characterOptimizations[characterSet.character.name].optimizationPlan;
 
       return (
         <div className={'set-row'} key={characterSet.character.name}>
-          <ModSetDetail set={currentSet} character={characterSet.character} />
+          <ModSetDetail set={currentSet} optimizationPlan={optimizationPlan} character={characterSet.character} />
           <CharacterAvatar name={characterSet.character.name}/>
           <Arrow />
-          <ModSetDetail set={characterSet.modSet} character={characterSet.character} />
+          <ModSetDetail
+            set={characterSet.modSet}
+            optimizationPlan={optimizationPlan}
+            character={characterSet.character} />
         </div>
       );
     });
@@ -41,7 +46,7 @@ class ReviewSets extends React.Component {
     if (0 === characterSets.length) {
       return (
         <div className={'review-sets'}>
-          <h2>No mods have been assigned yet. ↑Try hitting the Optimize button up there↑</h2>
+          <h2>Your mods are already optimal. Congratulations!</h2>
         </div>
       );
     } else {

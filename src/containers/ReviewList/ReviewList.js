@@ -7,9 +7,15 @@ import Arrow from "../../components/Arrow/Arrow";
 
 class ReviewList extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {'sortBy': 'assignTo'};
+
+    if ('function' === typeof props.saveState) {
+      this.saveState = props.saveState;
+    } else {
+      this.saveState = function() {};
+    }
   }
 
   render() {
@@ -82,6 +88,7 @@ class ReviewList extends React.Component {
   removeMod(mod) {
     mod.currentCharacter = null;
     this.setState({});
+    this.saveState();
   }
 
   reassignMod(mod) {
@@ -90,6 +97,7 @@ class ReviewList extends React.Component {
       .forEach(m => m.currentCharacter = null);
     mod.currentCharacter = mod.assignTo;
     this.setState({});
+    this.saveState();
   }
 
   sortByCurrent() {

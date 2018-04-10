@@ -1,3 +1,5 @@
+import statTypeMap from "../constants/statTypeMap";
+
 class Stat {
   constructor(type, value) {
     this.displayModifier = type.endsWith('%') || value.endsWith('%') ? '%' : '';
@@ -38,6 +40,30 @@ class Stat {
    */
   showValue() {
     return `${this.displayValue}${this.displayModifier}`;
+  }
+
+  /**
+   * Extract the type and value of this stat for serialization
+   */
+  serialize() {
+    const percent = this.isPercent && !this.type.includes('%') ? '%' : '';
+
+    return [this.type, `+${this.displayValue}${percent}`];
+  }
+
+  /**
+   * Get the value of this stat for optimization
+   *
+   * @param optimizationPlan
+   * @param character
+   */
+  getOptimizationValue(optimizationPlan, character) {
+    const statType = statTypeMap[this.displayType];
+    if (this.isPercent) {
+      return optimizationPlan[statType] * Math.floor(character.baseStats[statType] * this.value / 100);
+    } else {
+      return optimizationPlan[statType] * this.value
+    }
   }
 }
 

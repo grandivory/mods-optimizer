@@ -5,12 +5,19 @@ import ReviewList from "../ReviewList/ReviewList";
 import ReviewSets from "../ReviewSets/ReviewSets";
 
 class OptimizerView extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       'view': 'sets',
-      'modAssignments': []
     };
+
+    if ('function' === typeof props.saveState) {
+      this.saveState = props.saveState;
+    } else {
+      this.saveState = function() {};
+    }
+
+    this.state.modAssignments = this.optimizeMods(props.mods);
   }
 
   render() {
@@ -18,9 +25,6 @@ class OptimizerView extends React.Component {
 
     return (
       <div className={'optimizer-view'}>
-        <div className={'actions'}>
-          <button onClick={this.optimizeMods.bind(this, mods)}>Optimize Mods!</button>
-        </div>
         <nav className={'sub-nav'}>
           <button className={'sets' === this.state.view ? 'active' : ''}
                   onClick={this.updateView.bind(this, 'sets')}>View sets</button>
@@ -30,7 +34,7 @@ class OptimizerView extends React.Component {
         {'sets' === this.state.view &&
           <ReviewSets characterSets={this.state.modAssignments} mods={mods} />}
         {'mods' === this.state.view &&
-          <ReviewList mods={mods} />
+          <ReviewList mods={mods} saveState={this.saveState} />
         }
       </div>
     );
@@ -118,9 +122,9 @@ class OptimizerView extends React.Component {
       characterOptimizations['Darth Maul']
     ]);
 
-    this.setState({
-      'modAssignments': modAssignments
-    });
+    this.saveState();
+
+    return modAssignments;
   }
 }
 
