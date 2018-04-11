@@ -32,13 +32,18 @@ class ReviewSets extends React.Component {
 
       return (
         <div className={'set-row'} key={characterSet.character.name}>
-          <ModSetDetail set={currentSet} optimizationPlan={optimizationPlan} character={characterSet.character} />
-          <CharacterAvatar name={characterSet.character.name}/>
-          <Arrow />
           <ModSetDetail
+            changeClass={'remove'}
+            set={currentSet}
+            optimizationPlan={optimizationPlan}
+            character={characterSet.character}/>
+          <CharacterAvatar name={characterSet.character.name}/>
+          <Arrow/>
+          <ModSetDetail
+            changeClass={'add'}
             set={characterSet.modSet}
             optimizationPlan={optimizationPlan}
-            character={characterSet.character} />
+            character={characterSet.character}/>
         </div>
       );
     });

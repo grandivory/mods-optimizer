@@ -5,6 +5,14 @@
   z-index: 100;
 }
 
+.mod-image.remove img {
+  filter: drop-shadow(0 0 .5em darkred);
+}
+
+.mod-image.add img {
+  filter: drop-shadow(0 0 .5em #60bd1b);
+}
+
 .mod-image.square {
   left: 20px;
 }

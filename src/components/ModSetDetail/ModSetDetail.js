@@ -9,11 +9,14 @@ class ModSetDetail extends React.Component {
     const modSet = this.props.set;
     const optimizationPlan = this.props.optimizationPlan;
     const character = this.props.character;
+    const changeClass = this.props.changeClass || '';
 
     let modDetails = Object.keys(modSet).filter(slot => null !== modSet[slot]).map(slot => (
       <div className={'mod ' + slot} key={modSet[slot].id}>
-        <ModImage mod={modSet[slot]} />
-        <ModStats mod={modSet[slot]} />
+        <ModImage
+          className={modSet[slot].currentCharacter !== modSet[slot].assignTo ? changeClass : ''}
+          mod={modSet[slot]}/>
+        <ModStats mod={modSet[slot]}/>
       </div>
     ));
 
@@ -33,12 +36,12 @@ class ModSetDetail extends React.Component {
         <div className={'summary'}>
           <table>
             <thead>
-              <tr>
-                <th colSpan="2">Stats Summary</th>
-              </tr>
+            <tr>
+              <th colSpan="2">Stats Summary</th>
+            </tr>
             </thead>
             <tbody>
-              {statsDisplay}
+            {statsDisplay}
             </tbody>
           </table>
           <div className={'set-value'}>

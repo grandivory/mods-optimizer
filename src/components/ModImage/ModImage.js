@@ -17,9 +17,10 @@ class ModImage extends React.Component {
     const mod = this.props.mod;
     const modImageName = this.modImageName(mod);
     const modColor = this.modColor(mod);
+    const extraClass = this.props.className ? ` ${this.props.className}` : '';
 
     return (
-      <div className={'mod-image ' + mod.slot}>
+      <div className={'mod-image ' + mod.slot + extraClass}>
         <Pips pips={mod.pips} />
         <img src={mod_images[modImageName + '.png']} alt={modImageName} />
         <div className={'mod-level ' + (15 === mod.level ? 'gold ' : 'gray ') + mod.slot}>{mod.level}</div>
