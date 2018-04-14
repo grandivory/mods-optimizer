@@ -57,12 +57,12 @@ class Stat {
    * @param optimizationPlan
    * @param character
    */
-  getOptimizationValue(optimizationPlan, character) {
+  getOptimizationValue(character) {
     const statType = statTypeMap[this.displayType];
     if (this.isPercent) {
-      return optimizationPlan[statType] * Math.floor(character.baseStats[statType] * this.value / 100);
+      return character.optimizationPlan[statType] * Math.floor(character.baseStats[statType] * this.value / 100);
     } else {
-      return optimizationPlan[statType] * this.value
+      return character.optimizationPlan[statType] * this.value
     }
   }
 }

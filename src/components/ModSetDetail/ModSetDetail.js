@@ -7,7 +7,6 @@ import './ModSetDetail.css';
 class ModSetDetail extends React.Component {
   render() {
     const modSet = this.props.set;
-    const optimizationPlan = this.props.optimizationPlan;
     const character = this.props.character;
     const changeClass = this.props.changeClass || '';
 
@@ -45,7 +44,7 @@ class ModSetDetail extends React.Component {
             </tbody>
           </table>
           <div className={'set-value'}>
-            Total Value of Set: {modSet.getOptimizationValue(optimizationPlan, character).toFixed(2)}
+            Total Value of Set: {modSet.getOptimizationValue(character).toFixed(2)}
           </div>
         </div>
       </div>

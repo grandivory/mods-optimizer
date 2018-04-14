@@ -5,7 +5,6 @@ import ModSet from "../../domain/ModSet";
 import ModSetDetail from "../../components/ModSetDetail/ModSetDetail";
 
 import './ReviewSets.css';
-import characterOptimizations from "../../constants/characterOptimizations";
 
 class ReviewSets extends React.Component {
   constructor() {
@@ -21,28 +20,25 @@ class ReviewSets extends React.Component {
     // Filter out sets based on the view settings
     if ('move' === this.state.view) {
       characterSets = characterSets.filter(characterSet =>
-        undefined !== characterSet.modSet.mods().find(mod => mod.currentCharacter !== mod.assignTo)
+        undefined !== characterSet.modSet.mods().find(mod => mod.currentCharacter.name !== mod.assignTo.name)
       );
     }
 
     // Create sets for everything each character already has equipped
     const rows = characterSets.map(characterSet => {
-      const currentSet = new ModSet(mods.filter(mod => mod.currentCharacter === characterSet.character));
-      const optimizationPlan = characterOptimizations[characterSet.character.name].optimizationPlan;
+      const currentSet = new ModSet(mods.filter(mod => mod.currentCharacter.name === characterSet.character.name));
 
       return (
         <div className={'set-row'} key={characterSet.character.name}>
           <ModSetDetail
             changeClass={'remove'}
             set={currentSet}
-            optimizationPlan={optimizationPlan}
             character={characterSet.character}/>
           <CharacterAvatar name={characterSet.character.name}/>
           <Arrow/>
           <ModSetDetail
             changeClass={'add'}
             set={characterSet.modSet}
-            optimizationPlan={optimizationPlan}
             character={characterSet.character}/>
         </div>
       );

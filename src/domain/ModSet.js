@@ -160,12 +160,11 @@ class ModSet {
   /**
    * Get the value of this full mod set for optimization
    *
-   * @param optimizationPlan
    * @param character
    */
-  getOptimizationValue(optimizationPlan, character) {
+  getOptimizationValue(character) {
     return Object.values(this.getSummary(character))
-      .reduce((setValue, stat) => setValue + stat.getOptimizationValue(optimizationPlan, character), 0);
+      .reduce((setValue, stat) => setValue + stat.getOptimizationValue(character), 0);
   }
 }
 

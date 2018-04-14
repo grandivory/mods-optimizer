@@ -1,6 +1,5 @@
 import setBonuses from "../constants/setbonuses";
 import firstOrNull from "./firstOrNull";
-import statTypeMap from "../constants/statTypeMap";
 import chooseFromArray from "./chooseFromArray";
 import ModSet from "../domain/ModSet";
 
@@ -45,9 +44,8 @@ class Optimizer {
     let considerationSet = this.mods;
 
     // For each character in the list, find the best mod set for that character
-    for (let characterPlan of characterList) {
-      let {character, optimizationPlan} = characterPlan;
-      let modSet = this.findBestModSetForCharacter(considerationSet, character, optimizationPlan);
+    for (let character of characterList) {
+      let modSet = this.findBestModSetForCharacter(considerationSet, character);
 
       // Assign the character to each mod, then remove the mods from the consideration set
       // While assigning the character to each mod, remove them from any other mods in the set
@@ -69,10 +67,10 @@ class Optimizer {
    * such that the values in the plan are optimized.
    *
    * @param mods The set of mods that is available to be used for this character
-   * @param character A Character object that represents all of the base stats required for percentage calculations
-   * @param optimizationPlan An OptimizationPlan object that gives values to all stats.
+   * @param character A Character object that represents all of the base stats required for percentage calculations as
+   *                  well as the optimization plan to use
    */
-  findBestModSetForCharacter(mods, character, optimizationPlan) {
+  findBestModSetForCharacter(mods, character) {
     let availableMods;
     let squares, arrows, diamonds, triangles, circles, crosses;
     let modValues = new WeakMap();
@@ -84,7 +82,7 @@ class Optimizer {
     let candidateValues = new WeakMap();
 
     // If the optimization plan says to only use 5-dot mods, then filter out any mods with fewer dots
-    if (optimizationPlan.useOnly5dotMods) {
+    if (character.optimizationPlan.useOnly5dotMods) {
       availableMods = mods.filter(mod => 5 === mod.pips);
     } else {
       availableMods = mods;
@@ -92,16 +90,16 @@ class Optimizer {
 
     // Go through all mods and assign a value to them based on the optimization plan
     for (let mod of availableMods) {
-      modValues.set(mod, this.scoreMod(mod, optimizationPlan, character));
+      modValues.set(mod, this.scoreMod(mod, character));
     }
 
     // Sort all the mods by score, then break them into sets
     availableMods.sort((left, right) => {
       if (modValues.get(right) === modValues.get(left)) {
         // If mods have equal value, then favor the one that's already equipped
-        if (character === left.currentCharacter) {
+        if (character.name === left.currentCharacter.name) {
           return -1;
-        } else if (character === right.currentCharacter) {
+        } else if (character.name === right.currentCharacter.name) {
           return 1;
         } else {
           return 0;
@@ -123,7 +121,7 @@ class Optimizer {
         let setBonus = setBonuses[setName];
         setBonusValues.set(
           setBonus,
-          setBonus.bonus.getOptimizationValue(optimizationPlan, character)
+          setBonus.bonus.getOptimizationValue(character)
         );
 
         if (setBonusValues.get(setBonus) > 0) {
@@ -163,7 +161,7 @@ class Optimizer {
 
     // Choose the set with the highest value
     for (let candidateSet of candidateSets) {
-      candidateValues.set(candidateSet, candidateSet.getOptimizationValue(optimizationPlan, character));
+      candidateValues.set(candidateSet, candidateSet.getOptimizationValue(character));
     }
     candidateSets.sort((left, right) => candidateValues.get(right) - candidateValues.get(left));
 
@@ -174,15 +172,14 @@ class Optimizer {
    * Given a mod and an optimization plan, figure out the value for that mod
    *
    * @param mod Mod
-   * @param optimizationPlan OptimizationPlan
    * @param character Character for whom the mod is being scored
    */
-  scoreMod(mod, optimizationPlan, character) {
+  scoreMod(mod, character) {
     let score = 0;
 
-    score += mod.primaryStat.getOptimizationValue(optimizationPlan, character);
+    score += mod.primaryStat.getOptimizationValue(character);
     score += mod.secondaryStats.map(
-      stat => stat.getOptimizationValue(optimizationPlan, character)
+      stat => stat.getOptimizationValue(character)
     ).reduce((a, b) => a + b, 0);
 
     return score;
