@@ -3,21 +3,67 @@ import Optimizer from "../../utils/Optimizer";
 import ReviewList from "../ReviewList/ReviewList";
 import ReviewSets from "../ReviewSets/ReviewSets";
 import characters from "../../constants/characters";
+import CharacterEditView from "../CharacterEditView/CharacterEditView";
+
+import "./OptimizerView.css";
+import Character from "../../domain/Character";
 
 class OptimizerView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'view': 'sets',
+      'view': 'edit',
     };
 
     if ('function' === typeof props.saveState) {
-      this.saveState = props.saveState;
+      this.saveState = function() {
+        console.log(this.state);
+        window.localStorage.setItem(
+          'availableCharacters',
+          JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
+        );
+        window.localStorage.setItem(
+          'selectedCharacters',
+          JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
+        );
+        props.saveState();
+      }
     } else {
-      this.saveState = function() {};
+      this.saveState = function() {
+        console.log(this.state);
+        window.localStorage.setItem(
+          'availableCharacters',
+          JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
+        );
+        window.localStorage.setItem(
+          'selectedCharacters',
+          JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
+        );
+      };
     }
 
-    this.state.modAssignments = this.optimizeMods(props.mods);
+    const characterDefaults = Object.values(characters).sort((left, right) => {
+      if (left.name < right.name) {
+        return -1;
+      } else if (right.name < left.name) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    this.state.availableCharacters = Object.assign(
+      characterDefaults,
+      JSON.parse(window.localStorage.getItem('availableCharacters')).map(characterJson =>
+        Character.deserialize(characterJson)
+      )
+    );
+    this.state.selectedCharacters = Object.assign(
+      [],
+      JSON.parse(window.localStorage.getItem('selectedCharacters')).map(characterJson =>
+        Character.deserialize(characterJson)
+      )
+    );
   }
 
   render() {
@@ -25,12 +71,29 @@ class OptimizerView extends React.Component {
 
     return (
       <div className={'optimizer-view'}>
-        <nav className={'sub-nav'}>
-          <button className={'sets' === this.state.view ? 'active' : ''}
-                  onClick={this.updateView.bind(this, 'sets')}>View sets</button>
-          <button className={'mods' === this.state.view ? 'active' : ''}
-                  onClick={this.updateView.bind(this, 'mods')}>Show me the mods to move!</button>
-        </nav>
+        {'edit' !== this.state.view &&
+          <div className={'actions'}>
+            <button onClick={this.updateView.bind(this, 'edit')}>
+              Change my character selection
+            </button>
+            <button onClick={this.updateView.bind(this, 'mods' === this.state.view ? 'sets' : 'mods')}>
+              {'mods' === this.state.view ? 'Show me as sets' : 'Show me a list of mods to move'}
+            </button>
+          </div>
+        }
+        {'edit' === this.state.view &&
+          <div className={'actions'}>
+            <button onClick={this.updateView.bind(this, 'sets')}>
+              Optimize my mods!
+            </button>
+          </div>
+        }
+
+        {'edit' === this.state.view &&
+          <CharacterEditView
+            availableCharacters={this.state.availableCharacters}
+            selectedCharacters={this.state.selectedCharacters} />
+        }
         {'sets' === this.state.view &&
           <ReviewSets characterSets={this.state.modAssignments} mods={mods} />}
         {'mods' === this.state.view &&
@@ -43,9 +106,16 @@ class OptimizerView extends React.Component {
   /**
    * Update the view with a new page
    *
-   * @param view The name of the new view to show. Currently, either 'sets' or 'mods'
+   * @param view The name of the new view to show.
    */
   updateView(view) {
+    if (view === this.state.view ) {
+      return;
+    } else if ('edit' === this.state.view) {
+      // If we're going from edit to another view, then run the optimization
+      this.optimizeMods(this.props.mods);
+    }
+
     this.setState({'view': view});
   }
 
@@ -55,76 +125,13 @@ class OptimizerView extends React.Component {
    * @param mods Array the mods to use in the optimization
    */
   optimizeMods(mods) {
-    const modAssignments = new Optimizer(mods).optimizeMods([
-      characters['CT-7567 "Rex"'],
-      characters['Wampa'],
-      characters['Mother Talzin'],
-      characters['Darth Nihilus'],
-      characters['General Kenobi'],
-      characters['Darth Vader'],
-      characters['BB-8'],
-      characters['Grand Admiral Thrawn'],
-      characters['Commander Luke Skywalker'],
-      characters['Rey (Jedi Training)'],
-      characters['Resistance Trooper'],
-      characters['Rey (Scavenger)'],
-      characters['R2-D2'],
-      characters['Sabine Wren'],
-      characters['Han Solo'],
-      characters['Chirrut Îmwe'],
-      characters['Jedi Knight Anakin'],
-      characters['General Veers'],
-      characters['Shoretrooper'],
-      characters['Death Trooper'],
-      characters['Snowtrooper'],
-      characters['Colonel Starck'],
-      characters['Boba Fett'],
-      characters['Zam Wesell'],
-      characters['Greedo'],
-      characters['Jawa Engineer'],
-      characters['Ewok Elder'],
-      characters['Admiral Ackbar'],
-      characters['Stormtrooper Han'],
-      characters['Princess Leia'],
-      characters['Ezra Bridger'],
-      characters['Hoth Rebel Scout'],
-      characters['Hoth Rebel Soldier'],
-      characters['Jyn Erso'],
-      characters['Baze Malbus'],
-      characters['Cassian Andor'],
-      characters['K-2SO'],
-      characters['Poe Dameron'],
-      characters['Finn'],
-      characters['Resistance Pilot'],
-      characters['Darth Sidious'],
-      characters['Chopper'],
-      characters['Hera Syndulla'],
-      characters['Garazeb "Zeb" Orrelios'],
-      characters['Kanan Jarrus'],
-      characters['Rebel Officer Leia Organa'],
-      characters['Captain Han Solo'],
-      characters['Grand Master Yoda'],
-      characters['Biggs Darklighter'],
-      characters['Wedge Antilles'],
-      characters['Emperor Palpatine'],
-      characters['TIE Fighter Pilot'],
-      characters['Stormtrooper'],
-      characters['IG-88'],
-      characters['Dengar'],
-      characters['Sith Assassin'],
-      characters['Count Dooku'],
-      characters['Sith Trooper'],
-      characters['Asajj Ventress'],
-      characters['Old Daka'],
-      characters['Nightsister Acolyte'],
-      characters['Talia'],
-      characters['Nightsister Initiate'],
-      characters['Darth Maul']
-    ]);
+    const modAssignments = new Optimizer(mods).optimizeMods(this.state.selectedCharacters);
+
+    this.setState({
+      'modAssignments': modAssignments
+    });
 
     this.saveState();
-
-    return modAssignments;
   }
 }
 

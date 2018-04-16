@@ -22,6 +22,42 @@ class BaseStats {
     this.offense = physDmg * physDmgPercent + specDmg * (1 - physDmgPercent);
     this.speed = speed;
     this.defense = (armor + resistance) / 2;
+
+    this.physDmg = physDmg;
+    this.specDmg = specDmg;
+    this.physDmgPercent = physDmgPercent;
+
+    this.armor = armor;
+    this.resistance = resistance;
+  }
+
+  serialize() {
+    let baseStatsObject = {};
+
+    baseStatsObject.health = this.health;
+    baseStatsObject.protection = this.protection;
+    baseStatsObject.physDmg = this.physDmg;
+    baseStatsObject.specDmg = this.specDmg;
+    baseStatsObject.physDmgPercent = this.physDmgPercent;
+    baseStatsObject.speed = this.speed;
+    baseStatsObject.armor = this.armor;
+    baseStatsObject.resistance = this.resistance;
+
+    return baseStatsObject;
+  }
+
+  static deserialize(baseStatsJson) {
+    console.log(baseStatsJson);
+    return new BaseStats(
+      baseStatsJson.health,
+      baseStatsJson.protection,
+      baseStatsJson.physDmg,
+      baseStatsJson.specDmg,
+      baseStatsJson.physDmgPercent,
+      baseStatsJson.speed,
+      baseStatsJson.armor,
+      baseStatsJson.resistance
+    );
   }
 }
 

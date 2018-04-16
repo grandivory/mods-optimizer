@@ -21,7 +21,7 @@ class CharacterAvatar extends React.Component {
 
     return (
       <div className="avatar">
-        <img src={character_images[imageName + '.png']} alt={name} title={name}/>
+        <img src={character_images[imageName + '.png']} alt={name} title={name} draggable={false} />
       </div>
     );
   }

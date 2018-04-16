@@ -1,7 +1,7 @@
 .mod-detail {
   display: inline-grid;
-  grid-template-columns: 85px 1fr;
-  grid-template-rows: 1fr 40px;
+  grid-template-columns: 5em 1fr;
+  grid-template-rows: 1fr 3em;
   grid-gap: 1em;
   align-items: start;
   border: 1px solid dodgerblue;
@@ -10,20 +10,21 @@
   text-shadow: 2px 2px 1px black;
   margin: 1em;
   padding: 1em;
-  width: 310px;
+  width: 19em;
 }
 
 .mod-detail .mod-image {
   vertical-align: top;
   grid-row: 1;
   grid-column: 1;
-  width: 64px;
+  width: 4em;
 }
 
 .mod-detail .avatar {
   grid-row: 2;
   grid-column: 1;
-  width: 40px;
+  width: 3em;
+  text-align: center;
 }
 
 .mod-detail .mod-stats {

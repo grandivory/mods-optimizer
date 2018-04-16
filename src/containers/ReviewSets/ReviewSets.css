@@ -1,5 +1,6 @@
 .review-sets {
   padding-bottom: 12em;
+  height: 100%;
 }
 
 .review-sets h2 {
@@ -9,6 +10,11 @@
 .review-sets .display-options {
   text-align: center;
   font-size: 24px;
+}
+
+.review-sets .sets-list {
+  height: calc(100% - 9em);
+  overflow-y: auto;
 }
 
 .review-sets .mod-set-detail {

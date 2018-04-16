@@ -40,7 +40,12 @@ class Optimizer {
    */
   optimizeMods(characterList) {
     let assignedModSets = [];
-    // First, filter out any mods that have already been assigned
+    // First, unassign any mods that have been assigned, but not locked
+    this.mods.forEach(mod => {
+      if (!mod.isLocked) {
+        mod.assignTo = null;
+      }
+    });
     let considerationSet = this.mods;
 
     // For each character in the list, find the best mod set for that character
@@ -97,9 +102,9 @@ class Optimizer {
     availableMods.sort((left, right) => {
       if (modValues.get(right) === modValues.get(left)) {
         // If mods have equal value, then favor the one that's already equipped
-        if (character.name === left.currentCharacter.name) {
+        if (left.currentCharacter && character.name === left.currentCharacter.name) {
           return -1;
-        } else if (character.name === right.currentCharacter.name) {
+        } else if (right.currentCharacter && character.name === right.currentCharacter.name) {
           return 1;
         } else {
           return 0;

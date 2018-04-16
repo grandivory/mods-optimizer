@@ -1,3 +1,7 @@
+.review-list {
+  height: 100%;
+}
+
 .review-list h2 {
   text-align: center;
 }
@@ -9,6 +13,11 @@
 .sort-options {
   text-align: center;
   font-size: 24px;
+}
+
+.review-list .mods-list {
+  height: calc(100% - 9em);
+  overflow-y: auto;
 }
 
 .mod-row {

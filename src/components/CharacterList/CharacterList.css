@@ -1,0 +1,25 @@
+.character-block {
+  display: block;
+  width: 22em;
+  height: 8em;
+  border: 1px solid dodgerblue;
+  background-color: rgba(0, 0, 96, .5);
+  margin: .5em 0;
+  text-align: left;
+}
+
+.character-block .avatar {
+  vertical-align: middle;
+  display: inline-block;
+  height: 6em;
+  margin: 1em;
+}
+
+.character-block .character-name {
+  vertical-align: middle;
+}
+
+.character-block.drop-character {
+  margin-bottom: 5px;
+  box-shadow: 0 2px 3px 0 darkred;
+}

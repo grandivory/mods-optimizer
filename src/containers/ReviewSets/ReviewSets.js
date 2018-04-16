@@ -20,13 +20,17 @@ class ReviewSets extends React.Component {
     // Filter out sets based on the view settings
     if ('move' === this.state.view) {
       characterSets = characterSets.filter(characterSet =>
-        undefined !== characterSet.modSet.mods().find(mod => mod.currentCharacter.name !== mod.assignTo.name)
+        undefined !== characterSet.modSet.mods().find(mod =>
+          mod.currentCharacter && mod.currentCharacter.name !== mod.assignTo.name
+        )
       );
     }
 
     // Create sets for everything each character already has equipped
     const rows = characterSets.map(characterSet => {
-      const currentSet = new ModSet(mods.filter(mod => mod.currentCharacter.name === characterSet.character.name));
+      const currentSet = new ModSet(mods.filter(mod =>
+        mod.currentCharacter && mod.currentCharacter.name === characterSet.character.name
+      ));
 
       return (
         <div className={'set-row'} key={characterSet.character.name}>
