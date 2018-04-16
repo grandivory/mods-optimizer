@@ -54,13 +54,13 @@ class OptimizerView extends React.Component {
 
     this.state.availableCharacters = Object.assign(
       characterDefaults,
-      JSON.parse(window.localStorage.getItem('availableCharacters')).map(characterJson =>
+      (JSON.parse(window.localStorage.getItem('availableCharacters')) || []).map(characterJson =>
         Character.deserialize(characterJson)
       )
     );
     this.state.selectedCharacters = Object.assign(
       [],
-      JSON.parse(window.localStorage.getItem('selectedCharacters')).map(characterJson =>
+      (JSON.parse(window.localStorage.getItem('selectedCharacters')) || []).map(characterJson =>
         Character.deserialize(characterJson)
       )
     );
