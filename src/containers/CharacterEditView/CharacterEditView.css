@@ -22,3 +22,52 @@
   max-height: calc(100% - 4em);
   overflow-y: auto;
 }
+
+.character-edit-form .base-stats,
+.character-edit-form .optimization-plan {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 2.5%;
+  max-width: 45%;
+}
+
+.character-edit-form .base-stats {
+  width: 40em;
+}
+
+.character-edit-form .optimization-plan {
+  width: 16em;
+}
+
+.character-edit-form .form-row {
+  text-align: right;
+  margin: .25em 0;
+  padding: .1em .25em;
+}
+
+.character-edit-form .form-row label {
+  margin-right: 1em;
+}
+
+.character-edit-form .form-row input {
+  width: 5em;
+  padding: .1em .25em;
+}
+
+.character-edit-form .form-row input[type=range] {
+  width: 9em;
+}
+
+.character-edit-form .form-row:nth-child(odd) {
+  background-color: rgb(30, 47, 70);
+  color: rgb(117, 203, 203);
+}
+
+.character-edit-form .form-row:nth-child(even) {
+  background-color: rgb(28, 56, 93);
+  color: rgb(28, 169, 212);
+}
+
+.character-edit-form .actions {
+  text-align: right;
+}

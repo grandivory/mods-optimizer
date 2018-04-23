@@ -1006,7 +1006,7 @@ let charactersArray = [
     new OptimizationPlan(
       .2, // health
       0, // protection
-      10, // speed
+      100, // speed
       33, // crit damage
       0, // potency
       0, // tenacity
@@ -1023,7 +1023,7 @@ let charactersArray = [
     new OptimizationPlan(
       0, // health
       0, // protection
-      10, // speed
+      100, // speed
       50, // crit damage
       0, // potency
       0, // tenacity
@@ -1060,7 +1060,7 @@ let charactersArray = [
     new OptimizationPlan(
       .5, // health
       0, // protection
-      10, // speed
+      100, // speed
       0, // crit damage
       0, // potency
       0, // tenacity
@@ -1392,7 +1392,7 @@ let charactersArray = [
     new OptimizationPlan(
       .2, // health
       0, // protection
-      10, // speed
+      100, // speed
       0, // crit damage
       0, // potency
       0, // tenacity

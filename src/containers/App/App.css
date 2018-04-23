@@ -161,6 +161,15 @@ button:active, .button:active {
   border: 1px inset limegreen;
 }
 
+button.red, .button.red {
+  background-color: darkred;
+  border: 1px outset red;
+}
+
+button.red:active, .button.red:active {
+  border: 1px inset red;
+}
+
 button:hover, button:focus,
 .button:hover, .button:focus {
   outline: 0;
@@ -178,4 +187,31 @@ nav button.active {
   text-align: center;
   margin: 0 auto;
   max-width: 800px;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, .5);
+  margin: 0;
+  padding: 2em;
+}
+
+.overlay::before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.modal {
+  border: 1px solid dodgerblue;
+  background-color: rgb(0, 0, 64);
+  margin: 0 auto;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 1em;
 }

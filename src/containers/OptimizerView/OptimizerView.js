@@ -17,7 +17,6 @@ class OptimizerView extends React.Component {
 
     if ('function' === typeof props.saveState) {
       this.saveState = function() {
-        console.log(this.state);
         window.localStorage.setItem(
           'availableCharacters',
           JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
@@ -27,10 +26,9 @@ class OptimizerView extends React.Component {
           JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
         );
         props.saveState();
-      }
+      }.bind(this);
     } else {
       this.saveState = function() {
-        console.log(this.state);
         window.localStorage.setItem(
           'availableCharacters',
           JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
@@ -39,9 +37,13 @@ class OptimizerView extends React.Component {
           'selectedCharacters',
           JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
         );
-      };
+      }.bind(this);
     }
 
+    this.state = Object.assign(this.state, this.restoreCharacterList());
+  }
+
+  restoreCharacterList() {
     const characterDefaults = Object.values(characters).sort((left, right) => {
       if (left.name < right.name) {
         return -1;
@@ -52,18 +54,39 @@ class OptimizerView extends React.Component {
       }
     });
 
-    this.state.availableCharacters = Object.assign(
-      characterDefaults,
-      (JSON.parse(window.localStorage.getItem('availableCharacters')) || []).map(characterJson =>
-        Character.deserialize(characterJson)
-      )
+    const savedAvailableCharacters = (JSON.parse(window.localStorage.getItem('availableCharacters')) || []).map(
+      characterJson => Character.deserialize(characterJson)
     );
-    this.state.selectedCharacters = Object.assign(
-      [],
-      (JSON.parse(window.localStorage.getItem('selectedCharacters')) || []).map(characterJson =>
-        Character.deserialize(characterJson)
-      )
+    const savedSelectedCharacters = (JSON.parse(window.localStorage.getItem('selectedCharacters')) || []).map(
+      characterJson => Character.deserialize(characterJson)
     );
+
+    const savedCharacters = savedAvailableCharacters.concat(savedSelectedCharacters);
+
+    const newCharacters = characterDefaults.filter(character =>
+      !savedCharacters.some(c => c.name === character.name)
+    );
+
+    let availableCharacters = [];
+    let selectedCharacters = [];
+
+    savedAvailableCharacters.forEach(character => {
+      const defaultCharacter = characterDefaults.find(c => c.name === character.name);
+      defaultCharacter.optimizationPlan = character.optimizationPlan;
+      defaultCharacter.baseStats = character.baseStats;
+      availableCharacters.push(defaultCharacter);
+    });
+    savedSelectedCharacters.forEach(character => {
+      const defaultCharacter = characterDefaults.find(c => c.name === character.name);
+      defaultCharacter.optimizationPlan = character.optimizationPlan;
+      defaultCharacter.baseStats = character.baseStats;
+      selectedCharacters.push(defaultCharacter);
+    });
+
+    return {
+      'availableCharacters': Object.assign(newCharacters, availableCharacters),
+      'selectedCharacters': selectedCharacters
+    };
   }
 
   render() {
@@ -72,32 +95,34 @@ class OptimizerView extends React.Component {
     return (
       <div className={'optimizer-view'}>
         {'edit' !== this.state.view &&
-          <div className={'actions'}>
-            <button onClick={this.updateView.bind(this, 'edit')}>
-              Change my character selection
-            </button>
-            <button onClick={this.updateView.bind(this, 'mods' === this.state.view ? 'sets' : 'mods')}>
-              {'mods' === this.state.view ? 'Show me as sets' : 'Show me a list of mods to move'}
-            </button>
-          </div>
+        <div className={'actions'}>
+          <button onClick={this.updateView.bind(this, 'edit')}>
+            Change my character selection
+          </button>
+          <button onClick={this.updateView.bind(this, 'mods' === this.state.view ? 'sets' : 'mods')}>
+            {'mods' === this.state.view ? 'Show me as sets' : 'Show me a list of mods to move'}
+          </button>
+        </div>
         }
         {'edit' === this.state.view &&
-          <div className={'actions'}>
-            <button onClick={this.updateView.bind(this, 'sets')}>
-              Optimize my mods!
-            </button>
-          </div>
+        <div className={'actions'}>
+          <button onClick={this.updateView.bind(this, 'sets')}>
+            Optimize my mods!
+          </button>
+        </div>
         }
 
         {'edit' === this.state.view &&
-          <CharacterEditView
-            availableCharacters={this.state.availableCharacters}
-            selectedCharacters={this.state.selectedCharacters} />
+        <CharacterEditView
+          availableCharacters={this.state.availableCharacters}
+          selectedCharacters={this.state.selectedCharacters}
+          saveState={this.saveState}
+        />
         }
         {'sets' === this.state.view &&
-          <ReviewSets characterSets={this.state.modAssignments} mods={mods} />}
+        <ReviewSets characterSets={this.state.modAssignments} mods={mods}/>}
         {'mods' === this.state.view &&
-          <ReviewList mods={mods} saveState={this.saveState} />
+        <ReviewList mods={mods} saveState={this.saveState}/>
         }
       </div>
     );
@@ -109,7 +134,7 @@ class OptimizerView extends React.Component {
    * @param view The name of the new view to show.
    */
   updateView(view) {
-    if (view === this.state.view ) {
+    if (view === this.state.view) {
       return;
     } else if ('edit' === this.state.view) {
       // If we're going from edit to another view, then run the optimization

@@ -6,6 +6,7 @@
   background-color: rgba(0, 0, 96, .5);
   margin: .5em 0;
   text-align: left;
+  position: relative;
 }
 
 .character-block .avatar {
@@ -22,4 +23,12 @@
 .character-block.drop-character {
   margin-bottom: 5px;
   box-shadow: 0 2px 3px 0 darkred;
+}
+
+.character-block button.edit {
+  position: absolute;
+  margin: 0;
+  top: 0;
+  right: 0;
+  font-size: .75em;
 }

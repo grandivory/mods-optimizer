@@ -55,6 +55,7 @@ class CharacterList extends React.Component {
   render() {
     const characters = this.props.characters;
     const draggable = this.props.draggable;
+    const onEdit = 'function' === typeof this.props.onEdit ? this.props.onEdit : function() {};
 
     return (
       <div className={'character-list'}>
@@ -68,6 +69,7 @@ class CharacterList extends React.Component {
             onDragOver={this.characterBlockDragOver()}
             onDragLeave={this.characterBlockDragLeave(character.name)}
             onDrop={this.characterBlockDrop(character.name)}>
+            <button className={'edit'} onClick={() => onEdit(character)}>Edit</button>
             <CharacterAvatar name={character.name} />
             <span className={'character-name'}>{character.name}</span>
           </div>

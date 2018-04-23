@@ -47,7 +47,6 @@ class BaseStats {
   }
 
   static deserialize(baseStatsJson) {
-    console.log(baseStatsJson);
     return new BaseStats(
       baseStatsJson.health,
       baseStatsJson.protection,

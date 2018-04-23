@@ -19,7 +19,6 @@ class Character{
   }
 
   static deserialize(characterJson) {
-    console.log(characterJson);
     return new Character(
       characterJson.name,
       BaseStats.deserialize(characterJson.baseStats),
