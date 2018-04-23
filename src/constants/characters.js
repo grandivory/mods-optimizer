@@ -6,7 +6,20 @@ let charactersArray = [
   new Character(
     'Aayla Secura',
     new BaseStats(26236, 28731, 2756, 2351, 1, 125, 291, 116),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      .1, // protection
+      100, // speed
+      24, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      75, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Admiral Ackbar',
@@ -29,17 +42,56 @@ let charactersArray = [
   new Character(
     'Ahsoka Tano',
     new BaseStats(23102, 16056, 2648, 1464, 1, 105, 285, 110),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      .1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Ahsoka Tano (Fulcrum)',
     new BaseStats(26600, 26452, 2801, 1765, 1, 148, 219, 92),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      .1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Amilyn Holdo',
     new BaseStats(36873, 43712, 1997, 3265, .5, 90, 285, 257),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      .25, // health
+      .5, // protection
+      100, // speed
+      0, // crit damage
+      5, // potency
+      10, // tenacity
+      0, // offense
+      0, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Asajj Ventress',
@@ -61,26 +113,52 @@ let charactersArray = [
   new Character(
     'B2 Super Battle Droid',
     new BaseStats(28207, 37758, 2419, 2222, 1, 111, 366, 431),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.5, // health
+      0.5, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      10, // tenacity
+      1, // offense
+      0, // crit chance
+      1, // defense
+      3, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Barriss Offee',
     new BaseStats(29943, 31100, 2393, 2482, 1, 116, 393, 253),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      1, // health
+      .1, // protection
+      50, // speed
+      0, // crit damage
+      0, // potency
+      5, // tenacity
+      0, // offense
+      0, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Baze Malbus',
     new BaseStats(28481, 39152, 2622, 1990, 1, 90, 385, 271),
     new OptimizationPlan(
       1, // health
-      1, // protection
-      100, // speed
+      .5, // protection
+      50, // speed
       0, // crit damage
       10, // potency
       10, // tenacity
       0, // offense
       0, // crit chance
-      0, // defense
+      1, // defense
       0, // accuracy,
       0 // crit avoidance
     )
@@ -123,7 +201,20 @@ let charactersArray = [
   new Character(
     'Bistan',
     new BaseStats(28049, 22588, 2659, 1675, 1, 145, 277, 121),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      .1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Boba Fett',
@@ -146,12 +237,38 @@ let charactersArray = [
   new Character(
     'Bodhi Rook',
     new BaseStats(26837, 22621, 2575, 3313, 1, 132, 236, 284),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      .1, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      0, // tenacity
+      1, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Cad Bane',
     new BaseStats(27439, 15086, 2991, 1886, 1, 113, 256, 146),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      .1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Captain Han Solo',
@@ -173,7 +290,20 @@ let charactersArray = [
   new Character(
     'Captain Phasma',
     new BaseStats(26074, 29919, 2179, 2307, 1, 121, 295, 271),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      .2, // health
+      .1, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      0, // tenacity
+      1, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Cassian Andor',
@@ -196,30 +326,69 @@ let charactersArray = [
   new Character(
     'CC-2224 "Cody"',
     new BaseStats(23694, 16040, 2581, 2317, .5, 115, 207, 91),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      30, // crit damage
+      0, // potency
+      0, // tenacity
+      1, // offense
+      30, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Chief Chirpa',
     new BaseStats(28017, 28168, 2672, 2503, 1, 116, 326, 253),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0, // protection
+      100, // speed
+      0, // crit damage
+      0, // potency
+      0, // tenacity
+      0, // offense
+      0, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Chief Nebit',
     new BaseStats(34474, 40275, 2744, 1956, 1, 115, 404, 228),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Chirrut Îmwe',
     new BaseStats(16110, 24866, 2895, 1819, 1, 153, 267, 240),
     new OptimizationPlan(
-      0, // health
+      .2, // health
       0, // protection
-      10, // speed
-      0, // crit damage
+      100, // speed
+      50, // crit damage
       0, // potency
       0, // tenacity
       5, // offense
-      0, // crit chance
+      50, // crit chance
       0, // defense
       0, // accuracy,
       0,// crit avoidance
@@ -246,12 +415,38 @@ let charactersArray = [
   new Character(
     'Clone Sergeant - Phase I',
     new BaseStats(27009, 19019, 2505, 1513, 1, 107, 277, 134),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Clone Wars Chewbacca',
     new BaseStats(35134, 31433, 2757, 2038, 1, 106, 360, 227),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      1, // health
+      .5, // protection
+      100, // speed
+      0, // crit damage
+      0, // potency
+      10, // tenacity
+      0, // offense
+      0, // crit chance
+      2, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Colonel Starck',
@@ -290,7 +485,20 @@ let charactersArray = [
   new Character(
     'Coruscant Underworld Police',
     new BaseStats(28338, 16817, 2493, 1923, 1, 112, 254, 313),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      .2, // health
+      0, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      0, // tenacity
+      0, // offense
+      0, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Count Dooku',
@@ -312,12 +520,38 @@ let charactersArray = [
   new Character(
     'CT-21-0408 "Echo"',
     new BaseStats(29166, 21252, 2453, 3645, .5, 129, 209, 143),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'CT-5555 "Fives"',
     new BaseStats(31787, 35342, 2638, 2067, 1, 115, 509, 233),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      .2, // health
+      0, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      0, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'CT-7567 "Rex"',
@@ -392,12 +626,38 @@ let charactersArray = [
   new Character(
     'Darth Sion',
     new BaseStats(33278, 39707, 3001, 2071, 1, 137, 400, 194),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.2, // health
+      0.1, // protection
+      100, // speed
+      0, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      0, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Darth Traya',
     new BaseStats(32072, 38006, 2313, 5007, 0, 134, 188, 161),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.1, // health
+      0, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Darth Vader',
@@ -420,7 +680,20 @@ let charactersArray = [
   new Character(
     'Dathcha',
     new BaseStats(23950, 15245, 2363, 3232, .5, 137, 247, 165),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.1, // health
+      0, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      0, // tenacity
+      6, // offense
+      0, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Death Trooper',
@@ -460,12 +733,38 @@ let charactersArray = [
   new Character(
     'Director Krennic',
     new BaseStats(24482, 22240, 2195, 4446, 0, 129, 166, 212),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      5, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Eeth Koth',
     new BaseStats(26307, 17686, 2152, 3608, .5, 144, 190, 250),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Emperor Palpatine',
@@ -504,7 +803,20 @@ let charactersArray = [
   new Character(
     'Ewok Scout',
     new BaseStats(25685, 23792, 2737, 1777, 1, 140, 272, 120),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Ezra Bridger',
@@ -545,37 +857,128 @@ let charactersArray = [
   new Character(
     'First Order Executioner',
     new BaseStats(29216, 34967, 2904, 1574, 1, 111, 308, 176),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.1, // health
+      0.2, // protection
+      100, // speed
+      50, // crit damage
+      5, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'First Order Officer',
     new BaseStats(28099, 18375, 2068, 2117, 1, 145, 253, 133),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0, // protection
+      100, // speed
+      0, // crit damage
+      0, // potency
+      0, // tenacity
+      0, // offense
+      0, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'First Order SF TIE Pilot',
     new BaseStats(27640, 32834, 2325, 2668, .5, 130, 316, 163),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      0, // tenacity
+      .5, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'First Order Stormtrooper',
     new BaseStats(32966, 30161, 2801, 1633, 1, 116, 460, 247),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      .3, // health
+      .1, // protection
+      100, // speed
+      0, // crit damage
+      0, // potency
+      5, // tenacity
+      .5, // offense
+      0, // crit chance
+      2, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'First Order TIE Pilot',
     new BaseStats(24379, 18436, 2958, 1614, 1, 128, 220, 63),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      5, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Gamorrean Guard',
     new BaseStats(37232, 33275, 2614, 1742, 1, 118, 352, 313),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.1, // health
+      0.2, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      5, // tenacity
+      0, // offense
+      0, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Gar Saxon',
     new BaseStats(26701, 30467, 2742, 1847, 1, 127, 404, 247),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Garazeb "Zeb" Orrelios',
@@ -598,21 +1001,34 @@ let charactersArray = [
   new Character(
     'General Grievous',
     new BaseStats(32627, 23213, 2819, 1504, 1, 109, 229, 112),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      0, // tenacity
+      5, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'General Kenobi',
     new BaseStats(31124, 44728, 2935, 1989, 1, 127, 386, 352),
     new OptimizationPlan(
-      1, // health
-      1, // protection
-      10, // speed
+      .3, // health
+      .5, // protection
+      100, // speed
       0, // crit damage
       0, // potency
       5, // tenacity
       0, // offense
       0, // crit chance
-      1, // defense
+      2, // defense
       0, // accuracy
       0 // crit avoidance
     )
@@ -637,12 +1053,38 @@ let charactersArray = [
   new Character(
     'Geonosian Soldier',
     new BaseStats(23655, 17814, 2921, 1869, 1, 154, 263, 96),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Geonosian Spy',
     new BaseStats(25360, 18153, 2683, 1545, 1, 127, 203, 114),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Grand Admiral Thrawn',
@@ -682,7 +1124,20 @@ let charactersArray = [
   new Character(
     'Grand Moff Tarkin',
     new BaseStats(25156, 23132, 2292, 3609, .5, 134, 229, 257),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.2, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Greedo',
@@ -709,7 +1164,7 @@ let charactersArray = [
       0, // protection
       100, // speed
       50, // crit damage
-      0, // potency
+      5, // potency
       0, // tenacity
       5, // offense
       50, // crit chance
@@ -739,12 +1194,38 @@ let charactersArray = [
   new Character(
     'Hermit Yoda',
     new BaseStats(34851, 41226, 2201, 3562, .5, 160, 238, 207),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.3, // health
+      0, // protection
+      100, // speed
+      0, // crit damage
+      0, // potency
+      0, // tenacity
+      0, // offense
+      0, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'HK-47',
     new BaseStats(25598, 30636, 2602, 2471, 1, 103, 283, 220),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Hoth Rebel Scout',
@@ -783,12 +1264,38 @@ let charactersArray = [
   new Character(
     'IG-100 MagnaGuard',
     new BaseStats(37149, 35306, 2770, 1879, 1, 99, 309, 212),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.2, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      2, // tenacity
+      4, // offense
+      0, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'IG-86 Sentinel Droid',
     new BaseStats(24687, 17131, 2717, 1798, 1, 119, 225, 69),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'IG-88',
@@ -810,22 +1317,74 @@ let charactersArray = [
   new Character(
     'Ima-Gun Di',
     new BaseStats(34443, 28875, 2835, 1967, 1, 125, 305, 143),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Imperial Probe Droid',
     new BaseStats(27089, 32172, 2105, 3491, 1, 132, 290, 282),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.2, // health
+      0.1, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      0, // tenacity
+      0, // offense
+      0, // crit chance
+      3, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Imperial Super Commando',
     new BaseStats(27917, 31001, 2732, 1989, 1, 121, 308, 134),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.2, // protection
+      100, // speed
+      50, // crit damage
+      5, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Jawa',
     new BaseStats(26611, 15314, 2496, 3299, .5, 133, 292, 153),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.1, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      5, // potency
+      0, // tenacity
+      6, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Jawa Engineer',
@@ -847,25 +1406,51 @@ let charactersArray = [
   new Character(
     'Jawa Scavenger',
     new BaseStats(26493, 17427, 2559, 3120, 1, 119, 261, 236),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      24, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      75, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Jedi Consular',
     new BaseStats(23767, 18689, 2055, 2824, .5, 119, 276, 209),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.5, // health
+      0.6, // protection
+      100, // speed
+      0, // crit damage
+      0, // potency
+      0, // tenacity
+      0, // offense
+      0, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Jedi Knight Anakin',
     new BaseStats(25059, 25181, 2800, 1974, 1, 144, 292, 76),
     new OptimizationPlan(
       0, // health
-      0, // protection
-      10, // speed
-      0, // crit damage
+      0.1, // protection
+      100, // speed
+      50, // crit damage
       0, // potency
       0, // tenacity
       5, // offense
-      0, // crit chance
+      50, // crit chance
       0, // defense
       0, // accuracy
       0 // crit avoidance
@@ -874,7 +1459,20 @@ let charactersArray = [
   new Character(
     'Jedi Knight Guardian',
     new BaseStats(28812, 32069, 2751, 1835, 1, 97, 270, 232),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.3, // health
+      0.2, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      5, // tenacity
+      0, // offense
+      0, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Jyn Erso',
@@ -907,7 +1505,8 @@ let charactersArray = [
       0, // crit chance
       0, // defense
       0, // accuracy
-      0 // crit avoidance
+      0, // crit avoidance
+      true
     )
   ),
   new Character(
@@ -931,69 +1530,212 @@ let charactersArray = [
   new Character(
     'Kit Fisto',
     new BaseStats(28509, 30319, 2831, 2066, 1, 120, 307, 141),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.2, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      0, // potency
+      0, // tenacity
+      5, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Kylo Ren',
     new BaseStats(24744, 32983, 2880, 1720, 10, 128, 303, 258),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.1, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Kylo Ren (Unmasked)',
     new BaseStats(30428, 36380, 3051, 2067, 1, 132, 332, 190),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.2, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Lando Calrissian',
     new BaseStats(23447, 19333, 2217, 2023, 1, 115, 287, 193),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Lobot',
     new BaseStats(28395, 16056, 2236, 4321, 1, 120, 288, 206),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      5, // tenacity
+      0, // offense
+      0, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Logray',
     new BaseStats(28431, 30052, 2389, 3409, 1, 127, 285, 196),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      5, // tenacity
+      0, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Luke Skywalker (Farmboy)',
     new BaseStats(24870, 19920, 2760, 1521, 1, 125, 222, 87),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Luminara Unduli',
     new BaseStats(23103, 20355, 2715, 2176, 1, 124, 233, 167),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.2, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      5, // tenacity
+      2, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Mace Windu',
     new BaseStats(26454, 21383, 2259, 3942, .5, 123, 258, 426),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Magmatrooper',
     new BaseStats(27452, 30192, 3020, 1730, 1, 119, 304, 107),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      5, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Mob Enforcer',
     new BaseStats(26961, 26075, 2816, 2597, 1, 132, 300, 157),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.3, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Mother Talzin',
     new BaseStats(29274, 35092, 2147, 4826, 0, 122, 217, 182),
     new OptimizationPlan(
       0, // health
-      0, // protection
+      0.1, // protection
       100, // speed
       0, // crit damage
-      100, // potency
+      10, // potency
       0, // tenacity
-      0, // offense
+      2, // offense
       0, // crit chance
       0, // defense
       0, // accuracy
@@ -1037,22 +1779,74 @@ let charactersArray = [
   new Character(
     'Nightsister Spirit',
     new BaseStats(24035, 28607, 3052, 1542, 1, 153, 220, 108),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      0, // tenacity
+      5, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Nightsister Zombie',
     new BaseStats(32201, 38428, 2502, 1808, 1, 120, 357, 158),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.3, // health
+      0, // protection
+      100, // speed
+      0, // crit damage
+      0, // potency
+      10, // tenacity
+      0, // offense
+      0, // crit chance
+      2, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Nute Gunray',
     new BaseStats(26623, 14525, 2860, 1590, 1, 156, 245, 90),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.2, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Obi-Wan Kenobi (Old Ben)',
     new BaseStats(26248, 31339, 2260, 2643, 1, 118, 435, 353),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.2, // health
+      0.1, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      5, // tenacity
+      0, // offense
+      0, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Old Daka',
@@ -1062,7 +1856,7 @@ let charactersArray = [
       0, // protection
       100, // speed
       0, // crit damage
-      0, // potency
+      5, // potency
       0, // tenacity
       0, // offense
       0, // crit chance
@@ -1074,17 +1868,56 @@ let charactersArray = [
   new Character(
     'Pao',
     new BaseStats(22726, 21220, 2873, 1930, 1, 145, 211, 152),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      30, // crit damage
+      0, // potency
+      0, // tenacity
+      5, // offense
+      30, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Paploo',
     new BaseStats(32889, 38447, 2696, 2146, 1, 108, 413, 200),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.2, // health
+      0.1, // protection
+      100, // speed
+      0, // crit damage
+      0, // potency
+      5, // tenacity
+      0, // offense
+      0, // crit chance
+      2, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Plo Koon',
     new BaseStats(25896, 22933, 2474, 3773, .5, 114, 266, 220),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      5, // tenacity
+      2, // offense
+      10, // crit chance
+      2, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Poe Dameron',
@@ -1107,7 +1940,20 @@ let charactersArray = [
   new Character(
     'Poggle the Lesser',
     new BaseStats(28801, 20689, 2342, 4641, 1, 144, 221, 172),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      5, // tenacity
+      0, // offense
+      0, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Princess Leia',
@@ -1129,7 +1975,20 @@ let charactersArray = [
   new Character(
     'Qui-Gon Jinn',
     new BaseStats(22288, 19431, 2448, 4333, .5, 145, 191, 194),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.2, // health
+      0.1, // protection
+      100, // speed
+      25, // crit damage
+      10, // potency
+      0, // tenacity
+      6, // offense
+      25, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'R2-D2',
@@ -1238,12 +2097,38 @@ let charactersArray = [
   new Character(
     'Rose Tico',
     new BaseStats(24272, 28882, 2481, 2286, .5, 141, 289, 104),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Royal Guard',
     new BaseStats(32248, 38614, 2608, 1921, 1, 110, 371, 313),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.3, // health
+      0.3, // protection
+      10, // speed
+      0, // crit damage
+      0, // potency
+      5, // tenacity
+      0, // offense
+      0, // crit chance
+      5, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Sabine Wren',
@@ -1266,12 +2151,38 @@ let charactersArray = [
   new Character(
     'Savage Opress',
     new BaseStats(28749, 30556, 3004, 1843, 1, 123, 294, 149),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.4, // health
+      0, // protection
+      100, // speed
+      0, // crit damage
+      5, // potency
+      5, // tenacity
+      3, // offense
+      0, // crit chance
+      2, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Scarif Rebel Pathfinder',
     new BaseStats(35234, 41802, 2515, 1969, 1, 121, 416, 359),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.3, // health
+      0, // protection
+      100, // speed
+      0, // crit damage
+      5, // potency
+      4, // tenacity
+      0, // offense
+      0, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Shoretrooper',
@@ -1311,7 +2222,20 @@ let charactersArray = [
   new Character(
     'Sith Marauder',
     new BaseStats(29238, 34972, 2604, 1947, 1, 142, 237, 95),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.2, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Sith Trooper',
@@ -1384,7 +2308,20 @@ let charactersArray = [
   new Character(
     'Sun Fac',
     new BaseStats(30916, 44240, 2386, 1915, 1, 109, 458, 218),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.3, // health
+      0.3, // protection
+      100, // speed
+      0, // crit damage
+      5, // potency
+      5, // tenacity
+      0, // offense
+      0, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    )
   ),
   new Character(
     'Talia',
@@ -1393,11 +2330,11 @@ let charactersArray = [
       .2, // health
       0, // protection
       100, // speed
-      0, // crit damage
+      25, // crit damage
       0, // potency
       0, // tenacity
       4, // offense
-      0, // crit chance
+      25, // crit chance
       0, // defense
       0, // accuracy
       0 // crit avoidance
@@ -1441,44 +2378,135 @@ let charactersArray = [
   new Character(
     'Tusken Raider',
     new BaseStats(31524, 32750, 3296, 1635, 1, 121, 353, 104),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      40, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Tusken Shaman',
     new BaseStats(31609, 28261, 2302, 3159, 1, 131, 243, 155),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.2, // protection
+      100, // speed
+      0, // crit damage
+      10, // potency
+      2, // tenacity
+      0, // offense
+      0, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Ugnaught',
     new BaseStats(28251, 19469, 2405, 3991, .5, 130, 214, 193),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      10, // potency
+      0, // tenacity
+      6, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'URoRRuR\'R\'R',
     new BaseStats(30300, 17092, 2577, 3315, 1, 147, 229, 126),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      15, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      15, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Veteran Smuggler Chewbacca',
     new BaseStats(33412, 39840, 3251, 1521, 1, 102, 372, 181),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Veteran Smuggler Han Solo',
     new BaseStats(26054, 31152, 2520, 1946, 1, 145, 239, 205),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Visas Marr',
     new BaseStats(28028, 33287, 2345, 2241, 1, 126, 246, 137),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0.5, // health
+      0.1, // protection
+      100, // speed
+      10, // crit damage
+      0, // potency
+      10, // tenacity
+      2, // offense
+      10, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Wampa',
     new BaseStats(29260, 34998, 3160, 1667, 1, 127, 263, 117),
     new OptimizationPlan(
       0, // health
-      0, // protection
+      0.1, // protection
       100, // speed
       40, // crit damage
       25, // potency
@@ -1511,7 +2539,20 @@ let charactersArray = [
   new Character(
     'Wicket',
     new BaseStats(25913, 30987, 2496, 1550, 1, 146, 315, 226),
-    new OptimizationPlan()
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
   ),
   new Character(
     'Zam Wesell',
