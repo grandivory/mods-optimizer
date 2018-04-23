@@ -46,7 +46,8 @@ class Stat {
    * Extract the type and value of this stat for serialization
    */
   serialize() {
-    const percent = this.isPercent && !this.type.includes('%') ? '%' : '';
+    const percent = (this.isPercent || !Stat.percentTypes.includes(this.displayType)) &&
+    !this.type.includes('%') ? '%' : '';
 
     return [this.type, `+${this.displayValue}${percent}`];
   }
