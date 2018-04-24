@@ -557,12 +557,12 @@ let charactersArray = [
     'CT-7567 "Rex"',
     new BaseStats(20916, 17981, 2484, 2723, 1, 140, 194, 180),
     new OptimizationPlan(
-      0.25, // health
+      0.1, // health
       0, // protection
       100, // speed
       0, // crit damage
-      40, // potency
-      75, // tenacity
+      25, // potency
+      40, // tenacity
       0, // offense
       0, // crit chance
       0, // defense
@@ -597,7 +597,7 @@ let charactersArray = [
       .1, // protection
       100, // speed
       0, // crit damage
-      25, // potency
+      10, // potency
       0, // tenacity
       0, // offense
       0, // crit chance
@@ -1090,12 +1090,12 @@ let charactersArray = [
     'Grand Admiral Thrawn',
     new BaseStats(26987, 30185, 2149, 3825, .5, 150, 303, 207),
     new OptimizationPlan(
-      .25, // health
-      .25, // protection
+      .1, // health
+      .1, // protection
       100, // speed
       0, // crit damage
       0, // potency
-      50, // tenacity
+      10, // tenacity
       0, // offense
       0, // crit chance
       0, // defense
@@ -2574,11 +2574,15 @@ let charactersArray = [
 ];
 
 const characters = {};
+const charDefaults = {};
 
 for (let character of charactersArray) {
   characters[character.name] = character;
+  charDefaults[character.name] = new Character(character.name, character.baseStats, character.optimizationPlan);
+  Object.freeze(charDefaults[character.name]);
 }
 
 Object.freeze(characters);
+Object.freeze(charDefaults);
 
-export default characters;
+export {characters, charDefaults};

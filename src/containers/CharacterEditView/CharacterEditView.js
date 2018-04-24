@@ -5,6 +5,7 @@ import CharacterList from "../../components/CharacterList/CharacterList";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import BaseStats from "../../domain/BaseStats";
+import {charDefaults} from "../../constants/characters";
 
 class CharacterEditView extends React.Component {
   constructor(props) {
@@ -84,6 +85,23 @@ class CharacterEditView extends React.Component {
     });
   }
 
+  resetDefaults(character, form) {
+    const defaults = charDefaults[character.name].optimizationPlan;
+
+    form['health-stat'].value = defaults.health;
+    form['protection-stat'].value = defaults.protection;
+    form['speed-stat'].value = defaults.speed;
+    form['critDmg-stat'].value = defaults.critDmg;
+    form['potency-stat'].value = defaults.potency;
+    form['tenacity-stat'].value = defaults.tenacity;
+    form['offense-stat'].value = defaults.offense;
+    form['critChance-stat'].value = defaults.critChance;
+    form['defense-stat'].value = defaults.defense;
+    form['accuracy-stat'].value = defaults.accuracy;
+    form['critAvoid-stat'].value = defaults.critAvoid;
+    form['5dot'].checked = defaults.useOnly5dotMods;
+  }
+
   cancelEdit() {
     this.setState({
       'editCharacter': null
@@ -135,6 +153,7 @@ class CharacterEditView extends React.Component {
               className={'character-edit-form'}
               onSubmit={(e) => {
                 e.preventDefault();
+                console.log(e, editCharacter);
                 this.saveCharacter.bind(this, editCharacter)(e.target);
               }}>
               <div className={'characterView'}>
@@ -212,6 +231,7 @@ class CharacterEditView extends React.Component {
                   <label htmlFor="health-stat">Health:</label>
                   <input
                     type={'number'}
+                    step={.01}
                     id={'health-stat'}
                     name={'health-stat'}
                     defaultValue={editCharacter.optimizationPlan.health}/>
@@ -220,6 +240,7 @@ class CharacterEditView extends React.Component {
                   <label htmlFor="protection-stat">Protection:</label>
                   <input
                     type={'number'}
+                    step={.01}
                     id={'protection-stat'}
                     name={'protection-stat'}
                     defaultValue={editCharacter.optimizationPlan.protection}/>
@@ -306,7 +327,10 @@ class CharacterEditView extends React.Component {
                 </div>
               </div>
               <div className={'actions'}>
-                <button onClick={this.cancelEdit.bind(this)}>Cancel</button>
+                <button type={'button'} onClick={(e) => this.resetDefaults.bind(this, editCharacter)(e.target.form)}>
+                  Reset to Defaults
+                </button>
+                <button type={'button'} onClick={this.cancelEdit.bind(this)}>Cancel</button>
                 <button type={'submit'}>Save</button>
               </div>
             </form>

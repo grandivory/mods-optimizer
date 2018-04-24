@@ -2,7 +2,7 @@ import React from "react";
 import Optimizer from "../../utils/Optimizer";
 import ReviewList from "../ReviewList/ReviewList";
 import ReviewSets from "../ReviewSets/ReviewSets";
-import characters from "../../constants/characters";
+import {characters} from "../../constants/characters";
 import CharacterEditView from "../CharacterEditView/CharacterEditView";
 
 import "./OptimizerView.css";

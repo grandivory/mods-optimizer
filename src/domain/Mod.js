@@ -2,7 +2,7 @@ import BaseStats from "./BaseStats";
 import Character from "./Character";
 import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
-import characters from "../constants/characters";
+import {characters} from "../constants/characters";
 
 class Mod {
   constructor(id, slot, set, level, pips, primaryStat, secondaryStats, currentCharacter, assignTo) {
