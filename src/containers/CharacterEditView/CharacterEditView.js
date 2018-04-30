@@ -153,7 +153,6 @@ class CharacterEditView extends React.Component {
               className={'character-edit-form'}
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log(e, editCharacter);
                 this.saveCharacter.bind(this, editCharacter)(e.target);
               }}>
               <div className={'characterView'}>
@@ -254,7 +253,7 @@ class CharacterEditView extends React.Component {
                     defaultValue={editCharacter.optimizationPlan.speed}/>
                 </div>
                 <div className={'form-row'}>
-                  <label htmlFor="critChance-stat">Critical Change %:</label>
+                  <label htmlFor="critChance-stat">Critical Chance %:</label>
                   <input
                     type={'number'}
                     id={'critChance-stat'}

@@ -11,6 +11,12 @@ class ReviewList extends React.Component {
     super(props);
     this.state = {'sortBy': 'assignTo'};
 
+    let movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
+
+    movingMods.sort(this.characterSort('assignTo'));
+
+    this.state.movingMods = movingMods;
+
     if ('function' === typeof props.saveState) {
       this.saveState = props.saveState;
     } else {
@@ -19,35 +25,7 @@ class ReviewList extends React.Component {
   }
 
   render() {
-    let movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
-
-    if ('currentCharacter' === this.state.sortBy) {
-      movingMods.sort((left, right) => {
-        let leftCharName = left.currentCharacter ? left.currentCharacter.name : '';
-        let rightCharName = right.currentCharacter ? right.currentCharacter.name : '';
-
-        if (leftCharName < rightCharName) {
-          return -1;
-        } else if (leftCharName > rightCharName) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-    } else if ('assignTo' === this.state.sortBy) {
-      movingMods.sort((left, right) => {
-        let leftCharName = left.assignTo ? left.assignTo.name : '';
-        let rightCharName = right.assignTo ? right.assignTo.name : '';
-
-        if (leftCharName < rightCharName) {
-          return -1;
-        } else if (leftCharName > rightCharName) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-    }
+    let movingMods = this.state.movingMods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
 
     const modRows = movingMods.map(mod =>
       <div className={'mod-row'} key={mod.id} >
@@ -74,8 +52,8 @@ class ReviewList extends React.Component {
           <h2>Reassigning {movingMods.length} mods</h2>
           <div className={'sort-options'}>
             Sort By:
-            <button onClick={this.sortByCurrent.bind(this)}>Currently Equipped</button>
-            <button onClick={this.sortByAssigned.bind(this)}>Assigned Character</button>
+            <button onClick={this.reSort.bind(this, 'currentCharacter')}>Currently Equipped</button>
+            <button onClick={this.reSort.bind(this, 'assignTo')}>Assigned Character</button>
           </div>
           <div className={'mods-list'}>
             {modRows}
@@ -100,12 +78,36 @@ class ReviewList extends React.Component {
     this.saveState();
   }
 
-  sortByCurrent() {
-    this.setState({'sortBy': 'currentCharacter'});
+  characterSort(characterPropertyName) {
+    return function(left, right) {
+      let leftCharName = left[characterPropertyName] ? left[characterPropertyName].name : '';
+      let rightCharName = right[characterPropertyName] ? right[characterPropertyName].name : '';
+
+      if (leftCharName < rightCharName) {
+        return -1;
+      } else if (leftCharName > rightCharName) {
+        return 1;
+      } else {
+        if (left.slot < right.slot) {
+          return -1;
+        } else if (left.slot > right.slot) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+    }
   }
 
-  sortByAssigned() {
-    this.setState({'sortBy': 'assignTo'});
+  reSort(characterPropertyName) {
+    let movingMods = this.state.movingMods;
+
+    movingMods.sort(this.characterSort(characterPropertyName));
+
+    this.setState({
+      'sortBy': characterPropertyName,
+      'movingMods': movingMods
+    });
   }
 }
 
