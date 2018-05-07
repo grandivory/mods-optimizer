@@ -253,6 +253,24 @@ let charactersArray = [
     )
   ),
   new Character(
+    'Bossk',
+    new BaseStats(34002, 40572, 2769, 2043, 1, 151, 352, 228),
+    new OptimizationPlan(
+      .1, // health
+      .2, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      10, // tenacity
+      1, // offense
+      50, // crit chance
+      1, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
+  ),
+  new Character(
     'Cad Bane',
     new BaseStats(27439, 15086, 2991, 1886, 1, 113, 256, 146),
     new OptimizationPlan(
