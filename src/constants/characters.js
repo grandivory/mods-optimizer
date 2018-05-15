@@ -2466,6 +2466,24 @@ let charactersArray = [
     )
   ),
   new Character(
+    'Vandor Chewbacca',
+    new BaseStats(26854, 32212, 3008, 1887, 1, 131, 336, 183),
+    new OptimizationPlan(
+      0.3, // health
+      0, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      40, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      false
+    )
+  ),
+  new Character(
     'Veteran Smuggler Chewbacca',
     new BaseStats(33412, 39840, 3251, 1521, 1, 102, 372, 181),
     new OptimizationPlan(
@@ -2570,6 +2588,24 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
+    )
+  ),
+  new Character(
+    'Young Han Solo',
+    new BaseStats(24720, 29407, 2725, 1792, 1, 125, 228, 108),
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      40, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
     )
   ),
   new Character(

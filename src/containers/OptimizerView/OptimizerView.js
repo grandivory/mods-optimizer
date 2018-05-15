@@ -82,7 +82,7 @@ class OptimizerView extends React.Component {
       defaultCharacter.baseStats = character.baseStats;
       selectedCharacters.push(defaultCharacter);
     });
-    
+
     return {
       'availableCharacters': availableCharacters.concat(newCharacters),
       'selectedCharacters': selectedCharacters
