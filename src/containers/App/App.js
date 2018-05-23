@@ -130,6 +130,9 @@ class App extends Component {
             </nav>
             <div className={'actions'}>
               <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
+              <button type={'button'} className={'red'} onClick={() => this.setState({'reset': true})}>
+                Reset Mods-Optimizer
+              </button>
             </div>
           </header>
           <div className={'app-body'}>
@@ -138,6 +141,22 @@ class App extends Component {
             }
             {'optimize' === this.state.view &&
             <OptimizerView mods={this.state.mods} saveState={this.saveState.bind(this)} />
+            }
+            {this.state.reset &&
+            <div className={'overlay'}>
+              <div className={'modal reset-modal'}>
+                <h2>Reset the mods optimizer?</h2>
+                <p>
+                  If you click "Reset", everything that the application currently has saved - your mods,
+                  character configuration, selected characters, etc. - will all be deleted.
+                  Are you sure that's what you want?
+                </p>
+                <div className={'actions'}>
+                  <button type={'button'} onClick={() => this.setState({'reset': false})}>Cancel</button>
+                  <button type={'button'} className={'red'} onClick={this.handleReset}>Reset</button>
+                </div>
+              </div>
+            </div>
             }
           </div>
           <footer className={'App-footer'}>
@@ -180,7 +199,6 @@ class App extends Component {
         </div>
       );
     }
-
   }
 
   /**
@@ -190,6 +208,14 @@ class App extends Component {
    */
   showPage(pageName) {
     this.setState({'view': pageName});
+  }
+
+  /**
+   * Handle the "Reset Mods Optimizer" button press. Remove all saved state and refresh the page
+   */
+  handleReset() {
+    window.localStorage.clear();
+    window.location.reload();
   }
 }
 
