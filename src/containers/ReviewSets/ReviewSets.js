@@ -43,6 +43,7 @@ class ReviewSets extends React.Component {
           <ModSetDetail
             changeClass={'add'}
             set={characterSet.modSet}
+            diffset={currentSet}
             character={characterSet.character}/>
         </div>
       );

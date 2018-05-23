@@ -3,7 +3,7 @@
   position: relative;
   border: 1px solid dodgerblue;
   background-color: rgba(0, 0, 96, .5);
-  padding: 1em;
+  padding: 1em 1em 3em;
 }
 
 .mod-set-detail .mods {
@@ -59,6 +59,22 @@
 
 .mod-set-detail .summary table td.stat-value {
   text-align: right;
+}
+
+.mod-set-detail .summary table td.stat-diff {
+  /*text-shadow: none;*/
+}
+
+.mod-set-detail .summary table td.stat-diff.increase {
+  color: #60bd1b;
+}
+
+.mod-set-detail .summary table td.stat-diff.increase::before {
+  content: '+';
+}
+
+.mod-set-detail .summary table td.stat-diff.decrease {
+  color: #e64343;
 }
 
 .mod-set-detail .summary .set-value {

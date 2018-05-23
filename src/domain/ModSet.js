@@ -83,7 +83,19 @@ class ModSet {
    * @return Object An object keyed on each stat in the mod set
    */
   getSummary(character) {
-    let summary = {};
+    let summary = {
+      'Health': new Stat('Health', '0'),
+      'Protection': new Stat('Protection', '0'),
+      'Speed': new Stat('Speed', '0'),
+      'Critical Damage': new Stat('Critical Damage %', '0'),
+      'Critical Chance': new Stat('Critical Chance %', '0'),
+      'Potency': new Stat('Potency', '0'),
+      'Tenacity': new Stat('Tenacity', '0'),
+      'Offense': new Stat('Offense', '0'),
+      'Defense': new Stat('Defense', '0'),
+      'Accuracy': new Stat('Accuracy %', '0'),
+      'Critical Avoidance': new Stat('Critical Avoidance %', '0')
+    };
     let setCounts = new WeakMap();
 
     for (let slot of ModSet.slots) {

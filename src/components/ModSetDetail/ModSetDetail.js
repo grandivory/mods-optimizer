@@ -7,6 +7,8 @@ import './ModSetDetail.css';
 class ModSetDetail extends React.Component {
   render() {
     const modSet = this.props.set;
+    const diffSet = this.props.diffset;
+    let diffSummary;
     const character = this.props.character;
     const changeClass = this.props.changeClass || '';
 
@@ -20,12 +22,27 @@ class ModSetDetail extends React.Component {
     ));
 
     const statSummary = modSet.getSummary(character);
-    const statsDisplay = Object.values(statSummary).map((stat, index) =>
-      <tr key={index}>
+    if (diffSet) {
+      diffSummary = diffSet.getSummary(character);
+    }
+
+    const statsDisplay = Object.values(statSummary).map((stat, index) => {
+      let diffStat;
+
+      if (diffSet) {
+        diffStat = stat.minus(diffSummary[stat.displayType]);
+      }
+
+      return <tr key={index}>
         <td className={'stat-type'}>{stat.displayType}</td>
         <td className={'stat-value'}>{stat.showValue()}</td>
+        {diffSet &&
+        <td className={'stat-diff' + (diffStat.value > 0 ? ' increase' : diffStat.value < 0 ? ' decrease' : '')}>
+          {diffStat.showValue()}
+        </td>
+        }
       </tr>
-    );
+    });
 
     return (
       <div className={'mod-set-detail'}>
@@ -36,7 +53,7 @@ class ModSetDetail extends React.Component {
           <table>
             <thead>
             <tr>
-              <th colSpan="2">Stats Summary</th>
+              <th colSpan={diffSet ? 3 : 2}>Stats Summary</th>
             </tr>
             </thead>
             <tbody>

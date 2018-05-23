@@ -1,5 +1,10 @@
 import statTypeMap from "../constants/statTypeMap";
 
+function InvalidArgumentException(message) {
+  this.message = message;
+  this.name = 'InvalidArgumentException';
+}
+
 class Stat {
   constructor(type, value) {
     this.displayModifier = type.endsWith('%') || value.endsWith('%') ? '%' : '';
@@ -53,9 +58,31 @@ class Stat {
   }
 
   /**
+   * Take the difference between this stat and that stat
+   *
+   * @param that Stat
+   * @returns Stat with the same type and a value representing the difference
+   */
+  minus(that) {
+    if (!(that instanceof Stat)) {
+      throw new InvalidArgumentException("Can't take the difference between a Stat and a non-Stat");
+    }
+    if (that.type !== this.type) {
+      throw new InvalidArgumentException("Can't take the difference between Stats of different types");
+    }
+    let valueDiff = this.value - that.value;
+    if (valueDiff % 1) {
+      valueDiff = `${valueDiff.toFixed(2)}`;
+    } else {
+      valueDiff = `${valueDiff}`;
+    }
+
+    return new Stat(this.type, `${valueDiff}${this.displayModifier}`)
+  }
+
+  /**
    * Get the value of this stat for optimization
    *
-   * @param optimizationPlan
    * @param character
    */
   getOptimizationValue(character) {
