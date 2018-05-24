@@ -122,7 +122,7 @@ class OptimizerView extends React.Component {
         {'sets' === this.state.view &&
         <ReviewSets characterSets={this.state.modAssignments} mods={mods}/>}
         {'mods' === this.state.view &&
-        <ReviewList mods={mods} saveState={this.saveState}/>
+        <ReviewList mods={mods} saveState={this.saveState} characters={this.state.selectedCharacters}/>
         }
       </div>
     );

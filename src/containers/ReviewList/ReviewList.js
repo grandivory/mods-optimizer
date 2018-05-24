@@ -13,9 +13,10 @@ class ReviewList extends React.Component {
 
     let movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
 
-    movingMods.sort(this.characterSort('assignTo'));
+    this.slotOrder = ['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross'];
 
     this.state.movingMods = movingMods;
+    this.optimizerOrder(false);
 
     if ('function' === typeof props.saveState) {
       this.saveState = props.saveState;
@@ -53,7 +54,7 @@ class ReviewList extends React.Component {
           <div className={'sort-options'}>
             Sort By:
             <button onClick={this.reSort.bind(this, 'currentCharacter')}>Currently Equipped</button>
-            <button onClick={this.reSort.bind(this, 'assignTo')}>Assigned Character</button>
+            <button onClick={this.optimizerOrder.bind(this)}>Assigned Character</button>
           </div>
           <div className={'mods-list'}>
             {modRows}
@@ -63,12 +64,20 @@ class ReviewList extends React.Component {
     }
   }
 
+  /**
+   * Unassign a mod from any character and re-render the view to show the change.
+   * @param mod Mod
+   */
   removeMod(mod) {
     mod.currentCharacter = null;
     this.setState({});
     this.saveState();
   }
 
+  /**
+   * Move a mod from its currently assigned character to its assignTo charcter and re-render the view.
+   * @param mod Mod
+   */
   reassignMod(mod) {
     this.props.mods
       .filter(m => m.currentCharacter === mod.assignTo && m.slot === mod.slot)
@@ -78,7 +87,13 @@ class ReviewList extends React.Component {
     this.saveState();
   }
 
+  /**
+   * Generate a sort function for a list of mods based on reading a particular property to get the characters to sort by
+   * @param characterPropertyName string The name of the property from which to read the character name
+   * @returns {Function}
+   */
   characterSort(characterPropertyName) {
+    const slotOrder = this.slotOrder;
     return function(left, right) {
       let leftCharName = left[characterPropertyName] ? left[characterPropertyName].name : '';
       let rightCharName = right[characterPropertyName] ? right[characterPropertyName].name : '';
@@ -88,26 +103,52 @@ class ReviewList extends React.Component {
       } else if (leftCharName > rightCharName) {
         return 1;
       } else {
-        if (left.slot < right.slot) {
-          return -1;
-        } else if (left.slot > right.slot) {
-          return 1;
-        } else {
-          return 0;
-        }
+        return slotOrder.indexOf(left.slot) - slotOrder.indexOf(right.slot);
       }
     }
   }
 
+  /**
+   * Re-sort the list of moving mods by a particular property
+   * @param characterPropertyName string The property to sort by
+   */
   reSort(characterPropertyName) {
     let movingMods = this.state.movingMods;
 
-    movingMods.sort(this.characterSort(characterPropertyName));
+    movingMods.sort(this.characterSort.call(this, characterPropertyName));
 
     this.setState({
       'sortBy': characterPropertyName,
       'movingMods': movingMods
     });
+  }
+
+  /**
+   * Re-sort the list of moving mods into the same order the characters were selected for.
+   * @param reRender bool If true, will re-render the view upon completion of the sort
+   */
+  optimizerOrder(reRender) {
+    let movingMods = this.state.movingMods;
+    const characterList = this.props.characters;
+    const slotOrder = this.slotOrder
+
+    movingMods.sort((left, right) => {
+      let leftChar = left.assignTo;
+      let rightChar = right.assignTo;
+
+      if (leftChar === rightChar) {
+        return slotOrder.indexOf(left.slot) - slotOrder.indexOf(right.slot);
+      } else {
+        return characterList.indexOf(left.assignTo) - characterList.indexOf(right.assignTo);
+      }
+    });
+
+    if (reRender) {
+      this.setState({
+        'sortBy': 'assignTo',
+        'movingMods': movingMods
+      });
+    }
   }
 }
 
