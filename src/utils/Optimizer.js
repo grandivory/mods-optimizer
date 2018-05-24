@@ -34,11 +34,12 @@ class Optimizer {
    * Find the optimum configuration for mods for a list of characters by optimizing mods for the first character,
    * optimizing mods for the second character after removing those used for the first, etc.
    *
-   * @param characterList Array An array of objects with character and optimizationPlan properties
+   * @param characterList Array An array of characters to optimize, in order
+   * @param lockList Array An array of characters whose mods not to consider when optimizing
    *
    * @return Array an array of objects with character and modSet properties
    */
-  optimizeMods(characterList) {
+  optimizeMods(characterList, lockList) {
     let assignedModSets = [];
     // First, unassign any mods that have been assigned, but not locked
     this.mods.forEach(mod => {
@@ -46,7 +47,7 @@ class Optimizer {
         mod.assignTo = null;
       }
     });
-    let considerationSet = this.mods;
+    let considerationSet = this.mods.filter(mod => !lockList.includes(mod.currentCharacter));
 
     // For each character in the list, find the best mod set for that character
     for (let character of characterList) {

@@ -25,6 +25,10 @@ class OptimizerView extends React.Component {
           'selectedCharacters',
           JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
         );
+        window.localStorage.setItem(
+          'lockedCharacters',
+          JSON.stringify(this.state.lockedCharacters.map(character => character.serialize()))
+        );
         props.saveState();
       }.bind(this);
     } else {
@@ -36,6 +40,10 @@ class OptimizerView extends React.Component {
         window.localStorage.setItem(
           'selectedCharacters',
           JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
+        );
+        window.localStorage.setItem(
+          'lockedCharacters',
+          JSON.stringify(this.state.lockedCharacters.map(character => character.serialize()))
         );
       }.bind(this);
     }
@@ -60,8 +68,11 @@ class OptimizerView extends React.Component {
     const savedSelectedCharacters = (JSON.parse(window.localStorage.getItem('selectedCharacters')) || []).map(
       characterJson => Character.deserialize(characterJson)
     );
+    const savedLockedCharacters = (JSON.parse(window.localStorage.getItem('lockedCharacters')) || []).map(
+      characterJson => Character.deserialize(characterJson)
+    );
 
-    const savedCharacters = savedAvailableCharacters.concat(savedSelectedCharacters);
+    const savedCharacters = savedAvailableCharacters.concat(savedSelectedCharacters, savedLockedCharacters);
 
     const newCharacters = characterDefaults.filter(character =>
       !savedCharacters.some(c => c.name === character.name)
@@ -69,6 +80,7 @@ class OptimizerView extends React.Component {
 
     let availableCharacters = [];
     let selectedCharacters = [];
+    let lockedCharacters = [];
 
     savedAvailableCharacters.forEach(character => {
       const defaultCharacter = characterDefaults.find(c => c.name === character.name);
@@ -82,10 +94,17 @@ class OptimizerView extends React.Component {
       defaultCharacter.baseStats = character.baseStats;
       selectedCharacters.push(defaultCharacter);
     });
+    savedLockedCharacters.forEach(character => {
+      const defaultCharacter = characterDefaults.find(c => c.name === character.name);
+      defaultCharacter.optimizationPlan = character.optimizationPlan;
+      defaultCharacter.baseStats = character.baseStats;
+      lockedCharacters.push(defaultCharacter);
+    });
 
     return {
       'availableCharacters': availableCharacters.concat(newCharacters),
-      'selectedCharacters': selectedCharacters
+      'selectedCharacters': selectedCharacters,
+      'lockedCharacters': lockedCharacters
     };
   }
 
@@ -116,6 +135,7 @@ class OptimizerView extends React.Component {
         <CharacterEditView
           availableCharacters={this.state.availableCharacters}
           selectedCharacters={this.state.selectedCharacters}
+          lockedCharacters={this.state.lockedCharacters}
           saveState={this.saveState}
         />
         }
@@ -150,7 +170,7 @@ class OptimizerView extends React.Component {
    * @param mods Array the mods to use in the optimization
    */
   optimizeMods(mods) {
-    const modAssignments = new Optimizer(mods).optimizeMods(this.state.selectedCharacters);
+    const modAssignments = new Optimizer(mods).optimizeMods(this.state.selectedCharacters, this.state.lockedCharacters);
 
     this.setState({
       'modAssignments': modAssignments

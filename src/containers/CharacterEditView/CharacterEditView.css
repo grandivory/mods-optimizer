@@ -11,7 +11,8 @@
 }
 
 .character-edit .available-characters,
-.character-edit .selected-characters {
+.character-edit .selected-characters,
+.character-edit .locked-characters {
   display: inline-block;
   vertical-align: top;
   height: calc(100% - 5em);

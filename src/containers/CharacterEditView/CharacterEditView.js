@@ -13,11 +13,11 @@ class CharacterEditView extends React.Component {
     this.state = {
       'availableCharacters': props.availableCharacters,
       'selectedCharacters': props.selectedCharacters,
+      'lockedCharacters': props.lockedCharacters,
       'editCharacter': null
     };
 
-    this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {
-    };
+    this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {};
   }
 
   characterDrop() {
@@ -27,8 +27,10 @@ class CharacterEditView extends React.Component {
 
       if (me.state.selectedCharacters.some(character => dragTarget === character.name)) {
         sourceList = me.state.selectedCharacters;
-      } else {
+      } else if (me.state.availableCharacters.some(character => dragTarget === character.name)) {
         sourceList = me.state.availableCharacters;
+      } else {
+        sourceList = me.state.lockedCharacters;
       }
 
       // Get the character from the source list
@@ -119,6 +121,7 @@ class CharacterEditView extends React.Component {
       }
     });
     const selectedCharacters = this.state.selectedCharacters;
+    const lockedCharacters = this.state.lockedCharacters;
     const editCharacter = this.state.editCharacter;
 
     return (
@@ -126,6 +129,16 @@ class CharacterEditView extends React.Component {
         <h3 className={'instructions'}>
           Drag and Drop characters between the available and selected columns to pick who to optimize mods for.
         </h3>
+        <div className={'locked-characters'}>
+          <h4>Locked Characters</h4>
+          <CharacterList
+            selfDrop={true}
+            draggable={true}
+            characters={lockedCharacters}
+            onDrop={this.characterDrop()}
+            onEdit={this.editCharacter.bind(this)}
+          />
+        </div>
         <div className={'available-characters'}>
           <h4>Available Characters</h4>
           <CharacterList
