@@ -146,198 +146,205 @@ class CharacterEditView extends React.Component {
             onEdit={this.editCharacter.bind(this)}
           />
         </div>
-        {editCharacter &&
-        <div className={'overlay'}>
-          <div className={'modal'}>
-            <form
-              className={'character-edit-form'}
-              onSubmit={(e) => {
-                e.preventDefault();
-                this.saveCharacter.bind(this, editCharacter)(e.target);
-              }}>
-              <div className={'characterView'}>
-                <CharacterAvatar name={editCharacter.name}/>
-                <h2 className={'character-name'}>{editCharacter.name}</h2>
-              </div>
-              <div className={'base-stats'}>
-                <h4>
-                  What are your characters base stats (without any mods equipped)? These are used to calculate the value
-                  of percent stats on mods.
-                </h4>
-                <div className={'form-row'}>
-                  <label htmlFor="health">Health:</label>
-                  <input type={'number'} id={'health'} name={'health'} defaultValue={editCharacter.baseStats.health}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="protection">Protection:</label>
-                  <input
-                    type={'number'}
-                    id={'protection'}
-                    name={'protection'}
-                    defaultValue={editCharacter.baseStats.protection}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="physDmg">Physical Damage:</label>
-                  <input
-                    type={'number'}
-                    id={'physDmg'}
-                    name={'physDmg'}
-                    defaultValue={editCharacter.baseStats.physDmg}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="specDmg">Special Damage:</label>
-                  <input
-                    type={'number'}
-                    id={'specDmg'}
-                    name={'specDmg'}
-                    defaultValue={editCharacter.baseStats.specDmg}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="physDmgPct">Physical Damage Percent of Offense:</label>
-                  <input
-                    type={'range'}
-                    id={'physDmgPct'}
-                    name={'physDmgPct'}
-                    defaultValue={editCharacter.baseStats.physDmgPercent * 100}
-                    onChange={(e) => document.getElementById('physDmgPct-display').value = e.target.value + '%'}
-                  />
-                  <output id={'physDmgPct-display'} htmlFor="physDmgPct">
-                    {editCharacter.baseStats.physDmgPercent * 100}%
-                  </output>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="speed">Speed:</label>
-                  <input type={'number'} id={'speed'} name={'speed'} defaultValue={editCharacter.baseStats.speed}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="armor">Armor:</label>
-                  <input type={'number'} id={'armor'} name={'armor'} defaultValue={editCharacter.baseStats.armor}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="resistance">Resistance:</label>
-                  <input
-                    type={'number'}
-                    id={'resistance'}
-                    name={'resistance'}
-                    defaultValue={editCharacter.baseStats.resistance}/>
-                </div>
-              </div>
-              <div className={'optimization-plan'}>
-                <h4>
-                  Give each stat type a value. This will be used to calculate the optimum mods to equip.
-                </h4>
-                <div className={'form-row'}>
-                  <label htmlFor="health-stat">Health:</label>
-                  <input
-                    type={'number'}
-                    step={.01}
-                    id={'health-stat'}
-                    name={'health-stat'}
-                    defaultValue={editCharacter.optimizationPlan.health}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="protection-stat">Protection:</label>
-                  <input
-                    type={'number'}
-                    step={.01}
-                    id={'protection-stat'}
-                    name={'protection-stat'}
-                    defaultValue={editCharacter.optimizationPlan.protection}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="speed-stat">Speed:</label>
-                  <input
-                    type={'number'}
-                    id={'speed-stat'}
-                    name={'speed-stat'}
-                    defaultValue={editCharacter.optimizationPlan.speed}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="critChance-stat">Critical Chance %:</label>
-                  <input
-                    type={'number'}
-                    id={'critChance-stat'}
-                    name={'critChance-stat'}
-                    defaultValue={editCharacter.optimizationPlan.critChance}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="critDmg-stat">Critical Damage %:</label>
-                  <input
-                    type={'number'}
-                    id={'critDmg-stat'}
-                    name={'critDmg-stat'}
-                    defaultValue={editCharacter.optimizationPlan.critDmg}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="potency-stat">Potency %:</label>
-                  <input
-                    type={'number'}
-                    id={'potency-stat'}
-                    name={'potency-stat'}
-                    defaultValue={editCharacter.optimizationPlan.potency}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="tenacity-stat">Tenacity %:</label>
-                  <input
-                    type={'number'}
-                    id={'tenacity-stat'}
-                    name={'tenacity-stat'}
-                    defaultValue={editCharacter.optimizationPlan.tenacity}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="offense-stat">Offense:</label>
-                  <input
-                    type={'number'}
-                    id={'offense-stat'}
-                    name={'offense-stat'}
-                    defaultValue={editCharacter.optimizationPlan.offense}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="defense-stat">Defense:</label>
-                  <input
-                    type={'number'}
-                    id={'defense-stat'}
-                    name={'defense-stat'}
-                    defaultValue={editCharacter.optimizationPlan.defense}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="accuracy-stat">Accuracy:</label>
-                  <input
-                    type={'number'}
-                    id={'accuracy-stat'}
-                    name={'accuracy-stat'}
-                    defaultValue={editCharacter.optimizationPlan.accuracy}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
-                  <input
-                    type={'number'}
-                    id={'critAvoid-stat'}
-                    name={'critAvoid-stat'}
-                    defaultValue={editCharacter.optimizationPlan.critAvoid}/>
-                </div>
-                <div className={'form-row'}>
-                  <label htmlFor="5dot">Use only 5-dot mods?</label>
-                  <input
-                    type={'checkbox'}
-                    id={'5dot'}
-                    name={'5dot'}
-                    defaultChecked={editCharacter.optimizationPlan.useOnly5dotMods}/>
-                </div>
-              </div>
-              <div className={'actions'}>
-                <button type={'button'} onClick={(e) => this.resetDefaults.bind(this, editCharacter)(e.target.form)}>
-                  Reset to Defaults
-                </button>
-                <button type={'button'} onClick={this.cancelEdit.bind(this)}>Cancel</button>
-                <button type={'submit'}>Save</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        }
+        {editCharacter && this.characterEditModal(editCharacter)}
       </div>
     );
+  }
+
+  /**
+   * Render a modal for editing a character's base stats and optimization plan
+   * @param character Character
+   * @returns JSX Element
+   */
+  characterEditModal(character) {
+    return <div className={'overlay'}>
+      <div className={'modal'}>
+        <form
+          className={'character-edit-form'}
+          onSubmit={(e) => {
+            e.preventDefault();
+            this.saveCharacter.bind(this, character)(e.target);
+          }}>
+          <div className={'characterView'}>
+            <CharacterAvatar name={character.name}/>
+            <h2 className={'character-name'}>{character.name}</h2>
+          </div>
+          <div className={'base-stats'}>
+            <h4>
+              What are your characters base stats (without any mods equipped)? These are used to calculate the value
+              of percent stats on mods.
+            </h4>
+            <div className={'form-row'}>
+              <label htmlFor="health">Health:</label>
+              <input type={'number'} id={'health'} name={'health'} defaultValue={character.baseStats.health}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="protection">Protection:</label>
+              <input
+                type={'number'}
+                id={'protection'}
+                name={'protection'}
+                defaultValue={character.baseStats.protection}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="physDmg">Physical Damage:</label>
+              <input
+                type={'number'}
+                id={'physDmg'}
+                name={'physDmg'}
+                defaultValue={character.baseStats.physDmg}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="specDmg">Special Damage:</label>
+              <input
+                type={'number'}
+                id={'specDmg'}
+                name={'specDmg'}
+                defaultValue={character.baseStats.specDmg}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="physDmgPct">Physical Damage Percent of Offense:</label>
+              <input
+                type={'range'}
+                id={'physDmgPct'}
+                name={'physDmgPct'}
+                defaultValue={character.baseStats.physDmgPercent * 100}
+                onChange={(e) => document.getElementById('physDmgPct-display').value = e.target.value + '%'}
+              />
+              <output id={'physDmgPct-display'} htmlFor="physDmgPct">
+                {character.baseStats.physDmgPercent * 100}%
+              </output>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="speed">Speed:</label>
+              <input type={'number'} id={'speed'} name={'speed'} defaultValue={character.baseStats.speed}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="armor">Armor:</label>
+              <input type={'number'} id={'armor'} name={'armor'} defaultValue={character.baseStats.armor}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="resistance">Resistance:</label>
+              <input
+                type={'number'}
+                id={'resistance'}
+                name={'resistance'}
+                defaultValue={character.baseStats.resistance}/>
+            </div>
+          </div>
+          <div className={'optimization-plan'}>
+            <h4>
+              Give each stat type a value. This will be used to calculate the optimum mods to equip.
+            </h4>
+            <div className={'form-row'}>
+              <label htmlFor="health-stat">Health:</label>
+              <input
+                type={'number'}
+                step={.01}
+                id={'health-stat'}
+                name={'health-stat'}
+                defaultValue={character.optimizationPlan.health}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="protection-stat">Protection:</label>
+              <input
+                type={'number'}
+                step={.01}
+                id={'protection-stat'}
+                name={'protection-stat'}
+                defaultValue={character.optimizationPlan.protection}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="speed-stat">Speed:</label>
+              <input
+                type={'number'}
+                id={'speed-stat'}
+                name={'speed-stat'}
+                defaultValue={character.optimizationPlan.speed}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="critChance-stat">Critical Chance %:</label>
+              <input
+                type={'number'}
+                id={'critChance-stat'}
+                name={'critChance-stat'}
+                defaultValue={character.optimizationPlan.critChance}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="critDmg-stat">Critical Damage %:</label>
+              <input
+                type={'number'}
+                id={'critDmg-stat'}
+                name={'critDmg-stat'}
+                defaultValue={character.optimizationPlan.critDmg}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="potency-stat">Potency %:</label>
+              <input
+                type={'number'}
+                id={'potency-stat'}
+                name={'potency-stat'}
+                defaultValue={character.optimizationPlan.potency}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="tenacity-stat">Tenacity %:</label>
+              <input
+                type={'number'}
+                id={'tenacity-stat'}
+                name={'tenacity-stat'}
+                defaultValue={character.optimizationPlan.tenacity}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="offense-stat">Offense:</label>
+              <input
+                type={'number'}
+                id={'offense-stat'}
+                name={'offense-stat'}
+                defaultValue={character.optimizationPlan.offense}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="defense-stat">Defense:</label>
+              <input
+                type={'number'}
+                id={'defense-stat'}
+                name={'defense-stat'}
+                defaultValue={character.optimizationPlan.defense}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="accuracy-stat">Accuracy:</label>
+              <input
+                type={'number'}
+                id={'accuracy-stat'}
+                name={'accuracy-stat'}
+                defaultValue={character.optimizationPlan.accuracy}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
+              <input
+                type={'number'}
+                id={'critAvoid-stat'}
+                name={'critAvoid-stat'}
+                defaultValue={character.optimizationPlan.critAvoid}/>
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor="5dot">Use only 5-dot mods?</label>
+              <input
+                type={'checkbox'}
+                id={'5dot'}
+                name={'5dot'}
+                defaultChecked={character.optimizationPlan.useOnly5dotMods}/>
+            </div>
+          </div>
+          <div className={'actions'}>
+            <button type={'button'} onClick={(e) => this.resetDefaults.bind(this, character)(e.target.form)}>
+              Reset to Defaults
+            </button>
+            <button type={'button'} onClick={this.cancelEdit.bind(this)}>Cancel</button>
+            <button type={'submit'}>Save</button>
+          </div>
+        </form>
+      </div>
+    </div>;
   }
 }
 

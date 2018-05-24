@@ -117,88 +117,26 @@ class App extends Component {
   }
 
   render() {
-    if (this.state.mods.length > 0) {
-      return (
-        <div className={'App'}>
-          <header className={'App-header'}>
-            <h1 className={'App-title'}>Grandivory's Mod Optimizer for Star Wars: Galaxy of Heroes™</h1>
-            <nav>
-              <button className={'explore' === this.state.view ? 'active' : ''}
-                      onClick={this.showPage.bind(this, 'explore')}>Explore my mods</button>
-              <button className={'optimize' === this.state.view ? 'active' : ''}
-                      onClick={this.showPage.bind(this, 'optimize')}>Optimize my mods</button>
-            </nav>
-            <div className={'actions'}>
-              <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
-              <button type={'button'} className={'red'} onClick={() => this.setState({'reset': true})}>
-                Reset Mods-Optimizer
-              </button>
-            </div>
-          </header>
-          <div className={'app-body'}>
-            {'explore' === this.state.view &&
-            <ExploreView mods={this.state.mods} saveState={this.saveState.bind(this)} />
-            }
-            {'optimize' === this.state.view &&
-            <OptimizerView mods={this.state.mods} saveState={this.saveState.bind(this)} />
-            }
-            {this.state.reset &&
-            <div className={'overlay'}>
-              <div className={'modal reset-modal'}>
-                <h2>Reset the mods optimizer?</h2>
-                <p>
-                  If you click "Reset", everything that the application currently has saved - your mods,
-                  character configuration, selected characters, etc. - will all be deleted.
-                  Are you sure that's what you want?
-                </p>
-                <div className={'actions'}>
-                  <button type={'button'} onClick={() => this.setState({'reset': false})}>Cancel</button>
-                  <button type={'button'} className={'red'} onClick={this.handleReset}>Reset</button>
-                </div>
-              </div>
-            </div>
-            }
-          </div>
-          <footer className={'App-footer'}>
-            Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.
-          </footer>
+    const instructionsScreen = 0 === this.state.mods.length;
+
+    return (
+      <div className={'App'}>
+        {this.header(!instructionsScreen)}
+        <div className={'app-body'}>
+          {instructionsScreen && this.welcome()}
+          {!instructionsScreen && 'explore' === this.state.view &&
+          <ExploreView mods={this.state.mods} saveState={this.saveState.bind(this)}/>
+          }
+          {!instructionsScreen && 'optimize' === this.state.view &&
+          <OptimizerView mods={this.state.mods} saveState={this.saveState.bind(this)}/>
+          }
+          {this.state.reset && this.resetModal()}
         </div>
-      );
-    } else {
-      return (
-        <div className={'App'}>
-          <header className={'App-header'}>
-            <h1 className={'App-title'}>Grandivory's Mod Optimizer for Star Wars: Galaxy of Heroes™</h1>
-            <div className={'actions'}>
-              <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
-            </div>
-          </header>
-          <div className={'app-body'}>
-            <div className={'welcome'}>
-              <h2>Welcome to the mod optimizer for Star Wars: Galaxy of Heroes™!</h2>
-              <p>
-                This application will allow you to equip the optimum mod set on every character you have by assigning
-                a value to each stat that a mod can confer. You'll give it a list of characters to optimize for along
-                with the stats that you're looking for, and it will determine the best mods to equip, one character at a
-                time, until your list is exhausted.
-              </p>
-              <p>
-                To get started, copy the google sheet <a className={'call-out'}
-                href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy">here</a>
-                , courtesy of <a href="http://apps.crouchingrancor.com">Crouching Rancor</a>.
-                It will allow you to export your mods from <a href="https://swgoh.gg">SWGOH.gg</a> in order to import
-                them into this tool. When you're ready, you can click the button above, or drag your mods file into the
-                box below.
-              </p>
-              <FileDropZone handler={this.readModsFile.bind(this)} label={'Drop your mods file here!'} />
-            </div>
-          </div>
-          <footer className={'App-footer'}>
-            Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.
-          </footer>
-        </div>
-      );
-    }
+        <footer className={'App-footer'}>
+          Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.
+        </footer>
+      </div>
+    );
   }
 
   /**
@@ -208,6 +146,81 @@ class App extends Component {
    */
   showPage(pageName) {
     this.setState({'view': pageName});
+  }
+
+  /**
+   * Renders the header for the application, optionally showing navigation buttons and a reset button
+   * @param showActions bool If true, render the "Explore" and "Optimize" buttons and the "Reset Mods Optimizer" button
+   * @returns JSX Element
+   */
+  header(showActions) {
+    return <header className={'App-header'}>
+      <h1 className={'App-title'}>Grandivory's Mod Optimizer for Star Wars: Galaxy of Heroes™</h1>
+      {showActions &&
+      <nav>
+        <button className={'explore' === this.state.view ? 'active' : ''}
+                onClick={this.showPage.bind(this, 'explore')}>Explore my mods
+        </button>
+        <button className={'optimize' === this.state.view ? 'active' : ''}
+                onClick={this.showPage.bind(this, 'optimize')}>Optimize my mods
+        </button>
+      </nav>
+      }
+      <div className={'actions'}>
+        <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
+        {showActions &&
+        <button type={'button'} className={'red'} onClick={() => this.setState({'reset': true})}>
+          Reset Mods-Optimizer
+        </button>
+        }
+      </div>
+    </header>;
+  }
+
+  /**
+   * Renders the welcome screen for when someone first opens the application
+   * @returns JSX Element
+   */
+  welcome() {
+    return <div className={'welcome'}>
+      <h2>Welcome to the mod optimizer for Star Wars: Galaxy of Heroes™!</h2>
+      <p>
+        This application will allow you to equip the optimum mod set on every character you have by assigning
+        a value to each stat that a mod can confer. You'll give it a list of characters to optimize for along
+        with the stats that you're looking for, and it will determine the best mods to equip, one character at a
+        time, until your list is exhausted.
+      </p>
+      <p>
+        To get started, copy the google sheet <a className={'call-out'}
+                                                 href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy">here</a>
+        , courtesy of <a href="http://apps.crouchingrancor.com">Crouching Rancor</a>.
+        It will allow you to export your mods from <a href="https://swgoh.gg">SWGOH.gg</a> in order to import
+        them into this tool. When you're ready, you can click the button above, or drag your mods file into the
+        box below.
+      </p>
+      <FileDropZone handler={this.readModsFile.bind(this)} label={'Drop your mods file here!'}/>
+    </div>;
+  }
+
+  /**
+   * Renders the "Are you sure?" modal for resetting the app
+   * @returns JSX Element
+   */
+  resetModal() {
+    return <div className={'overlay'}>
+      <div className={'modal reset-modal'}>
+        <h2>Reset the mods optimizer?</h2>
+        <p>
+          If you click "Reset", everything that the application currently has saved - your mods,
+          character configuration, selected characters, etc. - will all be deleted.
+          Are you sure that's what you want?
+        </p>
+        <div className={'actions'}>
+          <button type={'button'} onClick={() => this.setState({'reset': false})}>Cancel</button>
+          <button type={'button'} className={'red'} onClick={this.handleReset}>Reset</button>
+        </div>
+      </div>
+    </div>;
   }
 
   /**
