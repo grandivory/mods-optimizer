@@ -161,7 +161,11 @@ button, .button {
   opacity: .9;
   cursor: pointer;
   line-height: 1.3;
-  vertical-align: top;
+  vertical-align: middle;
+}
+
+button.small, .button.small {
+  font-size: .7em;
 }
 
 button:active, .button:active {
@@ -223,8 +227,15 @@ nav button.active {
   display: inline-block;
   vertical-align: middle;
   padding: 1em;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .modal.reset-modal {
   width: 50em;
+}
+
+strong {
+  font-weight: bold;
+  color: #a35ef9;
 }

@@ -72,3 +72,19 @@
 .character-edit-form .actions {
   text-align: right;
 }
+
+.modal.instructions {
+  height: auto;
+  width: 50em;
+  text-align: left;
+}
+
+.modal.instructions h2,
+.modal.instructions h3 {
+  text-align: center;
+  border-bottom: 1px solid white;
+}
+
+.modal.instructions .actions {
+  text-align: right;
+}

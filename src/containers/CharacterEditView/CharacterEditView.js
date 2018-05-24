@@ -14,7 +14,8 @@ class CharacterEditView extends React.Component {
       'availableCharacters': props.availableCharacters,
       'selectedCharacters': props.selectedCharacters,
       'lockedCharacters': props.lockedCharacters,
-      'editCharacter': null
+      'editCharacter': null,
+      'instructions': false
     };
 
     this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {};
@@ -127,7 +128,10 @@ class CharacterEditView extends React.Component {
     return (
       <div className={'character-edit'}>
         <h3 className={'instructions'}>
-          Drag and Drop characters between the available and selected columns to pick who to optimize mods for.
+          Drag and Drop characters between the columns to pick who to optimize mods for.
+          <button type={'button'} className={'small'} onClick={() => this.setState({'instructions': true})}>
+            Show full instructions
+          </button>
         </h3>
         <div className={'locked-characters'}>
           <h4>Locked Characters</h4>
@@ -160,6 +164,7 @@ class CharacterEditView extends React.Component {
           />
         </div>
         {editCharacter && this.characterEditModal(editCharacter)}
+        {this.state.instructions && this.instructionsModal()}
       </div>
     );
   }
@@ -356,6 +361,81 @@ class CharacterEditView extends React.Component {
             <button type={'submit'}>Save</button>
           </div>
         </form>
+      </div>
+    </div>;
+  }
+
+  /**
+   * Render a modal with instructions on how to use the optimizer
+   * @returns JSX Element
+   */
+  instructionsModal() {
+    return <div className={'overlay'}>
+      <div className={'modal instructions'}>
+        <h2>How to use the mods optimizer</h2>
+        <p>
+          Welcome to my mods optimizer for Star Wars: Galaxy of Heroes! This application works on a simple principle:
+          every stat should have some set value for a character, and if we know all of those values, then we can
+          calculate how much a given mod, or set of mods, is worth for that character. From there, the tool knows how to
+          find the set of mods that give the highest possible overall value for each of your characters without you
+          needing to look through the hundreds of mods in your inventory!
+        </p>
+        <h3>Selecting characters to optimize</h3>
+        <p>
+          The mods optimizer will start out by considering all mods equipped on any character other than those in the
+          "Locked Characters" column. Then, it will go down the list of selected characters, one by one, choosing the
+          best mods it can find for each character. As it finishes each character, it removes those mods from its
+          consideration set. Therefore, the character that you want to have your absolute best mods should always be
+          first among your selected characters. Usually, this means that you want the character who needs the most speed
+          to be first.
+        </p>
+        <p>
+          I suggest optimizing your arena team first, in order of required speed, then characters you use for raids,
+          then characters for other game modes, like Territory Battles, Territory Wars, and events.
+        </p>
+        <h3>Picking the right values</h3>
+        <p>
+          Every character in the game has been given starting values for all stats that can be used by the optimizer to
+          pick the best mods. <strong>These values, while directionally good for characters, are only a base suggestion!
+          </strong> There are many reasons that you might want to pick different values than those listed by default in
+          the optimizer: you might want to optimize for a different purpose (such as a phase 3 Sith Triumvirate Raid
+          team, where speed can be detrimental), you might want to choose something different to optimize against, or
+          you might simply have a better set of values that you want to employ.
+        </p>
+        <p>
+          In order to change how each character gets optimized, click the "edit" button at the top right of the
+          character block. This will bring up a form with two areas to fill out: the character's base stats and the
+          values to give to each stat. The base stats should simply reflect the values for your own characters when they
+          have no mods equipped. The default values are accurate for characters at 7* gear level 12 with 3 extra pieces
+          equipped. The more accurate you make these values, the more accurate the mods optimizer can be in
+          choosing between mods, especially in choosing between percent-based stats and absolute stats.
+        </p>
+        <p>
+          The stat values can be difficult to tweak in order to get the result that you want. The tool calculates the
+          value of a mod or mod set by multiplying the value listed here by the benefit granted by the mod. For example,
+          if speed has a value of 100 and a mod gives +6 speed, then the speed stat on that mod contributes 600 to the
+          total value of the mod. If looking at a speed set that grants +10% speed, the speed value of 100 is multiplied
+          by the total amount of speed the set would give your character. If your character's base speed is 130, then
+          the total value of the speed set would be (100 * 130 * .1), or 1300.
+        </p>
+        <p>
+          Some stats tend to come in much larger numbers than others, e.g. protection. It's possible to have a set of
+          mods grant over 50,000 protection to a character, whereas 120 speed would be considered a great set. Because
+          of this, the values granted to each stat can vary greatly. Even if protection is worth a lot to a character,
+          it might be better to choose a low value like .2 for the protection stat in order for it not to be optimized
+          to the detriment of all other stats.
+        </p>
+        <p>
+          <strong>A good rule of thumb is to assign values based on tradeoffs between stats.</strong> If speed is worth
+          100 and you decide that it's worth giving up 1 speed to gain 1000 protection, then protection should have a
+          value of .1 (1*100 = .1*1000).
+        </p>
+        <p>
+          I hope that you enjoy the tool! Happy modding!
+        </p>
+        <div className={'actions'}>
+          <button type={'button'} onClick={() => this.setState({'instructions': false})}>OK</button>
+        </div>
       </div>
     </div>;
   }
