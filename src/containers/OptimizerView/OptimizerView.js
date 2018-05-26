@@ -15,38 +15,23 @@ class OptimizerView extends React.Component {
       'view': 'edit',
     };
 
-    if ('function' === typeof props.saveState) {
-      this.saveState = function() {
-        window.localStorage.setItem(
-          'availableCharacters',
-          JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
-        );
-        window.localStorage.setItem(
-          'selectedCharacters',
-          JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
-        );
-        window.localStorage.setItem(
-          'lockedCharacters',
-          JSON.stringify(this.state.lockedCharacters.map(character => character.serialize()))
-        );
-        props.saveState();
-      }.bind(this);
-    } else {
-      this.saveState = function() {
-        window.localStorage.setItem(
-          'availableCharacters',
-          JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
-        );
-        window.localStorage.setItem(
-          'selectedCharacters',
-          JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
-        );
-        window.localStorage.setItem(
-          'lockedCharacters',
-          JSON.stringify(this.state.lockedCharacters.map(character => character.serialize()))
-        );
-      }.bind(this);
-    }
+    const superSave = 'function' === typeof props.saveState ? props.saveState : function() {};
+
+    this.saveState = function() {
+      window.localStorage.setItem(
+        'availableCharacters',
+        JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
+      );
+      window.localStorage.setItem(
+        'selectedCharacters',
+        JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
+      );
+      window.localStorage.setItem(
+        'lockedCharacters',
+        JSON.stringify(this.state.lockedCharacters.map(character => character.serialize()))
+      );
+      superSave();
+    }.bind(this);
 
     this.state = Object.assign(this.state, this.restoreCharacterList());
   }

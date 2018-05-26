@@ -26,6 +26,7 @@ class App extends Component {
    */
   saveState() {
     window.localStorage.setItem('optimizer.mods', JSON.stringify(this.state.mods.map(mod => mod.serialize())));
+    document.getElementById('saveProgress').href = this.getProgressData();
   }
 
   /**
@@ -44,6 +45,26 @@ class App extends Component {
       });
 
       this.saveState();
+    };
+
+    reader.readAsText(fileInput);
+  }
+
+  /**
+   * Restore the app state from a file and refresh the app
+   */
+  restoreFromFile(fileInput) {
+    let reader = new FileReader();
+
+    reader.onload = (event) => {
+      const state = JSON.parse(event.target.result).state;
+
+      window.localStorage.setItem('optimizer.mods', state.mods);
+      window.localStorage.setItem('availableCharacters', state.availableCharacters);
+      window.localStorage.setItem('lockedCharacters', state.lockedCharacters);
+      window.localStorage.setItem('selectedCharacters', state.selectedCharacters);
+
+      window.location.reload();
     };
 
     reader.readAsText(fileInput);
@@ -131,6 +152,7 @@ class App extends Component {
           <OptimizerView mods={this.state.mods} saveState={this.saveState.bind(this)}/>
           }
           {this.state.reset && this.resetModal()}
+          {this.state.saveModal && this.saveModal()}
         </div>
         <footer className={'App-footer'}>
           Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.
@@ -168,10 +190,16 @@ class App extends Component {
       }
       <div className={'actions'}>
         <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
+        <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
         {showActions &&
-        <button type={'button'} className={'red'} onClick={() => this.setState({'reset': true})}>
-          Reset Mods Optimizer
-        </button>
+          <a id={'saveProgress'} href={this.getProgressData()} className={'button'} download={'modsOptimizer.json'}>
+            Save your progress
+          </a>
+        }
+        {showActions &&
+          <button type={'button'} className={'red'} onClick={() => this.setState({'reset': true})}>
+            Reset Mods Optimizer
+          </button>
         }
       </div>
     </header>;
@@ -221,6 +249,20 @@ class App extends Component {
         </div>
       </div>
     </div>;
+  }
+
+  /**
+   * Get all of the data needed to save the app state
+   */
+  getProgressData() {
+    return 'data:text/json;charset=utf-8,' + JSON.stringify({
+      'state': {
+        'mods': window.localStorage.getItem('optimizer.mods'),
+        'availableCharacters': window.localStorage.getItem('availableCharacters'),
+        'lockedCharacters': window.localStorage.getItem('lockedCharacters'),
+        'selectedCharacters': window.localStorage.getItem('selectedCharacters')
+      }
+    });
   }
 
   /**
