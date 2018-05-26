@@ -2103,6 +2103,24 @@ let charactersArray = [
     ['Light Side', 'Rebel', 'Attacker']
   ),
   new Character(
+    'Qi\'ra',
+    new BaseStats(27746, 32940, 2644, 1473, 1, 142, 256, 100),
+    new OptimizationPlan(
+      0, // health
+      0, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy
+      0 // crit avoidance
+    ),
+    ['Light Side', 'Scoundrel', 'Support']
+  ),
+  new Character(
     'Qui-Gon Jinn',
     new BaseStats(22288, 19431, 2448, 4333, .5, 145, 191, 194),
     new OptimizationPlan(
