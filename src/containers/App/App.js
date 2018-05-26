@@ -170,7 +170,7 @@ class App extends Component {
         <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
         {showActions &&
         <button type={'button'} className={'red'} onClick={() => this.setState({'reset': true})}>
-          Reset Mods-Optimizer
+          Reset Mods Optimizer
         </button>
         }
       </div>
