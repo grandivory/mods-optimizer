@@ -193,7 +193,7 @@ class App extends Component {
         <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
         {showActions &&
           <a id={'saveProgress'} href={this.getProgressData()} className={'button'} download={'modsOptimizer.json'}>
-            Save your progress
+            Save my progress
           </a>
         }
         {showActions &&
