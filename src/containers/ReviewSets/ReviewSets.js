@@ -5,11 +5,16 @@ import ModSet from "../../domain/ModSet";
 import ModSetDetail from "../../components/ModSetDetail/ModSetDetail";
 
 import './ReviewSets.css';
+import Toggle from "../../components/Toggle/Toggle";
 
 class ReviewSets extends React.Component {
   constructor() {
     super();
     this.state = {'view': 'all'};
+    this.filterOptions = {
+      'all': 'all',
+      'move': 'move'
+    }
   }
 
   render() {
@@ -59,10 +64,13 @@ class ReviewSets extends React.Component {
       return (
         <div className={'review-sets'}>
           <h2>Showing mod sets for {characterSets.length} out of {numOptimizedCharacters} characters</h2>
-          <div className={'display-options'}>
-            <button onClick={this.showSets.bind(this, 'all')}>Show all sets</button>
-            <button onClick={this.showSets.bind(this, 'move')}>Show only sets with moving mods</button>
+          <div className={'filters'}>
+            {this.filterForm()}
           </div>
+          {/*<div className={'display-options'}>*/}
+            {/*<button onClick={this.showSets.bind(this, 'all')}>Show all sets</button>*/}
+            {/*<button onClick={this.showSets.bind(this, 'move')}>Show only sets with moving mods</button>*/}
+          {/*</div>*/}
           <div className={'sets-list'}>
             {rows}
           </div>
@@ -80,6 +88,23 @@ class ReviewSets extends React.Component {
     this.setState({
       'view': filter
     })
+  }
+
+  /**
+   * Render a form used to filter the sets displayed on the page
+   * @returns JSX Element
+   */
+  filterForm() {
+    return <div className={'filter-form'}>
+      <Toggle inputLabel={'Show me:'}
+              leftLabel={'Changing sets'}
+              leftValue={this.filterOptions.move}
+              rightLabel={'All sets'}
+              rightValue={this.filterOptions.all}
+              value={this.filterOptions.all}
+              onChange={this.showSets.bind(this)}
+      />
+    </div>;
   }
 }
 
