@@ -19,7 +19,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Jedi', 'Galactic Republic', 'Support']
   ),
   new Character(
     'Admiral Ackbar',
@@ -37,7 +38,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Support', 'Fleet Commander', 'Crew Member']
   ),
   new Character(
     'Ahsoka Tano',
@@ -55,7 +57,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Jedi', 'Galactic Republic', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Ahsoka Tano (Fulcrum)',
@@ -73,7 +76,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Rebel', 'Attacker']
   ),
   new Character(
     'Amilyn Holdo',
@@ -91,7 +95,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Resistance', 'Tank']
   ),
   new Character(
     'Asajj Ventress',
@@ -108,7 +113,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy,
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Nightsister', 'Separatist', 'Support']
   ),
   new Character(
     'B2 Super Battle Droid',
@@ -126,7 +132,8 @@ let charactersArray = [
       3, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Separatist', 'Droid', 'Tank']
   ),
   new Character(
     'Barriss Offee',
@@ -144,7 +151,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Jedi', 'Galactic Republic', 'Healer']
   ),
   new Character(
     'Baze Malbus',
@@ -161,7 +169,8 @@ let charactersArray = [
       1, // defense
       0, // accuracy,
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Rebel', 'Rogue One', 'Tank']
   ),
   new Character(
     'BB-8',
@@ -178,7 +187,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy,
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Resistance', 'Droid', 'Support']
   ),
   new Character(
     'Biggs Darklighter',
@@ -196,7 +206,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Support', 'Crew Member']
   ),
   new Character(
     'Bistan',
@@ -214,7 +225,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Rogue One', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Boba Fett',
@@ -232,7 +244,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Bodhi Rook',
@@ -250,7 +263,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Rebel', 'Rogue One', 'Support']
   ),
   new Character(
     'Bossk',
@@ -268,7 +282,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Tank']
   ),
   new Character(
     'Cad Bane',
@@ -286,7 +301,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Support']
   ),
   new Character(
     'Captain Han Solo',
@@ -303,7 +319,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy,
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Scountrel', 'Rebel', 'Support']
   ),
   new Character(
     'Captain Phasma',
@@ -321,7 +338,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'First Order', 'Support', 'Crew Member']
   ),
   new Character(
     'Cassian Andor',
@@ -339,7 +357,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Rogue One', 'Support', 'Crew Member']
   ),
   new Character(
     'CC-2224 "Cody"',
@@ -357,7 +376,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Clone Trooper', 'Attacker']
   ),
   new Character(
     'Chief Chirpa',
@@ -375,7 +395,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Ewok', 'Support']
   ),
   new Character(
     'Chief Nebit',
@@ -393,7 +414,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Jawa', 'Tank']
   ),
   new Character(
     'Chirrut Îmwe',
@@ -410,7 +432,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy,
       0,// crit avoidance
-    )
+    ),
+    ['Light Side', 'Rebel', 'Rogue One', 'Attacker']
   ),
   new Character(
     'Chopper',
@@ -428,7 +451,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Phoenix', 'Droid', 'Support', 'Crew Member']
   ),
   new Character(
     'Clone Sergeant - Phase I',
@@ -446,7 +470,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Clone Trooper', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Clone Wars Chewbacca',
@@ -464,7 +489,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Scoundrel', 'Tank']
   ),
   new Character(
     'Colonel Starck',
@@ -481,7 +507,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy,
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Empire', 'Imperial Trooper', 'Support']
   ),
   new Character(
     'Commander Luke Skywalker',
@@ -498,7 +525,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy,
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Rebel', 'Attacker']
   ),
   new Character(
     'Coruscant Underworld Police',
@@ -516,7 +544,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Support']
   ),
   new Character(
     'Count Dooku',
@@ -533,7 +562,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Separatist', 'Sith', 'Support']
   ),
   new Character(
     'CT-21-0408 "Echo"',
@@ -551,7 +581,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Clone Trooper', 'Support']
   ),
   new Character(
     'CT-5555 "Fives"',
@@ -569,7 +600,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Clone Trooper', 'Tank', 'Crew Member']
   ),
   new Character(
     'CT-7567 "Rex"',
@@ -587,7 +619,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance, \n0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Clone Trooper', 'Support', 'Crew Member']
   ),
   new Character(
     'Darth Maul',
@@ -605,7 +638,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance,\n0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Sith', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Darth Nihilus',
@@ -622,7 +656,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Sith', 'Support']
   ),
   new Character(
     'Darth Sidious',
@@ -639,7 +674,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Sith', 'Attacker']
   ),
   new Character(
     'Darth Sion',
@@ -657,7 +693,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Sith', 'Tank']
   ),
   new Character(
     'Darth Traya',
@@ -675,7 +712,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Sith', 'Support']
   ),
   new Character(
     'Darth Vader',
@@ -693,7 +731,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Empire', 'Sith', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Dathcha',
@@ -711,7 +750,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Jawa', 'Support']
   ),
   new Character(
     'Death Trooper',
@@ -729,7 +769,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Empire', 'Imperial Trooper', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Dengar',
@@ -746,7 +787,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker']
   ),
   new Character(
     'Director Krennic',
@@ -764,7 +806,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Empire', 'Support']
   ),
   new Character(
     'Eeth Koth',
@@ -782,7 +825,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Support']
   ),
   new Character(
     'Emperor Palpatine',
@@ -799,7 +843,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Empire', 'Sith', 'Support']
   ),
   new Character(
     'Ewok Elder',
@@ -816,7 +861,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Ewok', 'Healer']
   ),
   new Character(
     'Ewok Scout',
@@ -834,7 +880,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Ewok', 'Attacker']
   ),
   new Character(
     'Ezra Bridger',
@@ -852,7 +899,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Phoenix', 'Jedi', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Finn',
@@ -870,7 +918,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Resistance', 'Tank', 'Crew Member']
   ),
   new Character(
     'First Order Executioner',
@@ -888,7 +937,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'First Order', 'Attacker']
   ),
   new Character(
     'First Order Officer',
@@ -906,7 +956,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'First Order', 'Support']
   ),
   new Character(
     'First Order SF TIE Pilot',
@@ -924,7 +975,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'First Order', 'Attacker', 'Crew Member']
   ),
   new Character(
     'First Order Stormtrooper',
@@ -942,7 +994,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'First Order', 'Tank', 'Crew Member']
   ),
   new Character(
     'First Order TIE Pilot',
@@ -960,7 +1013,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'First Order', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Gamorrean Guard',
@@ -978,7 +1032,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Scoundrel', 'Tank']
   ),
   new Character(
     'Gar Saxon',
@@ -996,7 +1051,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Empire', 'Tank', 'Crew Member']
   ),
   new Character(
     'Garazeb "Zeb" Orrelios',
@@ -1014,7 +1070,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Phoenix', 'Tank', 'Crew Member']
   ),
   new Character(
     'General Grievous',
@@ -1032,7 +1089,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Separatist', 'Droid', 'Attacker']
   ),
   new Character(
     'General Kenobi',
@@ -1049,7 +1107,8 @@ let charactersArray = [
       2, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Tank']
   ),
   new Character(
     'General Veers',
@@ -1066,7 +1125,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Empire', 'Imperial Trooper', 'Support']
   ),
   new Character(
     'Geonosian Soldier',
@@ -1084,7 +1144,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Separatist', 'Geonosian', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Geonosian Spy',
@@ -1102,7 +1163,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Separatist', 'Geonosian', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Grand Admiral Thrawn',
@@ -1120,7 +1182,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Empire', 'Support', 'Fleet Commander', 'Crew Member']
   ),
   new Character(
     'Grand Master Yoda',
@@ -1137,7 +1200,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Support']
   ),
   new Character(
     'Grand Moff Tarkin',
@@ -1155,7 +1219,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Empire', 'Support', 'Fleet Commander', 'Crew Member']
   ),
   new Character(
     'Greedo',
@@ -1172,7 +1237,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker']
   ),
   new Character(
     'Han Solo',
@@ -1189,7 +1255,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Scoundrel', 'Rebel', 'Attacker']
   ),
   new Character(
     'Hera Syndulla',
@@ -1207,7 +1274,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Phoenix', 'Support', 'Crew Member']
   ),
   new Character(
     'Hermit Yoda',
@@ -1225,7 +1293,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Jedi', 'Support']
   ),
   new Character(
     'HK-47',
@@ -1243,7 +1312,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Droid', 'Support']
   ),
   new Character(
     'Hoth Rebel Scout',
@@ -1260,7 +1330,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Rebel', 'Attacker']
   ),
   new Character(
     'Hoth Rebel Soldier',
@@ -1277,7 +1348,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Rebel', 'Support']
   ),
   new Character(
     'IG-100 MagnaGuard',
@@ -1295,7 +1367,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Separatist', 'Droid', 'Tank']
   ),
   new Character(
     'IG-86 Sentinel Droid',
@@ -1313,7 +1386,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Droid', 'Attacker']
   ),
   new Character(
     'IG-88',
@@ -1330,7 +1404,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Droid', 'Attacker']
   ),
   new Character(
     'Ima-Gun Di',
@@ -1348,7 +1423,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Support']
   ),
   new Character(
     'Imperial Probe Droid',
@@ -1366,7 +1442,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Empire', 'Droid', 'Support']
   ),
   new Character(
     'Imperial Super Commando',
@@ -1384,7 +1461,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Empire', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Jawa',
@@ -1402,7 +1480,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Jawa', 'Attacker']
   ),
   new Character(
     'Jawa Engineer',
@@ -1419,7 +1498,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Jawa', 'Healer']
   ),
   new Character(
     'Jawa Scavenger',
@@ -1437,7 +1517,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Jawa', 'Support']
   ),
   new Character(
     'Jedi Consular',
@@ -1455,7 +1536,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Healer', 'Crew Member']
   ),
   new Character(
     'Jedi Knight Anakin',
@@ -1472,7 +1554,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Attacker']
   ),
   new Character(
     'Jedi Knight Guardian',
@@ -1490,7 +1573,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Tank']
   ),
   new Character(
     'Jyn Erso',
@@ -1507,7 +1591,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Rebel', 'Rogue One', 'Attacker', 'Crew Member']
   ),
   new Character(
     'K-2SO',
@@ -1525,7 +1610,8 @@ let charactersArray = [
       0, // accuracy
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Rogue One', 'Droid', 'Tank', 'Crew Member']
   ),
   new Character(
     'Kanan Jarrus',
@@ -1543,7 +1629,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Phoenix', 'Tank', 'Crew Member']
   ),
   new Character(
     'Kit Fisto',
@@ -1561,7 +1648,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Attacker']
   ),
   new Character(
     'Kylo Ren',
@@ -1579,7 +1667,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'First Order', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Kylo Ren (Unmasked)',
@@ -1597,7 +1686,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'First Order', 'Tank', 'Crew Member']
   ),
   new Character(
     'Lando Calrissian',
@@ -1615,7 +1705,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Scoundrel', 'Rebel', 'Attacker']
   ),
   new Character(
     'Lobot',
@@ -1633,7 +1724,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Rebel', 'Support']
   ),
   new Character(
     'Logray',
@@ -1651,7 +1743,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Ewok', 'Support']
   ),
   new Character(
     'Luke Skywalker (Farmboy)',
@@ -1669,7 +1762,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Rebel', 'Attacker']
   ),
   new Character(
     'Luminara Unduli',
@@ -1687,7 +1781,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Healer']
   ),
   new Character(
     'Mace Windu',
@@ -1705,7 +1800,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Tank', 'Fleet Commander', 'Crew Member']
   ),
   new Character(
     'Magmatrooper',
@@ -1723,7 +1819,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Empire', 'Imperial Trooper', 'Attacker']
   ),
   new Character(
     'Mob Enforcer',
@@ -1741,7 +1838,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Scoundrel', 'Tank']
   ),
   new Character(
     'Mother Talzin',
@@ -1758,7 +1856,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Nightsister', 'Support']
   ),
   new Character(
     'Nightsister Acolyte',
@@ -1775,7 +1874,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Nightsister', 'Attacker']
   ),
   new Character(
     'Nightsister Initiate',
@@ -1792,7 +1892,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Nightsister', 'Attacker']
   ),
   new Character(
     'Nightsister Spirit',
@@ -1810,7 +1911,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Nightsister', 'Attacker']
   ),
   new Character(
     'Nightsister Zombie',
@@ -1828,7 +1930,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Nightsister', 'Tank']
   ),
   new Character(
     'Nute Gunray',
@@ -1846,7 +1949,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Scoundrel', 'Separatist', 'Attacker']
   ),
   new Character(
     'Obi-Wan Kenobi (Old Ben)',
@@ -1864,7 +1968,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Rebel', 'Jedi', 'Tank']
   ),
   new Character(
     'Old Daka',
@@ -1881,7 +1986,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Nightsister', 'Healer']
   ),
   new Character(
     'Pao',
@@ -1899,7 +2005,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Rebel', 'Rogue One', 'Attacker']
   ),
   new Character(
     'Paploo',
@@ -1917,7 +2024,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Ewok', 'Tank']
   ),
   new Character(
     'Plo Koon',
@@ -1935,7 +2043,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Tank', 'Crew Member']
   ),
   new Character(
     'Poe Dameron',
@@ -1953,7 +2062,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Resistance', 'Tank', 'Crew Member']
   ),
   new Character(
     'Poggle the Lesser',
@@ -1971,7 +2081,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Separatist', 'Geonosian', 'Support']
   ),
   new Character(
     'Princess Leia',
@@ -1988,7 +2099,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Rebel', 'Attacker']
   ),
   new Character(
     'Qui-Gon Jinn',
@@ -2006,7 +2118,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Support']
   ),
   new Character(
     'R2-D2',
@@ -2023,7 +2136,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Galactic Republic', 'Rebel', 'Resistance', 'Droid', 'Support']
   ),
   new Character(
     'Rebel Officer Leia Organa',
@@ -2040,7 +2154,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Rebel', 'Attacker']
   ),
   new Character(
     'Resistance Pilot',
@@ -2058,7 +2173,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Resistance', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Resistance Trooper',
@@ -2075,7 +2191,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Resistance', 'Attacker']
   ),
   new Character(
     'Rey (Jedi Training)',
@@ -2092,7 +2209,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Resistance', 'Tank']
   ),
   new Character(
     'Rey (Scavenger)',
@@ -2110,7 +2228,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Resistance', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Rose Tico',
@@ -2128,7 +2247,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Resistance', 'Attacker']
   ),
   new Character(
     'Royal Guard',
@@ -2146,7 +2266,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Empire', 'Tank']
   ),
   new Character(
     'Sabine Wren',
@@ -2164,7 +2285,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Phoenix', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Savage Opress',
@@ -2182,7 +2304,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Sith', 'Attacker']
   ),
   new Character(
     'Scarif Rebel Pathfinder',
@@ -2200,7 +2323,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Rogue One', 'Tank', 'Crew Member']
   ),
   new Character(
     'Shoretrooper',
@@ -2218,7 +2342,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Empire', 'Imperial Trooper', 'Tank', 'Crew Member']
   ),
   new Character(
     'Sith Assassin',
@@ -2235,7 +2360,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Sith', 'Attacker']
   ),
   new Character(
     'Sith Marauder',
@@ -2253,7 +2379,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Sith', 'Attacker']
   ),
   new Character(
     'Sith Trooper',
@@ -2270,7 +2397,8 @@ let charactersArray = [
       20, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Sith', 'Tank']
   ),
   new Character(
     'Snowtrooper',
@@ -2287,7 +2415,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Empire', 'Imperial Trooper', 'Attacker']
   ),
   new Character(
     'Stormtrooper',
@@ -2304,7 +2433,8 @@ let charactersArray = [
       10, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Empire', 'Imperial Trooper', 'Tank']
   ),
   new Character(
     'Stormtrooper Han',
@@ -2321,7 +2451,8 @@ let charactersArray = [
       3, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Scoundrel', 'Rebel', 'Tank']
   ),
   new Character(
     'Sun Fac',
@@ -2339,7 +2470,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Separatist', 'Geonosian', 'Tank', 'Crew Member']
   ),
   new Character(
     'Talia',
@@ -2356,7 +2488,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Nightsister', 'Healer']
   ),
   new Character(
     'Teebo',
@@ -2373,7 +2506,8 @@ let charactersArray = [
       5, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Light Side', 'Ewok', 'Tank']
   ),
   new Character(
     'TIE Fighter Pilot',
@@ -2391,7 +2525,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Dark Side', 'Empire', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Tusken Raider',
@@ -2409,7 +2544,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Tusken', 'Attacker']
   ),
   new Character(
     'Tusken Shaman',
@@ -2427,7 +2563,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Tusken', 'Healer']
   ),
   new Character(
     'Ugnaught',
@@ -2445,7 +2582,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Support']
   ),
   new Character(
     'URoRRuR\'R\'R',
@@ -2463,7 +2601,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Dark Side', 'Tusken', 'Support']
   ),
   new Character(
     'Vandor Chewbacca',
@@ -2481,7 +2620,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Scoundrel', 'Tank']
   ),
   new Character(
     'Veteran Smuggler Chewbacca',
@@ -2499,7 +2639,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Scoundrel', 'Attacker']
   ),
   new Character(
     'Veteran Smuggler Han Solo',
@@ -2517,7 +2658,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Scoundrel', 'Attacker']
   ),
   new Character(
     'Visas Marr',
@@ -2535,7 +2677,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Healer']
   ),
   new Character(
     'Wampa',
@@ -2552,7 +2695,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Attacker']
   ),
   new Character(
     'Wedge Antilles',
@@ -2570,7 +2714,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Rebel', 'Attacker', 'Crew Member']
   ),
   new Character(
     'Wicket',
@@ -2588,7 +2733,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       false
-    )
+    ),
+    ['Light Side', 'Ewok', 'Attacker']
   ),
   new Character(
     'Young Han Solo',
@@ -2606,7 +2752,8 @@ let charactersArray = [
       0, // accuracy,
       0, // crit avoidance
       true
-    )
+    ),
+    ['Light Side', 'Scoundrel', 'Attacker']
   ),
   new Character(
     'Zam Wesell',
@@ -2623,7 +2770,8 @@ let charactersArray = [
       0, // defense
       0, // accuracy
       0 // crit avoidance
-    )
+    ),
+    ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker']
   )
 ];
 

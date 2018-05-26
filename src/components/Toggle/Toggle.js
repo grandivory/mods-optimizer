@@ -7,17 +7,11 @@ class Toggle extends React.Component {
     super(props);
 
     if (!this.props.leftValue || !this.props.rightValue) {
-      throw {
-        'message': 'Both a left and right value must be specified for the toggle',
-        'name': 'InvalidArgumentException'
-      };
+      throw new Error('Both a left and right value must be specified for the toggle');
     }
 
     if (this.props.value && ![this.props.leftValue, this.props.rightValue].includes(this.props.value)) {
-      throw {
-        'message': 'The value specified for the toggle must be one of the left or right values',
-        'name': 'InvalidArgumentException'
-      };
+      throw new Error('The value specified for the toggle must be one of the left or right values');
     }
 
     this.value = this.props.value || this.props.rightValue;
@@ -42,7 +36,7 @@ class Toggle extends React.Component {
   }
 
   render() {
-    return <div>
+    return <div className={'toggle-wrapper'}>
       <div className={'toggle-label'}>{this.props.inputLabel}</div>
       <label>
         <input type={'checkbox'}

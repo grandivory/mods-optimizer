@@ -2,10 +2,11 @@ import BaseStats from "./BaseStats";
 import OptimizationPlan from "./OptimizationPlan";
 
 class Character{
-  constructor(name, baseStats, optimizationPlan) {
+  constructor(name, baseStats, optimizationPlan, tags) {
     this.name = name;
     this.baseStats = baseStats;
     this.optimizationPlan = optimizationPlan;
+    this.tags = tags;
   }
 
   serialize() {

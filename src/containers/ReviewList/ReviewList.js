@@ -14,13 +14,15 @@ class ReviewList extends React.Component {
       'currentCharacter': 'currentCharacter',
       'assignTo': 'assignTo'
     };
-    this.state = {'sortBy': this.sortOptions.assignTo};
+    this.state = {
+      'sortBy': this.sortOptions.assignTo,
+      'tag': ''
+    };
 
-    let movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
+    this.state.movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
+    this.state.displayedMods = this.state.movingMods;
 
     this.slotOrder = ['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross'];
-
-    this.state.movingMods = movingMods.sort(this.optimizerOrder.bind(this));
 
     if ('function' === typeof props.saveState) {
       this.saveState = props.saveState;
@@ -30,9 +32,9 @@ class ReviewList extends React.Component {
   }
 
   render() {
-    let movingMods = this.state.movingMods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
+    const modsLeft = this.state.movingMods.length;
 
-    const modRows = movingMods.map(mod =>
+    const modRows = this.state.displayedMods.map(mod =>
       <div className={'mod-row'} key={mod.id} >
         <ModDetail key={mod.id} mod={mod}/>
         <Arrow />
@@ -44,7 +46,7 @@ class ReviewList extends React.Component {
       </div>
     );
 
-    if (0 === movingMods.length) {
+    if (0 === modsLeft) {
       return (
         <div className={'review-list'}>
           <h2>You don't have any mods left to move! Great job!</h2>
@@ -57,10 +59,15 @@ class ReviewList extends React.Component {
           <div className={'filters'}>
             {this.filterForm()}
           </div>
-          <h2>Reassigning {movingMods.length} mods</h2>
-          <div className={'mods-list'}>
-            {modRows}
-          </div>
+          <h2>Reassigning {modsLeft} mods</h2>
+          {(0 < this.state.displayedMods.length) &&
+            <div className={'mods-list'}>
+              {modRows}
+            </div>
+          }
+          {(0 === this.state.displayedMods.length) &&
+            <h3>No more mods to move under that filter. Try a different filter now!</h3>
+          }
         </div>
       );
     }
@@ -72,8 +79,7 @@ class ReviewList extends React.Component {
    */
   removeMod(mod) {
     mod.currentCharacter = null;
-    this.setState({});
-    this.saveState();
+    this.updateMovingMods();
   }
 
   /**
@@ -85,29 +91,19 @@ class ReviewList extends React.Component {
       .filter(m => m.currentCharacter === mod.assignTo && m.slot === mod.slot)
       .forEach(m => m.currentCharacter = null);
     mod.currentCharacter = mod.assignTo;
-    this.setState({});
-    this.saveState();
+    this.updateMovingMods();
   }
 
   /**
-   * Change the view to sort (and filter) mods by either the characters currently equipping them, or
-   * the characters they're being reassigned to
+   * Re-filter all of the mods this view is aware of to get a list of those that are moving, then save the state and
+   * re-render
    */
-  changeSortTo(sortBy) {
-    let movingMods = this.state.movingMods;
-
-    if (this.sortOptions.currentCharacter === sortBy) {
-      movingMods.sort(this.characterSort.call(this, sortBy))
-    } else {
-      movingMods.sort(this.optimizerOrder.bind(this))
-    }
-
+  updateMovingMods() {
     this.setState({
-      'sortBy': sortBy,
-      'movingMods': movingMods
+      'movingMods': this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo)
     });
+    this.saveState();
   }
-
 
   /**
    * Generate a sort function for a list of mods based on reading a particular property to get the characters to sort by
@@ -131,21 +127,6 @@ class ReviewList extends React.Component {
   }
 
   /**
-   * Re-sort the list of moving mods by a particular property
-   * @param characterPropertyName string The property to sort by
-   */
-  reSort(characterPropertyName) {
-    let movingMods = this.state.movingMods;
-
-    movingMods.sort(this.characterSort.call(this, characterPropertyName));
-
-    this.setState({
-      'sortBy': characterPropertyName,
-      'movingMods': movingMods
-    });
-  }
-
-  /**
    * Sorting function for reordering mods into the same order the characters were selected for.
    */
   optimizerOrder(left, right) {
@@ -166,6 +147,14 @@ class ReviewList extends React.Component {
    * @returns JSX Element
    */
   filterForm() {
+    const sortBy = this.state.sortBy;
+    const tags = this.state.movingMods
+      .filter(mod => null !== mod[sortBy])
+      .map(mod => mod[sortBy].tags)
+      .reduce((allTags, charTags) => allTags.concat(charTags.filter(tag => !allTags.includes(tag))), [])
+      .sort();
+    const tagOptions = tags.map(tag => <option value={tag} key={tag}>{tag}</option>);
+
     return <div className={'filter-form'}>
       <Toggle inputLabel={'Organize mods by:'}
               leftLabel={'Currently Equipped'}
@@ -173,9 +162,40 @@ class ReviewList extends React.Component {
               rightLabel={'Assigned Character'}
               rightValue={this.sortOptions.assignTo}
               value={this.sortOptions.assignTo}
-              onChange={this.changeSortTo.bind(this)}
+              onChange={sortBy => this.updateDisplayedMods.bind(this)(sortBy, this.state.tag)}
       />
+      <label htmlFor={'tag'}>Show characters by tag:</label>
+      <select id={'tag'} value={this.state.tag} onChange={e => this.updateDisplayedMods.bind(this)(sortBy, e.target.value)}>
+        <option value={''}>All</option>
+        {tagOptions}
+      </select>
     </div>;
+  }
+
+  /**
+   * Update the list of mods that's shown based on the values in the filter form and re-render the form
+   */
+  updateDisplayedMods(sortBy, tag) {
+    let displayedMods = this.state.movingMods;
+
+    if ('' !== tag) {
+      const filteredMods = displayedMods.filter(mod => mod[sortBy] && mod[sortBy].tags.includes(tag));
+      if (filteredMods.length) {
+        displayedMods = filteredMods;
+      }
+    }
+
+    if (this.sortOptions.currentCharacter === sortBy) {
+      displayedMods.sort(this.characterSort.call(this, sortBy))
+    } else {
+      displayedMods.sort(this.optimizerOrder.bind(this))
+    }
+
+    this.setState({
+      'sortBy': sortBy,
+      'tag': displayedMods.length ? tag : '',
+      'displayedMods': displayedMods
+    });
   }
 }
 

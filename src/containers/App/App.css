@@ -248,3 +248,27 @@ strong {
   border: 1px solid #888;
   border-left-width: 0;
 }
+
+.filter-form {
+  text-align: center;
+}
+
+.filter-form label {
+  display: block;
+  border-bottom: 1px solid white;
+  font-size: 1.2em;
+  margin-top: .5em;
+  margin-bottom: .25em;
+}
+
+.filter-form select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-size: 1em;
+  color: white;
+  background-color: rgb(0, 0, 64);
+  border: 1px solid dodgerblue;
+  border-radius: 0;
+  margin: .25em;
+  padding: .25em;
+}
