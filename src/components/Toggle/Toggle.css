@@ -8,6 +8,11 @@ div.toggle-label {
   margin-bottom: .3em;
 }
 
+.toggle-left-value,
+.toggle-right-value {
+  cursor: pointer;
+}
+
 span.toggle-switch {
   display: inline-block;
   width: 2em;
@@ -17,6 +22,7 @@ span.toggle-switch {
   background-color: #222;
   vertical-align: middle;
   margin: 0 .5em;
+  cursor: pointer;
 }
 
 span.toggle-switch::after {
