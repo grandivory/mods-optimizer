@@ -20,9 +20,9 @@ class ReviewList extends React.Component {
     };
 
     this.state.movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
-    this.state.displayedMods = this.state.movingMods;
-
     this.slotOrder = ['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross'];
+    this.state.displayedMods = this.state.movingMods;
+    this.state.displayedMods.sort(this.optimizerOrder.bind(this));
 
     if ('function' === typeof props.saveState) {
       this.saveState = props.saveState;
@@ -79,7 +79,11 @@ class ReviewList extends React.Component {
    */
   removeMod(mod) {
     mod.currentCharacter = null;
-    this.updateMovingMods();
+    const movingMods = this.updateMovingMods();
+    this.saveState();
+    this.setState({
+      'movingMods': movingMods
+    });
   }
 
   /**
@@ -91,18 +95,15 @@ class ReviewList extends React.Component {
       .filter(m => m.currentCharacter === mod.assignTo && m.slot === mod.slot)
       .forEach(m => m.currentCharacter = null);
     mod.currentCharacter = mod.assignTo;
-    this.updateMovingMods();
+    const movingMods = this.updateMovingMods();
+    this.updateDisplayedMods(this.state.sortBy, this.state.tag, movingMods);
   }
 
   /**
-   * Re-filter all of the mods this view is aware of to get a list of those that are moving, then save the state and
-   * re-render
+   * Re-filter all of the mods this view is aware of to get a list of those that are moving
    */
   updateMovingMods() {
-    this.setState({
-      'movingMods': this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo)
-    });
-    this.saveState();
+    return this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
   }
 
   /**
@@ -162,10 +163,13 @@ class ReviewList extends React.Component {
               rightLabel={'Assigned Character'}
               rightValue={this.sortOptions.assignTo}
               value={this.sortOptions.assignTo}
-              onChange={sortBy => this.updateDisplayedMods.bind(this)(sortBy, this.state.tag)}
+              onChange={sortBy => this.updateDisplayedMods.bind(this)(sortBy, this.state.tag, this.state.movingMods)}
       />
       <label htmlFor={'tag'}>Show characters by tag:</label>
-      <select id={'tag'} value={this.state.tag} onChange={e => this.updateDisplayedMods.bind(this)(sortBy, e.target.value)}>
+      <select id={'tag'}
+              value={this.state.tag}
+              onChange={e => this.updateDisplayedMods.bind(this)(sortBy, e.target.value, this.state.movingMods)}
+      >
         <option value={''}>All</option>
         {tagOptions}
       </select>
@@ -175,8 +179,8 @@ class ReviewList extends React.Component {
   /**
    * Update the list of mods that's shown based on the values in the filter form and re-render the form
    */
-  updateDisplayedMods(sortBy, tag) {
-    let displayedMods = this.state.movingMods;
+  updateDisplayedMods(sortBy, tag, movingMods, reRender=true) {
+    let displayedMods = movingMods;
 
     if ('' !== tag) {
       const filteredMods = displayedMods.filter(mod => mod[sortBy] && mod[sortBy].tags.includes(tag));
@@ -191,11 +195,14 @@ class ReviewList extends React.Component {
       displayedMods.sort(this.optimizerOrder.bind(this))
     }
 
-    this.setState({
-      'sortBy': sortBy,
-      'tag': displayedMods.length ? tag : '',
-      'displayedMods': displayedMods
-    });
+    if (reRender) {
+      this.setState({
+        'sortBy': sortBy,
+        'tag': displayedMods.length ? tag : '',
+        'movingMods': movingMods,
+        'displayedMods': displayedMods
+      });
+    }
   }
 }
 
