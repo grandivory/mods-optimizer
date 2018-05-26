@@ -4,19 +4,23 @@ import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 
 import './ReviewList.css';
 import Arrow from "../../components/Arrow/Arrow";
+import Toggle from "../../components/Toggle/Toggle";
 
 class ReviewList extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {'sortBy': 'assignTo'};
+    this.sortOptions = {
+      'currentCharacter': 'currentCharacter',
+      'assignTo': 'assignTo'
+    };
+    this.state = {'sortBy': this.sortOptions.assignTo};
 
     let movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
 
     this.slotOrder = ['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross'];
 
-    this.state.movingMods = movingMods;
-    this.optimizerOrder(false);
+    this.state.movingMods = movingMods.sort(this.optimizerOrder.bind(this));
 
     if ('function' === typeof props.saveState) {
       this.saveState = props.saveState;
@@ -50,12 +54,10 @@ class ReviewList extends React.Component {
     } else {
       return (
         <div className={'review-list'}>
-          <h2>Reassigning {movingMods.length} mods</h2>
-          <div className={'sort-options'}>
-            Sort By:
-            <button onClick={this.reSort.bind(this, 'currentCharacter')}>Currently Equipped</button>
-            <button onClick={this.optimizerOrder.bind(this)}>Assigned Character</button>
+          <div className={'filters'}>
+            {this.filterForm()}
           </div>
+          <h2>Reassigning {movingMods.length} mods</h2>
           <div className={'mods-list'}>
             {modRows}
           </div>
@@ -86,6 +88,26 @@ class ReviewList extends React.Component {
     this.setState({});
     this.saveState();
   }
+
+  /**
+   * Change the view to sort (and filter) mods by either the characters currently equipping them, or
+   * the characters they're being reassigned to
+   */
+  changeSortTo(sortBy) {
+    let movingMods = this.state.movingMods;
+
+    if (this.sortOptions.currentCharacter === sortBy) {
+      movingMods.sort(this.characterSort.call(this, sortBy))
+    } else {
+      movingMods.sort(this.optimizerOrder.bind(this))
+    }
+
+    this.setState({
+      'sortBy': sortBy,
+      'movingMods': movingMods
+    });
+  }
+
 
   /**
    * Generate a sort function for a list of mods based on reading a particular property to get the characters to sort by
@@ -124,31 +146,36 @@ class ReviewList extends React.Component {
   }
 
   /**
-   * Re-sort the list of moving mods into the same order the characters were selected for.
-   * @param reRender bool If true, will re-render the view upon completion of the sort
+   * Sorting function for reordering mods into the same order the characters were selected for.
    */
-  optimizerOrder(reRender) {
-    let movingMods = this.state.movingMods;
+  optimizerOrder(left, right) {
     const characterList = this.props.characters;
-    const slotOrder = this.slotOrder
+    const slotOrder = this.slotOrder;
+    let leftChar = left.assignTo;
+    let rightChar = right.assignTo;
 
-    movingMods.sort((left, right) => {
-      let leftChar = left.assignTo;
-      let rightChar = right.assignTo;
-
-      if (leftChar === rightChar) {
-        return slotOrder.indexOf(left.slot) - slotOrder.indexOf(right.slot);
-      } else {
-        return characterList.indexOf(left.assignTo) - characterList.indexOf(right.assignTo);
-      }
-    });
-
-    if (reRender) {
-      this.setState({
-        'sortBy': 'assignTo',
-        'movingMods': movingMods
-      });
+    if (leftChar === rightChar) {
+      return slotOrder.indexOf(left.slot) - slotOrder.indexOf(right.slot);
+    } else {
+      return characterList.indexOf(left.assignTo) - characterList.indexOf(right.assignTo);
     }
+  }
+
+  /**
+   * Render a form used to filter and sort the mods displayed on the page
+   * @returns JSX Element
+   */
+  filterForm() {
+    return <div className={'filter-form'}>
+      <Toggle inputLabel={'Organize mods by:'}
+              leftLabel={'Currently Equipped'}
+              leftValue={this.sortOptions.currentCharacter}
+              rightLabel={'Assigned Character'}
+              rightValue={this.sortOptions.assignTo}
+              value={this.sortOptions.assignTo}
+              onChange={this.changeSortTo.bind(this)}
+      />
+    </div>;
   }
 }
 

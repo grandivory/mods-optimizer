@@ -1,0 +1,43 @@
+input.toggle {
+  display: none;
+}
+
+div.toggle-label {
+  font-size: 1.2em;
+  border-bottom: 1px solid white;
+  margin-bottom: .3em;
+}
+
+span.toggle-switch {
+  display: inline-block;
+  width: 2em;
+  height: 1em;
+  position: relative;
+  border-radius: .25em;
+  background-color: #222;
+  vertical-align: middle;
+  margin: 0 .5em;
+}
+
+span.toggle-switch::after {
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: .25em;
+  width: 1.2em;
+  height: 1.2em;
+  top: -.1em;
+  left: .9em;
+  right: .9em;
+  background-color: #61c714;
+  transition-property: left;
+  transition-duration: .2s;
+}
+
+span.toggle-switch.left::after {
+  left: 0;
+}
+
+span.toggle-switch.right::after {
+  right: 0;
+}

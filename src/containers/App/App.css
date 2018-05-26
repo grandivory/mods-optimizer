@@ -239,3 +239,12 @@ strong {
   font-weight: bold;
   color: #a35ef9;
 }
+
+.filters {
+  float: left;
+  background-color: #444;
+  padding: 1em;
+  border-radius: 0 .5em .5em 0;
+  border: 1px solid #888;
+  border-left-width: 0;
+}

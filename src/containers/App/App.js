@@ -12,7 +12,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.state.view = 'explore';
+    this.state.view = 'optimize';
     this.state.mods = [];
 
     let savedMods = window.localStorage.getItem('optimizer.mods');
