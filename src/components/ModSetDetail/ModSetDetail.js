@@ -1,6 +1,4 @@
 import React from "react";
-import ModStats from "../ModStats/ModStats";
-import ModImage from "../ModImage/ModImage";
 
 import './ModSetDetail.css';
 import ModSetView from "../ModSetView/ModSetView";
