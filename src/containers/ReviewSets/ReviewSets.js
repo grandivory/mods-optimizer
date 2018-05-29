@@ -67,10 +67,6 @@ class ReviewSets extends React.Component {
           <div className={'filters'}>
             {this.filterForm()}
           </div>
-          {/*<div className={'display-options'}>*/}
-            {/*<button onClick={this.showSets.bind(this, 'all')}>Show all sets</button>*/}
-            {/*<button onClick={this.showSets.bind(this, 'move')}>Show only sets with moving mods</button>*/}
-          {/*</div>*/}
           <div className={'sets-list'}>
             {rows}
           </div>

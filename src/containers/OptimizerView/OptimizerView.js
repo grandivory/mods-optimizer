@@ -104,7 +104,7 @@ class OptimizerView extends React.Component {
             Change my character selection
           </button>
           <button onClick={this.updateView.bind(this, 'mods' === this.state.view ? 'sets' : 'mods')}>
-            {'mods' === this.state.view ? 'Show me as sets' : 'Show me a list of mods to move'}
+            {'mods' === this.state.view ? 'Let me review the changes' : 'Show me the mods to move'}
           </button>
         </div>
         }

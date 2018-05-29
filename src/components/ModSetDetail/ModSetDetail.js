@@ -3,6 +3,7 @@ import ModStats from "../ModStats/ModStats";
 import ModImage from "../ModImage/ModImage";
 
 import './ModSetDetail.css';
+import ModSetView from "../ModSetView/ModSetView";
 
 class ModSetDetail extends React.Component {
   render() {
@@ -11,15 +12,6 @@ class ModSetDetail extends React.Component {
     let diffSummary;
     const character = this.props.character;
     const changeClass = this.props.changeClass || '';
-
-    let modDetails = Object.keys(modSet).filter(slot => null !== modSet[slot]).map(slot => (
-      <div className={'mod ' + slot} key={modSet[slot].id}>
-        <ModImage
-          className={modSet[slot].currentCharacter !== modSet[slot].assignTo ? changeClass : ''}
-          mod={modSet[slot]}/>
-        <ModStats mod={modSet[slot]}/>
-      </div>
-    ));
 
     const statSummary = modSet.getSummary(character);
     if (diffSet) {
@@ -46,9 +38,7 @@ class ModSetDetail extends React.Component {
 
     return (
       <div className={'mod-set-detail'}>
-        <div className={'mods'}>
-          {modDetails}
-        </div>
+        <ModSetView modSet={modSet} changeClass={changeClass} />
         <div className={'summary'}>
           <table>
             <thead>

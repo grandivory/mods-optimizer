@@ -5,6 +5,8 @@ import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import './ReviewList.css';
 import Arrow from "../../components/Arrow/Arrow";
 import Toggle from "../../components/Toggle/Toggle";
+import ModSet from "../../domain/ModSet";
+import ModSetView from "../../components/ModSetView/ModSetView";
 
 class ReviewList extends React.Component {
 
@@ -14,9 +16,14 @@ class ReviewList extends React.Component {
       'currentCharacter': 'currentCharacter',
       'assignTo': 'assignTo'
     };
+    this.viewOptions = {
+      'list': 'list',
+      'sets': 'sets'
+    };
     this.state = {
       'sortBy': this.sortOptions.assignTo,
-      'tag': ''
+      'tag': '',
+      'view': this.viewOptions.list
     };
 
     this.state.movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
@@ -27,24 +34,25 @@ class ReviewList extends React.Component {
     if ('function' === typeof props.saveState) {
       this.saveState = props.saveState;
     } else {
-      this.saveState = function() {};
+      this.saveState = function() {
+      };
     }
   }
 
   render() {
     const modsLeft = this.state.movingMods.length;
+    let modRows;
 
-    const modRows = this.state.displayedMods.map(mod =>
-      <div className={'mod-row'} key={mod.id} >
-        <ModDetail key={mod.id} mod={mod}/>
-        <Arrow />
-        <CharacterAvatar name={mod.assignTo.name}/>
-        <div className={'actions'}>
-          <button onClick={this.removeMod.bind(this, mod)}>Remove Mod</button>
-          <button onClick={this.reassignMod.bind(this, mod)}>Reassign Mod</button>
-        </div>
-      </div>
-    );
+    switch (this.state.view) {
+      case this.viewOptions.list:
+        modRows = this.listView(this.state.displayedMods);
+        break;
+      case this.viewOptions.sets:
+        modRows = this.setsView(this.state.displayedMods);
+        break;
+      default:
+        throw new Error(`Unknown view type ${this.state.view} - should be one of "list" or "sets"`);
+    }
 
     if (0 === modsLeft) {
       return (
@@ -61,16 +69,87 @@ class ReviewList extends React.Component {
           </div>
           <h2>Reassigning {modsLeft} mods</h2>
           {(0 < this.state.displayedMods.length) &&
-            <div className={'mods-list'}>
-              {modRows}
-            </div>
+          <div className={'mods-list'}>
+            {modRows}
+          </div>
           }
           {(0 === this.state.displayedMods.length) &&
-            <h3>No more mods to move under that filter. Try a different filter now!</h3>
+          <h3>No more mods to move under that filter. Try a different filter now!</h3>
           }
         </div>
       );
     }
+  }
+
+  /**
+   * Convert a list of displayed mods into the renderable elements to display them as a list of individual mods
+   * @param displayedMods array[Mod]
+   * @returns array[JSX Element]
+   */
+  listView(displayedMods) {
+    return displayedMods.map(mod =>
+      <div className={'mod-row'} key={mod.id}>
+        <ModDetail key={mod.id} mod={mod}/>
+        <Arrow/>
+        <CharacterAvatar name={mod.assignTo.name}/>
+        <div className={'actions'}>
+          <button onClick={this.removeMod.bind(this, mod)}>Remove Mod</button>
+          <button onClick={this.reassignMod.bind(this, mod)}>Reassign Mod</button>
+        </div>
+      </div>
+    );
+  }
+
+  /***
+   * Convert a list of displayed mods into the renderable elements to display them as sets
+   * @param displayedMods array[Mod]
+   * @returns array[JSX Element]
+   */
+  setsView(displayedMods) {
+    const me = this;
+
+    // Group the displayed mods by character, based on the current sort options
+    const modsByCharacter = displayedMods.reduce(
+      (modsAcc, mod) => {
+        const character = mod[me.state.sortBy];
+
+        // This case can be hit if a mod is currently unassigned - we simply won't show it in a set
+        if (!character) {
+          return modsAcc;
+        }
+
+        if (!modsAcc.hasOwnProperty(character.name)) {
+          modsAcc[character.name] = {
+            'character': character,
+            'mods': [mod]
+          }
+        } else {
+          modsAcc[character.name].mods.push(mod);
+        }
+
+        return modsAcc;
+      },
+      {}
+    );
+
+    // Iterate over each character to render a full mod set
+    return Object.values(modsByCharacter).map(charMods =>
+      <div className={'mod-row'} key={charMods.character.name}>
+        <CharacterAvatar name={charMods.character.name}/>
+        <Arrow/>
+        <div className={'mod-set-block'}>
+          <ModSetView modSet={new ModSet(charMods.mods)}
+                      changeClass={this.sortOptions.currentCharacter === this.state.sortBy ? 'remove' : 'add'}
+          />
+        </div>
+        <div className={'actions'}>
+          {this.sortOptions.currentCharacter === this.state.sortBy &&
+          <button onClick={this.removeMods.bind(this, charMods.mods)}>Remove Mods</button>}
+          {this.sortOptions.assignTo === this.state.sortBy &&
+          <button onClick={this.reassignMods.bind(this, charMods.mods)}>Reassign Mods</button>}
+        </div>
+      </div>
+    );
   }
 
   /**
@@ -87,6 +166,19 @@ class ReviewList extends React.Component {
   }
 
   /**
+   * Remove set of mods from a character and re-render the view to show the change.
+   * @param mods array[Mod]
+   */
+  removeMods(mods) {
+    mods.forEach(mod => {
+      mod.currentCharacter = null;
+    });
+    const movingMods = this.updateMovingMods();
+    this.saveState();
+    this.updateDisplayedMods(this.state.sortBy, this.state.tag, movingMods);
+  }
+
+  /**
    * Move a mod from its currently assigned character to its assignTo charcter and re-render the view.
    * @param mod Mod
    */
@@ -96,6 +188,22 @@ class ReviewList extends React.Component {
       .forEach(m => m.currentCharacter = null);
     mod.currentCharacter = mod.assignTo;
     const movingMods = this.updateMovingMods();
+    this.saveState();
+    this.updateDisplayedMods(this.state.sortBy, this.state.tag, movingMods);
+  }
+
+  /**
+   * Move a set of mods from their currently assigned characters to their assignTo character and re-render the view.
+   * @param mods array[Mod]
+   */
+  reassignMods(mods) {
+    mods.forEach(mod => {
+      this.props.mods.filter(m => m.currentCharacter === mod.assignTo && m.slot === mod.slot)
+        .forEach(m => m.currentCharacter = null);
+      mod.currentCharacter = mod.assignTo;
+    });
+    const movingMods = this.updateMovingMods();
+    this.saveState();
     this.updateDisplayedMods(this.state.sortBy, this.state.tag, movingMods);
   }
 
@@ -165,6 +273,14 @@ class ReviewList extends React.Component {
               value={this.sortOptions.assignTo}
               onChange={sortBy => this.updateDisplayedMods.bind(this)(sortBy, this.state.tag, this.state.movingMods)}
       />
+      <Toggle inputLabel={'Show mods as:'}
+              leftLabel={'Sets'}
+              leftValue={this.viewOptions.sets}
+              rightLabel={'Individual mods'}
+              rightValue={this.viewOptions.list}
+              value={this.viewOptions.list}
+              onChange={viewAs => this.setState({'view': viewAs})}
+      />
       <label htmlFor={'tag'}>Show characters by tag:</label>
       <select id={'tag'}
               value={this.state.tag}
@@ -179,7 +295,7 @@ class ReviewList extends React.Component {
   /**
    * Update the list of mods that's shown based on the values in the filter form and re-render the form
    */
-  updateDisplayedMods(sortBy, tag, movingMods, reRender=true) {
+  updateDisplayedMods(sortBy, tag, movingMods, reRender = true) {
     let displayedMods = movingMods;
 
     if ('' !== tag) {

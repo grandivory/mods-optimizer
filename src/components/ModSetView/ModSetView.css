@@ -1,0 +1,123 @@
+.mod-set-view {
+  width: 12em;
+  height: calc(12em * 701/400);
+  display: inline-block;
+  background-image: url('/img/modset-background.png');
+  background-size: 100%;
+  position: relative;
+}
+
+.mod-set-view .mod {
+  position: absolute;
+}
+
+.mod-set-view .mod .mod-level {
+  background: none;
+}
+
+.mod-set-view .mod .pips::before {
+  background: none;
+}
+
+.mod-set-view .mod .pips::after {
+  background: none;
+}
+
+.mod-set-view .mod .mod-stats {
+  display: none;
+}
+
+.mod-set-view .mod:hover .mod-stats {
+  display: block;
+  position: absolute;
+  border: 1px solid dodgerblue;
+  background-color: rgb(0, 0, 66);
+  padding: 1em;
+  z-index: 1000;
+}
+
+.mod-set-view .mod.square {
+  left: .25em;
+  top: .7em;
+  width: 4em;
+}
+
+.mod-set-view .mod.square .pips {
+  left: -5px;
+  top: 3px;
+}
+
+.mod-set-view .mod.arrow {
+  right: .95em;
+  top: -.2em;
+  width: 4.5em;
+}
+
+.mod-set-view .mod.arrow .pips {
+  top: 5px;
+}
+
+.mod-set-detila .mod.arrow .mod-level {
+  bottom: -16px;
+  right: 25px;
+}
+
+.mod-set-view .mod.diamond {
+  left: 2em;
+  top: 8.9em;
+  width: 4.5em;
+}
+
+.mod-set-view .mod.diamond .pips {
+  top: 5px;
+}
+
+.mod-set-view .mod.diamond .mod-level {
+  bottom: -17px;
+  right: 7px;
+}
+
+.mod-set-view .mod.triangle {
+  right: 1.8em;
+  top: 7.2em;
+  width: 4em;
+}
+
+.mod-set-view .mod.triangle .pips {
+  left: -4px;
+  top: 5px;
+}
+
+.mod-set-view .mod.triangle .mod-level {
+  right: -20px;
+}
+
+.mod-set-view .mod.circle {
+  left: .95em;
+  bottom: .45em;
+  width: 4.5em;
+}
+
+.mod-set-view .mod.circle .pips {
+  top: 6px;
+}
+
+.mod-set-view .mod.circle .mod-level {
+  left: -16px;
+  top: 29px;
+}
+
+.mod-set-view .mod.cross {
+  right: 1.05em;
+  bottom: 2.25em;
+  width: 4.55em;
+}
+
+.mod-set-view .mod.cross .pips {
+  left: 1px;
+  top: 5px;
+}
+
+.mod-set-view .mod.cross .mod-level {
+  bottom: -13px;
+}

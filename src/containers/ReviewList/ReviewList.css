@@ -30,6 +30,15 @@
   margin-right: 30px;
 }
 
+.mod-row .mod-set-block {
+  display: inline-block;
+  margin: 0 1em;
+  vertical-align: middle;
+  padding: 1em;
+  border: 1px solid dodgerblue;
+  background-color: rgba(0, 0, 96, .5);
+}
+
 .mod-row .avatar {
   display: inline-block;
   margin: 0 30px;
