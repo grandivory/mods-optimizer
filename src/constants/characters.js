@@ -667,7 +667,7 @@ let charactersArray = [
       0, // protection
       100, // speed
       0, // crit damage
-      75, // potency
+      40, // potency
       0, // tenacity
       5, // offense
       0, // crit chance

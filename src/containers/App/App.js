@@ -229,8 +229,7 @@ class App extends Component {
              height={'1'}
         />
       </form>
-
-
+      <div className={'version'}>version 1.1</div>
     </footer>;
   }
 
@@ -248,8 +247,8 @@ class App extends Component {
         time, until your list is exhausted.
       </p>
       <p>
-        To get started, copy the google sheet <a className={'call-out'}
-                                                 href="https://docs.google.com/spreadsheets/d/1ho7M-Ux58QjxRol4BpnVAKhiSt0SljDiNe3JDMB-p1w/copy">here</a>
+        To get started, copy the google sheet <a className={'call-out'} target={'_blank'} rel={'noopener'}
+                                                 href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy">here</a>
         , courtesy of <a href="http://apps.crouchingrancor.com">Crouching Rancor</a>.
         It will allow you to export your mods from <a href="https://swgoh.gg">SWGOH.gg</a> in order to import
         them into this tool. When you're ready, you can click the button above, or drag your mods file into the

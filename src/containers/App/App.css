@@ -108,6 +108,7 @@ html, body {
   box-sizing: border-box;
   border-top: 1px solid gray;
   text-align: center;
+  position: relative;
 }
 
 .App-footer a {
@@ -118,6 +119,14 @@ html, body {
 .App-footer #donate-button {
   display: inline-block;
   vertical-align: middle;
+}
+
+.App-footer .version {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: .75em;
+  margin: .5em;
 }
 
 .App-title {
