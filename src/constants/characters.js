@@ -236,7 +236,7 @@ let charactersArray = [
       .2, // protection
       100, // speed
       50, // crit damage
-      50, // potency
+      25, // potency
       0, // tenacity
       2, // offense
       50, // crit chance
@@ -312,7 +312,7 @@ let charactersArray = [
       0, // protection
       100, // speed
       10, // crit damage
-      50, // potency
+      25, // potency
       0, // tenacity
       .5, // offense
       0, // crit chance
@@ -349,7 +349,7 @@ let charactersArray = [
       .4, // protection
       100, // speed
       0, // crit damage
-      50, // potency
+      25, // potency
       0, // tenacity
       0, // offense
       0, // crit chance
@@ -514,11 +514,11 @@ let charactersArray = [
     'Commander Luke Skywalker',
     new BaseStats(25266, 30107, 3164, 1872, 1, 152, 222, 106),
     new OptimizationPlan(
-      .25, // health
-      .25, // protection
+      .1, // health
+      .1, // protection
       100, // speed
-      30, // crit damage
-      50, // potency
+      50, // crit damage
+      10, // potency
       0, // tenacity
       2, // offense
       50, // crit chance
@@ -723,7 +723,7 @@ let charactersArray = [
       0, // protection
       100, // speed
       30, // crit damage
-      50, // potency
+      25, // potency
       0, // tenacity
       2, // offense
       65, // crit chance
@@ -780,7 +780,7 @@ let charactersArray = [
       0, // protection
       100, // speed
       10, // crit damage
-      50, // potency
+      25, // potency
       0, // tenacity
       1, // offense
       75, // crit chance
@@ -836,7 +836,7 @@ let charactersArray = [
       0, // protection
       100, // speed
       50, // crit damage
-      50, // potency
+      25, // potency
       0, // tenacity
       2, // offense
       50, // crit chance
@@ -910,7 +910,7 @@ let charactersArray = [
       .2, // protection
       10, // speed
       33, // crit damage
-      50, // potency
+      25, // potency
       0, // tenacity
       0, // offense
       33, // crit chance
@@ -1062,7 +1062,7 @@ let charactersArray = [
       .33, // protection
       100, // speed
       0, // crit damage
-      50, // potency
+      25, // potency
       0, // tenacity
       0, // offense
       0, // crit chance
@@ -1230,7 +1230,7 @@ let charactersArray = [
       .2, // protection
       100, // speed
       50, // crit damage
-      50, // potency
+      25, // potency
       0, // tenacity
       0, // offense
       50, // crit chance
@@ -1323,7 +1323,7 @@ let charactersArray = [
       .2, // protection
       100, // speed
       50, // crit damage
-      50, // potency
+      10, // potency
       0, // tenacity
       2, // offense
       50, // crit chance
@@ -1491,7 +1491,7 @@ let charactersArray = [
       .2, // protection
       100, // speed
       0, // crit damage
-      50, // potency
+      25, // potency
       10, // tenacity
       0, // offense
       0, // crit chance
@@ -1584,7 +1584,7 @@ let charactersArray = [
       .2, // protection
       100, // speed
       33, // crit damage
-      50, // potency
+      10, // potency
       0, // tenacity
       0, // offense
       75, // crit chance
@@ -1602,7 +1602,7 @@ let charactersArray = [
       .2, // protection
       100, // speed
       0, // crit damage
-      50, // potency
+      10, // potency
       10, // tenacity
       0, // offense
       0, // crit chance
@@ -2054,7 +2054,7 @@ let charactersArray = [
       .2, // protection
       100, // speed
       0, // crit damage
-      50, // potency
+      25, // potency
       0, // tenacity
       0, // offense
       0, // crit chance
@@ -2165,7 +2165,7 @@ let charactersArray = [
       .2, // protection
       100, // speed
       33, // crit damage
-      50, // potency
+      10, // potency
       0, // tenacity
       5, // offense
       20, // crit chance
@@ -2517,7 +2517,7 @@ let charactersArray = [
       .2, // protection
       100, // speed
       0, // crit damage
-      50, // potency
+      20, // potency
       5, // tenacity
       0, // offense
       0, // crit chance
@@ -2781,7 +2781,7 @@ let charactersArray = [
       .2, // protection
       100, // speed
       0, // crit damage
-      50, // potency
+      10, // potency
       0, // tenacity
       1, // offense
       0, // crit chance
