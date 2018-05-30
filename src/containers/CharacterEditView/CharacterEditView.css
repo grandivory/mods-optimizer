@@ -17,11 +17,13 @@
   vertical-align: top;
   height: calc(100% - 5em);
   margin: 0 5em;
+  max-width: calc(33% - 10em);
 }
 
 .character-edit .character-list {
   max-height: calc(100% - 4em);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .character-edit-form .base-stats,
