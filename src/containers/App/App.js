@@ -229,7 +229,7 @@ class App extends Component {
              height={'1'}
         />
       </form>
-      <div className={'version'}>version 1.1</div>
+      <div className={'version'}>version 1.0.1</div>
     </footer>;
   }
 
