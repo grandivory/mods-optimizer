@@ -847,6 +847,24 @@ let charactersArray = [
     ['Dark Side', 'Empire', 'Sith', 'Support']
   ),
   new Character(
+    'Enfys Nest',
+    new BaseStats(27438, 32665, 2476, 1668, 1, 159, 217, 70),
+    new OptimizationPlan(
+      0, // health
+      .1, // protection
+      100, // speed
+      60, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      25, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+    ),
+    ['Light Side', 'Scoundrel', 'Attacker']
+  ),
+  new Character(
     'Ewok Elder',
     new BaseStats(27549, 26448, 1933, 2127, 1, 122, 314, 225),
     new OptimizationPlan(
