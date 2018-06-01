@@ -276,6 +276,7 @@ class CharacterEditView extends React.Component {
               <label htmlFor="speed-stat">Speed:</label>
               <input
                 type={'number'}
+                step={.01}
                 id={'speed-stat'}
                 name={'speed-stat'}
                 defaultValue={character.optimizationPlan.speed}/>
@@ -284,6 +285,7 @@ class CharacterEditView extends React.Component {
               <label htmlFor="critChance-stat">Critical Chance %:</label>
               <input
                 type={'number'}
+                step={.01}
                 id={'critChance-stat'}
                 name={'critChance-stat'}
                 defaultValue={character.optimizationPlan.critChance}/>
@@ -292,6 +294,7 @@ class CharacterEditView extends React.Component {
               <label htmlFor="critDmg-stat">Critical Damage %:</label>
               <input
                 type={'number'}
+                step={.01}
                 id={'critDmg-stat'}
                 name={'critDmg-stat'}
                 defaultValue={character.optimizationPlan.critDmg}/>
@@ -300,6 +303,7 @@ class CharacterEditView extends React.Component {
               <label htmlFor="potency-stat">Potency %:</label>
               <input
                 type={'number'}
+                step={.01}
                 id={'potency-stat'}
                 name={'potency-stat'}
                 defaultValue={character.optimizationPlan.potency}/>
@@ -308,6 +312,7 @@ class CharacterEditView extends React.Component {
               <label htmlFor="tenacity-stat">Tenacity %:</label>
               <input
                 type={'number'}
+                step={.01}
                 id={'tenacity-stat'}
                 name={'tenacity-stat'}
                 defaultValue={character.optimizationPlan.tenacity}/>
@@ -316,6 +321,7 @@ class CharacterEditView extends React.Component {
               <label htmlFor="offense-stat">Offense:</label>
               <input
                 type={'number'}
+                step={.01}
                 id={'offense-stat'}
                 name={'offense-stat'}
                 defaultValue={character.optimizationPlan.offense}/>
@@ -324,6 +330,7 @@ class CharacterEditView extends React.Component {
               <label htmlFor="defense-stat">Defense:</label>
               <input
                 type={'number'}
+                step={.01}
                 id={'defense-stat'}
                 name={'defense-stat'}
                 defaultValue={character.optimizationPlan.defense}/>
@@ -332,6 +339,7 @@ class CharacterEditView extends React.Component {
               <label htmlFor="accuracy-stat">Accuracy:</label>
               <input
                 type={'number'}
+                step={.01}
                 id={'accuracy-stat'}
                 name={'accuracy-stat'}
                 defaultValue={character.optimizationPlan.accuracy}/>
@@ -340,6 +348,7 @@ class CharacterEditView extends React.Component {
               <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
               <input
                 type={'number'}
+                step={.01}
                 id={'critAvoid-stat'}
                 name={'critAvoid-stat'}
                 defaultValue={character.optimizationPlan.critAvoid}/>
