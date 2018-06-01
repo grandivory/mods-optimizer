@@ -83,7 +83,7 @@ class Mod {
       secondaryStats.push(new Stat(modJson.secondaryType_4, modJson.secondaryValue_4));
     }
 
-    let currentCharacter = '' !== modJson.characterName ?
+    let currentCharacter = ('' !== modJson.characterName && 'UNASSIGNED' !== modJson.characterName) ?
       characters[modJson.characterName.replace(/&amp;#39;/g, "'")] ||
       new Character(modJson.characterName, new BaseStats()) :
       null;
