@@ -95,7 +95,7 @@ class Mod {
     return new Mod(
       modJson.mod_uid,
       modJson.slot,
-      setBonuses[modJson.set],
+      setBonuses[modJson.set.toLowerCase()],
       modJson.level,
       modJson.pips,
       primaryStat,
