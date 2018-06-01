@@ -260,7 +260,7 @@ class ReviewList extends React.Component {
     const tags = this.state.movingMods
       .filter(mod => null !== mod[sortBy])
       .map(mod => mod[sortBy].tags)
-      .reduce((allTags, charTags) => allTags.concat(charTags.filter(tag => !allTags.includes(tag))), [])
+      .reduce((allTags, charTags) => allTags.concat((charTags || []).filter(tag => !allTags.includes(tag))), [])
       .sort();
     const tagOptions = tags.map(tag => <option value={tag} key={tag}>{tag}</option>);
 
