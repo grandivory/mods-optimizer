@@ -25,8 +25,11 @@ class App extends Component {
    * Saves the application state to localStorage
    */
   saveState() {
+    const saveProgressButton = document.getElementById('saveProgress');
+
     window.localStorage.setItem('optimizer.mods', JSON.stringify(this.state.mods.map(mod => mod.serialize())));
-    document.getElementById('saveProgress').href = this.getProgressData();
+    saveProgressButton.href = this.getProgressData();
+    saveProgressButton.download = `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`
   }
 
   /**
@@ -190,7 +193,11 @@ class App extends Component {
         <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
         <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
         {showActions &&
-          <a id={'saveProgress'} href={this.getProgressData()} className={'button'} download={'modsOptimizer.json'}>
+          <a id={'saveProgress'}
+             href={this.getProgressData()}
+             className={'button'}
+             download={`modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`}
+          >
             Save my progress
           </a>
         }
