@@ -70,16 +70,16 @@ class Mod {
     const primaryStat = new Stat(modJson.primaryBonusType, modJson.primaryBonusValue);
     let secondaryStats = [];
 
-    if ('' !== modJson.secondaryValue_1) {
+    if ('None' !== modJson.secondaryType_1 && '' !== modJson.secondaryValue_1) {
       secondaryStats.push(new Stat(modJson.secondaryType_1, modJson.secondaryValue_1));
     }
-    if ('' !== modJson.secondaryValue_2) {
+    if ('None' !== modJson.secondaryType_2 && '' !== modJson.secondaryValue_2) {
       secondaryStats.push(new Stat(modJson.secondaryType_2, modJson.secondaryValue_2));
     }
-    if ('' !== modJson.secondaryValue_3) {
+    if ('None' !== modJson.secondaryType_3 && '' !== modJson.secondaryValue_3) {
       secondaryStats.push(new Stat(modJson.secondaryType_3, modJson.secondaryValue_3));
     }
-    if ('' !== modJson.secondaryValue_4) {
+    if ('None' !== modJson.secondaryType_4 && '' !== modJson.secondaryValue_4) {
       secondaryStats.push(new Stat(modJson.secondaryType_4, modJson.secondaryValue_4));
     }
 
