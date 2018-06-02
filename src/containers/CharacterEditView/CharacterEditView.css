@@ -39,7 +39,7 @@
 }
 
 .character-edit-form .optimization-plan {
-  width: 16em;
+  width: 20em;
 }
 
 .character-edit-form .form-row {
@@ -59,6 +59,11 @@
 
 .character-edit-form .form-row input[type=range] {
   width: 9em;
+}
+
+.character-edit-form .form-row output {
+  display: inline-block;
+  width: 3em;
 }
 
 .character-edit-form .form-row:nth-child(odd) {
