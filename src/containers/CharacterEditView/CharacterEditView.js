@@ -84,11 +84,11 @@ class CharacterEditView extends React.Component {
       form['defense-stat'].valueAsNumber,
       form['accuracy-stat'].valueAsNumber,
       form['critAvoid-stat'].valueAsNumber,
-      form['5dot'].checked
     );
 
     character.baseStats = baseStats;
     character.optimizationPlan = optimizationPlan;
+    character.useOnly5DotMods = form['5dot'].checked;
     this.saveState();
 
     this.setState({
@@ -110,7 +110,7 @@ class CharacterEditView extends React.Component {
     form['defense-stat'].value = defaults.defense;
     form['accuracy-stat'].value = defaults.accuracy;
     form['critAvoid-stat'].value = defaults.critAvoid;
-    form['5dot'].checked = defaults.useOnly5dotMods;
+    form['5dot'].checked = charDefaults[character.name].useOnly5DotMods;
   }
 
   cancelEdit() {
@@ -265,102 +265,113 @@ class CharacterEditView extends React.Component {
         </h4>
         <div className={'form-row'}>
           <label htmlFor="health-stat">Health:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'health-stat'}
             name={'health-stat'}
-            defaultValue={character.optimizationPlan.health}/>
+            defaultValue={character.optimizationPlan.rawHealth}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="protection-stat">Protection:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'protection-stat'}
             name={'protection-stat'}
-            defaultValue={character.optimizationPlan.protection}/>
+            defaultValue={character.optimizationPlan.rawProtection}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="speed-stat">Speed:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'speed-stat'}
             name={'speed-stat'}
-            defaultValue={character.optimizationPlan.speed}/>
+            defaultValue={character.optimizationPlan.rawSpeed}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="critChance-stat">Critical Chance %:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'critChance-stat'}
             name={'critChance-stat'}
-            defaultValue={character.optimizationPlan.critChance}/>
+            defaultValue={character.optimizationPlan.rawCritChance}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="critDmg-stat">Critical Damage %:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'critDmg-stat'}
             name={'critDmg-stat'}
-            defaultValue={character.optimizationPlan.critDmg}/>
+            defaultValue={character.optimizationPlan.rawCritDmg}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="potency-stat">Potency %:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'potency-stat'}
             name={'potency-stat'}
-            defaultValue={character.optimizationPlan.potency}/>
+            defaultValue={character.optimizationPlan.rawPotency}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="tenacity-stat">Tenacity %:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'tenacity-stat'}
             name={'tenacity-stat'}
-            defaultValue={character.optimizationPlan.tenacity}/>
+            defaultValue={character.optimizationPlan.rawTenacity}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="offense-stat">Offense:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'offense-stat'}
             name={'offense-stat'}
-            defaultValue={character.optimizationPlan.offense}/>
+            defaultValue={character.optimizationPlan.rawOffense}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="defense-stat">Defense:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'defense-stat'}
             name={'defense-stat'}
-            defaultValue={character.optimizationPlan.defense}/>
+            defaultValue={character.optimizationPlan.rawDefense}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="accuracy-stat">Accuracy:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'accuracy-stat'}
             name={'accuracy-stat'}
-            defaultValue={character.optimizationPlan.accuracy}/>
+            defaultValue={character.optimizationPlan.rawAccuracy}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
-          <input
-            type={'number'}
-            step={.01}
+          <RangeInput
             id={'critAvoid-stat'}
             name={'critAvoid-stat'}
-            defaultValue={character.optimizationPlan.critAvoid}/>
+            defaultValue={character.optimizationPlan.rawCritAvoid}
+            min={-100}
+            max={100}
+          />
         </div>
         <div className={'form-row'}>
           <label htmlFor="5dot">Use only 5-dot mods?</label>
@@ -368,7 +379,7 @@ class CharacterEditView extends React.Component {
             type={'checkbox'}
             id={'5dot'}
             name={'5dot'}
-            defaultChecked={character.optimizationPlan.useOnly5dotMods}/>
+            defaultChecked={character.useOnly5DotMods}/>
         </div>
       </div>
       <div className={'actions'}>
