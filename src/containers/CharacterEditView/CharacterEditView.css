@@ -39,7 +39,7 @@
 }
 
 .character-edit-form .optimization-plan {
-  width: 20em;
+  width: 21em;
 }
 
 .character-edit-form .form-row {
@@ -64,6 +64,11 @@
 .character-edit-form .form-row output {
   display: inline-block;
   width: 3em;
+}
+
+.character-edit-form .form-row input.slider-input {
+  width: 3.5em;
+  margin-left: .5em;
 }
 
 .character-edit-form .form-row:nth-child(odd) {
