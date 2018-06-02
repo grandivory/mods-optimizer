@@ -7,6 +7,7 @@ import OptimizerView from "../OptimizerView/OptimizerView";
 import ExploreView from "../ExploreView/ExploreView";
 import FileInput from "../../components/FileInput/FileInput";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
+import Modal from "../../components/Modal/Modal";
 
 class App extends Component {
   constructor(props) {
@@ -154,8 +155,7 @@ class App extends Component {
           {!instructionsScreen && 'optimize' === this.state.view &&
           <OptimizerView mods={this.state.mods} saveState={this.saveState.bind(this)}/>
           }
-          {this.state.reset && this.resetModal()}
-          {this.state.saveModal && this.saveModal()}
+          <Modal show={this.state.reset} className={'reset-modal'} content={this.resetModal()} />
         </div>
         {this.footer()}
       </div>
@@ -193,18 +193,18 @@ class App extends Component {
         <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
         <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
         {showActions &&
-          <a id={'saveProgress'}
-             href={this.getProgressData()}
-             className={'button'}
-             download={`modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`}
-          >
-            Save my progress
-          </a>
+        <a id={'saveProgress'}
+           href={this.getProgressData()}
+           className={'button'}
+           download={`modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`}
+        >
+          Save my progress
+        </a>
         }
         {showActions &&
-          <button type={'button'} className={'red'} onClick={() => this.setState({'reset': true})}>
-            Reset Mods Optimizer
-          </button>
+        <button type={'button'} className={'red'} onClick={() => this.setState({'reset': true})}>
+          Reset Mods Optimizer
+        </button>
         }
       </div>
     </header>;
@@ -216,14 +216,16 @@ class App extends Component {
    */
   footer() {
     return <footer className={'App-footer'}>
-      Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.<br />
+      Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.<br/>
       <a href={'mailto:grandivory+swgoh@gmail.com'} target={'_blank'} rel={'noopener'}>Send Feedback</a>&nbsp;|&nbsp;
-      <a href={'https://github.com/grandivory/mods-optimizer'} target={'_blank'} rel={'noopener'}>Contribute</a>&nbsp;|&nbsp;
+      <a href={'https://github.com/grandivory/mods-optimizer'} target={'_blank'} rel={'noopener'}>Contribute</a>
+      &nbsp;|&nbsp;
       <a href={'https://discord.gg/WFKycSm'} target={'_blank'} rel={'noopener'}>Discord</a>
       &nbsp;| Like the tool? Consider donating to support the developer!&nbsp;
       <form id={'donate-button'} action={'https://www.paypal.com/cgi-bin/webscr'} method={'post'} target={'_top'}>
-        <input type={'hidden'} name={'cmd'} value={'_s-xclick'} />
-        <input type={'hidden'} name={'encrypted'} value={'-----BEGIN PKCS7-----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-----END PKCS7-----'} />
+        <input type={'hidden'} name={'cmd'} value={'_s-xclick'}/>
+        <input type={'hidden'} name={'encrypted'}
+               value={'-----BEGIN PKCS7-----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-----END PKCS7-----'}/>
         <input type={'image'}
                src={'https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif'}
                border={'0'}
@@ -236,7 +238,8 @@ class App extends Component {
              width={'1'}
              height={'1'}
         />
-      </form> or&nbsp;
+      </form>
+      or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'}>Patreon</a>
       <div className={'version'}>version 1.0.4</div>
     </footer>;
@@ -269,23 +272,21 @@ class App extends Component {
 
   /**
    * Renders the "Are you sure?" modal for resetting the app
-   * @returns JSX Element
+   * @returns Array[JSX Element]
    */
   resetModal() {
-    return <div className={'overlay'}>
-      <div className={'modal reset-modal'}>
-        <h2>Reset the mods optimizer?</h2>
-        <p>
-          If you click "Reset", everything that the application currently has saved - your mods,
-          character configuration, selected characters, etc. - will all be deleted.
-          Are you sure that's what you want?
-        </p>
-        <div className={'actions'}>
-          <button type={'button'} onClick={() => this.setState({'reset': false})}>Cancel</button>
-          <button type={'button'} className={'red'} onClick={this.handleReset}>Reset</button>
-        </div>
-      </div>
-    </div>;
+    return [
+      <h2>Reset the mods optimizer?</h2>,
+      <p>
+        If you click "Reset", everything that the application currently has saved - your mods,
+        character configuration, selected characters, etc. - will all be deleted.
+        Are you sure that's what you want?
+      </p>,
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.setState({'reset': false})}>Cancel</button>
+        <button type={'button'} className={'red'} onClick={this.handleReset}>Reset</button>
+      </div>,
+    ];
   }
 
   /**
