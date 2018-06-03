@@ -15,10 +15,16 @@ class CharacterEditView extends React.Component {
       'selectedCharacters': props.selectedCharacters,
       'lockedCharacters': props.lockedCharacters,
       'editCharacter': null,
-      'instructions': false
+      'instructions': false,
+      'filterString': ''
     };
 
     this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {};
+  }
+
+  updateFilter(event){
+      const val = event.target.value.toLowerCase();
+      this.setState(()=> {return {filterString:val}})
   }
 
   characterDrop() {
@@ -145,12 +151,14 @@ class CharacterEditView extends React.Component {
         </div>
         <div className={'available-characters'}>
           <h4>Available Characters</h4>
+          <input type='text' onChange={this.updateFilter.bind(this)}/>
           <CharacterList
             selfDrop={false}
             draggable={true}
             characters={availableCharacters}
             onDrop={this.characterDrop()}
             onEdit={this.editCharacter.bind(this)}
+            filterString={this.state.filterString}
           />
         </div>
         <div className={'selected-characters'}>
