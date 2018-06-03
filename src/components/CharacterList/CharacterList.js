@@ -52,29 +52,50 @@ class CharacterList extends React.Component {
     }
   }
 
-  render() {
-    const characters = this.props.characters;
+  renderCharacterBlock(character, faded = false){
     const draggable = this.props.draggable;
     const onEdit = 'function' === typeof this.props.onEdit ? this.props.onEdit : function() {};
 
+    return(
+      <div
+        className={faded ? 'character-block faded' : 'character-block'}
+        key={character.name}
+        draggable={draggable}
+        onDragStart={this.characterBlockDragStart(character.name)}
+        onDragEnter={this.characterBlockDragEnter(character.name)}
+        onDragOver={this.characterBlockDragOver()}
+        onDragLeave={this.characterBlockDragLeave(character.name)}
+        onDrop={this.characterBlockDrop(character.name)}>
+      <button className={'edit'} onClick={() => onEdit(character)}>Edit</button>
+      <CharacterAvatar name={character.name} />
+      <span className={'character-name'}>{character.name}</span>
+    </div>
+    )
+  }
+
+  render() {
+    const characters = this.props.characters;
+
+     const isFiltered = character => (
+          this.props.filterString === undefined || this.props.filterString.length === 0 ||
+          0 <= character.name.toLowerCase().indexOf(this.props.filterString)
+      );
+
+    const filteredChars = characters.filter(isFiltered);
+    const unfilteredChars = characters.filter(character=>!isFiltered(character));
+
     return (
       <div className={'character-list'}>
-        {0 < characters.length && characters.map(character =>
-          <div
-            className={'character-block'}
-            key={character.name}
-            draggable={draggable}
-            onDragStart={this.characterBlockDragStart(character.name)}
-            onDragEnter={this.characterBlockDragEnter(character.name)}
-            onDragOver={this.characterBlockDragOver()}
-            onDragLeave={this.characterBlockDragLeave(character.name)}
-            onDrop={this.characterBlockDrop(character.name)}>
-            <button className={'edit'} onClick={() => onEdit(character)}>Edit</button>
-            <CharacterAvatar name={character.name} />
-            <span className={'character-name'}>{character.name}</span>
-          </div>
+
+        {0 < filteredChars.length && filteredChars.map(character =>
+           this.renderCharacterBlock(character)
         )}
-        {0 === characters.length &&
+
+        {0 < unfilteredChars.length && unfilteredChars.map(character =>
+            this.renderCharacterBlock(character, true)
+        )}
+
+        {0 === filteredChars.length &&
           <div
             className={'character-block'}
             onDragEnter={this.characterBlockDragEnter('')}
