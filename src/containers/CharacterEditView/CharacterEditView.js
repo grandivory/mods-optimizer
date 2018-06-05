@@ -151,7 +151,8 @@ class CharacterEditView extends React.Component {
         </div>
         <div className={'available-characters'}>
           <h4>Available Characters</h4>
-          <input type='text' onChange={this.updateFilter.bind(this)}/>
+          <label htmlFor={'character-filter'}>Filter:</label>&nbsp;
+          <input autoFocus={true} id='character-filter' type='text' onChange={this.updateFilter.bind(this)}/>
           <CharacterList
             selfDrop={false}
             draggable={true}

@@ -21,9 +21,13 @@
 }
 
 .character-edit .character-list {
-  max-height: calc(100% - 5.5em);
+  max-height: calc(100% - 3em);
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.available-characters .character-edit .character-list {
+  max-height: calc(100% - 5.5em);
 }
 
 .character-edit-form .base-stats,
