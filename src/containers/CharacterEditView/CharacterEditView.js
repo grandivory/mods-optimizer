@@ -153,7 +153,8 @@ class CharacterEditView extends React.Component {
         </div>
         <div className={'available-characters'}>
           <h4>Available Characters</h4>
-          <input type='text' onChange={this.updateFilter.bind(this)}/>
+          <label htmlFor={'character-filter'}>Filter:</label>&nbsp;
+          <input autoFocus={true} id='character-filter' type='text' onChange={this.updateFilter.bind(this)}/>
           <CharacterList
             selfDrop={false}
             draggable={true}
@@ -265,6 +266,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="health-stat">Health:</label>
           <RangeInput
+            editable={true}
             id={'health-stat'}
             name={'health-stat'}
             defaultValue={character.optimizationPlan.rawHealth}
@@ -275,6 +277,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="protection-stat">Protection:</label>
           <RangeInput
+            editable={true}
             id={'protection-stat'}
             name={'protection-stat'}
             defaultValue={character.optimizationPlan.rawProtection}
@@ -285,6 +288,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="speed-stat">Speed:</label>
           <RangeInput
+            editable={true}
             id={'speed-stat'}
             name={'speed-stat'}
             defaultValue={character.optimizationPlan.rawSpeed}
@@ -295,6 +299,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="critChance-stat">Critical Chance %:</label>
           <RangeInput
+            editable={true}
             id={'critChance-stat'}
             name={'critChance-stat'}
             defaultValue={character.optimizationPlan.rawCritChance}
@@ -305,6 +310,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="critDmg-stat">Critical Damage %:</label>
           <RangeInput
+            editable={true}
             id={'critDmg-stat'}
             name={'critDmg-stat'}
             defaultValue={character.optimizationPlan.rawCritDmg}
@@ -315,6 +321,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="potency-stat">Potency %:</label>
           <RangeInput
+            editable={true}
             id={'potency-stat'}
             name={'potency-stat'}
             defaultValue={character.optimizationPlan.rawPotency}
@@ -325,6 +332,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="tenacity-stat">Tenacity %:</label>
           <RangeInput
+            editable={true}
             id={'tenacity-stat'}
             name={'tenacity-stat'}
             defaultValue={character.optimizationPlan.rawTenacity}
@@ -335,6 +343,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="offense-stat">Offense:</label>
           <RangeInput
+            editable={true}
             id={'offense-stat'}
             name={'offense-stat'}
             defaultValue={character.optimizationPlan.rawOffense}
@@ -345,6 +354,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="defense-stat">Defense:</label>
           <RangeInput
+            editable={true}
             id={'defense-stat'}
             name={'defense-stat'}
             defaultValue={character.optimizationPlan.rawDefense}
@@ -355,6 +365,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="accuracy-stat">Accuracy:</label>
           <RangeInput
+            editable={true}
             id={'accuracy-stat'}
             name={'accuracy-stat'}
             defaultValue={character.optimizationPlan.rawAccuracy}
@@ -365,6 +376,7 @@ class CharacterEditView extends React.Component {
         <div className={'form-row'}>
           <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
           <RangeInput
+            editable={true}
             id={'critAvoid-stat'}
             name={'critAvoid-stat'}
             defaultValue={character.optimizationPlan.rawCritAvoid}

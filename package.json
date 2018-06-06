@@ -9,10 +9,10 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "start": "NODE_PATH=src,src/components react-scripts start",
-    "build": "NODE_PATH=src,src/components react-scripts build",
-    "test": "NODE_PATH=src,src/components react-scripts test --env=jsdom",
-    "eject": "NODE_PATH=src,src/components react-scripts eject"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
     "webpack": "^3.12.0"
