@@ -2,11 +2,12 @@ import BaseStats from "./BaseStats";
 import OptimizationPlan from "./OptimizationPlan";
 
 class Character{
-  constructor(name, baseStats, optimizationPlan, tags) {
+  constructor(name, baseStats, optimizationPlan, tags, useOnly5DotMods) {
     this.name = name;
     this.baseStats = baseStats;
     this.optimizationPlan = optimizationPlan;
     this.tags = tags;
+    this.useOnly5DotMods = useOnly5DotMods || false;
   }
 
   serialize() {
@@ -15,6 +16,7 @@ class Character{
     characterObject.name = this.name;
     characterObject.baseStats = this.baseStats.serialize();
     characterObject.optimizationPlan = this.optimizationPlan.serialize();
+    characterObject.useOnly5DotMods = this.useOnly5DotMods;
 
     return characterObject;
   }
@@ -23,7 +25,9 @@ class Character{
     return new Character(
       characterJson.name,
       BaseStats.deserialize(characterJson.baseStats),
-      OptimizationPlan.deserialize(characterJson.optimizationPlan)
+      OptimizationPlan.deserialize(characterJson.optimizationPlan),
+      [],
+      characterJson.useOnly5DotMods
     );
   }
 }
