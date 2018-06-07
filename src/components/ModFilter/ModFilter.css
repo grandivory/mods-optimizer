@@ -1,0 +1,67 @@
+.mod-filter-option{
+    display: inline-block;
+}
+
+.mod-filter-option img{
+    height: 3em;
+}
+
+.mod-filter-option input[type=checkbox]{
+    display: none;
+}
+
+.mod-filter-option label {
+    position:relative;
+    cursor:pointer;
+    padding:0.2em;
+    display: inline-block;
+    background-color: #000062;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.mod-filter-option label.active {
+    background-color: #1e90ff;
+}
+
+.mod-filter-option label img,.mod-filter-option label span{
+    opacity: 0.5;
+}
+.mod-filter-option label.active img,.mod-filter-option label.active span{
+    opacity: 1;
+}
+
+.mod-filter-option:first-of-type label{
+    border-left: 1px solid white;
+    border-top-left-radius:3px;
+    border-bottom-left-radius:3px;
+}
+.mod-filter-option:last-of-type label{
+    border-right: 1px solid white;
+    border-top-right-radius:3px;
+    border-bottom-right-radius:3px;
+
+}
+
+.filter-option-row .mod-filter-option span{
+    width: 8em;
+    display:inline-block;
+}
+.filter-option-row .mod-filter-option{
+    border: 1px solid white;
+}
+
+.mod-filter .multi-row{
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: start;
+}
+
+.mod-filter table{
+    width:100%;
+}
+.mod-filter table tr{
+    border-collapse: separate;
+}
+
