@@ -60,7 +60,7 @@ pre.summary{
   padding: 1em;
   text-shadow: none !important;
   max-height: calc(100vh - 27em);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 
