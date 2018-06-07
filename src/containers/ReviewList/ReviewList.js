@@ -7,6 +7,7 @@ import Arrow from "../../components/Arrow/Arrow";
 import Toggle from "../../components/Toggle/Toggle";
 import ModSet from "../../domain/ModSet";
 import ModSetView from "../../components/ModSetView/ModSetView";
+import Modal from "../../components/Modal/Modal";
 
 class ReviewList extends React.Component {
 
@@ -23,7 +24,8 @@ class ReviewList extends React.Component {
     this.state = {
       'sortBy': this.sortOptions.assignTo,
       'tag': '',
-      'view': this.viewOptions.list
+      'view': this.viewOptions.list,
+      'review':false,
     };
 
     this.state.movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
@@ -42,6 +44,12 @@ class ReviewList extends React.Component {
   render() {
     const modsLeft = this.state.movingMods.length;
     let modRows;
+
+    const summary = (
+      <button type={'button'} className={'small'} onClick={() => this.setState({'review': 'true'})}>
+        Show Summary
+      </button>
+    );
 
     switch (this.state.view) {
       case this.viewOptions.list:
@@ -67,7 +75,7 @@ class ReviewList extends React.Component {
           <div className={'filters'}>
             {this.filterForm()}
           </div>
-          <h2>Reassigning {modsLeft} mods</h2>
+          <h2>Reassigning {modsLeft} mods {summary}</h2>
           {(0 < this.state.displayedMods.length) &&
           <div className={'mods-list'}>
             {modRows}
@@ -76,6 +84,7 @@ class ReviewList extends React.Component {
           {(0 === this.state.displayedMods.length) &&
           <h3>No more mods to move under that filter. Try a different filter now!</h3>
           }
+          <Modal show={this.state.review} className={'instructions'} content={this.reviewModal()}/>
         </div>
       );
     }
@@ -320,6 +329,56 @@ class ReviewList extends React.Component {
       });
     }
   }
+  /**
+   * Render a modal with a copy-paste-able review of the mods to move
+   * @returns Array[JSX Element]
+   */
+  reviewModal() {
+    const displayedMods = this.state.displayedMods;
+    return [
+      <div key={'summary_modal_content'}>
+        <h2>Move Summary</h2>
+        <pre id="summary_pre" className={'summary'}>
+        {this.summaryListView(displayedMods)}
+        </pre>
+        <div className={'actions'}>
+          <button type={'button'} onClick={() => this.copyContentsToClipboard(document.getElementById('summary_pre'))}>
+            Copy to Clipboard
+          </button>
+          <button type={'button'} onClick={() => this.setState({'review': false})}>OK</button>
+        </div>
+      </div>]
+  }
+
+  /**
+   * Takes an element and tries its best to put just the text(including newlines) into the clipboard
+   * I think it only works if it's called as part of an input event handler 'cause execCommand is mean
+   */
+  copyContentsToClipboard(el){
+    const str = el.innerHTML.replace(/(<br\/?>)|(<\/div>)+/g, "\n").replace(/(<div>)|(<\/?b>)/g, '');
+    const ta = document.createElement('textarea');
+    ta.value = str;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  };
+
+  summaryListView(displayedMods) {
+    const capitalize = function(str){
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+    let lastModAssign = "";
+    return displayedMods.map(mod =>
+      <div key={mod.id}>
+        {mod.assignTo.name !== lastModAssign && (lastModAssign = mod.assignTo.name)  &&
+        <div><br/>{mod.assignTo.name}</div>
+        }
+        <div>Move {capitalize(mod.set.name)}({mod.primaryStat.type}{mod.primaryStat.displayModifier}) <b>{capitalize(mod.slot)}</b> from {mod.currentCharacter.name}</div>
+      </div>
+    );
+  }
 }
 
 export default ReviewList;
+

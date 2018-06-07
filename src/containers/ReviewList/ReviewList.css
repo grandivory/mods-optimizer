@@ -54,3 +54,14 @@
 .mod-row .actions button {
   display: block;
 }
+
+pre.summary{
+  background-color: #222;
+  padding: 1em;
+  text-shadow: none !important;
+  max-height: calc(100vh - 27em);
+  overflow-y: scroll;
+}
+
+
+
