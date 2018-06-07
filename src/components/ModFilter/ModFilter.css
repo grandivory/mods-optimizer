@@ -1,16 +1,24 @@
-.mod-filter-option{
-    display: inline-block;
+.mod-filter table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 20px;
 }
 
-.mod-filter-option img{
+.mod-filter .toggle{
+    display: inline-block;
+    position: relative;
+}
+
+.mod-filter .toggle img{
     height: 3em;
 }
 
-.mod-filter-option input[type=checkbox]{
+.mod-filter .toggle input[type=checkbox],
+.mod-filter .toggle input[type=button]{
     display: none;
 }
 
-.mod-filter-option label {
+.mod-filter .toggle label {
     position:relative;
     cursor:pointer;
     padding:0.2em;
@@ -18,50 +26,59 @@
     background-color: #000062;
     border-top: 1px solid white;
     border-bottom: 1px solid white;
+    border-right: 1px solid white;
+}
+.mod-filter .toggle img + span{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    height: min-content;
+    top: 0;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 3.2em;
 }
 
-.mod-filter-option label.active {
+.mod-filter .toggle label.active {
     background-color: #1e90ff;
 }
 
-.mod-filter-option label img,.mod-filter-option label span{
+.mod-filter .toggle label img, 
+.mod-filter .toggle label span{
     opacity: 0.5;
 }
-.mod-filter-option label.active img,.mod-filter-option label.active span{
+.mod-filter .toggle label.active img,
+.mod-filter .toggle label.active span{
     opacity: 1;
 }
 
-.mod-filter-option:first-of-type label{
+
+.mod-filter .toggle:first-of-type label{
     border-left: 1px solid white;
     border-top-left-radius:3px;
     border-bottom-left-radius:3px;
 }
-.mod-filter-option:last-of-type label{
+.mod-filter .toggle:last-of-type label{
     border-right: 1px solid white;
     border-top-right-radius:3px;
     border-bottom-right-radius:3px;
-
 }
 
-.filter-option-row .mod-filter-option span{
-    width: 8em;
-    display:inline-block;
-}
-.filter-option-row .mod-filter-option{
-    border: 1px solid white;
-}
-
-.mod-filter .multi-row{
+.mod-filter .mod-filter .multi-row{
     width: max-content;
     margin-left: auto;
     margin-right: auto;
     text-align: start;
 }
 
-.mod-filter table{
-    width:100%;
+.mod-filter .row {
+    margin-bottom: 3px;
 }
-.mod-filter table tr{
-    border-collapse: separate;
+
+.mod-filter .row .toggle span{
+    width: 8em;
+    display:inline-block;
+    text-align: center
 }
+
 
