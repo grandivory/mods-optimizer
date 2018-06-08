@@ -16,7 +16,7 @@
 }
 
 .review-list .mods-list {
-  height: calc(100% - 9em);
+  height: calc(100% - 8em);
   overflow-y: auto;
 }
 

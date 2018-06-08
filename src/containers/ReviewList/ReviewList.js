@@ -26,7 +26,7 @@ class ReviewList extends React.Component {
       'sortBy': this.sortOptions.assignTo,
       'tag': '',
       'view': this.viewOptions.list,
-      'showSummaryModal':false,
+      'showSummaryModal': false,
     };
 
     this.state.movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
@@ -103,8 +103,8 @@ class ReviewList extends React.Component {
         <Arrow/>
         <CharacterAvatar name={mod.assignTo.name}/>
         <div className={'actions'}>
-          <button onClick={this.removeMod.bind(this, mod)}>Remove Mod</button>
-          <button onClick={this.reassignMod.bind(this, mod)}>Reassign Mod</button>
+          <button onClick={this.removeMod.bind(this, mod)}>I removed this mod</button>
+          <button onClick={this.reassignMod.bind(this, mod)}>I reassigned this mod</button>
         </div>
       </div>
     );
@@ -154,9 +154,9 @@ class ReviewList extends React.Component {
         </div>
         <div className={'actions'}>
           {this.sortOptions.currentCharacter === this.state.sortBy &&
-          <button onClick={this.removeMods.bind(this, charMods.mods)}>Remove Mods</button>}
+          <button onClick={this.removeMods.bind(this, charMods.mods)}>I removed these mods</button>}
           {this.sortOptions.assignTo === this.state.sortBy &&
-          <button onClick={this.reassignMods.bind(this, charMods.mods)}>Reassign Mods</button>}
+          <button onClick={this.reassignMods.bind(this, charMods.mods)}>I reassigned these mods</button>}
         </div>
       </div>
     );
@@ -330,6 +330,7 @@ class ReviewList extends React.Component {
       });
     }
   }
+
   /**
    * Render a modal with a copy-paste-able review of the mods to move
    * @returns Array[JSX Element]
@@ -353,30 +354,33 @@ class ReviewList extends React.Component {
   /**
    * Copies the summary display text into the clipboard
    */
-  copySummaryToClipboard(){
+  copySummaryToClipboard() {
     copyToClipboard(this.summaryListContent());
   };
 
   summaryListContent() {
-    const capitalize = function(str){
+    const capitalize = function(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     };
 
-
     let movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
-    movingMods = movingMods.sort((a,b)=> a.assignTo.name > b.assignTo.name ? 1 : a.assignTo.name < b.assignTo.name ? -1 : 0);
+    movingMods = movingMods.sort((a, b) => a.assignTo.name > b.assignTo.name ?
+      1 :
+      a.assignTo.name < b.assignTo.name ?
+        -1 :
+        0);
 
     let lastModAssign = "";
     let lines = [];
-    for(let i = 0; i < movingMods.length; i++){
+    for (let i = 0; i < movingMods.length; i++) {
       let mod = movingMods[i];
-      if(mod.assignTo.name !== lastModAssign){
+      if (mod.assignTo.name !== lastModAssign) {
         lines.push('');
         lines.push(mod.assignTo.name);
         lastModAssign = mod.assignTo.name;
       }
-      lines.push("Move "+capitalize(mod.set.name)+'('+mod.primaryStat.type+')'+
-        capitalize(mod.slot)+" from "+mod.currentCharacter.name);
+      lines.push("Move " + capitalize(mod.set.name) + '(' + mod.primaryStat.type + ')' + capitalize(mod.slot) +
+        " from " + (mod.currentCharacter ? mod.currentCharacter.name : 'your unassigned mods'));
     }
     return lines.join('\r\n');
   }
