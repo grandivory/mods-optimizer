@@ -20,19 +20,24 @@ class ExploreView extends React.Component {
 
     return (
       <div>
-        <div className="explore-view-filter">
+        <div className={'filters'}>
           <ModFilter
             updated={this.filterUpdated.bind(this)}
-            ref={(filter) => {this.filter = filter;}}
           />
         </div>
+        {/*<div className="explore-view-filter">*/}
+          {/*<ModFilter*/}
+            {/*updated={this.filterUpdated.bind(this)}*/}
+            {/*ref={(filter) => {this.filter = filter;}}*/}
+          {/*/>*/}
+        {/*</div>*/}
         <div className='mods'>
           {modElements}
         </div>
       </div>
     );
-
   }
+
 }
 
 export default ExploreView;

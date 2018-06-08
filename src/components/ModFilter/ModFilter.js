@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from "../../components/Modal/Modal";
 
 import './ModFilter.css';
+import ModSet from "../../domain/ModSet";
 
 function importImages(context) {
   let images = {};
@@ -175,6 +176,10 @@ class modFilter extends React.Component {
     return <div>{toggles}{all}{none}</div>
   }
 
+  slotFilter() {
+    return ModSet.slots.map(slot => <input type={'checkbox'} name={'slot-filter'} value={slot} />);
+  }
+
   filter_text(elements, name) {
     const toggleCheckbox = this.toggle_checkbox.bind(this);
     const select_all = ()=> {
@@ -291,12 +296,15 @@ class modFilter extends React.Component {
 
 
   render() {
-    return (
-      <div>
-        <button onClick={()=>this.setState({'show':true})}>Mod Filter</button>
-        <Modal show={this.state.show} className={'reset-modal'} content={this.modalContent()} />
-      </div>
-    );
+    return <form className={'mod-filters'}>
+        <label htmlFor={'slot-filter'}>Slot</label>
+        {this.slotFilter()}
+      </form>;
+      {/*<div>*/}
+        {/*{this.modalContent()}*/}
+        {/*/!*<button onClick={()=>this.setState({'show':true})}>Mod Filter</button>*!/*/}
+        {/*/!*<Modal show={this.state.show} className={'reset-modal'} content={this.modalContent()} />*!/*/}
+      {/*</div>*/}
   }
 }
 

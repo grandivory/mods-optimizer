@@ -236,6 +236,8 @@ strong {
   border-radius: 0 .5em .5em 0;
   border: 1px solid #888;
   border-left-width: 0;
+  margin: 1em;
+  margin-left: 0;
 }
 
 .filter-form {
