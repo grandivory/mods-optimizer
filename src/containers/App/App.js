@@ -241,7 +241,7 @@ class App extends Component {
       </form>
       or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'}>Patreon</a>
-      <div className={'version'}>version 1.0.5</div>
+      <div className={'version'}>version 1.0.6</div>
     </footer>;
   }
 
