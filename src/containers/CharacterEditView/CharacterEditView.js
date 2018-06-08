@@ -99,18 +99,27 @@ class CharacterEditView extends React.Component {
   resetDefaults(character, form) {
     const defaults = charDefaults[character.name].optimizationPlan;
 
-    form['health-stat'].value = defaults.health;
-    form['protection-stat'].value = defaults.protection;
-    form['speed-stat'].value = defaults.speed;
-    form['critDmg-stat'].value = defaults.critDmg;
-    form['potency-stat'].value = defaults.potency;
-    form['tenacity-stat'].value = defaults.tenacity;
-    form['offense-stat'].value = defaults.offense;
-    form['critChance-stat'].value = defaults.critChance;
-    form['defense-stat'].value = defaults.defense;
-    form['accuracy-stat'].value = defaults.accuracy;
-    form['critAvoid-stat'].value = defaults.critAvoid;
+    form['health-stat'].value = defaults.rawHealth;
+    form['protection-stat'].value = defaults.rawProtection;
+    form['speed-stat'].value = defaults.rawSpeed;
+    form['critDmg-stat'].value = defaults.rawCritDmg;
+    form['potency-stat'].value = defaults.rawPotency;
+    form['tenacity-stat'].value = defaults.rawTenacity;
+    form['offense-stat'].value = defaults.rawOffense;
+    form['critChance-stat'].value = defaults.rawCritChance;
+    form['defense-stat'].value = defaults.rawDefense;
+    form['accuracy-stat'].value = defaults.rawAccuracy;
+    form['critAvoid-stat'].value = defaults.rawCritAvoid;
     form['5dot'].checked = charDefaults[character.name].useOnly5DotMods;
+
+    // Also reset the sliders!
+    [...document.getElementsByTagName('input')]
+      .filter(input => input.type === 'range')
+      .filter(input => input.id.includes('-slider'))
+      .forEach(rangeInput => {
+      const valueInput = rangeInput.id.substring(0, rangeInput.id.indexOf('-slider'));
+      rangeInput.value = form[valueInput].value;
+    })
   }
 
   cancelEdit() {
