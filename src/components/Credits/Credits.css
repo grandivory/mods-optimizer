@@ -1,0 +1,9 @@
+svg.credits {
+  height: 1em;
+}
+
+svg.credits path {
+  fill: black;
+  stroke: #eeca44;
+  stroke-width: 6px;
+}

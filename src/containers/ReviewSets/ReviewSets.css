@@ -3,8 +3,14 @@
   height: 100%;
 }
 
-.review-sets h2 {
+.review-sets h2,
+.review-sets h3 {
   text-align: center;
+  margin-bottom: 0;
+}
+
+.review-sets h3 {
+  margin-top: 0;
 }
 
 .review-sets .display-options {
@@ -13,7 +19,7 @@
 }
 
 .review-sets .sets-list {
-  height: calc(100% - 9em);
+  height: calc(100% - 8em);
   overflow-y: auto;
 }
 
