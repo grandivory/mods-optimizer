@@ -309,7 +309,9 @@ class ReviewList extends React.Component {
     let displayedMods = movingMods;
 
     if ('' !== tag) {
-      const filteredMods = displayedMods.filter(mod => mod[sortBy] && mod[sortBy].tags.includes(tag));
+      const filteredMods = displayedMods.filter(
+        mod => mod[sortBy] && mod[sortBy].tags && mod[sortBy].tags.includes(tag)
+      );
       if (filteredMods.length) {
         displayedMods = filteredMods;
       }
