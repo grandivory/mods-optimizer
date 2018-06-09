@@ -3,6 +3,7 @@ import Character from "./Character";
 import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
 import {characters} from "../constants/characters";
+import OptimizationPlan from "./OptimizationPlan";
 
 class Mod {
   constructor(id, slot, set, level, pips, primaryStat, secondaryStats, currentCharacter, assignTo) {
@@ -85,7 +86,7 @@ class Mod {
 
     let currentCharacter = ('' !== modJson.characterName && 'UNASSIGNED' !== modJson.characterName) ?
       characters[modJson.characterName.replace(/&amp;#39;/g, "'")] ||
-      new Character(modJson.characterName, new BaseStats()) :
+      new Character(modJson.characterName, new BaseStats(), new OptimizationPlan(), []) :
       null;
 
     let assignTo = modJson.assignTo ?
