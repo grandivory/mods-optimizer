@@ -1349,7 +1349,7 @@ let charactersArray = [
       0, // accuracy
       0 // crit avoidance
     ),
-    ['Light Side', 'Rebel', 'Attacker']
+    ['Light Side', 'Rebel', 'Attacker', 'HRS', 'Hoth Bros']
   ),
   new Character(
     'Hoth Rebel Soldier',
@@ -2770,7 +2770,7 @@ let charactersArray = [
       0, // crit avoidance
       true
     ),
-    ['Light Side', 'Rebel', 'Attacker', 'Crew Member', 'Wiggs', 'chiggs', 'Standard Rebels', 'SuperStar2D2']
+    ['Light Side', 'Rebel', 'Attacker', 'Crew Member', 'Wiggs', 'chiggs', 'SuperStar2D2']
   ),
   new Character(
     'Wicket',
