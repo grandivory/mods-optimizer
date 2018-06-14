@@ -320,7 +320,7 @@ let charactersArray = [
       0, // accuracy,
       0 // crit avoidance
     ),
-    ['Light Side', 'Scountrel', 'Rebel', 'Support']
+    ['Light Side', 'Scoundrel', 'Rebel', 'Support']
   ),
   new Character(
     'Captain Phasma',
@@ -1708,6 +1708,25 @@ let charactersArray = [
     ['Dark Side', 'First Order', 'Tank', 'Crew Member']
   ),
   new Character(
+    'L3-37',
+    new BaseStats(32222, 38474, 2796, 1792, 1, 97, 330, 192),
+    new OptimizationPlan(
+      0.4, // health
+      0.1, // protection
+      50, // speed
+      0, // crit damage
+      10, // potency
+      10, // tenacity
+      0, // offense
+      0, // crit chance
+      10, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    ),
+    ['Light Side', 'Scoundrel', 'Droid', 'Tank']
+  ),
+  new Character(
     'Lando Calrissian',
     new BaseStats(23447, 19333, 2217, 2023, 1, 115, 287, 193),
     new OptimizationPlan(
@@ -2784,6 +2803,25 @@ let charactersArray = [
       0, // tenacity
       2, // offense
       40, // crit chance
+      0, // defense
+      0, // accuracy,
+      0, // crit avoidance
+      true
+    ),
+    ['Light Side', 'Scoundrel', 'Attacker']
+  ),
+  new Character(
+    'Young Lando Calrissian',
+    new BaseStats(24436, 29075, 2875, 1588, 1, 141, 204, 89),
+    new OptimizationPlan(
+      0, // health
+      0, // protection
+      100, // speed
+      50, // crit damage
+      10, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
       0, // defense
       0, // accuracy,
       0, // crit avoidance

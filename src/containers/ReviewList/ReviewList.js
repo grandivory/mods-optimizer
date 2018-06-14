@@ -7,6 +7,8 @@ import Arrow from "../../components/Arrow/Arrow";
 import Toggle from "../../components/Toggle/Toggle";
 import ModSet from "../../domain/ModSet";
 import ModSetView from "../../components/ModSetView/ModSetView";
+import Modal from "../../components/Modal/Modal";
+import copyToClipboard from "../../utils/clipboard"
 
 class ReviewList extends React.Component {
 
@@ -23,7 +25,8 @@ class ReviewList extends React.Component {
     this.state = {
       'sortBy': this.sortOptions.assignTo,
       'tag': '',
-      'view': this.viewOptions.list
+      'view': this.viewOptions.list,
+      'showSummaryModal': false,
     };
 
     this.state.movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
@@ -42,6 +45,12 @@ class ReviewList extends React.Component {
   render() {
     const modsLeft = this.state.movingMods.length;
     let modRows;
+
+    const summaryButton = (
+      <button type={'button'} className={'small'} onClick={() => this.setState({'showSummaryModal': true})}>
+        Show Summary
+      </button>
+    );
 
     switch (this.state.view) {
       case this.viewOptions.list:
@@ -67,7 +76,7 @@ class ReviewList extends React.Component {
           <div className={'filters'}>
             {this.filterForm()}
           </div>
-          <h2>Reassigning {modsLeft} mods</h2>
+          <h2>Reassigning {modsLeft} mods {summaryButton}</h2>
           {(0 < this.state.displayedMods.length) &&
           <div className={'mods-list'}>
             {modRows}
@@ -76,6 +85,7 @@ class ReviewList extends React.Component {
           {(0 === this.state.displayedMods.length) &&
           <h3>No more mods to move under that filter. Try a different filter now!</h3>
           }
+          <Modal show={this.state.showSummaryModal} content={this.reviewModal()}/>
         </div>
       );
     }
@@ -93,8 +103,8 @@ class ReviewList extends React.Component {
         <Arrow/>
         <CharacterAvatar name={mod.assignTo.name}/>
         <div className={'actions'}>
-          <button onClick={this.removeMod.bind(this, mod)}>Remove Mod</button>
-          <button onClick={this.reassignMod.bind(this, mod)}>Reassign Mod</button>
+          <button onClick={this.removeMod.bind(this, mod)}>I removed this mod</button>
+          <button onClick={this.reassignMod.bind(this, mod)}>I reassigned this mod</button>
         </div>
       </div>
     );
@@ -144,9 +154,9 @@ class ReviewList extends React.Component {
         </div>
         <div className={'actions'}>
           {this.sortOptions.currentCharacter === this.state.sortBy &&
-          <button onClick={this.removeMods.bind(this, charMods.mods)}>Remove Mods</button>}
+          <button onClick={this.removeMods.bind(this, charMods.mods)}>I removed these mods</button>}
           {this.sortOptions.assignTo === this.state.sortBy &&
-          <button onClick={this.reassignMods.bind(this, charMods.mods)}>Reassign Mods</button>}
+          <button onClick={this.reassignMods.bind(this, charMods.mods)}>I reassigned these mods</button>}
         </div>
       </div>
     );
@@ -299,7 +309,9 @@ class ReviewList extends React.Component {
     let displayedMods = movingMods;
 
     if ('' !== tag) {
-      const filteredMods = displayedMods.filter(mod => mod[sortBy] && mod[sortBy].tags.includes(tag));
+      const filteredMods = displayedMods.filter(
+        mod => mod[sortBy] && mod[sortBy].tags && mod[sortBy].tags.includes(tag)
+      );
       if (filteredMods.length) {
         displayedMods = filteredMods;
       }
@@ -320,6 +332,61 @@ class ReviewList extends React.Component {
       });
     }
   }
+
+  /**
+   * Render a modal with a copy-paste-able review of the mods to move
+   * @returns Array[JSX Element]
+   */
+  reviewModal() {
+    return [
+      <div key={'summary_modal_content'}>
+        <h2>Move Summary</h2>
+        <pre id="summary_pre" className={'summary'}>
+        {this.summaryListContent()}
+        </pre>
+        <div className={'actions'}>
+          <button type={'button'} onClick={() => this.copySummaryToClipboard()}>
+            Copy to Clipboard
+          </button>
+          <button type={'button'} onClick={() => this.setState({'showSummaryModal': false})}>OK</button>
+        </div>
+      </div>]
+  }
+
+  /**
+   * Copies the summary display text into the clipboard
+   */
+  copySummaryToClipboard() {
+    copyToClipboard(this.summaryListContent());
+  };
+
+  summaryListContent() {
+    const capitalize = function(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+
+    let movingMods = this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
+    movingMods = movingMods.sort((a, b) => a.assignTo.name > b.assignTo.name ?
+      1 :
+      a.assignTo.name < b.assignTo.name ?
+        -1 :
+        0);
+
+    let lastModAssign = "";
+    let lines = [];
+    for (let i = 0; i < movingMods.length; i++) {
+      let mod = movingMods[i];
+      if (mod.assignTo.name !== lastModAssign) {
+        lines.push('');
+        lines.push(mod.assignTo.name);
+        lastModAssign = mod.assignTo.name;
+      }
+      lines.push("Move " + capitalize(mod.set.name) + '(' + mod.primaryStat.type + ')' + capitalize(mod.slot) +
+        " from " + (mod.currentCharacter ? mod.currentCharacter.name : 'your unassigned mods'));
+    }
+    return lines.join('\r\n');
+  }
 }
 
 export default ReviewList;
+

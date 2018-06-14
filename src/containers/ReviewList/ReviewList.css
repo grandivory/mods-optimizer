@@ -16,7 +16,7 @@
 }
 
 .review-list .mods-list {
-  height: calc(100% - 9em);
+  height: calc(100% - 8em);
   overflow-y: auto;
 }
 
@@ -54,3 +54,14 @@
 .mod-row .actions button {
   display: block;
 }
+
+pre.summary{
+  background-color: #222;
+  padding: 1em;
+  text-shadow: none !important;
+  max-height: calc(100vh - 27em);
+  overflow-y: auto;
+}
+
+
+
