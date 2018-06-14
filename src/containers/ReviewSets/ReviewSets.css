@@ -21,6 +21,8 @@
 .review-sets .sets-list {
   height: calc(100% - 8em);
   overflow-y: auto;
+  padding-bottom: 5em;
+  box-sizing: border-box;
 }
 
 .review-sets .mod-set-detail {
