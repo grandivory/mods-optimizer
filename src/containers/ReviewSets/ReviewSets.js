@@ -128,25 +128,35 @@ class ReviewSets extends React.Component {
       );
     }
 
-    const allMods = characterSets.map(characterSet => characterSet.modSet.mods())
-      .reduce((acc, mods) => acc.concat(mods), []);
+    const modsByCharacter = mods.reduce((acc, mod) => {
+      if (!mod.currentCharacter) {
+        return acc;
+      }
+      if (acc.hasOwnProperty(mod.currentCharacter.name)) {
+        acc[mod.currentCharacter.name].push(mod);
+      } else {
+        acc[mod.currentCharacter.name] = [mod];
+      }
+
+      return acc;
+    }, {});
 
     // Get a count of how much it will cost to move the mods.
     // It only costs money to remove mods, so only account for mods that have a current character
     // and a different assignTo
-    const modRemovalCost = allMods
-      .filter(mod => mod.currentCharacter && mod.assignTo && mod.currentCharacter !== mod.assignTo)
+    const modRemovalCost = mods
+      .filter(mod => mod.currentCharacter && ((mod.assignTo && mod.currentCharacter !== mod.assignTo) ||
+        mods.some(m => m !== mod && m.slot === mod.slot && m.assignTo === mod.currentCharacter))
+      )
       .reduce((cost, mod) => cost + modRemovalCosts[mod.pips], 0);
 
-    const modUpgradeCost = allMods
+    const modUpgradeCost = mods
       .filter(mod => 15 !== mod.level && mod.assignTo && mod.assignTo !== mod.currentCharacter)
       .reduce((cost, mod) => cost + modUpgradeCosts[mod.pips][mod.level], 0);
 
     // Create sets for everything each character already has equipped
     const rows = characterSets.map(characterSet => {
-      const currentSet = new ModSet(mods.filter(mod =>
-        mod.currentCharacter && mod.currentCharacter.name === characterSet.character.name
-      ));
+      const currentSet = new ModSet(modsByCharacter[characterSet.character.name] || []);
 
       return (
         <div className={'set-row'} key={characterSet.character.name}>
