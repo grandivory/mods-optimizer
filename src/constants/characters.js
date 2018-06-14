@@ -114,7 +114,7 @@ let charactersArray = [
       0, // accuracy,
       0 // crit avoidance
     ),
-    ['Dark Side', 'Nightsister', 'Separatist', 'Support', 'AV', 'Zen', 'NS', 'hSTR NS', 'ABC']
+    ['Dark Side', 'Nightsister', 'Separatist', 'Support', 'AV', 'Zen', 'NS', 'hSTR NS', 'ABC' ]
   ),
   new Character(
     'B2 Super Battle Droid',
@@ -152,7 +152,7 @@ let charactersArray = [
       0, // crit avoidance
       false
     ),
-    ['Light Side', 'Jedi', 'Galactic Republic', 'Healer']
+    ['Light Side', 'Jedi', 'Galactic Republic', 'Healer' ]
   ),
   new Character(
     'Baze Malbus',
@@ -396,7 +396,7 @@ let charactersArray = [
       0, // crit avoidance
       false
     ),
-    ['Light Side', 'Ewok', 'Support', 'chirp', 'Murderbears']
+    ['Light Side', 'Ewok', 'Support', 'Murderbears']
   ),
   new Character(
     'Chief Nebit',
@@ -415,7 +415,7 @@ let charactersArray = [
       0, // crit avoidance
       false
     ),
-    ['Light Side', 'Jawa', 'Tank', 'neb']
+    ['Light Side', 'Jawa', 'Tank', 'nebs']
   ),
   new Character(
     'Chirrut Îmwe',
@@ -526,7 +526,7 @@ let charactersArray = [
       0, // accuracy,
       0 // crit avoidance
     ),
-    ['Light Side', 'Rebel', 'Attacker', 'CLS', 'Wampanader', 'Chex Mix', 'ABC', 'Titans']
+    ['Light Side', 'Rebel', 'Attacker', 'CLS', 'Wampanader', 'Chex Mix', 'ABC', 'Titans' ]
   ),
   new Character(
     'Coruscant Underworld Police',
@@ -1819,7 +1819,7 @@ let charactersArray = [
       0, // crit avoidance
       false
     ),
-    ['Light Side', 'Galactic Republic', 'Jedi', 'Healer', 'lumi']
+    ['Light Side', 'Galactic Republic', 'Jedi', 'Healer']
   ),
   new Character(
     'Mace Windu',
@@ -2006,7 +2006,7 @@ let charactersArray = [
       0, // crit avoidance
       false
     ),
-    ['Light Side', 'Rebel', 'Jedi', 'Tank', 'ben', 'OB']
+    ['Light Side', 'Rebel', 'Jedi', 'Tank', 'OB']
   ),
   new Character(
     'Old Daka',
@@ -2247,7 +2247,7 @@ let charactersArray = [
       0, // accuracy
       0 // crit avoidance
     ),
-    ['Light Side', 'Resistance', 'Attacker', 'RT', 'res trooper']
+    ['Light Side', 'Resistance', 'Attacker', 'RT', 'res trooper' ]
   ),
   new Character(
     'Rey (Jedi Training)',
@@ -2265,7 +2265,7 @@ let charactersArray = [
       0, // accuracy
       0 // crit avoidance
     ),
-    ['Light Side', 'Resistance', 'Tank', 'JTR', 'RJT', 'Jedi Rey', 'Jey Z']
+    ['Light Side', 'Resistance', 'Tank', 'JTR', 'RJT', 'Jedi Rey', 'Jey Z' ]
   ),
   new Character(
     'Rey (Scavenger)',
@@ -2284,7 +2284,7 @@ let charactersArray = [
       0, // crit avoidance
       true
     ),
-    ['Light Side', 'Resistance', 'Attacker', 'Crew Member', 'scav rey']
+    ['Light Side', 'Resistance', 'Attacker', 'Crew Member', 'scav rey' ]
   ),
   new Character(
     'Rose Tico',
@@ -2544,7 +2544,7 @@ let charactersArray = [
       0, // accuracy
       0 // crit avoidance
     ),
-    ['Dark Side', 'Nightsister', 'Healer', 'NS', 'hSTR NS']
+    ['Dark Side', 'Nightsister', 'Healer', 'NS', 'hSTR NS' ]
   ),
   new Character(
     'Teebo',
@@ -2695,7 +2695,7 @@ let charactersArray = [
       0, // crit avoidance
       false
     ),
-    ['Light Side', 'Scoundrel', 'Attacker', 'Vets', 'Vet']
+    ['Light Side', 'Scoundrel', 'Attacker', 'Vets']
   ),
   new Character(
     'Veteran Smuggler Han Solo',
@@ -2714,7 +2714,7 @@ let charactersArray = [
       0, // crit avoidance
       false
     ),
-    ['Light Side', 'Scoundrel', 'Attacker', 'Vets', 'Vet']
+    ['Light Side', 'Scoundrel', 'Attacker', 'Vets']
   ),
   new Character(
     'Visas Marr',
@@ -2733,7 +2733,7 @@ let charactersArray = [
       0, // crit avoidance
       false
     ),
-    ['Light Side', 'Healer']
+    ['Light Side', 'Healer' ]
   ),
   new Character(
     'Wampa',
