@@ -1,14 +1,17 @@
 import React from 'react';
-import Modal from "../../components/Modal/Modal";
 
 import './ModFilter.css';
 import ModSet from "../../domain/ModSet";
+import setBonuses from "../../constants/setbonuses";
 
 function importImages(context) {
   let images = {};
-  context.keys().forEach((item) => {images[item.replace('./', '')] = context(item)});
+  context.keys().forEach((item) => {
+    images[item.replace('./', '')] = context(item)
+  });
   return images;
 }
+
 const images = importImages(require.context('./images', false, /\.png/));
 
 /**
@@ -28,283 +31,231 @@ const images = importImages(require.context('./images', false, /\.png/));
  *
  */
 class modFilter extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      'show': false,
-    };
-    this.filters = modFilter.getDefaultFilter();
-  }
-
   /**
-   *
-   * @returns An object with four properties (slot, set, primary, secondary) that each
-   *            contain a list of strings representing selections for each mod component
+   * Render the slot filter inputs
+   * @returns {JSX Element}
    */
-  get_filters(){
-    const filtered_shapes = this.filters.shape.filter(e=>e.checked).map(e=>e.name);
-    const filtered_sets = this.filters.set.filter(e=>e.checked).map(e=>e.name);
-    const filtered_primaries = this.filters.primary.filter(e=>e.checked).map(e=>e.name);
-    const filtered_secondaries = this.filters.secondary.filter(e=>e.checked).map(e=>e.name);
-    return  {
-      'slot':filtered_shapes,
-      'set': filtered_sets,
-      'primary': filtered_primaries,
-      'secondary':filtered_secondaries,
-    }
-  };
-
-  /**
-   * @param mods An array of Mod objects
-   * @returns An array of Mod objects, filtered using the options selected in the filter
-   */
-  apply_filter(mods){
-    const filters= this.get_filters();
-    mods = mods.filter(e=> filters.slot.includes(e.slot));
-    mods = mods.filter(e=> filters.set.includes(e.set.name));
-    mods = mods.filter(e=> filters.primary.includes(e.primaryStat.displayType));
-    if(filters.secondary.length > 0){
-      mods = mods.filter(
-        e => filters.secondary.every(f=>e.secondaryStats.map(s=>s.type).includes(f))
-      );
-    }
-    return mods;
-  }
-
-  static getDefaultFilter() {
-    return {
-      'shape': [
-        {'name': 'square', 'checked': true},
-        {'name': 'arrow', 'checked': true},
-        {'name': 'diamond', 'checked': true},
-        {'name': 'triangle', 'checked': true},
-        {'name': 'circle', 'checked': true},
-        {'name': 'cross', 'checked': true}
-      ],
-      'set': [
-        {'name': 'potency', 'checked': true},
-        {'name': 'defense', 'checked': true},
-        {'name': 'offense', 'checked': true},
-        {'name': 'critchance', 'checked': true},
-        {'name': 'critdamage', 'checked': true},
-        {'name': 'health', 'checked': true},
-        {'name': 'speed', 'checked': true},
-        {'name': 'tenacity', 'checked': true}
-      ],
-      'primary': [
-        {'name': 'Speed', 'checked': true},
-        {'name': 'Critical Chance', 'checked': true},
-        {'name': 'Critical Damage', 'checked': true},
-        {'name': 'Potency', 'checked': true},
-        {'name': 'Tenacity', 'checked': true},
-        {'name': 'Accuracy', 'checked': true},
-        {'name': 'Critical Avoidance', 'checked': true},
-        {'name': 'Offense', 'checked': true},
-        {'name': 'Defense', 'checked': true},
-        {'name': 'Health', 'checked': true},
-        {'name': 'Protection', 'checked': true},
-      ],
-      'secondary': [
-        {'name': 'Speed', 'checked': false},
-        {'name': 'Critical Chance', 'checked': false},
-        {'name': 'Potency', 'checked': false},
-        {'name': 'Tenacity', 'checked': false},
-        {'name': 'Offense', 'checked': false},
-        {'name': 'Defense', 'checked': false},
-        {'name': 'Health', 'checked': false},
-        {'name': 'Protection', 'checked': false},
-        {'name': 'Offense %', 'checked': false},
-        {'name': 'Defense %', 'checked': false},
-        {'name': 'Health %', 'checked': false},
-        {'name': 'Protection %', 'checked': false},
-      ]
-    }
-  }
-
-
-  toggle_checkbox(toggle){
-    toggle.checked = !toggle.checked;
-    this.forceUpdate();
-  }
-
-  filter_images(elements, img, name){
-    const toggleCheckbox = this.toggle_checkbox.bind(this);
-    const select_all = ()=> {
-      elements.map(e=>e.checked=true);
-      this.forceUpdate();
-    };
-    const select_none = ()=>{
-      elements.map(e=>e.checked=false);
-      this.forceUpdate();
-    };
-    const toggles =  elements.map(shape =>
-      <div className={'toggle'} key={name+"_"+shape.name}>
-        <label className={shape.checked?'active':''}>
-          <input
-            type={'checkbox'}
-            defaultChecked={shape.checked}
-            onChange={()=>toggleCheckbox(shape)}/>
-          {img &&
-          <img
-            src={images[img.replace('{}', shape.name)]}
-            alt={"Filter " + shape.name}/>
-          }
-        </label>
-      </div>
-    );
-    const all =(
-        <div className={'toggle'} key={name+"_"+'extras'}>
-          <label className={'active'}>
-            <input type={'button'} onClick={select_all.bind(this)}/>
-            <img
-              src={images['transparent.png']}
-              alt={"Filter All"}/>
-            <span>All</span>
-          </label>
-        </div>);
-    const none = (
-        <div className={'toggle'} key={name+"_"+'extras'}>
-          <label className={'active'}>
-            <input type={'button'} onClick={select_none.bind(this)}/>
-            <img
-              src={images['transparent.png']}
-              alt={"Filter None"}/>
-            <span>None</span>
-          </label>
-        </div>
-    );
-    return <div>{toggles}{all}{none}</div>
-  }
-
   slotFilter() {
-    return ModSet.slots.map(slot => <input type={'checkbox'} name={'slot-filter'} value={slot} />);
+    const selectAll = (e) => {
+      e.preventDefault();
+      ModSet.slots.forEach(slot => document.getElementById(`slot-filter-${slot}`).checked = true);
+    };
+    const selectNone = (e) => {
+      e.preventDefault();
+      ModSet.slots.forEach(slot => document.getElementById(`slot-filter-${slot}`).checked = false);
+    };
+
+    const slots = ModSet.slots.map(slot => {
+      const inputName = `slot-filter-${slot}`;
+
+      return <label htmlFor={inputName} key={slot}>
+          <input type={'checkbox'} id={inputName} name={inputName} value={slot} defaultChecked={true} />
+          <img src={images[`empty_${slot}.png`]} alt={slot} />
+        </label>
+    });
+
+    return <div id={'slot-filters'}>
+      <div className={'toggle-label'}>Slot</div>
+      <div className={'slots'}>
+        {slots}
+      </div>
+      <div className={'actions'}>
+        <button onClick={selectAll}>All</button>
+        <button onClick={selectNone}>None</button>
+      </div>
+    </div>;
   }
 
-  filter_text(elements, name) {
-    const toggleCheckbox = this.toggle_checkbox.bind(this);
-    const select_all = ()=> {
-      elements.map(e=>e.checked=true);
-      this.forceUpdate();
+  /**
+   * Render the set filter inputs
+   * @returns {JSX Element}
+   */
+  setFilter() {
+    const selectAll = (e) => {
+      e.preventDefault();
+      Object.keys(setBonuses)
+        .forEach(set => document.getElementById(`set-filter-${set}`).checked = true);
     };
-    const select_none = ()=>{
-      elements.map(e=>e.checked=false);
-      this.forceUpdate();
+    const selectNone = (e) => {
+      e.preventDefault();
+      Object.keys(setBonuses)
+        .forEach(set => document.getElementById(`set-filter-${set}`).checked = false);
     };
 
-    const rows = [];
-    // Split up the filter into sets of four, then render each set as a row
-    for (let i = 0; i < elements.length; i += 4) {
-      let row = [];
-      row.push(elements.slice(i, i + 4).map(element => {
-        return (
-          <div className={'toggle'} key={element.name}>
-            <label className={element.checked ? 'active' : ''}>
-              <input
-                type={'checkbox'}
-                defaultChecked={element.checked}
-                onChange={() => toggleCheckbox(element)}/>
-              <span> {element.name}</span>
-            </label>
-          </div>
-        )
-      }));
-      rows.push(row);
+    const sets = Object.keys(setBonuses).map(set => {
+      const inputName = `set-filter-${set}`;
+
+      return <label htmlFor={inputName} key={set}>
+        <input type={'checkbox'} id={inputName} name={inputName} value={set} defaultChecked={true} />
+        <img src={images[`icon_buff_${set}.png`]} alt={set} />
+      </label>
+    });
+
+    return <div id={'set-filters'}>
+      <div className={'toggle-label'}>Set</div>
+      <div className={'sets'}>
+        {sets}
+      </div>
+      <div className={'actions'}>
+        <button onClick={selectAll}>All</button>
+        <button onClick={selectNone}>None</button>
+      </div>
+    </div>;
+  }
+
+  /**
+   * Render the primary stat filter inputs, using the given mods as the source of possible values
+   * @param mods [Mod] the list of mods being filtered
+   * @returns {JSX Element}
+   */
+  primaryStatFilter(mods) {
+    const primaryStats = mods.map(mod => mod.primaryStat.displayType)
+      .reduce((acc, stat) => acc.includes(stat) ? acc : acc.concat([stat]), [])
+      .sort();
+
+    const selectAll = (e) => {
+      e.preventDefault();
+      primaryStats.forEach(stat => document.getElementById(`primary-filter-${stat}`).checked = true);
+    };
+    const selectNone = (e) => {
+      e.preventDefault();
+      primaryStats.forEach(stat => document.getElementById(`primary-filter-${stat}`).checked = false);
+    };
+
+    const primaries = primaryStats.map(stat => {
+      const inputName = `primary-filter-${stat}`;
+
+      return <label htmlFor={inputName} key={stat}>
+        <input type={'checkbox'} id={inputName} name={inputName} value={stat} defaultChecked={true} />
+        {stat}
+      </label>
+    });
+
+    return <div id={'primary-filters'}>
+      <div className={'toggle-label'}>Primary Stat</div>
+      <div className={'primaries'}>
+        {primaries}
+      </div>
+      <div className={'actions'}>
+        <button onClick={selectAll}>All</button>
+        <button onClick={selectNone}>None</button>
+      </div>
+    </div>;
+  }
+
+  /**
+   * Render the secondary stat filter inputs, using the given mods as the source of possible values
+   * @param mods [Mod] the list of mods being filtered
+   * @returns {JSX Element}
+   */
+  secondaryStatFilter(mods) {
+    const secondaryStats = mods.map(mod => mod.secondaryStats)
+      .reduce((acc, stats) => acc.concat(stats), [])
+      .map(stat => stat.displayType)
+      .reduce((acc, stat) => acc.includes(stat) ? acc : acc.concat([stat]), [])
+      .sort();
+
+    const selectAll = (e) => {
+      e.preventDefault();
+      secondaryStats.forEach(stat => document.getElementById(`secondary-filter-${stat}`).checked = true);
+    };
+    const selectNone = (e) => {
+      e.preventDefault();
+      secondaryStats.forEach(stat => document.getElementById(`secondary-filter-${stat}`).checked = false);
+    };
+
+    const secondaries = secondaryStats.map(stat => {
+      const inputName = `secondary-filter-${stat}`;
+
+      return <label htmlFor={inputName} key={stat}>
+        <input type={'checkbox'} id={inputName} name={inputName} value={stat} defaultChecked={true} />
+        {stat}
+      </label>
+    });
+
+    return <div id={'secondary-filters'}>
+      <div className={'toggle-label'}>Secondary Stat</div>
+      <div className={'secondaries'}>
+        {secondaries}
+      </div>
+      <div className={'actions'}>
+        <button onClick={selectAll}>All</button>
+        <button onClick={selectNone}>None</button>
+      </div>
+    </div>;
+  }
+
+  /**
+   * Render an input to select what stat to sort by, using the given mods as the source of possible values
+   * @param mods [Mod] the list of mods being sorted
+   * @returns {JSX Element}
+   */
+  sortOption(mods) {
+    const secondaryStats = mods.map(mod => mod.secondaryStats)
+      .reduce((acc, stats) => acc.concat(stats), [])
+      .map(stat => stat.displayType)
+      .reduce((acc, stat) => acc.includes(stat) ? acc : acc.concat([stat]), [])
+      .sort();
+
+    const sortOptions = secondaryStats.map(stat =>
+      <option value={stat} key={stat}>{stat}</option>
+    );
+
+    return <div>
+      <div className={'toggle-label'}>Sort By:</div>
+      <select name={'sort-option'}>
+        <option value={''}>default</option>
+        {sortOptions}
+      </select>
+    </div>;
+  }
+
+  /**
+   * @returns Object an object with keys for 'slot', 'set', 'primary', 'secondary', each containing an
+   *                 array of selected values, plus 'sort', containing the value to sort by
+   */
+  collectFilters(form) {
+    const slot = [...form.elements]
+      .filter(element => element.id.includes('slot-filter') && element.checked)
+      .map(element => element.value);
+
+    const set = [...form.elements]
+      .filter(element => element.id.includes('set-filter') && element.checked)
+      .map(element => element.value);
+
+    const primary = [...form.elements]
+      .filter(element => element.id.includes('primary-filter') && element.checked)
+      .map(element => element.value);
+
+    const secondary = [...form.elements]
+      .filter(element => element.id.includes('secondary-filter') && element.checked)
+      .map(element => element.value);
+
+    return {
+      'slot': slot,
+      'set': set,
+      'primary': primary,
+      'secondary': secondary,
+      'sort': form['sort-option'].value
     }
-
-    const filter_rows = rows.map((row, index)=>
-        <div className={'row'} key={'row-'+index+'_'+name}>{row}</div>
-    );
-
-    const all =(
-      <div className={'toggle'} key={name+"_"+'extras'}>
-        <label className={'active'}>
-          <input type={'button'} onClick={select_all.bind(this)}/>
-          <span>All</span>
-        </label>
-      </div>);
-    const none = (
-      <div className={'toggle'} key={name+"_"+'extras'}>
-        <label className={'active'}>
-          <input type={'button'} onClick={select_none.bind(this)}/>
-          <span>None</span>
-        </label>
-      </div>
-    );
-    const extras_row = (
-      <div className={'row'} key={'extras-row_'+name}>{'secondary' !== name &&all}{none}</div>
-    );
-
-    return (
-      <div>
-        {filter_rows}
-        {extras_row}
-      </div>
-    )
-
   }
-
-  filter_table(){
-    return(
-      <table>
-        <tbody>
-        <tr>
-          <td>Slots</td>
-          <td>{this.filter_images(this.filters.shape, 'empty_{}.png', 'slot')}</td>
-        </tr>
-        <tr>
-          <td>Sets</td>
-          <td>{this.filter_images(this.filters.set, 'icon_buff_{}.png', 'set')}</td>
-        </tr>
-        <tr>
-          <td>Primary Stats</td>
-          <td><div className={'multi-row'}>{this.filter_text(this.filters.primary, 'primary')}</div></td>
-        </tr>
-        <tr>
-          <td>Required Secondary Stats</td>
-          <td><div className={'multi-row'}>{this.filter_text(this.filters.secondary, 'secondary')}</div></td>
-        </tr>
-        </tbody>
-      </table>
-
-    )
-  }
-
-  modalContent(){
-    const updated = this.props.updated || function(){};
-    const save = ()=>{
-      updated();
-      this.setState({'show':false});
-    };
-
-    const reset = function(){
-      // noinspection JSPotentiallyInvalidUsageOfClassThis
-      this.filters = modFilter.getDefaultFilter();
-      this.forceUpdate();
-    };
-
-    return (
-      <div className={'mod-filter'}>
-        {this.filter_table()}
-        <div className={'actions'}>
-          <button onClick={()=>this.setState({'show':false})} className={'red'}>Cancel</button>
-          <button onClick={reset.bind(this)}>Reset</button>
-          <button onClick={save}>Apply</button>
-        </div>
-      </div>
-    )
-  }
-
 
   render() {
-    return <form className={'mod-filters'}>
-        <label htmlFor={'slot-filter'}>Slot</label>
-        {this.slotFilter()}
-      </form>;
-      {/*<div>*/}
-        {/*{this.modalContent()}*/}
-        {/*/!*<button onClick={()=>this.setState({'show':true})}>Mod Filter</button>*!/*/}
-        {/*/!*<Modal show={this.state.show} className={'reset-modal'} content={this.modalContent()} />*!/*/}
-      {/*</div>*/}
+    const mods = this.props.mods;
+    const onUpdate = 'function' === typeof this.props.onUpdate ? this.props.onUpdate : function() {};
+    const onSubmit = (e) => {
+        e.preventDefault();
+        onUpdate(this.collectFilters(e.target))
+      };
+
+    return <form className={'mod-filters filter-form'} onSubmit={onSubmit}>
+      {this.slotFilter()}
+      {this.setFilter()}
+      {this.primaryStatFilter(mods)}
+      {this.secondaryStatFilter(mods)}
+      {this.sortOption(mods)}
+      <button type={'submit'}>Apply Filters</button>
+    </form>;
   }
 }
 

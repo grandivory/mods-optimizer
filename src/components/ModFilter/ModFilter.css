@@ -1,21 +1,39 @@
-.mod-filter table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 20px;
-}
-
-.mod-filter .toggle{
-    display: inline-block;
-    position: relative;
-}
-
-.mod-filter .toggle img{
-    height: 3em;
-}
-
-.mod-filter .toggle input[type=checkbox],
-.mod-filter .toggle input[type=button]{
+.mod-filters input[type=checkbox] {
     display: none;
+}
+
+.mod-filters label {
+  display: inline;
+  border: none;
+  font-size: 1em;
+  margin: auto;
+}
+
+.mod-filters img {
+  height: 3em;
+  /*border: 1px solid white;*/
+  /*background-color: #000062;*/
+  /*border-radius: .5em;*/
+  padding: .2em;
+  filter: drop-shadow(0 0 .5em darkred);
+}
+
+.mod-filters input:checked + img {
+  /*background-color: #1e90ff;*/
+  filter: drop-shadow(0 0 .5em #60bd1b);
+}
+
+.mod-filters .actions {
+  text-align: center;
+}
+
+.mod-filters button {
+  font-size: .9em;
+}
+
+.mod-filters button[type='submit'] {
+  font-size: 1.2em;
+  float: right;
 }
 
 .mod-filter .toggle label {
@@ -43,7 +61,7 @@
     background-color: #1e90ff;
 }
 
-.mod-filter .toggle label img, 
+.mod-filter .toggle label img,
 .mod-filter .toggle label span{
     opacity: 0.5;
 }
