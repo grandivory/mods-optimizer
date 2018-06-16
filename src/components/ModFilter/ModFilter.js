@@ -215,7 +215,7 @@ class ModFilter extends React.Component {
    */
   resetFilters() {
     [...document.getElementById('mod-filters').getElementsByTagName('input')].forEach(element => {
-      if ('checkbox' == element.type) {
+      if ('checkbox' === element.type) {
         element.checked = true;
       }
     });
