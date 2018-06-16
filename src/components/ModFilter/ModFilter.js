@@ -30,7 +30,7 @@ const images = importImages(require.context('./images', false, /\.png/));
  *  To filter an array of Mod objects, this.filter.apply_filter(mods);
  *
  */
-class modFilter extends React.Component {
+class ModFilter extends React.Component {
   /**
    * Render the slot filter inputs
    * @returns {JSX Element}
@@ -127,7 +127,7 @@ class modFilter extends React.Component {
 
       return <label htmlFor={inputName} key={stat}>
         <input type={'checkbox'} id={inputName} name={inputName} value={stat} defaultChecked={true} />
-        {stat}
+        <span className={'option'}>{stat}</span>
       </label>
     });
 
@@ -169,7 +169,7 @@ class modFilter extends React.Component {
 
       return <label htmlFor={inputName} key={stat}>
         <input type={'checkbox'} id={inputName} name={inputName} value={stat} defaultChecked={true} />
-        {stat}
+        <span className={'option'}>{stat}</span>
       </label>
     });
 
@@ -211,6 +211,17 @@ class modFilter extends React.Component {
   }
 
   /**
+   * Reset all filters so that all values are selected
+   */
+  resetFilters() {
+    [...document.getElementById('mod-filters').getElementsByTagName('input')].forEach(element => {
+      if ('checkbox' == element.type) {
+        element.checked = true;
+      }
+    });
+  }
+
+  /**
    * @returns Object an object with keys for 'slot', 'set', 'primary', 'secondary', each containing an
    *                 array of selected values, plus 'sort', containing the value to sort by
    */
@@ -248,15 +259,22 @@ class modFilter extends React.Component {
         onUpdate(this.collectFilters(e.target))
       };
 
-    return <form className={'mod-filters filter-form'} onSubmit={onSubmit}>
+    return <form className={'mod-filters filter-form'} id={'mod-filters'} onSubmit={onSubmit}>
+      <div className={'form-actions'}>
+        <button type={'button'} onClick={this.resetFilters}>Reset all filters</button>
+        <button type={'submit'}>Apply Filters</button>
+      </div>
       {this.slotFilter()}
       {this.setFilter()}
       {this.primaryStatFilter(mods)}
       {this.secondaryStatFilter(mods)}
       {this.sortOption(mods)}
-      <button type={'submit'}>Apply Filters</button>
+      <div className={'form-actions'}>
+        <button type={'button'} onClick={this.resetFilters}>Reset all filters</button>
+        <button type={'submit'}>Apply Filters</button>
+      </div>
     </form>;
   }
 }
 
-export default modFilter;
+export default ModFilter;

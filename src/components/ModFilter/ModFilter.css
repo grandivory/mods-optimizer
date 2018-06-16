@@ -9,17 +9,29 @@
   margin: auto;
 }
 
+.mod-filters span.option {
+  display: inline-block;
+  border-radius: .25em;
+  border: 1px outset dodgerblue;
+  background-color: rgb(0, 0, 96);
+  margin: .25em;
+  padding: .2em;
+  box-shadow: 0 0 1.5em .5em inset darkred;
+}
+
 .mod-filters img {
   height: 3em;
-  /*border: 1px solid white;*/
-  /*background-color: #000062;*/
-  /*border-radius: .5em;*/
   padding: .2em;
   filter: drop-shadow(0 0 .5em darkred);
 }
 
+.mod-filters input:checked + span.option {
+  border-style: inset;
+  background-color: rgb(0, 0, 64);
+  box-shadow: 0 0 1.5em .5em inset #60bd1b;
+}
+
 .mod-filters input:checked + img {
-  /*background-color: #1e90ff;*/
   filter: drop-shadow(0 0 .5em #60bd1b);
 }
 
@@ -31,72 +43,22 @@
   font-size: .9em;
 }
 
-.mod-filters button[type='submit'] {
-  font-size: 1.2em;
-  float: right;
+.mod-filters .slots label:nth-child(even)::after {
+  content: '\a';
+  white-space: pre;
 }
 
-.mod-filter .toggle label {
-    position:relative;
-    cursor:pointer;
-    padding:0.2em;
-    display: inline-block;
-    background-color: #000062;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
-    border-right: 1px solid white;
-}
-.mod-filter .toggle img + span{
-    position: absolute;
-    width: 100%;
-    left: 0;
-    height: min-content;
-    top: 0;
-    vertical-align: middle;
-    text-align: center;
-    line-height: 3.2em;
+.mod-filters .form-actions {
+  text-align: center;
+  margin-bottom: 1em;
 }
 
-.mod-filter .toggle label.active {
-    background-color: #1e90ff;
+.mod-filters .form-actions:last-child {
+  margin-top: 1em;
+  margin-bottom: 0;
 }
 
-.mod-filter .toggle label img,
-.mod-filter .toggle label span{
-    opacity: 0.5;
+.mod-filters .form-actions button {
+  font-size: 1em;
+  margin: .2em;
 }
-.mod-filter .toggle label.active img,
-.mod-filter .toggle label.active span{
-    opacity: 1;
-}
-
-
-.mod-filter .toggle:first-of-type label{
-    border-left: 1px solid white;
-    border-top-left-radius:3px;
-    border-bottom-left-radius:3px;
-}
-.mod-filter .toggle:last-of-type label{
-    border-right: 1px solid white;
-    border-top-right-radius:3px;
-    border-bottom-right-radius:3px;
-}
-
-.mod-filter .mod-filter .multi-row{
-    width: max-content;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: start;
-}
-
-.mod-filter .row {
-    margin-bottom: 3px;
-}
-
-.mod-filter .row .toggle span{
-    width: 8em;
-    display:inline-block;
-    text-align: center
-}
-
-
