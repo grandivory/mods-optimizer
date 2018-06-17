@@ -78,8 +78,7 @@ class CharacterList extends React.Component {
 
      const isFiltered = character => (
           this.props.filterString === undefined || this.props.filterString.length === 0 ||
-            character.name.toLowerCase().includes(this.props.filterString) ||
-            (character.tags || []).some(tag => tag.toLowerCase().includes(this.props.filterString))
+            character.matchesFilter(this.props.filterString)
       );
 
     const filteredChars = characters.filter(isFiltered);
