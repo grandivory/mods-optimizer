@@ -1,6 +1,8 @@
 import React from "react";
 import ModDetail from '../../components/ModDetail/ModDetail';
-import ModFilter from '../../components/ModFilter/ModFilter'
+import ModFilter from '../../components/ModFilter/ModFilter';
+
+import './ExploreView.css';
 
 class ExploreView extends React.Component {
 
@@ -42,23 +44,17 @@ class ExploreView extends React.Component {
     );
 
     return (
-      <div>
-        <div className={'filters'}>
+      [
+        <div className={'filters'} key={'filters'}>
           <ModFilter
             mods={this.props.mods}
             onUpdate={this.filterUpdated.bind(this)}
           />
-        </div>
-        {/*<div className="explore-view-filter">*/}
-          {/*<ModFilter*/}
-            {/*updated={this.filterUpdated.bind(this)}*/}
-            {/*ref={(filter) => {this.filter = filter;}}*/}
-          {/*/>*/}
-        {/*</div>*/}
-        <div className='mods'>
+        </div>,
+        <div className='mods' key={'mods'}>
           {modElements}
         </div>
-      </div>
+      ]
     );
   }
 
