@@ -139,7 +139,7 @@ html, body {
   background: black url('/img/cantina-background.jpg') no-repeat fixed;
   background-size: cover;
   height: calc(100% - 100px - 3.2em);
-  overflow-y: auto;
+  overflow: hidden;
   color: white;
   text-shadow: 2px 2px 1px black;
 }
@@ -236,9 +236,11 @@ strong {
   border-radius: 0 .5em .5em 0;
   border: 1px solid #888;
   border-left-width: 0;
-  margin: 1em;
-  margin-left: 0;
-  max-width: 15em;
+  margin: 1em 1em 0 0;
+  max-width: 19em;
+  box-sizing: border-box;
+  max-height: calc(100% - 2em);
+  overflow-y: auto;
 }
 
 .filter-form {
