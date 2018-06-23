@@ -40,15 +40,16 @@ class App extends Component {
    */
   readModsFile(fileInput) {
     let reader = new FileReader();
+    const me = this;
 
     reader.onload = (event) => {
-      const mods = this.processMods(JSON.parse(event.target.result));
+      const mods = me.processMods(JSON.parse(event.target.result));
 
-      this.setState({
+      me.setState({
         'mods': mods
       });
 
-      this.saveState();
+      me.saveState();
     };
 
     reader.readAsText(fileInput);
