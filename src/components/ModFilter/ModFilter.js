@@ -49,7 +49,7 @@ class ModFilter extends React.Component {
       const inputName = `slot-filter-${slot}`;
 
       return <label htmlFor={inputName} key={slot}>
-          <input type={'checkbox'} id={inputName} name={inputName} value={slot} defaultChecked={true} />
+          <input type={'checkbox'} id={inputName} name={inputName} value={slot} defaultChecked={false} />
           <img src={images[`empty_${slot}.png`]} alt={slot} />
         </label>
     });
@@ -86,7 +86,7 @@ class ModFilter extends React.Component {
       const inputName = `set-filter-${set}`;
 
       return <label htmlFor={inputName} key={set}>
-        <input type={'checkbox'} id={inputName} name={inputName} value={set} defaultChecked={true} />
+        <input type={'checkbox'} id={inputName} name={inputName} value={set} defaultChecked={false} />
         <img src={images[`icon_buff_${set}.png`]} alt={set} />
       </label>
     });
@@ -126,7 +126,7 @@ class ModFilter extends React.Component {
       const inputName = `primary-filter-${stat}`;
 
       return <label htmlFor={inputName} key={stat}>
-        <input type={'checkbox'} id={inputName} name={inputName} value={stat} defaultChecked={true} />
+        <input type={'checkbox'} id={inputName} name={inputName} value={stat} defaultChecked={false} />
         <span className={'option'}>{stat}</span>
       </label>
     });
@@ -168,7 +168,7 @@ class ModFilter extends React.Component {
       const inputName = `secondary-filter-${stat}`;
 
       return <label htmlFor={inputName} key={stat}>
-        <input type={'checkbox'} id={inputName} name={inputName} value={stat} defaultChecked={true} />
+        <input type={'checkbox'} id={inputName} name={inputName} value={stat} defaultChecked={false} />
         <span className={'option'}>{stat}</span>
       </label>
     });
@@ -216,7 +216,7 @@ class ModFilter extends React.Component {
   resetFilters() {
     [...document.getElementById('mod-filters').getElementsByTagName('input')].forEach(element => {
       if ('checkbox' === element.type) {
-        element.checked = true;
+        element.checked = false;
       }
     });
   }

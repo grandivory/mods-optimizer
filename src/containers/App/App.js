@@ -40,15 +40,16 @@ class App extends Component {
    */
   readModsFile(fileInput) {
     let reader = new FileReader();
+    const me = this;
 
     reader.onload = (event) => {
-      const mods = this.processMods(JSON.parse(event.target.result));
+      const mods = me.processMods(JSON.parse(event.target.result));
 
-      this.setState({
+      me.setState({
         'mods': mods
       });
 
-      this.saveState();
+      me.saveState();
     };
 
     reader.readAsText(fileInput);
@@ -241,7 +242,7 @@ class App extends Component {
       </form>
       or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'}>Patreon</a>
-      <div className={'version'}>version 1.0.11</div>
+      <div className={'version'}>version 1.0.12</div>
     </footer>;
   }
 
