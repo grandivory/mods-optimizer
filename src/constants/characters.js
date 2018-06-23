@@ -2312,6 +2312,25 @@ let charactersArray = [
     ['Trashcan', 'R2z2', 'SuperStar2D2']
   ),
   new Character(
+    'Range Trooper',
+    new BaseStats(31730, 33360, 3166, 2296, 1, 139, 398, 152),
+    new OptimizationPlan(
+      0, // health
+      0.1, // protection
+      100, // speed
+      50, // crit damage
+      0, // potency
+      0, // tenacity
+      2, // offense
+      50, // crit chance
+      0, // defense
+      0, // accuracy
+      0 // crit avoidance
+    ),
+    ['Dark Side', 'Support', 'Empire', 'Imperial Trooper'],
+    ['Troopers']
+  ),
+  new Character(
     'Rebel Officer Leia Organa',
     new BaseStats(28176, 36668, 2446, 1984, 1, 152, 283, 144),
     new OptimizationPlan(
