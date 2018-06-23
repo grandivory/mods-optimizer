@@ -15,11 +15,20 @@ class ExploreView extends React.Component {
   }
 
   filterUpdated(filters) {
-    let displayedMods = this.props.mods
-      .filter(mod => filters.slot.includes(mod.slot))
-      .filter(mod => filters.set.includes(mod.set.name))
-      .filter(mod => filters.primary.includes(mod.primaryStat.displayType))
-      .filter(mod => mod.secondaryStats.some(stat => filters.secondary.includes(stat.displayType)));
+    let displayedMods = this.props.mods;
+
+    if (0 < filters.slot.length) {
+      displayedMods = displayedMods.filter(mod => filters.slot.includes(mod.slot));
+    }
+    if (0 < filters.set.length) {
+      displayedMods = displayedMods.filter(mod => filters.set.includes(mod.set.name));
+    }
+    if (0 < filters.primary.length) {
+      displayedMods = displayedMods.filter(mod => filters.primary.includes(mod.primaryStat.displayType));
+    }
+    if (0 < filters.secondary.length) {
+      displayedMods = displayedMods.filter(mod => mod.secondaryStats.some(stat => filters.secondary.includes(stat.displayType)));
+    }
 
     if (filters.sort) {
       displayedMods = displayedMods.sort((left, right) => {
