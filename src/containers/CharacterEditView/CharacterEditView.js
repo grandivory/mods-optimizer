@@ -29,6 +29,18 @@ class CharacterEditView extends React.Component {
       this.setState(()=> {return {filterString:val}})
   }
 
+  moveAllToLocked(event){
+      const characters = this.state.availableCharacters;
+      const isFiltered = characters => (
+            this.state.filterString === undefined || this.state.filterString.length === 0 ||
+              characters.matchesFilter(this.state.filterString)
+        );
+
+      const filteredChars = characters.filter(isFiltered);
+      const unfilteredChars = characters.filter(characters=>!isFiltered(characters));
+      this.setState(()=> {return {lockedCharacters: this.state.lockedCharacters.concat(filteredChars), availableCharacters: unfilteredChars, filterString:''}});
+  }
+
   characterDrop() {
     const me = this;
     return function(targetList, dragTarget, dropTarget) {
@@ -153,6 +165,7 @@ class CharacterEditView extends React.Component {
         </div>
         <div className={'available-characters'}>
           <h4>Available Characters</h4>
+          <p><button onClick={this.moveAllToLocked.bind(this)}>Left</button></p>
           <label htmlFor={'character-filter'}>Filter:</label>&nbsp;
           <input autoFocus={true} id='character-filter' type='text' onChange={this.updateFilter.bind(this)}/>
           <CharacterList
