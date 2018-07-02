@@ -289,6 +289,10 @@ strong {
   padding: .25em;
 }
 
+.filter-form input[type='text'] {
+  font-size: 1.2em;
+}
+
 input {
-  color: #222222;
+    color: #222222;
 }

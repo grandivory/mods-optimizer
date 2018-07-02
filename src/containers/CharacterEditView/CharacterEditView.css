@@ -10,15 +10,38 @@
   box-sizing: border-box;
 }
 
-.character-edit .available-characters,
-.character-edit .selected-characters,
-.character-edit .locked-characters {
+.character-edit .selected-characters {
+  float: right;
+  max-width: calc(33% - 10em);
+  margin: 0 5em;
+  height: calc(100% - 5em);
+}
+
+.character-edit .available-characters {
+  height: calc(100% - 5em);
+  overflow-y: auto;
+}
+
+.character-edit .available-characters .character {
   display: inline-block;
   vertical-align: top;
-  height: calc(100% - 5em);
-  margin: 0 5em;
-  max-width: calc(33% - 10em);
+  margin: 1em 2em;
+  width: 7em;
 }
+
+.character-edit .available-characters .character.inactive {
+  opacity: .25;
+}
+
+/*.character-edit .available-characters,*/
+/*.character-edit .selected-characters,*/
+/*.character-edit .locked-characters {*/
+  /*display: inline-block;*/
+  /*vertical-align: top;*/
+  /*height: calc(100% - 5em);*/
+  /*margin: 0 5em;*/
+  /*max-width: calc(33% - 10em);*/
+/*}*/
 
 .character-edit .character-list {
   max-height: calc(100% - 4em);
@@ -26,9 +49,9 @@
   overflow-x: hidden;
 }
 
-.character-edit .available-characters .character-list {
-  max-height: calc(100% - 5.5em);
-}
+/*.available-characters .character-edit .character-list {*/
+  /*max-height: calc(100% - 5.5em);*/
+/*}*/
 
 .character-edit-form .base-stats,
 .character-edit-form .optimization-plan {

@@ -24,9 +24,62 @@ class CharacterEditView extends React.Component {
     this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {};
   }
 
-  updateFilter(event){
-      const val = event.target.value.toLowerCase();
-      this.setState(()=> {return {filterString:val}})
+  dragStart(character) {
+    return function(event) {
+      event.dataTransfer.dropEffect = 'move';
+      event.dataTransfer.setData('text/plain', character.name);
+
+      // let dragImage = new Image();
+      // dragImage.src = event.target.getElementsByTagName('img')[0].src;
+      // event.dataTransfer.setDragImage(dragImage, 0, 0);
+    }
+  }
+
+  static dragOver(event) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }
+
+  static dragLeave(event) {
+    event.preventDefault();
+    event.target.classList.remove('drop-character');
+  }
+
+  static availableCharactersDragEnter(event) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }
+
+  availableCharactersDrop(event) {
+    event.preventDefault();
+    const movingCharacterName = event.dataTransfer.getData('text/plain');
+    let availableCharacters = this.state.availableCharacters;
+    let selectedCharacters = this.state.selectedCharacters;
+    const sourceCharacterIndex = selectedCharacters.findIndex(c => c.name === movingCharacterName)
+    if (-1 === sourceCharacterIndex) {
+      return;
+    }
+
+    if (!this.state.availableCharacters.some(c => c.name === movingCharacterName)) {
+      availableCharacters.push(selectedCharacters[sourceCharacterIndex]);
+    }
+    selectedCharacters.splice(sourceCharacterIndex, 1);
+
+    this.setState({
+      availableCharacters: availableCharacters,
+      selectedCharacters: selectedCharacters
+    });
+  }
+
+  selectedCharactersDragEnter(event) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    event.target.classList.add('drop-character');
+  }
+
+  selectedCharactersDrop(event) {
+    event.preventDefault();
+
   }
 
   characterDrop() {
@@ -142,51 +195,98 @@ class CharacterEditView extends React.Component {
     const lockedCharacters = this.state.lockedCharacters;
     const editCharacter = this.state.editCharacter;
 
-    return (
-      <div className={'character-edit'}>
-        <h3 className={'instructions'}>
-          Drag and Drop characters between the columns to pick who to optimize mods for.
-          <button type={'button'} className={'small'} onClick={() => this.setState({'instructions': true})}>
-            Show full instructions
-          </button>
-        </h3>
-        <div className={'locked-characters'}>
-          <h4>Locked Characters</h4>
-          <CharacterList
-            selfDrop={true}
-            draggable={true}
-            characters={lockedCharacters}
-            onDrop={this.characterDrop()}
-            onEdit={this.editCharacter.bind(this)}
-          />
-        </div>
-        <div className={'available-characters'}>
-          <h4>Available Characters</h4>
-          <label htmlFor={'character-filter'}>Filter:</label>&nbsp;
-          <input autoFocus={true} id='character-filter' type='text' onChange={this.updateFilter.bind(this)}/>
-          <CharacterList
-            selfDrop={false}
-            draggable={true}
-            characters={availableCharacters}
-            onDrop={this.characterDrop()}
-            onEdit={this.editCharacter.bind(this)}
-            filterString={this.state.filterString}
-          />
-        </div>
-        <div className={'selected-characters'}>
-          <h4>Selected Characters</h4>
-          <CharacterList
-            selfDrop={true}
-            draggable={true}
-            characters={selectedCharacters}
-            onDrop={this.characterDrop()}
-            onEdit={this.editCharacter.bind(this)}
-          />
-        </div>
-        <Modal show={editCharacter} content={this.characterEditModal(editCharacter)}/>
-        <Modal show={this.state.instructions} className={'instructions'} content={this.instructionsModal()}/>
+    const characterFilter = character =>
+      '' === this.state.filterString || character.matchesFilter(this.state.filterString);
+
+    const filteredCharacters = availableCharacters.filter(characterFilter);
+    const unfilteredCharacters = availableCharacters.filter((c) => !characterFilter(c));
+
+    return <div className={'character-edit'}>
+      <h3 className={'instructions'}>
+        Drag and Drop characters between the columns to pick who to optimize mods for.
+        <button type={'button'} className={'small'} onClick={() => this.setState({'instructions': true})}>
+          Show full instructions
+        </button>
+      </h3>
+      {this.filterForm()}
+      <div className={'selected-characters'}>
+        <h4>Selected Characters</h4>
+        <CharacterList
+          selfDrop={true}
+          draggable={true}
+          characters={selectedCharacters}
+          onDrop={this.characterDrop()}
+          onEdit={this.editCharacter.bind(this)}
+        />
       </div>
-    );
+      {/*<div className={'locked-characters'}>*/}
+        {/*<h4>Locked Characters</h4>*/}
+        {/*<CharacterList*/}
+          {/*selfDrop={true}*/}
+          {/*draggable={true}*/}
+          {/*characters={lockedCharacters}*/}
+          {/*onDrop={this.characterDrop()}*/}
+          {/*onEdit={this.editCharacter.bind(this)}*/}
+        {/*/>*/}
+      {/*</div>*/}
+      <div className={'available-characters'}
+           onDragEnter={CharacterEditView.availableCharactersDragEnter}
+           onDragOver={CharacterEditView.dragOver}
+           onDragLeave={CharacterEditView.dragLeave}
+           onDrop={this.availableCharactersDrop.bind(this)}
+      >
+        {/*<h4>Available Characters</h4>*/}
+        {/*<label htmlFor={'character-filter'}>Filter:</label>&nbsp;*/}
+        {/*<input autoFocus={true} id='character-filter' type='text' onChange={this.updateFilter.bind(this)}/>*/}
+        {/*<CharacterList*/}
+          {/*selfDrop={false}*/}
+          {/*draggable={true}*/}
+          {/*characters={availableCharacters}*/}
+          {/*onDrop={this.characterDrop()}*/}
+          {/*onEdit={this.editCharacter.bind(this)}*/}
+          {/*filterString={this.state.filterString}*/}
+        {/*/>*/}
+        {filteredCharacters.map(character => this.characterBlock(character, 'active'))}
+        {unfilteredCharacters.map(character => this.characterBlock(character, 'inactive'))}
+      </div>
+      <Modal show={editCharacter} content={this.characterEditModal(editCharacter)}/>
+      <Modal show={this.state.instructions} className={'instructions'} content={this.instructionsModal()}/>
+    </div>;
+  }
+
+  /**
+   * Renders a form for filtering available characters
+   *
+   * @returns JSX Element
+   */
+  filterForm() {
+    return <div className={'filters'}>
+      <div className={'filter-form'}>
+        <label htmlFor={'character-filter'}>Search by character name, tag, or common abbreviation:</label>
+        <input autoFocus={true} id='character-filter' type='text'
+               onChange={(e) => this.setState({filterString: e.target.value.toLowerCase()})}
+        />
+      </div>
+    </div>;
+  }
+
+  /**
+   * Render a character block for the set of available characters. This includes the character portrait and a button
+   * to edit the character's stats
+   * @param character Character
+   * @param className String A class to apply to each character block
+   */
+  characterBlock(character, className) {
+    return <div
+      className={className ? 'character ' + className : 'character'}
+      key={character.name}
+    >
+      <div draggable={true} onDragStart={this.dragStart(character)}>
+        <CharacterAvatar name={character.name} />
+      </div>
+      <div className={'character-name'}>{character.name}</div>
+      <button className={'small'} onClick={() => this.setState({editCharacter: character})}>Edit Stats</button>
+    </div>;
   }
 
   /**

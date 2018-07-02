@@ -23,10 +23,6 @@
   max-width: calc(100% - 4.5em);
 }
 
-.character-block.faded{
-  opacity:0.25;
-}
-
 .character-block.drop-character {
   margin-bottom: 5px;
   box-shadow: 0 2px 3px 0 darkred;
