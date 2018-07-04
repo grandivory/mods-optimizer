@@ -101,7 +101,7 @@ class ReviewList extends React.Component {
       <div className={'mod-row'} key={mod.id}>
         <ModDetail key={mod.id} mod={mod}/>
         <Arrow/>
-        <CharacterAvatar name={mod.assignTo.name}/>
+        <CharacterAvatar character={mod.assignTo}/>
         <div className={'actions'}>
           <button onClick={this.removeMod.bind(this, mod)}>I removed this mod</button>
           <button onClick={this.reassignMod.bind(this, mod)}>I reassigned this mod</button>
@@ -145,7 +145,7 @@ class ReviewList extends React.Component {
     // Iterate over each character to render a full mod set
     return Object.values(modsByCharacter).map(charMods =>
       <div className={'mod-row'} key={charMods.character.name}>
-        <CharacterAvatar name={charMods.character.name}/>
+        <CharacterAvatar character={charMods.character}/>
         <Arrow/>
         <div className={'mod-set-block'}>
           <ModSetView modSet={new ModSet(charMods.mods)}

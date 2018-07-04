@@ -164,7 +164,7 @@ class ReviewSets extends React.Component {
             changeClass={'remove'}
             set={currentSet}
             character={characterSet.character}/>
-          <CharacterAvatar name={characterSet.character.name}/>
+          <CharacterAvatar character={characterSet.character}/>
           <Arrow/>
           <ModSetDetail
             changeClass={'add'}

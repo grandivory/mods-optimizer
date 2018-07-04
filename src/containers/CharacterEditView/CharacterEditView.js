@@ -17,11 +17,13 @@ class CharacterEditView extends React.Component {
       'selectedCharacters': props.selectedCharacters,
       'lockedCharacters': props.lockedCharacters,
       'editCharacter': null,
+      'editStats': null,
       'instructions': false,
       'filterString': ''
     };
 
-    this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {};
+    this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {
+    };
   }
 
   dragStart(character) {
@@ -107,9 +109,17 @@ class CharacterEditView extends React.Component {
     }
   }
 
-  editCharacter(character) {
+  /**
+   * Update a character's gear level and star level based on the submitted form
+   */
+  updateCharacterPower(character, form) {
+    character.level = form['char-level'].valueAsNumber;
+    character.starLevel = parseInt(form['star-level'].value, 10);
+    character.gearLevel = form['gear-level'].valueAsNumber;
+
+    this.saveState();
     this.setState({
-      'editCharacter': character
+      'editStats': null
     });
   }
 
@@ -170,13 +180,14 @@ class CharacterEditView extends React.Component {
       .filter(input => input.type === 'range')
       .filter(input => input.id.includes('-slider'))
       .forEach(rangeInput => {
-      const valueInput = rangeInput.id.substring(0, rangeInput.id.indexOf('-slider'));
-      rangeInput.value = form[valueInput].value;
-    })
+        const valueInput = rangeInput.id.substring(0, rangeInput.id.indexOf('-slider'));
+        rangeInput.value = form[valueInput].value;
+      })
   }
 
   cancelEdit() {
     this.setState({
+      'editStats': null,
       'editCharacter': null
     });
   }
@@ -194,6 +205,7 @@ class CharacterEditView extends React.Component {
     const selectedCharacters = this.state.selectedCharacters;
     const lockedCharacters = this.state.lockedCharacters;
     const editCharacter = this.state.editCharacter;
+    const editStats = this.state.editStats;
 
     const characterFilter = character =>
       '' === this.state.filterString || character.matchesFilter(this.state.filterString);
@@ -202,12 +214,6 @@ class CharacterEditView extends React.Component {
     const unfilteredCharacters = availableCharacters.filter((c) => !characterFilter(c));
 
     return <div className={'character-edit'}>
-      <h3 className={'instructions'}>
-        Drag and Drop characters between the columns to pick who to optimize mods for.
-        <button type={'button'} className={'small'} onClick={() => this.setState({'instructions': true})}>
-          Show full instructions
-        </button>
-      </h3>
       {this.filterForm()}
       <div className={'selected-characters'}>
         <h4>Selected Characters</h4>
@@ -216,18 +222,18 @@ class CharacterEditView extends React.Component {
           draggable={true}
           characters={selectedCharacters}
           onDrop={this.characterDrop()}
-          onEdit={this.editCharacter.bind(this)}
+          onEdit={(character) => this.setState({editCharacter: character})}
         />
       </div>
       {/*<div className={'locked-characters'}>*/}
-        {/*<h4>Locked Characters</h4>*/}
-        {/*<CharacterList*/}
-          {/*selfDrop={true}*/}
-          {/*draggable={true}*/}
-          {/*characters={lockedCharacters}*/}
-          {/*onDrop={this.characterDrop()}*/}
-          {/*onEdit={this.editCharacter.bind(this)}*/}
-        {/*/>*/}
+      {/*<h4>Locked Characters</h4>*/}
+      {/*<CharacterList*/}
+      {/*selfDrop={true}*/}
+      {/*draggable={true}*/}
+      {/*characters={lockedCharacters}*/}
+      {/*onDrop={this.characterDrop()}*/}
+      {/*onEdit={this.editCharacter.bind(this)}*/}
+      {/*/>*/}
       {/*</div>*/}
       <div className={'available-characters'}
            onDragEnter={CharacterEditView.availableCharactersDragEnter}
@@ -235,21 +241,28 @@ class CharacterEditView extends React.Component {
            onDragLeave={CharacterEditView.dragLeave}
            onDrop={this.availableCharactersDrop.bind(this)}
       >
+        <h3 className={'instructions'}>
+          Drag and Drop characters to the selected column to pick who to optimize mods for.
+          <button type={'button'} className={'small'} onClick={() => this.setState({'instructions': true})}>
+            Show full instructions
+          </button>
+        </h3>
         {/*<h4>Available Characters</h4>*/}
         {/*<label htmlFor={'character-filter'}>Filter:</label>&nbsp;*/}
         {/*<input autoFocus={true} id='character-filter' type='text' onChange={this.updateFilter.bind(this)}/>*/}
         {/*<CharacterList*/}
-          {/*selfDrop={false}*/}
-          {/*draggable={true}*/}
-          {/*characters={availableCharacters}*/}
-          {/*onDrop={this.characterDrop()}*/}
-          {/*onEdit={this.editCharacter.bind(this)}*/}
-          {/*filterString={this.state.filterString}*/}
+        {/*selfDrop={false}*/}
+        {/*draggable={true}*/}
+        {/*characters={availableCharacters}*/}
+        {/*onDrop={this.characterDrop()}*/}
+        {/*onEdit={this.editCharacter.bind(this)}*/}
+        {/*filterString={this.state.filterString}*/}
         {/*/>*/}
         {filteredCharacters.map(character => this.characterBlock(character, 'active'))}
         {unfilteredCharacters.map(character => this.characterBlock(character, 'inactive'))}
       </div>
       <Modal show={editCharacter} content={this.characterEditModal(editCharacter)}/>
+      <Modal show={editStats} content={this.editStatsModal(editStats)}/>
       <Modal show={this.state.instructions} className={'instructions'} content={this.instructionsModal()}/>
     </div>;
   }
@@ -282,11 +295,93 @@ class CharacterEditView extends React.Component {
       key={character.name}
     >
       <div draggable={true} onDragStart={this.dragStart(character)}>
-        <CharacterAvatar name={character.name} />
+        <CharacterAvatar character={character}/>
       </div>
       <div className={'character-name'}>{character.name}</div>
-      <button className={'small'} onClick={() => this.setState({editCharacter: character})}>Edit Stats</button>
+      <button className={'small'} onClick={() => this.setState({editStats: character})}>Edit Stats</button>
     </div>;
+  }
+
+  /**
+   * Render a modal for editing a character's stars and gear level
+   * @param character
+   */
+  editStatsModal(character) {
+    if (!character) {
+      return null;
+    }
+
+    const updateStarClasses = value => {
+      [...document.getElementsByClassName('star-input')].forEach(el => {
+        if (el.value <= value) {
+          el.parentNode.classList.add('active');
+        } else {
+          el.parentNode.classList.remove('active');
+        }
+      });
+    };
+
+    const star = value =>
+      <label htmlFor={`star-${value}`}
+             className={character.starLevel >= value ? 'star active' : 'star'}
+             id={`star-label-${value}`}
+             key={`label-${value}`}>
+        <input type={'radio'}
+               id={`star-${value}`}
+               name={'star-level'}
+               className={'star-input'}
+               value={value} defaultChecked={value === character.starLevel} key={`star-${value}`}
+               onChange={e => {
+                 if (e.target.checked) {
+                   updateStarClasses(e.target.value);
+                 }
+               }}
+        />
+      </label>;
+
+    return <form className={'character-power-form'} onSubmit={(e) => {
+      e.preventDefault();
+      this.updateCharacterPower.bind(this, character)(e.target);
+    }}>
+      <div className={'characterView'}>
+        <CharacterAvatar character={character} displayStars={false} id={'avatar'}/>
+        {[1, 2, 3, 4, 5, 6, 7].map(star)}
+      </div>
+      <h2 className={'character-name'}>{character.name}</h2>
+      <div className={'form-row'}>
+        <label htmlFor={'gear-level'}>Current Gear Level:</label>
+        <RangeInput
+          editable={false}
+          id={'gear-level'}
+          name={'gear-level'}
+          defaultValue={character.gearLevel}
+          min={1}
+          max={12}
+          step={1}
+          onChange={gearLevel => {
+            const avatarClassList = document.getElementById('avatar').classList;
+            const avatarGearClass = [...avatarClassList].find(cls => cls.startsWith('gear-'));
+            avatarClassList.replace(avatarGearClass, `gear-${gearLevel}`)
+          }}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor={'char-level'}>Character Level:</label>
+        <RangeInput
+          editable={true}
+          id={'char-level'}
+          name={'char-level'}
+          defaultValue={character.level}
+          min={1}
+          max={85}
+          step={1}
+        />
+      </div>
+      <div className={'actions'}>
+        <button type={'button'} onClick={this.cancelEdit.bind(this)}>Cancel</button>
+        <button type={'submit'}>Save</button>
+      </div>
+    </form>
   }
 
   /**
@@ -306,7 +401,7 @@ class CharacterEditView extends React.Component {
         this.saveCharacter.bind(this, character)(e.target);
       }}>
       <div className={'characterView'}>
-        <CharacterAvatar name={character.name}/>
+        <CharacterAvatar character={character}/>
         <h2 className={'character-name'}>{character.name}</h2>
       </div>
       <div className={'base-stats'}>

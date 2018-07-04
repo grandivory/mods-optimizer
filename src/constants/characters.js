@@ -1,10 +1,10 @@
-import Character from "../domain/Character";
+import {SimpleCharacter} from "../domain/Character";
 import BaseStats from "../domain/BaseStats";
 import OptimizationPlan from "../domain/OptimizationPlan";
 import optimizationStrategy from "./optimizationStrategy";
 
 let charactersArray = [
-  new Character(
+  new SimpleCharacter(
     'Aayla Secura',
     new BaseStats(26236, 28731, 2756, 2351, 1, 125, 291, 116),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -12,7 +12,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Admiral Ackbar',
     new BaseStats(26856, 19200, 2642, 3454, 1, 119, 301, 222),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -20,7 +20,7 @@ let charactersArray = [
     ['AA', 'Snackbar', 'ABC'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Ahsoka Tano',
     new BaseStats(23102, 16056, 2648, 1464, 1, 105, 285, 110),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -28,7 +28,7 @@ let charactersArray = [
     ['Snips'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Ahsoka Tano (Fulcrum)',
     new BaseStats(26600, 26452, 2801, 1765, 1, 148, 219, 92),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -36,7 +36,7 @@ let charactersArray = [
     ['ATF', 'FAT'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Amilyn Holdo',
     new BaseStats(36873, 43712, 1997, 3265, .5, 90, 285, 257),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -44,7 +44,7 @@ let charactersArray = [
     ['Hodor'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Asajj Ventress',
     new BaseStats(24345, 18158, 2546, 2575, .5, 104, 284, 116),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -52,7 +52,7 @@ let charactersArray = [
     ['AV', 'Zen', 'NS', 'hSTR NS', 'ABC'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'B2 Super Battle Droid',
     new BaseStats(28207, 37758, 2419, 2222, 1, 111, 366, 431),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -60,7 +60,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Barriss Offee',
     new BaseStats(29943, 31100, 2393, 2482, 1, 116, 393, 253),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -68,7 +68,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Baze Malbus',
     new BaseStats(28481, 39152, 2622, 1990, 1, 90, 385, 271),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -76,7 +76,7 @@ let charactersArray = [
     ['Rogue 1', 'Chaze', 'Chiggs'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'BB-8',
     new BaseStats(25270, 30427, 2440, 3783, 1, 162, 285, 307),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -84,7 +84,7 @@ let charactersArray = [
     ['bb8', 'Wampanader', 'ABC'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Biggs Darklighter',
     new BaseStats(15692, 19594, 2239, 2611, 1, 108, 275, 304),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -92,7 +92,7 @@ let charactersArray = [
     ['Wiggs', 'Chiggs'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Bistan',
     new BaseStats(28049, 22588, 2659, 1675, 1, 145, 277, 121),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -100,7 +100,7 @@ let charactersArray = [
     ['Rogue 1', 'SuperStar2D2'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Boba Fett',
     new BaseStats(23193, 19913, 2950, 1687, 1, 147, 221, 188),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -108,7 +108,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Bodhi Rook',
     new BaseStats(26837, 22621, 2575, 3313, 1, 132, 236, 284),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -116,7 +116,7 @@ let charactersArray = [
     ['Rogue 1'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Bossk',
     new BaseStats(34002, 40572, 2769, 2043, 1, 151, 352, 228),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -124,7 +124,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Cad Bane',
     new BaseStats(27439, 15086, 2991, 1886, 1, 113, 256, 146),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -132,7 +132,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Captain Han Solo',
     new BaseStats(27432, 32592, 2111, 2389, 1, 129, 319, 214),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -140,7 +140,7 @@ let charactersArray = [
     ['CHS', 'CHolo', 'Snolo', 'Hoth Han'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Captain Phasma',
     new BaseStats(26074, 29919, 2179, 2307, 1, 121, 295, 271),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -148,7 +148,7 @@ let charactersArray = [
     ['FO'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Cassian Andor',
     new BaseStats(27798, 25047, 2135, 3508, .5, 134, 186, 135),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -156,7 +156,7 @@ let charactersArray = [
     ['Rogue 1', 'SuperStar2D2'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'CC-2224 "Cody"',
     new BaseStats(23694, 16040, 2581, 2317, .5, 115, 207, 91),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -164,7 +164,7 @@ let charactersArray = [
     ['zody'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Chief Chirpa',
     new BaseStats(28017, 28168, 2672, 2503, 1, 116, 326, 253),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -172,7 +172,7 @@ let charactersArray = [
     ['Murderbears'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Chief Nebit',
     new BaseStats(34474, 40275, 2744, 1956, 1, 115, 404, 228),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -180,7 +180,7 @@ let charactersArray = [
     ['nebs'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Chirrut Îmwe',
     new BaseStats(16110, 24866, 2895, 1819, 1, 153, 267, 240),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -188,7 +188,7 @@ let charactersArray = [
     ['Rogue 1', 'Chaze', 'Chiggs', 'Chex Mix'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Chopper',
     new BaseStats(31708, 29738, 2319, 2032, 1, 152, 390, 187),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -196,7 +196,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Clone Sergeant - Phase I',
     new BaseStats(27009, 19019, 2505, 1513, 1, 107, 277, 134),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -204,7 +204,7 @@ let charactersArray = [
     ['Sarge'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Clone Wars Chewbacca',
     new BaseStats(35134, 31433, 2757, 2038, 1, 106, 360, 227),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -212,7 +212,7 @@ let charactersArray = [
     ['CWC'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Colonel Starck',
     new BaseStats(28193, 33480, 2264, 2102, 1, 155, 291, 133),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -220,7 +220,7 @@ let charactersArray = [
     ['Tony Stark', 'Troopers'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Commander Luke Skywalker',
     new BaseStats(25266, 30107, 3164, 1872, 1, 152, 222, 106),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -228,7 +228,7 @@ let charactersArray = [
     ['CLS', 'Wampanader', 'Chex Mix', 'ABC', 'Titans'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Coruscant Underworld Police',
     new BaseStats(28338, 16817, 2493, 1923, 1, 112, 254, 313),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -236,7 +236,7 @@ let charactersArray = [
     ['CUP'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Count Dooku',
     new BaseStats(19559, 16692, 2187, 2603, .5, 167, 276, 282),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -244,7 +244,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'CT-21-0408 "Echo"',
     new BaseStats(29166, 21252, 2453, 3645, .5, 129, 209, 143),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -252,7 +252,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'CT-5555 "Fives"',
     new BaseStats(31787, 35342, 2638, 2067, 1, 115, 509, 233),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -260,7 +260,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'CT-7567 "Rex"',
     new BaseStats(20916, 17981, 2484, 2723, 1, 140, 194, 180),
     new OptimizationPlan(
@@ -280,7 +280,7 @@ let charactersArray = [
     ['Titans'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Darth Maul',
     new BaseStats(26165, 12733, 2852, 1137, 1, 100, 250, 98),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -288,7 +288,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Darth Nihilus',
     new BaseStats(26259, 38154, 1657, 4345, 0, 120, 308, 265),
     new OptimizationPlan(
@@ -308,7 +308,7 @@ let charactersArray = [
     ['Nightmare'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Darth Sidious',
     new BaseStats(23499, 15775, 2791, 2025, 1, 161, 258, 100),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -316,7 +316,7 @@ let charactersArray = [
     ['Auto Lightzader'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Darth Sion',
     new BaseStats(33278, 39707, 3001, 2071, 1, 137, 400, 194),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -324,7 +324,7 @@ let charactersArray = [
     ['Nightmare'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Darth Traya',
     new BaseStats(32072, 38006, 2313, 5007, 0, 134, 188, 161),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -332,7 +332,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Darth Vader',
     new BaseStats(26646, 35283, 2514, 2565, 1, 121, 371, 334),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -340,7 +340,7 @@ let charactersArray = [
     ['Auto Lightzader', 'Wampanader', 'Nightmare'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Dathcha',
     new BaseStats(23950, 15245, 2363, 3232, .5, 137, 247, 165),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -348,7 +348,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Death Trooper',
     new BaseStats(26388, 35155, 2429, 2075, 1, 124, 255, 152),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -356,7 +356,7 @@ let charactersArray = [
     ['Troopers', 'Chex Mix'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Dengar',
     new BaseStats(29230, 33112, 2852, 1377, 1, 109, 305, 189),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -364,7 +364,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Director Krennic',
     new BaseStats(24482, 22240, 2195, 4446, 0, 129, 166, 212),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -372,7 +372,7 @@ let charactersArray = [
     ['Imperial Grancor Maneuver'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Eeth Koth',
     new BaseStats(26307, 17686, 2152, 3608, .5, 144, 190, 250),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -380,7 +380,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Emperor Palpatine',
     new BaseStats(24999, 18955, 2363, 5300, 0, 122, 142, 223),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -388,7 +388,7 @@ let charactersArray = [
     ['EP', 'Palp', 'EzPz', 'Nightmare'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Enfys Nest',
     new BaseStats(27438, 32665, 2476, 1668, 1, 159, 217, 70),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -396,7 +396,7 @@ let charactersArray = [
     ['Nesty', 'Baby Wampa', '#solo'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Ewok Elder',
     new BaseStats(27549, 26448, 1933, 2127, 1, 122, 314, 225),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -404,7 +404,7 @@ let charactersArray = [
     ['EE', 'Murderbears'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Ewok Scout',
     new BaseStats(25685, 23792, 2737, 1777, 1, 140, 272, 120),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -412,7 +412,7 @@ let charactersArray = [
     ['Murderbears'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Ezra Bridger',
     new BaseStats(27310, 28928, 2570, 1744, 1, 143, 288, 125),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -420,7 +420,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Finn',
     new BaseStats(30522, 34100, 2458, 1974, 1, 119, 468, 246),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -428,7 +428,7 @@ let charactersArray = [
     ['Zinn'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'First Order Executioner',
     new BaseStats(29216, 34967, 2904, 1574, 1, 111, 308, 176),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -436,7 +436,7 @@ let charactersArray = [
     ['Fox', 'Panda', 'Foe', 'FO'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'First Order Officer',
     new BaseStats(28099, 18375, 2068, 2117, 1, 145, 253, 133),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -444,7 +444,7 @@ let charactersArray = [
     ['Foo', 'FO'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'First Order SF TIE Pilot',
     new BaseStats(27640, 32834, 2325, 2668, .5, 130, 316, 163),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -452,7 +452,7 @@ let charactersArray = [
     ['SFTP', 'FO'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'First Order Stormtrooper',
     new BaseStats(32966, 30161, 2801, 1633, 1, 116, 460, 247),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -460,7 +460,7 @@ let charactersArray = [
     ['FOST', 'FO'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'First Order TIE Pilot',
     new BaseStats(24379, 18436, 2958, 1614, 1, 128, 220, 63),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -468,7 +468,7 @@ let charactersArray = [
     ['FOTP', 'FO'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Gamorrean Guard',
     new BaseStats(37232, 33275, 2614, 1742, 1, 118, 352, 313),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -476,7 +476,7 @@ let charactersArray = [
     ['Piggy'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Gar Saxon',
     new BaseStats(26701, 30467, 2742, 1847, 1, 127, 404, 247),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -484,7 +484,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Garazeb "Zeb" Orrelios',
     new BaseStats(36749, 33152, 2748, 1439, 1, 115, 352, 102),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -492,7 +492,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'General Grievous',
     new BaseStats(32627, 23213, 2819, 1504, 1, 109, 229, 112),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -500,7 +500,7 @@ let charactersArray = [
     ['GG'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'General Kenobi',
     new BaseStats(31124, 44728, 2935, 1989, 1, 127, 386, 352),
     new OptimizationPlan(
@@ -520,7 +520,7 @@ let charactersArray = [
     ['GK', 'Titans'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'General Veers',
     new BaseStats(22449, 30852, 2650, 3616, .5, 137, 218, 209),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -528,7 +528,7 @@ let charactersArray = [
     ['Troopers'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Geonosian Soldier',
     new BaseStats(23655, 17814, 2921, 1869, 1, 154, 263, 96),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -536,7 +536,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Geonosian Spy',
     new BaseStats(25360, 18153, 2683, 1545, 1, 127, 203, 114),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -544,7 +544,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Grand Admiral Thrawn',
     new BaseStats(26987, 30185, 2149, 3825, .5, 150, 303, 207),
     optimizationStrategy['Speed with survivability'],
@@ -552,7 +552,7 @@ let charactersArray = [
     ['GAT', 'Imperial Grancor Maneuver', 'Wampanader', 'ABC', 'Titans'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Grand Master Yoda',
     new BaseStats(28667, 16325, 2368, 4291, .5, 157, 245, 149),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -560,7 +560,7 @@ let charactersArray = [
     ['GMY'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Grand Moff Tarkin',
     new BaseStats(25156, 23132, 2292, 3609, .5, 134, 229, 257),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -568,7 +568,7 @@ let charactersArray = [
     ['GMT', 'Auto Lightzader', 'Imperial Grancor Maneuver'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Greedo',
     new BaseStats(25121, 15733, 2835, 1765, 1, 134, 192, 131),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -576,7 +576,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Han Solo',
     new BaseStats(26003, 21291, 2496, 1495, 1, 136, 195, 72),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -584,7 +584,7 @@ let charactersArray = [
     ['Raid Han', 'rHan', 'OG Han', 'Zolo', 'Chex Mix', 'Titans'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Hera Syndulla',
     new BaseStats(24394, 27322, 2390, 2934, 1, 132, 369, 422),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -592,7 +592,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Hermit Yoda',
     new BaseStats(34851, 41226, 2201, 3562, .5, 160, 238, 207),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -600,7 +600,7 @@ let charactersArray = [
     ['Hyoda', 'Hoboda', 'Hobo', 'HY'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'HK-47',
     new BaseStats(25598, 30636, 2602, 2471, 1, 103, 283, 220),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -608,7 +608,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Hoth Rebel Scout',
     new BaseStats(24554, 19261, 2645, 2121, 1, 155, 209, 147),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -616,7 +616,7 @@ let charactersArray = [
     ['HRS', 'Hoth Bros'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Hoth Rebel Soldier',
     new BaseStats(36251, 32564, 2571, 2105, 1, 98, 337, 238),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -624,7 +624,7 @@ let charactersArray = [
     ['HRS', 'Hoth Bros'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'IG-100 MagnaGuard',
     new BaseStats(37149, 35306, 2770, 1879, 1, 99, 309, 212),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -632,7 +632,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'IG-86 Sentinel Droid',
     new BaseStats(24687, 17131, 2717, 1798, 1, 119, 225, 69),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -640,7 +640,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'IG-88',
     new BaseStats(23490, 14077, 2757, 1910, 1, 127, 219, 139),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -648,7 +648,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Ima-Gun Di',
     new BaseStats(34443, 28875, 2835, 1967, 1, 125, 305, 143),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -656,7 +656,7 @@ let charactersArray = [
     ['IGD'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Imperial Probe Droid',
     new BaseStats(27089, 32172, 2105, 3491, 1, 132, 290, 282),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -664,7 +664,7 @@ let charactersArray = [
     ['IPD'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Imperial Super Commando',
     new BaseStats(27917, 31001, 2732, 1989, 1, 121, 308, 134),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -672,7 +672,7 @@ let charactersArray = [
     ['ISC'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Jawa',
     new BaseStats(26611, 15314, 2496, 3299, .5, 133, 292, 153),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -680,7 +680,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Jawa Engineer',
     new BaseStats(24555, 16561, 2543, 3187, .5, 153, 325, 212),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -688,7 +688,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Jawa Scavenger',
     new BaseStats(26493, 17427, 2559, 3120, 1, 119, 261, 236),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -696,7 +696,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Jedi Consular',
     new BaseStats(23767, 18689, 2055, 2824, .5, 119, 276, 209),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -704,7 +704,7 @@ let charactersArray = [
     ['JC'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Jedi Knight Anakin',
     new BaseStats(25059, 25181, 2800, 1974, 1, 144, 292, 76),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -712,7 +712,7 @@ let charactersArray = [
     ['JKA'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Jedi Knight Guardian',
     new BaseStats(28812, 32069, 2751, 1835, 1, 97, 270, 232),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -720,7 +720,7 @@ let charactersArray = [
     ['JKG'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Jyn Erso',
     new BaseStats(23520, 25787, 2804, 1922, 1, 163, 255, 77),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -728,7 +728,7 @@ let charactersArray = [
     ['Rogue 1', 'Auto Lightzader', 'Imperial Grancor Maneuver', 'SuperStar2D2'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'K-2SO',
     new BaseStats(33243, 38185, 2996, 2076, 1, 129, 399, 194),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -736,7 +736,7 @@ let charactersArray = [
     ['Rogue 1', 'Cass-2SO', 'K2'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Kanan Jarrus',
     new BaseStats(31627, 35600, 2813, 1543, 1, 95, 347, 91),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -744,7 +744,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Kit Fisto',
     new BaseStats(28509, 30319, 2831, 2066, 1, 120, 307, 141),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -752,7 +752,7 @@ let charactersArray = [
     ['Fisty', 'Fister'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Kylo Ren',
     new BaseStats(24744, 32983, 2880, 1720, 10, 128, 303, 258),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -760,7 +760,7 @@ let charactersArray = [
     ['Old Kylo', 'zylo', 'FO'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Kylo Ren (Unmasked)',
     new BaseStats(30428, 36380, 3051, 2067, 1, 132, 332, 190),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -768,7 +768,7 @@ let charactersArray = [
     ['kru', 'matt', 'Snape', 'FO'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'L3-37',
     new BaseStats(32222, 38474, 2796, 1792, 1, 97, 330, 192),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -776,7 +776,7 @@ let charactersArray = [
     ['#solo'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Lando Calrissian',
     new BaseStats(23447, 19333, 2217, 2023, 1, 115, 287, 193),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -784,7 +784,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Lobot',
     new BaseStats(28395, 16056, 2236, 4321, 1, 120, 288, 206),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -792,7 +792,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Logray',
     new BaseStats(28431, 30052, 2389, 3409, 1, 127, 285, 196),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -800,7 +800,7 @@ let charactersArray = [
     ['Murderbears'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Luke Skywalker (Farmboy)',
     new BaseStats(24870, 19920, 2760, 1521, 1, 125, 222, 87),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -808,7 +808,7 @@ let charactersArray = [
     ['farmboi'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Luminara Unduli',
     new BaseStats(23103, 20355, 2715, 2176, 1, 124, 233, 167),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -816,7 +816,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Mace Windu',
     new BaseStats(26454, 21383, 2259, 3942, .5, 123, 258, 426),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -824,7 +824,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Magmatrooper',
     new BaseStats(27452, 30192, 3020, 1730, 1, 119, 304, 107),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -832,7 +832,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Mob Enforcer',
     new BaseStats(26961, 26075, 2816, 2597, 1, 132, 300, 157),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -840,7 +840,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Mother Talzin',
     new BaseStats(29274, 35092, 2147, 4826, 0, 122, 217, 182),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -848,7 +848,7 @@ let charactersArray = [
     ['MT', 'NS', 'hSTR NS'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Nightsister Acolyte',
     new BaseStats(23314, 20877, 2245, 4654, .5, 147, 142, 138),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -856,7 +856,7 @@ let charactersArray = [
     ['NA', 'NS'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Nightsister Initiate',
     new BaseStats(35088, 34708, 3532, 1619, 1, 112, 359, 108),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -864,7 +864,7 @@ let charactersArray = [
     ['NI', 'NS'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Nightsister Spirit',
     new BaseStats(24035, 28607, 3052, 1542, 1, 153, 220, 108),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -872,7 +872,7 @@ let charactersArray = [
     ['NS'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Nightsister Zombie',
     new BaseStats(32201, 38428, 2502, 1808, 1, 120, 357, 158),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -880,7 +880,7 @@ let charactersArray = [
     ['NS', 'hSTR NS'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Nute Gunray',
     new BaseStats(26623, 14525, 2860, 1590, 1, 156, 245, 90),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -888,7 +888,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Obi-Wan Kenobi (Old Ben)',
     new BaseStats(26248, 31339, 2260, 2643, 1, 118, 435, 353),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -896,7 +896,7 @@ let charactersArray = [
     ['OB'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Old Daka',
     new BaseStats(28597, 21808, 2381, 3698, 1, 136, 233, 232),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -904,7 +904,7 @@ let charactersArray = [
     ['NS', 'hSTR NS'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Pao',
     new BaseStats(22726, 21220, 2873, 1930, 1, 145, 211, 152),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -912,7 +912,7 @@ let charactersArray = [
     ['Rogue 1', 'Chex Mix'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Paploo',
     new BaseStats(32889, 38447, 2696, 2146, 1, 108, 413, 200),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -920,7 +920,7 @@ let charactersArray = [
     ['Murderbears'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Plo Koon',
     new BaseStats(25896, 22933, 2474, 3773, .5, 114, 266, 220),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -928,7 +928,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Poe Dameron',
     new BaseStats(25975, 25625, 2475, 2060, 1, 150, 304, 115),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -936,7 +936,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Poggle the Lesser',
     new BaseStats(28801, 20689, 2342, 4641, 1, 144, 221, 172),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -944,7 +944,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Princess Leia',
     new BaseStats(24895, 15836, 2943, 1998, 1, 164, 219, 103),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -952,7 +952,7 @@ let charactersArray = [
     ['Machine Gun'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Qi\'ra',
     new BaseStats(27746, 32940, 2644, 1473, 1, 142, 256, 100),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -960,7 +960,7 @@ let charactersArray = [
     ['#solo'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Qui-Gon Jinn',
     new BaseStats(22288, 19431, 2448, 4333, .5, 145, 191, 194),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -968,7 +968,7 @@ let charactersArray = [
     ['QGJ'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'R2-D2',
     new BaseStats(32155, 29560, 2239, 3683, .5, 157, 205, 181),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -976,7 +976,7 @@ let charactersArray = [
     ['Trashcan', 'R2z2', 'SuperStar2D2'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Range Trooper',
     new BaseStats(31730, 33360, 3166, 2296, 1, 139, 398, 152),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -984,7 +984,7 @@ let charactersArray = [
     ['Troopers'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Rebel Officer Leia Organa',
     new BaseStats(28176, 36668, 2446, 1984, 1, 152, 283, 144),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -992,7 +992,7 @@ let charactersArray = [
     ['ROLO'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Resistance Pilot',
     new BaseStats(23448, 19400, 3047, 1754, 1, 120, 243, 98),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1000,7 +1000,7 @@ let charactersArray = [
     ['RP'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Resistance Trooper',
     new BaseStats(24442, 18525, 2647, 1892, 1, 134, 211, 144),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1008,7 +1008,7 @@ let charactersArray = [
     ['RT', 'res trooper'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Rey (Jedi Training)',
     new BaseStats(28508, 33993, 2703, 1991, 1, 140, 336, 90),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1016,7 +1016,7 @@ let charactersArray = [
     ['JTR', 'RJT', 'Jedi Rey', 'Jey Z'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Rey (Scavenger)',
     new BaseStats(23076, 16639, 2699, 1758, 1, 164, 209, 146),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1024,7 +1024,7 @@ let charactersArray = [
     ['scav rey'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Rose Tico',
     new BaseStats(24272, 28882, 2481, 2286, .5, 141, 289, 104),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1032,7 +1032,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Royal Guard',
     new BaseStats(32248, 38614, 2608, 1921, 1, 110, 371, 313),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1040,7 +1040,7 @@ let charactersArray = [
     ['RG', 'Red Guard'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Sabine Wren',
     new BaseStats(26240, 28240, 2545, 1732, 1, 151, 285, 125),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1048,7 +1048,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Savage Opress',
     new BaseStats(28749, 30556, 3004, 1843, 1, 123, 294, 149),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1056,7 +1056,7 @@ let charactersArray = [
     ['zavage'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Scarif Rebel Pathfinder',
     new BaseStats(35234, 41802, 2515, 1969, 1, 121, 416, 359),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1064,7 +1064,7 @@ let charactersArray = [
     ['Rogue 1', 'SRP'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Shoretrooper',
     new BaseStats(32620, 43305, 2790, 2230, 1, 117, 334, 265),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1072,7 +1072,7 @@ let charactersArray = [
     ['ShT', 'Troopers', 'Imperial Grancor Maneuver'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Sith Assassin',
     new BaseStats(26311, 25172, 2881, 1557, 1, 151, 212, 111),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1080,7 +1080,7 @@ let charactersArray = [
     ['SA', 'Sassy'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Sith Marauder',
     new BaseStats(29238, 34972, 2604, 1947, 1, 142, 237, 95),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1088,7 +1088,7 @@ let charactersArray = [
     ['SM'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Sith Trooper',
     new BaseStats(32551, 39372, 2941, 2026, 1, 95, 322, 238),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1096,7 +1096,7 @@ let charactersArray = [
     ['SiT', 'Nightmare'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Snowtrooper',
     new BaseStats(23985, 26475, 3071, 1975, 1, 118, 210, 223),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1104,7 +1104,7 @@ let charactersArray = [
     ['Troopers'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Stormtrooper',
     new BaseStats(27508, 33852, 2359, 1960, 1, 125, 286, 202),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1112,7 +1112,7 @@ let charactersArray = [
     ['Troopers'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Stormtrooper Han',
     new BaseStats(30484, 22350, 2118, 1692, 1, 126, 370, 150),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1120,7 +1120,7 @@ let charactersArray = [
     ['STHan'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Sun Fac',
     new BaseStats(30916, 44240, 2386, 1915, 1, 109, 458, 218),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1128,7 +1128,7 @@ let charactersArray = [
     [],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Talia',
     new BaseStats(26646, 20575, 2434, 3920, .5, 115, 253, 249),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1136,7 +1136,7 @@ let charactersArray = [
     ['NS', 'hSTR NS'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Teebo',
     new BaseStats(30035, 31136, 3066, 1930, 1, 118, 315, 196),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1144,7 +1144,7 @@ let charactersArray = [
     ['Teebotine', 'Murderbears'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'TIE Fighter Pilot',
     new BaseStats(24995, 18040, 2910, 1526, 1, 170, 243, 107),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1152,7 +1152,7 @@ let charactersArray = [
     ['TFP', 'Auto Lightzader'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Tusken Raider',
     new BaseStats(31524, 32750, 3296, 1635, 1, 121, 353, 104),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1160,7 +1160,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Tusken Shaman',
     new BaseStats(31609, 28261, 2302, 3159, 1, 131, 243, 155),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1168,7 +1168,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Ugnaught',
     new BaseStats(28251, 19469, 2405, 3991, .5, 130, 214, 193),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1176,7 +1176,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'URoRRuR\'R\'R',
     new BaseStats(30300, 17092, 2577, 3315, 1, 147, 229, 126),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1184,7 +1184,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Vandor Chewbacca',
     new BaseStats(26854, 32212, 3008, 1887, 1, 131, 336, 183),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1192,7 +1192,7 @@ let charactersArray = [
     ['Dwight', '#solo'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Veteran Smuggler Chewbacca',
     new BaseStats(33412, 39840, 3251, 1521, 1, 102, 372, 181),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1200,7 +1200,7 @@ let charactersArray = [
     ['Vets'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Veteran Smuggler Han Solo',
     new BaseStats(26054, 31152, 2520, 1946, 1, 145, 239, 205),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1208,7 +1208,7 @@ let charactersArray = [
     ['Vets'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Visas Marr',
     new BaseStats(28028, 33287, 2345, 2241, 1, 126, 246, 137),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1216,7 +1216,7 @@ let charactersArray = [
     [],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Wampa',
     new BaseStats(29260, 34998, 3160, 1667, 1, 127, 263, 117),
     new OptimizationPlan(
@@ -1236,7 +1236,7 @@ let charactersArray = [
     ['beast', 'Wampanader'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Wedge Antilles',
     new BaseStats(16452, 18177, 2580, 2316, 1, 110, 271, 267),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1244,7 +1244,7 @@ let charactersArray = [
     ['Wiggs', 'chiggs', 'SuperStar2D2'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Wicket',
     new BaseStats(25913, 30987, 2496, 1550, 1, 146, 315, 226),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1252,7 +1252,7 @@ let charactersArray = [
     ['Murderbears'],
     false
   ),
-  new Character(
+  new SimpleCharacter(
     'Young Han Solo',
     new BaseStats(24720, 29407, 2725, 1792, 1, 125, 228, 108),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1260,7 +1260,7 @@ let charactersArray = [
     ['YOLO', '#solo', 'Jim'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Young Lando Calrissian',
     new BaseStats(24436, 29075, 2875, 1588, 1, 141, 204, 89),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1268,7 +1268,7 @@ let charactersArray = [
     ['#solo'],
     true
   ),
-  new Character(
+  new SimpleCharacter(
     'Zam Wesell',
     new BaseStats(26032, 19080, 2664, 1689, 1, 163, 208, 148),
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1283,7 +1283,7 @@ const charDefaults = {};
 
 for (let character of charactersArray) {
   characters[character.name] = character;
-  charDefaults[character.name] = new Character(character.name, character.baseStats, character.optimizationPlan);
+  charDefaults[character.name] = new SimpleCharacter(character.name, character.baseStats, character.optimizationPlan);
   Object.freeze(charDefaults[character.name]);
 }
 

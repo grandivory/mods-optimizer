@@ -13,13 +13,22 @@
 .character-edit .selected-characters {
   float: right;
   max-width: calc(33% - 10em);
-  margin: 0 5em;
-  height: calc(100% - 5em);
+  margin: 0 1em;
+  height: 100%;
+}
+
+.character-edit .selected-characters h4 {
+  margin-top: 0;
+  margin-bottom: .5em;
 }
 
 .character-edit .available-characters {
-  height: calc(100% - 5em);
+  height: 100%;
   overflow-y: auto;
+}
+
+.character-edit .available-characters h3 {
+  margin: 0;
 }
 
 .character-edit .available-characters .character {
@@ -44,7 +53,7 @@
 /*}*/
 
 .character-edit .character-list {
-  max-height: calc(100% - 4em);
+  max-height: calc(100% - 2em);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -52,6 +61,83 @@
 /*.available-characters .character-edit .character-list {*/
   /*max-height: calc(100% - 5.5em);*/
 /*}*/
+
+.character-power-form {
+  width: 22em;
+}
+
+.character-power-form .characterView {
+  position: relative;
+  margin-top: 1em;
+}
+
+.character-power-form .characterView .avatar {
+  margin: 0;
+}
+
+.character-power-form .star {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: calc(50% - .65em);
+  top: calc(50% - .65em);
+}
+
+.character-power-form .star::before {
+  content: '';
+  background: url('/img/star-passive.png') no-repeat;
+  background-size: contain;
+  width: 1.3em;
+  height: 1.3em;
+  display: inline-block;
+}
+
+.character-power-form .star-input {
+  display: none;
+}
+
+.character-power-form .star.active::before {
+  background-image: url('/img/star-active.png');
+}
+
+.character-power-form #star-label-1::before {
+  transform: rotate(-70deg) translateY(-350%);
+}
+
+.character-power-form #star-label-2::before {
+  transform: rotate(-47deg) translateY(-350%);
+}
+
+.character-power-form #star-label-3::before {
+  transform: rotate(-23deg) translateY(-350%);
+}
+
+.character-power-form #star-label-4::before {
+  transform: translateY(-350%);
+}
+
+.character-power-form #star-label-5::before {
+  transform: rotate(23deg) translateY(-350%);
+}
+
+.character-power-form #star-label-6::before {
+  transform: rotate(47deg) translateY(-350%);
+}
+
+.character-power-form #star-label-7::before {
+  transform: rotate(70deg) translateY(-350%);
+}
+
+.character-power-form .form-row label {
+  display: inline-block;
+  text-align: right;
+  width: 10em;
+}
+
+.character-power-form .form-row output {
+  display: inline-block;
+  width: 2.2em;
+}
 
 .character-edit-form .base-stats,
 .character-edit-form .optimization-plan {

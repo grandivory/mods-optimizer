@@ -67,7 +67,7 @@ class CharacterList extends React.Component {
         onDragLeave={this.characterBlockDragLeave(character.name)}
         onDrop={this.characterBlockDrop(character.name)}>
       <button className={'edit'} onClick={() => onEdit(character)}>Edit</button>
-      <CharacterAvatar name={character.name} />
+      <CharacterAvatar character={character} />
       <span className={'character-name'}>{character.name}</span>
     </div>
     )

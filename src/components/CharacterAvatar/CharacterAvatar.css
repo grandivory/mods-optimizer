@@ -1,6 +1,118 @@
+.avatar {
+  position: relative;
+  margin-top: 1em;
+  border-radius: 100%;
+  display: inline-block;
+  pointer-events: none;
+}
+
 .avatar img {
   max-width: 100%;
   max-height: 100%;
-  border-radius: 50%;
-  border: 1px solid #eeca44;
+  border-radius: 100%;
+}
+
+.avatar::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  background-size: cover;
+}
+
+.avatar.gear-1::after {
+  border-radius: 100%;
+  border: 1px inset #ccfffe;
+}
+
+.avatar.gear-2::after {
+  background-image: url('/img/g2-overlay.png');
+}
+
+.avatar.gear-3::after {
+  background-image: url('/img/g3-overlay.png');
+}
+
+.avatar.gear-4::after {
+  background-image: url('/img/g4-overlay.png');
+}
+
+.avatar.gear-5::after {
+  background-image: url('/img/g5-overlay.png');
+}
+
+.avatar.gear-6::after {
+  background-image: url('/img/g6-overlay.png');
+}
+
+.avatar.gear-7::after {
+  background-image: url('/img/g7-overlay.png');
+}
+
+.avatar.gear-8::after {
+  background-image: url('/img/g8-overlay.png');
+}
+
+.avatar.gear-9::after {
+  background-image: url('/img/g9-overlay.png');
+}
+
+.avatar.gear-10::after {
+  background-image: url('/img/g10-overlay.png');
+}
+
+.avatar.gear-11::after {
+  background-image: url('/img/g11-overlay.png');
+}
+
+.avatar.gear-12::after {
+  background-image: url('/img/g12-overlay.png');
+}
+
+.avatar .star {
+  background: url('/img/star-passive.png') no-repeat;
+  background-size: contain;
+  display: block;
+  width: 16.66%;
+  height: 16.66%;
+  position: absolute;
+  left: 41.66%;
+  top: 41.66%;
+}
+
+.avatar .star.active {
+  background-image: url('/img/star-active.png');
+}
+
+.avatar .star-1 {
+  transform: rotate(-70deg) translateY(-350%);
+}
+
+.avatar .star-2 {
+  transform: rotate(-47deg) translateY(-350%);
+}
+
+.avatar .star-3 {
+  transform: rotate(-23deg) translateY(-350%);
+}
+
+.avatar .star-4 {
+  transform: rotate(0deg) translateY(-350%);
+}
+
+.avatar .star-5 {
+  transform: rotate(23deg) translateY(-350%);
+}
+
+.avatar .star-6 {
+  transform: rotate(47deg) translateY(-350%);
+}
+
+.avatar .star-7 {
+  transform: rotate(70deg) translateY(-350%);
 }
