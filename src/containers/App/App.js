@@ -6,8 +6,9 @@ import Mod from "../../domain/Mod";
 import OptimizerView from "../OptimizerView/OptimizerView";
 import ExploreView from "../ExploreView/ExploreView";
 import FileInput from "../../components/FileInput/FileInput";
-import FileDropZone from "../../components/FileDropZone/FileDropZone";
 import Modal from "../../components/Modal/Modal";
+import WarningLabel from "../../components/WarningLabel/WarningLabel";
+import Spinner from "../../components/Spinner/Spinner";
 
 class App extends Component {
   constructor(props) {
@@ -16,10 +17,13 @@ class App extends Component {
     this.state.view = 'optimize';
     this.state.mods = [];
 
-    let savedMods = window.localStorage.getItem('optimizer.mods');
+    const savedMods = window.localStorage.getItem('optimizer.mods');
     if (savedMods) {
       this.state.mods = this.processMods(JSON.parse(savedMods));
     }
+
+    const allyCode = window.localStorage.getItem('optimizer.allyCode');
+    this.state.allyCode = allyCode || '';
   }
 
   /**
@@ -29,8 +33,70 @@ class App extends Component {
     const saveProgressButton = document.getElementById('saveProgress');
 
     window.localStorage.setItem('optimizer.mods', JSON.stringify(this.state.mods.map(mod => mod.serialize())));
+    window.localStorage.setItem('optimizer.allyCode', this.state.allyCode);
     saveProgressButton.href = this.getProgressData();
     saveProgressButton.download = `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`
+  }
+
+  /**
+   * Query the player profile from swgoh.help and parse the mods from it
+   *
+   * @param allyCode The player's ally code
+   */
+  queryPlayerProfile(allyCode) {
+    const xhr = new XMLHttpRequest();
+    const me = this;
+
+    xhr.open('POST', `https://api.mods-optimizer.swgoh.grandivory.com/playerprofile/`, true);
+    xhr.onload = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          try {
+            const playerProfile = JSON.parse(xhr.responseText);
+            const mods = playerProfile.roster
+              .filter(character => character.type === 'char')
+              .map(character => character.mods.map(mod => {
+                mod.characterName = character.name;
+                mod.mod_uid = mod.id;
+                return mod;
+              }))
+              .reduce((allMods, charMods) => allMods.concat(charMods), []);
+            me.setState({
+              'mods': me.processMods(mods),
+              'loading': false,
+              'allyCode': allyCode
+            });
+            me.saveState();
+          } catch (e) {
+            me.setState({
+              'error': e.message,
+              'loading': false
+            });
+          }
+        } else {
+          me.setState({
+            'error': xhr.responseText,
+            'loading': false
+          });
+        }
+      }
+    };
+
+    xhr.onerror = function() {
+      me.setState({
+        'error': xhr.responseText
+      });
+    };
+
+    xhr.setRequestHeader('Accept', 'application/json');
+
+    xhr.send(JSON.stringify({
+      'ally-code': allyCode.replace(/[^\d]/g, '')
+    }));
+
+    this.setState({
+      loading: true
+    });
   }
 
   /**
@@ -65,6 +131,7 @@ class App extends Component {
       const state = JSON.parse(event.target.result).state;
 
       window.localStorage.setItem('optimizer.mods', state.mods);
+      window.localStorage.setItem('optimizer.allyCode', state.allyCode);
       window.localStorage.setItem('availableCharacters', state.availableCharacters);
       window.localStorage.setItem('lockedCharacters', state.lockedCharacters);
       window.localStorage.setItem('selectedCharacters', state.selectedCharacters);
@@ -156,7 +223,9 @@ class App extends Component {
           {!instructionsScreen && 'optimize' === this.state.view &&
           <OptimizerView mods={this.state.mods} saveState={this.saveState.bind(this)}/>
           }
+          <Modal show={this.state.error} className={'error-modal'} content={this.errorModal(this.state.error)} />
           <Modal show={this.state.reset} className={'reset-modal'} content={this.resetModal()} />
+          <Spinner show={this.state.loading} />
         </div>
         {this.footer()}
       </div>
@@ -191,7 +260,43 @@ class App extends Component {
       </nav>
       }
       <div className={'actions'}>
-        <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
+        <label htmlFor={'ally-code'}>Enter your ally code:</label>
+        <input id={'ally-code'} type={'text'} inputMode={'numeric'}
+               defaultValue={this.state.allyCode}
+               onKeyUp={(e) => {
+                 if (e.key === 'Enter') {
+                   this.queryPlayerProfile(e.target.value);
+                 }
+                 // Don't change the input if the user is trying to select something
+                 if (window.getSelection().toString() !== '') {
+                   return;
+                 }
+                 // Don't change the input if the user is hitting the arrow keys
+                 if ([38,40,37,39].includes(e.keyCode)) {
+                   return;
+                 }
+
+                 // Grab the value from the input field
+                 let allyCode = e.target.value;
+
+                 // Take only numbers
+                 allyCode = allyCode.replace(/[^\d]/g, '');
+
+                 // Take only the first 9 digits
+                 allyCode = allyCode.substr(0, 9);
+
+                 // Split the numbers into chunks of 3
+                 const allyCodeChunks = allyCode.match(/\d{1,3}/g) || [];
+
+                 // Add dashes between each and set the value back on the field
+                 e.target.value = allyCodeChunks.join('-');
+               }}
+        />
+        <button type={'button'} onClick={() =>
+          this.queryPlayerProfile(document.getElementById('ally-code').value)}>
+          Get my mods!
+        </button>
+      <br />
         <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
         {showActions &&
         <a id={'saveProgress'}
@@ -242,7 +347,7 @@ class App extends Component {
       </form>
       or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'}>Patreon</a>
-      <div className={'version'}>version 1.0.12</div>
+      <div className={'version'}>version 1.0.13</div>
     </footer>;
   }
 
@@ -252,22 +357,31 @@ class App extends Component {
    */
   welcome() {
     return <div className={'welcome'}>
-      <h2>Welcome to the mod optimizer for Star Wars: Galaxy of Heroes™!</h2>
+      <h2>Welcome to Grandivory's Mods Optimizer for Star Wars: Galaxy of Heroes™!</h2>
       <p>
         This application will allow you to equip the optimum mod set on every character you have by assigning
-        a value to each stat that a mod can confer. You'll give it a list of characters to optimize for along
+        a value to each stat that a mod can confer. You'll give it a list of characters to optimize along
         with the stats that you're looking for, and it will determine the best mods to equip, one character at a
         time, until your list is exhausted.
       </p>
       <p>
-        To get started, copy the google sheet <a className={'call-out'} target={'_blank'} rel={'noopener'}
-                                                 href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy">here</a>
-        , courtesy of <a href="http://apps.crouchingrancor.com">Crouching Rancor</a>.
-        It will allow you to export your mods from <a href="https://swgoh.gg">SWGOH.gg</a> in order to import
-        them into this tool. When you're ready, you can click the button above, or drag your mods file into the
-        box below.
+        To get started, enter your ally code in the box in the header and click "Get my mods!"
       </p>
-      <FileDropZone handler={this.readModsFile.bind(this)} label={'Drop your mods file here!'}/>
+    </div>;
+  }
+
+  /**
+   * Shows a popup with an error message
+   * @param errorMessage
+   */
+  errorModal(errorMessage) {
+    return <div>
+      <WarningLabel />
+      <h2 key={'error-header'}>Error!</h2>
+      <p key={'error-message'}>{errorMessage}</p>
+      <div key={'error-actions'} className={'actions'}>
+        <button type={'button'} onClick={() => this.setState({'error': false})}>Ok</button>
+      </div>
     </div>;
   }
 
@@ -297,6 +411,7 @@ class App extends Component {
     return 'data:text/json;charset=utf-8,' + JSON.stringify({
       'state': {
         'mods': window.localStorage.getItem('optimizer.mods'),
+        'allyCode': window.localStorage.getItem('optimizer.allyCode'),
         'availableCharacters': window.localStorage.getItem('availableCharacters'),
         'lockedCharacters': window.localStorage.getItem('lockedCharacters'),
         'selectedCharacters': window.localStorage.getItem('selectedCharacters')

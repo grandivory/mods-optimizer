@@ -7,6 +7,7 @@ import CharacterEditView from "../CharacterEditView/CharacterEditView";
 
 import "./OptimizerView.css";
 import Character from "../../domain/Character";
+import Spinner from "../../components/Spinner/Spinner";
 
 class OptimizerView extends React.Component {
   constructor(props) {
@@ -98,6 +99,7 @@ class OptimizerView extends React.Component {
 
     return (
       <div className={'optimizer-view'}>
+        <Spinner show={this.state.loading} />
         {'edit' !== this.state.view &&
         <div className={'actions'}>
           <button onClick={this.updateView.bind(this, 'edit')}>
@@ -141,12 +143,27 @@ class OptimizerView extends React.Component {
   updateView(view) {
     if (view === this.state.view) {
       return;
-    } else if ('edit' === this.state.view) {
-      // If we're going from edit to another view, then run the optimization
-      this.optimizeMods(this.props.mods);
     }
 
-    this.setState({'view': view});
+    if ('edit' === this.state.view) {
+      this.setState({
+        'loading': true
+      });
+
+      // Set a timeout so that the loading state is propagated before the optimizer runs
+      setTimeout(() => {
+        // If we're going from edit to another view, then run the optimization
+        this.optimizeMods(this.props.mods);
+        this.setState({
+          'view': view,
+          'loading': false
+        });
+      }, 0);
+    } else {
+      this.setState({
+        'view': view
+      });
+    }
   }
 
   /**
