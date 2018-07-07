@@ -6,7 +6,6 @@ import Mod from "../../domain/Mod";
 import OptimizerView from "../OptimizerView/OptimizerView";
 import ExploreView from "../ExploreView/ExploreView";
 import FileInput from "../../components/FileInput/FileInput";
-import FileDropZone from "../../components/FileDropZone/FileDropZone";
 import Modal from "../../components/Modal/Modal";
 import WarningLabel from "../../components/WarningLabel/WarningLabel";
 import Spinner from "../../components/Spinner/Spinner";
@@ -348,7 +347,7 @@ class App extends Component {
       </form>
       or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'}>Patreon</a>
-      <div className={'version'}>version 1.0.12</div>
+      <div className={'version'}>version 1.0.13</div>
     </footer>;
   }
 
