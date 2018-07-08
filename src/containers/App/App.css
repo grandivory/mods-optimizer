@@ -246,6 +246,10 @@ nav button.active {
   height: 10em;
 }
 
+.modal.error-modal p {
+  word-break: break-word;
+}
+
 strong {
   font-weight: bold;
   color: #a35ef9;

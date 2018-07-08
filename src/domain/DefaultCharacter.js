@@ -4,7 +4,7 @@ import BaseStats from "./BaseStats";
 
 class DefaultCharacter extends Character {
   constructor(name) {
-    super(name, 85, 7, 12, new BaseStats(), new OptimizationPlan(), [], [], false)
+    super(name, '', 1, 1, 1, [], 1, new BaseStats(), new BaseStats(), new OptimizationPlan(), [], [], false)
   }
 }
 

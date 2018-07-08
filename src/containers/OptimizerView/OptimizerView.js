@@ -2,15 +2,10 @@ import React from "react";
 import Optimizer from "../../utils/Optimizer";
 import ReviewList from "../ReviewList/ReviewList";
 import ReviewSets from "../ReviewSets/ReviewSets";
-import {characters} from "../../constants/characters";
 import CharacterEditView from "../CharacterEditView/CharacterEditView";
 
 import "./OptimizerView.css";
-import Character from "../../domain/Character";
-import DefaultCharacter from "../../domain/DefaultCharacter";
 import Spinner from "../../components/Spinner/Spinner";
-import BaseStats from "../../domain/BaseStats";
-import OptimizationPlan from "../../domain/OptimizationPlan";
 
 class OptimizerView extends React.Component {
   constructor(props) {
@@ -19,85 +14,11 @@ class OptimizerView extends React.Component {
       'view': 'edit',
     };
 
-    const superSave = 'function' === typeof props.saveState ? props.saveState : function() {};
+    this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {};
 
-    this.saveState = function() {
-      window.localStorage.setItem(
-        'availableCharacters',
-        JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
-      );
-      window.localStorage.setItem(
-        'selectedCharacters',
-        JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
-      );
-      window.localStorage.setItem(
-        'lockedCharacters',
-        JSON.stringify(this.state.lockedCharacters.map(character => character.serialize()))
-      );
-      superSave();
-    }.bind(this);
-
-    this.state = Object.assign(this.state, this.restoreCharacterList());
-  }
-
-  restoreCharacterList() {
-    const characterDefaults = Object.values(characters).sort((left, right) => {
-      if (left.name < right.name) {
-        return -1;
-      } else if (right.name < left.name) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-
-    const savedAvailableCharacters = (JSON.parse(window.localStorage.getItem('availableCharacters')) || []).map(
-      characterJson => Character.deserialize(characterJson)
-    );
-    const savedSelectedCharacters = (JSON.parse(window.localStorage.getItem('selectedCharacters')) || []).map(
-      characterJson => Character.deserialize(characterJson)
-    );
-    const savedLockedCharacters = (JSON.parse(window.localStorage.getItem('lockedCharacters')) || []).map(
-      characterJson => Character.deserialize(characterJson)
-    );
-
-    const savedCharacters = savedAvailableCharacters.concat(savedSelectedCharacters, savedLockedCharacters);
-
-    const newCharacters = characterDefaults.filter(character =>
-      !savedCharacters.some(c => c.name === character.name)
-    );
-
-    let availableCharacters = [];
-    let selectedCharacters = [];
-    let lockedCharacters = [];
-
-    savedAvailableCharacters.forEach(character => {
-      const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
-        new DefaultCharacter(character.name);
-      defaultCharacter.optimizationPlan = character.optimizationPlan;
-      defaultCharacter.baseStats = character.baseStats;
-      availableCharacters.push(defaultCharacter);
-    });
-    savedSelectedCharacters.forEach(character => {
-      const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
-        new DefaultCharacter(character.name);
-      defaultCharacter.optimizationPlan = character.optimizationPlan;
-      defaultCharacter.baseStats = character.baseStats;
-      selectedCharacters.push(defaultCharacter);
-    });
-    savedLockedCharacters.forEach(character => {
-      const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
-        new DefaultCharacter(character.name);
-      defaultCharacter.optimizationPlan = character.optimizationPlan;
-      defaultCharacter.baseStats = character.baseStats;
-      lockedCharacters.push(defaultCharacter);
-    });
-
-    return {
-      'availableCharacters': availableCharacters.concat(newCharacters),
-      'selectedCharacters': selectedCharacters,
-      'lockedCharacters': lockedCharacters
-    };
+    this.state.availableCharacters = props.availableCharacters;
+    this.state.selectedCharacters = props.selectedCharacters;
+    this.state.lockedCharacters = props.lockedCharacters;
   }
 
   render() {

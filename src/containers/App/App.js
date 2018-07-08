@@ -9,22 +9,22 @@ import FileInput from "../../components/FileInput/FileInput";
 import Modal from "../../components/Modal/Modal";
 import WarningLabel from "../../components/WarningLabel/WarningLabel";
 import Spinner from "../../components/Spinner/Spinner";
+import Character from "../../domain/Character";
+import DefaultCharacter from "../../domain/DefaultCharacter";
+import {characters} from "../../constants/characters";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    this.state.view = 'optimize';
-    this.state.mods = [];
+    this.state = {
+      'view': 'optimize',
+      'mods': []
+    };
 
-    const savedMods = window.localStorage.getItem('optimizer.mods');
-    if (savedMods) {
-      this.state.mods = this.processMods(JSON.parse(savedMods));
-    }
+    const restoredState = this.restoreState();
 
-    const allyCode = window.localStorage.getItem('optimizer.allyCode');
-    this.state.allyCode = allyCode || '';
+    this.state = Object.assign(this.state, restoredState);
   }
 
   /**
@@ -33,10 +33,87 @@ class App extends Component {
   saveState() {
     const saveProgressButton = document.getElementById('saveProgress');
 
-    window.localStorage.setItem('optimizer.mods', JSON.stringify(this.state.mods.map(mod => mod.serialize())));
     window.localStorage.setItem('optimizer.allyCode', this.state.allyCode);
+    window.localStorage.setItem('optimizer.mods', JSON.stringify(this.state.mods.map(mod => mod.serialize())));
+    window.localStorage.setItem(
+      'availableCharacters',
+      JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
+    );
+    window.localStorage.setItem(
+      'selectedCharacters',
+      JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
+    );
+    window.localStorage.setItem(
+      'lockedCharacters',
+      JSON.stringify(this.state.lockedCharacters.map(character => character.serialize()))
+    );
+
     saveProgressButton.href = this.getProgressData();
     saveProgressButton.download = `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`
+  }
+
+  restoreState() {
+    let state = {};
+
+    state.allyCode = window.localStorage.getItem('optimizer.allyCode') || '';
+
+    const savedMods = window.localStorage.getItem('optimizer.mods');
+    if (savedMods) {
+      state.mods = this.processMods(JSON.parse(savedMods));
+    }
+
+    state = Object.assign(state, this.restoreCharacterList());
+
+    return state;
+  }
+
+  restoreCharacterList() {
+    const characterDefaults = Object.values(characters);
+
+    const savedAvailableCharacters = (JSON.parse(window.localStorage.getItem('availableCharacters')) || []).map(
+      characterJson => Character.deserialize(characterJson)
+    );
+    const savedSelectedCharacters = (JSON.parse(window.localStorage.getItem('selectedCharacters')) || []).map(
+      characterJson => Character.deserialize(characterJson)
+    );
+    const savedLockedCharacters = (JSON.parse(window.localStorage.getItem('lockedCharacters')) || []).map(
+      characterJson => Character.deserialize(characterJson)
+    );
+
+    const savedCharacters = savedAvailableCharacters.concat(savedSelectedCharacters, savedLockedCharacters);
+
+    const newCharacters = characterDefaults.filter(character =>
+      !savedCharacters.some(c => c.name === character.name)
+    );
+
+    let availableCharacters = [];
+    let selectedCharacters = [];
+    let lockedCharacters = [];
+
+    savedAvailableCharacters.forEach(character => {
+      const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
+        new DefaultCharacter(character.name);
+      defaultCharacter.apply(character);
+      availableCharacters.push(defaultCharacter);
+    });
+    savedSelectedCharacters.forEach(character => {
+      const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
+        new DefaultCharacter(character.name);
+      defaultCharacter.apply(character);
+      selectedCharacters.push(defaultCharacter);
+    });
+    savedLockedCharacters.forEach(character => {
+      const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
+        new DefaultCharacter(character.name);
+      defaultCharacter.apply(character);
+      lockedCharacters.push(defaultCharacter);
+    });
+
+    return {
+      'availableCharacters': availableCharacters.concat(newCharacters),
+      'selectedCharacters': selectedCharacters,
+      'lockedCharacters': lockedCharacters
+    };
   }
 
   /**
@@ -54,14 +131,25 @@ class App extends Component {
         if (xhr.status === 200) {
           try {
             const playerProfile = JSON.parse(xhr.responseText);
-            const mods = playerProfile.roster
-              .filter(character => character.type === 'char')
+            const roster = playerProfile.roster.filter(entry => entry.type === 'char');
+            const mods = roster
               .map(character => character.mods.map(mod => {
                 mod.characterName = character.name;
                 mod.mod_uid = mod.id;
                 return mod;
               }))
               .reduce((allMods, charMods) => allMods.concat(charMods), []);
+
+            roster.forEach(character => {
+              const baseCharacter = Object.values(characters).find(c => c.name === character.name) ||
+                DefaultCharacter(character.name);
+
+              baseCharacter.level = character.level;
+              baseCharacter.gearLevel = character.gear;
+              baseCharacter.starLevel = character.rarity;
+              baseCharacter.gear = character.equipped;
+            });
+
             me.setState({
               'mods': me.processMods(mods),
               'loading': false,
@@ -164,17 +252,16 @@ class App extends Component {
   }
 
   /**
-   * Given the input from a file exported from the Mods Manager Importer, read mods into memory in the format
-   * used by this application
+   * Given a JSON representation of mods, read mods into memory in the format used by this application
    *
-   * @param fileInput array The parsed contents of the file generated by the Mods Manager Importer
+   * @param modsJson array A serialized representation of a player's mods
    *
    * @return Array[Mod]
    */
-  processMods(fileInput) {
+  processMods(modsJson) {
     let mods = [];
 
-    for (let fileMod of fileInput) {
+    for (let fileMod of modsJson) {
       mods.push(Mod.deserialize(fileMod));
     }
 
@@ -242,7 +329,13 @@ class App extends Component {
           <ExploreView mods={this.state.mods} saveState={this.saveState.bind(this)}/>
           }
           {!instructionsScreen && 'optimize' === this.state.view &&
-          <OptimizerView mods={this.state.mods} saveState={this.saveState.bind(this)}/>
+          <OptimizerView
+            mods={this.state.mods}
+            availableCharacters={this.state.availableCharacters}
+            selectedCharacters={this.state.selectedCharacters}
+            lockedCharacters={this.state.lockedCharacters}
+            saveState={this.saveState.bind(this)}
+          />
           }
           <Modal show={this.state.error} className={'error-modal'} content={this.errorModal(this.state.error)} />
           <Modal show={this.state.reset} className={'reset-modal'} content={this.resetModal()} />
@@ -281,7 +374,7 @@ class App extends Component {
       </nav>
       }
       <div className={'actions'}>
-        <label htmlFor={'ally-code'}>Enter your ally code:</label>
+        <label htmlFor={'ally-code'}>Ally code:</label>
         <input id={'ally-code'} type={'text'} inputMode={'numeric'}
                defaultValue={this.state.allyCode || ''}
                onKeyUp={(e) => {
@@ -315,7 +408,7 @@ class App extends Component {
         />
         <button type={'button'} onClick={() =>
           this.queryPlayerProfile(document.getElementById('ally-code').value)}>
-          Get my mods!
+          Fetch my data!
         </button>
       <br />
         <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
