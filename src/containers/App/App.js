@@ -9,6 +9,7 @@ import FileInput from "../../components/FileInput/FileInput";
 import Modal from "../../components/Modal/Modal";
 import WarningLabel from "../../components/WarningLabel/WarningLabel";
 import Spinner from "../../components/Spinner/Spinner";
+import FileDropZone from "../../components/FileDropZone/FileDropZone";
 
 class App extends Component {
   constructor(props) {
@@ -109,13 +110,26 @@ class App extends Component {
     const me = this;
 
     reader.onload = (event) => {
-      const mods = me.processMods(JSON.parse(event.target.result));
+      try {
+        const fileMods = JSON.parse(event.target.result);
+        if (fileMods.length > 0) {
+          const mods = me.processMods(JSON.parse(event.target.result));
 
-      me.setState({
-        'mods': mods
-      });
+          me.setState({
+            'mods': mods
+          });
+          me.saveState();
+        } else {
+          me.setState({
+            'error': 'No mods were found in your mods file! Please try to generate a new file.'
+          });
+        }
+      } catch (e) {
+        me.setState({
+          'error': 'Unable to read mods from the provided file. Please make sure that you uploaded the correct file.'
+        });
+      }
 
-      me.saveState();
     };
 
     reader.readAsText(fileInput);
@@ -126,17 +140,24 @@ class App extends Component {
    */
   restoreFromFile(fileInput) {
     let reader = new FileReader();
+    const me = this;
 
     reader.onload = (event) => {
-      const state = JSON.parse(event.target.result).state;
+      try {
+        const state = JSON.parse(event.target.result).state;
 
-      window.localStorage.setItem('optimizer.mods', state.mods);
-      window.localStorage.setItem('optimizer.allyCode', state.allyCode);
-      window.localStorage.setItem('availableCharacters', state.availableCharacters);
-      window.localStorage.setItem('lockedCharacters', state.lockedCharacters);
-      window.localStorage.setItem('selectedCharacters', state.selectedCharacters);
+        window.localStorage.setItem('optimizer.mods', state.mods);
+        window.localStorage.setItem('optimizer.allyCode', state.allyCode || '');
+        window.localStorage.setItem('availableCharacters', state.availableCharacters);
+        window.localStorage.setItem('lockedCharacters', state.lockedCharacters);
+        window.localStorage.setItem('selectedCharacters', state.selectedCharacters);
 
-      window.location.reload();
+        window.location.reload();
+      } catch (e) {
+        me.setState({
+          'error': 'Unable to read the progress file. Please make sure that you uploaded the correct file.'
+        });
+      }
     };
 
     reader.readAsText(fileInput);
@@ -262,7 +283,7 @@ class App extends Component {
       <div className={'actions'}>
         <label htmlFor={'ally-code'}>Enter your ally code:</label>
         <input id={'ally-code'} type={'text'} inputMode={'numeric'}
-               defaultValue={this.state.allyCode}
+               defaultValue={this.state.allyCode || ''}
                onKeyUp={(e) => {
                  if (e.key === 'Enter') {
                    this.queryPlayerProfile(e.target.value);
@@ -297,6 +318,7 @@ class App extends Component {
           Get my mods!
         </button>
       <br />
+        <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
         <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
         {showActions &&
         <a id={'saveProgress'}
@@ -347,7 +369,7 @@ class App extends Component {
       </form>
       or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'}>Patreon</a>
-      <div className={'version'}>version 1.0.13</div>
+      <div className={'version'}>version 1.0.14</div>
     </footer>;
   }
 
@@ -365,8 +387,17 @@ class App extends Component {
         time, until your list is exhausted.
       </p>
       <p>
-        To get started, enter your ally code in the box in the header and click "Get my mods!"
+        To get started, enter your ally code in the box in the header and click "Get my mods!". Note that your mods
+        will only be updated a maximum of once per hour.
       </p>
+      <p>
+        If you have a mods file from either the SCORPIO bot (check out the discord server below) or from the <a
+          className={'call-out'} target={'_blank'} rel={'noopener'}
+          href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy">
+          Google Sheet
+        </a>, you can drop them in the box below, or use the "Upload my mods!" button above!
+      </p>
+      <FileDropZone handler={this.readModsFile.bind(this)} label={'Drop your mods file here!'}/>
     </div>;
   }
 
