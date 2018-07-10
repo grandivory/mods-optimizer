@@ -1221,6 +1221,7 @@ let charactersArray = [
   new BasicCharacter(
     'Sith Trooper',
     'SITHTROOPER',
+    DamageType.physical,
     new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
     ['Dark Side', 'Sith', 'Tank'],
     ['SiT', 'Nightmare'],

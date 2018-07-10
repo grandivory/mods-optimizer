@@ -163,7 +163,7 @@ class App extends Component {
             me.saveState();
 
             // After we update characters, always update their stats, too
-            me.queryCharacterStats();
+            // me.queryCharacterStats();
           } catch (e) {
             me.setState({
               'error': e.message,
@@ -292,13 +292,13 @@ class App extends Component {
   readModsFile(fileInput) {
     let reader = new FileReader();
     const me = this;
-             
+
     reader.onload = (event) => {
       try {
         const fileMods = JSON.parse(event.target.result);
         if (fileMods.length > 0) {
           const mods = me.processMods(JSON.parse(event.target.result));
-             
+
           me.setState({
             'mods': mods
           });
@@ -313,12 +313,12 @@ class App extends Component {
           'error': 'Unable to read mods from the provided file. Please make sure that you uploaded the correct file.'
         });
       }
-             
+
     };
-             
+
     reader.readAsText(fileInput);
   }
-           
+
   /**
    * Restore the app state from a file and refresh the app
    */

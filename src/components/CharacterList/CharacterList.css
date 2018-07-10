@@ -1,6 +1,7 @@
 .character-block {
   display: block;
   width: 18em;
+  min-height: 4em;
   border: 1px solid dodgerblue;
   background-color: rgba(0, 0, 96, .5);
   padding: .25em;
