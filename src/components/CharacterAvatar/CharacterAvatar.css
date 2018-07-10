@@ -37,9 +37,6 @@
   line-height: 3em;
   margin-bottom: -1.1em;
   box-sizing: border-box;
-  /*background-color: rgb(28, 56, 93);*/
-  /*border: .1em solid white;*/
-  /*border-radius: 50% 50% 25% 25%;*/
   background:
       radial-gradient(100% 100% at 50% 85%, rgb(28, 56, 93) 44%, white 45%, white 49%, transparent 50%) 50% 15% / 1.6em 1.6em,
       radial-gradient(125% 100% at 50% -28%, rgb(28, 56, 93) 44%, white 45%, white 49%, transparent 50%) 50% 121% / 1.5em 1.6em;

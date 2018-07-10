@@ -12,6 +12,7 @@ import Spinner from "../../components/Spinner/Spinner";
 import Character from "../../domain/Character";
 import DefaultCharacter from "../../domain/DefaultCharacter";
 import {characters} from "../../constants/characters";
+import BaseStats from "../../domain/BaseStats";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
 
 class App extends Component {
@@ -141,21 +142,106 @@ class App extends Component {
               .reduce((allMods, charMods) => allMods.concat(charMods), []);
 
             roster.forEach(character => {
-              const baseCharacter = Object.values(characters).find(c => c.name === character.name) ||
-                new DefaultCharacter(character.name);
+              const baseCharacter = Object.values(characters).find(c => c.name === character.name);
 
-              baseCharacter.level = character.level;
-              baseCharacter.gearLevel = character.gear;
-              baseCharacter.starLevel = character.rarity;
-              baseCharacter.gear = character.equipped;
-              baseCharacter.galacticPower = character.gp;
+              if (baseCharacter) {
+                baseCharacter.level = character.level;
+                baseCharacter.gearLevel = character.gear;
+                baseCharacter.starLevel = character.rarity;
+                baseCharacter.gear = character.equipped;
+                baseCharacter.galacticPower = character.gp;
+              }
             });
+
+            console.log(characters);
 
             me.setState({
               'mods': me.processMods(mods),
               'loading': false,
               'allyCode': allyCode
             });
+            me.saveState();
+
+            // After we update characters, always update their stats, too
+            me.queryCharacterStats();
+          } catch (e) {
+            me.setState({
+              'error': e.message,
+              'loading': false
+            });
+          }
+        } else {
+          me.setState({
+            'error': xhr.responseText,
+            'loading': false
+          });
+        }
+      }
+    };
+
+    xhr.onerror = function() {
+      me.setState({
+        'error': xhr.responseText || 'Unknown error fetching your player profile.',
+        'loading': false
+      });
+    };
+
+    xhr.setRequestHeader('Accept', 'application/json');
+
+    xhr.send(JSON.stringify({
+      'ally-code': allyCode.replace(/[^\d]/g, '')
+    }));
+
+    this.setState({
+      loading: true
+    });
+  }
+
+  /**
+   * Query for the base stats of every character known to the tool so that they can be optimized accurately
+   */
+  queryCharacterStats() {
+    const xhr = new XMLHttpRequest();
+    const me = this;
+
+    xhr.open('POST', 'https://crinolo-swgoh.glitch.me/baseStats/api/', true);
+    xhr.onload = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          try {
+            const characterStats = JSON.parse(xhr.responseText);
+            characterStats.forEach(characterObject => {
+              const baseCharacter = Object.values(characters).find(c => c.baseID === characterObject.unit.baseID);
+
+              if (baseCharacter) {
+                const baseStats = new BaseStats(
+                  characterObject.base['Health'] || 0,
+                  characterObject.base['Protection'] || 0,
+                  characterObject.base['Physical Damage'] || 0,
+                  characterObject.base['Special Damage'] || 0,
+                  baseCharacter.physDmgPercent || 1,
+                  characterObject.base['Speed'] || 0,
+                  characterObject.base['Armor'] || 0,
+                  characterObject.base['Resistance'] || 0
+                );
+
+                const totalStats = new BaseStats(
+                  characterObject.total['Health'] || 0,
+                  characterObject.total['Protection'] || 0,
+                  characterObject.total['Physical Damage'] || 0,
+                  characterObject.total['Special Damage'] || 0,
+                  baseCharacter.physDmgPercent || 1,
+                  characterObject.total['Speed'] || 0,
+                  characterObject.total['Armor'] || 0,
+                  characterObject.total['Resistance'] || 0
+                );
+
+                baseCharacter.baseStats = baseStats;
+                baseCharacter.totalStats = totalStats;
+              }
+            });
+
+            console.dir(characters);
             me.saveState();
           } catch (e) {
             me.setState({
@@ -174,15 +260,24 @@ class App extends Component {
 
     xhr.onerror = function() {
       me.setState({
-        'error': xhr.responseText
+        'error': xhr.responseText || 'Unknown error fetching character stats',
+        'loading': false
       });
     };
 
     xhr.setRequestHeader('Accept', 'application/json');
 
-    xhr.send(JSON.stringify({
-      'ally-code': allyCode.replace(/[^\d]/g, '')
-    }));
+    xhr.send(JSON.stringify(
+      Object.values(characters).map(character => {
+        return {
+          'characterID': character.baseID,
+          'level': character.level,
+          'starLevel': character.starLevel,
+          'gearLevel': character.gearLevel,
+          'gear': character.gear.map(gear => gear.equipmentId)
+        };
+      })
+    ));
 
     this.setState({
       loading: true
@@ -197,13 +292,13 @@ class App extends Component {
   readModsFile(fileInput) {
     let reader = new FileReader();
     const me = this;
-
+             
     reader.onload = (event) => {
       try {
         const fileMods = JSON.parse(event.target.result);
         if (fileMods.length > 0) {
           const mods = me.processMods(JSON.parse(event.target.result));
-
+             
           me.setState({
             'mods': mods
           });
@@ -218,12 +313,12 @@ class App extends Component {
           'error': 'Unable to read mods from the provided file. Please make sure that you uploaded the correct file.'
         });
       }
-
+             
     };
-
+             
     reader.readAsText(fileInput);
   }
-
+           
   /**
    * Restore the app state from a file and refresh the app
    */
