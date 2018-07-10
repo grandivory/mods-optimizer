@@ -153,8 +153,6 @@ class App extends Component {
               }
             });
 
-            console.log(characters);
-
             me.setState({
               'mods': me.processMods(mods),
               'loading': false,
@@ -163,7 +161,7 @@ class App extends Component {
             me.saveState();
 
             // After we update characters, always update their stats, too
-            // me.queryCharacterStats();
+            me.queryCharacterStats();
           } catch (e) {
             me.setState({
               'error': e.message,
@@ -241,7 +239,9 @@ class App extends Component {
               }
             });
 
-            console.dir(characters);
+            me.setState({
+              loading: false
+            });
             me.saveState();
           } catch (e) {
             me.setState({
@@ -266,6 +266,7 @@ class App extends Component {
     };
 
     xhr.setRequestHeader('Accept', 'application/json');
+    xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.send(JSON.stringify(
       Object.values(characters).map(character => {
