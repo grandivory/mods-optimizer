@@ -1434,7 +1434,12 @@ const charDefaults = {};
 
 for (let character of charactersArray) {
   characters[character.name] = character;
-  charDefaults[character.name] = new BasicCharacter(character.name, character.baseId, character.optimizationPlan);
+  charDefaults[character.name] = new BasicCharacter(
+    character.name,
+    character.baseId,
+    character.physDmgPercent,
+    character.optimizationPlan
+  );
   Object.freeze(charDefaults[character.name]);
 }
 

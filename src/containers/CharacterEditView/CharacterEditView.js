@@ -194,13 +194,7 @@ class CharacterEditView extends React.Component {
 
   render() {
     const availableCharacters = this.state.availableCharacters.sort((left, right) => {
-      if (left.name < right.name) {
-        return -1;
-      } else if (left.name > right.name) {
-        return 1;
-      } else {
-        return 0;
-      }
+      return right.galacticPower - left.galacticPower;
     });
     const selectedCharacters = this.state.selectedCharacters;
     const lockedCharacters = this.state.lockedCharacters;

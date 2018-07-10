@@ -142,12 +142,13 @@ class App extends Component {
 
             roster.forEach(character => {
               const baseCharacter = Object.values(characters).find(c => c.name === character.name) ||
-                DefaultCharacter(character.name);
+                new DefaultCharacter(character.name);
 
               baseCharacter.level = character.level;
               baseCharacter.gearLevel = character.gear;
               baseCharacter.starLevel = character.rarity;
               baseCharacter.gear = character.equipped;
+              baseCharacter.galacticPower = character.gp;
             });
 
             me.setState({

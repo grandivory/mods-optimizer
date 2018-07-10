@@ -8,6 +8,7 @@ class Character {
               starLevel,
               gearLevel,
               gearPieces,
+              galacticPower,
               physDmgPct,
               baseStats,
               totalStats,
@@ -22,6 +23,7 @@ class Character {
     this.starLevel = starLevel;
     this.gearLevel = gearLevel;
     this.gearPieces = gearPieces;
+    this.galacticPower = galacticPower;
     this.physDmgPct = physDmgPct;
     this.baseStats = baseStats;
     this.totalStats = totalStats;
@@ -63,6 +65,10 @@ class Character {
     characterObject.starLevel = this.starLevel;
     characterObject.gearLevel = this.gearLevel;
     characterObject.gearPieces = this.gearPieces;
+    characterObject.galacticPower = this.galacticPower;
+    characterObject.physDmgPercent = this.physDmgPct;
+    characterObject.baseStats = this.baseStats;
+    characterObject.totalStats = this.totalStats;
     characterObject.optimizationPlan = this.optimizationPlan.serialize();
     characterObject.useOnly5DotMods = this.useOnly5DotMods;
 
@@ -77,7 +83,10 @@ class Character {
       characterJson.starLevel || 1,
       characterJson.gearLevel || 1,
       characterJson.gearPieces || [],
-      new BaseStats(),
+      characterJson.galacticPower || 0,
+      characterJson.physDmgPercent,
+      characterJson.baseStats ? BaseStats.deserialize(characterJson.baseStats) : new BaseStats() ,
+      characterJson.totalStats ? BaseStats.deserialize(characterJson.totalStats) : new BaseStats() ,
       OptimizationPlan.deserialize(characterJson.optimizationPlan),
       [],
       [],
@@ -95,6 +104,7 @@ class BasicCharacter extends Character {
       1,
       1,
       [],
+      0,
       physDmgPct,
       new BaseStats(),
       new BaseStats(),
