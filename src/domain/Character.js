@@ -52,6 +52,7 @@ class Character {
     this.starLevel = other.starLevel;
     this.gearLevel = other.gearLevel;
     this.gearPieces = other.gearPieces;
+    this.galacticPower = other.galacticPower;
     this.optimizationPlan = other.optimizationPlan;
     this.useOnly5DotMods = other.useOnly5DotMods;
   }
