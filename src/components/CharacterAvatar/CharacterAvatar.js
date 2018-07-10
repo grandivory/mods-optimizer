@@ -33,6 +33,7 @@ class CharacterAvatar extends React.Component {
           [1,2,3,4,5,6,7].map(star)
         }
         <img src={character_images[imageName + '.png']} alt={character.name} title={character.name} draggable={false} />
+        <div className={'character-level'}>{character.level}</div>
       </div>
     );
   }

@@ -1,9 +1,9 @@
 .character-block {
   display: block;
   width: 18em;
-  height: 4em;
   border: 1px solid dodgerblue;
   background-color: rgba(0, 0, 96, .5);
+  padding: .25em;
   margin: .5em 0;
   text-align: left;
   position: relative;
@@ -13,8 +13,8 @@
 .character-block .avatar {
   vertical-align: middle;
   display: inline-block;
-  height: 3em;
-  margin: .5em;
+  font-size: .8em;
+  margin-right: 1em;
 }
 
 .character-block .character-name {
@@ -24,7 +24,6 @@
 }
 
 .character-block.drop-character {
-  margin-bottom: 5px;
   box-shadow: 0 2px 3px 0 darkred;
 }
 

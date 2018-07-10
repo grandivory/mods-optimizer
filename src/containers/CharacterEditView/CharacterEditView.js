@@ -292,7 +292,7 @@ class CharacterEditView extends React.Component {
         <CharacterAvatar character={character}/>
       </div>
       <div className={'character-name'}>{character.name}</div>
-      <button className={'small'} onClick={() => this.setState({editStats: character})}>Edit Stats</button>
+      {/*<button className={'small'} onClick={() => this.setState({editStats: character})}>Edit Stats</button>*/}
     </div>;
   }
 

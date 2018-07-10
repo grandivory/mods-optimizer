@@ -1,7 +1,7 @@
 .mod-detail {
   display: inline-grid;
   grid-template-columns: 5em 1fr;
-  grid-template-rows: 1fr 3em;
+  grid-template-rows: 1fr fit-content();
   grid-gap: 1em;
   align-items: start;
   border: 1px solid dodgerblue;
@@ -23,8 +23,8 @@
 .mod-detail .avatar {
   grid-row: 2;
   grid-column: 1;
-  width: 3em;
   text-align: center;
+  font-size: .8em;
 }
 
 .mod-detail .mod-stats {

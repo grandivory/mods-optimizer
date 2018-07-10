@@ -1,14 +1,15 @@
 .avatar {
+  width: 4em;
   position: relative;
-  margin-top: 1em;
+  margin: .75em .5em .25em;
   border-radius: 100%;
   display: inline-block;
   pointer-events: none;
 }
 
 .avatar img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 99%;
+  height: 99%;
   border-radius: 100%;
 }
 
@@ -16,13 +17,34 @@
   content: '';
   display: block;
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 99%;
+  height: 99%;
   box-sizing: border-box;
   z-index: 9999;
   left: 0;
   top: 0;
   background-size: cover;
+}
+
+.avatar .character-level {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  text-align: center;
+  width: 3em;
+  margin-left: -1.5em;
+  height: 3em;
+  line-height: 3em;
+  margin-bottom: -1.1em;
+  box-sizing: border-box;
+  /*background-color: rgb(28, 56, 93);*/
+  /*border: .1em solid white;*/
+  /*border-radius: 50% 50% 25% 25%;*/
+  background:
+      radial-gradient(100% 100% at 50% 85%, rgb(28, 56, 93) 44%, white 45%, white 49%, transparent 50%) 50% 15% / 1.6em 1.6em,
+      radial-gradient(125% 100% at 50% -28%, rgb(28, 56, 93) 44%, white 45%, white 49%, transparent 50%) 50% 121% / 1.5em 1.6em;
+  background-repeat: no-repeat;
+  z-index: 10000;
 }
 
 .avatar.gear-1::after {

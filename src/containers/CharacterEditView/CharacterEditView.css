@@ -34,8 +34,12 @@
 .character-edit .available-characters .character {
   display: inline-block;
   vertical-align: top;
-  margin: 1em 2em;
-  width: 7em;
+  margin: .5em 1em;
+  width: 8em;
+}
+
+.character-edit .available-characters .character .avatar {
+  font-size: 1.2em;
 }
 
 .character-edit .available-characters .character.inactive {
