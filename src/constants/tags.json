@@ -1,0 +1,587 @@
+
+{
+  "rancor":{
+    "name":"THE PIT - FACE THE RANCOR - HEROIC",
+    "rarity":7,
+    "gear":8,
+    "level":80,
+    "phase":[
+      {
+        "name":"PHASE 1 - GAMORREAN CAPTAIN",
+        "squads":[
+          { "name":"TEAM 1", "note":"", "url":"", "team":[ "TEEBO", "EWOKELDER", "QUIGONJINN", "PHASMA", "GEONOSIANSOLDIER" ] },
+          { "name":"TEAM 2", "note":"", "url":"", "team":[ "TEEBO", "EWOKELDER", "QUIGONJINN", "BIGGSDARKLIGHTER", "WEDGEANTILLES" ] },
+          { "name":"TEAM 3", "note":"", "url":"", "team":[ "TEEBO", "QUIGONJINN", "TIEFIGHTERPILOT", "PHASMA", "CT7567" ] }
+        ]
+      },
+      {
+        "name":"PHASE 2 - RANCOR PHASE",
+        "squads":[
+          { "name":"TEAM 1", "note":"", "url":"", "team":[ "PHASMA", "GEONOSIANSOLDIER", "QUIGONJINN", "GRANDMASTERYODA", "REY" ] },
+          { "name":"TEAM 2", "note":"", "url":"", "team":[ "IG88", "IG86SENTINELDROID", "CT5555", "GEONOSIANSOLDIER", "PRINCESSLEIA" ] },
+          { "name":"TEAM 3", "note":"", "url":"", "team":[ "TEEBO", "DENGAR", "CT7567", "PHASMA", "QUIGONJINN" ] },
+          { "name":"TEAM 4", "note":"", "url":"", "team":[ "PHASMA", "GEONOSIANSOLDIER", "QUIGONJINN", "REY", "CT7567" ] }
+        ]
+      },
+      {
+        "name":"SOLO RANCOR TEAMS",
+        "squads":[
+          { "name":"AUTO LIGHTZADER", "note":"", "url":"", "team":[ "VADER", "GRANDMOFFTARKIN", "JYNERSO", "TIEFIGHTERPILOT", "DARTHSIDIOUS" ] },
+          { "name":"IMPERIAL GRANCOR MANEUVER", "note":"", "url":"", "team":[ "GRANDADMIRALTHRAWN", "JYNERSO", "SHORETROOPER", "GRANDMOFFTARKIN", "DIRECTORKRENNIC" ] },
+          { "name":"REBEL POWER", "note":"", "url":"", "team":[ "WEDGEANTILLES", "JYNERSO", "BAZEMALBUS", "BISTAN", "SCARIFREBEL" ] },
+          { "name":"REBEL POWER ALT", "note":"", "url":"", "team":[ "WEDGEANTILLES", "JYNERSO", "CASSIANANDOR", "BISTAN", "SCARIFREBEL" ] },
+          { "name":"SUPERSTAR2D2", "note":"", "url":"", "team":[ "WEDGEANTILLES", "R2D2_LEGENDARY", "JYNERSO", "CASSIANANDOR", "BISTAN" ] },
+          { "name":"C.L.S.TEEBO D.I.S.C.O", "note":"", "url":"", "team":[ "TEEBO", "COMMANDERLUKESKYWALKER", "CT7567", "QUIGONJINN", "R2D2_LEGENDARY" ] },
+          { "name":"TEE-REX COMMANDER", "note":"", "url":"", "team":[ "TEEBO", "QUIGONJINN", "COMMANDERLUKESKYWALKER", "JYNERSO", "CT7567" ] },
+          { "name":"UNMASKING", "note":"", "url":"", "team":[ "KYLORENUNMASKED:L", "KYLOREN", "PHASMA", "FIRSTORDEROFFICERMALE", "FIRSTORDEREXECUTIONER" ] },
+          { "name":"SPIRITUAL SISTERS", "note":"", "url":"", "team":[ "ASAJVENTRESS:L", "MOTHERTALZIN", "DAKA", "NIGHTSISTERSPIRIT", "NIGHTSISTERZOMBIE" ] },
+          { "name":"THE MAGIC NUMBER", "note":"", "url":"", "team":[ "WEDGEANTILLES", "BIGGSDARKLIGHTER", "COMMANDERLUKESKYWALKER" ] },
+          { "name":"C.LONELY.S", "note":"", "url":"", "team":[ "COMMANDERLUKESKYWALKER" ] }
+        ]
+      }
+    ]
+  },
+  "aat":{
+    "name":"TANK TAKEDOWN - DESTROY AN AAT - NORMAL",
+    "rarity":6,
+    "gear":8,
+    "level":80,
+    "phase":[
+      {
+        "name":"PHASE 1 - GENERAL GRIEVOUS &amp; DROIDS",
+        "squads":[
+          { "name":"TEAM ONE", "note":"", "url":"", "team":[ "AAYLASECURA", "ANAKINKNIGHT", "IMAGUNDI", "QUIGONJINN", "AHSOKATANO" ] },
+          { "name":"TEAM TWO", "note":"", "url":"", "team":[ "ANAKINKNIGHT", "QUIGONJINN", "AAYLASECURA", "GRANDMASTERYODA", "AHSOKATANO" ] },
+          { "name":"TEAM THREE", "note":"", "url":"", "team":[ "IMAGUNDI", "QUIGONJINN", "AAYLASECURA", "GRANDMASTERYODA", "KITFISTO" ] },
+          { "name":"TEAM FOUR", "note":"", "url":"", "team":[ "ANAKINKNIGHT", "QUIGONJINN", "AAYLASECURA", "IMAGUNDI", "EWOKELDER" ] }
+        ]
+      },
+      {
+        "name":"PHASE 2 - AAT",
+        "squads":[
+          { "name":"TEAM ONE", "note":"", "url":"", "team":[ "HK47", "IG88", "IG86SENTINELDROID", "CHIEFNEBIT", "JAWAENGINEER" ] },
+          { "name":"TEAM TWO", "note":"", "url":"", "team":[ "HK47", "IG88", "IG86SENTINELDROID", "EWOKELDER", "JAWAENGINEER" ] },
+          { "name":"TEAM THREE", "note":"", "url":"", "team":[ "CHIEFNEBIT", "JAWA", "JAWASCAVENGER", "DATHCHA", "JAWAENGINEER" ] },
+          { "name":"TEAM FOUR", "note":"", "url":"", "team":[ "CC2224", "CT7567", "CT210408", "CT5555", "CLONESERGEANTPHASEI" ] }
+        ]
+      },
+      {
+        "name":"PHASE 3 - B2 ROCKET TROOPER, DROIDS, AND AAT CANNON",
+        "squads":[
+          { "name":"TEAM ONE", "note":"", "url":"", "team":[ "CHIEFCHIRPA", "EMPERORPALPATINE", "STORMTROOPERHAN", "ROYALGUARD", "SUNFAC" ] },
+          { "name":"TEAM TWO", "note":"", "url":"", "team":[ "EMPERORPALPATINE", "TIEFIGHTERPILOT", "SUNFAC", "STORMTROOPERHAN", "ROYALGUARD" ] },
+          { "name":"TEAM THREE", "note":"", "url":"", "team":[ "DATHCHA", "JAWA", "JAWASCAVENGER", "EWOKELDER", "UGNAUGHT" ] },
+          { "name":"TEAM FOUR", "note":"", "url":"", "team":[ "DATHCHA", "JAWA", "JAWASCAVENGER", "EWOKELDER", "TIEFIGHTERPILOT" ] }
+        ]
+      },
+      {
+        "name":"PHASE 4 - AAT & 2 X B2 SUPER BATTLE DROID",
+        "squads":[
+          { "name":"TEAM ONE", "note":"", "url":"", "team":[ "WEDGEANTILLES", "BIGGSDARKLIGHTER", "ADMINISTRATORLANDO", "PHASMA", "PRINCESSLEIA" ] },
+          { "name":"TEAM TWO", "note":"", "url":"", "team":[ "WEDGEANTILLES", "BIGGSDARKLIGHTER", "ADMINISTRATORLANDO", "STORMTROOPERHAN", "PRINCESSLEIA" ] },
+          { "name":"TEAM THREE", "note":"", "url":"", "team":[ "WEDGEANTILLES", "BIGGSDARKLIGHTER", "ADMINISTRATORLANDO", "ADMIRALACKBAR", "PRINCESSLEIA" ] },
+          { "name":"TEAM FOUR", "note":"", "url":"", "team":[ "WEDGEANTILLES", "BIGGSDARKLIGHTER", "ADMINISTRATORLANDO", "STORMTROOPERHAN", "HANSOLO" ] }
+        ]
+      }
+    ]
+  },
+  "haat":{
+    "name":"TANK TAKEDOWN - DESTROY AN AAT - HEROIC",
+    "rarity":7,
+    "gear":10,
+    "level":85,
+    "phase":[
+      {
+        "name":"PHASE 1 - GENERAL GRIEVOUS &amp; DROIDS",
+        "squads":[
+          { "name":"TENACITY JEDI", "note":"", "url":"", "team":[ "AAYLASECURA", "ANAKINKNIGHT", "IMAGUNDI", "QUIGONJINN", "AHSOKATANO" ] },
+          { "name":"COUNTER JEDI", "note":"", "url":"", "team":[ "IMAGUNDI", "AAYLASECURA", "ANAKINKNIGHT", "AHSOKATANO", "GRANDMASTERYODA" ] },
+          { "name":"QWAY GON FISHIN", "note":"", "url":"", "team":[ "QUIGONJINN", "EZRABRIDGERS3", "BARRISSOFFEE", "ANAKINKNIGHT", "IMAGUNDI" ] },
+          { "name":"KENOBI SINK", "note":"", "url":"", "team":[ "IMAGUNDI", "GENERALKENOBI", "JAWASCAVENGER", "MAUL", "FIRSTORDERTIEPILOT" ] },
+          { "name":"RETRIBUTION PARTY", "note":"", "url":"", "team":[ "ANAKINKNIGHT", "GENERALKENOBI", "JAWASCAVENGER", "MAUL", "FIRSTORDERTIEPILOT" ] },
+          { "name":"ROGUE TEEBO", "note":"", "url":"", "team":[ "TEEBO", "JYNERSO", "CASSIANANDOR", "TIEFIGHTERPILOT", "BARRISSOFFEE" ] },
+          { "name":"NIHILUS", "note":"", "url":"", "team":[ "DARTHNIHILUS", "BARRISSOFFEE", "MAUL", "SAVAGEOPRESS", "COUNTDOOKU" ] },
+          { "name":"ZYLO:S", "note":"", "url":"", "team":[ "KYLOREN" ] },
+          { "name":"BROTINI", "note":"", "url":"", "team":[ "DATHCHA", "COMMANDERLUKESKYWALKER", "HANSOLO" ] }
+        ]
+      },
+      {
+        "name":"PHASE 2 - AAT",
+        "squads":[
+          { "name":"DROIDS", "note":"", "url":"", "team":[ "HK47", "IG88", "IG86SENTINELDROID", "CHIEFNEBIT", "JAWAENGINEER" ] },
+          { "name":"STANDARD CLONES", "note":"", "url":"", "team":[ "CC2224", "CT7567", "CT210408", "CT5555", "CLONESERGEANTPHASEI" ] },
+          { "name":"DATHCHA ZODY", "note":"", "url":"", "team":[ "CC2224", "CT210408", "CT5555", "CLONESERGEANTPHASEI", "DATHCHA" ] },
+          { "name":"ELDER ZODY", "note":"", "url":"", "team":[ "CC2224", "CT210408", "CT5555", "CLONESERGEANTPHASEI", "EWOKELDER" ] },
+          { "name":"IMPERIAL TROOPERS", "note":"", "url":"", "team":[ "VEERS", "STORMTROOPER", "MAGMATROOPER", "DEATHTROOPER", "SNOWTROOPER" ] },
+          { "name":"SRP ZODY", "note":"", "url":"", "team":[ "CC2224", "CT210408", "CT5555", "CLONESERGEANTPHASEI", "SCARIFREBEL" ] },
+          { "name":"ELDER ZADER", "note":"", "url":"", "team":[ "VADER", "DARTHSIDIOUS", "TUSKENSHAMAN", "EWOKELDER", "PHASMA" ] },
+          { "name":"VIVA LA RESISTANCE", "note":"", "url":"", "team":[ "FINN", "REY", "POE", "RESISTANCEPILOT", "RESISTANCETROOPER" ] },
+          { "name":"THE FOURTH ORDER", "note":"", "url":"", "team":[ "PHASMA", "KYLOREN", "FIRSTORDEROFFICERMALE", "FIRSTORDERTROOPER", "FIRSTORDERTIEPILOT" ] },
+          { "name":"SCAVENGER ZODY", "note":"", "url":"", "team":[ "CC2224", "JAWASCAVENGER", "CT210408", "CT5555", "CLONESERGEANTPHASEI" ] }
+        ]
+      },
+      {
+        "name":"PHASE 3 - B2 ROCKET TROOPER, DROIDS, AND AAT CANNON",
+        "squads":[
+          { "name":"IMPERIAL GRAND MANEUVER", "note":"", "url":"", "team":[ "GRANDADMIRALTHRAWN", "JYNERSO", "SHORETROOPER", "GRANDMOFFTARKIN", "DIRECTORKRENNIC" ] },
+          { "name":"VIVA LA POE", "note":"", "url":"", "team":[ "FINN", "POE", "R2D2_LEGENDARY", "RESISTANCEPILOT", "RESISTANCETROOPER" ] },
+          { "name":"CHIRPATINE", "note":"", "url":"", "team":[ "CHIEFCHIRPA", "EMPERORPALPATINE", "STORMTROOPERHAN", "ROYALGUARD", "SUNFAC" ] },
+          { "name":"TIEPATINE", "note":"", "url":"", "team":[ "EMPERORPALPATINE", "TIEFIGHTERPILOT", "SUNFAC", "STORMTROOPERHAN", "ROYALGUARD" ] },
+          { "name":"ROGUE 1", "note":"", "url":"", "team":[ "JYNERSO", "CASSIANANDOR", "BAZEMALBUS", "CHIRRUTIMWE", "BISTAN" ] },
+          { "name":"DARTH TEEBO", "note":"", "url":"", "team":[ "TEEBO", "JYNERSO", "BAZEMALBUS", "CHIRRUTIMWE", "DARTHNIHILUS" ] },
+          { "name":"TEEBOTINE", "note":"", "url":"", "team":[ "TEEBO", "EMPERORPALPATINE", "TIEFIGHTERPILOT", "STORMTROOPERHAN", "ROYALGUARD" ] },
+          { "name":"RTFP", "note":"", "url":"", "team":[ "TEEBO", "JYNERSO", "BAZEMALBUS", "CHIRRUTIMWE", "TIEFIGHTERPILOT" ] },
+          { "name":"CHIRPATHRAWN", "note":"", "url":"", "team":[ "CHIEFCHIRPA", "EMPERORPALPATINE", "GRANDADMIRALTHRAWN", "SUNFAC", "ROYALGUARD" ] },
+          { "name":"MURDERBEARS", "note":"", "url":"", "team":[ "CHIEFCHIRPA", "TEEBO", "WICKET", "LOGRAY", "PAPLOO" ] },
+          { "name":"THE BEAST", "note":"", "url":"", "team":[ "SAVAGEOPRESS" ] }
+        ]
+      },
+      {
+        "name":"PHASE 4 - AAT & 2 X B2 SUPER BATTLE DROID",
+        "squads":[
+          { "name":"STANDARD REBELS", "note":"", "url":"", "team":[ "WEDGEANTILLES", "BIGGSDARKLIGHTER", "ADMINISTRATORLANDO", "ADMIRALACKBAR", "PRINCESSLEIA" ] },
+          { "name":"PRINCESS ZODY", "note":"", "url":"", "team":[ "CC2224", "CT5555", "CT210408", "CLONESERGEANTPHASEI", "PRINCESSLEIA" ] },
+          { "name":"IMA GUN KILL YA", "note":"", "url":"", "team":[ "CC2224", "CT5555", "CT210408", "CLONESERGEANTPHASEI", "IMAGUNDI" ] },
+          { "name":"CHAZE AND FRIENDS", "note":"", "url":"", "team":[ "WEDGEANTILLES", "BIGGSDARKLIGHTER", "BAZEMALBUS", "CHIRRUTIMWE", "HANSOLO" ] },
+          { "name":"PHASMA REBELS", "note":"", "url":"", "team":[ "WEDGEANTILLES", "BIGGSDARKLIGHTER", "ADMIRALACKBAR", "ADMINISTRATORLANDO", "PHASMA" ] },
+          { "name":"FIRST ORDER", "note":"", "url":"", "team":[ "PHASMA", "FIRSTORDEROFFICERMALE", "KYLOREN", "FIRSTORDERTROOPER", "FIRSTORDERTIEPILOT" ] },
+          { "name":"VIVA LA R2", "note":"", "url":"", "team":[ "FINN", "POE", "REY", "RESISTANCETROOPER", "R2D2_LEGENDARY" ] },
+          { "name":"BB8 BE BALLER", "note":"", "url":"", "team":[ "FINN", "POE", "BB8", "RESISTANCETROOPER", "RESISTANCEPILOT" ] },
+          { "name":"IMPERIAL TROOPERS", "note":"", "url":"", "team":[ "VEERS", "SNOWTROOPER", "MAGMATROOPER", "DEATHTROOPER", "STORMTROOPER" ] },
+          { "name":"JUGGERMAUL 1", "note":"", "url":"", "team":[ "DARTHSIDIOUS", "EMPERORPALPATINE", "MAUL", "SITHASSASSIN", "CHIRRUTIMWE" ] },
+          { "name":"JUGGERMAUL 2", "note":"", "url":"", "team":[ "DARTHSIDIOUS", "EMPERORPALPATINE", "MAUL", "SITHASSASSIN", "EWOKELDER" ] }
+        ]
+      }
+    ]
+  },
+  "sith":{
+    "name":"THE SITH TRIUMVIRATE - DEFEAT THE ANCIENT SITH LORDS",
+    "rarity":7,
+    "gear":11,
+    "level":85,
+    "phase":[
+      {
+        "name":"PHASE 1 - DARTH NIHILUS, SITH ASSASSIN &amp; SITH MARAUDER",
+        "squads":[
+          { "name":"[α] RJT REY R2", "note":"4%-10% [1,862,000-4,655,000]", "url":"https://youtu.be/8ebER5Sm1ok", "team":[ "REYJEDITRAINING:L", "BB8:U1", "R2D2_LEGENDARY:U2", "RESISTANCETROOPER", "REY" ] },
+          { "name":"[α] RJT REY VISAS", "note":"4%-10% [1,862,000-4,655,000]", "url":"", "team":[ "REYJEDITRAINING:L", "BB8:U1", "VISASMARR:U1", "REY", "RESISTANCETROOPER" ] },
+          { "name":"[α] RJT HYODA R2", "note":"4%-10% [1,862,000-4,655,000]", "url":"", "team":[ "REYJEDITRAINING:L", "BB8:U1", "R2D2_LEGENDARY:U2", "RESISTANCETROOPER", "HERMITYODA:S" ] },
+          { "name":"[α] RJT HYODA VISAS", "note":"4%-10% [1,862,000-4,655,000]", "url":"", "team":[ "REYJEDITRAINING:L", "BB8:U1", "VISASMARR:U1", "RESISTANCETROOPER", "HERMITYODA:S" ] },
+          { "name":"[α] BOBA VM", "note":"2%-5% [931,000-2,327,500]", "url":"", "team":[ "BOBAFETT", "IG88", "DENGAR", "GREEDO", "VISASMARR" ] },
+          { "name":"[α] BOBA BOSS", "note":"2%-5% [931,000-2,327,500]", "url":"", "team":[ "BOBAFETT", "IG88", "DENGAR", "GREEDO", "BOSSK" ] },
+          { "name":"[α] BOSSK VM", "note":"2%-5% [931,000-2,327,500]", "url":"", "team":[ "BOSSK", "IG88", "DENGAR", "GREEDO", "VISASMARR" ] }
+        ]
+      },
+      {
+        "name":"PHASE 2 - DARTH SION, SITH MARAUDER &amp; SITH ASSASSIN",
+        "squads":[
+          { "name":"[α] CLS YODA", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "COMMANDERLUKESKYWALKER:L", "HERMITYODA:S", "SCARIFREBEL", "SABINEWRENS3:S", "EZRABRIDGERS3:S" ] },
+          { "name":"[α] LEIA YODA", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "PRINCESSLEIA", "HERMITYODA:S", "SCARIFREBEL", "SABINEWRENS3:S", "EZRABRIDGERS3:S" ] },
+          { "name":"[α] LEIA ALT 1", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "PRINCESSLEIA", "HERMITYODA:S", "SCARIFREBEL", "SABINEWRENS3:S", "GRANDADMIRALTHRAWN" ] },
+          { "name":"[α] LEIA ALT 2", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "PRINCESSLEIA", "HERMITYODA:S", "GENERALKENOBI", "SABINEWRENS3:S", "EZRABRIDGERS3:S" ] },
+          { "name":"[α] LEIA ALT 3", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "PRINCESSLEIA", "HERMITYODA:S", "GENERALKENOBI", "SABINEWRENS3:S", "GRANDADMIRALTHRAWN" ] },
+          { "name":"[α] VEERS", "note":"1%-2% [520,000-1,040,000]", "url":"", "team":[ "VEERS:U1", "GRANDADMIRALTHRAWN:U1", "DEATHTROOPER", "SHORETROOPER", "COLONELSTARCK" ] },
+          { "name":"[α] GK HW", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "GENERALKENOBI", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "HERMITYODA:S", "WAMPA" ] },
+          { "name":"[α] GK HL", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "GENERALKENOBI", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "HERMITYODA:S", "PRINCESSLEIA" ] },
+          { "name":"[α] GK ZW", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "GENERALKENOBI", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "BARRISSOFFEE:U1", "WAMPA" ] },
+          { "name":"[α] GK ZL", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "GENERALKENOBI", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "BARRISSOFFEE:U1", "PRINCESSLEIA" ] },
+          { "name":"[α] BOBA HW", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "BOBAFETT", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "HERMITYODA:S", "WAMPA" ] },
+          { "name":"[α] BOBA HL", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "BOBAFETT", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "HERMITYODA:S", "PRINCESSLEIA" ] },
+          { "name":"[α] BOBA ZW", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "BOBAFETT", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "BARRISSOFFEE:U1", "WAMPA" ] },
+          { "name":"[α] BOBA ZL", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "BOBAFETT", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "BARRISSOFFEE:U1", "PRINCESSLEIA" ] },
+          { "name":"[α] OB HW", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "OLDBENKENOBI", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "HERMITYODA:S", "WAMPA" ] },
+          { "name":"[α] OB HL", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "OLDBENKENOBI", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "HERMITYODA:S", "PRINCESSLEIA" ] },
+          { "name":"[α] OB ZW", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "OLDBENKENOBI", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "BARRISSOFFEE:U1", "WAMPA" ] },
+          { "name":"[α] OB ZL", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "OLDBENKENOBI", "GRANDADMIRALTHRAWN:U1", "SABINEWRENS3:S", "BARRISSOFFEE:U1", "PRINCESSLEIA" ] },
+          { "name":"[α] NUTE SRP", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "NUTEGUNRAY", "PRINCESSLEIA", "SCARIFREBEL", "NIGHTSISTERACOLYTE", "HERMITYODA" ] },
+          { "name":"[α] NUTE ZOMBIE", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "NUTEGUNRAY", "PRINCESSLEIA", "NIGHTSISTERZOMBIE", "NIGHTSISTERACOLYTE", "HERMITYODA" ] },
+          { "name":"[α] NUTE", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "NUTEGUNRAY", "PRINCESSLEIA", "STORMTROOPERHAN", "GENERALKENOBI", "WAMPA" ] },
+          { "name":"[α/β] PHOENIX", "note":"0.5%-7% [260,000-3,640,000]", "url":"", "team":[ "HERASYNDULLAS3:S", "EZRABRIDGERS3:S", "KANANJARRUSS3:S", "SABINEWRENS3:S", "ZEBS3:S" ] },
+          { "name":"[β] ACKBAR", "note":"1% [520,000]", "url":"", "team":[ "ADMIRALACKBAR", "BARRISSOFFEE", "GENERALKENOBI", "GRANDADMIRALTHRAWN", "SABINEWRENS3" ] },
+          { "name":"[β] LEIA", "note":"1% [520,000]", "url":"", "team":[ "PRINCESSLEIA", "HERMITYODA", "SCARIFREBEL", "GRANDADMIRALTHRAWN", "SABINEWRENS3" ] },
+          { "name":"[β] THRAWN", "note":"1% [520,000]", "url":"", "team":[ "GRANDADMIRALTHRAWN", "VEERS", "SHORETROOPER", "COLONELSTARCK", "SNOWTROOPER" ] },
+          { "name":"[β] VEERS SNOW", "note":"1% [520,000]", "url":"", "team":[ "VEERS", "GRANDADMIRALTHRAWN", "SHORETROOPER", "COLONELSTARCK", "SNOWTROOPER" ] },
+          { "name":"[β] MURDER BEARS", "note":"0.5%-1% [260,000-520,000]", "url":"", "team":[ "CHIEFCHIRPA:L", "WICKET", "EWOKELDER", "EWOKSCOUT", "LOGRAY" ] },
+          { "name":"[β] ZAUL", "note":"0.5%-1% [260,000-520,000]", "url":"", "team":[ "MAUL:L", "DARTHNIHILUS", "DARTHSION", "SITHTROOPER", "SITHASSASSIN" ] },
+          { "name":"[β] PALPS", "note":"1%-2% [520,000-1,040,000]", "url":"", "team":[ "EMPERORPALPATINE", "GRANDADMIRALTHRAWN", "DARTHNIHILUS", "GRANDMOFFTARKIN", "VADER" ] },
+          { "name":"[β] PALPS ALT", "note":"1%-2% [520,000-1,040,000]", "url":"", "team":[ "EMPERORPALPATINE", "GRANDADMIRALTHRAWN", "DARTHNIHILUS", "GRANDMOFFTARKIN", "SITHTROOPER" ] },
+          { "name":"[β] CLS (IF NO DT)", "note":"TBD%", "url":"", "team":[ "COMMANDERLUKESKYWALKER", "HERMITYODA", "SCARIFREBEL", "EZRABRIDGERS3", "SABINEWRENS3" ] }
+        ]
+      },
+      {
+        "name":"PHASE 3 - DARTH TRAYA &amp; 3 LIGHTSABERS",
+        "squads":[
+          { "name":"[α] CHEX MIX SAB", "note":"4%-6% [1,440,000-2,160,000]", "url":"", "team":[ "COMMANDERLUKESKYWALKER:L", "HANSOLO:U1", "DEATHTROOPER", "SABINEWRENS3", "CHIRRUTIMWE" ] },
+          { "name":"[α] CHEX MIX PAO", "note":"4%-6% [1,440,000-2,160,000]", "url":"", "team":[ "COMMANDERLUKESKYWALKER:L", "HANSOLO:U1", "DEATHTROOPER", "PAO", "CHIRRUTIMWE" ] },
+          { "name":"[α] CHEX MIX JKA", "note":"4%-6% [1,440,000-2,160,000]", "url":"", "team":[ "COMMANDERLUKESKYWALKER:L", "HANSOLO:U1", "DEATHTROOPER", "ANAKINKNIGHT", "CHIRRUTIMWE" ] },
+          { "name":"[α] CHEX REX SAB", "note":"4%-6% [1,440,000-2,160,000]", "url":"", "team":[ "COMMANDERLUKESKYWALKER:L", "HANSOLO:U1", "DEATHTROOPER", "SABINEWRENS3", "CT7567" ] },
+          { "name":"[α] CHEX REX PAO", "note":"4%-6% [1,440,000-2,160,000]", "url":"", "team":[ "COMMANDERLUKESKYWALKER:L", "HANSOLO:U1", "DEATHTROOPER", "PAO", "CT7567" ] },
+          { "name":"[α] CHEX REX JKA", "note":"4%-6% [1,440,000-2,160,000]", "url":"", "team":[ "COMMANDERLUKESKYWALKER:L", "HANSOLO:U1", "DEATHTROOPER", "ANAKINKNIGHT", "CT7567" ] },
+          { "name":"[β] KRU XSF", "note":"3%-4% [1,080,000-1,440,000]", "url":"", "team":[ "KYLORENUNMASKED:L", "FIRSTORDERTROOPER", "FIRSTORDEROFFICERMALE", "FIRSTORDEREXECUTIONER", "FIRSTORDERSPECIALFORCESPILOT" ] },
+          { "name":"[β] KRU ALT 1", "note":"3%-4% [1,080,000-1,440,000]", "url":"", "team":[ "KYLORENUNMASKED:L", "FIRSTORDERTROOPER", "FIRSTORDEROFFICERMALE", "FIRSTORDEREXECUTIONER", "PHASMA" ] },
+          { "name":"[β] KRU ALT 2", "note":"3%-4% [1,080,000-1,440,000]", "url":"", "team":[ "KYLORENUNMASKED:L", "FIRSTORDERTROOPER", "FIRSTORDEROFFICERMALE", "FIRSTORDERTIEPILOT", "FIRSTORDERSPECIALFORCESPILOT" ] },
+          { "name":"[β] KRU ALT 3", "note":"3%-4% [1,080,000-1,440,000]", "url":"", "team":[ "KYLORENUNMASKED:L", "FIRSTORDERTROOPER", "FIRSTORDEROFFICERMALE", "FIRSTORDERTIEPILOT", "PHASMA" ] },
+          { "name":"[β] NIGHTSISTERS", "note":"4%-8% [1,440,000-2,880,000]", "url":"", "team":[ "ASAJVENTRESS:L", "MOTHERTALZIN", "DAKA", "NIGHTSISTERACOLYTE", "NIGHTSISTERZOMBIE" ] },
+          { "name":"[β] BOBA VM FLEX TANK", "note":"2%-3% [720,000-1,080,000]", "url":"", "team":[ "BOBAFETT", "PRINCESSLEIA", "ANAKINKNIGHT", "VISASMARR", "GENERALKENOBI" ] },
+          { "name":"[β] BOBA DOOKU FLEX TANK", "note":"2%-3% [720,000-1,080,000]", "url":"", "team":[ "BOBAFETT", "PRINCESSLEIA", "ANAKINKNIGHT", "COUNTDOOKU:U1", "GENERALKENOBI" ] }
+        ]
+      },
+      {
+        "name":"PHASE 4 - DARTH TRAYA - DARTH NIHILUS",
+        "squads":[
+          { "name":"[α] NS 1.0", "note":"4%-8% [480,000-16,600,000] - Zombie should be weak as possible", "url":"https://youtu.be/hMctm_0RYwA", "team":[ "ASAJVENTRESS:L:U1", "MOTHERTALZIN:U1", "DAKA:U1", "TALIA", "NIGHTSISTERZOMBIE" ] },
+          { "name":"[α] NS 2.0", "note":"4%-8% [480,000-960,000]", "url":"", "team":[ "ASAJVENTRESS:L:U1", "DAKA:U1", "TALIA", "NIGHTSISTERACOLYTE", "NIGHTSISTERINITIATE" ] },
+          { "name":"[α] NS 3.0", "note":"4%-8% [480,000-960,000]", "url":"", "team":[ "ASAJVENTRESS:L", "DAKA", "TALIA", "NIGHTSISTERACOLYTE", "MOTHERTALZIN:U1" ] },
+          { "name":"[α] NS 4.0", "note":"4%-8% [480,000-960,000]", "url":"", "team":[ "ASAJVENTRESS:L", "DAKA", "NIGHTSISTERACOLYTE", "MOTHERTALZIN:U1", "NIGHTSISTERZOMBIE" ] },
+          { "name":"[α] NS 5.0", "note":"4%-8% [480,000-960,000]", "url":"", "team":[ "MOTHERTALZIN:U1", "ASAJVENTRESS:U1", "DAKA", "NIGHTSISTERACOLYTE", "NIGHTSISTERZOMBIE" ] },
+          { "name":"[α] NS 6.0", "note":"4%-8% [480,000-960,000]", "url":"", "team":[ "MOTHERTALZIN:U1", "ASAJVENTRESS:U1", "DAKA", "NIGHTSISTERACOLYTE", "TALIA" ] }
+        ]
+      },
+      {
+        "name":"PHASE 4 - DARTH TRAYA - SION",
+        "squads":[
+          { "name":"[α] FO 1.0", "note":"1%-4% [96,000-384,000]", "url":"", "team":[ "KYLORENUNMASKED:L", "FIRSTORDERTROOPER", "FIRSTORDEROFFICERMALE", "FIRSTORDEREXECUTIONER", "FIRSTORDERSPECIALFORCESPILOT" ] },
+          { "name":"[α] FO 2.0", "note":"1%-4% [96,000-384,000]", "url":"", "team":[ "KYLORENUNMASKED:L", "FIRSTORDERTROOPER", "FIRSTORDEROFFICERMALE", "FIRSTORDEREXECUTIONER", "FIRSTORDERTIEPILOT" ] },
+          { "name":"[β] FO 3.0", "note":"1%-2% [96,000-192,000]", "url":"", "team":[ "KYLORENUNMASKED:L", "FIRSTORDERTROOPER", "FIRSTORDEROFFICERMALE", "KYLOREN", "FIRSTORDERSPECIALFORCESPILOT" ] },
+          { "name":"[β] FO 4.0", "note":"1%-2% [96,000-192,000]", "url":"", "team":[ "KYLORENUNMASKED:L", "FIRSTORDERTROOPER", "FIRSTORDEROFFICERMALE", "KYLOREN", "FIRSTORDERTIEPILOT" ] }
+        ]
+      }
+    ]
+  },
+  "events":{
+    "name":"SWGOH EVENTS",
+    "rarity":7,
+    "gear":8,
+    "level":80,
+    "phase":[
+      {
+        "name":"REY'S HERO'S JOURNEY",
+        "squads":[
+          { "name":"", "note":"Finn's Zeta recommended.", "url":"", "team":[ "REY", "FINN", "BB8", "SMUGGLERHAN", "SMUGGLERCHEWBACCA" ] }
+        ]
+      },
+      {
+        "name":"LUKE SKYWALKER HERO'S JOURNEY",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "LUKESKYWALKER", "PRINCESSLEIA", "R2D2_LEGENDARY", "STORMTROOPERHAN", "OLDBENKENOBI" ] }
+        ]
+      },
+      {
+        "name":"DARING DROID",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "VADER", "DEATHTROOPER", "DIRECTORKRENNIC", "EMPERORPALPATINE", "GARSAXON", "VEERS", "GRANDADMIRALTHRAWN", "GRANDMOFFTARKIN", "IMPERIALPROBEDROID", "IMPERIALSUPERCOMMANDO", "MAGMATROOPER", "ROYALGUARD", "SHORETROOPER", "SNOWTROOPER", "STORMTROOPER", "TIEFIGHTERPILOT" ] }
+        ]
+      },
+      {
+        "name":"PIECES &amp; PLANS",
+        "squads":[
+          { "name":"", "note":"Kylo's Zeta recommended", "url":"", "team":[ "PHASMA", "FIRSTORDEROFFICERMALE", "FIRSTORDERTROOPER", "FIRSTORDERTIEPILOT", "KYLOREN", "FIRSTORDEREXECUTIONER", "KYLORENUNMASKED", "FIRSTORDERSPECIALFORCESPILOT" ] }
+        ]
+      },
+      {
+        "name":"GRANDMASTER'S TRAINING",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "AAYLASECURA", "AHSOKATANO", "BARRISSOFFEE", "EETHKOTH", "EZRABRIDGERS3", "GENERALKENOBI", "HERMITYODA", "IMAGUNDI", "JEDIKNIGHTCONSULAR", "ANAKINKNIGHT", "JEDIKNIGHTGUARDIAN", "KANANJARRUSS3", "KITFISTO", "LUMINARAUNDULI", "MACEWINDU", "OLDBENKENOBI", "PLOKOON", "QUIGONJINN" ] }
+        ]
+      },
+      {
+        "name":"EMPEROR'S DEMISE",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "ADMIRALACKBAR", "FULCRUMAHSOKA", "BAZEMALBUS", "BIGGSDARKLIGHTER", "BISTAN", "BODHIROOK", "HOTHHAN", "CASSIANANDOR", "CHIRRUTIMWE", "CHOPPERS3", "COMMANDERLUKESKYWALKER", "EZRABRIDGERS3", "ZEBS3", "HANSOLO", "HERASYNDULLAS3", "HOTHREBELSCOUT", "HOTHREBELSOLDIER", "JYNERSO", "K2SO", "KANANJARRUSS3", "ADMINISTRATORLANDO", "LOBOT", "LUKESKYWALKER", "OLDBENKENOBI", "PAO", "PRINCESSLEIA", "R2D2_LEGENDARY", "HOTHLEIA", "SABINEWRENS3", "SCARIFREBEL", "STORMTROOPERHAN", "WEDGEANTILLES" ] }
+        ]
+      },
+      {
+        "name":"ARTIST OF WAR",
+        "squads":[
+          { "name":"", "note":"Sabine not recommended. All purple mats and omegas on Ezra recommended", "url":"", "team":[ "CHOPPERS3", "EZRABRIDGERS3", "ZEBS3", "HERASYNDULLAS3", "KANANJARRUSS3", "SABINEWRENS3" ] }
+        ]
+      },
+      {
+        "name":"IMPERIAL CHIMERA",
+        "squads":[
+          { "name":"", "note":"Two ships must be Ghost and Phantom II", "url":"", "shippy":"true", "team":[ "CAPITALMONCALAMARICRUISER", "GHOST", "PHANTOM2", "XWINGRED3", "XWINGRED2", "UWINGSCARIF", "UWINGROGUEONE" ] }
+        ]
+      }
+    ]
+  },
+  "twdefense":{
+    "name":"TERRITORY WARS DEFENSE",
+    "rarity":7,
+    "gear":11,
+    "level":85,
+    "phase":[
+      {
+        "name":"FIRST ORDER",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "KYLORENUNMASKED:L", "FIRSTORDERTROOPER", "FIRSTORDEREXECUTIONER", "FIRSTORDEROFFICERMALE", "FIRSTORDERSPECIALFORCESPILOT", "KYLOREN:S" ] }
+        ]
+      },
+      {
+        "name":"COMMANDER LUKE SKYWALKER LEAD",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "COMMANDERLUKESKYWALKER:L:U2", "BAZEMALBUS", "CHIRRUTIMWE", "R2D2_LEGENDARY", "HANSOLO" ] },
+          { "name":"", "note":"", "url":"", "team":[ "COMMANDERLUKESKYWALKER:L:U2", "HANSOLO", "R2D2_LEGENDARY", "BIGGSDARKLIGHTER", "WEDGEANTILLES" ] }
+        ]
+      },
+      {
+        "name":"JEDI",
+        "squads":[
+          { "name":"TEAM ONE", "note":"", "url":"", "team":[ "GENERALKENOBI", "BARRISSOFFEE:U1", "HERMITYODA:S", "EZRABRIDGERS3", "OLDBENKENOBI" ] },
+          { "name":"TEAM TWO", "note":"", "url":"", "team":[ "QUIGONJINN:L", "BARRISSOFFEE:U1", "HERMITYODA:S", "EZRABRIDGERS3", "OLDBENKENOBI" ] },
+          { "name":"", "note":"", "url":"", "team":[ "VADER", "DEATHTROOPER", "DIRECTORKRENNIC", "EMPERORPALPATINE", "GARSAXON", "VEERS", "GRANDADMIRALTHRAWN", "GRANDMOFFTARKIN", "IMPERIALPROBEDROID", "IMPERIALSUPERCOMMANDO", "MAGMATROOPER", "ROYALGUARD", "SHORETROOPER", "SNOWTROOPER", "STORMTROOPER", "TIEFIGHTERPILOT" ] }
+        ]
+      },
+      {
+        "name":"DARK SIDE",
+        "squads":[
+          { "name":"TEAM ONE", "note":"", "url":"", "team":[ "EMPERORPALPATINE:L:U1", "BARRISSOFFEE:U1", "HERMITYODA:S", "EZRABRIDGERS3", "OLDBENKENOBI" ] },
+          { "name":"TEAM TWO", "note":"", "url":"", "team":[ "QUIGONJINN:L", "BARRISSOFFEE:U1", "HERMITYODA:S", "EZRABRIDGERS3", "OLDBENKENOBI" ] },
+          { "name":"", "note":"", "url":"", "team":[ "VADER", "DEATHTROOPER", "DIRECTORKRENNIC", "EMPERORPALPATINE", "GARSAXON", "VEERS", "GRANDADMIRALTHRAWN", "GRANDMOFFTARKIN", "IMPERIALPROBEDROID", "IMPERIALSUPERCOMMANDO", "MAGMATROOPER", "ROYALGUARD", "SHORETROOPER", "SNOWTROOPER", "STORMTROOPER", "TIEFIGHTERPILOT" ] }
+        ]
+      },
+      {
+        "name":"",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "AAYLASECURA", "AHSOKATANO", "BARRISSOFFEE", "EETHKOTH", "EZRABRIDGERS3", "GENERALKENOBI", "HERMITYODA", "IMAGUNDI", "JEDIKNIGHTCONSULAR", "ANAKINKNIGHT", "JEDIKNIGHTGUARDIAN", "KANANJARRUSS3", "KITFISTO", "LUMINARAUNDULI", "MACEWINDU", "OLDBENKENOBI", "PLOKOON", "QUIGONJINN" ] }
+        ]
+      },
+      {
+        "name":"",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "ADMIRALACKBAR", "FULCRUMAHSOKA", "BAZEMALBUS", "BIGGSDARKLIGHTER", "BISTAN", "BODHIROOK", "HOTHHAN", "CASSIANANDOR", "CHIRRUTIMWE", "CHOPPERS3", "COMMANDERLUKESKYWALKER", "EZRABRIDGERS3", "ZEBS3", "HANSOLO", "HERASYNDULLAS3", "HOTHREBELSCOUT", "HOTHREBELSOLDIER", "JYNERSO", "K2SO", "KANANJARRUSS3", "ADMINISTRATORLANDO", "LOBOT", "LUKESKYWALKER", "OLDBENKENOBI", "PAO", "PRINCESSLEIA", "R2D2_LEGENDARY", "HOTHLEIA", "SABINEWRENS3", "SCARIFREBEL", "STORMTROOPERHAN", "WEDGEANTILLES" ] }
+        ]
+      },
+      {
+        "name":"",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "HERASYNDULLAS3", "CHOPPERS3", "EZRABRIDGERS3", "ZEBS3", "KANANJARRUSS3", "SABINEWRENS3" ] }
+        ]
+      }
+    ]
+  },
+  "lstb":{
+    "name":"LIGHT SIDE TERRITORY BATTLES",
+    "rarity":7,
+    "gear":10,
+    "level":85,
+    "phase":[
+      {
+        "name":"PHASE ONE",
+        "squads":[
+          { "name":"SPECIAL MISSION", "note":"7 GET Rewards", "url":"", "team":[ "HERASYNDULLAS3", "CHOPPERS3", "EZRABRIDGERS3", "ZEBS3", "KANANJARRUSS3", "SABINEWRENS3" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "REYJEDITRAINING", "BB8", "FINN", "REY", "RESISTANCETROOPER", "POE" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "COMMANDERLUKESKYWALKER", "R2D2_LEGENDARY", "HANSOLO", "BIGGSDARKLIGHTER", "WEDGEANTILLES", "PRINCESSLEIA", "STORMTROOPERHAN","OLDBENKENOBI", "ADMIRALACKBAR" ] }
+        ]
+      },
+      {
+        "name":"PHASE TWO",
+        "squads":[
+          { "name":"SPECIAL MISSION", "note":"Rogue One only. 8 GET Rewards", "url":"", "team":[ "JYNERSO", "BAZEMALBUS", "CHIRRUTIMWE", "BISTAN", "BODHIROOK", "CASSIANANDOR", "K2SO","PAO", "SCARIFREBEL" ] },
+          { "name":"COMBAT MISSION", "note":"Hoth Rebel Soldier + 4 Rebels required", "url":"", "team":[ "HOTHREBELSOLDIER", "COMMANDERLUKESKYWALKER", "R2D2_LEGENDARY", "HANSOLO", "BIGGSDARKLIGHTER", "WEDGEANTILLES", "PRINCESSLEIA", "STORMTROOPERHAN","OLDBENKENOBI", "ADMIRALACKBAR" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "REYJEDITRAINING", "BB8", "FINN", "REY", "RESISTANCETROOPER", "POE" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "HERASYNDULLAS3", "CHOPPERS3", "EZRABRIDGERS3", "ZEBS3", "KANANJARRUSS3", "SABINEWRENS3" ] }
+        ]
+      },
+      {
+        "name":"PHASE THREE",
+        "squads":[
+          { "name":"SHIP COMBAT MISSION", "note":"", "url":"", "shippy":"true", "team":[ "CAPITALJEDICRUISER", "CAPITALMONCALAMARICRUISER", "XWINGRED2", "XWINGRED3", "UWINGSCARIF", "UWINGROGUEONE", "XWINGBLACKONE", "XWINGRESISTANCE", "JEDISTARFIGHTERAHSOKATANO", "MILLENNIUMFALCONEP7", "MILLENNIUMFALCONPRISTINE", "GHOST", "ARC170REX", "ARC170CLONESERGEANT", "UMBARANSTARFIGHTER", "BLADEOFDORIN" ] },
+          { "name":"COMBAT MISSION", "note":"Hoth Rebel Scout + 4 Rebels required", "url":"", "team":[ "HOTHREBELSCOUT", "COMMANDERLUKESKYWALKER", "R2D2_LEGENDARY", "HANSOLO", "BIGGSDARKLIGHTER", "WEDGEANTILLES", "PRINCESSLEIA", "STORMTROOPERHAN","OLDBENKENOBI", "ADMIRALACKBAR" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "REYJEDITRAINING", "BB8", "FINN", "REY", "RESISTANCETROOPER", "POE" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "HERASYNDULLAS3", "CHOPPERS3", "EZRABRIDGERS3", "ZEBS3", "KANANJARRUSS3", "SABINEWRENS3" ] },
+          { "name":"SPECIAL MISSION", "note":"Hoth Rebel Soldier required. Two ROLO Shards Reward", "url":"", "team":[ "HOTHREBELSOLDIER", "COMMANDERLUKESKYWALKER", "R2D2_LEGENDARY", "HANSOLO", "BIGGSDARKLIGHTER", "WEDGEANTILLES", "PRINCESSLEIA", "STORMTROOPERHAN","OLDBENKENOBI", "ADMIRALACKBAR" ] }
+        ]
+      },
+      {
+        "name":"PHASE FOUR",
+        "squads":[
+          { "name":"SHIP COMBAT MISSION", "note":"", "url":"", "shippy":"true", "team":[ "CAPITALJEDICRUISER", "CAPITALMONCALAMARICRUISER", "XWINGRED2", "XWINGRED3", "UWINGSCARIF", "UWINGROGUEONE", "XWINGBLACKONE", "XWINGRESISTANCE", "JEDISTARFIGHTERAHSOKATANO", "MILLENNIUMFALCONEP7", "MILLENNIUMFALCONPRISTINE", "GHOST", "ARC170REX", "ARC170CLONESERGEANT", "UMBARANSTARFIGHTER", "BLADEOFDORIN" ] },
+          { "name":"COMBAT MISSION", "note":"Hoth Rebel Soldier + 4 Rebels required", "url":"", "team":[ "HOTHREBELSOLDIER", "COMMANDERLUKESKYWALKER", "R2D2_LEGENDARY", "HANSOLO", "BIGGSDARKLIGHTER", "WEDGEANTILLES", "PRINCESSLEIA", "STORMTROOPERHAN","OLDBENKENOBI", "ADMIRALACKBAR" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "REYJEDITRAINING", "BB8", "FINN", "REY", "RESISTANCETROOPER", "POE" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "HERASYNDULLAS3", "CHOPPERS3", "EZRABRIDGERS3", "ZEBS3", "KANANJARRUSS3", "SABINEWRENS3" ] },
+          { "name":"SPECIAL MISSION", "note":"ROLO Required. 20 GET Rewards", "url":"", "team":[ "HOTHLEIA", "JYNERSO", "BAZEMALBUS", "CHIRRUTIMWE", "BISTAN", "BODHIROOK", "CASSIANANDOR", "K2SO", "PAO", "SCARIFREBEL" ] }
+        ]
+      },
+      {
+        "name":"PHASE FIVE",
+        "squads":[
+          { "name":"SHIP COMBAT MISSION", "note":"", "url":"", "shippy":"true", "team":[ "CAPITALJEDICRUISER", "CAPITALMONCALAMARICRUISER", "XWINGRED2", "XWINGRED3", "UWINGSCARIF", "UWINGROGUEONE", "XWINGBLACKONE", "XWINGRESISTANCE", "JEDISTARFIGHTERAHSOKATANO", "MILLENNIUMFALCONEP7", "MILLENNIUMFALCONPRISTINE", "GHOST", "ARC170REX", "ARC170CLONESERGEANT", "UMBARANSTARFIGHTER", "BLADEOFDORIN" ] },
+          { "name":"COMBAT MISSION", "note":"Hoth Rebel Scout + 4 Rebels required", "url":"", "team":[ "HOTHREBELSCOUT", "COMMANDERLUKESKYWALKER", "R2D2_LEGENDARY", "HANSOLO", "BIGGSDARKLIGHTER", "WEDGEANTILLES", "PRINCESSLEIA", "STORMTROOPERHAN","OLDBENKENOBI", "ADMIRALACKBAR" ] },
+          { "name":"COMBAT MISSION", "note":"Phoenix Required", "url":"", "team":[ "HERASYNDULLAS3", "CHOPPERS3", "EZRABRIDGERS3", "ZEBS3", "KANANJARRUSS3", "SABINEWRENS3" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "REYJEDITRAINING", "BB8", "FINN", "REY", "RESISTANCETROOPER", "POE" ] },
+          { "name":"SPECIAL MISSION", "note":"CLS Required", "url":"", "team":[ "COMMANDERLUKESKYWALKER", "R2D2_LEGENDARY", "HANSOLO", "BIGGSDARKLIGHTER", "WEDGEANTILLES", "PRINCESSLEIA", "STORMTROOPERHAN","OLDBENKENOBI", "ADMIRALACKBAR" ] }
+        ]
+      },
+      {
+        "name":"PHASE SIX",
+        "squads":[
+          { "name":"SHIP COMBAT MISSION", "note":"", "url":"", "shippy":"true", "team":[ "CAPITALJEDICRUISER", "CAPITALMONCALAMARICRUISER", "XWINGRED2", "XWINGRED3", "UWINGSCARIF", "UWINGROGUEONE", "XWINGBLACKONE", "XWINGRESISTANCE", "JEDISTARFIGHTERAHSOKATANO", "MILLENNIUMFALCONEP7", "MILLENNIUMFALCONPRISTINE", "GHOST", "ARC170REX", "ARC170CLONESERGEANT", "UMBARANSTARFIGHTER", "BLADEOFDORIN" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "REYJEDITRAINING", "BB8", "FINN", "REY", "RESISTANCETROOPER", "POE" ] },
+          { "name":"REBELS", "note":"", "url":"", "team":[ "COMMANDERLUKESKYWALKER", "R2D2_LEGENDARY", "HANSOLO", "BIGGSDARKLIGHTER", "WEDGEANTILLES", "PRINCESSLEIA", "STORMTROOPERHAN", "OLDBENKENOBI", "ADMIRALACKBAR" ] },
+          { "name":"ROGUE ONE", "note":"Jyn is the only RO with a leader abiliy", "url":"", "team":[ "JYNERSO", "BAZEMALBUS", "CHIRRUTIMWE", "BISTAN", "BODHIROOK", "CASSIANANDOR", "K2SO", "PAO", "SCARIFREBEL" ] },
+          { "name":"SPECIAL MISSION", "note":"Hoth Han currently isn't a requirement due to a bug, only ROLO is. 30 GET Rewards", "url":"https://youtu.be/W2ScsA7eA4o", "team":[ "HOTHHAN", "HOTHLEIA", "HANSOLO", "GENERALKENOBI", "COMMANDERLUKESKYWALKER", "R2D2_LEGENDARY" ] }
+        ]
+      }
+    ]
+  },
+  "dstb":{
+    "name":"DARK SIDE TERRITORY BATTLES",
+    "rarity":7,
+    "gear":9,
+    "level":85,
+    "phase":[
+      {
+        "name":"PHASE ONE - 2* AND UP",
+        "squads":[
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "VEERS", "DEATHTROOPER", "STORMTROOPER", "COLONELSTARCK", "MAGMATROOPER", "SNOWTROOPER", "SHORETROOPER" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "DARTHNIHILUS", "MAUL", "DARTHSION", "SITHTROOPER", "COUNTDOOKU", "DARTHSIDIOUS", "SAVAGEOPRESS" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "MOTHERTALZIN", "ASAJVENTRESS", "NIGHTSISTERSPIRIT", "NIGHTSISTERZOMBIE", "DAKA", "TALIA", "NIGHTSISTERACOLYTE", "NIGHTSISTERINITIATE" ] },
+          { "name":"SPECIAL MISSION", "note":"VADER REQUIRED + 4 EMPIRE. OTHERS LISTED ARE COMMON TEAMMATES. REWARD: 7 GET", "url":"", "team":[ "VADER", "GRANDMOFFTARKIN", "EMPERORPALPATINE", "TIEFIGHTERPILOT", "ROYALGUARD", "GRANDADMIRALTHRAWN" ] }
+        ]
+      },
+      {
+        "name":"PHASE TWO - 3* AND UP",
+        "squads":[
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "DARTHNIHILUS", "MAUL", "DARTHSION", "SITHTROOPER", "COUNTDOOKU", "DARTHSIDIOUS", "SAVAGEOPRESS" ] },
+          { "name":"COMBAT MISSION", "note":"SNOWTROOPER + 4 EMPIRE REQUIRED. OTHERS LISTED ARE COMMON TEAMMATES", "url":"", "team":[ "SNOWTROOPER", "VADER", "GRANDMOFFTARKIN", "EMPERORPALPATINE", "TIEFIGHTERPILOT", "ROYALGUARD", "GRANDADMIRALTHRAWN" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "KYLORENUNMASKED", "KYLOREN", "FIRSTORDERTROOPER", "FIRSTORDERTIEPILOT", "FIRSTORDEREXECUTIONER", "FIRSTORDEROFFICERMALE", "FIRSTORDERSPECIALFORCESPILOT", "PHASMA" ] },
+          { "name":"SPECIAL MISSION", "note":"REWARD: 9 GET", "url":"", "team":[ "BOSSK", "BOBAFETT", "GREEDO", "CADBANE", "DENGAR", "IG88", "ZAMWESELL" ] }
+        ]
+      },
+      {
+        "name":"PHASE THREE - 4* AND UP",
+        "squads":[
+          { "name":"SHIP COMBAT MISSION", "note":"DARK SIDE SHIPS", "url":"", "shippy":"true", "team":[ "CAPITALCHIMAERA","CAPITALSTARDESTROYER", "TIEFIGHTERFOSF", "TIEFIGHTERFIRSTORDER", "GAUNTLETSTARFIGHTER", "GEONOSIANSTARFIGHTER1", "GEONOSIANSTARFIGHTER2", "GEONOSIANSTARFIGHTER3", "COMMANDSHUTTLE", "TIEFIGHTERIMPERIAL", "SITHINFILTRATOR", "SLAVE1", "TIEADVANCED", "TIEREAPER", "TIESILENCER" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "DARTHNIHILUS", "MAUL", "DARTHSION", "SITHTROOPER", "COUNTDOOKU", "DARTHSIDIOUS", "SAVAGEOPRESS" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "KYLORENUNMASKED", "KYLOREN", "FIRSTORDERTROOPER", "FIRSTORDERTIEPILOT", "FIRSTORDEREXECUTIONER", "FIRSTORDEROFFICERMALE", "FIRSTORDERSPECIALFORCESPILOT", "PHASMA" ] },
+          { "name":"COMBAT MISSION", "note":"", "url":"", "team":[ "BOSSK", "BOBAFETT", "GREEDO", "CADBANE", "DENGAR", "IG88", "ZAMWESELL" ] },
+          { "name":"SPECIAL MISSION", "note":"VEERS, STARCK + 3 IMPERIAL TROOPERS REQUIRED. REWARD: 2 IPD SHARDS", "url":"", "team":[ "VEERS", "COLONELSTARCK", "DEATHTROOPER", "MAGMATROOPER", "SHORETROOPER", "SNOWTROOPER", "STORMTROOPER" ] }
+        ]
+      },
+      {
+        "name":"PHASE FOUR - 5* AND UP",
+        "squads":[
+          { "name":"SHIP COMBAT MISSION", "note":"DARK SIDE SHIPS", "url":"", "shippy":"true", "team":[ "CAPITALSTARDESTROYER", "TIEFIGHTERFOSF", "TIEFIGHTERFIRSTORDER", "GAUNTLETSTARFIGHTER", "GEONOSIANSTARFIGHTER1", "GEONOSIANSTARFIGHTER2", "GEONOSIANSTARFIGHTER3", "COMMANDSHUTTLE", "TIEFIGHTERIMPERIAL", "SITHINFILTRATOR", "SLAVE1", "TIEADVANCED", "TIEREAPER", "TIESILENCER" ] },
+          { "name":"SHIP SPECIAL MISSION", "note":"CHIMERA REQUIRED. REWARD: 20 GET", "url":"", "shippy":"true", "team":[ "CAPITALCHIMAERA", "TIEFIGHTERFOSF", "TIEFIGHTERFIRSTORDER", "GAUNTLETSTARFIGHTER", "GEONOSIANSTARFIGHTER1", "GEONOSIANSTARFIGHTER2", "GEONOSIANSTARFIGHTER3", "COMMANDSHUTTLE", "TIEFIGHTERIMPERIAL", "SITHINFILTRATOR", "SLAVE1", "TIEADVANCED", "TIEREAPER", "TIESILENCER" ] },
+          { "name":"COMBAT MISSION", "note":"SNOWTROOPER, VEERS AND 3 EMPIRE REQUIRED.", "url":"", "team":[ "SNOWTROOPER", "VEERS", "DEATHTROOPER", "STORMTROOPER", "COLONELSTARCK", "MAGMATROOPER", "SHORETROOPER", "VADER", "GRANDMOFFTARKIN", "EMPERORPALPATINE", "TIEFIGHTERPILOT", "ROYALGUARD", "GRANDADMIRALTHRAWN" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "MOTHERTALZIN", "ASAJVENTRESS", "NIGHTSISTERSPIRIT", "NIGHTSISTERZOMBIE", "DAKA", "TALIA", "NIGHTSISTERACOLYTE", "NIGHTSISTERINITIATE" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "DARTHNIHILUS", "MAUL", "DARTHSION", "SITHTROOPER", "COUNTDOOKU", "DARTHSIDIOUS", "SAVAGEOPRESS" ] }
+        ]
+      },
+      {
+        "name":"PHASE FIVE - 6* AND UP",
+        "squads":[
+          { "name":"SHIP COMBAT MISSION", "note":"DARK SIDE SHIPS", "url":"", "shippy":"true", "team":[ "CAPITALCHIMAERA","CAPITALSTARDESTROYER", "TIEFIGHTERFOSF", "TIEFIGHTERFIRSTORDER", "GAUNTLETSTARFIGHTER", "GEONOSIANSTARFIGHTER1", "GEONOSIANSTARFIGHTER2", "GEONOSIANSTARFIGHTER3", "COMMANDSHUTTLE", "TIEFIGHTERIMPERIAL", "SITHINFILTRATOR", "SLAVE1", "TIEADVANCED", "TIEREAPER", "TIESILENCER" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "KYLORENUNMASKED", "KYLOREN", "FIRSTORDERTROOPER", "FIRSTORDERTIEPILOT", "FIRSTORDEREXECUTIONER", "FIRSTORDEROFFICERMALE", "FIRSTORDERSPECIALFORCESPILOT", "PHASMA" ] },
+          { "name":"SPECIAL MISSION", "note":"REWARD: 25 GET", "url":"", "team":[ "BOSSK", "BOBAFETT", "GREEDO", "CADBANE", "DENGAR", "IG88", "ZAMWESELL" ] },
+          { "name":"COMBAT MISSION", "note":"EMPIRE. LISTED TOONS ARE COMMON", "url":"", "team":[ "SNOWTROOPER", "VEERS", "DEATHTROOPER", "STORMTROOPER", "COLONELSTARCK", "MAGMATROOPER", "SHORETROOPER", "VADER", "GRANDMOFFTARKIN", "EMPERORPALPATINE", "TIEFIGHTERPILOT", "ROYALGUARD", "GRANDADMIRALTHRAWN" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "MOTHERTALZIN", "ASAJVENTRESS", "NIGHTSISTERSPIRIT", "NIGHTSISTERZOMBIE", "DAKA", "TALIA", "NIGHTSISTERACOLYTE", "NIGHTSISTERINITIATE" ] }
+        ]
+      },
+      {
+        "name":"PHASE SIX - 7*",
+        "squads":[
+          { "name":"SHIP COMBAT MISSION", "note":"DARK SIDE SHIPS", "url":"", "shippy":"true", "team":[ "CAPITALCHIMAERA","CAPITALSTARDESTROYER", "TIEFIGHTERFOSF", "TIEFIGHTERFIRSTORDER", "GAUNTLETSTARFIGHTER", "GEONOSIANSTARFIGHTER1", "GEONOSIANSTARFIGHTER2", "GEONOSIANSTARFIGHTER3", "COMMANDSHUTTLE", "TIEFIGHTERIMPERIAL", "SITHINFILTRATOR", "SLAVE1", "TIEADVANCED", "TIEREAPER", "TIESILENCER" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "KYLORENUNMASKED", "KYLOREN", "FIRSTORDERTROOPER", "FIRSTORDERTIEPILOT", "FIRSTORDEREXECUTIONER", "FIRSTORDEROFFICERMALE", "FIRSTORDERSPECIALFORCESPILOT", "PHASMA" ] },
+          { "name":"COMBAT MISSION", "note":"EMPIRE. LISTED TOONS ARE COMMON", "url":"", "team":[ "EMPERORPALPATINE", "VADER", "GRANDMOFFTARKIN", "GRANDADMIRALTHRAWN", "STORMTROOPER", "DEATHTROOPER" ] },
+          { "name":"COMBAT MISSION", "note":"DARK SIDE. LISTED TOONS ARE COMMON", "url":"", "team":[ "MOTHERTALZIN", "ASAJVENTRESS", "NIGHTSISTERSPIRIT", "NIGHTSISTERZOMBIE", "DAKA", "TALIA", "NIGHTSISTERACOLYTE", "NIGHTSISTERINITIATE" ] },
+          { "name":"SPECIAL MISSION", "note":"VEERS, STARCK, IPD + 2 EMPIRE REQUIRED. REWARD: 30 GET", "url":"", "team":[ "VEERS", "COLONELSTARCK", "IMPERIALPROBEDROID", "ROYALGUARD", "TIEFIGHTERPILOT" ] }
+        ]
+      }
+    ]
+  },
+  "psummary":{
+    "name":"PLAYER SUMMARY",
+    "rarity":7,
+    "gear":12,
+    "level":85,
+    "phase":[
+      {
+        "name":"LEGENDARY CHARACTERS",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "GRANDADMIRALTHRAWN:L:U", "EMPERORPALPATINE:L:U", "R2D2_LEGENDARY:U1:U2", "BB8:U1:U2", "COMMANDERLUKESKYWALKER:L:U1:U2", "REYJEDITRAINING:L:U1:U2", "GRANDMASTERYODA:L:S" ] }
+        ]
+      },
+      {
+        "name":"LSTB CHARACTERS",
+        "squads":[
+          { "name":"ROGUE ONE", "note":"", "url":"", "team":[ "JYNERSO:U", "BAZEMALBUS", "CHIRRUTIMWE", "BISTAN", "BODHIROOK:U", "CASSIANANDOR:U", "K2SO:U", "PAO:U", "SCARIFREBEL" ] },
+          { "name":"PHOENIX", "note":"", "url":"", "team":[ "HERASYNDULLAS3:S", "CHOPPERS3:S", "EZRABRIDGERS3:S", "ZEBS3:S", "KANANJARRUSS3:S", "SABINEWRENS3:S" ] },
+          { "name":"UNIQUE UNITS", "note":"", "url":"", "team":[ "HOTHHAN:U", "HOTHLEIA:U", "HOTHREBELSCOUT", "HOTHREBELSOLDIER" ] }
+        ]
+      },
+      {
+        "name":"DSTB CHARACTERS",
+        "squads":[
+          { "name":"BOUNTY HUNTERS", "note":"", "url":"", "team":[ "BOSSK:L:U", "BOBAFETT:U", "GREEDO:S", "CADBANE", "DENGAR:L:U", "IG88:U", "ZAMWESELL" ] },
+          { "name":"IMPERIAL TROOPERS", "note":"", "url":"", "team":[ "VEERS:U", "COLONELSTARCK:U", "DEATHTROOPER:U", "MAGMATROOPER", "SHORETROOPER", "SNOWTROOPER", "STORMTROOPER:U", "RANGETROOPER" ] },
+          { "name":"UNIQUE UNITS", "note":"", "url":"", "team":[ "VADER:L:U", "IMPERIALPROBEDROID:U" ] }
+        ]
+      },
+      {
+        "name":"USEFUL TW CHARACTERS",
+        "squads":[
+          { "name":"MASS DAZE", "note":"", "url":"", "team":[ "AMILYNHOLDO:U", "MAUL:L", "ENFYSNEST:U" ] },
+          { "name":"TANKS", "note":"", "url":"", "team":[ "SHORETROOPER", "DARTHSION:U", "SITHTROOPER" ] },
+          { "name":"HEALER", "note":"", "url":"", "team":[ "BARRISSOFFEE:U1", "VISASMARR:U" ] },
+          { "name":"OTHERS", "note":"", "url":"", "team":[ "FINN:L" ] }
+        ]
+      },
+      {
+        "name":"OTHER CHARACTERS",
+        "squads":[
+          { "name":"NIGHTSISTERS", "note":"", "url":"", "team":[ "MOTHERTALZIN:U1:L", "ASAJVENTRESS:L:U1", "NIGHTSISTERSPIRIT", "NIGHTSISTERZOMBIE", "DAKA:U1", "TALIA", "NIGHTSISTERACOLYTE", "NIGHTSISTERINITIATE:U" ] },
+          { "name":"FIRST ORDER", "note":"", "url":"", "team":[ "KYLORENUNMASKED:L:U", "KYLOREN:S", "FIRSTORDERTROOPER:U", "FIRSTORDERTIEPILOT:U", "FIRSTORDEREXECUTIONER", "FIRSTORDEROFFICERMALE", "FIRSTORDERSPECIALFORCESPILOT", "PHASMA:L" ] },
+          { "name":"UNIQUE UNITS", "note":"", "url":"", "team":[ "WAMPA:S:U2", "HERMITYODA:S:U", "GENERALKENOBI", "HANSOLO:U", "DARTHTRAYA:L:U" ] }
+        ]
+      }
+    ]
+  },
+  "gsummary":{
+    "name":"GUILD SUMMARY",
+    "rarity":7,
+    "gear":12,
+    "level":85,
+    "phase":[
+      {
+        "name":"LEGENDARY CHARACTERS",
+        "squads":[
+          { "name":"", "note":"", "url":"", "team":[ "GRANDADMIRALTHRAWN", "EMPERORPALPATINE:L", "R2D2_LEGENDARY:U1:U2", "BB8:U1", "COMMANDERLUKESKYWALKER:L:U2", "REYJEDITRAINING:L", "GRANDMASTERYODA:L" ] }
+        ]
+      },
+      {
+        "name":"LSTB CHARACTERS",
+        "squads":[
+          { "name":"ROGUE ONE", "note":"", "url":"", "team":[ "JYNERSO", "BAZEMALBUS", "CHIRRUTIMWE", "BISTAN", "BODHIROOK", "CASSIANANDOR", "K2SO","PAO", "SCARIFREBEL" ] },
+          { "name":"PHOENIX", "note":"", "url":"", "team":[ "HERASYNDULLAS3:S", "CHOPPERS3", "EZRABRIDGERS3:S", "ZEBS3:S", "KANANJARRUSS3:S", "SABINEWRENS3:S" ] },
+          { "name":"UNIQUE UNITS", "note":"", "url":"", "team":[ "HOTHHAN", "HOTHLEIA", "HOTHREBELSCOUT", "HOTHREBELSOLDIER" ] }
+        ]
+      },
+      {
+        "name":"DSTB CHARACTERS",
+        "squads":[
+          { "name":"BOUNTY HUNTERS", "note":"", "url":"", "team":[ "BOSSK", "BOBAFETT", "GREEDO", "CADBANE", "DENGAR", "IG88", "ZAMWESELL" ] },
+          { "name":"IMPERIAL TROOPERS", "note":"", "url":"", "team":[ "VEERS", "COLONELSTARCK", "DEATHTROOPER", "MAGMATROOPER", "SHORETROOPER", "SNOWTROOPER", "STORMTROOPER" ] },
+          { "name":"UNIQUE UNITS", "note":"", "url":"", "team":[ "VADER", "IMPERIALPROBEDROID" ] }
+        ]
+      },
+      {
+        "name":"USEFUL TW CHARACTERS",
+        "squads":[
+          { "name":"MASS DAZE", "note":"", "url":"", "team":[ "AMILYNHOLDO", "MAUL", "ENFYSNEST" ] },
+          { "name":"TANKS", "note":"", "url":"", "team":[ "SHORETROOPER", "DARTHSION", "SITHTROOPER" ] },
+          { "name":"HEALER", "note":"", "url":"", "team":[ "BARRISSOFFEE:U1", "VISASMARR:U" ] },
+          { "name":"OTHERS", "note":"", "url":"", "team":[ "FINN:L" ] }
+        ]
+      },
+      {
+        "name":"OTHER CHARACTERS",
+        "squads":[
+          { "name":"NIGHTSISTERS", "note":"", "url":"", "team":[ "MOTHERTALZIN:U1:L", "ASAJVENTRESS:L:U1", "NIGHTSISTERSPIRIT", "NIGHTSISTERZOMBIE", "DAKA:U1", "TALIA", "NIGHTSISTERACOLYTE", "NIGHTSISTERINITIATE" ] },
+          { "name":"FIRST ORDER", "note":"", "url":"", "team":[ "KYLORENUNMASKED", "KYLOREN", "FIRSTORDERTROOPER", "FIRSTORDERTIEPILOT", "FIRSTORDEREXECUTIONER", "FIRSTORDEROFFICERMALE", "FIRSTORDERSPECIALFORCESPILOT", "PHASMA" ] },
+          { "name":"UNIQUE UNITS", "note":"", "url":"", "team":[ "WAMPA", "HERMITYODA:S:U", "GENERALKENOBI", "HANSOLO:U", "DARTHTRAYA" ] }
+        ]
+      }
+    ]
+  }
+}
