@@ -34,6 +34,8 @@
           { "name":"C.L.S.TEEBO D.I.S.C.O", "note":"", "url":"", "team":[ "TEEBO", "COMMANDERLUKESKYWALKER", "CT7567", "QUIGONJINN", "R2D2_LEGENDARY" ] },
           { "name":"TEE-REX COMMANDER", "note":"", "url":"", "team":[ "TEEBO", "QUIGONJINN", "COMMANDERLUKESKYWALKER", "JYNERSO", "CT7567" ] },
           { "name":"UNMASKING", "note":"", "url":"", "team":[ "KYLORENUNMASKED:L", "KYLOREN", "PHASMA", "FIRSTORDEROFFICERMALE", "FIRSTORDEREXECUTIONER" ] },
+          { "name":"UNMASKING ALT 1", "note":"", "url":"", "team":[ "KYLORENUNMASKED:L", "KYLOREN", "GRANDADMIRALTHRAWN", "FIRSTORDEROFFICERMALE", "FIRSTORDEREXECUTIONER" ] },
+          { "name":"UNMASKING ALT 2", "note":"", "url":"", "team":[ "KYLORENUNMASKED:L", "KYLOREN", "FIRSTORDERTROOPER", "FIRSTORDEROFFICERMALE", "FIRSTORDEREXECUTIONER" ] },
           { "name":"SPIRITUAL SISTERS", "note":"", "url":"", "team":[ "ASAJVENTRESS:L", "MOTHERTALZIN", "DAKA", "NIGHTSISTERSPIRIT", "NIGHTSISTERZOMBIE" ] },
           { "name":"THE MAGIC NUMBER", "note":"", "url":"", "team":[ "WEDGEANTILLES", "BIGGSDARKLIGHTER", "COMMANDERLUKESKYWALKER" ] },
           { "name":"C.LONELY.S", "note":"", "url":"", "team":[ "COMMANDERLUKESKYWALKER" ] }
@@ -167,6 +169,7 @@
           { "name":"[α] RJT REY VISAS", "note":"4%-10% [1,862,000-4,655,000]", "url":"", "team":[ "REYJEDITRAINING:L", "BB8:U1", "VISASMARR:U1", "REY", "RESISTANCETROOPER" ] },
           { "name":"[α] RJT HYODA R2", "note":"4%-10% [1,862,000-4,655,000]", "url":"", "team":[ "REYJEDITRAINING:L", "BB8:U1", "R2D2_LEGENDARY:U2", "RESISTANCETROOPER", "HERMITYODA:S" ] },
           { "name":"[α] RJT HYODA VISAS", "note":"4%-10% [1,862,000-4,655,000]", "url":"", "team":[ "REYJEDITRAINING:L", "BB8:U1", "VISASMARR:U1", "RESISTANCETROOPER", "HERMITYODA:S" ] },
+          { "name":"[α] YODALICIOUS", "note":"4%-12% [1,862,000-5,586,000] - Hermit Yoda zeta recommended, but optional", "url":"https://www.youtube.com/watch?v=dpwuA_gao48", "team":[ "GRANDMASTERYODA:L:S", "HERMITYODA", "VISASMARR:U1", "QUIGONJINN", "EZRABRIDGERS3:S" ] },
           { "name":"[α] BOBA VM", "note":"2%-5% [931,000-2,327,500]", "url":"", "team":[ "BOBAFETT", "IG88", "DENGAR", "GREEDO", "VISASMARR" ] },
           { "name":"[α] BOBA BOSS", "note":"2%-5% [931,000-2,327,500]", "url":"", "team":[ "BOBAFETT", "IG88", "DENGAR", "GREEDO", "BOSSK" ] },
           { "name":"[α] BOSSK VM", "note":"2%-5% [931,000-2,327,500]", "url":"", "team":[ "BOSSK", "IG88", "DENGAR", "GREEDO", "VISASMARR" ] }
@@ -198,6 +201,7 @@
           { "name":"[α] NUTE", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "NUTEGUNRAY", "PRINCESSLEIA", "STORMTROOPERHAN", "GENERALKENOBI", "WAMPA" ] },
           { "name":"[α/β] PHOENIX", "note":"0.5%-7% [260,000-3,640,000]", "url":"", "team":[ "HERASYNDULLAS3:S", "EZRABRIDGERS3:S", "KANANJARRUSS3:S", "SABINEWRENS3:S", "ZEBS3:S" ] },
           { "name":"[β] ACKBAR", "note":"1% [520,000]", "url":"", "team":[ "ADMIRALACKBAR", "BARRISSOFFEE", "GENERALKENOBI", "GRANDADMIRALTHRAWN", "SABINEWRENS3" ] },
+          { "name":"[β] ACKBAR + LEIA SPAM", "note":"1%-4% [520,000-2,100,000]", "url":"", "team":[ "ADMIRALACKBAR", "HERMITYODA:S", "GENERALKENOBI", "GRANDADMIRALTHRAWN", "PRINCESSLEIA" ] },
           { "name":"[β] LEIA", "note":"1% [520,000]", "url":"", "team":[ "PRINCESSLEIA", "HERMITYODA", "SCARIFREBEL", "GRANDADMIRALTHRAWN", "SABINEWRENS3" ] },
           { "name":"[β] THRAWN", "note":"1% [520,000]", "url":"", "team":[ "GRANDADMIRALTHRAWN", "VEERS", "SHORETROOPER", "COLONELSTARCK", "SNOWTROOPER" ] },
           { "name":"[β] VEERS SNOW", "note":"1% [520,000]", "url":"", "team":[ "VEERS", "GRANDADMIRALTHRAWN", "SHORETROOPER", "COLONELSTARCK", "SNOWTROOPER" ] },
@@ -205,7 +209,11 @@
           { "name":"[β] ZAUL", "note":"0.5%-1% [260,000-520,000]", "url":"", "team":[ "MAUL:L", "DARTHNIHILUS", "DARTHSION", "SITHTROOPER", "SITHASSASSIN" ] },
           { "name":"[β] PALPS", "note":"1%-2% [520,000-1,040,000]", "url":"", "team":[ "EMPERORPALPATINE", "GRANDADMIRALTHRAWN", "DARTHNIHILUS", "GRANDMOFFTARKIN", "VADER" ] },
           { "name":"[β] PALPS ALT", "note":"1%-2% [520,000-1,040,000]", "url":"", "team":[ "EMPERORPALPATINE", "GRANDADMIRALTHRAWN", "DARTHNIHILUS", "GRANDMOFFTARKIN", "SITHTROOPER" ] },
-          { "name":"[β] CLS (IF NO DT)", "note":"TBD%", "url":"", "team":[ "COMMANDERLUKESKYWALKER", "HERMITYODA", "SCARIFREBEL", "EZRABRIDGERS3", "SABINEWRENS3" ] }
+          { "name":"[β] FO FUN", "note":"1%-2% [520,000-1,040,000]", "url":"", "team":[ "KYLORENUNMASKED:L", "KYLOREN:U", "FIRSTORDERTROOPER:U", "FIRSTORDEROFFICERMALE", "FIRSTORDEREXECUTIONER" ] },
+          { "name":"[β] TRAYA", "note":"2%-6% [1,040,000-3,120,000] - GMY Special & DN Unique recommended zetas", "url":"", "team":[ "DARTHTRAYA:L:U", "DARTHSION:U", "DARTHNIHILUS", "GRANDMASTERYODA", "HERMITYODA:S" ] },
+          { "name":"[β] YOUNG GUNS", "note":"2%-6% [1,040,000-3,120,000] - Optional Zetas: STH unique & Young Lando Unique", "url":"", "team":[ "QIRA:U", "YOUNGHAN:U", "YOUNGLANDO", "YOUNGCHEWBACCA:U", "STORMTROOPERHAN" ] }
+          { "name":"[α] CLS (IF NO DT)", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "COMMANDERLUKESKYWALKER", "HERMITYODA", "SCARIFREBEL", "EZRABRIDGERS3", "SABINEWRENS3" ] },
+          { "name":"[β] YODALICIOUS", "note":"%TBD%", "url":"", "team":[ "GRANDMASTERYODA:L:U", "HERMITYODA:S:U", "GENERALKENOBI", "AAYLASECURA", "EZRABRIDGERS3:S" ] }
         ]
       },
       {
