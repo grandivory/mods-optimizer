@@ -94,6 +94,14 @@ html, body {
   position: absolute;
   right: 0;
   bottom: 0;
+  text-align: right;
+}
+
+.App-header .actions label:not(.button),
+.App-header .actions input:not(.button) {
+  font-size: 1.2em;
+  margin: 0 .25em;
+  vertical-align: middle;
 }
 
 .App-header .actions form {
@@ -217,11 +225,25 @@ nav button.active {
 .welcome {
   text-align: center;
   margin: 0 auto;
-  max-width: 800px;
+  max-width: 45em;
 }
 
 .modal.reset-modal {
   width: 50em;
+}
+
+.modal.error-modal {
+  border: 1px solid darkred;
+  background-color: #ead118;
+  width: 30em;
+  height: 12em;
+  color: black;
+  text-shadow: none;
+}
+
+.modal.error-modal .warning-label {
+  float: right;
+  height: 10em;
 }
 
 strong {
@@ -265,4 +287,8 @@ strong {
   border-radius: 0;
   margin: .25em;
   padding: .25em;
+}
+
+input {
+  color: #222222;
 }
