@@ -211,7 +211,7 @@
           { "name":"[β] PALPS ALT", "note":"1%-2% [520,000-1,040,000]", "url":"", "team":[ "EMPERORPALPATINE", "GRANDADMIRALTHRAWN", "DARTHNIHILUS", "GRANDMOFFTARKIN", "SITHTROOPER" ] },
           { "name":"[β] FO FUN", "note":"1%-2% [520,000-1,040,000]", "url":"", "team":[ "KYLORENUNMASKED:L", "KYLOREN:U", "FIRSTORDERTROOPER:U", "FIRSTORDEROFFICERMALE", "FIRSTORDEREXECUTIONER" ] },
           { "name":"[β] TRAYA", "note":"2%-6% [1,040,000-3,120,000] - GMY Special & DN Unique recommended zetas", "url":"", "team":[ "DARTHTRAYA:L:U", "DARTHSION:U", "DARTHNIHILUS", "GRANDMASTERYODA", "HERMITYODA:S" ] },
-          { "name":"[β] YOUNG GUNS", "note":"2%-6% [1,040,000-3,120,000] - Optional Zetas: STH unique & Young Lando Unique", "url":"", "team":[ "QIRA:U", "YOUNGHAN:U", "YOUNGLANDO", "YOUNGCHEWBACCA:U", "STORMTROOPERHAN" ] }
+          { "name":"[β] YOUNG GUNS", "note":"2%-6% [1,040,000-3,120,000] - Optional Zetas: STH unique & Young Lando Unique", "url":"", "team":[ "QIRA:U", "YOUNGHAN:U", "YOUNGLANDO", "YOUNGCHEWBACCA:U", "STORMTROOPERHAN" ] },
           { "name":"[α] CLS (IF NO DT)", "note":"2%-4% [1,040,000-2,080,000]", "url":"", "team":[ "COMMANDERLUKESKYWALKER", "HERMITYODA", "SCARIFREBEL", "EZRABRIDGERS3", "SABINEWRENS3" ] },
           { "name":"[β] YODALICIOUS", "note":"%TBD%", "url":"", "team":[ "GRANDMASTERYODA:L:U", "HERMITYODA:S:U", "GENERALKENOBI", "AAYLASECURA", "EZRABRIDGERS3:S" ] }
         ]
