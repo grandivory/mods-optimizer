@@ -2,6 +2,9 @@ import Character from "../domain/Character";
 import BaseStats from "../domain/BaseStats";
 import OptimizationPlan from "../domain/OptimizationPlan";
 
+//declare tags for use globally
+const tags = require("./tags.json");
+
 let charactersArray = [
   new Character(
     'Aayla Secura',
