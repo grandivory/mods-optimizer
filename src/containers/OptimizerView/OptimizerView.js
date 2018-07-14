@@ -18,7 +18,6 @@ class OptimizerView extends React.Component {
 
     this.state.availableCharacters = props.availableCharacters;
     this.state.selectedCharacters = props.selectedCharacters;
-    this.state.lockedCharacters = props.lockedCharacters;
   }
 
   render() {
@@ -49,7 +48,6 @@ class OptimizerView extends React.Component {
         <CharacterEditView
           availableCharacters={this.state.availableCharacters}
           selectedCharacters={this.state.selectedCharacters}
-          lockedCharacters={this.state.lockedCharacters}
           saveState={this.saveState}
         />
         }
@@ -99,7 +97,10 @@ class OptimizerView extends React.Component {
    * @param mods Array the mods to use in the optimization
    */
   optimizeMods(mods) {
-    const modAssignments = new Optimizer(mods).optimizeMods(this.state.selectedCharacters, this.state.lockedCharacters);
+    const selectedCharacters = this.state.selectedCharacters.filter(character => !character.isLocked);
+    const lockedCharacters = this.state.selectedCharacters.filter(character => character.isLocked);
+
+    const modAssignments = new Optimizer(mods).optimizeMods(selectedCharacters, lockedCharacters);
 
     this.setState({
       'modAssignments': modAssignments

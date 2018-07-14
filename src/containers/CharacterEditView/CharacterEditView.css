@@ -1,13 +1,7 @@
 .character-edit {
-  font-color: gold;
   height: calc(100% - 3em);
   overflow: hidden;
   text-align: center;
-}
-
-.character-edit .instructions {
-  height: 2em;
-  box-sizing: border-box;
 }
 
 .character-edit .selected-characters {
@@ -46,123 +40,46 @@
   opacity: .25;
 }
 
-/*.character-edit .available-characters,*/
-/*.character-edit .selected-characters,*/
-/*.character-edit .locked-characters {*/
-  /*display: inline-block;*/
-  /*vertical-align: top;*/
-  /*height: calc(100% - 5em);*/
-  /*margin: 0 5em;*/
-  /*max-width: calc(33% - 10em);*/
-/*}*/
-
 .character-edit .character-list {
   max-height: calc(100% - 2em);
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-/*.available-characters .character-edit .character-list {*/
-  /*max-height: calc(100% - 5.5em);*/
-/*}*/
-
-.character-power-form {
-  width: 22em;
+.character-edit-form {
+  width: 30em;
 }
 
-.character-power-form .characterView {
-  position: relative;
-  margin-top: 1em;
-}
-
-.character-power-form .characterView .avatar {
-  margin: 0;
-}
-
-.character-power-form .star {
-  width: 0;
-  height: 0;
-  position: absolute;
-  left: calc(50% - .65em);
-  top: calc(50% - .65em);
-}
-
-.character-power-form .star::before {
-  content: '';
-  background: url('/img/star-passive.png') no-repeat;
-  background-size: contain;
-  width: 1.3em;
-  height: 1.3em;
-  display: inline-block;
-}
-
-.character-power-form .star-input {
+.character-edit-form.basic #advanced-form {
   display: none;
 }
 
-.character-power-form .star.active::before {
-  background-image: url('/img/star-active.png');
+.character-edit-form.advanced #basic-form {
+  display: none;
 }
 
-.character-power-form #star-label-1::before {
-  transform: rotate(-70deg) translateY(-350%);
+.character-edit-form .character-view .avatar {
+  font-size: 1.5em;
 }
 
-.character-power-form #star-label-2::before {
-  transform: rotate(-47deg) translateY(-350%);
+.character-edit-form .instructions {
+  margin-bottom: 2em;
 }
 
-.character-power-form #star-label-3::before {
-  transform: rotate(-23deg) translateY(-350%);
-}
-
-.character-power-form #star-label-4::before {
-  transform: translateY(-350%);
-}
-
-.character-power-form #star-label-5::before {
-  transform: rotate(23deg) translateY(-350%);
-}
-
-.character-power-form #star-label-6::before {
-  transform: rotate(47deg) translateY(-350%);
-}
-
-.character-power-form #star-label-7::before {
-  transform: rotate(70deg) translateY(-350%);
-}
-
-.character-power-form .form-row label {
-  display: inline-block;
-  text-align: right;
-  width: 10em;
-}
-
-.character-power-form .form-row output {
-  display: inline-block;
-  width: 2.2em;
-}
-
-.character-edit-form .base-stats,
-.character-edit-form .optimization-plan {
-  display: inline-block;
-  vertical-align: top;
-  margin: 0 2.5%;
-  max-width: 45%;
-}
-
-.character-edit-form .base-stats {
-  width: 40em;
-}
-
-.character-edit-form .optimization-plan {
-  width: 23em;
+.character-edit-form .header-row {
+  width: 21em;
+  margin: 0 auto .5em;
 }
 
 .character-edit-form .form-row {
   text-align: right;
-  margin: .25em 0;
+  margin: .25em auto;
   padding: .1em .25em;
+  width: 21em;
+}
+
+.character-edit-form .footer {
+  margin-top: .5em;
 }
 
 .character-edit-form .form-row label {
@@ -196,6 +113,11 @@
 .character-edit-form .form-row:nth-child(even) {
   background-color: rgb(28, 56, 93);
   color: rgb(28, 169, 212);
+}
+
+.character-edit-form #plan-name {
+  font-size: 1.2em;
+  width: 15em;
 }
 
 .character-edit-form .actions {

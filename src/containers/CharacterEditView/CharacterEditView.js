@@ -4,10 +4,9 @@ import "./CharacterEditView.css";
 import CharacterList from "../../components/CharacterList/CharacterList";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import OptimizationPlan from "../../domain/OptimizationPlan";
-import BaseStats from "../../domain/BaseStats";
-import {charDefaults} from "../../constants/characters";
 import Modal from "../../components/Modal/Modal";
 import RangeInput from "../../components/RangeInput/RangeInput";
+import Toggle from "../../components/Toggle/Toggle";
 
 class CharacterEditView extends React.Component {
   constructor(props) {
@@ -15,9 +14,8 @@ class CharacterEditView extends React.Component {
     this.state = {
       'availableCharacters': props.availableCharacters,
       'selectedCharacters': props.selectedCharacters,
-      'lockedCharacters': props.lockedCharacters,
       'editCharacter': null,
-      'editStats': null,
+      'selectedTarget': null,
       'instructions': false,
       'filterString': ''
     };
@@ -30,10 +28,6 @@ class CharacterEditView extends React.Component {
     return function(event) {
       event.dataTransfer.dropEffect = 'move';
       event.dataTransfer.setData('text/plain', character.name);
-
-      // let dragImage = new Image();
-      // dragImage.src = event.target.getElementsByTagName('img')[0].src;
-      // event.dataTransfer.setDragImage(dragImage, 0, 0);
     }
   }
 
@@ -67,21 +61,12 @@ class CharacterEditView extends React.Component {
     }
     selectedCharacters.splice(sourceCharacterIndex, 1);
 
+    this.saveState();
+
     this.setState({
       availableCharacters: availableCharacters,
       selectedCharacters: selectedCharacters
     });
-  }
-
-  selectedCharactersDragEnter(event) {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-    event.target.classList.add('drop-character');
-  }
-
-  selectedCharactersDrop(event) {
-    event.preventDefault();
-
   }
 
   characterDrop() {
@@ -93,8 +78,6 @@ class CharacterEditView extends React.Component {
         sourceList = me.state.selectedCharacters;
       } else if (me.state.availableCharacters.some(character => dragTarget === character.name)) {
         sourceList = me.state.availableCharacters;
-      } else {
-        sourceList = me.state.lockedCharacters;
       }
 
       // Get the character from the source list
@@ -109,49 +92,50 @@ class CharacterEditView extends React.Component {
     }
   }
 
-  /**
-   * Update a character's gear level and star level based on the submitted form
-   */
-  updateCharacterPower(character, form) {
-    character.level = form['char-level'].valueAsNumber;
-    character.starLevel = parseInt(form['star-level'].value, 10);
-    character.gearLevel = form['gear-level'].valueAsNumber;
+  saveOptimizationPlan(character, form) {
+    const planName = form['plan-name'].value;
+    let optimizationPlan;
 
-    this.saveState();
-    this.setState({
-      'editStats': null
-    });
-  }
+    if (form.mode.checked) {
+      // Advanced form
+      optimizationPlan = new OptimizationPlan(
+        form['health-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.health,
+        form['protection-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.protection,
+        form['speed-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.speed,
+        form['critDmg-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critDmg,
+        form['potency-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.potency,
+        form['tenacity-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.tenacity,
+        form['offense-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.offense,
+        form['critChance-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critChance,
+        form['defense-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.defense,
+        form['accuracy-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.accuracy,
+        form['critAvoid-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critAvoid,
+      );
+    } else {
+      // Basic form
+      optimizationPlan = new OptimizationPlan(
+        form['health-stat'].valueAsNumber,
+        form['protection-stat'].valueAsNumber,
+        form['speed-stat'].valueAsNumber,
+        form['critDmg-stat'].valueAsNumber,
+        form['potency-stat'].valueAsNumber,
+        form['tenacity-stat'].valueAsNumber,
+        form['offense-stat'].valueAsNumber,
+        form['critChance-stat'].valueAsNumber,
+        form['defense-stat'].valueAsNumber,
+        form['accuracy-stat'].valueAsNumber,
+        form['critAvoid-stat'].valueAsNumber,
+      );
+    }
 
-  saveCharacter(character, form) {
-    const baseStats = new BaseStats(
-      form.health.valueAsNumber,
-      form.protection.valueAsNumber,
-      form.physDmg.valueAsNumber,
-      form.specDmg.valueAsNumber,
-      form.physDmgPct.valueAsNumber / 100,
-      form.speed.valueAsNumber,
-      form.armor.valueAsNumber,
-      form.resistance.valueAsNumber
-    );
-
-    const optimizationPlan = new OptimizationPlan(
-      form['health-stat'].valueAsNumber,
-      form['protection-stat'].valueAsNumber,
-      form['speed-stat'].valueAsNumber,
-      form['critDmg-stat'].valueAsNumber,
-      form['potency-stat'].valueAsNumber,
-      form['tenacity-stat'].valueAsNumber,
-      form['offense-stat'].valueAsNumber,
-      form['critChance-stat'].valueAsNumber,
-      form['defense-stat'].valueAsNumber,
-      form['accuracy-stat'].valueAsNumber,
-      form['critAvoid-stat'].valueAsNumber,
-    );
-
-    character.baseStats = baseStats;
-    character.optimizationPlan = optimizationPlan;
+    if ('custom' !== planName && 'lock' !== planName) {
+      character.namedPlans[planName] = optimizationPlan;
+      character.optimizationPlan = character.namedPlans[planName];
+    } else {
+      character.optimizationPlan = optimizationPlan;
+    }
     character.useOnly5DotMods = form['5dot'].checked;
+
     this.saveState();
 
     this.setState({
@@ -159,35 +143,8 @@ class CharacterEditView extends React.Component {
     });
   }
 
-  resetDefaults(character, form) {
-    const defaults = charDefaults[character.name].optimizationPlan;
-
-    form['health-stat'].value = defaults.rawHealth;
-    form['protection-stat'].value = defaults.rawProtection;
-    form['speed-stat'].value = defaults.rawSpeed;
-    form['critDmg-stat'].value = defaults.rawCritDmg;
-    form['potency-stat'].value = defaults.rawPotency;
-    form['tenacity-stat'].value = defaults.rawTenacity;
-    form['offense-stat'].value = defaults.rawOffense;
-    form['critChance-stat'].value = defaults.rawCritChance;
-    form['defense-stat'].value = defaults.rawDefense;
-    form['accuracy-stat'].value = defaults.rawAccuracy;
-    form['critAvoid-stat'].value = defaults.rawCritAvoid;
-    form['5dot'].checked = charDefaults[character.name].useOnly5DotMods;
-
-    // Also reset the sliders!
-    [...document.getElementsByTagName('input')]
-      .filter(input => input.type === 'range')
-      .filter(input => input.id.includes('-slider'))
-      .forEach(rangeInput => {
-        const valueInput = rangeInput.id.substring(0, rangeInput.id.indexOf('-slider'));
-        rangeInput.value = form[valueInput].value;
-      })
-  }
-
   cancelEdit() {
     this.setState({
-      'editStats': null,
       'editCharacter': null
     });
   }
@@ -197,9 +154,7 @@ class CharacterEditView extends React.Component {
       return right.galacticPower - left.galacticPower;
     });
     const selectedCharacters = this.state.selectedCharacters;
-    const lockedCharacters = this.state.lockedCharacters;
     const editCharacter = this.state.editCharacter;
-    const editStats = this.state.editStats;
 
     const characterFilter = character =>
       '' === this.state.filterString || character.matchesFilter(this.state.filterString);
@@ -216,19 +171,13 @@ class CharacterEditView extends React.Component {
           draggable={true}
           characters={selectedCharacters}
           onDrop={this.characterDrop()}
-          onEdit={(character) => this.setState({editCharacter: character})}
+          onEdit={(character, planName) => this.setState({
+            editCharacter: character,
+            selectedTarget: planName
+          })}
+          saveState={this.saveState}
         />
       </div>
-      {/*<div className={'locked-characters'}>*/}
-      {/*<h4>Locked Characters</h4>*/}
-      {/*<CharacterList*/}
-      {/*selfDrop={true}*/}
-      {/*draggable={true}*/}
-      {/*characters={lockedCharacters}*/}
-      {/*onDrop={this.characterDrop()}*/}
-      {/*onEdit={this.editCharacter.bind(this)}*/}
-      {/*/>*/}
-      {/*</div>*/}
       <div className={'available-characters'}
            onDragEnter={CharacterEditView.availableCharactersDragEnter}
            onDragOver={CharacterEditView.dragOver}
@@ -241,22 +190,10 @@ class CharacterEditView extends React.Component {
             Show full instructions
           </button>
         </h3>
-        {/*<h4>Available Characters</h4>*/}
-        {/*<label htmlFor={'character-filter'}>Filter:</label>&nbsp;*/}
-        {/*<input autoFocus={true} id='character-filter' type='text' onChange={this.updateFilter.bind(this)}/>*/}
-        {/*<CharacterList*/}
-        {/*selfDrop={false}*/}
-        {/*draggable={true}*/}
-        {/*characters={availableCharacters}*/}
-        {/*onDrop={this.characterDrop()}*/}
-        {/*onEdit={this.editCharacter.bind(this)}*/}
-        {/*filterString={this.state.filterString}*/}
-        {/*/>*/}
         {filteredCharacters.map(character => this.characterBlock(character, 'active'))}
         {unfilteredCharacters.map(character => this.characterBlock(character, 'inactive'))}
       </div>
       <Modal show={editCharacter} content={this.characterEditModal(editCharacter)}/>
-      <Modal show={editStats} content={this.editStatsModal(editStats)}/>
       <Modal show={this.state.instructions} className={'instructions'} content={this.instructionsModal()}/>
     </div>;
   }
@@ -292,90 +229,7 @@ class CharacterEditView extends React.Component {
         <CharacterAvatar character={character}/>
       </div>
       <div className={'character-name'}>{character.name}</div>
-      {/*<button className={'small'} onClick={() => this.setState({editStats: character})}>Edit Stats</button>*/}
     </div>;
-  }
-
-  /**
-   * Render a modal for editing a character's stars and gear level
-   * @param character
-   */
-  editStatsModal(character) {
-    if (!character) {
-      return null;
-    }
-
-    const updateStarClasses = value => {
-      [...document.getElementsByClassName('star-input')].forEach(el => {
-        if (el.value <= value) {
-          el.parentNode.classList.add('active');
-        } else {
-          el.parentNode.classList.remove('active');
-        }
-      });
-    };
-
-    const star = value =>
-      <label htmlFor={`star-${value}`}
-             className={character.starLevel >= value ? 'star active' : 'star'}
-             id={`star-label-${value}`}
-             key={`label-${value}`}>
-        <input type={'radio'}
-               id={`star-${value}`}
-               name={'star-level'}
-               className={'star-input'}
-               value={value} defaultChecked={value === character.starLevel} key={`star-${value}`}
-               onChange={e => {
-                 if (e.target.checked) {
-                   updateStarClasses(e.target.value);
-                 }
-               }}
-        />
-      </label>;
-
-    return <form className={'character-power-form'} onSubmit={(e) => {
-      e.preventDefault();
-      this.updateCharacterPower.bind(this, character)(e.target);
-    }}>
-      <div className={'characterView'}>
-        <CharacterAvatar character={character} displayStars={false} id={'avatar'}/>
-        {[1, 2, 3, 4, 5, 6, 7].map(star)}
-      </div>
-      <h2 className={'character-name'}>{character.name}</h2>
-      <div className={'form-row'}>
-        <label htmlFor={'gear-level'}>Current Gear Level:</label>
-        <RangeInput
-          editable={false}
-          id={'gear-level'}
-          name={'gear-level'}
-          defaultValue={character.gearLevel}
-          min={1}
-          max={12}
-          step={1}
-          onChange={gearLevel => {
-            const avatarClassList = document.getElementById('avatar').classList;
-            const avatarGearClass = [...avatarClassList].find(cls => cls.startsWith('gear-'));
-            avatarClassList.replace(avatarGearClass, `gear-${gearLevel}`)
-          }}
-        />
-      </div>
-      <div className={'form-row'}>
-        <label htmlFor={'char-level'}>Character Level:</label>
-        <RangeInput
-          editable={true}
-          id={'char-level'}
-          name={'char-level'}
-          defaultValue={character.level}
-          min={1}
-          max={85}
-          step={1}
-        />
-      </div>
-      <div className={'actions'}>
-        <button type={'button'} onClick={this.cancelEdit.bind(this)}>Cancel</button>
-        <button type={'submit'}>Save</button>
-      </div>
-    </form>
   }
 
   /**
@@ -388,79 +242,50 @@ class CharacterEditView extends React.Component {
       return null;
     }
 
+    let planType;
+
+    if (character.optimizationPlan.isBasic()) {
+      planType = 'basic';
+    } else {
+      planType = 'advanced';
+    }
+
     return <form
-      className={'character-edit-form'}
+      className={`character-edit-form ${planType}`}
       onSubmit={(e) => {
         e.preventDefault();
-        this.saveCharacter.bind(this, character)(e.target);
+        this.saveOptimizationPlan.bind(this, character)(e.target);
       }}>
-      <div className={'characterView'}>
+      <div className={'character-view'}>
         <CharacterAvatar character={character}/>
         <h2 className={'character-name'}>{character.name}</h2>
       </div>
-      <div className={'base-stats'}>
-        <h4>
-          What are your characters base stats (without any mods equipped)? These are used to calculate the value
-          of percent stats on mods.
-        </h4>
-        <div className={'form-row'}>
-          <label htmlFor="health">Health:</label>
-          <input type={'number'} id={'health'} name={'health'} defaultValue={character.baseStats.health}/>
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="protection">Protection:</label>
-          <input
-            type={'number'}
-            id={'protection'}
-            name={'protection'}
-            defaultValue={character.baseStats.protection}/>
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="physDmg">Physical Damage:</label>
-          <input
-            type={'number'}
-            id={'physDmg'}
-            name={'physDmg'}
-            defaultValue={character.baseStats.physDmg}/>
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="specDmg">Special Damage:</label>
-          <input
-            type={'number'}
-            id={'specDmg'}
-            name={'specDmg'}
-            defaultValue={character.baseStats.specDmg}/>
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="physDmgPct">Offense from Physical Damage:</label>
-          <RangeInput
-            id={'physDmgPct'}
-            name={'physDmgPct'}
-            defaultValue={character.baseStats.physDmgPercent * 100}
-            isPercent={true}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="speed">Speed:</label>
-          <input type={'number'} id={'speed'} name={'speed'} defaultValue={character.baseStats.speed}/>
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="armor">Armor:</label>
-          <input type={'number'} id={'armor'} name={'armor'} defaultValue={character.baseStats.armor}/>
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="resistance">Resistance:</label>
-          <input
-            type={'number'}
-            id={'resistance'}
-            name={'resistance'}
-            defaultValue={character.baseStats.resistance}/>
-        </div>
+      <div className={'instructions'}>
+        Give each stat type a value. This will be used to calculate the optimum mods to equip. You can give this plan
+        a name to easily select it later.
       </div>
-      <div className={'optimization-plan'}>
-        <h4>
-          Give each stat type a value. This will be used to calculate the optimum mods to equip.
-        </h4>
+      <div className={'header-row'}>
+        <label htmlFor={'plan-name'}>Plan Name: </label>
+        <input type={'text'} defaultValue={this.state.selectedTarget} id={'plan-name'} name={'plan-name'}/>
+      </div>
+      <div className={'header-row'}>
+        <Toggle
+          inputLabel={'Mode'}
+          name={'mode'}
+          leftLabel={'Basic'}
+          leftValue={'basic'}
+          rightLabel={'Advanced'}
+          rightValue={'advanced'}
+          value={planType}
+          onChange={(newValue) => {
+            const form = document.getElementsByClassName('character-edit-form')[0];
+            form.classList.remove('basic');
+            form.classList.remove('advanced');
+            form.classList.add(newValue);
+          }}
+        />
+      </div>
+      <div id={'basic-form'}>
         <div className={'form-row'}>
           <label htmlFor="health-stat">Health:</label>
           <RangeInput
@@ -582,19 +407,128 @@ class CharacterEditView extends React.Component {
             max={100}
           />
         </div>
+      </div>
+      <div id={'advanced-form'}>
         <div className={'form-row'}>
-          <label htmlFor="5dot">Use only 5-dot mods?</label>
+          <label htmlFor="health-stat-advanced">Health:</label>
           <input
-            type={'checkbox'}
-            id={'5dot'}
-            name={'5dot'}
-            defaultChecked={character.useOnly5DotMods}/>
+            id={'health-stat-advanced'}
+            name={'health-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.health}
+          />
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor="protection-stat">Protection:</label>
+          <input
+            id={'protection-stat-advanced'}
+            name={'protection-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.protection}
+          />
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor="speed-stat">Speed:</label>
+          <input
+            id={'speed-stat-advanced'}
+            name={'speed-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.speed}
+          />
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor="critChance-stat">Critical Chance %:</label>
+          <input
+            id={'critChance-stat-advanced'}
+            name={'critChance-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.critChance}
+          />
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor="critDmg-stat">Critical Damage %:</label>
+          <input
+            id={'critDmg-stat-advanced'}
+            name={'critDmg-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.critDmg}
+          />
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor="potency-stat">Potency %:</label>
+          <input
+            id={'potency-stat-advanced'}
+            name={'potency-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.potency}
+          />
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor="tenacity-stat">Tenacity %:</label>
+          <input
+            id={'tenacity-stat-advanced'}
+            name={'tenacity-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.tenacity}
+          />
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor="offense-stat">Offense:</label>
+          <input
+            id={'offense-stat-advanced'}
+            name={'offense-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.offense}
+          />
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor="defense-stat">Defense:</label>
+          <input
+            id={'defense-stat-advanced'}
+            name={'defense-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.defense}
+          />
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor="accuracy-stat">Accuracy:</label>
+          <input
+            id={'accuracy-stat-advanced'}
+            name={'accuracy-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.accuracy}
+          />
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
+          <input
+            id={'critAvoid-stat-advanced'}
+            name={'critAvoid-stat-advanced'}
+            type={'number'}
+            step={.01}
+            defaultValue={character.optimizationPlan.critAvoid}
+          />
         </div>
       </div>
+      <div className={'form-row footer'}>
+        <label htmlFor="5dot">Use only 5-dot mods?</label>
+        <input
+          type={'checkbox'}
+          id={'5dot'}
+          name={'5dot'}
+          defaultChecked={character.useOnly5DotMods}/>
+      </div>
       <div className={'actions'}>
-        <button type={'button'} onClick={(e) => this.resetDefaults.bind(this, character)(e.target.form)}>
-          Reset to Defaults
-        </button>
         <button type={'button'} onClick={this.cancelEdit.bind(this)}>Cancel</button>
         <button type={'submit'}>Save</button>
       </div>

@@ -1,5 +1,8 @@
 .character-block {
-  display: block;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: fit-content(1em) auto;
+  grid-column-gap: .5em;
   width: 18em;
   min-height: 4em;
   border: 1px solid dodgerblue;
@@ -7,31 +10,59 @@
   padding: .25em;
   margin: .5em 0;
   text-align: left;
-  position: relative;
   max-width: 100%;
-}
-
-.character-block .avatar {
-  vertical-align: middle;
-  display: inline-block;
-  font-size: .8em;
-  margin-right: 1em;
-}
-
-.character-block .character-name {
-  display: inline-block;
-  vertical-align: middle;
-  max-width: calc(100% - 4.5em);
 }
 
 .character-block.drop-character {
   box-shadow: 0 2px 3px 0 darkred;
 }
 
-.character-block button.edit {
-  position: absolute;
-  margin: 0;
-  top: 0;
-  right: 0;
-  font-size: .75em;
+.character-block.locked {
+  border-color: darkred;
+  opacity: .75;
+}
+
+.character-block .avatar {
+  grid-row: 1 / span 2;
+  grid-column: 1;
+  font-size: .8em;
+}
+
+.character-block .character-name {
+  grid-row: 1;
+  grid-column: 2;
+  display: inline-block;
+  vertical-align: middle;
+  pointer-events: none;
+}
+
+.character-block .target {
+  grid-row: 2;
+  grid-column: 2;
+}
+
+.character-block label {
+  font-weight: 300;
+  font-size: 90%;
+  vertical-align: middle;
+  pointer-events: none;
+}
+
+.character-block select {
+  display: inline-block;
+  width: 7em;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-size: 1em;
+  color: rgb(28, 169, 212);
+  background-color: rgb(30, 47, 70);
+  border: 1px solid dodgerblue;
+  border-radius: 0;
+  margin: .25em;
+  padding: .25em;
+}
+
+.character-block button {
+  font-size: 1em;
 }

@@ -13,9 +13,11 @@ class Character {
               baseStats,
               totalStats,
               optimizationPlan,
+              namedPlans,
               tags,
               extraTags,
-              useOnly5DotMods
+              useOnly5DotMods,
+              isLocked
   ) {
     this.name = name;
     this.baseID = baseID;
@@ -28,9 +30,11 @@ class Character {
     this.baseStats = baseStats;
     this.totalStats = totalStats;
     this.optimizationPlan = optimizationPlan;
+    this.namedPlans = namedPlans;
     this.tags = tags;
     this.extraTags = extraTags;
     this.useOnly5DotMods = useOnly5DotMods || false;
+    this.isLocked = isLocked || false
   }
 
   /**
@@ -54,11 +58,18 @@ class Character {
     this.gearPieces = other.gearPieces;
     this.galacticPower = other.galacticPower;
     this.optimizationPlan = other.optimizationPlan;
+    this.namedPlans = Object.assign(this.namedPlans, other.namedPlans);
     this.useOnly5DotMods = other.useOnly5DotMods;
+    this.isLocked = other.isLocked;
   }
 
   serialize() {
     let characterObject = {};
+
+    const namedPlansObject = Object.keys(this.namedPlans).reduce((obj, key) => {
+      obj[key] = this.namedPlans[key].serialize();
+      return obj;
+    }, {});
 
     characterObject.name = this.name;
     characterObject.baseID = this.baseID;
@@ -71,12 +82,20 @@ class Character {
     characterObject.baseStats = this.baseStats;
     characterObject.totalStats = this.totalStats;
     characterObject.optimizationPlan = this.optimizationPlan.serialize();
+    characterObject.namedPlans = namedPlansObject;
     characterObject.useOnly5DotMods = this.useOnly5DotMods;
+    characterObject.isLocked = this.isLocked;
 
     return characterObject;
   }
 
   static deserialize(characterJson) {
+    const serializedNamedPlans = characterJson.namedPlans || {};
+    const namedPlansObject = Object.keys(serializedNamedPlans).reduce((obj, key) => {
+      obj[key] = OptimizationPlan.deserialize(serializedNamedPlans[key]);
+      return obj;
+    }, {});
+
     return new Character(
       characterJson.name,
       '',
@@ -89,15 +108,17 @@ class Character {
       characterJson.baseStats ? BaseStats.deserialize(characterJson.baseStats) : new BaseStats() ,
       characterJson.totalStats ? BaseStats.deserialize(characterJson.totalStats) : new BaseStats() ,
       OptimizationPlan.deserialize(characterJson.optimizationPlan),
+      namedPlansObject,
       [],
       [],
-      characterJson.useOnly5DotMods
+      characterJson.useOnly5DotMods,
+      characterJson.isLocked || false
     );
   }
 }
 
 class BasicCharacter extends Character {
-  constructor(name, baseID, physDmgPct, defaultPlan, tags, extraTags, useOnly5dotMods) {
+  constructor(name, baseID, physDmgPct, defaultPlan, namedPlans, tags, extraTags, useOnly5dotMods) {
     super(
       name,
       baseID,
@@ -110,9 +131,11 @@ class BasicCharacter extends Character {
       new BaseStats(),
       new BaseStats(),
       defaultPlan,
+      namedPlans,
       tags,
       extraTags,
-      useOnly5dotMods
+      useOnly5dotMods,
+      false
     );
   }
 }

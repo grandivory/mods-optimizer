@@ -1,5 +1,6 @@
 .avatar {
   width: 4em;
+  height: 4em;
   position: relative;
   margin: .75em .5em .25em;
   border-radius: 100%;
@@ -35,11 +36,11 @@
   margin-left: -1.5em;
   height: 3em;
   line-height: 3em;
-  margin-bottom: -1.1em;
+  margin-bottom: -1em;
   box-sizing: border-box;
   background:
       radial-gradient(100% 100% at 50% 85%, rgb(28, 56, 93) 44%, white 45%, white 49%, transparent 50%) 50% 15% / 1.6em 1.6em,
-      radial-gradient(125% 100% at 50% -28%, rgb(28, 56, 93) 44%, white 45%, white 49%, transparent 50%) 50% 121% / 1.5em 1.6em;
+      radial-gradient(125% 100% at 50% -28%, rgb(28, 56, 93) 44%, white 45%, white 49%, transparent 50%) 50% 123% / 1.5em 1.6em;
   background-repeat: no-repeat;
   z-index: 10000;
 }

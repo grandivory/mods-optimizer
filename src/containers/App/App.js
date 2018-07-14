@@ -209,7 +209,7 @@ class App extends Component {
           try {
             const characterStats = JSON.parse(xhr.responseText);
             characterStats.forEach(characterObject => {
-              const baseCharacter = Object.values(characters).find(c => c.baseID === characterObject.unit.baseID);
+              const baseCharacter = Object.values(characters).find(c => c.baseID === characterObject.unit.characterID);
 
               if (baseCharacter) {
                 const baseStats = new BaseStats(
@@ -430,7 +430,6 @@ class App extends Component {
             mods={this.state.mods}
             availableCharacters={this.state.availableCharacters}
             selectedCharacters={this.state.selectedCharacters}
-            lockedCharacters={this.state.lockedCharacters}
             saveState={this.saveState.bind(this)}
           />
           }
@@ -611,18 +610,18 @@ class App extends Component {
    * @returns Array[JSX Element]
    */
   resetModal() {
-    return [
-      <h2>Reset the mods optimizer?</h2>,
+    return <div>
+      <h2>Reset the mods optimizer?</h2>
       <p>
         If you click "Reset", everything that the application currently has saved - your mods,
         character configuration, selected characters, etc. - will all be deleted.
         Are you sure that's what you want?
-      </p>,
+      </p>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.setState({'reset': false})}>Cancel</button>
         <button type={'button'} className={'red'} onClick={this.handleReset}>Reset</button>
-      </div>,
-    ];
+      </div>
+    </div>;
   }
 
   /**

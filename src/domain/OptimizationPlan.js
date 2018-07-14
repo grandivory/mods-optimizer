@@ -43,6 +43,53 @@ class OptimizationPlan {
     this.critAvoid = this.rawCritAvoid / OptimizationPlan.statWeight.critAvoid;
   }
 
+  /**
+   * Checks to see if two OptimizationPlans are equivalent
+   * @param that
+   */
+  equals(that) {
+    return that instanceof OptimizationPlan &&
+      this.health === that.health &&
+      this.protection === that.protection &&
+      this.speed === that.speed &&
+      this.critDmg === that.critDmg &&
+      this.potency === that.potency &&
+      this.tenacity === that.tenacity &&
+      this.offense === that.offense &&
+      this.critChance === that.critChance &&
+      this.defense === that.defense &&
+      this.accuracy === that.accuracy &&
+      this.critAvoid === that.critAvoid;
+  }
+
+  /**
+   * Returns true if every raw value in this plan is an integer between -100 and 100. Otherwise, returns false
+   *
+   * @returns boolean
+   */
+  isBasic() {
+    return this.valueIsBasic(this.rawHealth) &&
+      this.valueIsBasic(this.rawProtection) &&
+      this.valueIsBasic(this.rawSpeed) &&
+      this.valueIsBasic(this.rawCritDmg) &&
+      this.valueIsBasic(this.rawPotency) &&
+      this.valueIsBasic(this.rawTenacity) &&
+      this.valueIsBasic(this.rawOffense) &&
+      this.valueIsBasic(this.rawCritChance) &&
+      this.valueIsBasic(this.rawDefense) &&
+      this.valueIsBasic(this.rawAccuracy) &&
+      this.valueIsBasic(this.rawCritAvoid);
+  }
+
+  /**
+   * Checks whether a value is an integer between -100 and 100.
+   *
+   * @returns boolean
+   */
+  valueIsBasic(val) {
+    return val >= -100 && val <= 100 && Number.isInteger(val);
+  }
+
   serialize() {
     let planObject = {};
 

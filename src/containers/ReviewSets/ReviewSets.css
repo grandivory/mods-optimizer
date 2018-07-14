@@ -33,6 +33,7 @@
 .review-sets .avatar {
   display: inline-block;
   margin: 1em;
+  font-size: 1.7em;
 }
 
 .review-sets .set-row {
