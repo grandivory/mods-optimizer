@@ -275,7 +275,7 @@ class App extends Component {
           'level': character.level,
           'starLevel': character.starLevel,
           'gearLevel': character.gearLevel,
-          'gear': character.gear.map(gear => gear.equipmentId)
+          'gear': character.gearPieces.map(gear => gear.equipmentId)
         };
       })
     ));
