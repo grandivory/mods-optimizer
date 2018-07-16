@@ -1,9 +1,10 @@
-import {BasicCharacter, DamageType} from "../domain/Character";
+import Character from "../domain/Character";
+import {DamageType} from "../domain/Character";
 import OptimizationPlan from "../domain/OptimizationPlan";
 import optimizationStrategy from "./optimizationStrategy";
 
 let charactersArray = [
-  new BasicCharacter(
+  Character.basicCharacter(
     'Aayla Secura',
     'AAYLASECURA',
     DamageType.physical,
@@ -13,7 +14,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Admiral Ackbar',
     'ADMIRALACKBAR',
     DamageType.physical,
@@ -23,7 +24,7 @@ let charactersArray = [
     ['AA', 'Snackbar', 'ABC'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Ahsoka Tano',
     'AHSOKATANO',
     DamageType.physical,
@@ -33,7 +34,7 @@ let charactersArray = [
     ['Snips'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Ahsoka Tano (Fulcrum)',
     'FULCRUMAHSOKA',
     DamageType.physical,
@@ -43,7 +44,7 @@ let charactersArray = [
     ['ATF', 'FAT'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Amilyn Holdo',
     'AMILYNHOLDO',
     DamageType.mixed,
@@ -53,7 +54,7 @@ let charactersArray = [
     ['Hodor'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Asajj Ventress',
     'ASAJVENTRESS',
     DamageType.mixed,
@@ -63,7 +64,7 @@ let charactersArray = [
     ['AV', 'Zen', 'NS', 'hSTR NS', 'ABC'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'B2 Super Battle Droid',
     'B2SUPERBATTLEDROID',
     DamageType.physical,
@@ -73,7 +74,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Barriss Offee',
     'BARRISSOFFEE',
     DamageType.physical,
@@ -83,7 +84,17 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
+    'Bastila Shan',
+    'BASTILASHAN',
+    DamageType.special,
+    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    {},
+    ['Light Side', 'Jedi', 'Old Republic', 'Support'],
+    [],
+    false
+  ),
+  Character.basicCharacter(
     'Baze Malbus',
     'BAZEMALBUS',
     DamageType.physical,
@@ -93,7 +104,7 @@ let charactersArray = [
     ['Rogue 1', 'Chaze', 'Chiggs'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'BB-8',
     'BB8',
     DamageType.physical,
@@ -103,7 +114,7 @@ let charactersArray = [
     ['bb8', 'Wampanader', 'ABC'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Biggs Darklighter',
     'BIGGSDARKLIGHTER',
     DamageType.physical,
@@ -113,7 +124,7 @@ let charactersArray = [
     ['Wiggs', 'Chiggs'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Bistan',
     'BISTAN',
     DamageType.physical,
@@ -123,7 +134,7 @@ let charactersArray = [
     ['Rogue 1', 'SuperStar2D2'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Boba Fett',
     'BOBAFETT',
     DamageType.physical,
@@ -133,7 +144,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Bodhi Rook',
     'BODHIROOK',
     DamageType.physical,
@@ -143,7 +154,7 @@ let charactersArray = [
     ['Rogue 1'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Bossk',
     'BOSSK',
     DamageType.physical,
@@ -153,7 +164,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Cad Bane',
     'CADBANE',
     DamageType.physical,
@@ -163,7 +174,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Captain Han Solo',
     'HOTHHAN',
     DamageType.physical,
@@ -173,7 +184,7 @@ let charactersArray = [
     ['CHS', 'CHolo', 'Snolo', 'Hoth Han'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Captain Phasma',
     'PHASMA',
     DamageType.physical,
@@ -183,7 +194,7 @@ let charactersArray = [
     ['FO'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Cassian Andor',
     'CASSIANANDOR',
     DamageType.mixed,
@@ -193,7 +204,7 @@ let charactersArray = [
     ['Rogue 1', 'SuperStar2D2'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'CC-2224 "Cody"',
     'CC2224',
     DamageType.mixed,
@@ -203,7 +214,7 @@ let charactersArray = [
     ['zody'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Chief Chirpa',
     'CHIEFCHIRPA',
     DamageType.physical,
@@ -213,7 +224,7 @@ let charactersArray = [
     ['Murderbears'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Chief Nebit',
     'CHIEFNEBIT',
     DamageType.physical,
@@ -223,7 +234,7 @@ let charactersArray = [
     ['nebs'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Chirrut Îmwe',
     'CHIRRUTIMWE',
     DamageType.physical,
@@ -233,7 +244,7 @@ let charactersArray = [
     ['Rogue 1', 'Chaze', 'Chiggs', 'Chex Mix'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Chopper',
     'CHOPPERS3',
     DamageType.physical,
@@ -243,7 +254,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Clone Sergeant - Phase I',
     'CLONESERGEANTPHASEI',
     DamageType.physical,
@@ -253,7 +264,7 @@ let charactersArray = [
     ['Sarge'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Clone Wars Chewbacca',
     'CLONEWARSCHEWBACCA',
     DamageType.physical,
@@ -263,7 +274,7 @@ let charactersArray = [
     ['CWC'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Colonel Starck',
     'COLONELSTARCK',
     DamageType.physical,
@@ -273,7 +284,7 @@ let charactersArray = [
     ['Tony Stark', 'Troopers'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Commander Luke Skywalker',
     'COMMANDERLUKESKYWALKER',
     DamageType.physical,
@@ -283,7 +294,7 @@ let charactersArray = [
     ['CLS', 'Wampanader', 'Chex Mix', 'ABC', 'Titans'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Coruscant Underworld Police',
     'CORUSCANTUNDERWORLDPOLICE',
     DamageType.physical,
@@ -293,7 +304,7 @@ let charactersArray = [
     ['CUP'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Count Dooku',
     'COUNTDOOKU',
     DamageType.mixed,
@@ -303,7 +314,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'CT-21-0408 "Echo"',
     'CT210408',
     DamageType.mixed,
@@ -313,7 +324,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'CT-5555 "Fives"',
     'CT5555',
     DamageType.physical,
@@ -323,7 +334,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'CT-7567 "Rex"',
     'CT7567',
     DamageType.physical,
@@ -345,7 +356,7 @@ let charactersArray = [
     ['Titans'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Darth Maul',
     'MAUL',
     DamageType.physical,
@@ -355,7 +366,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Darth Nihilus',
     'DARTHNIHILUS',
     DamageType.special,
@@ -377,7 +388,7 @@ let charactersArray = [
     ['Nightmare'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Darth Sidious',
     'DARTHSIDIOUS',
     DamageType.physical,
@@ -387,7 +398,7 @@ let charactersArray = [
     ['Auto Lightzader'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Darth Sion',
     'DARTHSION',
     DamageType.physical,
@@ -397,7 +408,7 @@ let charactersArray = [
     ['Nightmare'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Darth Traya',
     'DARTHTRAYA',
     DamageType.special,
@@ -407,7 +418,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Darth Vader',
     'VADER',
     DamageType.physical,
@@ -417,7 +428,7 @@ let charactersArray = [
     ['Auto Lightzader', 'Wampanader', 'Nightmare'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Dathcha',
     'DATHCHA',
     DamageType.mixed,
@@ -427,7 +438,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Death Trooper',
     'DEATHTROOPER',
     DamageType.physical,
@@ -437,7 +448,7 @@ let charactersArray = [
     ['Troopers', 'Chex Mix'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Dengar',
     'DENGAR',
     DamageType.physical,
@@ -447,7 +458,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Director Krennic',
     'DIRECTORKRENNIC',
     DamageType.special,
@@ -457,7 +468,7 @@ let charactersArray = [
     ['Imperial Grancor Maneuver'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Eeth Koth',
     'EETHKOTH',
     DamageType.mixed,
@@ -467,7 +478,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Emperor Palpatine',
     'EMPERORPALPATINE',
     DamageType.special,
@@ -477,7 +488,7 @@ let charactersArray = [
     ['EP', 'Palp', 'EzPz', 'Nightmare'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Enfys Nest',
     'ENFYSNEST',
     DamageType.physical,
@@ -487,7 +498,7 @@ let charactersArray = [
     ['Nesty', 'Baby Wampa', '#solo'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Ewok Elder',
     'EWOKELDER',
     DamageType.physical,
@@ -497,7 +508,7 @@ let charactersArray = [
     ['EE', 'Murderbears'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Ewok Scout',
     'EWOKSCOUT',
     DamageType.physical,
@@ -507,7 +518,7 @@ let charactersArray = [
     ['Murderbears'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Ezra Bridger',
     'EZRABRIDGERS3',
     DamageType.physical,
@@ -517,7 +528,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Finn',
     'FINN',
     DamageType.physical,
@@ -527,7 +538,7 @@ let charactersArray = [
     ['Zinn'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'First Order Executioner',
     'FIRSTORDEREXECUTIONER',
     DamageType.physical,
@@ -537,7 +548,7 @@ let charactersArray = [
     ['Fox', 'Panda', 'Foe', 'FO'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'First Order Officer',
     'FIRSTORDEROFFICERMALE',
     DamageType.physical,
@@ -547,7 +558,7 @@ let charactersArray = [
     ['Foo', 'FO'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'First Order SF TIE Pilot',
     'FIRSTORDERSPECIALFORCESPILOT',
     DamageType.mixed,
@@ -557,7 +568,7 @@ let charactersArray = [
     ['SFTP', 'FO'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'First Order Stormtrooper',
     'FIRSTORDERTROOPER',
     DamageType.physical,
@@ -567,7 +578,7 @@ let charactersArray = [
     ['FOST', 'FO'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'First Order TIE Pilot',
     'FIRSTORDERTIEPILOT',
     DamageType.physical,
@@ -577,7 +588,7 @@ let charactersArray = [
     ['FOTP', 'FO'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Gamorrean Guard',
     'GAMORREANGUARD',
     DamageType.physical,
@@ -587,7 +598,7 @@ let charactersArray = [
     ['Piggy'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Gar Saxon',
     'GARSAXON',
     DamageType.physical,
@@ -597,7 +608,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Garazeb "Zeb" Orrelios',
     'ZEBS3',
     DamageType.physical,
@@ -607,7 +618,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'General Grievous',
     'GRIEVOUS',
     DamageType.physical,
@@ -617,7 +628,7 @@ let charactersArray = [
     ['GG'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'General Kenobi',
     'GENERALKENOBI',
     DamageType.physical,
@@ -639,7 +650,7 @@ let charactersArray = [
     ['GK', 'Titans'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'General Veers',
     'VEERS',
     DamageType.mixed,
@@ -649,7 +660,7 @@ let charactersArray = [
     ['Troopers'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Geonosian Soldier',
     'GEONOSIANSOLDIER',
     DamageType.physical,
@@ -659,7 +670,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Geonosian Spy',
     'GEONOSIANSPY',
     DamageType.physical,
@@ -669,7 +680,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Grand Admiral Thrawn',
     'GRANDADMIRALTHRAWN',
     DamageType.special,
@@ -679,7 +690,7 @@ let charactersArray = [
     ['GAT', 'Imperial Grancor Maneuver', 'Wampanader', 'ABC', 'Titans'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Grand Master Yoda',
     'GRANDMASTERYODA',
     DamageType.special,
@@ -689,7 +700,7 @@ let charactersArray = [
     ['GMY'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Grand Moff Tarkin',
     'GRANDMOFFTARKIN',
     DamageType.mixed,
@@ -699,7 +710,7 @@ let charactersArray = [
     ['GMT', 'Auto Lightzader', 'Imperial Grancor Maneuver'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Greedo',
     'GREEDO',
     DamageType.physical,
@@ -709,7 +720,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Han Solo',
     'HANSOLO',
     DamageType.physical,
@@ -719,7 +730,7 @@ let charactersArray = [
     ['Raid Han', 'rHan', 'OG Han', 'Zolo', 'Chex Mix', 'Titans'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Hera Syndulla',
     'HERASYNDULLAS3',
     DamageType.physical,
@@ -729,7 +740,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Hermit Yoda',
     'HERMITYODA',
     DamageType.mixed,
@@ -739,7 +750,7 @@ let charactersArray = [
     ['Hyoda', 'Hoboda', 'Hobo', 'HY'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'HK-47',
     'HK47',
     DamageType.physical,
@@ -749,7 +760,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Hoth Rebel Scout',
     'HOTHREBELSCOUT',
     DamageType.physical,
@@ -759,7 +770,7 @@ let charactersArray = [
     ['HRS', 'Hoth Bros'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Hoth Rebel Soldier',
     'HOTHREBELSOLDIER',
     DamageType.physical,
@@ -769,7 +780,7 @@ let charactersArray = [
     ['HRS', 'Hoth Bros'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'IG-100 MagnaGuard',
     'MAGNAGUARD',
     DamageType.physical,
@@ -779,7 +790,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'IG-86 Sentinel Droid',
     'IG86SENTINELDROID',
     DamageType.physical,
@@ -789,7 +800,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'IG-88',
     'IG88',
     DamageType.physical,
@@ -799,7 +810,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Ima-Gun Di',
     'IMAGUNDI',
     DamageType.physical,
@@ -809,7 +820,7 @@ let charactersArray = [
     ['IGD'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Imperial Probe Droid',
     'IMPERIALPROBEDROID',
     DamageType.physical,
@@ -819,7 +830,7 @@ let charactersArray = [
     ['IPD'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Imperial Super Commando',
     'IMPERIALSUPERCOMMANDO',
     DamageType.physical,
@@ -829,7 +840,7 @@ let charactersArray = [
     ['ISC'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Jawa',
     'JAWA',
     DamageType.mixed,
@@ -839,7 +850,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Jawa Engineer',
     'JAWAENGINEER',
     DamageType.mixed,
@@ -849,7 +860,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Jawa Scavenger',
     'JAWASCAVENGER',
     DamageType.physical,
@@ -859,7 +870,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Jedi Consular',
     'JEDIKNIGHTCONSULAR',
     DamageType.mixed,
@@ -869,7 +880,7 @@ let charactersArray = [
     ['JC'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Jedi Knight Anakin',
     'ANAKINKNIGHT',
     DamageType.physical,
@@ -879,7 +890,7 @@ let charactersArray = [
     ['JKA'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Jedi Knight Guardian',
     'JEDIKNIGHTGUARDIAN',
     DamageType.physical,
@@ -889,7 +900,17 @@ let charactersArray = [
     ['JKG'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
+    'Jolee Bindo',
+    'JOLEEBINDO',
+    DamageType.physical,
+    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    {},
+    ['Light Side', 'Jedi', 'Old Republic', 'Healer'],
+    [],
+    false
+  ),
+  Character.basicCharacter(
     'Jyn Erso',
     'JYNERSO',
     DamageType.physical,
@@ -899,7 +920,7 @@ let charactersArray = [
     ['Rogue 1', 'Auto Lightzader', 'Imperial Grancor Maneuver', 'SuperStar2D2'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'K-2SO',
     'K2SO',
     DamageType.physical,
@@ -909,7 +930,7 @@ let charactersArray = [
     ['Rogue 1', 'Cass-2SO', 'K2'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Kanan Jarrus',
     'KANANJARRUSS3',
     DamageType.physical,
@@ -919,7 +940,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Kit Fisto',
     'KITFISTO',
     DamageType.physical,
@@ -929,7 +950,7 @@ let charactersArray = [
     ['Fisty', 'Fister'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Kylo Ren',
     'KYLOREN',
     DamageType.physical,
@@ -939,7 +960,7 @@ let charactersArray = [
     ['Old Kylo', 'zylo', 'FO'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Kylo Ren (Unmasked)',
     'KYLORENUNMASKED',
     DamageType.physical,
@@ -949,7 +970,7 @@ let charactersArray = [
     ['kru', 'matt', 'Snape', 'FO'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'L3-37',
     'L3_37',
     DamageType.physical,
@@ -959,7 +980,7 @@ let charactersArray = [
     ['#solo'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Lando Calrissian',
     'ADMINISTRATORLANDO',
     DamageType.physical,
@@ -969,7 +990,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Lobot',
     'LOBOT',
     DamageType.physical,
@@ -979,7 +1000,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Logray',
     'LOGRAY',
     DamageType.physical,
@@ -989,7 +1010,7 @@ let charactersArray = [
     ['Murderbears'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Luke Skywalker (Farmboy)',
     'LUKESKYWALKER',
     DamageType.physical,
@@ -999,7 +1020,7 @@ let charactersArray = [
     ['farmboi'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Luminara Unduli',
     'LUMINARAUNDULI',
     DamageType.physical,
@@ -1009,7 +1030,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Mace Windu',
     'MACEWINDU',
     DamageType.mixed,
@@ -1019,7 +1040,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Magmatrooper',
     'MAGMATROOPER',
     DamageType.physical,
@@ -1029,7 +1050,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Mob Enforcer',
     'HUMANTHUG',
     DamageType.physical,
@@ -1039,7 +1060,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Mother Talzin',
     'MOTHERTALZIN',
     DamageType.special,
@@ -1049,7 +1070,7 @@ let charactersArray = [
     ['MT', 'NS', 'hSTR NS'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Nightsister Acolyte',
     'NIGHTSISTERACOLYTE',
     DamageType.mixed,
@@ -1059,7 +1080,7 @@ let charactersArray = [
     ['NA', 'NS'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Nightsister Initiate',
     'NIGHTSISTERINITIATE',
     DamageType.physical,
@@ -1069,7 +1090,7 @@ let charactersArray = [
     ['NI', 'NS'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Nightsister Spirit',
     'NIGHTSISTERSPIRIT',
     DamageType.physical,
@@ -1079,7 +1100,7 @@ let charactersArray = [
     ['NS'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Nightsister Zombie',
     'NIGHTSISTERZOMBIE',
     DamageType.physical,
@@ -1089,7 +1110,7 @@ let charactersArray = [
     ['NS', 'hSTR NS'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Nute Gunray',
     'NUTEGUNRAY',
     DamageType.physical,
@@ -1099,7 +1120,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Obi-Wan Kenobi (Old Ben)',
     'OLDBENKENOBI',
     DamageType.physical,
@@ -1109,7 +1130,7 @@ let charactersArray = [
     ['OB'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Old Daka',
     'DAKA',
     DamageType.physical,
@@ -1119,7 +1140,7 @@ let charactersArray = [
     ['NS', 'hSTR NS'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Pao',
     'PAO',
     DamageType.physical,
@@ -1129,7 +1150,7 @@ let charactersArray = [
     ['Rogue 1', 'Chex Mix'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Paploo',
     'PAPLOO',
     DamageType.physical,
@@ -1139,7 +1160,7 @@ let charactersArray = [
     ['Murderbears'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Plo Koon',
     'PLOKOON',
     DamageType.mixed,
@@ -1149,7 +1170,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Poe Dameron',
     'POE',
     DamageType.physical,
@@ -1159,7 +1180,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Poggle the Lesser',
     'POGGLETHELESSER',
     DamageType.physical,
@@ -1169,7 +1190,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Princess Leia',
     'PRINCESSLEIA',
     DamageType.physical,
@@ -1179,7 +1200,7 @@ let charactersArray = [
     ['Machine Gun'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Qi\'ra',
     'QIRA',
     DamageType.physical,
@@ -1189,7 +1210,7 @@ let charactersArray = [
     ['#solo'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Qui-Gon Jinn',
     'QUIGONJINN',
     DamageType.mixed,
@@ -1199,7 +1220,7 @@ let charactersArray = [
     ['QGJ'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'R2-D2',
     'R2D2_LEGENDARY',
     DamageType.mixed,
@@ -1209,7 +1230,7 @@ let charactersArray = [
     ['Trashcan', 'R2z2', 'SuperStar2D2'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Range Trooper',
     'RANGETROOPER',
     DamageType.physical,
@@ -1219,7 +1240,7 @@ let charactersArray = [
     ['Troopers'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Rebel Officer Leia Organa',
     'HOTHLEIA',
     DamageType.physical,
@@ -1229,7 +1250,7 @@ let charactersArray = [
     ['ROLO'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Resistance Pilot',
     'RESISTANCEPILOT',
     DamageType.physical,
@@ -1239,7 +1260,7 @@ let charactersArray = [
     ['RP'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Resistance Trooper',
     'RESISTANCETROOPER',
     DamageType.physical,
@@ -1249,7 +1270,7 @@ let charactersArray = [
     ['RT', 'res trooper'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Rey (Jedi Training)',
     'REYJEDITRAINING',
     DamageType.physical,
@@ -1262,7 +1283,7 @@ let charactersArray = [
     ['JTR', 'RJT', 'Jedi Rey', 'Jey Z'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Rey (Scavenger)',
     'REY',
     DamageType.physical,
@@ -1272,7 +1293,7 @@ let charactersArray = [
     ['scav rey'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Rose Tico',
     'ROSETICO',
     DamageType.mixed,
@@ -1282,7 +1303,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Royal Guard',
     'ROYALGUARD',
     DamageType.physical,
@@ -1292,7 +1313,7 @@ let charactersArray = [
     ['RG', 'Red Guard'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Sabine Wren',
     'SABINEWRENS3',
     DamageType.physical,
@@ -1302,7 +1323,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Savage Opress',
     'SAVAGEOPRESS',
     DamageType.physical,
@@ -1312,7 +1333,7 @@ let charactersArray = [
     ['zavage'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Scarif Rebel Pathfinder',
     'SCARIFREBEL',
     DamageType.physical,
@@ -1322,7 +1343,7 @@ let charactersArray = [
     ['Rogue 1', 'SRP'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Shoretrooper',
     'SHORETROOPER',
     DamageType.physical,
@@ -1332,7 +1353,7 @@ let charactersArray = [
     ['ShT', 'Troopers', 'Imperial Grancor Maneuver'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Sith Assassin',
     'SITHASSASSIN',
     DamageType.physical,
@@ -1342,7 +1363,7 @@ let charactersArray = [
     ['SA', 'Sassy'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Sith Marauder',
     'SITHMARAUDER',
     DamageType.physical,
@@ -1352,7 +1373,7 @@ let charactersArray = [
     ['SM'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Sith Trooper',
     'SITHTROOPER',
     DamageType.physical,
@@ -1362,7 +1383,7 @@ let charactersArray = [
     ['SiT', 'Nightmare'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Snowtrooper',
     'SNOWTROOPER',
     DamageType.physical,
@@ -1372,7 +1393,7 @@ let charactersArray = [
     ['Troopers'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Stormtrooper',
     'STORMTROOPER',
     DamageType.physical,
@@ -1382,7 +1403,7 @@ let charactersArray = [
     ['Troopers'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Stormtrooper Han',
     'STORMTROOPERHAN',
     DamageType.physical,
@@ -1392,7 +1413,7 @@ let charactersArray = [
     ['STHan'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Sun Fac',
     'SUNFAC',
     DamageType.physical,
@@ -1402,7 +1423,7 @@ let charactersArray = [
     [],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Talia',
     'TALIA',
     DamageType.mixed,
@@ -1412,7 +1433,7 @@ let charactersArray = [
     ['NS', 'hSTR NS'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Teebo',
     'TEEBO',
     DamageType.physical,
@@ -1422,7 +1443,7 @@ let charactersArray = [
     ['Teebotine', 'Murderbears'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'TIE Fighter Pilot',
     'TIEFIGHTERPILOT',
     DamageType.physical,
@@ -1432,7 +1453,7 @@ let charactersArray = [
     ['TFP', 'Auto Lightzader'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Tusken Raider',
     'TUSKENRAIDER',
     DamageType.physical,
@@ -1442,7 +1463,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Tusken Shaman',
     'TUSKENSHAMAN',
     DamageType.physical,
@@ -1452,7 +1473,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Ugnaught',
     'UGNAUGHT',
     DamageType.mixed,
@@ -1462,7 +1483,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'URoRRuR\'R\'R',
     'URORRURRR',
     DamageType.physical,
@@ -1472,7 +1493,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Vandor Chewbacca',
     'YOUNGCHEWBACCA',
     DamageType.physical,
@@ -1482,7 +1503,7 @@ let charactersArray = [
     ['Dwight', '#solo'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Veteran Smuggler Chewbacca',
     'SMUGGLERCHEWBACCA',
     DamageType.physical,
@@ -1492,7 +1513,7 @@ let charactersArray = [
     ['Vets'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Veteran Smuggler Han Solo',
     'SMUGGLERHAN',
     DamageType.physical,
@@ -1502,7 +1523,7 @@ let charactersArray = [
     ['Vets'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Visas Marr',
     'VISASMARR',
     DamageType.physical,
@@ -1512,7 +1533,7 @@ let charactersArray = [
     [],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Wampa',
     'WAMPA',
     DamageType.physical,
@@ -1534,7 +1555,7 @@ let charactersArray = [
     ['beast', 'Wampanader'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Wedge Antilles',
     'WEDGEANTILLES',
     DamageType.physical,
@@ -1544,7 +1565,7 @@ let charactersArray = [
     ['Wiggs', 'chiggs', 'SuperStar2D2'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Wicket',
     'WICKET',
     DamageType.physical,
@@ -1554,7 +1575,7 @@ let charactersArray = [
     ['Murderbears'],
     false
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Young Han Solo',
     'YOUNGHAN',
     DamageType.physical,
@@ -1564,7 +1585,7 @@ let charactersArray = [
     ['YOLO', '#solo', 'Jim'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Young Lando Calrissian',
     'YOUNGLANDO',
     DamageType.physical,
@@ -1574,7 +1595,7 @@ let charactersArray = [
     ['#solo'],
     true
   ),
-  new BasicCharacter(
+  Character.basicCharacter(
     'Zam Wesell',
     'ZAMWESELL',
     DamageType.physical,
@@ -1591,7 +1612,7 @@ const charDefaults = {};
 
 for (let character of charactersArray) {
   characters[character.name] = character;
-  charDefaults[character.name] = new BasicCharacter(
+  charDefaults[character.name] = Character.basicCharacter(
     character.name,
     character.baseId,
     character.physDmgPercent,

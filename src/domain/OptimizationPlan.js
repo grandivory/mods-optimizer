@@ -120,8 +120,28 @@ class OptimizationPlan {
       planJson.critChance,
       planJson.defense,
       planJson.accuracy,
-      planJson.critAvoid,
+      planJson.critAvoid
     );
+  }
+
+  /**
+   * Deserialize an OptimizationPlan that was serialized prior to normalization
+   * @param planJson
+   */
+  static deserializeVersionOne(planJson) {
+    return new OptimizationPlan(
+      planJson.health * OptimizationPlan.statWeight.health,
+      planJson.protection * OptimizationPlan.statWeight.protection,
+      planJson.speed * OptimizationPlan.statWeight.speed,
+      planJson.critDmg * OptimizationPlan.statWeight.critDmg,
+      planJson.potency * OptimizationPlan.statWeight.potency,
+      planJson.tenacity * OptimizationPlan.statWeight.tenacity,
+      planJson.offense * OptimizationPlan.statWeight.offense,
+      planJson.critChance * OptimizationPlan.statWeight.critChance,
+      planJson.defense * OptimizationPlan.statWeight.defense,
+      planJson.accuracy * OptimizationPlan.statWeight.accuracy,
+      planJson.critAvoid * OptimizationPlan.statWeight.critAvoid
+    )
   }
 }
 

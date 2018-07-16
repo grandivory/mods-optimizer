@@ -37,7 +37,49 @@ class Character {
     this.isLocked = isLocked || false
   }
 
-  /**
+  static basicCharacter(name, baseID, physDmgPct, defaultPlan, namedPlans, tags, extraTags, useOnly5dotMods) {
+    return new Character(
+      name,
+      baseID,
+      1,
+      1,
+      1,
+      [],
+      0,
+      physDmgPct,
+      null,
+      null,
+      defaultPlan,
+      namedPlans,
+      tags,
+      extraTags,
+      useOnly5dotMods,
+      false
+    );
+  }
+
+  static defaultCharacter(name) {
+    return new Character(
+      name,
+      '',
+      1,
+      1,
+      1,
+      [],
+      0,
+      1,
+      null,
+      null,
+      new OptimizationPlan(),
+      {},
+      [],
+      [],
+      false,
+      false
+    );
+  }
+
+/**
    * Checks whether this character matches a given filter string in name or tags
    * @param filterString string The string to filter by
    * @returns boolean
@@ -89,10 +131,17 @@ class Character {
     return characterObject;
   }
 
-  static deserialize(characterJson) {
+  static deserialize(characterJson, version) {
     const serializedNamedPlans = characterJson.namedPlans || {};
+    let planDeserializer;
+    if (version < '1.1.0') {
+      planDeserializer = OptimizationPlan.deserializeVersionOne;
+    } else {
+      planDeserializer = OptimizationPlan.deserialize;
+    }
+
     const namedPlansObject = Object.keys(serializedNamedPlans).reduce((obj, key) => {
-      obj[key] = OptimizationPlan.deserialize(serializedNamedPlans[key]);
+      obj[key] = planDeserializer(serializedNamedPlans[key]);
       return obj;
     }, {});
 
@@ -105,37 +154,14 @@ class Character {
       characterJson.gearPieces || [],
       characterJson.galacticPower || 0,
       characterJson.physDmgPercent,
-      characterJson.baseStats ? BaseStats.deserialize(characterJson.baseStats) : new BaseStats() ,
-      characterJson.totalStats ? BaseStats.deserialize(characterJson.totalStats) : new BaseStats() ,
-      OptimizationPlan.deserialize(characterJson.optimizationPlan),
+      characterJson.baseStats ? BaseStats.deserialize(characterJson.baseStats) : new BaseStats(),
+      characterJson.totalStats ? BaseStats.deserialize(characterJson.totalStats) : new BaseStats(),
+      planDeserializer(characterJson.optimizationPlan),
       namedPlansObject,
       [],
       [],
       characterJson.useOnly5DotMods,
       characterJson.isLocked || false
-    );
-  }
-}
-
-class BasicCharacter extends Character {
-  constructor(name, baseID, physDmgPct, defaultPlan, namedPlans, tags, extraTags, useOnly5dotMods) {
-    super(
-      name,
-      baseID,
-      1,
-      1,
-      1,
-      [],
-      0,
-      physDmgPct,
-      new BaseStats(),
-      new BaseStats(),
-      defaultPlan,
-      namedPlans,
-      tags,
-      extraTags,
-      useOnly5dotMods,
-      false
     );
   }
 }
@@ -150,4 +176,4 @@ Object.freeze(DamageType);
 
 export default Character;
 
-export {BasicCharacter, DamageType};
+export {DamageType};

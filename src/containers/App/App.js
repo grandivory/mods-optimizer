@@ -10,14 +10,15 @@ import Modal from "../../components/Modal/Modal";
 import WarningLabel from "../../components/WarningLabel/WarningLabel";
 import Spinner from "../../components/Spinner/Spinner";
 import Character from "../../domain/Character";
-import DefaultCharacter from "../../domain/DefaultCharacter";
-import {characters} from "../../constants/characters";
 import BaseStats from "../../domain/BaseStats";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
+import {characters} from "../../constants/characters";
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.version = '1.1.0';
+
     this.state = {
       'view': 'optimize',
       'mods': []
@@ -34,19 +35,23 @@ class App extends Component {
   saveState() {
     const saveProgressButton = document.getElementById('saveProgress');
 
+    window.localStorage.removeItem('availableCharacters');
+    window.localStorage.removeItem('selectedCharacters');
+    window.localStorage.removeItem('lockedCharacters');
+
     window.localStorage.setItem('optimizer.allyCode', this.state.allyCode);
     window.localStorage.setItem('optimizer.mods', JSON.stringify(this.state.mods.map(mod => mod.serialize())));
     window.localStorage.setItem(
-      'availableCharacters',
+      'optimizer.availableCharacters',
       JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
     );
     window.localStorage.setItem(
-      'selectedCharacters',
+      'optimizer.selectedCharacters',
       JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
     );
     window.localStorage.setItem(
-      'lockedCharacters',
-      JSON.stringify(this.state.lockedCharacters.map(character => character.serialize()))
+      'optimizer.version',
+      this.version
     );
 
     saveProgressButton.href = this.getProgressData();
@@ -56,29 +61,48 @@ class App extends Component {
   restoreState() {
     let state = {};
 
+    const version = window.localStorage.getItem('optimizer.version');
+
     state.allyCode = window.localStorage.getItem('optimizer.allyCode') || '';
 
     const savedMods = window.localStorage.getItem('optimizer.mods');
     if (savedMods) {
-      state.mods = this.processMods(JSON.parse(savedMods));
+      state.mods = this.processMods(JSON.parse(savedMods), version);
     }
 
-    state = Object.assign(state, this.restoreCharacterList());
+    state = Object.assign(state, this.restoreCharacterList(version));
 
     return state;
   }
 
-  restoreCharacterList() {
+  /**
+   * Restore the available and saved characters from localStorage
+   * @param version The version of the app used to save the data to localStorage
+   *
+   * @returns {{availableCharacters: Array[Character], selectedCharacters: Array[Character]}}
+   */
+  restoreCharacterList(version) {
     const characterDefaults = Object.values(characters);
+    let availableCharactersLocation, selectedCharactersLocation, lockedCharactersLocation;
 
-    const savedAvailableCharacters = (JSON.parse(window.localStorage.getItem('availableCharacters')) || []).map(
-      characterJson => Character.deserialize(characterJson)
+    if (version < '1.1.0') {
+      availableCharactersLocation = 'availableCharacters';
+      selectedCharactersLocation = 'selectedCharacters';
+      lockedCharactersLocation = 'lockedCharacters';
+    } else {
+      availableCharactersLocation = 'optimizer.availableCharacters';
+      selectedCharactersLocation = 'optimizer.selectedCharacters';
+      lockedCharactersLocation = '';
+    }
+
+    const savedAvailableCharacters = (JSON.parse(window.localStorage.getItem(availableCharactersLocation)) || []).map(
+      characterJson => Character.deserialize(characterJson, version)
     );
-    const savedSelectedCharacters = (JSON.parse(window.localStorage.getItem('selectedCharacters')) || []).map(
-      characterJson => Character.deserialize(characterJson)
+    const savedSelectedCharacters = (JSON.parse(window.localStorage.getItem(selectedCharactersLocation)) || []).map(
+      characterJson => Character.deserialize(characterJson, version)
     );
-    const savedLockedCharacters = (JSON.parse(window.localStorage.getItem('lockedCharacters')) || []).map(
-      characterJson => Character.deserialize(characterJson)
+    const savedLockedCharacters = (JSON.parse(window.localStorage.getItem(lockedCharactersLocation)) || []).map(
+      characterJson => Character.deserialize(characterJson, version)
     );
 
     const savedCharacters = savedAvailableCharacters.concat(savedSelectedCharacters, savedLockedCharacters);
@@ -89,31 +113,29 @@ class App extends Component {
 
     let availableCharacters = [];
     let selectedCharacters = [];
-    let lockedCharacters = [];
 
     savedAvailableCharacters.forEach(character => {
       const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
-        new DefaultCharacter(character.name);
+        Character.defaultCharacter(character.name);
       defaultCharacter.apply(character);
       availableCharacters.push(defaultCharacter);
     });
     savedSelectedCharacters.forEach(character => {
       const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
-        new DefaultCharacter(character.name);
+        Character.defaultCharacter(character.name);
       defaultCharacter.apply(character);
       selectedCharacters.push(defaultCharacter);
     });
     savedLockedCharacters.forEach(character => {
       const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
-        new DefaultCharacter(character.name);
+        Character.defaultCharacter(character.name);
       defaultCharacter.apply(character);
-      lockedCharacters.push(defaultCharacter);
+      availableCharacters.push(defaultCharacter);
     });
 
     return {
       'availableCharacters': availableCharacters.concat(newCharacters),
       'selectedCharacters': selectedCharacters,
-      'lockedCharacters': lockedCharacters
     };
   }
 
@@ -331,11 +353,12 @@ class App extends Component {
       try {
         const state = JSON.parse(event.target.result).state;
 
+        window.localStorage.setItem('optimizer.version', state.version || '1.0');
         window.localStorage.setItem('optimizer.mods', state.mods);
         window.localStorage.setItem('optimizer.allyCode', state.allyCode || '');
-        window.localStorage.setItem('availableCharacters', state.availableCharacters);
-        window.localStorage.setItem('lockedCharacters', state.lockedCharacters);
-        window.localStorage.setItem('selectedCharacters', state.selectedCharacters);
+        window.localStorage.setItem('optimizer.availableCharacters', state.availableCharacters);
+        window.localStorage.setItem('optimizer.lockedCharacters', state.lockedCharacters);
+        window.localStorage.setItem('optimizer.selectedCharacters', state.selectedCharacters);
 
         window.location.reload();
       } catch (e) {
@@ -359,7 +382,7 @@ class App extends Component {
     let mods = [];
 
     for (let fileMod of modsJson) {
-      mods.push(Mod.deserialize(fileMod));
+      mods.push(Mod.deserialize(fileMod, characters));
     }
 
     const statClassifier = new StatClassifier(this.calculateStatCategoryRanges(mods));
@@ -502,8 +525,9 @@ class App extends Component {
                  e.target.value = allyCodeChunks.join('-');
                }}
         />
-        <button type={'button'} onClick={() =>
-          this.queryPlayerProfile(document.getElementById('ally-code').value)}>
+        <button type={'button'} onClick={() => {
+          this.queryPlayerProfile(document.getElementById('ally-code').value);
+        }}>
           Fetch my data!
         </button>
       <br />
@@ -558,7 +582,7 @@ class App extends Component {
       </form>
       or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'}>Patreon</a>
-      <div className={'version'}>version 1.0.14</div>
+      <div className={'version'}>version {this.version}</div>
     </footer>;
   }
 
@@ -630,11 +654,12 @@ class App extends Component {
   getProgressData() {
     return 'data:text/json;charset=utf-8,' + JSON.stringify({
       'state': {
+        'version': window.localStorage.getItem('optimizer.state'),
         'mods': window.localStorage.getItem('optimizer.mods'),
         'allyCode': window.localStorage.getItem('optimizer.allyCode'),
-        'availableCharacters': window.localStorage.getItem('availableCharacters'),
-        'lockedCharacters': window.localStorage.getItem('lockedCharacters'),
-        'selectedCharacters': window.localStorage.getItem('selectedCharacters')
+        'availableCharacters': window.localStorage.getItem('optimizer.availableCharacters'),
+        'lockedCharacters': window.localStorage.getItem('optimizer.lockedCharacters'),
+        'selectedCharacters': window.localStorage.getItem('optimizer.selectedCharacters')
       }
     });
   }
