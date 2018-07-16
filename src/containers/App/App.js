@@ -85,7 +85,7 @@ class App extends Component {
     const characterDefaults = Object.values(characters);
     let availableCharactersLocation, selectedCharactersLocation, lockedCharactersLocation;
 
-    if (version < '1.1.0') {
+    if (!version || version < '1.1.0') {
       availableCharactersLocation = 'availableCharacters';
       selectedCharactersLocation = 'selectedCharacters';
       lockedCharactersLocation = 'lockedCharacters';

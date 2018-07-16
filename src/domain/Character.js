@@ -134,7 +134,7 @@ class Character {
   static deserialize(characterJson, version) {
     const serializedNamedPlans = characterJson.namedPlans || {};
     let planDeserializer;
-    if (version < '1.1.0') {
+    if (!version || version < '1.1.0') {
       planDeserializer = OptimizationPlan.deserializeVersionOne;
     } else {
       planDeserializer = OptimizationPlan.deserialize;
