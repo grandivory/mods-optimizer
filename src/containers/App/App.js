@@ -352,13 +352,21 @@ class App extends Component {
     reader.onload = (event) => {
       try {
         const state = JSON.parse(event.target.result).state;
+        const version = state.version || '1.0';
 
-        window.localStorage.setItem('optimizer.version', state.version || '1.0');
+        window.localStorage.setItem('optimizer.version', version);
         window.localStorage.setItem('optimizer.mods', state.mods);
         window.localStorage.setItem('optimizer.allyCode', state.allyCode || '');
-        window.localStorage.setItem('optimizer.availableCharacters', state.availableCharacters);
-        window.localStorage.setItem('optimizer.lockedCharacters', state.lockedCharacters);
-        window.localStorage.setItem('optimizer.selectedCharacters', state.selectedCharacters);
+
+        if (version <= '1.1.0') {
+          window.localStorage.setItem('availableCharacters', state.availableCharacters);
+          window.localStorage.setItem('lockedCharacters', state.lockedCharacters);
+          window.localStorage.setItem('selectedCharacters', state.selectedCharacters);
+        } else {
+          window.localStorage.setItem('optimizer.availableCharacters', state.availableCharacters);
+          window.localStorage.setItem('optimizer.lockedCharacters', state.lockedCharacters);
+          window.localStorage.setItem('optimizer.selectedCharacters', state.selectedCharacters);
+        }
 
         window.location.reload();
       } catch (e) {
