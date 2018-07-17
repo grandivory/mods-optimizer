@@ -98,6 +98,8 @@ class Character {
     this.starLevel = other.starLevel;
     this.gearLevel = other.gearLevel;
     this.gearPieces = other.gearPieces;
+    this.baseStats = other.baseStats || this.baseStats;
+    this.totalStats = other.totalStats || this.totalStats;
     this.galacticPower = other.galacticPower;
     this.optimizationPlan = other.optimizationPlan;
     this.namedPlans = Object.assign(this.namedPlans, other.namedPlans);

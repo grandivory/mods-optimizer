@@ -1361,7 +1361,7 @@ let charactersArray = [
     {},
     ['Dark Side', 'Sith', 'Attacker'],
     ['SA', 'Sassy'],
-    false
+    true
   ),
   Character.basicCharacter(
     'Sith Marauder',

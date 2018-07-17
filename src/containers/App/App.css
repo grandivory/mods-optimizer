@@ -250,6 +250,10 @@ nav button.active {
   word-break: break-word;
 }
 
+.modal.changelog-modal {
+  max-width: 45em;
+}
+
 strong {
   font-weight: bold;
   color: #a35ef9;
@@ -299,4 +303,9 @@ strong {
 
 input {
     color: #222222;
+}
+
+li {
+  text-align: left;
+  margin-bottom: .5em;
 }

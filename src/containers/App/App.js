@@ -72,6 +72,10 @@ class App extends Component {
 
     state = Object.assign(state, this.restoreCharacterList(version));
 
+    if (('version' < '1.1.0' || !version) && state.mods) {
+      state.showChangeLog = true;
+    }
+
     return state;
   }
 
@@ -358,7 +362,7 @@ class App extends Component {
         window.localStorage.setItem('optimizer.mods', state.mods);
         window.localStorage.setItem('optimizer.allyCode', state.allyCode || '');
 
-        if (version <= '1.1.0') {
+        if (version < '1.1.0') {
           window.localStorage.setItem('availableCharacters', state.availableCharacters);
           window.localStorage.setItem('lockedCharacters', state.lockedCharacters);
           window.localStorage.setItem('selectedCharacters', state.selectedCharacters);
@@ -466,6 +470,7 @@ class App extends Component {
           }
           <Modal show={this.state.error} className={'error-modal'} content={this.errorModal(this.state.error)} />
           <Modal show={this.state.reset} className={'reset-modal'} content={this.resetModal()} />
+          <Modal show={this.state.showChangeLog} className={'changelog-modal'} content={this.changeLogModal()} />
           <Spinner show={this.state.loading} />
         </div>
         {this.footer()}
@@ -625,6 +630,7 @@ class App extends Component {
   /**
    * Shows a popup with an error message
    * @param errorMessage
+   * @returns JSX Element
    */
   errorModal(errorMessage) {
     return <div>
@@ -639,7 +645,7 @@ class App extends Component {
 
   /**
    * Renders the "Are you sure?" modal for resetting the app
-   * @returns Array[JSX Element]
+   * @returns JSX Element
    */
   resetModal() {
     return <div>
@@ -652,6 +658,57 @@ class App extends Component {
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.setState({'reset': false})}>Cancel</button>
         <button type={'button'} className={'red'} onClick={this.handleReset}>Reset</button>
+      </div>
+    </div>;
+  }
+
+  /**
+   * Renders a popup describing the changes from the previous version, and any actions that the user needs to take.
+   * @returns JSX Element
+   */
+  changeLogModal() {
+    return <div>
+      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version {this.version}!</h2>
+      <h3>Here's a short summary of the changes included in this version:</h3>
+      <ul>
+        <li>
+          All character stats are now pulled via a combination of the <strong>swgoh.help</strong> API and the <strong>
+          crinolo-swgoh.glitch.me</strong> API. This means that you don't have to put your character stats in
+          manually anymore! You'll notice that all of your characters show up with no level, no gear level, and 1 star.
+          Just pull your data again and everything should display properly!
+        </li>
+        <li>
+          There is now only one list for selected characters. Any characters that you previously had locked should now
+          simply be listed as available. Don't worry! You can still lock your characters, and it works exactly like it
+          did before. It's just a different interface.
+        </li>
+        <li>
+          You can now see what you're targeting for each character's mods quickly in the selected characters list, and
+          you can change it by simply selecting a different target from the dropdown. This is also how you lock
+          characters - simply select "Lock" from the dropdown list. No matter where the character is in the selected
+          list, their mods won't be used at all for your other characters. This way, you don't need to remember the order
+          you optimized your characters in - simply lock the ones at the top and add new characters below them. Then, when
+          you're ready to optimize again, choose a different target!
+        </li>
+        <li>
+          You can now save optimization targets by giving them names! Simply enter a name when selecting stat weights,
+          and the tool will display it as a target on the selected character. When you go to select targets for that
+          character later, all the named targets that you've made (and everything that comes by default) will be
+          available for selection. Giving a target the same name as an existing target will overwrite it.
+        </li>
+        <li>
+          There's now a simpler way to select stat values. If you select a custom optimization target, or click the
+          "edit" button on a selected character, the new edit modal will pop up. Under "basic" mode, all stats are given
+          a value from -100 to 100. These values are normalized approximately by the maximum value of that stat that can
+          be found on mods. This should work a little more closely to a gut feel if you simply give the stats weights
+          based on their relative values to a character. If you want to go back to the old way of editing stat values,
+          simply click the mode toggle over to "advanced", and the stats will work exactly like before! Your previous
+          character settings are all saved, so most characters will probably default to "advanced". Make sure to save
+          your target under a new name if you want to keep it!
+        </li>
+      </ul>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.setState({showChangeLog: false})}>OK</button>
       </div>
     </div>;
   }

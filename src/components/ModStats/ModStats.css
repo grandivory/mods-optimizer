@@ -21,6 +21,7 @@
 
 .mod-stats ul li {
   height: 1em;
+  margin: 0;
 }
 
 .mod-stats .class {
