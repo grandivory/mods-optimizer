@@ -163,7 +163,10 @@ class CharacterEditView extends React.Component {
     const unfilteredCharacters = availableCharacters.filter((c) => !characterFilter(c));
 
     return <div className={'character-edit'}>
-      {this.filterForm()}
+      <div className={'sidebar'}>
+        {this.filterForm()}
+        {this.sidebarActions()}
+      </div>
       <div className={'selected-characters'}>
         <h4>Selected Characters</h4>
         <CharacterList
@@ -212,6 +215,24 @@ class CharacterEditView extends React.Component {
         />
       </div>
     </div>;
+  }
+
+  /**
+   * Renders a sidebar box with action buttons
+   *
+   * @returns JSX Element
+   */
+  sidebarActions() {
+    return <div className={'sidebar-actions'}>
+      <h3>Actions</h3>
+      <button
+        type={'button'}
+        onClick={this.props.onOptimize}
+        disabled={this.state.selectedCharacters.length === 0}
+      >
+        Optimize my mods!
+      </button>
+    </div>
   }
 
   /**

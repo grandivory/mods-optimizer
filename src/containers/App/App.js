@@ -719,7 +719,7 @@ class App extends Component {
   getProgressData() {
     return 'data:text/json;charset=utf-8,' + JSON.stringify({
       'state': {
-        'version': window.localStorage.getItem('optimizer.state'),
+        'version': window.localStorage.getItem('optimizer.version'),
         'mods': window.localStorage.getItem('optimizer.mods'),
         'allyCode': window.localStorage.getItem('optimizer.allyCode'),
         'availableCharacters': window.localStorage.getItem('optimizer.availableCharacters'),

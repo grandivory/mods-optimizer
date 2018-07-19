@@ -73,8 +73,11 @@ class ReviewList extends React.Component {
     } else {
       return (
         <div className={'review-list'}>
-          <div className={'filters'}>
-            {this.filterForm()}
+          <div className={'sidebar'}>
+            <div className={'filters'}>
+              {this.filterForm()}
+            </div>
+            {this.sidebarActions()}
           </div>
           <h2>Reassigning {modsLeft} mods {summaryButton}</h2>
           {(0 < this.state.displayedMods.length) &&
@@ -300,6 +303,30 @@ class ReviewList extends React.Component {
         {tagOptions}
       </select>
     </div>;
+  }
+
+  /**
+   * Renders a sidebar box with action buttons
+   *
+   * @returns JSX Element
+   */
+  sidebarActions() {
+    return <div className={'sidebar-actions'}>
+      <h3>I don't like these results...</h3>
+      <button
+        type={'button'}
+        onClick={this.props.onBack}
+      >
+        Change my selection
+      </button>
+      <h3>I want to review changes again</h3>
+      <button
+        type={'button'}
+        onClick={this.props.onNextView}
+      >
+        Show me the mod sets
+      </button>
+    </div>
   }
 
   /**

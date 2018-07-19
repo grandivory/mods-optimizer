@@ -26,35 +26,30 @@ class OptimizerView extends React.Component {
     return (
       <div className={'optimizer-view'}>
         <Spinner show={this.state.loading} />
-        {'edit' !== this.state.view &&
-        <div className={'actions'}>
-          <button onClick={this.updateView.bind(this, 'edit')}>
-            Change my character selection
-          </button>
-          <button onClick={this.updateView.bind(this, 'mods' === this.state.view ? 'sets' : 'mods')}>
-            {'mods' === this.state.view ? 'Let me review the changes' : 'Show me the mods to move'}
-          </button>
-        </div>
-        }
-        {'edit' === this.state.view &&
-        <div className={'actions'}>
-          <button onClick={this.updateView.bind(this, 'sets')}>
-            Optimize my mods!
-          </button>
-        </div>
-        }
-
         {'edit' === this.state.view &&
         <CharacterEditView
           availableCharacters={this.state.availableCharacters}
           selectedCharacters={this.state.selectedCharacters}
           saveState={this.saveState}
+          onOptimize={this.updateView.bind(this, 'sets')}
         />
         }
         {'sets' === this.state.view &&
-        <ReviewSets characterSets={this.state.modAssignments} mods={mods}/>}
+        <ReviewSets
+          characterSets={this.state.modAssignments}
+          mods={mods}
+          onBack={this.updateView.bind(this, 'edit')}
+          onNextView={this.updateView.bind(this, 'mods')}
+        />
+        }
         {'mods' === this.state.view &&
-        <ReviewList mods={mods} saveState={this.saveState} characters={this.state.selectedCharacters}/>
+        <ReviewList
+          mods={mods}
+          saveState={this.saveState}
+          characters={this.state.selectedCharacters}
+          onBack={this.updateView.bind(this, 'edit')}
+          onNextView={this.updateView.bind(this, 'sets')}
+        />
         }
       </div>
     );
