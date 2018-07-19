@@ -6,6 +6,8 @@ import CharacterEditView from "../CharacterEditView/CharacterEditView";
 
 import "./OptimizerView.css";
 import Spinner from "../../components/Spinner/Spinner";
+import WarningLabel from "../../components/WarningLabel/WarningLabel";
+import Modal from "../../components/Modal/Modal";
 
 class OptimizerView extends React.Component {
   constructor(props) {
@@ -51,8 +53,25 @@ class OptimizerView extends React.Component {
           onNextView={this.updateView.bind(this, 'sets')}
         />
         }
+        <Modal show={this.state.error} className={'error-modal'} content={this.errorModal(this.state.error)} />
       </div>
     );
+  }
+
+  /**
+   * Shows a popup with an error message
+   * @param errorMessage
+   * @returns JSX Element
+   */
+  errorModal(errorMessage) {
+    return <div>
+      <WarningLabel />
+      <h2 key={'error-header'}>Error!</h2>
+      <p key={'error-message'}>{errorMessage}</p>
+      <div key={'error-actions'} className={'actions'}>
+        <button type={'button'} onClick={() => this.setState({'error': false})}>Ok</button>
+      </div>
+    </div>;
   }
 
   /**
@@ -64,6 +83,17 @@ class OptimizerView extends React.Component {
     if (view === this.state.view) {
       return;
     }
+
+    const missingData =
+      this.state.selectedCharacters.filter(character => !character.baseStats || !character.baseStats.isValid());
+
+    if (missingData.length > 0) {
+      this.setState({
+        'error': 'Missing character data required to optimize your mods. Please fetch your data again.'
+      });
+      return
+    }
+
 
     if ('edit' === this.state.view) {
       this.setState({
