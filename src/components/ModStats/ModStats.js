@@ -1,5 +1,6 @@
 import React from 'react';
 import './ModStats.css';
+import CharacterAvatar from "../CharacterAvatar/CharacterAvatar";
 
 class ModStats extends React.Component {
   render() {
@@ -19,6 +20,13 @@ class ModStats extends React.Component {
         <ul className='secondary'>
           {statsDisplay}
         </ul>
+        {mod.currentCharacter && [
+          <h4>Assigned To</h4>,
+          <div className='avatar-row'>
+            <CharacterAvatar name={mod.currentCharacter.name}/>
+            <div className="avatar-name">{mod.currentCharacter.name}</div>
+          </div>
+          ]}
       </div>
     );
   }
