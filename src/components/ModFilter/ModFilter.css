@@ -16,23 +16,24 @@
   background-color: rgb(0, 0, 96);
   margin: .25em;
   padding: .2em;
-  box-shadow: 0 0 1.5em .5em inset darkred;
+  opacity: 0.5;
+  font-size: 0.9em;
 }
 
 .mod-filters img {
-  height: 3em;
+  height: 2.5em;
   padding: .2em;
-  filter: drop-shadow(0 0 .5em darkred);
+  opacity: 0.5;
 }
 
 .mod-filters input:checked + span.option {
   border-style: inset;
   background-color: rgb(0, 0, 64);
-  box-shadow: 0 0 1.5em .5em inset #60bd1b;
+  opacity: 1;
 }
 
 .mod-filters input:checked + img {
-  filter: drop-shadow(0 0 .5em #60bd1b);
+  opacity: 1;
 }
 
 .mod-filters .actions {
@@ -61,4 +62,12 @@
 .mod-filters .form-actions button {
   font-size: 1em;
   margin: .2em;
+}
+
+#mod-filters > div {
+  margin-bottom: .6em;
+}
+
+#mod-filters > div:last-child {
+  margin-bottom: 0;
 }
