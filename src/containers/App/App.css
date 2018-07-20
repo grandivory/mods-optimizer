@@ -259,7 +259,7 @@ strong {
   border: 1px solid #888;
   border-left-width: 0;
   margin: 1em 1em 0 0;
-  max-width: 19em;
+  max-width: 20em;
   box-sizing: border-box;
   max-height: calc(100% - 2em);
   overflow-y: auto;
