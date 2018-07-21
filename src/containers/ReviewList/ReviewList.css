@@ -55,6 +55,10 @@
   display: block;
 }
 
+.mod-row.set .avatar {
+  font-size: 1.5em;
+}
+
 pre.summary{
   background-color: #222;
   padding: 1em;

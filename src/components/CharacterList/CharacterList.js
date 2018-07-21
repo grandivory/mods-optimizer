@@ -66,8 +66,6 @@ class CharacterList extends React.Component {
     const onSelect = function(e) {
       const optimizationTarget = e.target.value;
 
-      console.log(optimizationTarget);
-
       if ('custom' === optimizationTarget) {
         character.isLocked = false;
         e.target.parentNode.parentNode.classList.remove('locked');

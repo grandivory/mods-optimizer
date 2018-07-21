@@ -101,7 +101,7 @@ class ReviewList extends React.Component {
    */
   listView(displayedMods) {
     return displayedMods.map(mod =>
-      <div className={'mod-row'} key={mod.id}>
+      <div className={'mod-row individual'} key={mod.id}>
         <ModDetail key={mod.id} mod={mod}/>
         <Arrow/>
         <CharacterAvatar character={mod.assignTo}/>
@@ -147,7 +147,7 @@ class ReviewList extends React.Component {
 
     // Iterate over each character to render a full mod set
     return Object.values(modsByCharacter).map(charMods =>
-      <div className={'mod-row'} key={charMods.character.name}>
+      <div className={'mod-row set'} key={charMods.character.name}>
         <CharacterAvatar character={charMods.character}/>
         <Arrow/>
         <div className={'mod-set-block'}>
@@ -235,13 +235,11 @@ class ReviewList extends React.Component {
   characterSort(characterPropertyName) {
     const slotOrder = this.slotOrder;
     return function(left, right) {
-      let leftCharName = left[characterPropertyName] ? left[characterPropertyName].name : '';
-      let rightCharName = right[characterPropertyName] ? right[characterPropertyName].name : '';
+      let leftCharGP = left[characterPropertyName] ? left[characterPropertyName].galacticPower : 0;
+      let rightCharGP = right[characterPropertyName] ? right[characterPropertyName].galacticPower : 0;
 
-      if (leftCharName < rightCharName) {
-        return -1;
-      } else if (leftCharName > rightCharName) {
-        return 1;
+      if (rightCharGP !== leftCharGP) {
+        return rightCharGP - leftCharGP;
       } else {
         return slotOrder.indexOf(left.slot) - slotOrder.indexOf(right.slot);
       }

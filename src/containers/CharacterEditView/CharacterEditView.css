@@ -6,7 +6,7 @@
 
 .character-edit .selected-characters {
   float: right;
-  max-width: calc(33% - 10em);
+  max-width: calc(33% - 7em);
   margin: 0 1em;
   height: 100%;
 }
@@ -42,6 +42,7 @@
   text-align: center;
 }
 
+.character-edit-form #character-level-options,
 .character-edit-form #basic-form,
 .character-edit-form #advanced-form {
   display: inline-block;
@@ -60,8 +61,12 @@
   font-size: 1.5em;
 }
 
+.character-edit-form .character-name {
+  margin-bottom: 0;
+}
+
 .character-edit-form .instructions {
-  margin-bottom: 2em;
+  margin: 1em 0;
 }
 
 .character-edit-form .header-row {
@@ -78,11 +83,6 @@
 
 .character-edit-form .form-row input {
   vertical-align: middle;
-}
-
-.character-edit-form .footer {
-  display: inline-block;
-  margin: .5em 2em;
 }
 
 .character-edit-form .form-row label {
@@ -121,7 +121,7 @@
 
 .character-edit-form #plan-name {
   font-size: 1.2em;
-  width: 15em;
+  width: 7em;
 }
 
 .character-edit-form .actions {

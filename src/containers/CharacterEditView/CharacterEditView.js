@@ -92,6 +92,25 @@ class CharacterEditView extends React.Component {
     }
   }
 
+  /**
+   * Move a character from availableCharacters to the bottom of the selectedCharacters
+   * @param character
+   */
+  selectCharacter(character) {
+    const availableCharacters = this.state.availableCharacters;
+    const selectedCharacters = this.state.selectedCharacters;
+
+    if (availableCharacters.includes(character)) {
+      availableCharacters.splice(availableCharacters.indexOf(character), 1)
+      selectedCharacters.push(character);
+
+      this.setState({
+        availableCharacters: availableCharacters,
+        selectedCharacters: selectedCharacters
+      });
+    }
+  }
+
   saveOptimizationPlan(character, form) {
     const planName = form['plan-name'].value;
     let optimizationPlan;
@@ -188,7 +207,7 @@ class CharacterEditView extends React.Component {
            onDrop={this.availableCharactersDrop.bind(this)}
       >
         <h3 className={'instructions'}>
-          Drag and Drop characters to the selected column to pick who to optimize mods for.
+          Double-click or drag characters to the selected column to pick who to optimize mods for.
           <button type={'button'} className={'small'} onClick={() => this.setState({'instructions': true})}>
             Show full instructions
           </button>
@@ -246,7 +265,8 @@ class CharacterEditView extends React.Component {
       className={className ? 'character ' + className : 'character'}
       key={character.name}
     >
-      <div draggable={true} onDragStart={this.dragStart(character)}>
+      <div draggable={true} onDragStart={this.dragStart(character)}
+           onDoubleClick={() => this.selectCharacter(character)}>
         <CharacterAvatar character={character}/>
       </div>
       <div className={'character-name'}>{character.name}</div>
@@ -280,6 +300,16 @@ class CharacterEditView extends React.Component {
       <div className={'character-view'}>
         <CharacterAvatar character={character}/>
         <h2 className={'character-name'}>{character.name}</h2>
+      </div>
+      <div id={'character-level-options'}>
+        <div className={'form-row'}>
+          <label htmlFor="5dot" id={'fivedot-label'}>Use only 5-dot mods?</label>
+          <input
+            type={'checkbox'}
+            id={'5dot'}
+            name={'5dot'}
+            defaultChecked={character.useOnly5DotMods}/>
+        </div>
       </div>
       <div className={'instructions'}>
         Give each stat type a value. This will be used to calculate the optimum mods to equip. You can give this plan
@@ -541,14 +571,6 @@ class CharacterEditView extends React.Component {
           />
         </div>
       </div>
-      <div className={'form-row footer'}>
-        <label htmlFor="5dot">Use only 5-dot mods?</label>
-        <input
-          type={'checkbox'}
-          id={'5dot'}
-          name={'5dot'}
-          defaultChecked={character.useOnly5DotMods}/>
-      </div>
       <div className={'actions'}>
         <button type={'button'} onClick={this.cancelEdit.bind(this)}>Cancel</button>
         <button type={'submit'}>Save</button>
@@ -572,12 +594,12 @@ class CharacterEditView extends React.Component {
       </p>
       <h3>Selecting characters to optimize</h3>
       <p>
-        The mods optimizer will start out by considering all mods equipped on any character other than those in the
-        "Locked Characters" column. Then, it will go down the list of selected characters, one by one, choosing the
-        best mods it can find for each character. As it finishes each character, it removes those mods from its
-        consideration set. Therefore, the character that you want to have your absolute best mods should always be
-        first among your selected characters. Usually, this means that you want the character who needs the most speed
-        to be first.
+        The mods optimizer will start out by considering all mods equipped on any character other than those that have
+        had "Lock" selected as a target. Then, it will go down the list of selected characters, one by one, choosing the
+        best mods it can find for each character, based on the selected target. As it finishes each character, it
+        removes those mods from its consideration set. Therefore, the character that you want to have your absolute best
+        mods should always be first among your selected characters. Usually, this means that you want the character who
+        needs the most speed to be first.
       </p>
       <p>
         I suggest optimizing your arena team first, in order of required speed, then characters you use for raids,
@@ -586,39 +608,29 @@ class CharacterEditView extends React.Component {
       <h3>Picking the right values</h3>
       <p>
         Every character in the game has been given starting values for all stats that can be used by the optimizer to
-        pick the best mods. <strong>These values, while directionally good for characters, are only a base suggestion!
-      </strong> There are many reasons that you might want to pick different values than those listed by default in
-        the optimizer: you might want to optimize for a different purpose (such as a phase 3 Sith Triumvirate Raid
-        team, where speed can be detrimental), you might want to choose something different to optimize against, or
-        you might simply have a better set of values that you want to employ.
+        pick the best mods. These values have been named for their general purpose - hSTR Phase 1, PvP, and PvE, for
+        example. Some characters have multiple different targets that you can select from. <strong>These targets, while
+        directionally good for characters, are only a base suggestion!</strong> There are many reasons that you might
+        want to pick different values than those listed by default in the optimizer: you might want to optimize for a
+        different purpose (such as a phase 3 Sith Triumvirate Raid team, where speed can be detrimental), you might
+        want to choose something different to optimize against, or you might simply have a better set of values that
+        you want to employ.
       </p>
       <p>
-        In order to change how each character gets optimized, click the "edit" button at the top right of the
-        character block. This will bring up a form with two areas to fill out: the character's base stats and the
-        values to give to each stat. The base stats should simply reflect the values for your own characters when they
-        have no mods equipped. The default values are accurate for characters at 7* gear level 12 with 3 extra pieces
-        equipped. The more accurate you make these values, the more accurate the mods optimizer can be in
-        choosing between mods, especially in choosing between percent-based stats and absolute stats.
+        As a starting point, choose a target for each character that matches what you'd like to optimize for. If no
+        such target exists, you can select "Custom", or simply hit the "Edit" button to bring up the character edit
+        modal. Most characters will have the "basic" mode selected by default. In basic mode, you select a value for all
+        stats that is between -100 and 100. These values are weights that are assigned to each stat to determine its
+        value for that character. Setting two values as equal means that those stats are about equally important for
+        that character. In basic mode, the optimizer will automatically adjust the weights to fit the range of values
+        seen in-game for that stat. For example, giving speed and protection both a value of 100 means that 1 speed is
+        about equivalent to 200 protection (since you find much more protection on mods than you do speed).
       </p>
       <p>
-        The stat values can be difficult to tweak in order to get the result that you want. The tool calculates the
-        value of a mod or mod set by multiplying the value listed here by the benefit granted by the mod. For example,
-        if speed has a value of 100 and a mod gives +6 speed, then the speed stat on that mod contributes 600 to the
-        total value of the mod. If looking at a speed set that grants +10% speed, the speed value of 100 is multiplied
-        by the total amount of speed the set would give your character. If your character's base speed is 130, then
-        the total value of the speed set would be (100 * 130 * .1), or 1300.
-      </p>
-      <p>
-        Some stats tend to come in much larger numbers than others, e.g. protection. It's possible to have a set of
-        mods grant over 50,000 protection to a character, whereas 120 speed would be considered a great set. Because
-        of this, the values granted to each stat can vary greatly. Even if protection is worth a lot to a character,
-        it might be better to choose a low value like .2 for the protection stat in order for it not to be optimized
-        to the detriment of all other stats.
-      </p>
-      <p>
-        <strong>A good rule of thumb is to assign values based on tradeoffs between stats.</strong> If speed is worth
-        100 and you decide that it's worth giving up 1 speed to gain 1000 protection, then protection should have a
-        value of .1 (1*100 = .1*1000).
+        If you want more fine-tuned control over the stat values, you can switch to "advanced" mode. In advanced mode,
+        the values given are the value for each point of the listed stat. In advanced mode, if speed and protection are
+        both given a value of 100, then the tool will never select speed, because it can more easily give that character
+        much more protection. I suggest sticking to basic mode until you have a strong sense for how the tool works.
       </p>
       <p>
         I hope that you enjoy the tool! Happy modding!
