@@ -66,6 +66,9 @@ class ReviewList extends React.Component {
     if (0 === modsLeft) {
       return (
         <div className={'review-list'}>
+          <div className={'sidebar'}>
+            {this.sidebarActions()}
+          </div>
           <h2>You don't have any mods left to move! Great job!</h2>
           <h3>Don't forget to assign mods to all your pilots!</h3>
         </div>

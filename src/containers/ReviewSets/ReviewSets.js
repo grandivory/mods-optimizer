@@ -180,6 +180,12 @@ class ReviewSets extends React.Component {
     if (0 === characterSets.length) {
       return (
         <div className={'review-sets'}>
+          <div className={'sidebar'}>
+            <div className={'filters'}>
+              {this.filterForm()}
+            </div>
+            {this.sidebarActions()}
+          </div>
           <h2>Your mods are already optimal. Congratulations!</h2>
         </div>
       );
