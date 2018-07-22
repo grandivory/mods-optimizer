@@ -18,8 +18,10 @@ let charactersArray = [
     'Admiral Ackbar',
     'ADMIRALACKBAR',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(20, 20, 100, 0, 0, 25, 0, 0, 0, 0, 0),
+    {
+      'Survivability': new OptimizationPlan(20, 20, 100, 0, 0, 25, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Support', 'Fleet Commander', 'Crew Member'],
     ['AA', 'Snackbar', 'ABC'],
     true
@@ -38,8 +40,10 @@ let charactersArray = [
     'Ahsoka Tano (Fulcrum)',
     'FULCRUMAHSOKA',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy["Speed, Crit, and Offense"],
+    {
+      'PvP': optimizationStrategy["Speed, Crit, and Offense"]
+    },
     ['Light Side', 'Rebel', 'Attacker'],
     ['ATF', 'FAT'],
     false
@@ -71,8 +75,10 @@ let charactersArray = [
     'B2 Super Battle Droid',
     'B2SUPERBATTLEDROID',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(50, 50, 0, 0, 50, 25, 0, 0, 0, 50, 0),
+    {
+      'Survival': new OptimizationPlan(50, 50, 0, 0, 50, 25, 0, 0, 0, 50, 0)
+    },
     ['Dark Side', 'Separatist', 'Droid', 'Tank'],
     [],
     false
@@ -101,8 +107,11 @@ let charactersArray = [
     'Baze Malbus',
     'BAZEMALBUS',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(50, 50, 0, 0, 10, 25, 0, 0, 25, 0, 0),
+    {
+      'Slow Tank': new OptimizationPlan(50, 50, 0, 0, 10, 25, 0, 0, 25, 0, 0),
+      'hSTR Phase 4': new OptimizationPlan(10, 10, -100, 0, 0, 0, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Rogue One', 'Tank'],
     ['Rogue 1', 'Chaze', 'Chiggs'],
     false
@@ -124,8 +133,10 @@ let charactersArray = [
     'Biggs Darklighter',
     'BIGGSDARKLIGHTER',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, and Offense'],
+    {
+      'PvP': optimizationStrategy['Speed, Crit, and Offense']
+    },
     ['Light Side', 'Rebel', 'Support', 'Crew Member'],
     ['Wiggs', 'Chiggs'],
     true
@@ -144,8 +155,12 @@ let charactersArray = [
     'Boba Fett',
     'BOBAFETT',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 50, 100, 25, 0, 50, 50, 0, 0, 0),
+    {
+      'PvE': new OptimizationPlan(0, 0, 50, 100, 25, 0, 50, 50, 0, 0, 0),
+      'PvP': optimizationStrategy['Speed, Crit, Offense, Potency'],
+      'hSTR Phase 2': new OptimizationPlan(0, 0, 100, 75, 0, 0, 25, 50, 0, 0, 0)
+    },
     ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker', 'Crew Member'],
     [],
     true
@@ -184,8 +199,10 @@ let charactersArray = [
     'Captain Han Solo',
     'HOTHHAN',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(20, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(20, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Scountrel', 'Rebel', 'Support'],
     ['CHS', 'CHolo', 'Snolo', 'Hoth Han'],
     false
@@ -194,8 +211,10 @@ let charactersArray = [
     'Captain Phasma',
     'PHASMA',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 25, 25, 0, 25, 25, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 25, 25, 0, 25, 25, 0, 0, 0)
+    },
     ['Dark Side', 'First Order', 'Support', 'Crew Member'],
     ['FO'],
     true
@@ -204,8 +223,10 @@ let charactersArray = [
     'Cassian Andor',
     'CASSIANANDOR',
     DamageType.mixed,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 20, 100, 0, 50, 0, 0, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 20, 100, 0, 50, 0, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Rogue One', 'Support', 'Crew Member'],
     ['Rogue 1', 'SuperStar2D2'],
     true
@@ -224,8 +245,10 @@ let charactersArray = [
     'Chief Chirpa',
     'CHIEFCHIRPA',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy.Speed,
+    {
+      'Speed': optimizationStrategy.Speed
+    },
     ['Light Side', 'Ewok', 'Support'],
     ['Murderbears'],
     false
@@ -244,8 +267,11 @@ let charactersArray = [
     'Chirrut Îmwe',
     'CHIRRUTIMWE',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0,0, 100, 100, 0, 20, 25, 50, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0,0, 100, 100, 0, 20, 25, 50, 0, 0, 0),
+      'Chex Mix': optimizationStrategy['Speedy Chex Mix']
+    },
     ['Light Side', 'Rebel', 'Rogue One', 'Attacker'],
     ['Rogue 1', 'Chaze', 'Chiggs', 'Chex Mix'],
     false
@@ -254,8 +280,10 @@ let charactersArray = [
     'Chopper',
     'CHOPPERS3',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(20, 40, 100, 0, 0, 10, 0, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(20, 40, 100, 0, 0, 10, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Phoenix', 'Droid', 'Support', 'Crew Member'],
     [],
     true
@@ -284,8 +312,10 @@ let charactersArray = [
     'Colonel Starck',
     'COLONELSTARCK',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy["Speed, Crit, Offense, Potency"],
+    {
+      'PvP': optimizationStrategy["Speed, Crit, Offense, Potency"]
+    },
     ['Dark Side', 'Empire', 'Imperial Trooper', 'Support'],
     ['Tony Stark', 'Troopers'],
     false
@@ -294,8 +324,12 @@ let charactersArray = [
     'Commander Luke Skywalker',
     'COMMANDERLUKESKYWALKER',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 100, 25, 0, 25, 50, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 100, 25, 0, 25, 50, 0, 0, 0),
+      'Chex Mix': optimizationStrategy['Speedy Chex Mix'],
+      'Raids': new OptimizationPlan(0, 0, 100, 0, 25, 0, 25, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Attacker'],
     ['CLS', 'Wampanader', 'Chex Mix', 'ABC', 'Titans'],
     false
@@ -314,8 +348,10 @@ let charactersArray = [
     'Count Dooku',
     'COUNTDOOKU',
     DamageType.mixed,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 0, 50, 50, 25, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 0, 50, 50, 25, 0, 0, 0, 0)
+    },
     ['Dark Side', 'Separatist', 'Sith', 'Support'],
     [],
     false
@@ -344,20 +380,10 @@ let charactersArray = [
     'CT-7567 "Rex"',
     'CT7567',
     DamageType.physical,
-    new OptimizationPlan(
-      10, // health
-      0, // protection
-      100, // speed
-      0, // crit damage
-      10, // potency
-      20, // tenacity
-      0, // offense
-      0, // crit chance
-      0, // defense
-      0, // accuracy
-      0 // crit avoidance
-    ),
-    {},
+    new OptimizationPlan(10, 0, 100, 0, 10, 20, 0, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(10, 0, 100, 0, 10, 20, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Galactic Republic', 'Clone Trooper', 'Support', 'Crew Member'],
     ['Titans'],
     true
@@ -366,8 +392,10 @@ let charactersArray = [
     'Darth Maul',
     'MAUL',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Special Damage with Potency'],
+    {
+      'PvP': optimizationStrategy['Special Damage with Potency']
+    },
     ['Dark Side', 'Sith', 'Attacker', 'Crew Member'],
     [],
     true
@@ -388,8 +416,10 @@ let charactersArray = [
     'Darth Sidious',
     'DARTHSIDIOUS',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Special Damage with Potency'],
+    {
+      'PvP': optimizationStrategy['Special Damage with Potency']
+    },
     ['Dark Side', 'Sith', 'Attacker'],
     ['Auto Lightzader'],
     false
@@ -410,9 +440,9 @@ let charactersArray = [
     'Darth Traya',
     'DARTHTRAYA',
     DamageType.special,
-    new OptimizationPlan(0, 0, 100, 0, 25, 0, 50, 0, 0, 0, 0),
+    optimizationStrategy['Special Damage with Potency'],
     {
-      'PvP': new OptimizationPlan(0, 0, 100, 0, 25, 0, 50, 0, 0, 0, 0)
+      'PvP': optimizationStrategy['Special Damage with Potency']
     },
     ['Dark Side', 'Sith', 'Support'],
     [],
@@ -422,8 +452,11 @@ let charactersArray = [
     'Darth Vader',
     'VADER',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, Offense, Potency'],
+    {
+      'PvP': optimizationStrategy['Speed, Crit, Offense, Potency'],
+      'Raids': new OptimizationPlan(0, 0, 100, 50, 25, 0, 25, 25, 0, 0, 0)
+    },
     ['Dark Side', 'Empire', 'Sith', 'Attacker', 'Crew Member'],
     ['Auto Lightzader', 'Wampanader', 'Nightmare'],
     true
@@ -442,8 +475,10 @@ let charactersArray = [
     'Death Trooper',
     'DEATHTROOPER',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 80, 100, 25, 0, 25, 25, 0, 0, 0),
+    {
+      'Damage': new OptimizationPlan(0, 0, 80, 100, 25, 0, 25, 25, 0, 0, 0)
+    },
     ['Dark Side', 'Empire', 'Imperial Trooper', 'Attacker', 'Crew Member'],
     ['Troopers', 'Chex Mix'],
     true
@@ -452,8 +487,10 @@ let charactersArray = [
     'Dengar',
     'DENGAR',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 0, 50, 0, 25, 75, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 0, 50, 0, 25, 75, 0, 0, 0)
+    },
     ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker'],
     [],
     false
@@ -482,8 +519,10 @@ let charactersArray = [
     'Emperor Palpatine',
     'EMPERORPALPATINE',
     DamageType.special,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Special Damage with Potency'],
+    {
+      'PvP': optimizationStrategy['Special Damage with Potency']
+    },
     ['Dark Side', 'Empire', 'Sith', 'Support'],
     ['EP', 'Palp', 'EzPz', 'Nightmare'],
     false
@@ -502,8 +541,10 @@ let charactersArray = [
     'Ewok Elder',
     'EWOKELDER',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(25, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(25, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Ewok', 'Healer'],
     ['EE', 'Murderbears'],
     false
@@ -512,8 +553,10 @@ let charactersArray = [
     'Ewok Scout',
     'EWOKSCOUT',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy["Speed, Crit, Offense, Potency"],
+    {
+      'PvP': optimizationStrategy["Speed, Crit, Offense, Potency"]
+    },
     ['Light Side', 'Ewok', 'Attacker'],
     ['Murderbears'],
     false
@@ -522,8 +565,10 @@ let charactersArray = [
     'Ezra Bridger',
     'EZRABRIDGERS3',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy["Speed, Crit, and Offense"],
+    {
+      'PvP': optimizationStrategy["Speed, Crit, and Offense"]
+    },
     ['Light Side', 'Rebel', 'Phoenix', 'Jedi', 'Attacker', 'Crew Member'],
     [],
     true
@@ -532,8 +577,10 @@ let charactersArray = [
     'Finn',
     'FINN',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Slow Crit, Offense, Potency'],
+    {
+      'PvP': optimizationStrategy['Slow Crit, Offense, Potency']
+    },
     ['Light Side', 'Resistance', 'Tank', 'Crew Member'],
     ['Zinn'],
     true
@@ -582,8 +629,10 @@ let charactersArray = [
     'First Order TIE Pilot',
     'FIRSTORDERTIEPILOT',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy["Speed, Crit, Offense, Potency"],
+    {
+      'PvP': optimizationStrategy["Speed, Crit, Offense, Potency"]
+    },
     ['Dark Side', 'First Order', 'Attacker', 'Crew Member'],
     ['FOTP', 'FO'],
     true
@@ -612,8 +661,10 @@ let charactersArray = [
     'Garazeb "Zeb" Orrelios',
     'ZEBS3',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 40, 100, 0, 50, 0, 0, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 40, 100, 0, 50, 0, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Phoenix', 'Tank', 'Crew Member'],
     [],
     true
@@ -632,20 +683,12 @@ let charactersArray = [
     'General Kenobi',
     'GENERALKENOBI',
     DamageType.physical,
-    new OptimizationPlan(
-      50, // health
-      100, // protection
-      100, // speed
-      0, // crit damage
-      0, // potency
-      50, // tenacity
-      0, // offense
-      0, // crit chance
-      50, // defense
-      0, // accuracy
-      0 // crit avoidance
-    ),
-    {},
+    new OptimizationPlan(50, 100, 50, 0, 0, 50, 0, 0, 50, 0, 0),
+    {
+      'Speedy Tank': new OptimizationPlan(25, 50, 100, 0, 0, 25, 0, 0, 25, 0, 0),
+      'Balanced': new OptimizationPlan(50, 100, 50, 0, 0, 50, 0, 0, 50, 0, 0),
+      'Slow Tank': new OptimizationPlan(50, 100, 0, 0, 0, 50, 0, 0, 50, 0, 0)
+    },
     ['Light Side', 'Galactic Republic', 'Jedi', 'Tank'],
     ['GK', 'Titans'],
     false
@@ -654,8 +697,10 @@ let charactersArray = [
     'General Veers',
     'VEERS',
     DamageType.mixed,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, Offense, Potency'],
+    {
+      'PvP': optimizationStrategy['Speed, Crit, Offense, Potency']
+    },
     ['Dark Side', 'Empire', 'Imperial Trooper', 'Support'],
     ['Troopers'],
     false
@@ -664,8 +709,10 @@ let charactersArray = [
     'Geonosian Soldier',
     'GEONOSIANSOLDIER',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy["Speed, Crit, and Offense"],
+    {
+      'PvP': optimizationStrategy["Speed, Crit, and Offense"]
+    },
     ['Dark Side', 'Separatist', 'Geonosian', 'Attacker', 'Crew Member'],
     [],
     true
@@ -696,8 +743,10 @@ let charactersArray = [
     'Grand Master Yoda',
     'GRANDMASTERYODA',
     DamageType.special,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 50, 25, 0, 80, 25, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 50, 25, 0, 80, 25, 0, 0, 0)
+    },
     ['Light Side', 'Galactic Republic', 'Jedi', 'Support'],
     ['GMY'],
     false
@@ -716,8 +765,10 @@ let charactersArray = [
     'Greedo',
     'GREEDO',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 50, 25, 0, 25, 100, 0, 0, 0),
+    {
+      'Crits': new OptimizationPlan(0, 0, 100, 50, 25, 0, 25, 100, 0, 0, 0)
+    },
     ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker'],
     [],
     false
@@ -726,8 +777,11 @@ let charactersArray = [
     'Han Solo',
     'HANSOLO',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, Offense, Potency'],
+    {
+      'Fast Han': optimizationStrategy['Speed, Crit, Offense, Potency'],
+      'Slow Han': new OptimizationPlan(0, 0, 0, 100, 25, 0, 50, 50, 0, 0, 0)
+    },
     ['Light Side', 'Scoundrel', 'Rebel', 'Attacker'],
     ['Raid Han', 'rHan', 'OG Han', 'Zolo', 'Chex Mix', 'Titans'],
     false
@@ -736,8 +790,10 @@ let charactersArray = [
     'Hera Syndulla',
     'HERASYNDULLAS3',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speedy debuffer'],
+    {
+      'Speed': optimizationStrategy['Speedy debuffer']
+    },
     ['Light Side', 'Rebel', 'Phoenix', 'Support', 'Crew Member'],
     [],
     true
@@ -746,8 +802,10 @@ let charactersArray = [
     'Hermit Yoda',
     'HERMITYODA',
     DamageType.mixed,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy.Speed,
+    {
+      'Speed': optimizationStrategy.Speed
+    },
     ['Light Side', 'Jedi', 'Support'],
     ['Hyoda', 'Hoboda', 'Hobo', 'HY'],
     false
@@ -756,8 +814,10 @@ let charactersArray = [
     'HK-47',
     'HK47',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 50, 50, 0, 25, 100, 0, 0, 0),
+    {
+      'Leader': new OptimizationPlan(0, 0, 100, 50, 50, 0, 25, 100, 0, 0, 0)
+    },
     ['Dark Side', 'Droid', 'Support'],
     [],
     false
@@ -766,8 +826,10 @@ let charactersArray = [
     'Hoth Rebel Scout',
     'HOTHREBELSCOUT',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, Offense, Potency'],
+    {
+      'PvE': optimizationStrategy['Speed, Crit, Offense, Potency']
+    },
     ['Light Side', 'Rebel', 'Attacker'],
     ['HRS', 'Hoth Bros'],
     false
@@ -776,8 +838,10 @@ let charactersArray = [
     'Hoth Rebel Soldier',
     'HOTHREBELSOLDIER',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0),
+    {
+      'PvE': new OptimizationPlan(25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Support'],
     ['HRS', 'Hoth Bros'],
     false
@@ -796,8 +860,10 @@ let charactersArray = [
     'IG-86 Sentinel Droid',
     'IG86SENTINELDROID',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy["Speed, Crit, and Offense"],
+    {
+      'PvP': optimizationStrategy["Speed, Crit, and Offense"]
+    },
     ['Dark Side', 'Droid', 'Attacker'],
     [],
     false
@@ -806,8 +872,10 @@ let charactersArray = [
     'IG-88',
     'IG88',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy["Speed, Crit, and Offense"],
+    {
+      'Damage': optimizationStrategy["Speed, Crit, and Offense"]
+    },
     ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Droid', 'Attacker'],
     [],
     false
@@ -826,8 +894,11 @@ let charactersArray = [
     'Imperial Probe Droid',
     'IMPERIALPROBEDROID',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(50, 50, 100, 0, 0, 0, 0, 0, 0, 0, 0),
+    {
+      'Tanky': new OptimizationPlan(50, 50, 100, 0, 0, 0, 0, 0, 0, 0, 0),
+      'Offense': new OptimizationPlan(0, 0, 100, 80, 50, 0, 25, 50, 0, 0, 0)
+    },
     ['Dark Side', 'Empire', 'Droid', 'Support'],
     ['IPD'],
     false
@@ -856,8 +927,10 @@ let charactersArray = [
     'Jawa Engineer',
     'JAWAENGINEER',
     DamageType.mixed,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(10, 0, 100, 0, 50, 10, 0, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(10, 0, 100, 0, 50, 10, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Jawa', 'Healer'],
     [],
     false
@@ -886,8 +959,11 @@ let charactersArray = [
     'Jedi Knight Anakin',
     'ANAKINKNIGHT',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 75, 25, 0, 25, 80, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 75, 25, 0, 25, 80, 0, 0, 0),
+      'Chex Mix': new OptimizationPlan(0, 0, 50, 0, 0, 0, 100, 25, 0, 0, 0)
+    },
     ['Light Side', 'Galactic Republic', 'Jedi', 'Attacker'],
     ['JKA'],
     false
@@ -916,8 +992,10 @@ let charactersArray = [
     'Jyn Erso',
     'JYNERSO',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 50, 50, 0, 20, 75, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 50, 50, 0, 20, 75, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Rogue One', 'Attacker', 'Crew Member'],
     ['Rogue 1', 'Auto Lightzader', 'Imperial Grancor Maneuver', 'SuperStar2D2'],
     false
@@ -926,8 +1004,10 @@ let charactersArray = [
     'K-2SO',
     'K2SO',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(20, 20, 100, 0, 50, 50, 0, 0, 0, 0, 0),
+    {
+      'Tanky': new OptimizationPlan(20, 20, 100, 0, 50, 50, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Rogue One', 'Droid', 'Tank', 'Crew Member'],
     ['Rogue 1', 'Cass-2SO', 'K2'],
     true
@@ -936,8 +1016,10 @@ let charactersArray = [
     'Kanan Jarrus',
     'KANANJARRUSS3',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 40, 100, 0, 30, 0, 0, 50, 0, 0, 0),
+    {
+      'Tanky': new OptimizationPlan(0, 40, 100, 0, 30, 0, 0, 50, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Phoenix', 'Tank', 'Crew Member'],
     [],
     true
@@ -986,8 +1068,10 @@ let charactersArray = [
     'Lando Calrissian',
     'ADMINISTRATORLANDO',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 50, 0, 0, 25, 75, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 50, 0, 0, 25, 75, 0, 0, 0)
+    },
     ['Light Side', 'Scoundrel', 'Rebel', 'Attacker'],
     [],
     false
@@ -1006,8 +1090,10 @@ let charactersArray = [
     'Logray',
     'LOGRAY',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Ewok', 'Support'],
     ['Murderbears'],
     false
@@ -1079,8 +1165,12 @@ let charactersArray = [
     'Nightsister Acolyte',
     'NIGHTSISTERACOLYTE',
     DamageType.mixed,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 100, 0, 0, 50, 80, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 100, 0, 0, 50, 80, 0, 0, 0),
+      'hSTR Phase 2': new OptimizationPlan(0, 0, 100, 100, 0, 0, 100, 100, 0, 0, 0),
+      'hSTR Phase 4': new OptimizationPlan(0, 0, 0, 100, 0, 0, 50, 100, 0, 0, 0)
+    },
     ['Dark Side', 'Nightsister', 'Attacker'],
     ['NA', 'NS'],
     false
@@ -1109,9 +1199,9 @@ let charactersArray = [
     'Nightsister Zombie',
     'NIGHTSISTERZOMBIE',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0),
+    optimizationStrategy['Speed'],
     {
-      'Weak Zombie': new OptimizationPlan(0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0),
+      'Weak Zombie': optimizationStrategy['Speed'],
       'Strong Zombie': new OptimizationPlan(20, 20, 100, 0, 0, 25, 0, 0, 0, 0, 0),
       'hSTR Phase 4': new OptimizationPlan(-5, -5, 100, 0, 0, 0, 0, 0, -5, 0, 0)
     },
@@ -1123,8 +1213,10 @@ let charactersArray = [
     'Nute Gunray',
     'NUTEGUNRAY',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy["Speed, Crit, Offense, Potency"],
+    {
+      'Damage': optimizationStrategy["Speed, Crit, Offense, Potency"]
+    },
     ['Dark Side', 'Scoundrel', 'Separatist', 'Attacker'],
     [],
     false
@@ -1133,8 +1225,10 @@ let charactersArray = [
     'Obi-Wan Kenobi (Old Ben)',
     'OLDBENKENOBI',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0),
+    {
+      'Speed': new OptimizationPlan(10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Jedi', 'Tank'],
     ['OB'],
     false
@@ -1156,8 +1250,11 @@ let charactersArray = [
     'Pao',
     'PAO',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, Offense, Potency'],
+    {
+      'PvP': optimizationStrategy['Speed, Crit, Offense, Potency'],
+      'Chex Mix': optimizationStrategy["Speedy Chex Mix"]
+    },
     ['Light Side', 'Rebel', 'Rogue One', 'Attacker'],
     ['Rogue 1', 'Chex Mix'],
     false
@@ -1186,8 +1283,10 @@ let charactersArray = [
     'Poe Dameron',
     'POE',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speedy debuffer'],
+    {
+      'Speed': optimizationStrategy['Speedy debuffer']
+    },
     ['Light Side', 'Resistance', 'Tank', 'Crew Member'],
     [],
     true
@@ -1206,8 +1305,11 @@ let charactersArray = [
     'Princess Leia',
     'PRINCESSLEIA',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, and Offense'],
+    {
+      'PvP': optimizationStrategy['Speed, Crit, and Offense'],
+      'hSTR Phase 2': new OptimizationPlan(0, 0, 50, 100, 0, 0, 25, 50, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Attacker'],
     ['Machine Gun'],
     false
@@ -1226,8 +1328,10 @@ let charactersArray = [
     'Qui-Gon Jinn',
     'QUIGONJINN',
     DamageType.mixed,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, Offense, Potency'],
+    {
+      'PvP': optimizationStrategy['Speed, Crit, Offense, Potency']
+    },
     ['Light Side', 'Galactic Republic', 'Jedi', 'Support'],
     ['QGJ'],
     false
@@ -1259,8 +1363,10 @@ let charactersArray = [
     'Rebel Officer Leia Organa',
     'HOTHLEIA',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 50, 50, 0, 25, 30, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 50, 50, 0, 25, 30, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Attacker'],
     ['ROLO'],
     false
@@ -1269,8 +1375,10 @@ let charactersArray = [
     'Resistance Pilot',
     'RESISTANCEPILOT',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Slow Crit, Offense, Potency'],
+    {
+      'PvP': optimizationStrategy['Slow Crit, Offense, Potency']
+    },
     ['Light Side', 'Resistance', 'Attacker', 'Crew Member'],
     ['RP'],
     true
@@ -1328,8 +1436,10 @@ let charactersArray = [
     'Royal Guard',
     'ROYALGUARD',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(50, 50, 25, 0, 0, 25, 0, 0, 10, 0, 0),
+    {
+      'Tanky': new OptimizationPlan(50, 50, 25, 0, 0, 25, 0, 0, 10, 0, 0)
+    },
     ['Dark Side', 'Empire', 'Tank'],
     ['RG', 'Red Guard'],
     false
@@ -1338,8 +1448,11 @@ let charactersArray = [
     'Sabine Wren',
     'SABINEWRENS3',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, Offense, Potency'],
+    {
+      'PvP': optimizationStrategy['Speed, Crit, Offense, Potency'],
+      'hSTR Phase 2': new OptimizationPlan(20, 20, 100, 0, 0, 0, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Phoenix', 'Attacker', 'Crew Member'],
     [],
     true
@@ -1358,8 +1471,11 @@ let charactersArray = [
     'Scarif Rebel Pathfinder',
     'SCARIFREBEL',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(20, 20, 100, 0, 25, 10, 0, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(20, 20, 100, 0, 25, 10, 0, 0, 0, 0, 0),
+      'hSTR Phase 2': new OptimizationPlan(20, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Rebel', 'Rogue One', 'Tank', 'Crew Member'],
     ['Rogue 1', 'SRP'],
     true
@@ -1368,8 +1484,10 @@ let charactersArray = [
     'Shoretrooper',
     'SHORETROOPER',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(50, 50, 100, 0, 0, 25, 0, 0, 0, 0, 0),
+    {
+      'Speedy Tank': new OptimizationPlan(50, 50, 100, 0, 0, 25, 0, 0, 0, 0, 0)
+    },
     ['Dark Side', 'Empire', 'Imperial Trooper', 'Tank', 'Crew Member'],
     ['ShT', 'Troopers', 'Imperial Grancor Maneuver'],
     true
@@ -1378,8 +1496,10 @@ let charactersArray = [
     'Sith Assassin',
     'SITHASSASSIN',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Special Damage with Potency'],
+    {
+      'PvP': optimizationStrategy['Special Damage with Potency']
+    },
     ['Dark Side', 'Sith', 'Attacker'],
     ['SA', 'Sassy'],
     true
@@ -1410,8 +1530,11 @@ let charactersArray = [
     'Snowtrooper',
     'SNOWTROOPER',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 50, 0, 0, 50, 100, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 50, 0, 0, 50, 100, 0, 0, 0),
+      'PvE': new OptimizationPlan(0, 0, 80, 50, 0, 0, 25, 100, 0, 0, 0)
+    },
     ['Dark Side', 'Empire', 'Imperial Trooper', 'Attacker'],
     ['Troopers'],
     false
@@ -1420,8 +1543,10 @@ let charactersArray = [
     'Stormtrooper',
     'STORMTROOPER',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(25, 25, 50, 0, 0, 25, 0, 0, 50, 0, 0),
+    {
+      'Speedy Tank': new OptimizationPlan(25, 25, 50, 0, 0, 25, 0, 0, 50, 0, 0)
+    },
     ['Dark Side', 'Empire', 'Imperial Trooper', 'Tank'],
     ['Troopers'],
     false
@@ -1430,8 +1555,11 @@ let charactersArray = [
     'Stormtrooper Han',
     'STORMTROOPERHAN',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy.Speed,
+    {
+      'Speed': optimizationStrategy.Speed,
+      'PvE': new OptimizationPlan(50, 50, 50, 0, 0, 50, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Scoundrel', 'Rebel', 'Tank'],
     ['STHan'],
     false
@@ -1450,9 +1578,9 @@ let charactersArray = [
     'Talia',
     'TALIA',
     DamageType.mixed,
-    new OptimizationPlan(0, 0, 50, 0, 0, 0, 100, 0, 0, 0, 0),
+    optimizationStrategy['Speedy Chex Mix'],
     {
-      'hSTR Phase 4': new OptimizationPlan(0, 0, 50, 0, 0, 0, 100, 0, 0, 0, 0)
+      'hSTR Phase 4': optimizationStrategy['Speedy Chex Mix']
     },
     ['Dark Side', 'Nightsister', 'Healer'],
     ['NS', 'hSTR NS'],
@@ -1462,8 +1590,10 @@ let charactersArray = [
     'Teebo',
     'TEEBO',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(25, 25, 100, 0, 50, 25, 0, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(25, 25, 100, 0, 50, 25, 0, 0, 0, 0, 0)
+    },
     ['Light Side', 'Ewok', 'Tank'],
     ['Teebotine', 'Murderbears'],
     false
@@ -1472,8 +1602,10 @@ let charactersArray = [
     'TIE Fighter Pilot',
     'TIEFIGHTERPILOT',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, Offense, Potency'],
+    {
+      'PvP': optimizationStrategy['Speed, Crit, Offense, Potency']
+    },
     ['Dark Side', 'Empire', 'Attacker', 'Crew Member'],
     ['TFP', 'Auto Lightzader'],
     true
@@ -1492,8 +1624,10 @@ let charactersArray = [
     'Tusken Shaman',
     'TUSKENSHAMAN',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 0, 50, 25, 0, 0, 0, 0, 0),
+    {
+      'PvE': new OptimizationPlan(0, 0, 100, 0, 50, 25, 0, 0, 0, 0, 0)
+    },
     ['Dark Side', 'Tusken', 'Healer'],
     [],
     false
@@ -1562,21 +1696,11 @@ let charactersArray = [
     'Wampa',
     'WAMPA',
     DamageType.physical,
-    // TODO: Start Here
-    new OptimizationPlan(
-      10, // health
-      0, // protection
-      100, // speed
-      100, // crit damage
-      10, // potency
-      0, // tenacity
-      50, // offense
-      0, // crit chance
-      0, // defense
-      0, // accuracy
-      0 // crit avoidance
-    ),
-    {},
+    new OptimizationPlan(10, 0, 80, 100, 10, 0, 50, 50, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(10, 0, 80, 100, 10, 0, 50, 50, 0, 0, 0),
+      'Raids': new OptimizationPlan(10, 0, 80, 100, 10, 0, 50, 0, 0, 0, 0)
+    },
     ['Dark Side', 'Attacker'],
     ['beast', 'Wampanader'],
     false
@@ -1585,8 +1709,10 @@ let charactersArray = [
     'Wedge Antilles',
     'WEDGEANTILLES',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy['Speed, Crit, and Offense'],
+    {
+      'PvP': optimizationStrategy['Speed, Crit, and Offense']
+    },
     ['Light Side', 'Rebel', 'Attacker', 'Crew Member'],
     ['Wiggs', 'chiggs', 'SuperStar2D2'],
     true
@@ -1595,8 +1721,10 @@ let charactersArray = [
     'Wicket',
     'WICKET',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    optimizationStrategy["Speed, Crit, and Offense"],
+    {
+      'PvP': optimizationStrategy["Speed, Crit, and Offense"]
+    },
     ['Light Side', 'Ewok', 'Attacker'],
     ['Murderbears'],
     false
@@ -1625,8 +1753,10 @@ let charactersArray = [
     'Zam Wesell',
     'ZAMWESELL',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    {},
+    new OptimizationPlan(0, 0, 100, 40, 50, 0, 25, 40, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan(0, 0, 100, 40, 50, 0, 25, 40, 0, 0, 0)
+    },
     ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker'],
     [],
     false
