@@ -5,6 +5,8 @@ import CharacterAvatar from "../CharacterAvatar/CharacterAvatar";
 class ModStats extends React.Component {
   render() {
     const mod = this.props.mod;
+    console.log(this.props);
+    const show_avatar = 'show_avatar' in this.props;
     const statsDisplay = mod.secondaryStats.length > 0 ?
       mod.secondaryStats.map(
         (stat, index) => ModStats.showStatElement(stat, index)
@@ -20,7 +22,7 @@ class ModStats extends React.Component {
         <ul className='secondary'>
           {statsDisplay}
         </ul>
-        {mod.currentCharacter && [
+        {show_avatar && mod.currentCharacter && [
           <h4>Assigned To</h4>,
           <div className='avatar-row'>
             <CharacterAvatar name={mod.currentCharacter.name}/>
