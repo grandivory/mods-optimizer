@@ -7,6 +7,9 @@
   text-transform: uppercase;
   margin: 0;
 }
+.mod-stats h4:not(:first-of-type){
+  margin-top: 1em;
+}
 
 .mod-stats ul {
   list-style: none;
@@ -47,4 +50,20 @@
 
 .mod-stats .class-D {
   color: #ccfffe;
+}
+.mod-stats .avatar-row{
+  display: table-row;
+}
+.mod-stats .avatar{
+  display: table-cell !important;
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  padding: 10px 5px 0 5px;
+}
+.mod-stats .avatar-name{
+  display: table-cell;
+  vertical-align: middle;
+  padding: 0 5px 0 5px;
+
 }
