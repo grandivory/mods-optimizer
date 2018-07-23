@@ -1,9 +1,6 @@
-import BaseStats from "./BaseStats";
-import Character from "./Character";
 import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
-import {characters} from "../constants/characters";
-import OptimizationPlan from "./OptimizationPlan";
+import Character from "./Character";
 
 class Mod {
   constructor(id, slot, set, level, pips, primaryStat, secondaryStats, currentCharacter, assignTo) {
@@ -64,10 +61,11 @@ class Mod {
    * Deserialize a JSON representation of a mod into a new mod
    *
    * @param modJson
+   * @param characters Object An object, keyed by character name, of all possible characters
    *
    * @return Mod
    */
-  static deserialize(modJson) {
+  static deserialize(modJson, characters) {
     const primaryStat = new Stat(modJson.primaryBonusType, modJson.primaryBonusValue);
     let secondaryStats = [];
 
@@ -86,11 +84,11 @@ class Mod {
 
     const currentCharacter = ('' !== modJson.characterName && 'UNASSIGNED' !== modJson.characterName) ?
       characters[modJson.characterName.replace(/&amp;#39;/g, "'")] ||
-      new Character(modJson.characterName, new BaseStats(), new OptimizationPlan(), []) :
+      Character.defaultCharacter(modJson.characterName) :
       null;
 
     const assignTo = modJson.assignTo ?
-      characters[modJson.assignTo] || new Character(modJson.assignTo, new BaseStats()) :
+      characters[modJson.assignTo] || Character.defaultCharacter(modJson.assignTo) :
       null;
 
     const setBonus = setBonuses[modJson.set.toLowerCase().replace(' ', '')];

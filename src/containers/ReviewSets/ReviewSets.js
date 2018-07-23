@@ -164,7 +164,7 @@ class ReviewSets extends React.Component {
             changeClass={'remove'}
             set={currentSet}
             character={characterSet.character}/>
-          <CharacterAvatar name={characterSet.character.name}/>
+          <CharacterAvatar character={characterSet.character}/>
           <Arrow/>
           <ModSetDetail
             changeClass={'add'}
@@ -180,6 +180,12 @@ class ReviewSets extends React.Component {
     if (0 === characterSets.length) {
       return (
         <div className={'review-sets'}>
+          <div className={'sidebar'}>
+            <div className={'filters'}>
+              {this.filterForm()}
+            </div>
+            {this.sidebarActions()}
+          </div>
           <h2>Your mods are already optimal. Congratulations!</h2>
         </div>
       );
@@ -197,8 +203,11 @@ class ReviewSets extends React.Component {
         <div className={'review-sets'}>
           <h2>Showing mod sets for {characterSets.length} out of {numOptimizedCharacters} characters</h2>
           {subHeading}
-          <div className={'filters'}>
-            {this.filterForm()}
+          <div className={'sidebar'}>
+            <div className={'filters'}>
+              {this.filterForm()}
+            </div>
+            {this.sidebarActions()}
           </div>
           <div className={'sets-list'}>
             {rows}
@@ -234,6 +243,30 @@ class ReviewSets extends React.Component {
               onChange={this.showSets.bind(this)}
       />
     </div>;
+  }
+
+  /**
+   * Renders a sidebar box with action buttons
+   *
+   * @returns JSX Element
+   */
+  sidebarActions() {
+    return <div className={'sidebar-actions'}>
+      <h3>I don't like these results...</h3>
+      <button
+        type={'button'}
+        onClick={this.props.onBack}
+      >
+        Change my selection
+      </button>
+      <h3>Looks good!</h3>
+      <button
+        type={'button'}
+        onClick={this.props.onNextView}
+      >
+        Show me the mods to move
+      </button>
+    </div>
   }
 }
 

@@ -22,12 +22,17 @@ class Toggle extends React.Component {
    * If there is an onChange handler for the toggle as a whole, pass the value to it
    */
   onChange(e) {
-    const checked = e.target.checked;
+    const input = e.target;
+    const toggleSwitch = input.parentNode.getElementsByClassName('toggle-switch')[0];
 
-    if (checked) {
+    if (input.checked) {
       this.value = this.props.rightValue;
+      toggleSwitch.classList.remove('left');
+      toggleSwitch.classList.add('right');
     } else {
       this.value = this.props.leftValue;
+      toggleSwitch.classList.remove('right');
+      toggleSwitch.classList.add('left');
     }
 
     if (this.props.onChange) {
@@ -41,8 +46,10 @@ class Toggle extends React.Component {
       <label>
         <input type={'checkbox'}
                className={'toggle'}
+               name={this.props.name}
+               id={this.props.id}
                value={this.props.rightValue}
-               checked={this.value === this.props.rightValue}
+               defaultChecked={this.value === this.props.rightValue}
                onChange={this.onChange.bind(this)}
         />
         <span className={'toggle-left-value'}>{this.props.leftLabel}</span>

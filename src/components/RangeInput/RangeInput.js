@@ -10,6 +10,7 @@ class RangeInput extends React.Component {
     const step = this.props.step || 1;
     const isPercent = this.props.isPercent || false;
     const editable = this.props.editable || false;
+    const onChange = this.props.onChange || function() {};
 
     if (editable) {
       return [
@@ -20,7 +21,10 @@ class RangeInput extends React.Component {
           min={min}
           max={max}
           step={step}
-          onChange={(e) => document.getElementById(id).value = e.target.value + (isPercent ? '%' : '')}
+          onChange={(e) => {
+            document.getElementById(id).value = e.target.value + (isPercent ? '%' : '');
+            onChange(e.target.value);
+          }}
           key={name + 'slider'}
         />,
         <input
@@ -32,7 +36,11 @@ class RangeInput extends React.Component {
           min={min}
           max={max}
           step={step}
-          onChange={(e) => document.getElementById(name + '-slider').value = e.target.value.replace(/%/g, '')}
+          onChange={(e) => {
+            const value = e.target.value.replace(/%/g, '');
+            document.getElementById(name + '-slider').value = value;
+            onChange(value);
+          }}
           key={name + 'input'}
         />
       ];
@@ -46,7 +54,10 @@ class RangeInput extends React.Component {
           min={min}
           max={max}
           step={step}
-          onChange={(e) => document.getElementById(name + '-display').value = e.target.value + (isPercent ? '%' : '')}
+          onChange={(e) => {
+            document.getElementById(name + '-display').value = e.target.value + (isPercent ? '%' : '');
+            onChange(e.target.value);
+          }}
           key={name + 'input'}
         />,
         <output id={name + '-display'} htmlFor={id} key={name + 'output'}>

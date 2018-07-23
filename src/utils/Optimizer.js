@@ -88,7 +88,7 @@ class Optimizer {
     let candidateValues = new WeakMap();
 
     // If the optimization plan says to only use 5-dot mods, then filter out any mods with fewer dots
-    if (character.optimizationPlan.useOnly5dotMods) {
+    if (character.useOnly5DotMods) {
       availableMods = mods.filter(mod => 5 === mod.pips);
     } else {
       availableMods = mods;

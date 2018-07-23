@@ -29,7 +29,8 @@ class ExploreView extends React.Component {
         filteredMods = filteredMods.filter(mod => filter.primary.includes(mod.primaryStat.displayType));
       }
       if (filter.secondary && 0 < filter.secondary.length) {
-        filteredMods = filteredMods.filter(mod => mod.secondaryStats.some(stat => filter.secondary.includes(stat.displayType)));
+        filteredMods = filteredMods.filter(
+          mod => mod.secondaryStats.some(stat => filter.secondary.includes(stat.displayType)));
       }
 
       if (filter.sort) {
@@ -63,11 +64,13 @@ class ExploreView extends React.Component {
 
     return (
       [
-        <div className={'filters'} key={'filters'}>
-          <ModFilter
-            mods={this.props.mods}
-            onUpdate={this.filterUpdated.bind(this)}
-          />
+        <div className={'sidebar'}>
+          <div className={'filters'} key={'filters'}>
+            <ModFilter
+              mods={this.props.mods}
+              onUpdate={this.filterUpdated.bind(this)}
+            />
+          </div>
         </div>,
         <div className='mods' key={'mods'}>
           {modElements}

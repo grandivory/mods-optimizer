@@ -1,6 +1,138 @@
+.avatar {
+  width: 4em;
+  height: 4em;
+  position: relative;
+  margin: .75em .5em .25em;
+  border-radius: 100%;
+  display: inline-block;
+  pointer-events: none;
+}
+
 .avatar img {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 50%;
-  border: 1px solid #eeca44;
+  width: 99%;
+  height: 99%;
+  border-radius: 100%;
+}
+
+.avatar::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 99%;
+  height: 99%;
+  box-sizing: border-box;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  background-size: cover;
+}
+
+.avatar .character-level {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  text-align: center;
+  width: 3em;
+  margin-left: -1.5em;
+  height: 3em;
+  line-height: 3em;
+  margin-bottom: -1em;
+  box-sizing: border-box;
+  background:
+      radial-gradient(100% 100% at 50% 85%, rgb(28, 56, 93) 0%, rgb(28, 56, 93) 44%, white 45%, white 49%, transparent 50%) 50% 15% / 1.6em 1.6em,
+      radial-gradient(125% 100% at 50% -28%, rgb(28, 56, 93) 0%, rgb(28, 56, 93) 44%, white 45%, white 49%, transparent 50%) 50% 123% / 1.5em 1.6em;
+  background-repeat: no-repeat;
+  z-index: 10000;
+}
+
+.avatar.gear-1::after {
+  border-radius: 100%;
+  border: 1px inset #ccfffe;
+}
+
+.avatar.gear-2::after {
+  background-image: url('/img/g2-overlay.png');
+}
+
+.avatar.gear-3::after {
+  background-image: url('/img/g3-overlay.png');
+}
+
+.avatar.gear-4::after {
+  background-image: url('/img/g4-overlay.png');
+}
+
+.avatar.gear-5::after {
+  background-image: url('/img/g5-overlay.png');
+}
+
+.avatar.gear-6::after {
+  background-image: url('/img/g6-overlay.png');
+}
+
+.avatar.gear-7::after {
+  background-image: url('/img/g7-overlay.png');
+}
+
+.avatar.gear-8::after {
+  background-image: url('/img/g8-overlay.png');
+}
+
+.avatar.gear-9::after {
+  background-image: url('/img/g9-overlay.png');
+}
+
+.avatar.gear-10::after {
+  background-image: url('/img/g10-overlay.png');
+}
+
+.avatar.gear-11::after {
+  background-image: url('/img/g11-overlay.png');
+}
+
+.avatar.gear-12::after {
+  background-image: url('/img/g12-overlay.png');
+}
+
+.avatar .star {
+  background: url('/img/star-passive.png') no-repeat;
+  background-size: contain;
+  display: block;
+  width: 16.66%;
+  height: 16.66%;
+  position: absolute;
+  left: 41.66%;
+  top: 41.66%;
+}
+
+.avatar .star.active {
+  background-image: url('/img/star-active.png');
+}
+
+.avatar .star-1 {
+  transform: rotate(-70deg) translateY(-350%);
+}
+
+.avatar .star-2 {
+  transform: rotate(-47deg) translateY(-350%);
+}
+
+.avatar .star-3 {
+  transform: rotate(-23deg) translateY(-350%);
+}
+
+.avatar .star-4 {
+  transform: rotate(0deg) translateY(-350%);
+}
+
+.avatar .star-5 {
+  transform: rotate(23deg) translateY(-350%);
+}
+
+.avatar .star-6 {
+  transform: rotate(47deg) translateY(-350%);
+}
+
+.avatar .star-7 {
+  transform: rotate(70deg) translateY(-350%);
 }

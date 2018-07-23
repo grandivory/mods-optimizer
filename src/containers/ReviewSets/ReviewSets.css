@@ -1,5 +1,4 @@
 .review-sets {
-  padding-bottom: 12em;
   height: 100%;
 }
 
@@ -19,7 +18,7 @@
 }
 
 .review-sets .sets-list {
-  height: calc(100% - 8em);
+  height: calc(100% - 5em);
   overflow-y: auto;
   padding-bottom: 5em;
   box-sizing: border-box;
@@ -33,6 +32,7 @@
 .review-sets .avatar {
   display: inline-block;
   margin: 1em;
+  font-size: 1.7em;
 }
 
 .review-sets .set-row {

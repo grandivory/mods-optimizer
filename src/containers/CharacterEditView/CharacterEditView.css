@@ -1,23 +1,34 @@
 .character-edit {
-  font-color: gold;
-  height: calc(100% - 3em);
+  height: 100%;
   overflow: hidden;
   text-align: center;
 }
 
-.character-edit .instructions {
-  height: 2em;
-  box-sizing: border-box;
+.character-edit .selected-characters {
+  float: right;
+  max-width: calc(33% - 7em);
+  margin: 0 1em;
+  height: 100%;
 }
 
-.character-edit .available-characters,
-.character-edit .selected-characters,
-.character-edit .locked-characters {
+.character-edit .available-characters {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.character-edit .available-characters .character {
   display: inline-block;
   vertical-align: top;
-  height: calc(100% - 5em);
-  margin: 0 5em;
-  max-width: calc(33% - 10em);
+  margin: .5em 1em;
+  width: 8em;
+}
+
+.character-edit .available-characters .character .avatar {
+  font-size: 1.2em;
+}
+
+.character-edit .available-characters .character.inactive {
+  opacity: .25;
 }
 
 .character-edit .character-list {
@@ -26,37 +37,60 @@
   overflow-x: hidden;
 }
 
-.character-edit .available-characters .character-list {
-  max-height: calc(100% - 5.5em);
+.character-edit-form {
+  width: 30em;
+  text-align: center;
 }
 
-.character-edit-form .base-stats,
-.character-edit-form .optimization-plan {
+.character-edit-form #character-level-options,
+.character-edit-form #basic-form,
+.character-edit-form #advanced-form {
   display: inline-block;
-  vertical-align: top;
-  margin: 0 2.5%;
-  max-width: 45%;
+  margin: 0 2em;
 }
 
-.character-edit-form .base-stats {
-  width: 40em;
+.character-edit-form.basic #advanced-form {
+  display: none;
 }
 
-.character-edit-form .optimization-plan {
+.character-edit-form.advanced #basic-form {
+  display: none;
+}
+
+.character-edit-form .character-view .avatar {
+  font-size: 1.5em;
+}
+
+.character-edit-form .character-name {
+  margin-bottom: 0;
+}
+
+.character-edit-form .instructions {
+  margin: 1em 0;
+}
+
+.character-edit-form .header-row {
   width: 21em;
+  margin: 0 auto .5em;
 }
 
 .character-edit-form .form-row {
   text-align: right;
-  margin: .25em 0;
-  padding: .1em .25em;
+  margin: .25em auto;
+  padding: .25em .5em;
+  line-height: 1em;
+}
+
+.character-edit-form .form-row input {
+  vertical-align: middle;
 }
 
 .character-edit-form .form-row label {
   margin-right: 1em;
 }
 
-.character-edit-form .form-row input {
+.character-edit-form .form-row input[type=range],
+.character-edit-form .form-row input[type=number] {
   width: 5em;
   padding: .1em .25em;
 }
@@ -83,6 +117,11 @@
 .character-edit-form .form-row:nth-child(even) {
   background-color: rgb(28, 56, 93);
   color: rgb(28, 169, 212);
+}
+
+.character-edit-form #plan-name {
+  font-size: 1.2em;
+  width: 7em;
 }
 
 .character-edit-form .actions {

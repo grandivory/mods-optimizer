@@ -66,6 +66,9 @@ class ReviewList extends React.Component {
     if (0 === modsLeft) {
       return (
         <div className={'review-list'}>
+          <div className={'sidebar'}>
+            {this.sidebarActions()}
+          </div>
           <h2>You don't have any mods left to move! Great job!</h2>
           <h3>Don't forget to assign mods to all your pilots!</h3>
         </div>
@@ -73,8 +76,11 @@ class ReviewList extends React.Component {
     } else {
       return (
         <div className={'review-list'}>
-          <div className={'filters'}>
-            {this.filterForm()}
+          <div className={'sidebar'}>
+            <div className={'filters'}>
+              {this.filterForm()}
+            </div>
+            {this.sidebarActions()}
           </div>
           <h2>Reassigning {modsLeft} mods {summaryButton}</h2>
           {(0 < this.state.displayedMods.length) &&
@@ -98,10 +104,10 @@ class ReviewList extends React.Component {
    */
   listView(displayedMods) {
     return displayedMods.map(mod =>
-      <div className={'mod-row'} key={mod.id}>
+      <div className={'mod-row individual'} key={mod.id}>
         <ModDetail key={mod.id} mod={mod}/>
         <Arrow/>
-        <CharacterAvatar name={mod.assignTo.name}/>
+        <CharacterAvatar character={mod.assignTo}/>
         <div className={'actions'}>
           <button onClick={this.removeMod.bind(this, mod)}>I removed this mod</button>
           <button onClick={this.reassignMod.bind(this, mod)}>I reassigned this mod</button>
@@ -144,8 +150,8 @@ class ReviewList extends React.Component {
 
     // Iterate over each character to render a full mod set
     return Object.values(modsByCharacter).map(charMods =>
-      <div className={'mod-row'} key={charMods.character.name}>
-        <CharacterAvatar name={charMods.character.name}/>
+      <div className={'mod-row set'} key={charMods.character.name}>
+        <CharacterAvatar character={charMods.character}/>
         <Arrow/>
         <div className={'mod-set-block'}>
           <ModSetView modSet={new ModSet(charMods.mods)}
@@ -232,13 +238,11 @@ class ReviewList extends React.Component {
   characterSort(characterPropertyName) {
     const slotOrder = this.slotOrder;
     return function(left, right) {
-      let leftCharName = left[characterPropertyName] ? left[characterPropertyName].name : '';
-      let rightCharName = right[characterPropertyName] ? right[characterPropertyName].name : '';
+      let leftCharGP = left[characterPropertyName] ? left[characterPropertyName].galacticPower : 0;
+      let rightCharGP = right[characterPropertyName] ? right[characterPropertyName].galacticPower : 0;
 
-      if (leftCharName < rightCharName) {
-        return -1;
-      } else if (leftCharName > rightCharName) {
-        return 1;
+      if (rightCharGP !== leftCharGP) {
+        return rightCharGP - leftCharGP;
       } else {
         return slotOrder.indexOf(left.slot) - slotOrder.indexOf(right.slot);
       }
@@ -300,6 +304,30 @@ class ReviewList extends React.Component {
         {tagOptions}
       </select>
     </div>;
+  }
+
+  /**
+   * Renders a sidebar box with action buttons
+   *
+   * @returns JSX Element
+   */
+  sidebarActions() {
+    return <div className={'sidebar-actions'}>
+      <h3>I don't like these results...</h3>
+      <button
+        type={'button'}
+        onClick={this.props.onBack}
+      >
+        Change my selection
+      </button>
+      <h3>I want to review changes again</h3>
+      <button
+        type={'button'}
+        onClick={this.props.onNextView}
+      >
+        Show me the mod sets
+      </button>
+    </div>
   }
 
   /**
