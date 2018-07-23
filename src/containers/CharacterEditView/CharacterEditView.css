@@ -128,6 +128,11 @@
   text-align: right;
 }
 
+.character-edit-form #reset-button,
+.character-edit-form #delete-button {
+  float: left;
+}
+
 .modal.instructions {
   height: auto;
   width: 50em;

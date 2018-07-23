@@ -7,6 +7,8 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 import Modal from "../../components/Modal/Modal";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import Toggle from "../../components/Toggle/Toggle";
+import {charDefaults} from "../../constants/characters";
+import Character from "../../domain/Character";
 
 class CharacterEditView extends React.Component {
   constructor(props) {
@@ -285,12 +287,47 @@ class CharacterEditView extends React.Component {
       return null;
     }
 
-    let planType;
+    const defaultChar = charDefaults[character.baseID] || Character.defaultCharacter(character.name);
+
+    let planType, resetButton;
 
     if (character.optimizationPlan.isBasic()) {
       planType = 'basic';
     } else {
       planType = 'advanced';
+    }
+
+    // Determine whether the current optimization plan is a default (same name exists), user-defined (same name doesn't
+    // exist), or custom (name is 'custom') This determines whether to display a "Reset target to default" button, a
+    // "Delete target" button, or nothing.
+    if ('custom' === this.state.selectedTarget) {
+      resetButton = null;
+    } else if (Object.keys(defaultChar.namedPlans).includes(this.state.selectedTarget)) {
+      resetButton = <button
+        type={'button'}
+        id={'reset-button'}
+        disabled={defaultChar.namedPlans[this.state.selectedTarget].equals(character.optimizationPlan)}
+        onClick={() => {
+          character.optimizationPlan = defaultChar.namedPlans[this.state.selectedTarget];
+          character.namedPlans[this.state.selectedTarget] = character.optimizationPlan;
+          this.setState({
+            editCharacter: null
+          });
+        }}>
+        Reset target to default
+      </button>
+    } else {
+      resetButton = <button type={'button'}
+                            id={'delete-button'}
+                            className={'red'}
+                            onClick={() => {
+                              delete character.namedPlans[this.state.selectedTarget];
+                              this.setState({
+                                editCharacter: null
+                              });
+                            }}>
+        Delete target
+      </button>
     }
 
     return <form
@@ -574,6 +611,7 @@ class CharacterEditView extends React.Component {
         </div>
       </div>
       <div className={'actions'}>
+        {resetButton}
         <button type={'button'} onClick={this.cancelEdit.bind(this)}>Cancel</button>
         <button type={'submit'}>Save</button>
       </div>

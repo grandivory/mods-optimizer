@@ -2,6 +2,7 @@ import React from "react";
 import CharacterAvatar from "../CharacterAvatar/CharacterAvatar";
 
 import "./CharacterList.css";
+import {charDefaults} from "../../constants/characters";
 
 class CharacterList extends React.Component {
   characterBlockDragStart(characterName) {
@@ -52,17 +53,23 @@ class CharacterList extends React.Component {
   }
 
   renderCharacterBlock(character) {
+    const defaultChar = charDefaults[character.baseID];
     const draggable = this.props.draggable;
-    const onEdit = 'function' === typeof this.props.onEdit ? this.props.onEdit : function() {};
-    const saveState = 'function' === typeof this.props.saveState ? this.props.saveState : function() {};
+    const onEdit = 'function' === typeof this.props.onEdit ? this.props.onEdit : function() {
+    };
+    const saveState = 'function' === typeof this.props.saveState ? this.props.saveState : function() {
+    };
     const selectedPlan = character.isLocked ?
       'lock' :
       Object.keys(character.namedPlans).find(
         key => character.namedPlans[key].equals(character.optimizationPlan)
       ) || 'custom';
-    const options = Object.keys(character.namedPlans).map(key =>
-      <option value={key} key={key}>{key}</option>
-    );
+    const options = Object.keys(character.namedPlans).map(key => {
+      const changeIndicator =
+        Object.keys(defaultChar.namedPlans).includes(key) &&
+        !defaultChar.namedPlans[key].equals(character.namedPlans[key]) ? '*' : '';
+      return <option value={key} key={key}>{changeIndicator}{key}</option>;
+    });
     const onSelect = function(e) {
       const optimizationTarget = e.target.value;
 
@@ -85,16 +92,15 @@ class CharacterList extends React.Component {
     };
     const baseClass = `character-block ${character.baseID}`;
 
-    return <div
-        className={character.isLocked ? `${baseClass} locked` : baseClass}
-        key={character.baseID}
-        draggable={draggable}
-        onDragStart={this.characterBlockDragStart(character.name)}
-        onDragEnter={this.characterBlockDragEnter(character.name)}
-        onDragOver={this.characterBlockDragOver()}
-        onDragLeave={this.characterBlockDragLeave(character.name)}
-        onDrop={this.characterBlockDrop(character.name)}>
-      <CharacterAvatar character={character} />
+    return <div className={character.isLocked ? `${baseClass} locked` : baseClass}
+                key={character.baseID}
+                draggable={draggable}
+                onDragStart={this.characterBlockDragStart(character.name)}
+                onDragEnter={this.characterBlockDragEnter(character.name)}
+                onDragOver={this.characterBlockDragOver()}
+                onDragLeave={this.characterBlockDragLeave(character.name)}
+                onDrop={this.characterBlockDrop(character.name)}>
+      <CharacterAvatar character={character}/>
       <div className={'character-name'}>{character.name}</div>
       <div className={'target'}>
         <label>Target:</label>
@@ -114,32 +120,31 @@ class CharacterList extends React.Component {
     const characters = this.props.characters;
 
     const isFiltered = character => (
-        this.props.filterString === undefined || this.props.filterString.length === 0 ||
-          character.matchesFilter(this.props.filterString)
+      this.props.filterString === undefined || this.props.filterString.length === 0 ||
+      character.matchesFilter(this.props.filterString)
     );
 
     const filteredChars = characters.filter(isFiltered);
-    const unfilteredChars = characters.filter(character=>!isFiltered(character));
+    const unfilteredChars = characters.filter(character => !isFiltered(character));
 
     return (
       <div className={'character-list'}>
 
         {0 < filteredChars.length && filteredChars.map(character =>
-           this.renderCharacterBlock(character)
+          this.renderCharacterBlock(character)
         )}
 
         {0 < unfilteredChars.length && unfilteredChars.map(character =>
-            this.renderCharacterBlock(character, true)
+          this.renderCharacterBlock(character, true)
         )}
 
         {0 === filteredChars.length &&
-          <div
-            className={'character-block'}
-            onDragEnter={this.characterBlockDragEnter('')}
-            onDragOver={this.characterBlockDragOver()}
-            onDragLeave={this.characterBlockDragLeave('')}
-            onDrop={this.characterBlockDrop('')}>
-          </div>
+        <div
+          className={'character-block'}
+          onDragEnter={this.characterBlockDragEnter('')}
+          onDragOver={this.characterBlockDragOver()}
+          onDragLeave={this.characterBlockDragLeave('')}
+          onDrop={this.characterBlockDrop('')} />
         }
       </div>
     )

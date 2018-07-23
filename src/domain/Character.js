@@ -79,7 +79,31 @@ class Character {
     );
   }
 
-/**
+  /**
+   * Return a shallow copy of this character
+   */
+  clone() {
+    return new Character(
+      this.name,
+      this.baseID,
+      this.level,
+      this.starLevel,
+      this.gearLevel,
+      this.gearPieces,
+      this.galacticPower,
+      this.physDmgPct,
+      this.baseStats,
+      this.totalStats,
+      this.optimizationPlan,
+      Object.assign({}, this.namedPlans),
+      this.tags,
+      this.extraTags,
+      this.useOnly5DotMods,
+      this.isLocked
+    );
+  }
+
+  /**
    * Checks whether this character matches a given filter string in name or tags
    * @param filterString string The string to filter by
    * @returns boolean

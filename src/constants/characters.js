@@ -1920,13 +1920,8 @@ const charDefaults = {};
 
 for (let character of charactersArray) {
   characters[character.name] = character;
-  charDefaults[character.name] = Character.basicCharacter(
-    character.name,
-    character.baseId,
-    character.physDmgPercent,
-    character.optimizationPlan
-  );
-  Object.freeze(charDefaults[character.name]);
+  charDefaults[character.baseID] = character.clone();
+  Object.freeze(charDefaults[character.baseID]);
 }
 
 Object.freeze(characters);
