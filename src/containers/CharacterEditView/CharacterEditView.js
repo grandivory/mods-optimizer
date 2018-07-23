@@ -104,6 +104,8 @@ class CharacterEditView extends React.Component {
       availableCharacters.splice(availableCharacters.indexOf(character), 1)
       selectedCharacters.push(character);
 
+      this.saveState();
+
       this.setState({
         availableCharacters: availableCharacters,
         selectedCharacters: selectedCharacters

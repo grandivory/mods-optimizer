@@ -10,7 +10,8 @@ let charactersArray = [
     DamageType.physical,
     new OptimizationPlan(0, 0, 100, 75, 50, 0, 25, 100, 0, 0, 0),
     {
-      'PvP': new OptimizationPlan(0, 0, 100, 75, 50, 0, 25, 100, 0, 0, 0)
+      'PvP': new OptimizationPlan(0, 0, 100, 75, 50, 0, 25, 100, 0, 0, 0),
+      'hSTR P1 Jedi': new OptimizationPlan(0, -5, 100, 75, 0, 0, 50, 50, 0, 0, 0)
     },
     ['Light Side', 'Jedi', 'Galactic Republic', 'Support'],
     [],
@@ -95,7 +96,8 @@ let charactersArray = [
     DamageType.physical,
     new OptimizationPlan(50, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0),
     {
-      'PvP': new OptimizationPlan(50, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0)
+      'PvP': new OptimizationPlan(50, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0),
+      'hSTR P1 Jedi': new OptimizationPlan(75, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0)
     },
     ['Light Side', 'Jedi', 'Galactic Republic', 'Healer'],
     [],
@@ -108,7 +110,8 @@ let charactersArray = [
     new OptimizationPlan(10, 0, 100, 0, 50, 0, 25, 0, 0, 0, 0),
     {
       'Leader': new OptimizationPlan(10, 0, 100, 0, 50, 0, 25, 0, 0, 0, 0),
-      'Non-leader': optimizationStrategy["Special Damage with Potency"]
+      'Non-leader': optimizationStrategy["Special Damage with Potency"],
+      'hSTR P2 Jedi': new OptimizationPlan(0, 0, 100, 50, 0, 0, 25, 50, 0, 0, 0)
     },
     ['Light Side', 'Jedi', 'Old Republic', 'Support'],
     [],
@@ -134,7 +137,7 @@ let charactersArray = [
     new OptimizationPlan(5, 5, 100, 0, 0, 10, 0, 0, 0, 0, 0),
     {
       'PvP': new OptimizationPlan(5, 5, 100, 0, 0, 10, 0, 0, 0, 0, 0),
-      'hSTR Phase 1': new OptimizationPlan(10, -5, 100, 0, 0, 0, 0, 0, 0, 0, 0)
+      'hSTR Phase 1': new OptimizationPlan(10, -5, 100, 0, 0, 0, 25, 25, 0, 0, 0)
     },
     ['Light Side', 'Resistance', 'Droid', 'Support'],
     ['bb8', 'Wampanader', 'ABC'],
@@ -475,9 +478,9 @@ let charactersArray = [
     'Darth Traya',
     'DARTHTRAYA',
     DamageType.special,
-    optimizationStrategy['Special Damage with Potency'],
+    new OptimizationPlan(0, 0, 100, 0, 25, 0, 50, 10, 0, 0, 0),
     {
-      'PvP': optimizationStrategy['Special Damage with Potency']
+      'PvP': new OptimizationPlan(0, 0, 100, 0, 25, 0, 50, 10, 0, 0, 0)
     },
     ['Dark Side', 'Sith', 'Support'],
     [],
@@ -611,7 +614,9 @@ let charactersArray = [
     DamageType.physical,
     optimizationStrategy["Speed, Crit, and Offense"],
     {
-      'PvP': optimizationStrategy["Speed, Crit, and Offense"]
+      'PvP': optimizationStrategy["Speed, Crit, and Offense"],
+      'hSTR P1 Jedi': new OptimizationPlan(0, -5, 100, 75, 0, 0, 50, 50, 0, 0, 0),
+      'hSTR P2 Jedi': new OptimizationPlan(0, 0, 60, 100, 0, 0, 75, 75, 0, 0, 0)
     },
     ['Light Side', 'Rebel', 'Phoenix', 'Jedi', 'Attacker', 'Crew Member'],
     [],
@@ -745,7 +750,8 @@ let charactersArray = [
     {
       'Speedy Tank': new OptimizationPlan(25, 50, 100, 0, 0, 25, 0, 0, 25, 0, 0),
       'Balanced': new OptimizationPlan(50, 100, 50, 0, 0, 50, 0, 0, 50, 0, 0),
-      'Slow Tank': new OptimizationPlan(50, 100, 0, 0, 0, 50, 0, 0, 50, 0, 0)
+      'Slow Tank': new OptimizationPlan(50, 100, 0, 0, 0, 50, 0, 0, 50, 0, 0),
+      'hSTR P2 Jedi': new OptimizationPlan(0, 100, 50, 0, 0, 0, 10, 25, 100, 0, 0)
     },
     ['Light Side', 'Galactic Republic', 'Jedi', 'Tank'],
     ['GK', 'Titans'],
@@ -805,7 +811,10 @@ let charactersArray = [
     DamageType.special,
     new OptimizationPlan(0, 0, 100, 50, 25, 0, 80, 25, 0, 0, 0),
     {
-      'PvP': new OptimizationPlan(0, 0, 100, 50, 25, 0, 80, 25, 0, 0, 0)
+      'PvP': new OptimizationPlan(0, 0, 100, 50, 25, 0, 80, 25, 0, 0, 0),
+      'hSTR P1 Jedi': new OptimizationPlan(0, -5, 100, 100, 0, 0, 100, 50, 0, 0, 0),
+      'hSTR P2 Jedi': new OptimizationPlan(0, 0, 60, 100, 0, 0, 75, 80, 0, 0, 0)
+
     },
     ['Light Side', 'Galactic Republic', 'Jedi', 'Support'],
     ['GMY'],
@@ -1036,7 +1045,8 @@ let charactersArray = [
     new OptimizationPlan(0, 0, 100, 75, 25, 0, 25, 80, 0, 0, 0),
     {
       'PvP': new OptimizationPlan(0, 0, 100, 75, 25, 0, 25, 80, 0, 0, 0),
-      'Chex Mix': new OptimizationPlan(0, 0, 50, 0, 0, 0, 100, 25, 0, 0, 0)
+      'Chex Mix': new OptimizationPlan(0, 0, 50, 0, 0, 0, 100, 25, 0, 0, 0),
+      'hSTR P1 Jedi': new OptimizationPlan(0, -5, 20, 100, 0, 0, 50, 50, 0, 0, 0)
     },
     ['Light Side', 'Galactic Republic', 'Jedi', 'Attacker'],
     ['JKA'],
@@ -1255,7 +1265,7 @@ let charactersArray = [
     new OptimizationPlan(0, 0, 100, 0, 50, 0, 25, 10, 0, 0, 0),
     {
       'PvP': new OptimizationPlan(0, 0, 100, 0, 50, 0, 25, 10, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan(0, 0, 50, 0, 0, 0, 50, 25, 0, 0, 0)
+      'hSTR Phase 4': new OptimizationPlan(0, 0, 50, 0, 0, 0, 75, 25, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Support'],
     ['MT', 'NS', 'hSTR NS'],
@@ -1344,7 +1354,7 @@ let charactersArray = [
     new OptimizationPlan(25, 0, 100, 0, 25, 15, 0, 0, 0, 0, 0),
     {
       'PvP': new OptimizationPlan(25, 0, 100, 0, 25, 15, 0, 0, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan(25, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0)
+      'hSTR Phase 4': new OptimizationPlan(50, 0, 75, 0, 0, 25, 25, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Healer'],
     ['NS', 'hSTR NS'],
@@ -1442,7 +1452,8 @@ let charactersArray = [
     DamageType.mixed,
     optimizationStrategy['Speed, Crit, Offense, Potency'],
     {
-      'PvP': optimizationStrategy['Speed, Crit, Offense, Potency']
+      'PvP': optimizationStrategy['Speed, Crit, Offense, Potency'],
+      'hSTR P1 Jedi': new OptimizationPlan(0, -5, 100, 75, 0, 0, 50, 50, 0, 0, 0)
     },
     ['Light Side', 'Galactic Republic', 'Jedi', 'Support'],
     ['QGJ'],
@@ -1455,7 +1466,7 @@ let charactersArray = [
     new OptimizationPlan(5, 5, 100, 0, 25, 10, 0, 25, 0, 0, 0),
     {
       'PvP': new OptimizationPlan(5, 5, 100, 0, 25, 10, 0, 25, 0, 0, 0),
-      'hSTR Phase 1': new OptimizationPlan(10, -5, 100, 25, 25, 0, 20, 50, 0, 0, 0)
+      'hSTR Phase 1': new OptimizationPlan(10, -5, 100, 25, 25, 0, 25, 50, 0, 0, 0)
     },
     ['Light Side', 'Galactic Republic', 'Rebel', 'Resistance', 'Droid', 'Support'],
     ['Trashcan', 'R2z2', 'SuperStar2D2'],
@@ -1501,10 +1512,10 @@ let charactersArray = [
     'Resistance Trooper',
     'RESISTANCETROOPER',
     DamageType.physical,
-    new OptimizationPlan(10, -5, 0, 100, 0, 0, 50, 0, 0, 0, 0),
+    new OptimizationPlan(0, 0, 10, 100, 25, 0, 50, 100, 0, 0, 0),
     {
       'PvP': new OptimizationPlan(0, 0, 10, 100, 25, 0, 50, 100, 0, 0, 0),
-      'hSTR Phase 1': new OptimizationPlan(10, -5, 0, 100, 0, 0, 50, 0, 0, 0, 0)
+      'hSTR Phase 1': new OptimizationPlan(0, -5, 0, 100, 0, 0, 50, 0, 0, 0, 0)
     },
     ['Light Side', 'Resistance', 'Attacker'],
     ['RT', 'res trooper'],
@@ -1517,7 +1528,7 @@ let charactersArray = [
     new OptimizationPlan(0, 0, 100, 100, 20, 0, 20, 50, 0, 0, 0),
     {
       'Arena': new OptimizationPlan(0, 0, 100, 100, 20, 0, 20, 50, 0, 0, 0),
-      'hSTR Phase 1': new OptimizationPlan(10, -5, 100, 100, 50, 0, 50, 0, 0, 0, 0)
+      'hSTR Phase 1': new OptimizationPlan(0, -5, 90, 100, 50, 0, 50, 0, 0, 0, 0)
     },
     ['Light Side', 'Resistance', 'Tank'],
     ['JTR', 'RJT', 'Jedi Rey', 'Jey Z'],
@@ -1530,7 +1541,7 @@ let charactersArray = [
     new OptimizationPlan(0, 0, 100, 100, 0, 0, 25, 50, 0, 0, 0),
     {
       'PvP': new OptimizationPlan(0, 0, 100, 100, 0, 0, 25, 50, 0, 0, 0),
-      'hSTR Phase 1': new OptimizationPlan(10, -5, 100, 100, 0, 0, 50, 0, 0, 0, 0)
+      'hSTR Phase 1': new OptimizationPlan(0, -5, 90, 100, 0, 0, 50, 0, 0, 0, 0)
     },
     ['Light Side', 'Resistance', 'Attacker', 'Crew Member'],
     ['scav rey'],

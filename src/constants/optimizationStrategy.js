@@ -110,7 +110,7 @@ const optimizationStrategy = {
     0, // protection,
     100, // speed
     0, // crit damage
-    50, // potency
+    25, // potency
     0, // tenacity,
     50, // offense
     0, // crit chance
