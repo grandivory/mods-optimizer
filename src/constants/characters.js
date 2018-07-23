@@ -575,9 +575,9 @@ let charactersArray = [
     'Enfys Nest',
     'ENFYSNEST',
     DamageType.physical,
-    new OptimizationPlan(0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0),
+    new OptimizationPlan(0, 0, 100, 0, 10, 0, 0, 0, 0, 0, 0),
     {
-      'Speedy': new OptimizationPlan(0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0),
+      'Speedy': new OptimizationPlan(0, 0, 100, 0, 10, 0, 0, 0, 0, 0, 0),
       'Offense': optimizationStrategy["Speed, Crit, Offense, Potency"]
     },
     ['Light Side', 'Scoundrel', 'Attacker'],
