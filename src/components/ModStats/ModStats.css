@@ -21,6 +21,7 @@
 
 .mod-stats ul li {
   height: 1em;
+  margin: 0;
 }
 
 .mod-stats .class {
@@ -47,4 +48,15 @@
 
 .mod-stats .class-D {
   color: #ccfffe;
+}
+
+.mod-stats .avatar{
+  display: inline-block;
+  vertical-align: middle;
+  font-size: .8em;
+}
+
+.mod-stats .avatar-name{
+  vertical-align: middle;
+  margin-left: .5em;
 }

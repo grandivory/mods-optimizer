@@ -12,7 +12,7 @@ class ModDetail extends React.Component {
       <div className='mod-detail'>
         <ModImage mod={mod}/>
         {mod.currentCharacter &&
-        <CharacterAvatar name={mod.currentCharacter.name}/>
+        <CharacterAvatar character={mod.currentCharacter}/>
         }
         < ModStats mod={mod} />
       </div>

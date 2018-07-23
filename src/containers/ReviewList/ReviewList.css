@@ -16,7 +16,7 @@
 }
 
 .review-list .mods-list {
-  height: calc(100% - 8em);
+  height: calc(100% - 5em);
   overflow-y: auto;
 }
 
@@ -39,7 +39,7 @@
   background-color: rgba(0, 0, 96, .5);
 }
 
-.mod-row .avatar {
+.mod-row > .avatar {
   display: inline-block;
   margin: 0 30px;
 }
@@ -53,6 +53,10 @@
 
 .mod-row .actions button {
   display: block;
+}
+
+.mod-row.set .avatar {
+  font-size: 1.5em;
 }
 
 pre.summary{

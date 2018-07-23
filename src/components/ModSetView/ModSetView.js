@@ -14,7 +14,7 @@ class ModSetView extends React.Component {
         <ModImage
           className={set[slot].currentCharacter !== set[slot].assignTo ? changeClass : ''}
           mod={set[slot]}/>
-        <ModStats mod={set[slot]}/>
+        <ModStats mod={set[slot]} showAvatar />
       </div>
     );
 

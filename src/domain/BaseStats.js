@@ -31,6 +31,34 @@ class BaseStats {
     this.resistance = resistance;
   }
 
+  /**
+   * Checks to see whether all required stats have valid values
+   *
+   * @returns boolean
+   */
+  isValid() {
+    return this.isNumberValid(this.health) &&
+      this.isNumberValid(this.protection) &&
+      this.isNumberValid(this.offense) &&
+      this.isNumberValid(this.speed) &&
+      this.isNumberValid(this.defense) &&
+      this.isNumberValid(this.physDmg) &&
+      this.isNumberValid(this.specDmg) &&
+      this.isNumberValid(this.physDmgPercent) &&
+      this.isNumberValid(this.armor) &&
+      this.isNumberValid(this.resistance);
+  }
+
+  /**
+   * Check a single value to see whether it is a valid number (defined, not null, not NaN)
+   *
+   * @param number
+   * @returns boolean
+   */
+  isNumberValid(number) {
+    return typeof number !== 'undefined' && null !== number && !isNaN(number);
+  }
+
   serialize() {
     let baseStatsObject = {};
 
