@@ -39,7 +39,7 @@
   background-color: rgba(0, 0, 96, .5);
 }
 
-.mod-row .avatar {
+.mod-row > .avatar {
   display: inline-block;
   margin: 0 30px;
 }
