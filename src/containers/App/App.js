@@ -17,7 +17,7 @@ import {characters} from "../../constants/characters";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.version = '1.1.0';
+    this.version = '1.1.2';
 
     this.state = {
       'view': 'optimize',
@@ -670,7 +670,7 @@ class App extends Component {
    */
   changeLogModal() {
     return <div>
-      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version {this.version}!</h2>
+      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.1!</h2>
       <h3>Here's a short summary of the changes included in this version:</h3>
       <ul>
         <li>
