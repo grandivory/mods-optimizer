@@ -104,6 +104,18 @@ class Character {
   }
 
   /**
+   * Comparison function useful for sorting characters by Galactic Power. If that has a higher GP, returns a value > 0.
+   * If this has a higher GP, returns a value < 0. If the GPs are the same, returns a value to sort by character name.
+   * @param that Character
+   */
+  compareGP(that) {
+    if (that.galacticPower === this.galacticPower) {
+      return this.name.localeCompare(that.name);
+    }
+    return that.galacticPower - this.galacticPower;
+  }
+
+  /**
    * Checks whether this character matches a given filter string in name or tags
    * @param filterString string The string to filter by
    * @returns boolean

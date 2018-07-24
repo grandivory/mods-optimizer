@@ -174,7 +174,7 @@ class CharacterEditView extends React.Component {
 
   render() {
     const availableCharacters = this.state.availableCharacters.sort((left, right) => {
-      return right.galacticPower - left.galacticPower;
+      return left.compareGP(right);
     });
     const selectedCharacters = this.state.selectedCharacters;
     const editCharacter = this.state.editCharacter;
