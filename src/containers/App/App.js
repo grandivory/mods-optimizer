@@ -595,7 +595,9 @@ class App extends Component {
       </form>
       or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'}>Patreon</a>
-      <div className={'version'}>version {this.version}</div>
+      <div className={'version'}>
+        <a onClick={() => this.setState({showChangeLog: true})}>version {this.version}</a>
+      </div>
     </footer>;
   }
 
