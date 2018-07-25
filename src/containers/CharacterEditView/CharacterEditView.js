@@ -332,6 +332,7 @@ class CharacterEditView extends React.Component {
 
     return <form
       className={`character-edit-form ${planType}`}
+      noValidate={'advanced' === planType}
       onSubmit={(e) => {
         e.preventDefault();
         this.saveOptimizationPlan.bind(this, character)(e.target);
@@ -372,6 +373,7 @@ class CharacterEditView extends React.Component {
             form.classList.remove('basic');
             form.classList.remove('advanced');
             form.classList.add(newValue);
+            form.noValidate = 'advanced' === newValue;
           }}
         />
       </div>
