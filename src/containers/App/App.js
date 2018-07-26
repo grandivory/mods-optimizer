@@ -197,7 +197,7 @@ class App extends Component {
                 baseCharacter.level = character.level;
                 baseCharacter.gearLevel = character.gear;
                 baseCharacter.starLevel = character.rarity;
-                baseCharacter.gear = character.equipped;
+                baseCharacter.gearPieces = character.equipped;
                 baseCharacter.galacticPower = character.gp;
               }
             });
