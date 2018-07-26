@@ -3,7 +3,8 @@
  * trying to optimize the mods assigned to each character. Each weight is on a scale from -100 to 100
  */
 class OptimizationPlan {
-  constructor(health,
+  constructor(name,
+              health,
               protection,
               speed,
               critDmg,
@@ -15,6 +16,8 @@ class OptimizationPlan {
               accuracy,
               critAvoid
   ) {
+    this.name = name;
+
     // Set raw values based on exactly what the user entered
     this.rawHealth = health || 0;
     this.rawProtection = protection || 0;
@@ -44,11 +47,34 @@ class OptimizationPlan {
   }
 
   /**
+   * Return a renamed version of this optimization plan
+   *
+   * @param name String
+   */
+  rename(name) {
+    return new OptimizationPlan(
+      name,
+      this.rawHealth,
+      this.rawProtection,
+      this.rawSpeed,
+      this.rawCritDmg,
+      this.rawPotency,
+      this.rawTenacity,
+      this.rawOffense,
+      this.rawCritChance,
+      this.rawDefense,
+      this.rawAccuracy,
+      this.rawCritAvoid
+    );
+  }
+
+  /**
    * Checks to see if two OptimizationPlans are equivalent
    * @param that
    */
   equals(that) {
     return that instanceof OptimizationPlan &&
+      this.name === that.name &&
       this.health === that.health &&
       this.protection === that.protection &&
       this.speed === that.speed &&
@@ -93,6 +119,7 @@ class OptimizationPlan {
   serialize() {
     let planObject = {};
 
+    planObject.name = this.name;
     planObject.health = this.rawHealth;
     planObject.protection = this.rawProtection;
     planObject.speed = this.rawSpeed;
@@ -110,6 +137,7 @@ class OptimizationPlan {
 
   static deserialize(planJson) {
     return new OptimizationPlan(
+      planJson.name || 'unnamed',
       planJson.health,
       planJson.protection,
       planJson.speed,
@@ -130,6 +158,7 @@ class OptimizationPlan {
    */
   static deserializeVersionOne(planJson) {
     return new OptimizationPlan(
+      'unnamed',
       planJson.health * OptimizationPlan.statWeight.health,
       planJson.protection * OptimizationPlan.statWeight.protection,
       planJson.speed * OptimizationPlan.statWeight.speed,

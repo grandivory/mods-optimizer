@@ -2,6 +2,7 @@ import OptimizationPlan from "../domain/OptimizationPlan";
 
 const optimizationStrategy = {
   'Speed with survivability': new OptimizationPlan(
+    'Speed with survivability',
     5, // health
     5, // protection
     100, // speed
@@ -15,6 +16,7 @@ const optimizationStrategy = {
     0 // crit avoidance
   ),
   'Speed': new OptimizationPlan(
+    'Speed',
     0, // health
     0, // protection
     100, // speed
@@ -28,6 +30,7 @@ const optimizationStrategy = {
     0 // crit avoidance
   ),
   'Speed, Crit, and Offense': new OptimizationPlan(
+    'Speed, Crit, and Offense',
     0, // health
     0, // protection
     100, // speed
@@ -41,6 +44,7 @@ const optimizationStrategy = {
     0 // crit avoidance
   ),
   'Speed, Crit, Offense, Potency': new OptimizationPlan(
+    'Speed, Crit, Offense, Potency',
     0, // health
     0, // protection
     100, // speed
@@ -54,6 +58,7 @@ const optimizationStrategy = {
     0 // crit avoidance
   ),
   'Speedy debuffer': new OptimizationPlan(
+    'Speedy debuffer',
     0, // health
     0, // protection
     100, // speed
@@ -67,6 +72,7 @@ const optimizationStrategy = {
     0 // crit avoidance
   ),
   'Slow Crit, Offense, Potency': new OptimizationPlan(
+    'Slow Crit, Offense, Potency',
     0, // health
     0, // protection
     10, // speed
@@ -80,6 +86,7 @@ const optimizationStrategy = {
     0 // crit avoidance
   ),
   'Speedy Chex Mix': new OptimizationPlan(
+    'Speedy Chex Mix',
     0, // health
     0, // protection,
     50, // speed
@@ -93,6 +100,7 @@ const optimizationStrategy = {
     0 // crit avoidance
   ),
   'Special Damage': new OptimizationPlan(
+    'Special Damage',
     0, // health
     0, // protection,
     100, // speed
@@ -106,6 +114,7 @@ const optimizationStrategy = {
     0 // crit avoidance
   ),
   'Special Damage with Potency': new OptimizationPlan(
+    'Special Damage with Potency',
     0, // health
     0, // protection,
     100, // speed

@@ -173,17 +173,27 @@ class Character {
     const serializedNamedPlans = characterJson.namedPlans || {
       unnamed: characterJson.optimizationPlan
     };
-    let planDeserializer;
-    if (!version || version < '1.1.0') {
-      planDeserializer = OptimizationPlan.deserializeVersionOne;
-    } else {
-      planDeserializer = OptimizationPlan.deserialize;
-    }
+    const planDeserializer = (!version || version < '1.1.0') ?
+      OptimizationPlan.deserializeVersionOne :
+      OptimizationPlan.deserialize;
 
     const namedPlansObject = Object.keys(serializedNamedPlans).reduce((obj, key) => {
-      obj[key] = planDeserializer(serializedNamedPlans[key]);
+      obj[key] = planDeserializer(serializedNamedPlans[key]).rename(key);
       return obj;
     }, {});
+
+    let selectedTarget = planDeserializer(characterJson.optimizationPlan);
+
+    // If the selected plan is unnamed, try to find if a matching plan does exist, so that the matching plan can
+    // be selected
+    if ('unnamed' === selectedTarget.name) {
+      Object.values(namedPlansObject).forEach(target => {
+        console.log(target, selectedTarget);
+        if (selectedTarget.rename(target.name).equals(target)) {
+          selectedTarget = target;
+        }
+      });
+    }
 
     return new Character(
       characterJson.name,
@@ -196,7 +206,7 @@ class Character {
       characterJson.physDmgPercent,
       characterJson.baseStats ? BaseStats.deserialize(characterJson.baseStats) : new BaseStats(),
       characterJson.totalStats ? BaseStats.deserialize(characterJson.totalStats) : new BaseStats(),
-      planDeserializer(characterJson.optimizationPlan),
+      selectedTarget,
       namedPlansObject,
       [],
       [],

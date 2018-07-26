@@ -135,6 +135,7 @@ class CharacterEditView extends React.Component {
     if (form.mode.checked) {
       // Advanced form
       optimizationPlan = new OptimizationPlan(
+        planName,
         form['health-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.health,
         form['protection-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.protection,
         form['speed-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.speed,
@@ -150,6 +151,7 @@ class CharacterEditView extends React.Component {
     } else {
       // Basic form
       optimizationPlan = new OptimizationPlan(
+        planName,
         form['health-stat'].valueAsNumber,
         form['protection-stat'].valueAsNumber,
         form['speed-stat'].valueAsNumber,
