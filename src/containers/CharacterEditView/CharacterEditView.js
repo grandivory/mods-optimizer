@@ -336,6 +336,7 @@ class CharacterEditView extends React.Component {
 
     return <form
       className={`character-edit-form`}
+      noValidate={'advanced' === this.state.editMode}
       onSubmit={(e) => {
         e.preventDefault();
         this.saveOptimizationPlan.bind(this, character)(e.target);

@@ -44,16 +44,15 @@ class ReviewList extends React.Component {
     // Figure out the order for characters so that all mods for that character will be in the same group
     let characters = [];
     this.state.movingMods.forEach(mod => {
-      if (!characters.includes(mod.currentCharacter)) {
+      if (mod.currentCharacter && !characters.includes(mod.currentCharacter)) {
         characters.push(mod.currentCharacter);
       }
-      if (!characters.includes(mod.assignTo)) {
+      if (mod.assignTo && !characters.includes(mod.assignTo)) {
         characters.push(mod.assignTo);
       }
     });
 
     characters.sort((left, right) => left.compareGP(right));
-    console.dir(characters);
     this.state.orderedCharacters = characters;
   }
 
