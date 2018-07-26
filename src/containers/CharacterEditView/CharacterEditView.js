@@ -22,8 +22,7 @@ class CharacterEditView extends React.Component {
       'filterString': ''
     };
 
-    this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {
-    };
+    this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {};
   }
 
   dragStart(character) {
@@ -115,6 +114,20 @@ class CharacterEditView extends React.Component {
     }
   }
 
+  /**
+   * Open up the modal for editing a character's optimization target
+   *
+   * @param character Character
+   * @param planName String The name of the optimization plan to edit
+   */
+  editCharacter(character, planName) {
+    this.setState({
+      editCharacter: character,
+      selectedTarget: planName,
+      editMode: character.optimizationPlan.isBasic() ? 'basic' : 'advanced'
+    })
+  }
+
   saveOptimizationPlan(character, form) {
     const planName = form['plan-name'].value;
     let optimizationPlan;
@@ -197,10 +210,7 @@ class CharacterEditView extends React.Component {
           draggable={true}
           characters={selectedCharacters}
           onDrop={this.characterDrop()}
-          onEdit={(character, planName) => this.setState({
-            editCharacter: character,
-            selectedTarget: planName
-          })}
+          onEdit={(character, planName) => this.editCharacter(character, planName)}
           saveState={this.saveState}
         />
       </div>
@@ -291,12 +301,6 @@ class CharacterEditView extends React.Component {
 
     let planType, resetButton;
 
-    if (character.optimizationPlan.isBasic()) {
-      planType = 'basic';
-    } else {
-      planType = 'advanced';
-    }
-
     // Determine whether the current optimization plan is a default (same name exists), user-defined (same name doesn't
     // exist), or custom (name is 'custom') This determines whether to display a "Reset target to default" button, a
     // "Delete target" button, or nothing.
@@ -331,8 +335,7 @@ class CharacterEditView extends React.Component {
     }
 
     return <form
-      className={`character-edit-form ${planType}`}
-      noValidate={'advanced' === planType}
+      className={`character-edit-form`}
       onSubmit={(e) => {
         e.preventDefault();
         this.saveOptimizationPlan.bind(this, character)(e.target);
@@ -367,257 +370,269 @@ class CharacterEditView extends React.Component {
           leftValue={'basic'}
           rightLabel={'Advanced'}
           rightValue={'advanced'}
-          value={planType}
-          onChange={(newValue) => {
-            const form = document.getElementsByClassName('character-edit-form')[0];
-            form.classList.remove('basic');
-            form.classList.remove('advanced');
-            form.classList.add(newValue);
-            form.noValidate = 'advanced' === newValue;
-          }}
+          value={this.state.editMode}
+          onChange={(newValue) => this.setState({editMode: newValue})}
         />
       </div>
-      <div id={'basic-form'}>
-        <div className={'form-row'}>
-          <label htmlFor="health-stat">Health:</label>
-          <RangeInput
-            editable={true}
-            id={'health-stat'}
-            name={'health-stat'}
-            defaultValue={character.optimizationPlan.rawHealth}
-            min={-100}
-            max={100}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="protection-stat">Protection:</label>
-          <RangeInput
-            editable={true}
-            id={'protection-stat'}
-            name={'protection-stat'}
-            defaultValue={character.optimizationPlan.rawProtection}
-            min={-100}
-            max={100}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="speed-stat">Speed:</label>
-          <RangeInput
-            editable={true}
-            id={'speed-stat'}
-            name={'speed-stat'}
-            defaultValue={character.optimizationPlan.rawSpeed}
-            min={-100}
-            max={100}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="critChance-stat">Critical Chance %:</label>
-          <RangeInput
-            editable={true}
-            id={'critChance-stat'}
-            name={'critChance-stat'}
-            defaultValue={character.optimizationPlan.rawCritChance}
-            min={-100}
-            max={100}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="critDmg-stat">Critical Damage %:</label>
-          <RangeInput
-            editable={true}
-            id={'critDmg-stat'}
-            name={'critDmg-stat'}
-            defaultValue={character.optimizationPlan.rawCritDmg}
-            min={-100}
-            max={100}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="potency-stat">Potency %:</label>
-          <RangeInput
-            editable={true}
-            id={'potency-stat'}
-            name={'potency-stat'}
-            defaultValue={character.optimizationPlan.rawPotency}
-            min={-100}
-            max={100}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="tenacity-stat">Tenacity %:</label>
-          <RangeInput
-            editable={true}
-            id={'tenacity-stat'}
-            name={'tenacity-stat'}
-            defaultValue={character.optimizationPlan.rawTenacity}
-            min={-100}
-            max={100}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="offense-stat">Offense:</label>
-          <RangeInput
-            editable={true}
-            id={'offense-stat'}
-            name={'offense-stat'}
-            defaultValue={character.optimizationPlan.rawOffense}
-            min={-100}
-            max={100}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="defense-stat">Defense:</label>
-          <RangeInput
-            editable={true}
-            id={'defense-stat'}
-            name={'defense-stat'}
-            defaultValue={character.optimizationPlan.rawDefense}
-            min={-100}
-            max={100}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="accuracy-stat">Accuracy:</label>
-          <RangeInput
-            editable={true}
-            id={'accuracy-stat'}
-            name={'accuracy-stat'}
-            defaultValue={character.optimizationPlan.rawAccuracy}
-            min={-100}
-            max={100}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
-          <RangeInput
-            editable={true}
-            id={'critAvoid-stat'}
-            name={'critAvoid-stat'}
-            defaultValue={character.optimizationPlan.rawCritAvoid}
-            min={-100}
-            max={100}
-          />
-        </div>
-      </div>
-      <div id={'advanced-form'}>
-        <div className={'form-row'}>
-          <label htmlFor="health-stat-advanced">Health:</label>
-          <input
-            id={'health-stat-advanced'}
-            name={'health-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.health}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="protection-stat">Protection:</label>
-          <input
-            id={'protection-stat-advanced'}
-            name={'protection-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.protection}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="speed-stat">Speed:</label>
-          <input
-            id={'speed-stat-advanced'}
-            name={'speed-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.speed}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="critChance-stat">Critical Chance %:</label>
-          <input
-            id={'critChance-stat-advanced'}
-            name={'critChance-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.critChance}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="critDmg-stat">Critical Damage %:</label>
-          <input
-            id={'critDmg-stat-advanced'}
-            name={'critDmg-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.critDmg}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="potency-stat">Potency %:</label>
-          <input
-            id={'potency-stat-advanced'}
-            name={'potency-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.potency}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="tenacity-stat">Tenacity %:</label>
-          <input
-            id={'tenacity-stat-advanced'}
-            name={'tenacity-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.tenacity}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="offense-stat">Offense:</label>
-          <input
-            id={'offense-stat-advanced'}
-            name={'offense-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.offense}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="defense-stat">Defense:</label>
-          <input
-            id={'defense-stat-advanced'}
-            name={'defense-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.defense}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="accuracy-stat">Accuracy:</label>
-          <input
-            id={'accuracy-stat-advanced'}
-            name={'accuracy-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.accuracy}
-          />
-        </div>
-        <div className={'form-row'}>
-          <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
-          <input
-            id={'critAvoid-stat-advanced'}
-            name={'critAvoid-stat-advanced'}
-            type={'number'}
-            step={.01}
-            defaultValue={character.optimizationPlan.critAvoid}
-          />
-        </div>
-      </div>
+      {'basic' === this.state.editMode && this.basicForm(character.optimizationPlan)}
+      {'advanced' === this.state.editMode && this.advancedForm(character.optimizationPlan)}
       <div className={'actions'}>
         {resetButton}
         <button type={'button'} onClick={this.cancelEdit.bind(this)}>Cancel</button>
         <button type={'submit'}>Save</button>
       </div>
     </form>;
+  }
+
+  /**
+   * Renders a form for stat weights that uses range inputs between -100 and 100
+   *
+   * @param optimizationPlan OptimizationPlan The OptimizationPlan that contains the default values to display
+   */
+  basicForm(optimizationPlan) {
+    return <div id={'basic-form'}>
+      <div className={'form-row'}>
+        <label htmlFor="health-stat">Health:</label>
+        <RangeInput
+          editable={true}
+          id={'health-stat'}
+          name={'health-stat'}
+          defaultValue={optimizationPlan.rawHealth}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="protection-stat">Protection:</label>
+        <RangeInput
+          editable={true}
+          id={'protection-stat'}
+          name={'protection-stat'}
+          defaultValue={optimizationPlan.rawProtection}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="speed-stat">Speed:</label>
+        <RangeInput
+          editable={true}
+          id={'speed-stat'}
+          name={'speed-stat'}
+          defaultValue={optimizationPlan.rawSpeed}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="critChance-stat">Critical Chance %:</label>
+        <RangeInput
+          editable={true}
+          id={'critChance-stat'}
+          name={'critChance-stat'}
+          defaultValue={optimizationPlan.rawCritChance}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="critDmg-stat">Critical Damage %:</label>
+        <RangeInput
+          editable={true}
+          id={'critDmg-stat'}
+          name={'critDmg-stat'}
+          defaultValue={optimizationPlan.rawCritDmg}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="potency-stat">Potency %:</label>
+        <RangeInput
+          editable={true}
+          id={'potency-stat'}
+          name={'potency-stat'}
+          defaultValue={optimizationPlan.rawPotency}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="tenacity-stat">Tenacity %:</label>
+        <RangeInput
+          editable={true}
+          id={'tenacity-stat'}
+          name={'tenacity-stat'}
+          defaultValue={optimizationPlan.rawTenacity}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="offense-stat">Offense:</label>
+        <RangeInput
+          editable={true}
+          id={'offense-stat'}
+          name={'offense-stat'}
+          defaultValue={optimizationPlan.rawOffense}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="defense-stat">Defense:</label>
+        <RangeInput
+          editable={true}
+          id={'defense-stat'}
+          name={'defense-stat'}
+          defaultValue={optimizationPlan.rawDefense}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="accuracy-stat">Accuracy:</label>
+        <RangeInput
+          editable={true}
+          id={'accuracy-stat'}
+          name={'accuracy-stat'}
+          defaultValue={optimizationPlan.rawAccuracy}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
+        <RangeInput
+          editable={true}
+          id={'critAvoid-stat'}
+          name={'critAvoid-stat'}
+          defaultValue={optimizationPlan.rawCritAvoid}
+          min={-100}
+          max={100}
+        />
+      </div>
+    </div>;
+  }
+
+  /**
+   * Renders a form for stat weights that allows for granular control over weights
+   *
+   * @param optimizationPlan OptimizationPlan The OptimizationPlan that contains the default values to display
+   */
+  advancedForm(optimizationPlan) {
+    return <div id={'advanced-form'}>
+      <div className={'form-row'}>
+        <label htmlFor="health-stat-advanced">Health:</label>
+        <input
+          id={'health-stat-advanced'}
+          name={'health-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.health}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="protection-stat">Protection:</label>
+        <input
+          id={'protection-stat-advanced'}
+          name={'protection-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.protection}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="speed-stat">Speed:</label>
+        <input
+          id={'speed-stat-advanced'}
+          name={'speed-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.speed}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="critChance-stat">Critical Chance %:</label>
+        <input
+          id={'critChance-stat-advanced'}
+          name={'critChance-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.critChance}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="critDmg-stat">Critical Damage %:</label>
+        <input
+          id={'critDmg-stat-advanced'}
+          name={'critDmg-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.critDmg}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="potency-stat">Potency %:</label>
+        <input
+          id={'potency-stat-advanced'}
+          name={'potency-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.potency}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="tenacity-stat">Tenacity %:</label>
+        <input
+          id={'tenacity-stat-advanced'}
+          name={'tenacity-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.tenacity}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="offense-stat">Offense:</label>
+        <input
+          id={'offense-stat-advanced'}
+          name={'offense-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.offense}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="defense-stat">Defense:</label>
+        <input
+          id={'defense-stat-advanced'}
+          name={'defense-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.defense}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="accuracy-stat">Accuracy:</label>
+        <input
+          id={'accuracy-stat-advanced'}
+          name={'accuracy-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.accuracy}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
+        <input
+          id={'critAvoid-stat-advanced'}
+          name={'critAvoid-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.critAvoid}
+        />
+      </div>
+    </div>;
   }
 
   /**

@@ -49,14 +49,6 @@
   margin: 0 2em;
 }
 
-.character-edit-form.basic #advanced-form {
-  display: none;
-}
-
-.character-edit-form.advanced #basic-form {
-  display: none;
-}
-
 .character-edit-form .character-view .avatar {
   font-size: 1.5em;
 }
