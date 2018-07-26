@@ -40,6 +40,21 @@ class ReviewList extends React.Component {
       this.saveState = function() {
       };
     }
+
+    // Figure out the order for characters so that all mods for that character will be in the same group
+    let characters = [];
+    this.state.movingMods.forEach(mod => {
+      if (!characters.includes(mod.currentCharacter)) {
+        characters.push(mod.currentCharacter);
+      }
+      if (!characters.includes(mod.assignTo)) {
+        characters.push(mod.assignTo);
+      }
+    });
+
+    characters.sort((left, right) => left.compareGP(right));
+    console.dir(characters);
+    this.state.orderedCharacters = characters;
   }
 
   render() {
@@ -237,12 +252,18 @@ class ReviewList extends React.Component {
    */
   characterSort(characterPropertyName) {
     const slotOrder = this.slotOrder;
-    return function(left, right) {
-      let leftCharGP = left[characterPropertyName] ? left[characterPropertyName].galacticPower : 0;
-      let rightCharGP = right[characterPropertyName] ? right[characterPropertyName].galacticPower : 0;
+    const characterOrder = this.state.orderedCharacters;
 
-      if (rightCharGP !== leftCharGP) {
-        return rightCharGP - leftCharGP;
+    return function(left, right) {
+      if (left[characterPropertyName] !== right[characterPropertyName]) {
+        const leftCharIndex = left[characterPropertyName] ?
+          characterOrder.indexOf(left[characterPropertyName]) :
+          Infinity;
+        const rightCharIndex = right[characterPropertyName] ?
+          characterOrder.indexOf(right[characterPropertyName]) :
+          Infinity;
+
+        return leftCharIndex - rightCharIndex;
       } else {
         return slotOrder.indexOf(left.slot) - slotOrder.indexOf(right.slot);
       }
