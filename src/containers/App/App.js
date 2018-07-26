@@ -17,7 +17,7 @@ import {characters} from "../../constants/characters";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.version = '1.1.6';
+    this.version = '1.1.7';
 
     this.state = {
       'view': 'optimize',
