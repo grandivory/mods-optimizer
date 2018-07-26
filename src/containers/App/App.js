@@ -266,7 +266,7 @@ class App extends Component {
                   characterObject.base['Protection'] || 0,
                   characterObject.base['Physical Damage'] || 0,
                   characterObject.base['Special Damage'] || 0,
-                  baseCharacter.physDmgPercent || 1,
+                  baseCharacter.physDmgPct,
                   characterObject.base['Speed'] || 0,
                   characterObject.base['Armor'] || 0,
                   characterObject.base['Resistance'] || 0
@@ -277,7 +277,7 @@ class App extends Component {
                   characterObject.total['Protection'] || 0,
                   characterObject.total['Physical Damage'] || 0,
                   characterObject.total['Special Damage'] || 0,
-                  baseCharacter.physDmgPercent || 1,
+                  baseCharacter.physDmgPct,
                   characterObject.total['Speed'] || 0,
                   characterObject.total['Armor'] || 0,
                   characterObject.total['Resistance'] || 0

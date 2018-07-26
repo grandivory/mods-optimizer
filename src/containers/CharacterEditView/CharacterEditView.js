@@ -299,7 +299,7 @@ class CharacterEditView extends React.Component {
 
     const defaultChar = charDefaults[character.baseID] || Character.defaultCharacter(character.name);
 
-    let planType, resetButton;
+    let resetButton;
 
     // Determine whether the current optimization plan is a default (same name exists), user-defined (same name doesn't
     // exist), or custom (name is 'custom') This determines whether to display a "Reset target to default" button, a
