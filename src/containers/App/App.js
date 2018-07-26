@@ -26,6 +26,29 @@ class App extends Component {
 
     const restoredState = this.restoreState();
 
+    const queryParams = new URLSearchParams(document.location.search);
+
+    if (queryParams.has('allyCode')) {
+      let allyCode = queryParams.get('allyCode');
+
+      // Take only numbers
+      allyCode = allyCode.replace(/[^\d]/g, '');
+
+      // Take only the first 9 digits
+      allyCode = allyCode.substr(0, 9);
+
+      // Split the numbers into chunks of 3
+      const allyCodeChunks = allyCode.match(/\d{1,3}/g) || [];
+
+      restoredState.allyCode = allyCodeChunks.join('-');
+
+      // This needs to be set in a timeout so that we don't try to call `setState` in the constructor
+      window.setTimeout(() => this.queryPlayerProfile(allyCode), 0);
+    }
+
+    // Remove the query string after reading anything we needed from it.
+    window.history.replaceState({}, document.title, document.location.href.split('?')[0]);
+
     this.state = Object.assign(this.state, restoredState);
   }
 
@@ -178,7 +201,7 @@ class App extends Component {
                 baseCharacter.galacticPower = character.gp;
               }
             });
-
+            
             me.setState({
               'mods': me.processMods(mods),
               'loading': false,
