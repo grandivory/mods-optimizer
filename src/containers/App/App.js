@@ -201,7 +201,7 @@ class App extends Component {
                 baseCharacter.galacticPower = character.gp;
               }
             });
-            
+
             me.setState({
               'mods': me.processMods(mods),
               'loading': false,

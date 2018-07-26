@@ -95,31 +95,39 @@ class Optimizer {
     }
 
     // Go through all mods and assign a value to them based on the optimization plan
-    for (let mod of availableMods) {
+    for (let mod of mods) {
       modValues.set(mod, this.scoreMod(mod, character));
     }
 
     // Sort all the mods by score, then break them into sets
-    availableMods.sort((left, right) => {
-      if (modValues.get(right) === modValues.get(left)) {
-        // If mods have equal value, then favor the one that's already equipped
-        if (left.currentCharacter && character.name === left.currentCharacter.name) {
-          return -1;
-        } else if (right.currentCharacter && character.name === right.currentCharacter.name) {
-          return 1;
-        } else {
-          return 0;
-        }
-      } else {
-        return modValues.get(right) - modValues.get(left);
-      }
-    });
+    availableMods.sort(this.modSort(character, modValues));
+    mods.sort(this.modSort(character, modValues));
+
+    // Get the set of all possible mods to use for this character
     squares = availableMods.filter(mod => 'square' === mod.slot);
+    if (0 === squares.length) {
+      squares = mods.filter(mod => 'square' === mod.slot);
+    }
     arrows = availableMods.filter(mod => 'arrow' === mod.slot);
+    if (0 === arrows.length) {
+      arrows = mods.filter(mod => 'arrow' === mod.slot);
+    }
     diamonds = availableMods.filter(mod => 'diamond' === mod.slot);
+    if (0 === diamonds.length) {
+      diamonds = mods.filter(mod => 'diamond' === mod.slot);
+    }
     triangles = availableMods.filter(mod => 'triangle' === mod.slot);
+    if (0 === triangles.length) {
+      triangles = mods.filter(mod => 'triangle' === mod.slot);
+    }
     circles = availableMods.filter(mod => 'circle' === mod.slot);
+    if (0 === circles.length) {
+      circles = mods.filter(mod => 'circle' === mod.slot);
+    }
     crosses = availableMods.filter(mod => 'cross' === mod.slot);
+    if (0 === crosses.length) {
+      crosses = mods.filter(mod => 'cross' === mod.slot);
+    }
 
     // Assign a value to each set bonus based on the optimization plan
     for (let setName in setBonuses) {
@@ -172,6 +180,30 @@ class Optimizer {
     candidateSets.sort((left, right) => candidateValues.get(right) - candidateValues.get(left));
 
     return candidateSets[0];
+  }
+
+  /**
+   * Return a function to sort mods by their scores for a character
+   *
+   * @param character Character
+   * @param modValues WeakMap A map from each Mod to a score for that mod (so that the scores don't need to constantly
+   *                          be recalculated)
+   */
+  modSort(character, modValues) {
+    return (left, right) => {
+      if (modValues.get(right) === modValues.get(left)) {
+        // If mods have equal value, then favor the one that's already equipped
+        if (left.currentCharacter && character.name === left.currentCharacter.name) {
+          return -1;
+        } else if (right.currentCharacter && character.name === right.currentCharacter.name) {
+          return 1;
+        } else {
+          return 0;
+        }
+      } else {
+        return modValues.get(right) - modValues.get(left);
+      }
+    }
   }
 
   /**

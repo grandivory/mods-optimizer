@@ -1527,7 +1527,7 @@ let charactersArray = [
     DamageType.physical,
     new OptimizationPlan(0, 0, 100, 100, 20, 0, 20, 50, 0, 0, 0),
     {
-      'Arena': new OptimizationPlan(0, 0, 100, 100, 20, 0, 20, 50, 0, 0, 0),
+      'PvP': new OptimizationPlan(0, 0, 100, 100, 20, 0, 20, 50, 0, 0, 0),
       'hSTR Phase 1': new OptimizationPlan(0, -5, 90, 100, 50, 0, 50, 0, 0, 0, 0)
     },
     ['Light Side', 'Resistance', 'Tank'],
