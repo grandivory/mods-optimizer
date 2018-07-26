@@ -705,8 +705,8 @@ class App extends Component {
           be found on mods. This should work a little more closely to a gut feel if you simply give the stats weights
           based on their relative values to a character. If you want to go back to the old way of editing stat values,
           simply click the mode toggle over to "advanced", and the stats will work exactly like before! Your previous
-          character settings are all saved, so most characters will probably default to "advanced". Make sure to save
-          your target under a new name if you want to keep it!
+          character settings are all saved under the "unnamed" target. Most of these will probably default to
+          "advanced". Play around with both modes to see the difference!
         </li>
       </ul>
       <div className={'actions'}>

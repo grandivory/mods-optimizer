@@ -170,7 +170,9 @@ class Character {
   }
 
   static deserialize(characterJson, version) {
-    const serializedNamedPlans = characterJson.namedPlans || {};
+    const serializedNamedPlans = characterJson.namedPlans || {
+      unnamed: characterJson.optimizationPlan
+    };
     let planDeserializer;
     if (!version || version < '1.1.0') {
       planDeserializer = OptimizationPlan.deserializeVersionOne;
