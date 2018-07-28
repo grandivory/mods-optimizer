@@ -1,21 +1,21 @@
 .gold {
-  color: #eeca44;
+  color: #eeca44 !important;
 }
 
 .purple {
-  color: #a35ef9;
+  color: #a35ef9 !important;
 }
 
 .blue {
-  color: #2997f1;
+  color: #2997f1 !important;
 }
 
 .green {
-  color: #8fff3a;
+  color: #8fff3a !important;
 }
 
 .gray {
-  color: #ccfffe;
+  color: #ccfffe !important;
 }
 
 .inset {

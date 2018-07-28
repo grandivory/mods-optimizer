@@ -612,25 +612,9 @@ class App extends Component {
       &nbsp;|&nbsp;
       <a href={'https://discord.gg/WFKycSm'} target={'_blank'} rel={'noopener'}>Discord</a>
       &nbsp;| Like the tool? Consider donating to support the developer!&nbsp;
-      <form id={'donate-button'} action={'https://www.paypal.com/cgi-bin/webscr'} method={'post'} target={'_top'}>
-        <input type={'hidden'} name={'cmd'} value={'_s-xclick'}/>
-        <input type={'hidden'} name={'encrypted'}
-               value={'-----BEGIN PKCS7-----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-----END PKCS7-----'}/>
-        <input type={'image'}
-               src={'https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif'}
-               border={'0'}
-               name={'submit'}
-               alt={'PayPal - The safer, easier way to pay online!'}
-        />
-        <img alt={''}
-             border={'0'}
-             src={'https://www.paypalobjects.com/en_US/i/scr/pixel.gif'}
-             width={'1'}
-             height={'1'}
-        />
-      </form>
-      or&nbsp;
-      <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'}>Patreon</a>
+      <a href={'https://paypal.me/grandivory'} target={'_blank'} rel={'noopener'} className={'gold'}>Paypal</a>
+      &nbsp;or&nbsp;
+      <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'} className={'gold'}>Patreon</a>
       <div className={'version'}>
         <a onClick={() => this.setState({showChangeLog: true})}>version {this.version}</a>
       </div>
