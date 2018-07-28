@@ -75,6 +75,11 @@ class CharacterEditView extends React.Component {
     return function(targetList, dragTarget, dropTarget) {
       let sourceList;
 
+      // Do nothing if a character is dropped on itself
+      if (dragTarget === dropTarget) {
+        return;
+      }
+
       if (me.state.selectedCharacters.some(character => dragTarget === character.name)) {
         sourceList = me.state.selectedCharacters;
       } else if (me.state.availableCharacters.some(character => dragTarget === character.name)) {
@@ -84,7 +89,8 @@ class CharacterEditView extends React.Component {
       // Get the character from the source list
       let [sourceCharacter] = sourceList.splice(sourceList.findIndex((character) => character.name === dragTarget), 1);
       // Put it into the target list
-      targetList.splice(targetList.findIndex((character) => character.name === dropTarget) + 1, 0, sourceCharacter);
+      const targetIndex = targetList.findIndex((character) => character.name === dropTarget) + 1 || targetList.length;
+      targetList.splice(targetIndex, 0, sourceCharacter);
 
       me.saveState();
 

@@ -42,6 +42,7 @@ class CharacterList extends React.Component {
 
     return function(event) {
       event.preventDefault();
+      event.stopPropagation();
       let movingCharacterName = event.dataTransfer.getData('text/plain');
 
       // Only allow drops if the character isn't already in this list, or self-drops are allowed
