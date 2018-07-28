@@ -88,4 +88,9 @@ class BaseStats {
   }
 }
 
+const NullBaseStats = new BaseStats(0, 0, 0, 0, 0, 0, 0, 0);
+Object.freeze(NullBaseStats);
+
 export default BaseStats;
+
+export {NullBaseStats};

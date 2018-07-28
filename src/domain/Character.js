@@ -1,4 +1,4 @@
-import BaseStats from "./BaseStats";
+import BaseStats, {NullBaseStats} from "./BaseStats";
 import OptimizationPlan from "./OptimizationPlan";
 
 class Character {
@@ -204,8 +204,8 @@ class Character {
       characterJson.gearPieces || [],
       characterJson.galacticPower || 0,
       characterJson.physDmgPercent,
-      characterJson.baseStats ? BaseStats.deserialize(characterJson.baseStats) : new BaseStats(),
-      characterJson.totalStats ? BaseStats.deserialize(characterJson.totalStats) : new BaseStats(),
+      characterJson.baseStats ? BaseStats.deserialize(characterJson.baseStats) : NullBaseStats,
+      characterJson.totalStats ? BaseStats.deserialize(characterJson.totalStats) : NullBaseStats,
       selectedTarget,
       namedPlansObject,
       [],

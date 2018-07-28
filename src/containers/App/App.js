@@ -10,7 +10,7 @@ import Modal from "../../components/Modal/Modal";
 import WarningLabel from "../../components/WarningLabel/WarningLabel";
 import Spinner from "../../components/Spinner/Spinner";
 import Character from "../../domain/Character";
-import BaseStats from "../../domain/BaseStats";
+import BaseStats, {NullBaseStats} from "../../domain/BaseStats";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
 import {characters} from "../../constants/characters";
 
@@ -261,35 +261,48 @@ class App extends Component {
               const baseCharacter = Object.values(characters).find(c => c.baseID === characterObject.unit.characterID);
 
               if (baseCharacter) {
-                const baseStats = new BaseStats(
-                  characterObject.base['Health'] || 0,
-                  characterObject.base['Protection'] || 0,
-                  characterObject.base['Physical Damage'] || 0,
-                  characterObject.base['Special Damage'] || 0,
-                  baseCharacter.physDmgPct,
-                  characterObject.base['Speed'] || 0,
-                  characterObject.base['Armor'] || 0,
-                  characterObject.base['Resistance'] || 0
-                );
+                const baseStats = characterObject.base ?
+                  new BaseStats(
+                    characterObject.base['Health'] || 0,
+                    characterObject.base['Protection'] || 0,
+                    characterObject.base['Physical Damage'] || 0,
+                    characterObject.base['Special Damage'] || 0,
+                    baseCharacter.physDmgPct,
+                    characterObject.base['Speed'] || 0,
+                    characterObject.base['Armor'] || 0,
+                    characterObject.base['Resistance'] || 0
+                  ) :
+                  NullBaseStats;
 
-                const totalStats = new BaseStats(
-                  characterObject.total['Health'] || 0,
-                  characterObject.total['Protection'] || 0,
-                  characterObject.total['Physical Damage'] || 0,
-                  characterObject.total['Special Damage'] || 0,
-                  baseCharacter.physDmgPct,
-                  characterObject.total['Speed'] || 0,
-                  characterObject.total['Armor'] || 0,
-                  characterObject.total['Resistance'] || 0
-                );
+                const totalStats = characterObject.total ?
+                  new BaseStats(
+                    characterObject.total['Health'] || 0,
+                    characterObject.total['Protection'] || 0,
+                    characterObject.total['Physical Damage'] || 0,
+                    characterObject.total['Special Damage'] || 0,
+                    baseCharacter.physDmgPct,
+                    characterObject.total['Speed'] || 0,
+                    characterObject.total['Armor'] || 0,
+                    characterObject.total['Resistance'] || 0
+                  ) :
+                  NullBaseStats;
 
                 baseCharacter.baseStats = baseStats;
                 baseCharacter.totalStats = totalStats;
               }
             });
 
+            const errorCharacters = Object.values(characters).filter(
+              character => character.baseStats === NullBaseStats || character.totalStats === NullBaseStats
+            ).map(character => character.name);
+            const errorMessage = errorCharacters.length > 0 ?
+              'Missing stats for characters: ' + errorCharacters.join(', ') +
+              '. These characters may not optimize properly.'
+              : null;
+
             me.setState({
-              loading: false
+              loading: false,
+              error: errorMessage
             });
             me.saveState();
           } catch (e) {

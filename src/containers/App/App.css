@@ -242,7 +242,7 @@ nav button.active {
   border: 1px solid darkred;
   background-color: #ead118;
   width: 30em;
-  height: 12em;
+  min-height: 12em;
   color: black;
   text-shadow: none;
 }

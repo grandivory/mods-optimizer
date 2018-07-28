@@ -1246,6 +1246,18 @@ let charactersArray = [
     false
   ),
   Character.basicCharacter(
+    'Mission Vao',
+    'MISSIONVAO',
+    DamageType.physical,
+    new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 75, 50, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 75, 50, 0, 0, 0)
+    },
+    ['Light Side', 'Old Republic', 'Scoundrel', 'Attacker'],
+    [],
+    false
+  ),
+  Character.basicCharacter(
     'Mob Enforcer',
     'HUMANTHUG',
     DamageType.physical,
@@ -1707,6 +1719,18 @@ let charactersArray = [
     true
   ),
   Character.basicCharacter(
+    'T3-M4',
+    'T3_M4',
+    DamageType.special,
+    new OptimizationPlan('PvP', 10, 10, 100, 0, 25, 10, 10, 10, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan('PvP', 10, 10, 100, 0, 25, 10, 10, 10, 0, 0, 0)
+    },
+    ['Light Side', 'Old Republic', 'Droid', 'Support'],
+    [],
+    false
+  ),
+  Character.basicCharacter(
     'Talia',
     'TALIA',
     DamageType.mixed,
@@ -1899,6 +1923,18 @@ let charactersArray = [
     ['Light Side', 'Scoundrel', 'Attacker'],
     ['#solo'],
     true
+  ),
+  Character.basicCharacter(
+    'Zaalbar',
+    'ZAALBAR',
+    DamageType.physical,
+    new OptimizationPlan('PvP', 25, 25, 100, 0, 25, 0, 10, 20, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan('PvP', 25, 25, 100, 0, 25, 0, 10, 20, 0, 0, 0)
+    },
+    ['Light Side', 'Old Republic', 'Scoundrel', 'Tank'],
+    [],
+    false
   ),
   Character.basicCharacter(
     'Zam Wesell',
