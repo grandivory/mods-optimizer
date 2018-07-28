@@ -96,9 +96,9 @@ class CharacterList extends React.Component {
                 key={character.baseID}
                 draggable={draggable}
                 onDragStart={this.characterBlockDragStart(character.name)}
-                onDragEnter={this.characterBlockDragEnter(character.name)}
+                onDragEnter={this.characterBlockDragEnter()}
                 onDragOver={this.characterBlockDragOver()}
-                onDragLeave={this.characterBlockDragLeave(character.name)}
+                onDragLeave={this.characterBlockDragLeave()}
                 onDrop={this.characterBlockDrop(character.name)}>
       <CharacterAvatar character={character}/>
       <div className={'character-name'}>{character.name}</div>
@@ -128,7 +128,11 @@ class CharacterList extends React.Component {
     const unfilteredChars = characters.filter(character => !isFiltered(character));
 
     return (
-      <div className={'character-list'}>
+      <div className={'character-list'}
+      onDragEnter={this.characterBlockDragEnter()}
+      onDragOver={this.characterBlockDragOver()}
+      onDragLeave={this.characterBlockDragLeave()}
+      onDrop={this.characterBlockDrop('')}>
 
         {0 < filteredChars.length && filteredChars.map(character =>
           this.renderCharacterBlock(character)
@@ -141,9 +145,9 @@ class CharacterList extends React.Component {
         {0 === filteredChars.length &&
         <div
           className={'character-block'}
-          onDragEnter={this.characterBlockDragEnter('')}
+          onDragEnter={this.characterBlockDragEnter()}
           onDragOver={this.characterBlockDragOver()}
-          onDragLeave={this.characterBlockDragLeave('')}
+          onDragLeave={this.characterBlockDragLeave()}
           onDrop={this.characterBlockDrop('')} />
         }
       </div>

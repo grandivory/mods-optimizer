@@ -77,8 +77,10 @@ class App extends Component {
       this.version
     );
 
-    saveProgressButton.href = this.getProgressData();
-    saveProgressButton.download = `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`
+    if (saveProgressButton) {
+      saveProgressButton.href = this.getProgressData();
+      saveProgressButton.download = `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`
+    }
   }
 
   restoreState() {
