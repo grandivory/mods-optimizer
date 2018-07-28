@@ -188,7 +188,6 @@ class Character {
     // be selected
     if ('unnamed' === selectedTarget.name) {
       Object.values(namedPlansObject).forEach(target => {
-        console.log(target, selectedTarget);
         if (selectedTarget.rename(target.name).equals(target)) {
           selectedTarget = target;
         }

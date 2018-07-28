@@ -144,14 +144,24 @@ class Optimizer {
       }
     }
 
-    // Start with the highest-value mod in each slot
+    const topMod = (candidates) => {
+      const mod = firstOrNull(candidates);
+      if (mod && modValues.get(mod) > 0) {
+        return mod;
+      } else {
+        return null;
+      }
+    };
+
+    // Start with the highest-value mod in each slot. If the highest-value mod has a negative value,
+    // leave the slot empty
     setlessMods = new ModSet([
-      firstOrNull(squares),
-      firstOrNull(arrows),
-      firstOrNull(diamonds),
-      firstOrNull(triangles),
-      firstOrNull(circles),
-      firstOrNull(crosses)
+      topMod(squares),
+      topMod(arrows),
+      topMod(diamonds),
+      topMod(triangles),
+      topMod(circles),
+      topMod(crosses)
     ]);
 
     // Go through each set bonus with a positive value, and find the best mod sub-sets (all possible pairs or quads)
