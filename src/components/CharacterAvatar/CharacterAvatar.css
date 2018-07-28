@@ -5,7 +5,6 @@
   margin: .75em .5em .25em;
   border-radius: 100%;
   display: inline-block;
-  pointer-events: none;
 }
 
 .avatar img {
@@ -25,6 +24,7 @@
   left: 0;
   top: 0;
   background-size: cover;
+  pointer-events:none;
 }
 
 .avatar .character-level {
@@ -43,6 +43,7 @@
       radial-gradient(125% 100% at 50% -28%, rgb(28, 56, 93) 0%, rgb(28, 56, 93) 44%, white 45%, white 49%, transparent 50%) 50% 123% / 1.5em 1.6em;
   background-repeat: no-repeat;
   z-index: 10000;
+  pointer-events: none;
 }
 
 .avatar.gear-1::after {
