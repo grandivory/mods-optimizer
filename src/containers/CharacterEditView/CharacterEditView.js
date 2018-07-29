@@ -148,9 +148,11 @@ class CharacterEditView extends React.Component {
         form['critDmg-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critDmg,
         form['potency-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.potency,
         form['tenacity-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.tenacity,
-        form['offense-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.offense,
+        form['physDmg-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.offense,
+        form['specDmg-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.offense,
         form['critChance-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critChance,
-        form['defense-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.defense,
+        form['armor-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.defense,
+        form['resistance-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.defense,
         form['accuracy-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.accuracy,
         form['critAvoid-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critAvoid,
       );
@@ -164,9 +166,11 @@ class CharacterEditView extends React.Component {
         form['critDmg-stat'].valueAsNumber,
         form['potency-stat'].valueAsNumber,
         form['tenacity-stat'].valueAsNumber,
-        form['offense-stat'].valueAsNumber,
+        form['physDmg-stat'].valueAsNumber,
+        form['specDmg-stat'].valueAsNumber,
         form['critChance-stat'].valueAsNumber,
-        form['defense-stat'].valueAsNumber,
+        form['armor-stat'].valueAsNumber,
+        form['resistance-stat'].valueAsNumber,
         form['accuracy-stat'].valueAsNumber,
         form['critAvoid-stat'].valueAsNumber,
       );
@@ -478,23 +482,45 @@ class CharacterEditView extends React.Component {
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="offense-stat">Offense:</label>
+        <label htmlFor="physDmg-stat">Physical Damage:</label>
         <RangeInput
           editable={true}
-          id={'offense-stat'}
-          name={'offense-stat'}
-          defaultValue={optimizationPlan.rawOffense}
+          id={'physDmg-stat'}
+          name={'physDmg-stat'}
+          defaultValue={optimizationPlan.rawPhysDmg}
           min={-100}
           max={100}
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="defense-stat">Defense:</label>
+        <label htmlFor="specDmg-stat">Special Damage:</label>
         <RangeInput
           editable={true}
-          id={'defense-stat'}
-          name={'defense-stat'}
-          defaultValue={optimizationPlan.rawDefense}
+          id={'specDmg-stat'}
+          name={'specDmg-stat'}
+          defaultValue={optimizationPlan.rawSpecDmg}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="armor-stat">Armor:</label>
+        <RangeInput
+          editable={true}
+          id={'armor-stat'}
+          name={'armor-stat'}
+          defaultValue={optimizationPlan.rawArmor}
+          min={-100}
+          max={100}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="resistance-stat">Resistance:</label>
+        <RangeInput
+          editable={true}
+          id={'resistance-stat'}
+          name={'resistance-stat'}
+          defaultValue={optimizationPlan.rawResistance}
           min={-100}
           max={100}
         />
@@ -542,7 +568,7 @@ class CharacterEditView extends React.Component {
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="protection-stat">Protection:</label>
+        <label htmlFor="protection-stat-advanced">Protection:</label>
         <input
           id={'protection-stat-advanced'}
           name={'protection-stat-advanced'}
@@ -552,7 +578,7 @@ class CharacterEditView extends React.Component {
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="speed-stat">Speed:</label>
+        <label htmlFor="speed-stat-advanced">Speed:</label>
         <input
           id={'speed-stat-advanced'}
           name={'speed-stat-advanced'}
@@ -562,7 +588,7 @@ class CharacterEditView extends React.Component {
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="critChance-stat">Critical Chance %:</label>
+        <label htmlFor="critChance-stat-advanced">Critical Chance %:</label>
         <input
           id={'critChance-stat-advanced'}
           name={'critChance-stat-advanced'}
@@ -572,7 +598,7 @@ class CharacterEditView extends React.Component {
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="critDmg-stat">Critical Damage %:</label>
+        <label htmlFor="critDmg-stat-advanced">Critical Damage %:</label>
         <input
           id={'critDmg-stat-advanced'}
           name={'critDmg-stat-advanced'}
@@ -582,7 +608,7 @@ class CharacterEditView extends React.Component {
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="potency-stat">Potency %:</label>
+        <label htmlFor="potency-stat-advanced">Potency %:</label>
         <input
           id={'potency-stat-advanced'}
           name={'potency-stat-advanced'}
@@ -592,7 +618,7 @@ class CharacterEditView extends React.Component {
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="tenacity-stat">Tenacity %:</label>
+        <label htmlFor="tenacity-stat-advanced">Tenacity %:</label>
         <input
           id={'tenacity-stat-advanced'}
           name={'tenacity-stat-advanced'}
@@ -602,27 +628,47 @@ class CharacterEditView extends React.Component {
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="offense-stat">Offense:</label>
+        <label htmlFor="physDmg-stat-advanced">Physical Damage:</label>
         <input
-          id={'offense-stat-advanced'}
-          name={'offense-stat-advanced'}
+          id={'physDmg-stat-advanced'}
+          name={'physDmg-stat-advanced'}
           type={'number'}
           step={.01}
           defaultValue={optimizationPlan.offense}
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="defense-stat">Defense:</label>
+        <label htmlFor="specDmg-stat-advanced">Special Damage:</label>
         <input
-          id={'defense-stat-advanced'}
-          name={'defense-stat-advanced'}
+          id={'specDmg-stat-advanced'}
+          name={'specDmg-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.offense}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="armor-stat-advanced">Armor:</label>
+        <input
+          id={'armor-stat-advanced'}
+          name={'armor-stat-advanced'}
           type={'number'}
           step={.01}
           defaultValue={optimizationPlan.defense}
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="accuracy-stat">Accuracy:</label>
+        <label htmlFor="resistance-stat-advanced">Resistance:</label>
+        <input
+          id={'resistance-stat-advanced'}
+          name={'resistance-stat-advanced'}
+          type={'number'}
+          step={.01}
+          defaultValue={optimizationPlan.defense}
+        />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor="accuracy-stat-advanced">Accuracy:</label>
         <input
           id={'accuracy-stat-advanced'}
           name={'accuracy-stat-advanced'}
@@ -632,7 +678,7 @@ class CharacterEditView extends React.Component {
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="critAvoid-stat">Critical Avoidance:</label>
+        <label htmlFor="critAvoid-stat-advanced">Critical Avoidance:</label>
         <input
           id={'critAvoid-stat-advanced'}
           name={'critAvoid-stat-advanced'}

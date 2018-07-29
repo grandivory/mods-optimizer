@@ -173,16 +173,23 @@ class Character {
     const serializedNamedPlans = characterJson.namedPlans || {
       unnamed: characterJson.optimizationPlan
     };
-    const planDeserializer = (!version || version < '1.1.0') ?
-      OptimizationPlan.deserializeVersionOne :
-      OptimizationPlan.deserialize;
+    const planDeserializer = (() => {
+      if (!version || version < '1.1.0') {
+        return OptimizationPlan.deserializeVersionOne;
+      } else if (version < '1.2.0') {
+        return OptimizationPlan.deserializeVersionOneOne;
+      } else {
+        return OptimizationPlan.deserialize;
+      }
+    })();
+    const physDmgPct = 'undefined' !== typeof characterJson.physDmgPercent ? characterJson.physDmgPercent : 1;
 
     const namedPlansObject = Object.keys(serializedNamedPlans).reduce((obj, key) => {
-      obj[key] = planDeserializer(serializedNamedPlans[key]).rename(key);
+      obj[key] = planDeserializer(serializedNamedPlans[key], physDmgPct).rename(key);
       return obj;
     }, {});
 
-    let selectedTarget = planDeserializer(characterJson.optimizationPlan);
+    let selectedTarget = planDeserializer(characterJson.optimizationPlan, physDmgPct);
 
     // If the selected plan is unnamed, try to find if a matching plan does exist, so that the matching plan can
     // be selected

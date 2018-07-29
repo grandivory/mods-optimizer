@@ -10,9 +10,11 @@ class OptimizationPlan {
               critDmg,
               potency,
               tenacity,
-              offense,
+              physDmg,
+              specDmg,
               critChance,
-              defense,
+              armor,
+              resistance,
               accuracy,
               critAvoid
   ) {
@@ -25,9 +27,11 @@ class OptimizationPlan {
     this.rawCritDmg = critDmg || 0;
     this.rawPotency = potency || 0;
     this.rawTenacity = tenacity || 0;
-    this.rawOffense = offense || 0;
+    this.rawPhysDmg = physDmg || 0;
+    this.rawSpecDmg = specDmg || 0;
     this.rawCritChance = critChance || 0;
-    this.rawDefense = defense || 0;
+    this.rawArmor = armor || 0;
+    this.rawResistance = resistance || 0;
     this.rawAccuracy = accuracy || 0;
     this.rawCritAvoid = critAvoid || 0;
 
@@ -39,9 +43,11 @@ class OptimizationPlan {
     this.critDmg =  this.rawCritDmg / OptimizationPlan.statWeight.critDmg;
     this.potency = this.rawPotency / OptimizationPlan.statWeight.potency;
     this.tenacity = this.rawTenacity / OptimizationPlan.statWeight.tenacity;
-    this.offense = this.rawOffense / OptimizationPlan.statWeight.offense;
+    this.physDmg = this.rawPhysDmg / OptimizationPlan.statWeight.physDmg;
+    this.specDmg = this.rawSpecDmg / OptimizationPlan.statWeight.specDmg;
     this.critChance = this.rawCritChance / OptimizationPlan.statWeight.critChance;
-    this.defense = this.rawDefense / OptimizationPlan.statWeight.defense;
+    this.armor = this.rawArmor / OptimizationPlan.statWeight.armor;
+    this.resistance = this.rawResistance / OptimizationPlan.statWeight.resistance;
     this.accuracy = this.rawAccuracy/ OptimizationPlan.statWeight.accuracy;
     this.critAvoid = this.rawCritAvoid / OptimizationPlan.statWeight.critAvoid;
   }
@@ -60,9 +66,11 @@ class OptimizationPlan {
       this.rawCritDmg,
       this.rawPotency,
       this.rawTenacity,
-      this.rawOffense,
+      this.rawPhysDmg,
+      this.rawSpecDmg,
       this.rawCritChance,
-      this.rawDefense,
+      this.rawArmor,
+      this.rawResistance,
       this.rawAccuracy,
       this.rawCritAvoid
     );
@@ -81,9 +89,11 @@ class OptimizationPlan {
       this.critDmg === that.critDmg &&
       this.potency === that.potency &&
       this.tenacity === that.tenacity &&
-      this.offense === that.offense &&
+      this.physDmg === that.physDmg &&
+      this.specDmg === that.specDmg &&
       this.critChance === that.critChance &&
-      this.defense === that.defense &&
+      this.armor === that.armor &&
+      this.resistance === that.resistance &&
       this.accuracy === that.accuracy &&
       this.critAvoid === that.critAvoid;
   }
@@ -94,17 +104,19 @@ class OptimizationPlan {
    * @returns boolean
    */
   isBasic() {
-    return this.valueIsBasic(this.rawHealth) &&
-      this.valueIsBasic(this.rawProtection) &&
-      this.valueIsBasic(this.rawSpeed) &&
-      this.valueIsBasic(this.rawCritDmg) &&
-      this.valueIsBasic(this.rawPotency) &&
-      this.valueIsBasic(this.rawTenacity) &&
-      this.valueIsBasic(this.rawOffense) &&
-      this.valueIsBasic(this.rawCritChance) &&
-      this.valueIsBasic(this.rawDefense) &&
-      this.valueIsBasic(this.rawAccuracy) &&
-      this.valueIsBasic(this.rawCritAvoid);
+    return OptimizationPlan.valueIsBasic(this.rawHealth) &&
+      OptimizationPlan.valueIsBasic(this.rawProtection) &&
+      OptimizationPlan.valueIsBasic(this.rawSpeed) &&
+      OptimizationPlan.valueIsBasic(this.rawCritDmg) &&
+      OptimizationPlan.valueIsBasic(this.rawPotency) &&
+      OptimizationPlan.valueIsBasic(this.rawTenacity) &&
+      OptimizationPlan.valueIsBasic(this.rawPhysDmg) &&
+      OptimizationPlan.valueIsBasic(this.rawSpecDmg) &&
+      OptimizationPlan.valueIsBasic(this.rawCritChance) &&
+      OptimizationPlan.valueIsBasic(this.rawArmor) &&
+      OptimizationPlan.valueIsBasic(this.rawResistance) &&
+      OptimizationPlan.valueIsBasic(this.rawAccuracy) &&
+      OptimizationPlan.valueIsBasic(this.rawCritAvoid);
   }
 
   /**
@@ -112,7 +124,7 @@ class OptimizationPlan {
    *
    * @returns boolean
    */
-  valueIsBasic(val) {
+  static valueIsBasic(val) {
     return val >= -100 && val <= 100 && Number.isInteger(val);
   }
 
@@ -126,16 +138,25 @@ class OptimizationPlan {
     planObject.critDmg = this.rawCritDmg;
     planObject.potency = this.rawPotency;
     planObject.tenacity = this.rawTenacity;
-    planObject.offense = this.rawOffense;
+    planObject.physDmg = this.rawPhysDmg;
+    planObject.specDmg = this.rawSpecDmg;
     planObject.critChance = this.rawCritChance;
-    planObject.defense = this.rawDefense;
+    planObject.armor = this.armor;
+    planObject.resistance = this.resistance;
     planObject.accuracy = this.rawAccuracy;
     planObject.critAvoid = this.rawCritAvoid;
 
     return planObject;
   }
 
-  static deserialize(planJson) {
+  /**
+   * Deserialize an OptimizationPlan from JSON
+   *
+   * @param planJson Object
+   * @returns {OptimizationPlan}
+   */
+  /* eslint-disable no-unused-vars */
+  static deserialize(planJson, physDmgPct) {
     return new OptimizationPlan(
       planJson.name || 'unnamed',
       planJson.health,
@@ -146,7 +167,33 @@ class OptimizationPlan {
       planJson.tenacity,
       planJson.offense,
       planJson.critChance,
-      planJson.defense,
+      planJson.armor,
+      planJson.resistance,
+      planJson.accuracy,
+      planJson.critAvoid
+    );
+  }
+  /* eslint-enable no-unused-vars */
+
+  /**
+   * Deserialize an OptimizationPlan that was serialized by version 1.1.*
+   * @param planJson Object
+   * @param physDmgPct Number The amount of offense to attribute to physical damage (the rest goes to special damage)
+   */
+  static deserializeVersionOneOne(planJson, physDmgPct) {
+    return new OptimizationPlan(
+      planJson.name || 'unnamed',
+      planJson.health,
+      planJson.protection,
+      planJson.speed,
+      planJson.critDmg,
+      planJson.potency,
+      planJson.tenacity,
+      planJson.offense * physDmgPct,
+      planJson.offense * (1 - physDmgPct),
+      planJson.critChance,
+      planJson.defense / 2,
+      planJson.defense / 2,
       planJson.accuracy,
       planJson.critAvoid
     );
@@ -154,9 +201,10 @@ class OptimizationPlan {
 
   /**
    * Deserialize an OptimizationPlan that was serialized prior to normalization
-   * @param planJson
+   * @param planJson Object
+   * @param physDmgPct Number The amount of offense to attribute to physical damage (the rest goes to special damage)
    */
-  static deserializeVersionOne(planJson) {
+  static deserializeVersionOne(planJson, physDmgPct) {
     return new OptimizationPlan(
       'unnamed',
       planJson.health * OptimizationPlan.statWeight.health,
@@ -165,12 +213,14 @@ class OptimizationPlan {
       planJson.critDmg * OptimizationPlan.statWeight.critDmg,
       planJson.potency * OptimizationPlan.statWeight.potency,
       planJson.tenacity * OptimizationPlan.statWeight.tenacity,
-      planJson.offense * OptimizationPlan.statWeight.offense,
+      planJson.offense * OptimizationPlan.statWeight.offense * physDmgPct,
+      planJson.offense * OptimizationPlan.statWeight.offense * (1 - physDmgPct),
       planJson.critChance * OptimizationPlan.statWeight.critChance,
-      planJson.defense * OptimizationPlan.statWeight.defense,
+      (planJson.defense * OptimizationPlan.statWeight.armor) / 2,
+      (planJson.defense * OptimizationPlan.statWeight.resistance) / 2,
       planJson.accuracy * OptimizationPlan.statWeight.accuracy,
       planJson.critAvoid * OptimizationPlan.statWeight.critAvoid
-    )
+    );
   }
 }
 
@@ -181,9 +231,12 @@ OptimizationPlan.statWeight = {
   'critDmg': 40,
   'potency': 10,
   'tenacity': 10,
+  'physDmg': 150,
+  'specDmg': 300,
   'offense': 150,
   'critChance': 10,
-  'defense': 33,
+  'armor': 33,
+  'resistance': 16,
   'accuracy': 50,
   'critAvoid': 25
 };

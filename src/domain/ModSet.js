@@ -88,13 +88,15 @@ class ModSet {
       'Protection': new Stat('Protection', '0'),
       'Speed': new Stat('Speed', '0'),
       'Critical Damage': new Stat('Critical Damage %', '0'),
-      'Critical Chance': new Stat('Critical Chance %', '0'),
       'Potency': new Stat('Potency', '0'),
       'Tenacity': new Stat('Tenacity', '0'),
-      'Offense': new Stat('Offense', '0'),
-      'Defense': new Stat('Defense', '0'),
+      'Physical Damage': new Stat('Physical Damage', '0'),
+      'Critical Chance': new Stat('Critical Chance %', '0'),
       'Accuracy': new Stat('Accuracy %', '0'),
-      'Critical Avoidance': new Stat('Critical Avoidance %', '0')
+      'Armor': new Stat('Armor', '0'),
+      'Critical Avoidance': new Stat('Critical Avoidance %', '0'),
+      'Special Damage': new Stat('Special Damage', '0'),
+      'Resistance': new Stat('Resistance', '0')
     };
     let setCounts = new WeakMap();
 
@@ -131,8 +133,8 @@ class ModSet {
     // Update the summary to mark the stats that should always be displayed as percentages
     // Also update all stats to be the correct precision
     Object.values(summary).forEach(stat => {
-      if (!Stat.percentTypes.includes(stat.displayType)) {
-        stat.value = Math.floor(stat.value * 100) / 100;
+      if (!Stat.mixedTypes.includes(stat.displayType)) {
+        stat.value = Math.round(stat.value * 100) / 100;
         stat.displayModifier = '%';
       } else {
         stat.value = Math.trunc(stat.value);
@@ -151,22 +153,26 @@ class ModSet {
    * @param character Character A character to use for calculations involving percentages
    */
   updateSummary(summary, stat, character) {
-    let propertyName = statTypeMap[stat.displayType];
+    const propertyNames = statTypeMap[stat.displayType];
 
-    if (!summary.hasOwnProperty(stat.displayType)) {
-      let statType =
-        // We only include a '%' if the stat is NOT in percentTypes, because those are the only stats that will always
-        // display as a percentage
-        Stat.percentTypes.includes(stat.displayType) ?
-          stat.displayType :
-          stat.displayType + '%';
-      summary[stat.displayType] = new Stat(statType, '0');
-    }
-    if (stat.isPercent) {
-      summary[stat.displayType].value += stat.value * character.baseStats[propertyName] / 100;
-    } else {
-      summary[stat.displayType].value += stat.value;
-    }
+    propertyNames.forEach(propertyName => {
+      const propertyDisplayName = Stat.displayNames[propertyName] || propertyName;
+
+      if (!summary.hasOwnProperty(propertyDisplayName)) {
+        let statType =
+          // We only include a '%' if the stat is NOT in mixedTypes, because those are the only stats that will always
+          // display as a percentage
+          Stat.mixedTypes.includes(propertyDisplayName) ?
+            stat.displayType :
+            stat.displayType + ' %';
+          summary[propertyDisplayName] = new Stat(statType, '0');
+      }
+      if (stat.isPercent) {
+        summary[propertyDisplayName].value += stat.value * character.baseStats[propertyName] / 100;
+      } else {
+        summary[propertyDisplayName].value += stat.value;
+      }
+    });
   }
 
   /**

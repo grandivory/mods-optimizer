@@ -9,9 +9,11 @@ const optimizationStrategy = {
     0, // crit damage
     0, // potency
     5, // tenacity
-    0, // offense
+    0, // physical damage
+    0, // special damage
     0, // crit chance
-    0, // defense
+    0, // armor
+    0, // resistance
     0, // accuracy
     0 // crit avoidance
   ),
@@ -23,37 +25,43 @@ const optimizationStrategy = {
     0, // crit damage
     0, // potency
     0, // tenacity
-    0, // offense
+    0, // physical damage
+    0, // special damage
     0, // crit chance
-    0, // defense
+    0, // armor
+    0, // resistance
     0, // accuracy
     0 // crit avoidance
   ),
-  'Speed, Crit, and Offense': new OptimizationPlan(
-    'Speed, Crit, and Offense',
+  "Speed, Crit, and Physical Damage": new OptimizationPlan(
+    'Speed, Crit, and Physical Damage',
     0, // health
     0, // protection
     100, // speed
     100, // crit damage
     0, // potency
     0, // tenacity
-    50, // offense
+    50, // physical damage
+    0, // special damage
     50, // crit chance
-    0, // defense
+    0, // armor
+    0, // resistance
     0, // accuracy
     0 // crit avoidance
   ),
-  'Speed, Crit, Offense, Potency': new OptimizationPlan(
-    'Speed, Crit, Offense, Potency',
+  "Speed, Crit, Physical Damage, Potency": new OptimizationPlan(
+    'Speed, Crit, Physical Damage, Potency',
     0, // health
     0, // protection
     100, // speed
     100, // crit damage
     25, // potency
     0, // tenacity
-    50, // offense
+    50, // physical damage
+    0, // special damage
     50, // crit chance
-    0, // defense
+    0, // armor
+    0, // resistance
     0, // accuracy
     0 // crit avoidance
   ),
@@ -65,23 +73,27 @@ const optimizationStrategy = {
     0, // crit damage
     25, // potency
     0, // tenacity
-    0, // offense
+    0, // physical damage
+    0, // special damage
     0, // crit chance
-    0, // defense
+    0, // armor
+    0, // resistance
     0, // accuracy
     0 // crit avoidance
   ),
-  'Slow Crit, Offense, Potency': new OptimizationPlan(
-    'Slow Crit, Offense, Potency',
+  "Slow Crit, Physical Damage, Potency": new OptimizationPlan(
+    'Slow Crit, Physical Damage, Potency',
     0, // health
     0, // protection
     10, // speed
     100, // crit damage
     25, // potency
     0, // tenacity
-    50, // offense
+    50, // physical damage
+    0, // special damage
     50, // crit chance
-    0, // defense
+    0, // armor
+    0, // resistance
     0, // accuracy
     0 // crit avoidance
   ),
@@ -93,9 +105,11 @@ const optimizationStrategy = {
     0, // crit damage
     0, // potency
     0, // tenacity,
-    100, // offense
+    100, // physical damage
+    0, // special damage
     0, // crit chance
-    0, // defense
+    0, // armor
+    0, // resistance
     0, // accuracy
     0 // crit avoidance
   ),
@@ -107,9 +121,11 @@ const optimizationStrategy = {
     0, // crit damage
     0, // potency
     0, // tenacity,
-    25, // offense
+    0, // physical damage
+    50, // special damage
     0, // crit chance
-    0, // defense
+    0, // armor
+    0, // resistance
     0, // accuracy
     0 // crit avoidance
   ),
@@ -121,9 +137,11 @@ const optimizationStrategy = {
     0, // crit damage
     25, // potency
     0, // tenacity,
-    25, // offense
+    0, // physical damage
+    50, // special damage
     0, // crit chance
-    0, // defense
+    0, // armor
+    0, // resistance
     0, // accuracy
     0 // crit avoidance
   )

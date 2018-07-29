@@ -7,7 +7,7 @@ class Stat {
     this.displayType = type.endsWith('%') ? type.substr(0, type.length - 1).trim() : type;
     this.displayValue = value.replace(/[+%]/g, '');
     this.value = +this.displayValue;
-    this.isPercent = '%' === this.displayModifier && Stat.percentTypes.includes(this.displayType);
+    this.isPercent = '%' === this.displayModifier && Stat.mixedTypes.includes(this.displayType);
   }
 
   /**
@@ -46,7 +46,7 @@ class Stat {
    * Extract the type and value of this stat for serialization
    */
   serialize() {
-    const percent = (this.isPercent || !Stat.percentTypes.includes(this.displayType)) &&
+    const percent = (this.isPercent || !Stat.mixedTypes.includes(this.displayType)) &&
     !this.type.includes('%') ? '%' : '';
 
     return [this.type, `+${this.displayValue}${percent}`];
@@ -81,15 +81,51 @@ class Stat {
    * @param character
    */
   getOptimizationValue(character) {
-    const statType = statTypeMap[this.displayType];
+    const statTypes = statTypeMap[this.displayType];
+
     if (this.isPercent) {
-      return character.optimizationPlan[statType] * Math.floor(character.baseStats[statType] * this.value / 100);
+      return statTypes.map(statType =>
+        character.optimizationPlan[statType] * Math.floor(character.baseStats[statType] * this.value / 100)
+      ).reduce((a, b) => a + b, 0);
     } else {
-      return character.optimizationPlan[statType] * this.value
+      return statTypes.map(statType =>
+        character.optimizationPlan[statType] * this.value
+      ).reduce((a, b) => a + b, 0);
     }
   }
 }
 
-Stat.percentTypes = ['Health', 'Protection', 'Offense', 'Speed', 'Defense'];
+// A list of stat types that can be either a flat value or a percent
+Stat.mixedTypes = ['Health',
+  'Protection',
+  'Offense',
+  'Physical Damage',
+  'Special Damage',
+  'Speed',
+  'Defense',
+  'Armor',
+  'Resistance'];
+
+// A map from the internal name to a more human-friendly name for each stat type
+Stat.displayNames = {
+  'health': 'Health',
+  'protection': 'Protection',
+  'speed': 'Speed',
+  'critDmg': 'Critical Damage',
+  'potency': 'Potency',
+  'tenacity': 'Tenacity',
+  'physDmg': 'Physical Damage',
+  'specDmg': 'Special Damage',
+  'critChance': 'Critical Chance',
+  'physCritChance': 'Physical Critical Chance',
+  'specCritChance': 'Special Critical Chance',
+  'defense': 'Defense',
+  'armor': 'Armor',
+  'resistance': 'Resistance',
+  'accuracy': 'Accuracy',
+  'critAvoid': 'Critical Avoidance',
+  'physCritAvoid': 'Physical Critical Avoidance',
+  'specCritAvoid': 'Special Critical Avoidance'
+};
 
 export default Stat;
