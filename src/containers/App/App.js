@@ -17,7 +17,7 @@ import {characters} from "../../constants/characters";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.version = '1.1.10';
+    this.version = '1.2.0';
 
     this.state = {
       'view': 'optimize',
@@ -97,7 +97,7 @@ class App extends Component {
 
     state = Object.assign(state, this.restoreCharacterList(version));
 
-    if (('version' < '1.1.0' || !version) && state.mods) {
+    if ((version < '1.2.0' || !version) && state.mods) {
       state.showChangeLog = true;
     }
 
@@ -700,45 +700,30 @@ class App extends Component {
    */
   changeLogModal() {
     return <div>
-      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.1!</h2>
+      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.2!</h2>
       <h3>Here's a short summary of the changes included in this version:</h3>
       <ul>
         <li>
-          All character stats are now pulled via a combination of the <strong>swgoh.help</strong> API and the <strong>
-          crinolo-swgoh.glitch.me</strong> API. This means that you don't have to put your character stats in
-          manually anymore! You'll notice that all of your characters show up with no level, no gear level, and 1 star.
-          Just pull your data again and everything should display properly!
+          Now, rather than selecting stat weights for <strong>Offense</strong> and <strong>Defense</strong>, characters
+          are optimized by selecting weights for <strong>Physical Damage</strong>, <strong>Special Damage</strong>
+          , <strong>Armor</strong>, and <strong>Resistance</strong>. This means that you now have the opportunity to
+          give different weights to different attacks for characters that deal both physical and special damage. All
+          optimization targets have been updated to match this new format.
         </li>
         <li>
-          There is now only one list for selected characters. Any characters that you previously had locked should now
-          simply be listed as available. Don't worry! You can still lock your characters, and it works exactly like it
-          did before. It's just a different interface.
+          When reviewing the mods that the optimizer suggests, the optimizer will now show you not only the sum of the
+          stats on the mods, but their effect on your character's total stats! Now you can easily see what the final
+          speed of your arena team will be, or more easily target specific speeds, damage numbers, or critical chance
+          numbers for various phases of the raids!
         </li>
         <li>
-          You can now see what you're targeting for each character's mods quickly in the selected characters list, and
-          you can change it by simply selecting a different target from the dropdown. This is also how you lock
-          characters - simply select "Lock" from the dropdown list. No matter where the character is in the selected
-          list, their mods won't be used at all for your other characters. This way, you don't need to remember the order
-          you optimized your characters in - simply lock the ones at the top and add new characters below them. Then, when
-          you're ready to optimize again, choose a different target!
-        </li>
-        <li>
-          You can now save optimization targets by giving them names! Simply enter a name when selecting stat weights,
-          and the tool will display it as a target on the selected character. When you go to select targets for that
-          character later, all the named targets that you've made (and everything that comes by default) will be
-          available for selection. Giving a target the same name as an existing target will overwrite it.
-        </li>
-        <li>
-          There's now a simpler way to select stat values. If you select a custom optimization target, or click the
-          "edit" button on a selected character, the new edit modal will pop up. Under "basic" mode, all stats are given
-          a value from -100 to 100. These values are normalized approximately by the maximum value of that stat that can
-          be found on mods. This should work a little more closely to a gut feel if you simply give the stats weights
-          based on their relative values to a character. If you want to go back to the old way of editing stat values,
-          simply click the mode toggle over to "advanced", and the stats will work exactly like before! Your previous
-          character settings are all saved under the "unnamed" target. Most of these will probably default to
-          "advanced". Play around with both modes to see the difference!
+          Because many of the default optimization targets have changed, I've added the ability to reset all characters
+          to their default targets. This will reset any optimization target that has the same name as one of the
+          defaults, but will leave any custom targets unchanged. This is meant to be a quick way to either accept
+          changes after a major update like this, or to reset your characters if you don't like the changes you've made.
         </li>
       </ul>
+      <h3>Happy Modding!</h3>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.setState({showChangeLog: false})}>OK</button>
       </div>
