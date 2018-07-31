@@ -10,7 +10,7 @@ import Modal from "../../components/Modal/Modal";
 import WarningLabel from "../../components/WarningLabel/WarningLabel";
 import Spinner from "../../components/Spinner/Spinner";
 import Character from "../../domain/Character";
-import BaseStats, {NullBaseStats} from "../../domain/BaseStats";
+import BaseStats, {NullCharacterStats} from "../../domain/CharacterStats";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
 import {characters} from "../../constants/characters";
 
@@ -267,27 +267,35 @@ class App extends Component {
                   new BaseStats(
                     characterObject.base['Health'] || 0,
                     characterObject.base['Protection'] || 0,
-                    characterObject.base['Physical Damage'] || 0,
-                    characterObject.base['Special Damage'] || 0,
-                    baseCharacter.physDmgPct,
                     characterObject.base['Speed'] || 0,
+                    characterObject.base['Potency'] || 0,
+                    characterObject.base['Tenacity'] || 0,
+                    characterObject.base['Physical Damage'] || 0,
+                    characterObject.base['Physical Critical Rating'] || 0,
                     characterObject.base['Armor'] || 0,
-                    characterObject.base['Resistance'] || 0
+                    characterObject.base['Special Damage'] || 0,
+                    characterObject.base['Special Critical Rating'] || 0,
+                    characterObject.base['Resistance'] || 0,
+                    baseCharacter.physDmgPct
                   ) :
-                  NullBaseStats;
+                  NullCharacterStats;
 
                 const totalStats = characterObject.total ?
                   new BaseStats(
                     characterObject.total['Health'] || 0,
                     characterObject.total['Protection'] || 0,
-                    characterObject.total['Physical Damage'] || 0,
-                    characterObject.total['Special Damage'] || 0,
-                    baseCharacter.physDmgPct,
                     characterObject.total['Speed'] || 0,
+                    characterObject.total['Potency'] || 0,
+                    characterObject.total['Tenacity'] || 0,
+                    characterObject.total['Physical Damage'] || 0,
+                    characterObject.total['Physical Critical Rating'] || 0,
                     characterObject.total['Armor'] || 0,
-                    characterObject.total['Resistance'] || 0
+                    characterObject.total['Special Damage'] || 0,
+                    characterObject.total['Special Critical Rating'] || 0,
+                    characterObject.total['Resistance'] || 0,
+                    baseCharacter.physDmgPct
                   ) :
-                  NullBaseStats;
+                  NullCharacterStats;
 
                 baseCharacter.baseStats = baseStats;
                 baseCharacter.totalStats = totalStats;
@@ -295,7 +303,7 @@ class App extends Component {
             });
 
             const errorCharacters = Object.values(characters).filter(
-              character => character.baseStats === NullBaseStats || character.totalStats === NullBaseStats
+              character => character.baseStats === NullCharacterStats || character.totalStats === NullCharacterStats
             ).map(character => character.name);
             const errorMessage = errorCharacters.length > 0 ?
               'Missing stats for characters: ' + errorCharacters.join(', ') +

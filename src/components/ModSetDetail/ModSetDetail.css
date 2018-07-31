@@ -3,13 +3,13 @@
   position: relative;
   border: 1px solid dodgerblue;
   background-color: rgba(0, 0, 96, .5);
-  padding: 1em 1em 3em;
+  padding: 1em;
 }
 
 .mod-set-detail .summary {
   display: inline-block;
   vertical-align: top;
-  margin: 0 2em;
+  margin: 0 0 0 1em;
 }
 
 .mod-set-detail .summary table {
@@ -26,34 +26,32 @@
 
 .mod-set-detail .summary table td {
   padding: .2em .5em;
+  font-size: .95em;
 }
 
 .mod-set-detail .summary table tr:nth-child(odd) td {
   background-color: rgb(30, 47, 70);
 }
 
-.mod-set-detail .summary table tr:nth-child(odd) td.stat-value {
-  color: rgb(117, 203, 203);
-}
-
 .mod-set-detail .summary table tr:nth-child(even) td {
   background-color: rgb(28, 56, 93);
 }
 
-.mod-set-detail .summary table tr:nth-child(even) td.stat-value {
-  color: rgb(28, 169, 212);
+.mod-set-detail .summary td.stat-value {
+  color: white;
+}
+
+.mod-set-detail .summary td.stat-value .mods-value {
+  color: #19ccb4;
 }
 
 .mod-set-detail .summary table td.stat-type {
   text-align: left;
+  max-width: 9em;
 }
 
 .mod-set-detail .summary table td.stat-value {
   text-align: right;
-}
-
-.mod-set-detail .summary table td.stat-diff {
-  /*text-shadow: none;*/
 }
 
 .mod-set-detail .summary table td.stat-diff.increase {
@@ -68,8 +66,8 @@
   color: #e64343;
 }
 
-.mod-set-detail .summary .set-value {
+.mod-set-detail .set-value {
   position: absolute;
-  right: 1em;
+  left: 1em;
   bottom: 1em;
 }

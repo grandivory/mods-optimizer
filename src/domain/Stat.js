@@ -24,7 +24,7 @@ class Stat {
    * value was updated
    */
   updateDisplayValue() {
-    this.displayValue = `${this.value}`;
+    this.displayValue = `${this.value % 1 ? Math.round(this.value * 100) / 100 : this.value}`;
   }
 
   /**
