@@ -215,6 +215,16 @@ button.red:active, .button.red:active {
   border: 1px inset red;
 }
 
+button.blue, .button.blue {
+  background-color: #0b4884;
+  border: 1px outset dodgerblue;
+  color: white !important;
+}
+
+button.blue:active, .button.blue:active {
+  border: 1px inset dodgerblue;
+}
+
 button:hover, button:focus,
 .button:hover, .button:focus {
   outline: 0;
@@ -235,7 +245,7 @@ nav button.active {
 }
 
 .modal.reset-modal {
-  width: 50em;
+  width: 40em;
 }
 
 .modal.error-modal {
@@ -288,7 +298,7 @@ strong {
 }
 
 .sidebar-actions button {
-  margin-bottom: 1em;
+  margin-bottom: .5em;
 }
 
 .sidebar-actions button:last-of-type {

@@ -7,7 +7,7 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 import Modal from "../../components/Modal/Modal";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import Toggle from "../../components/Toggle/Toggle";
-import {charDefaults} from "../../constants/characters";
+import {characters, charDefaults} from "../../constants/characters";
 import Character from "../../domain/Character";
 
 class CharacterEditView extends React.Component {
@@ -191,9 +191,27 @@ class CharacterEditView extends React.Component {
     });
   }
 
-  cancelEdit() {
+  /**
+   * Reset any named optimization targets to their default values for all characters
+   */
+  resetAllCharacters() {
+    Object.values(characters).forEach(character => {
+      const characterDefault = charDefaults[character.baseID];
+      if (!characterDefault) {
+        return;
+      }
+
+      character.namedPlans = Object.assign(character.namedPlans, characterDefault.namedPlans);
+
+      // If the character had one of the default plans selected, update the selected plan to match the newly-reset value
+      if (Object.keys(characterDefault.namedPlans).includes(character.optimizationPlan.name)) {
+        character.optimizationPlan = characterDefault.namedPlans[character.optimizationPlan.name];
+      }
+    });
+
+    this.saveState();
     this.setState({
-      'editCharacter': null
+      resetCharsModal: false
     });
   }
 
@@ -243,6 +261,7 @@ class CharacterEditView extends React.Component {
       </div>
       <Modal show={editCharacter} content={this.characterEditModal(editCharacter)}/>
       <Modal show={this.state.instructions} className={'instructions'} content={this.instructionsModal()}/>
+      <Modal show={this.state.resetCharsModal} className={'reset-modal'} content={this.resetCharsModal()}/>
     </div>;
   }
 
@@ -276,6 +295,13 @@ class CharacterEditView extends React.Component {
         disabled={this.state.selectedCharacters.length === 0}
       >
         Optimize my mods!
+      </button>
+      <button
+        type={'button'}
+        className={'blue'}
+        onClick={() => this.setState({resetCharsModal: true})}
+      >
+        Reset all characters
       </button>
     </div>
   }
@@ -391,7 +417,7 @@ class CharacterEditView extends React.Component {
       {'advanced' === this.state.editMode && this.advancedForm(character.optimizationPlan)}
       <div className={'actions'}>
         {resetButton}
-        <button type={'button'} onClick={this.cancelEdit.bind(this)}>Cancel</button>
+        <button type={'button'} onClick={() => this.setState({editCharacter: null})}>Cancel</button>
         <button type={'submit'}>Save</button>
       </div>
     </form>;
@@ -751,6 +777,26 @@ class CharacterEditView extends React.Component {
         <button type={'button'} onClick={() => this.setState({'instructions': false})}>OK</button>
       </div>
     </div>;
+  }
+
+  /**
+   * Renders an "Are you sure?" modal to reset all characters to their default optimization targets
+   *
+   * @return JSX Element
+   */
+  resetCharsModal() {
+    return <div>
+      <h2>Are you sure you want to reset all characters to defaults?</h2>
+      <p>
+        This will <strong>not</strong> overwrite any new optimization targets that you've saved, but if you've edited
+        any existing targets, or if any new targets have been created that have the same name as one that you've made,
+        then it will be overwritten.
+      </p>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.setState({resetCharsModal: false})}>Cancel</button>
+        <button type={'button'} className={'red'} onClick={this.resetAllCharacters.bind(this)}>Reset</button>
+      </div>
+    </div>
   }
 }
 
