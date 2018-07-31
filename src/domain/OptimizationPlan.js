@@ -141,8 +141,8 @@ class OptimizationPlan {
     planObject.physDmg = this.rawPhysDmg;
     planObject.specDmg = this.rawSpecDmg;
     planObject.critChance = this.rawCritChance;
-    planObject.armor = this.armor;
-    planObject.resistance = this.resistance;
+    planObject.armor = this.rawArmor;
+    planObject.resistance = this.rawResistance;
     planObject.accuracy = this.rawAccuracy;
     planObject.critAvoid = this.rawCritAvoid;
 
@@ -165,7 +165,8 @@ class OptimizationPlan {
       planJson.critDmg,
       planJson.potency,
       planJson.tenacity,
-      planJson.offense,
+      planJson.physDmg,
+      planJson.specDmg,
       planJson.critChance,
       planJson.armor,
       planJson.resistance,
