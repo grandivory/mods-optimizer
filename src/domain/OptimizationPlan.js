@@ -113,8 +113,8 @@ class OptimizationPlan {
       OptimizationPlan.valueIsBasic(this.rawPhysDmg) &&
       OptimizationPlan.valueIsBasic(this.rawSpecDmg) &&
       OptimizationPlan.valueIsBasic(this.rawCritChance) &&
-      OptimizationPlan.valueIsBasic(this.rawArmor) &&
-      OptimizationPlan.valueIsBasic(this.rawResistance) &&
+      OptimizationPlan.valueIsBasic(this.rawArmor + this.rawResistance) &&
+      this.rawArmor === this.rawResistance &&
       OptimizationPlan.valueIsBasic(this.rawAccuracy) &&
       OptimizationPlan.valueIsBasic(this.rawCritAvoid);
   }
@@ -214,8 +214,8 @@ class OptimizationPlan {
       planJson.critDmg * OptimizationPlan.statWeight.critDmg,
       planJson.potency * OptimizationPlan.statWeight.potency,
       planJson.tenacity * OptimizationPlan.statWeight.tenacity,
-      planJson.offense * OptimizationPlan.statWeight.offense * physDmgPct,
-      planJson.offense * OptimizationPlan.statWeight.offense * (1 - physDmgPct),
+      planJson.offense * OptimizationPlan.statWeight.physDmg * physDmgPct,
+      planJson.offense * OptimizationPlan.statWeight.specDmg * (1 - physDmgPct),
       planJson.critChance * OptimizationPlan.statWeight.critChance,
       (planJson.defense * OptimizationPlan.statWeight.armor) / 2,
       (planJson.defense * OptimizationPlan.statWeight.resistance) / 2,
@@ -237,7 +237,7 @@ OptimizationPlan.statWeight = {
   'offense': 150,
   'critChance': 10,
   'armor': 33,
-  'resistance': 16,
+  'resistance': 33,
   'accuracy': 50,
   'critAvoid': 25
 };

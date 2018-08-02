@@ -148,11 +148,11 @@ class CharacterEditView extends React.Component {
         form['critDmg-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critDmg,
         form['potency-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.potency,
         form['tenacity-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.tenacity,
-        form['physDmg-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.offense,
-        form['specDmg-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.offense,
+        form['physDmg-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.physDmg,
+        form['specDmg-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.specDmg,
         form['critChance-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critChance,
-        form['armor-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.defense,
-        form['resistance-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.defense,
+        form['armor-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.armor,
+        form['resistance-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.resistance,
         form['accuracy-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.accuracy,
         form['critAvoid-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critAvoid,
       );
@@ -169,8 +169,8 @@ class CharacterEditView extends React.Component {
         form['physDmg-stat'].valueAsNumber,
         form['specDmg-stat'].valueAsNumber,
         form['critChance-stat'].valueAsNumber,
-        form['armor-stat'].valueAsNumber,
-        form['resistance-stat'].valueAsNumber,
+        form['defense-stat'].valueAsNumber / 2,
+        form['defense-stat'].valueAsNumber / 2,
         form['accuracy-stat'].valueAsNumber,
         form['critAvoid-stat'].valueAsNumber,
       );
@@ -530,23 +530,12 @@ class CharacterEditView extends React.Component {
         />
       </div>
       <div className={'form-row'}>
-        <label htmlFor="armor-stat">Armor:</label>
+        <label htmlFor={'defense-stat'}>Defense:</label>
         <RangeInput
           editable={true}
-          id={'armor-stat'}
-          name={'armor-stat'}
-          defaultValue={optimizationPlan.rawArmor}
-          min={-100}
-          max={100}
-        />
-      </div>
-      <div className={'form-row'}>
-        <label htmlFor="resistance-stat">Resistance:</label>
-        <RangeInput
-          editable={true}
-          id={'resistance-stat'}
-          name={'resistance-stat'}
-          defaultValue={optimizationPlan.rawResistance}
+          id={'defense-stat'}
+          name={'defense-stat'}
+          defaultValue={optimizationPlan.rawArmor + optimizationPlan.rawResistance}
           min={-100}
           max={100}
         />
@@ -660,7 +649,7 @@ class CharacterEditView extends React.Component {
           name={'physDmg-stat-advanced'}
           type={'number'}
           step={.01}
-          defaultValue={optimizationPlan.offense}
+          defaultValue={optimizationPlan.physDmg}
         />
       </div>
       <div className={'form-row'}>
@@ -670,7 +659,7 @@ class CharacterEditView extends React.Component {
           name={'specDmg-stat-advanced'}
           type={'number'}
           step={.01}
-          defaultValue={optimizationPlan.offense}
+          defaultValue={optimizationPlan.specDmg}
         />
       </div>
       <div className={'form-row'}>
@@ -680,7 +669,7 @@ class CharacterEditView extends React.Component {
           name={'armor-stat-advanced'}
           type={'number'}
           step={.01}
-          defaultValue={optimizationPlan.defense}
+          defaultValue={optimizationPlan.armor}
         />
       </div>
       <div className={'form-row'}>
@@ -690,7 +679,7 @@ class CharacterEditView extends React.Component {
           name={'resistance-stat-advanced'}
           type={'number'}
           step={.01}
-          defaultValue={optimizationPlan.defense}
+          defaultValue={optimizationPlan.resistance}
         />
       </div>
       <div className={'form-row'}>

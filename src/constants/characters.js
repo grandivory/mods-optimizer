@@ -121,9 +121,9 @@ let charactersArray = [
     'Baze Malbus',
     'BAZEMALBUS',
     DamageType.physical,
-    new OptimizationPlan('Slow Tank', 50, 50, 0, 0, 10, 25, 0, 0, 0, 20, 10, 0, 0),
+    new OptimizationPlan('Slow Tank', 50, 50, 0, 0, 10, 25, 0, 0, 0, 12.5, 12.5, 0, 0),
     {
-      'Slow Tank': new OptimizationPlan('Slow Tank', 50, 50, 0, 0, 10, 25, 0, 0, 0, 20, 10, 0, 0),
+      'Slow Tank': new OptimizationPlan('Slow Tank', 50, 50, 0, 0, 10, 25, 0, 0, 0, 12.5, 12.5, 0, 0),
       'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 10, 10, -100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     },
     ['Light Side', 'Rebel', 'Rogue One', 'Tank'],
@@ -258,9 +258,9 @@ let charactersArray = [
     'CC-2224 "Cody"',
     'CC2224',
     DamageType.mixed,
-    new OptimizationPlan('Leader', 0, 0, 100, 50, 25, 0, 25, 0, 50, 25, 25, 0, 0),
+    new OptimizationPlan('Leader', 0, 0, 100, 50, 25, 0, 25, 0, 50, 12.5, 12.5, 0, 0),
     {
-      'Leader': new OptimizationPlan('Leader', 0, 0, 100, 50, 25, 0, 25, 0, 50, 25, 25, 0, 0),
+      'Leader': new OptimizationPlan('Leader', 0, 0, 100, 50, 25, 0, 25, 0, 50, 12.5, 12.5, 0, 0),
       'Non-leader': optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('Non-leader')
     },
     ['Light Side', 'Galactic Republic', 'Clone Trooper', 'Attacker'],
@@ -332,9 +332,9 @@ let charactersArray = [
     'Clone Wars Chewbacca',
     'CLONEWARSCHEWBACCA',
     DamageType.physical,
-    new OptimizationPlan('Tanky', 50, 50, 100, 0, 0, 25, 0, 0, 0, 20, 10, 0, 0),
+    new OptimizationPlan('Tanky', 50, 50, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0),
     {
-      'Tanky': new OptimizationPlan('Tanky', 50, 50, 100, 0, 0, 25, 0, 0, 0, 20, 10, 0, 0)
+      'Tanky': new OptimizationPlan('Tanky', 50, 50, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0)
     },
     ['Light Side', 'Galactic Republic', 'Scoundrel', 'Tank'],
     ['CWC'],
@@ -746,11 +746,11 @@ let charactersArray = [
     'General Kenobi',
     'GENERALKENOBI',
     DamageType.physical,
-    new OptimizationPlan('Balanced', 50, 100, 50, 0, 0, 50, 0, 0, 0, 40, 20, 0, 0),
+    new OptimizationPlan('Balanced', 50, 100, 50, 0, 0, 50, 0, 0, 0, 25, 25, 0, 0),
     {
-      'Speedy Tank': new OptimizationPlan('Speedy Tank', 25, 50, 100, 0, 0, 25, 0, 0, 0, 20, 10, 0, 0),
-      'Balanced': new OptimizationPlan('Balanced', 50, 100, 50, 0, 0, 50, 0, 0, 0, 40, 20, 0, 0),
-      'Slow Tank': new OptimizationPlan('Slow Tank', 50, 100, 0, 0, 0, 50, 0, 0, 0, 40, 20, 0, 0),
+      'Speedy Tank': new OptimizationPlan('Speedy Tank', 25, 50, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0),
+      'Balanced': new OptimizationPlan('Balanced', 50, 100, 50, 0, 0, 50, 0, 0, 0, 25, 25, 0, 0),
+      'Slow Tank': new OptimizationPlan('Slow Tank', 50, 100, 0, 0, 0, 50, 0, 0, 0, 25, 25, 0, 0),
       'hSTR P2 Jedi': new OptimizationPlan('hSTR P2 Jedi', 0, 100, 50, 0, 0, 0, 10, 0, 25, 100, 0, 0, 0)
     },
     ['Light Side', 'Galactic Republic', 'Jedi', 'Tank'],
@@ -920,9 +920,9 @@ let charactersArray = [
     'IG-100 MagnaGuard',
     'MAGNAGUARD',
     DamageType.physical,
-    new OptimizationPlan('Balanced', 20, 20, 100, 25, 50, 25, 25, 0, 25, 20, 10, 0, 0),
+    new OptimizationPlan('Balanced', 20, 20, 100, 25, 50, 25, 25, 0, 25, 12.5, 12.5, 0, 0),
     {
-      'Balanced': new OptimizationPlan('Balanced', 20, 20, 100, 25, 50, 25, 25, 0, 25, 20, 10, 0, 0)
+      'Balanced': new OptimizationPlan('Balanced', 20, 20, 100, 25, 50, 25, 25, 0, 25, 12.5, 12.5, 0, 0)
     },
     ['Dark Side', 'Separatist', 'Droid', 'Tank'],
     [],
@@ -1055,9 +1055,9 @@ let charactersArray = [
     'Jedi Knight Guardian',
     'JEDIKNIGHTGUARDIAN',
     DamageType.physical,
-    new OptimizationPlan('PvE', 40, 20, 100, 0, 50, 25, 0, 0, 0, 20, 10, 0, 0),
+    new OptimizationPlan('PvE', 40, 20, 100, 0, 50, 25, 0, 0, 0, 12.5, 12.5, 0, 0),
     {
-      'PvE': new OptimizationPlan('PvE', 40, 20, 100, 0, 50, 25, 0, 0, 0, 20, 10, 0, 0)
+      'PvE': new OptimizationPlan('PvE', 40, 20, 100, 0, 50, 25, 0, 0, 0, 12.5, 12.5, 0, 0)
     },
     ['Light Side', 'Galactic Republic', 'Jedi', 'Tank'],
     ['JKG'],
@@ -1151,10 +1151,10 @@ let charactersArray = [
     'L3-37',
     'L3_37',
     DamageType.physical,
-    new OptimizationPlan('Tanky', 40, 20, 50, 0, 25, 25, 0, 0, 0, 20, 10, 0, 0),
+    new OptimizationPlan('Tanky', 40, 20, 50, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0),
     {
-      'Tanky': new OptimizationPlan('Tanky', 40, 20, 50, 0, 25, 25, 0, 0, 0, 20, 10, 0, 0),
-      'Speedy': new OptimizationPlan('Speedy', 40, 20, 100, 0, 25, 25, 0, 0, 0, 20, 10, 0, 0)
+      'Tanky': new OptimizationPlan('Tanky', 40, 20, 50, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0),
+      'Speedy': new OptimizationPlan('Speedy', 40, 20, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0)
     },
     ['Light Side', 'Scoundrel', 'Droid', 'Tank'],
     ['#solo'],
@@ -1176,9 +1176,9 @@ let charactersArray = [
     'Lobot',
     'LOBOT',
     DamageType.physical,
-    new OptimizationPlan('PvE', 0, 0, 100, 0, 25, 25, 0, 0, 0, 25, 25, 0, 0),
+    new OptimizationPlan('PvE', 0, 0, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0),
     {
-      'PvE': new OptimizationPlan('PvE', 0, 0, 100, 0, 25, 25, 0, 0, 0, 25, 25, 0, 0)
+      'PvE': new OptimizationPlan('PvE', 0, 0, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0)
     },
     ['Light Side', 'Rebel', 'Support'],
     [],
@@ -1388,9 +1388,9 @@ let charactersArray = [
     'Paploo',
     'PAPLOO',
     DamageType.physical,
-    new OptimizationPlan('Fast Tank', 25, 25, 100, 0, 0, 25, 0, 0, 0, 20, 10, 0, 0),
+    new OptimizationPlan('Fast Tank', 25, 25, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0),
     {
-      'Fast Tank': new OptimizationPlan('Fast Tank', 25, 25, 100, 0, 0, 25, 0, 0, 0, 20, 10, 0, 0)
+      'Fast Tank': new OptimizationPlan('Fast Tank', 25, 25, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0)
     },
     ['Light Side', 'Ewok', 'Tank'],
     ['Murderbears'],
@@ -1599,9 +1599,9 @@ let charactersArray = [
     'Savage Opress',
     'SAVAGEOPRESS',
     DamageType.physical,
-    new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 25, 25, 0, 0),
+    new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 12.5, 12.5, 0, 0),
     {
-      'Balanced': new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 25, 25, 0, 0)
+      'Balanced': new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 12.5, 12.5, 0, 0)
     },
     ['Dark Side', 'Sith', 'Attacker'],
     ['zavage'],
@@ -1660,9 +1660,9 @@ let charactersArray = [
     'Sith Trooper',
     'SITHTROOPER',
     DamageType.physical,
-    new OptimizationPlan('PvP', 25, 25, 50, 0, 0, 15, 0, 0, 0, 40, 20, 0, 0),
+    new OptimizationPlan('PvP', 25, 25, 50, 0, 0, 15, 0, 0, 0, 25, 25, 0, 0),
     {
-      'PvP': new OptimizationPlan('PvP', 25, 25, 50, 0, 0, 15, 0, 0, 0, 40, 20, 0, 0)
+      'PvP': new OptimizationPlan('PvP', 25, 25, 50, 0, 0, 15, 0, 0, 0, 25, 25, 0, 0)
     },
     ['Dark Side', 'Sith', 'Tank'],
     ['SiT', 'Nightmare'],
@@ -1685,9 +1685,9 @@ let charactersArray = [
     'Stormtrooper',
     'STORMTROOPER',
     DamageType.physical,
-    new OptimizationPlan('Speedy Tank', 25, 25, 50, 0, 0, 25, 0, 0, 0, 40, 20, 0, 0),
+    new OptimizationPlan('Speedy Tank', 25, 25, 50, 0, 0, 25, 0, 0, 0, 25, 25, 0, 0),
     {
-      'Speedy Tank': new OptimizationPlan('Speedy Tank', 25, 25, 50, 0, 0, 25, 0, 0, 0, 40, 20, 0, 0)
+      'Speedy Tank': new OptimizationPlan('Speedy Tank', 25, 25, 50, 0, 0, 25, 0, 0, 0, 25, 25, 0, 0)
     },
     ['Dark Side', 'Empire', 'Imperial Trooper', 'Tank'],
     ['Troopers'],
@@ -1710,9 +1710,9 @@ let charactersArray = [
     'Sun Fac',
     'SUNFAC',
     DamageType.physical,
-    new OptimizationPlan('Tanky', 40, 40, 100, 0, 25, 25, 0, 0, 0, 20, 10, 0, 0),
+    new OptimizationPlan('Tanky', 40, 40, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0),
     {
-      'Tanky': new OptimizationPlan('Tanky', 40, 40, 100, 0, 25, 25, 0, 0, 0, 20, 10, 0, 0)
+      'Tanky': new OptimizationPlan('Tanky', 40, 40, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0)
     },
     ['Dark Side', 'Separatist', 'Geonosian', 'Tank', 'Crew Member'],
     [],

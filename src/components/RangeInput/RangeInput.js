@@ -7,7 +7,7 @@ class RangeInput extends React.Component {
     const defaultValue = this.props.defaultValue;
     const min = this.props.min || 0;
     const max = this.props.max || 100;
-    const step = this.props.step || 1;
+    const step = 'undefined' === typeof this.props.step ? 1 : this.props.step;
     const isPercent = this.props.isPercent || false;
     const editable = this.props.editable || false;
     const onChange = this.props.onChange || function() {};
