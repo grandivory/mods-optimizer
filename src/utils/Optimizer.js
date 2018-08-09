@@ -187,8 +187,15 @@ class Optimizer {
     for (let candidateSet of candidateSets) {
       candidateValues.set(candidateSet, candidateSet.getOptimizationValue(character));
     }
-    candidateSets.sort((left, right) => candidateValues.get(right) - candidateValues.get(left));
-
+    candidateSets.sort((left, right) => {
+      if (candidateValues.get(left) !== candidateValues.get(right)) {
+        return candidateValues.get(right) - candidateValues.get(left);
+      } else {
+        return right.mods().filter(mod => mod.currentCharacter === character).length -
+          left.mods().filter(mod => mod.currentCharacter === character).length;
+      }
+    });
+    
     return candidateSets[0];
   }
 

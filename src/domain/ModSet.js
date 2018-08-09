@@ -47,6 +47,20 @@ class ModSet {
   }
 
   /**
+   * Check whether this set is equal to another set
+   *
+   * @returns boolean
+   */
+  equals(that) {
+    return this.square === that.square &&
+      this.arrow === that.arrow &&
+      this.diamond === that.diamond &&
+      this.triangle === that.triangle &&
+      this.circle === that.circle &&
+      this.cross === that.cross;
+  }
+
+  /**
    * Overwrite the slots given in `slots` with the mods from modSet
    *
    * @param slots Array
