@@ -108,8 +108,29 @@ class CharacterEditView extends React.Component {
     const selectedCharacters = this.state.selectedCharacters;
 
     if (availableCharacters.includes(character)) {
-      availableCharacters.splice(availableCharacters.indexOf(character), 1)
+      availableCharacters.splice(availableCharacters.indexOf(character), 1);
       selectedCharacters.push(character);
+
+      this.saveState();
+
+      this.setState({
+        availableCharacters: availableCharacters,
+        selectedCharacters: selectedCharacters
+      });
+    }
+  }
+
+  /**
+   * Move a character from selectedCharacters back to availableCharacters
+   * @param character Character
+   */
+  unselectCharacter(character) {
+    const availableCharacters = this.state.availableCharacters;
+    const selectedCharacters = this.state.selectedCharacters;
+
+    if (selectedCharacters.includes(character)) {
+      selectedCharacters.splice(selectedCharacters.indexOf(character), 1);
+      availableCharacters.push(character);
 
       this.saveState();
 
@@ -240,6 +261,7 @@ class CharacterEditView extends React.Component {
           draggable={true}
           characters={selectedCharacters}
           onDrop={this.characterDrop()}
+          onDoubleClick={this.unselectCharacter.bind(this)}
           onEdit={(character, planName) => this.editCharacter(character, planName)}
           saveState={this.saveState}
         />

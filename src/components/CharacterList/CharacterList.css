@@ -23,6 +23,10 @@
   opacity: .75;
 }
 
+.character-block.drop-character * {
+  pointer-events: none;
+}
+
 .character-block .avatar {
   grid-row: 1 / span 2;
   grid-column: 1;

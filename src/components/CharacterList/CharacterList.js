@@ -56,10 +56,10 @@ class CharacterList extends React.Component {
   renderCharacterBlock(character) {
     const defaultChar = charDefaults[character.baseID];
     const draggable = this.props.draggable;
-    const onEdit = 'function' === typeof this.props.onEdit ? this.props.onEdit : function() {
-    };
-    const saveState = 'function' === typeof this.props.saveState ? this.props.saveState : function() {
-    };
+    const onEdit = 'function' === typeof this.props.onEdit ? this.props.onEdit : function() {};
+    const saveState = 'function' === typeof this.props.saveState ? this.props.saveState : function() {};
+    const onDoubleClick = 'function' === typeof this.props.onDoubleClick ? this.props.onDoubleClick : function() {};
+
     const selectedPlan = character.isLocked ?
       'lock' :
       Object.keys(character.namedPlans).find(
@@ -100,7 +100,8 @@ class CharacterList extends React.Component {
                 onDragEnter={this.characterBlockDragEnter()}
                 onDragOver={this.characterBlockDragOver()}
                 onDragLeave={this.characterBlockDragLeave()}
-                onDrop={this.characterBlockDrop(character.name)}>
+                onDrop={this.characterBlockDrop(character.name)}
+                onDoubleClick={() => onDoubleClick(character)}>
       <CharacterAvatar character={character}/>
       <div className={'character-name'}>{character.name}</div>
       <div className={'target'}>
