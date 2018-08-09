@@ -560,6 +560,18 @@ let charactersArray = [
     false
   ),
   Character.basicCharacter(
+    'Embo',
+    'EMBO',
+    DamageType.physical,
+    new OptimizationPlan('PvP', 0, 20, 100, 100, 0, 0, 25, 0, 25, 0, 0, 0, 0),
+    {
+      'PvP': new OptimizationPlan('PvP', 0, 20, 100, 100, 0, 0, 25, 0, 25, 0, 0, 0, 0)
+    },
+    ['Dark Side', 'Bounty Hunter', 'Scoundrel', 'Attacker'],
+    [],
+    false
+  ),
+  Character.basicCharacter(
     'Emperor Palpatine',
     'EMPERORPALPATINE',
     DamageType.special,
