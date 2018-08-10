@@ -17,7 +17,7 @@ import {characters} from "../../constants/characters";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.version = '1.2.3';
+    this.version = '1.2.4';
 
     this.state = {
       'view': 'optimize',
@@ -451,7 +451,12 @@ class App extends Component {
 
     if (keepOldMods) {
       let oldMods = {};
-      this.state.mods.forEach(mod => oldMods[mod.id] = mod);
+      this.state.mods.forEach(mod => {
+        oldMods[mod.id] = mod;
+
+        // Unassign all old mods before adding in new ones. Any mods that are still assigned will be in the modsJson
+        oldMods[mod.id].currentCharacter = null;
+      });
 
       mods = Object.values(Object.assign(oldMods, newMods));
     } else {
