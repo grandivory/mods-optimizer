@@ -64,7 +64,7 @@ class ExploreView extends React.Component {
 
     return (
       [
-        <div className={'sidebar'}>
+        <div className={'sidebar'} key={'sidebar'}>
           <div className={'filters'} key={'filters'}>
             <ModFilter
               mods={this.props.mods}

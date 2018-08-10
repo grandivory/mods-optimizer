@@ -195,7 +195,7 @@ class Optimizer {
           left.mods().filter(mod => mod.currentCharacter === character).length;
       }
     });
-    
+
     return candidateSets[0];
   }
 

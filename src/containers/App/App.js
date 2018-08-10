@@ -92,7 +92,7 @@ class App extends Component {
 
     const savedMods = window.localStorage.getItem('optimizer.mods');
     if (savedMods) {
-      state.mods = this.processMods(JSON.parse(savedMods), version);
+      state.mods = this.processMods(JSON.parse(savedMods), false);
     }
 
     state = Object.assign(state, this.restoreCharacterList(version));
@@ -178,7 +178,7 @@ class App extends Component {
     const me = this;
 
     xhr.open('POST', `https://api.mods-optimizer.swgoh.grandivory.com/playerprofile/`, true);
-    xhr.onload = function () {
+    xhr.onload = function() {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         if (xhr.status === 200) {
           try {
@@ -205,7 +205,7 @@ class App extends Component {
             });
 
             me.setState({
-              'mods': me.processMods(mods),
+              'mods': me.processMods(mods, document.getElementById('keep-old-mods').checked),
               'loading': false,
               'allyCode': allyCode
             });
@@ -370,7 +370,10 @@ class App extends Component {
       try {
         const fileMods = JSON.parse(event.target.result);
         if (fileMods.length > 0) {
-          const mods = me.processMods(JSON.parse(event.target.result));
+          const mods = me.processMods(
+            JSON.parse(event.target.result),
+            document.getElementById('keep-old-mods').checked
+          );
 
           me.setState({
             'mods': mods
@@ -433,14 +436,26 @@ class App extends Component {
    * Given a JSON representation of mods, read mods into memory in the format used by this application
    *
    * @param modsJson array A serialized representation of a player's mods
+   * @param keepOldMods boolean If true, will keep any mods already in state, even if they aren't found again
    *
    * @return Array[Mod]
    */
-  processMods(modsJson) {
+  processMods(modsJson, keepOldMods) {
     let mods = [];
+    let newMods = {};
 
     for (let fileMod of modsJson) {
-      mods.push(Mod.deserialize(fileMod, characters));
+      const mod = Mod.deserialize(fileMod, characters);
+      newMods[mod.id] = mod;
+    }
+
+    if (keepOldMods) {
+      let oldMods = {};
+      this.state.mods.forEach(mod => oldMods[mod.id] = mod);
+
+      mods = Object.values(Object.assign(oldMods, newMods));
+    } else {
+      mods = Object.values(newMods);
     }
 
     const statClassifier = new StatClassifier(this.calculateStatCategoryRanges(mods));
@@ -514,10 +529,10 @@ class App extends Component {
             saveState={this.saveState.bind(this)}
           />
           }
-          <Modal show={this.state.error} className={'error-modal'} content={this.errorModal(this.state.error)} />
-          <Modal show={this.state.reset} className={'reset-modal'} content={this.resetModal()} />
-          <Modal show={this.state.showChangeLog} className={'changelog-modal'} content={this.changeLogModal()} />
-          <Spinner show={this.state.loading} />
+          <Modal show={this.state.error} className={'error-modal'} content={this.errorModal(this.state.error)}/>
+          <Modal show={this.state.reset} className={'reset-modal'} content={this.resetModal()}/>
+          <Modal show={this.state.showChangeLog} className={'changelog-modal'} content={this.changeLogModal()}/>
+          <Spinner show={this.state.loading}/>
         </div>
         {this.footer()}
       </div>
@@ -564,7 +579,7 @@ class App extends Component {
                    return;
                  }
                  // Don't change the input if the user is hitting the arrow keys
-                 if ([38,40,37,39].includes(e.keyCode)) {
+                 if ([38, 40, 37, 39].includes(e.keyCode)) {
                    return;
                  }
 
@@ -589,7 +604,10 @@ class App extends Component {
         }}>
           Fetch my data!
         </button>
-      <br />
+        <input id={'keep-old-mods'} name={'keep-old-mods'} type={'checkbox'} value={'keep-old-mods'}
+               defaultChecked={true}/>
+        <label htmlFor={'keep-old-mods'}>Keep unequipped mods</label>
+        <br/>
         <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
         <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
         {showActions &&
@@ -650,10 +668,10 @@ class App extends Component {
       </p>
       <p>
         If you have a mods file from either the SCORPIO bot (check out the discord server below) or from the <a
-          className={'call-out'} target={'_blank'} rel={'noopener'}
-          href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy">
-          Google Sheet
-        </a>, you can drop them in the box below, or use the "Upload my mods!" button above!
+        className={'call-out'} target={'_blank'} rel={'noopener'}
+        href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy">
+        Google Sheet
+      </a>, you can drop them in the box below, or use the "Upload my mods!" button above!
       </p>
       <FileDropZone handler={this.readModsFile.bind(this)} label={'Drop your mods file here!'}/>
     </div>;
@@ -666,7 +684,7 @@ class App extends Component {
    */
   errorModal(errorMessage) {
     return <div>
-      <WarningLabel />
+      <WarningLabel/>
       <h2 key={'error-header'}>Error!</h2>
       <p key={'error-message'}>{errorMessage}</p>
       <div key={'error-actions'} className={'actions'}>
