@@ -13,11 +13,12 @@ import Character from "../../domain/Character";
 import BaseStats, {NullCharacterStats} from "../../domain/CharacterStats";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
 import {characters} from "../../constants/characters";
+import {modSets, modSlots, modStats} from "../../constants/enums";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.version = '1.2.4';
+    this.version = '1.2.5';
 
     this.state = {
       'view': 'optimize',
@@ -183,11 +184,17 @@ class App extends Component {
         if (xhr.status === 200) {
           try {
             const playerProfile = JSON.parse(xhr.responseText);
-            const roster = playerProfile.roster.filter(entry => entry.type === 'char');
+            const roster = playerProfile.roster.filter(entry => entry.type === 'CHARACTER');
             const mods = roster
               .map(character => character.mods.map(mod => {
                 mod.characterName = character.name;
                 mod.mod_uid = mod.id;
+                mod.set = modSets[mod.set];
+                mod.slot = modSlots[mod.slot];
+                mod.primaryBonusType = modStats[mod.primaryBonusType];
+                for (let i = 1; i <= 4; i++) {
+                  mod[`secondaryType_${i}`] = modStats[mod[`secondaryType_${i}`]];
+                }
                 return mod;
               }))
               .reduce((allMods, charMods) => allMods.concat(charMods), []);
@@ -611,7 +618,7 @@ class App extends Component {
         </button>
         <input id={'keep-old-mods'} name={'keep-old-mods'} type={'checkbox'} value={'keep-old-mods'}
                defaultChecked={true}/>
-        <label htmlFor={'keep-old-mods'}>Keep unequipped mods</label>
+        <label htmlFor={'keep-old-mods'}>Remember existing mods</label>
         <br/>
         <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
         <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
