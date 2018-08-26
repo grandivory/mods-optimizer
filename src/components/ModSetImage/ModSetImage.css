@@ -1,0 +1,88 @@
+.modset {
+  position: absolute;
+}
+
+.modset.gold {
+  filter: drop-shadow(0 0 .05em #eeca44);
+}
+.modset.gold path {
+  fill: #eeca44;
+}
+
+.modset.purple {
+  filter: drop-shadow(0 0 .05em #a35ef9);
+}
+.modset.purple path {
+  fill: #a35ef9;
+}
+
+.modset.blue {
+  filter: drop-shadow(0 0 .05em #2997f1);
+}
+.modset.blue path {
+  fill: #2997f1;
+}
+
+.modset.green {
+  filter: drop-shadow(0 0 .05em #8fff3a);
+}
+.modset.green path {
+  fill: #8fff3a;
+}
+
+.modset.gray {
+  filter: drop-shadow(0 0 .05em #ccfffe);
+}
+.modset.gray path {
+  fill: #ccfffe;
+}
+
+.modset path[class='2x'],
+.modset path.bang {
+  fill: #000000;
+}
+
+.mod-image.square .modset {
+  top: 2.18em;
+  right: .98em;
+  width: 1.3em;
+}
+
+.mod-image.arrow .modset {
+  top: 2.08em;
+  right: .98em;
+  width: 1.1em;
+}
+
+.mod-image.diamond .modset {
+  top: 2.54em;
+  left: 1.34em;
+  width: 1.3em;
+}
+
+.mod-image.triangle .modset {
+  top: 2.87em;
+  left: 1.39em;
+  width: 1.18em;
+}
+
+.mod-image.triangle .modset.potency {
+  top: 2.78em;
+}
+
+.mod-image.circle .modset {
+  top: 2.58em;
+  left: 1.35em;
+  width: 1.3em;
+}
+
+.mod-image.circle .modset.defense {
+  top: 2.62em;
+  left: 1.33em;
+}
+
+.mod-image.cross .modset {
+  top: 2.64em;
+  left: 1.41em;
+  width: 1.22em;
+}

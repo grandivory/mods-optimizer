@@ -1,6 +1,7 @@
 import React from 'react';
 import Pips from '../Pips/Pips';
 import './ModImage.css';
+import ModSetImage from "../ModSetImage/ModSetImage";
 
 function importImages(context) {
   let images = {};
@@ -23,6 +24,7 @@ class ModImage extends React.Component {
       <div className={'mod-image ' + mod.slot + extraClass}>
         <Pips pips={mod.pips} />
         <img src={mod_images[modImageName + '.png']} alt={modImageName} />
+        <ModSetImage type={mod.set.name} className={modColor}/>
         <div className={'mod-level ' + (15 === mod.level ? 'gold ' : 'gray ') + mod.slot}>{mod.level}</div>
       </div>
     );
@@ -30,7 +32,7 @@ class ModImage extends React.Component {
 
   // TODO: Update mod images to include mod color as well
   modImageName(mod) {
-    return mod.set.name + '_' + mod.slot;
+    return `${mod.slot}`;
   }
 
   modColor(mod) {
