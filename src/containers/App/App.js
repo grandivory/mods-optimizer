@@ -200,7 +200,7 @@ class App extends Component {
               .reduce((allMods, charMods) => allMods.concat(charMods), []);
 
             roster.forEach(character => {
-              const baseCharacter = Object.values(characters).find(c => c.name === character.name);
+              const baseCharacter = Object.values(characters).find(c => c.baseID === character.defId);
 
               if (baseCharacter) {
                 baseCharacter.level = character.level;

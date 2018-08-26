@@ -72,11 +72,24 @@ let charactersArray = [
     new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 10, 10, 20, 0, 0, 0, 0),
     {
       'PvP': new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 10, 10, 20, 0, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 0, 0, 20, 100, 0, 0, 25, 25, 0, 0, 0, 0, 0)
+      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 0, 0, 20, 100, 0, 0, 25, 25, 0, 0, 0, 0, 0),
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 15, 0, 50, 100, 0, 0, 30, 30, 0, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Separatist', 'Support'],
     ['AV', 'Zen', 'NS', 'hSTR NS', 'ABC'],
     false
+  ),
+  Character.basicCharacter(
+    'Aurra Sing',
+    'AURRA_SING',
+    DamageType.physical,
+    new OptimizationPlan('hSTR Phase 3', 0, 0, 75, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0),
+    {
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, 0, 75, 100, 0, 0, 50, 0, 10, 0, 0, 0, 0),
+      'PvP': new OptimizationPlan('PvP', 0, 0, 100, 80, 20, 0, 50, 0, 25, 0, 0, 0, 0)
+    },
+    ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker'],
+    []
   ),
   Character.basicCharacter(
     'B2 Super Battle Droid',
@@ -175,7 +188,8 @@ let charactersArray = [
     {
       'PvE': new OptimizationPlan('PvE', 0, 0, 50, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0),
       'PvP': optimizationStrategy['Speed, Crit, Physical Damage, Potency'].rename('PvP'),
-      'hSTR Phase 2': new OptimizationPlan('hSTR Phase 2', 0, 0, 100, 75, 0, 0, 25, 0, 50, 0, 0, 0, 0)
+      'hSTR Phase 2': new OptimizationPlan('hSTR Phase 2', 0, 0, 100, 75, 0, 0, 25, 0, 50, 0, 0, 0, 0),
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 50, 0, 0, 100, 0, 25, 0, 0, 0, 0)
     },
     ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker', 'Crew Member'],
     [],
@@ -529,7 +543,8 @@ let charactersArray = [
     DamageType.physical,
     new OptimizationPlan('PvP', 0, 0, 100, 0, 50, 0, 25, 0, 75, 0, 0, 0, 0),
     {
-      'PvP': new OptimizationPlan('PvP', 0, 0, 100, 0, 50, 0, 25, 0, 75, 0, 0, 0, 0)
+      'PvP': new OptimizationPlan('PvP', 0, 0, 100, 0, 50, 0, 25, 0, 75, 0, 0, 0, 0),
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 50, 0, 0, 100, 0, 25, 0, 0, 0, 0)
     },
     ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Attacker'],
     [],
@@ -565,7 +580,8 @@ let charactersArray = [
     DamageType.physical,
     new OptimizationPlan('PvP', 0, 20, 100, 100, 0, 0, 25, 0, 25, 0, 0, 0, 0),
     {
-      'PvP': new OptimizationPlan('PvP', 0, 20, 100, 100, 0, 0, 25, 0, 25, 0, 0, 0, 0)
+      'PvP': new OptimizationPlan('PvP', 0, 20, 100, 100, 0, 0, 25, 0, 25, 0, 0, 0, 0),
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, 0, 50, 25, 0, 0, 75, 0, 100, 0, 0, 0, 0)
     },
     ['Dark Side', 'Bounty Hunter', 'Scoundrel', 'Attacker'],
     [],
@@ -590,7 +606,8 @@ let charactersArray = [
     new OptimizationPlan('Speedy', 0, 0, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0),
     {
       'Speedy': new OptimizationPlan('Speedy', 0, 0, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0),
-      'Offense': optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('Offense')
+      'Offense': optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('Offense'),
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 25, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0)
     },
     ['Light Side', 'Scoundrel', 'Attacker'],
     ['Nesty', 'Baby Wampa', '#solo'],
@@ -1288,7 +1305,8 @@ let charactersArray = [
     new OptimizationPlan('PvP', 0, 0, 100, 0, 50, 0, 0, 25, 10, 0, 0, 0, 0),
     {
       'PvP': new OptimizationPlan('PvP', 0, 0, 100, 0, 50, 0, 0, 25, 10, 0, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 0, 0, 50, 0, 0, 0, 0, 75, 25, 0, 0, 0, 0)
+      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 0, 0, 50, 0, 0, 0, 0, 75, 25, 0, 0, 0, 0),
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, -5, 0, 0, 10, 0, 0, 100, 0, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Support'],
     ['MT', 'NS', 'hSTR NS'],
@@ -1314,7 +1332,8 @@ let charactersArray = [
     DamageType.physical,
     optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE'),
     {
-      'PvE': optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE')
+      'PvE': optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE'),
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 0, 0, 0, 50, 0, 100, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Attacker'],
     ['NI', 'NS'],
@@ -1326,7 +1345,8 @@ let charactersArray = [
     DamageType.physical,
     new OptimizationPlan('PvE', 0, 0, 100, 50, 25, 0, 75, 0, 50, 0, 0, 0, 0),
     {
-      'PvE': new OptimizationPlan('PvE', 0, 0, 100, 50, 25, 0, 75, 0, 50, 0, 0, 0, 0)
+      'PvE': new OptimizationPlan('PvE', 0, 0, 100, 50, 25, 0, 75, 0, 50, 0, 0, 0, 0),
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 40, 0, 0, 50, 0, 100, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Attacker'],
     ['NS'],
@@ -1340,7 +1360,8 @@ let charactersArray = [
     {
       'Weak Zombie': optimizationStrategy['Speed'].rename('Weak Zombie'),
       'Strong Zombie': new OptimizationPlan('Strong Zombie', 20, 20, 100, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', -5, -5, 100, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0)
+      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', -5, -5, 100, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0),
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 20, 0, 100, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Tank'],
     ['NS', 'hSTR NS'],
@@ -1377,7 +1398,8 @@ let charactersArray = [
     new OptimizationPlan('PvP', 25, 0, 100, 0, 25, 15, 0, 0, 0, 0, 0, 0, 0),
     {
       'PvP': new OptimizationPlan('PvP', 25, 0, 100, 0, 25, 15, 0, 0, 0, 0, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 50, 0, 75, 0, 0, 25, 25, 0, 0, 0, 0, 0, 0)
+      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 50, 0, 75, 0, 0, 25, 25, 0, 0, 0, 0, 0, 0),
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 50, 0, 75, 0, 15, 0, 5, 0, 0, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Healer'],
     ['NS', 'hSTR NS'],
