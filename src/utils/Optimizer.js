@@ -146,7 +146,9 @@ class Optimizer {
 
     const topMod = (candidates) => {
       const mod = firstOrNull(candidates);
-      if (mod && modValues.get(mod) > 0) {
+      // If we've already limited a character to using only 5-dot mods, then having any mod is likely worth something,
+      // so allow for 0-value mods.
+      if (mod && (modValues.get(mod) > 0 || (modValues.get(mod) === 0 && character.useOnly5DotMods))) {
         return mod;
       } else {
         return null;
