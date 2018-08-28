@@ -40,16 +40,17 @@ class ModImage extends React.Component {
   }
 
   modColor(mod) {
-    if ('' !== mod.secondaryType_4) {
-      return 'gold';
-    } else if ('' !== mod.secondaryType_3) {
-      return 'purple';
-    } else if ('' !== mod.secondaryType_2) {
-      return 'blue';
-    } else if ('' !== mod.secondaryType_1) {
-      return 'green';
-    } else {
-      return 'gray';
+    switch (mod.secondaryStats.length) {
+      case 4:
+        return 'gold';
+      case 3:
+        return 'purple';
+      case 2:
+        return 'blue';
+      case 1:
+        return 'green';
+      default:
+        return 'gray';
     }
   }
 
