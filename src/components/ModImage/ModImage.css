@@ -139,8 +139,8 @@
   fill: #ccfffe;
 }
 
-.modset path[class='2x'],
-.modset path.bang {
+.mod-image .modset path[class='2x'],
+.mod-image .modset path.bang {
   fill: #000000;
 }
 
