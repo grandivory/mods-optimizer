@@ -30,6 +30,10 @@
   display: block;
 }
 
+.mod-slot-image {
+  position: relative;
+}
+
 .mod-level {
   display: inline-block;
   padding: 1px;
@@ -44,54 +48,175 @@
 
 .mod-level.square {
   background-image: url('/img/modlevel-square.png');
-  width: 29px;
-  height: 21px;
-  left: -20px;
-  top: 26px;
-  padding: 2px 8px 2px 2px;
-}
-
-.mod-level.diamond {
-  background-image: url('/img/modlevel-diamond.png');
-  width: 24px;
-  height: 37px;
-  bottom: -18px;
-  right: 5px;
-  padding: 18px 2px 2px;
-}
-
-.mod-level.circle {
-  background-image: url('/img/modlevel-circle.png');
-  width: 35px;
-  height: 22px;
-  left: -17px;
-  top: 28px;
-  padding: 2px 15px 2px 2px;
+  width: 2.08em;
+  height: 1.5em;
+  left: -1.4em;
+  top: .3em;
+  padding: .15em .6em .15em .15em;
 }
 
 .mod-level.arrow {
   background-image: url('/img/modlevel-arrow.png');
-  width: 22px;
-  height: 24px;
-  bottom: -17px;
-  right: 21px;
-  padding: 6px 2px 2px;
+  width: 1.56em;
+  height: 1.71em;
+  bottom: -1.14em;
+  right: 1.5em;
+  padding: .43em .14em .14em;
+}
+
+.mod-level.diamond {
+  background-image: url('/img/modlevel-diamond.png');
+  width: 1.71em;
+  height: 2.64em;
+  bottom: -1.22em;
+  right: .38em;
+  padding: 1.29em .14em .14em;
 }
 
 .mod-level.triangle {
   background-image: url('/img/modlevel-triangle.png');
-  width: 32px;
-  height: 22px;
-  bottom: 7px;
-  right: -23px;
-  padding: 2px 2px 2px 9px;
+  width: 2.29em;
+  height: 1.57em;
+  bottom: .52em;
+  right: -1.58em;
+  padding: .14em .14em .14em .64em;
+}
+
+.mod-level.circle {
+  background-image: url('/img/modlevel-circle.png');
+  width: 2.5em;
+  height: 1.57em;
+  left: -1.14em;
+  top: .49em;
+  padding: .14em 1.07em .14em .14em;
 }
 
 .mod-level.cross {
   background-image: url('/img/modlevel-cross.png');
-  width: 25px;
-  height: 31px;
-  left: -3px;
-  bottom: -15px;
-  padding: 12px 3px 2px 2px;
+  width: 1.79em;
+  height: 2.21em;
+  left: -.18em;
+  bottom: -1em;
+  padding: .86em .21em .14em .14em;
+}
+
+.modset {
+  position: absolute;
+}
+
+.mod-image.gold .modset {
+  filter: drop-shadow(0 0 .05em #eeca44);
+}
+.mod-image.gold .modset path {
+  fill: #eeca44;
+}
+
+.mod-image.purple .modset {
+  filter: drop-shadow(0 0 .05em #a35ef9);
+}
+.mod-image.purple .modset path {
+  fill: #a35ef9;
+}
+
+.mod-image.blue .modset {
+  filter: drop-shadow(0 0 .05em #2997f1);
+}
+.mod-image.blue .modset path {
+  fill: #2997f1;
+}
+
+.mod-image.green .modset {
+  filter: drop-shadow(0 0 .05em #8fff3a);
+}
+.mod-image.green .modset path {
+  fill: #8fff3a;
+}
+
+.mod-image.gray .modset {
+  filter: drop-shadow(0 0 .05em #ccfffe);
+}
+.mod-image.gray .modset path {
+  fill: #ccfffe;
+}
+
+.modset path[class='2x'],
+.modset path.bang {
+  fill: #000000;
+}
+
+.mod-image.square .modset {
+  top: .84em;
+  right: .98em;
+  width: 1.3em;
+}
+
+.mod-image.arrow .modset {
+  top: .77em;
+  right: .98em;
+  width: 1.1em;
+}
+
+.mod-image.diamond .modset {
+  top: 1.2em;
+  left: 1.35em;
+  width: 1.3em;
+}
+
+.mod-image.triangle .modset {
+  top: 1.58em;
+  left: 1.39em;
+  width: 1.18em;
+}
+
+.mod-image.triangle .modset.potency {
+  top: 1.5em;
+}
+
+.mod-image.circle .modset {
+  top: 1.24em;
+  left: 1.35em;
+  width: 1.3em;
+}
+
+.mod-image.circle .modset.defense {
+  top: 1.28em;
+  left: 1.33em;
+}
+
+.mod-image.cross .modset {
+  top: 1.23em;
+  left: 1.41em;
+  width: 1.22em;
+}
+
+.mod-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.mod-highlight path {
+  fill: none;
+  stroke-width: .2em;
+}
+
+.mod-image.gold .mod-highlight {
+  stroke: #eeca44;
+}
+
+.mod-image.purple .mod-highlight {
+  stroke: #a35ef9;
+}
+
+.mod-image.blue .mod-highlight {
+  stroke: #2997f1;
+}
+
+.mod-image.green .mod-highlight {
+  stroke: #8fff3a;
+}
+
+.mod-image.gray .mod-highlight {
+  stroke: #ccfffe;
 }

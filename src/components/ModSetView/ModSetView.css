@@ -50,22 +50,24 @@
 .mod-set-view .mod.arrow {
   right: .95em;
   top: -.2em;
-  width: 4.5em;
+  width: 4em;
+  font-size: 1.11em;
 }
 
 .mod-set-view .mod.arrow .pips {
-  top: 5px;
+  top: 4px;
 }
 
-.mod-set-detila .mod.arrow .mod-level {
-  bottom: -16px;
-  right: 25px;
+.mod-set-view .mod.arrow .mod-level {
+  bottom: -1.14em;
+  right: 1.75em;
 }
 
 .mod-set-view .mod.diamond {
-  left: 2em;
-  top: 8.9em;
-  width: 4.5em;
+  left: 1.85em;
+  top: 7.95em;
+  width: 4em;
+  font-size: 1.11em;
 }
 
 .mod-set-view .mod.diamond .pips {
@@ -95,7 +97,8 @@
 .mod-set-view .mod.circle {
   left: .95em;
   bottom: .45em;
-  width: 4.5em;
+  width: 4em;
+  font-size: 1.11em;
 }
 
 .mod-set-view .mod.circle .pips {
@@ -103,14 +106,15 @@
 }
 
 .mod-set-view .mod.circle .mod-level {
-  left: -16px;
-  top: 29px;
+  left: -1.25em;
+  top: .57em;
 }
 
 .mod-set-view .mod.cross {
-  right: 1.05em;
-  bottom: 2.25em;
-  width: 4.55em;
+  right: .92em;
+  bottom: 1.95em;
+  width: 4em;
+  font-size: 1.1375em;
 }
 
 .mod-set-view .mod.cross .pips {
