@@ -40,14 +40,14 @@ class ModImage extends React.Component {
   }
 
   modColor(mod) {
-    switch (mod.secondaryStats.length) {
-      case 4:
+    switch (mod.tier) {
+      case 5:
         return 'gold';
-      case 3:
+      case 4:
         return 'purple';
-      case 2:
+      case 3:
         return 'blue';
-      case 1:
+      case 2:
         return 'green';
       default:
         return 'gray';

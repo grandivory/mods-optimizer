@@ -3,7 +3,7 @@ import Stat from "./Stat";
 import Character from "./Character";
 
 class Mod {
-  constructor(id, slot, set, level, pips, primaryStat, secondaryStats, currentCharacter, assignTo) {
+  constructor(id, slot, set, level, pips, primaryStat, secondaryStats, currentCharacter, assignTo, tier = 1) {
     this.id = id;
     this.slot = slot;
     this.set = set;
@@ -13,6 +13,7 @@ class Mod {
     this.secondaryStats = secondaryStats;
     this.currentCharacter = currentCharacter ? currentCharacter : null;
     this.assignTo = assignTo ? assignTo : null;
+    this.tier = tier;
   }
 
   /**
@@ -49,6 +50,7 @@ class Mod {
     modObject.level = this.level;
     modObject.pips = this.pips;
     modObject.characterName = this.currentCharacter ? this.currentCharacter.name : '';
+    modObject.tier = this.tier;
 
     if (this.assignTo) {
       modObject.assignTo = this.assignTo.name;
@@ -102,7 +104,8 @@ class Mod {
       primaryStat,
       secondaryStats,
       currentCharacter,
-      assignTo
+      assignTo,
+      modJson.tier
     );
   }
 }
