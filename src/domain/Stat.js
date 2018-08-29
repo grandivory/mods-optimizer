@@ -76,6 +76,18 @@ class Stat {
   }
 
   /**
+   * Return the value this stat would have as a primary stat at level 15 for a mod of the given number of pips
+   * @param modPips int
+   */
+  upgradePrimary(modPips) {
+    if (Stat.maxPrimaries.hasOwnProperty(this.displayType)) {
+      return new Stat(this.type, Stat.maxPrimaries[this.displayType][modPips]);
+    } else {
+      return this;
+    }
+  }
+
+  /**
    * Get the value of this stat for optimization
    *
    * @param character
@@ -126,6 +138,98 @@ Stat.displayNames = {
   'critAvoid': 'Critical Avoidance',
   'physCritAvoid': 'Physical Critical Avoidance',
   'specCritAvoid': 'Special Critical Avoidance'
+};
+
+// Map pips to maximum value at level 15 for each primary stat type
+Stat.maxPrimaries = {
+  'Offense': {
+    1: "1.88%",
+    2: "2%",
+    3: "3.88%",
+    4: "4%",
+    5: "5.88%",
+    6: "8.50%"
+  },
+  'Defense': {
+    1: "3.75%",
+    2: "4%",
+    3: "7.75%",
+    4: "8%",
+    5: "11.75%",
+    6: "20%"
+  },
+  'Health': {
+    1: "1.88%",
+    2: "2%",
+    3: "3.88%",
+    4: "4%",
+    5: "5.88%",
+    6: "16%"
+  },
+  'Protection': {
+    1: "7.5%",
+    2: "8%",
+    3: "15.5%",
+    4: "16%",
+    5: "23.5%",
+    6: "24%"
+  },
+  'Speed': {
+    1: "17",
+    2: "19",
+    3: "21",
+    4: "26",
+    5: "30",
+    6: "32"
+  },
+  'Accuracy': {
+    1: "7.5%",
+    2: "8%",
+    3: "8.75%",
+    4: "10.5%",
+    5: "12%",
+    6: "30%"
+  },
+  'Critical Avoidance': {
+    1: "15%",
+    2: "16%",
+    3: "18%",
+    4: "21%",
+    5: "24%",
+    6: "35%"
+  },
+  'Critical Chance': {
+    1: "7.50%",
+    2: "8%",
+    3: "8.75%",
+    4: "10.5%",
+    5: "12%",
+    6: "20%"
+  },
+  'Critical Damage': {
+    1: "22.50%",
+    2: "24%",
+    3: "27%",
+    4: "31.5%",
+    5: "36%",
+    6: "42%"
+  },
+  'Potency': {
+    1: "15%",
+    2: "16%",
+    3: "18%",
+    4: "21%",
+    5: "24%",
+    6: "30%"
+  },
+  'Tenacity': {
+    1: "15%",
+    2: "16%",
+    3: "18%",
+    4: "21%",
+    5: "24%",
+    6: "35%"
+  }
 };
 
 export default Stat;

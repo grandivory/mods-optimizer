@@ -151,7 +151,7 @@ class ReviewSets extends React.Component {
       .reduce((cost, mod) => cost + modRemovalCosts[mod.pips], 0);
 
     const modUpgradeCost = mods
-      .filter(mod => 15 !== mod.level && mod.assignTo && mod.assignTo !== mod.currentCharacter)
+      .filter(mod => mod.upgrade && 15 !== mod.level && mod.assignTo && mod.assignTo !== mod.currentCharacter)
       .reduce((cost, mod) => cost + modUpgradeCosts[mod.pips][mod.level], 0);
 
     // Create sets for everything each character already has equipped

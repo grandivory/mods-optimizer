@@ -176,6 +176,7 @@ class CharacterEditView extends React.Component {
         form['resistance-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.resistance,
         form['accuracy-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.accuracy,
         form['critAvoid-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critAvoid,
+        form['upgrade-mods'].checked
       );
     } else {
       // Basic form
@@ -194,6 +195,7 @@ class CharacterEditView extends React.Component {
         form['defense-stat'].valueAsNumber / 2,
         form['accuracy-stat'].valueAsNumber,
         form['critAvoid-stat'].valueAsNumber,
+        form['upgrade-mods'].checked
       );
     }
 
@@ -453,6 +455,11 @@ class CharacterEditView extends React.Component {
   basicForm(optimizationPlan) {
     return <div id={'basic-form'}>
       <div className={'form-row'}>
+        <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
+        <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
+               defaultChecked={optimizationPlan.upgradeMods}/>
+      </div>
+      <div className={'form-row'}>
         <label htmlFor="health-stat">Health:</label>
         <RangeInput
           editable={true}
@@ -594,6 +601,11 @@ class CharacterEditView extends React.Component {
    */
   advancedForm(optimizationPlan) {
     return <div id={'advanced-form'}>
+      <div className={'form-row'}>
+        <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
+        <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
+               defaultChecked={optimizationPlan.upgradeMods}/>
+      </div>
       <div className={'form-row'}>
         <label htmlFor="health-stat-advanced">Health:</label>
         <input

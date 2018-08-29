@@ -85,6 +85,7 @@ class ModSet {
     for (let slot of ModSet.slots) {
       if (this[slot]) {
         this[slot].assignTo = character;
+        this[slot].upgrade = character.optimizationPlan.upgradeMods;
       }
     }
   }
@@ -139,35 +140,57 @@ class ModSet {
       statMap = statTypeMap;
     }
 
-    let setCounts = new WeakMap();
+    let smallSetCounts = new WeakMap();
+    let maxSetCounts = new WeakMap();
 
     for (let slot of ModSet.slots) {
-      let mod = this[slot];
+      const mod = this[slot];
       if (null === mod) {
         continue;
       }
-      let set = mod.set;
+      const set = mod.set;
 
       // Update the summary for each stat on each mod
-      this.updateSummary(summary, mod.primaryStat, character, statMap);
+      const primaryStat = character.optimizationPlan.upgradeMods ?
+        mod.primaryStat.upgradePrimary(mod.pips) :
+        mod.primaryStat;
+
+      this.updateSummary(summary, primaryStat, character, statMap);
       for (let secondaryStat of mod.secondaryStats) {
         this.updateSummary(summary, secondaryStat, character, statMap);
       }
 
       // Get a count of how many mods are in each set
-      let currentCount = setCounts.get(set) || 0;
+      const currentSmallCount = smallSetCounts.get(set) || 0;
+      const currentMaxCount = maxSetCounts.get(set) || 0;
       if (set) {
-        setCounts.set(set, currentCount + 1);
+        smallSetCounts.set(set, currentSmallCount + 1);
+        if (character.optimizationPlan.upgradeMods || 15 === mod.level) {
+          maxSetCounts.set(set, currentMaxCount + 1);
+        }
       }
     }
 
     // Update the summary for each stat from each complete mod set
     for (let setKey in setBonuses) {
-      let setDescription = setBonuses[setKey];
-      let setMultiplier = Math.floor((setCounts.get(setDescription) || 0) / setDescription.numberOfModsRequired);
+      const setDescription = setBonuses[setKey];
 
-      for (let i = 0; i < setMultiplier; i++) {
-        this.updateSummary(summary, setDescription.bonus, character, statMap);
+      // Add in any set bonuses from leveled or upgraded mods
+      const maxSetMultiplier =
+        Math.floor((maxSetCounts.get(setDescription) || 0) / setDescription.numberOfModsRequired);
+
+      for (let i = 0; i < maxSetMultiplier; i++) {
+        this.updateSummary(summary, setDescription.maxBonus, character, statMap);
+        const smallSetCount = smallSetCounts.get(setDescription);
+        smallSetCounts.set(setDescription, smallSetCount - setDescription.numberOfModsRequired);
+      }
+
+      // Add in any set bonuses from unleveled mods
+      const smallSetMultiplier =
+        Math.floor((smallSetCounts.get(setDescription) || 0) / setDescription.numberOfModsRequired);
+
+      for (let i = 0; i < smallSetMultiplier; i++) {
+        this.updateSummary(summary, setDescription.smallBonus, character, statMap);
       }
     }
 

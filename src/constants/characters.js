@@ -1356,11 +1356,11 @@ let charactersArray = [
     'Nightsister Zombie',
     'NIGHTSISTERZOMBIE',
     DamageType.physical,
-    optimizationStrategy['Speed'].rename('Weak Zombie'),
+    new OptimizationPlan('Weak Zombie', 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false),
     {
-      'Weak Zombie': optimizationStrategy['Speed'].rename('Weak Zombie'),
+      'Weak Zombie': new OptimizationPlan('Weak Zombie', 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false),
       'Strong Zombie': new OptimizationPlan('Strong Zombie', 20, 20, 100, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', -5, -5, 100, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0),
+      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', -5, -5, 100, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, false),
       'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 20, 0, 100, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Tank'],

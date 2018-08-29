@@ -46,6 +46,7 @@ class Optimizer {
       if (!mod.isLocked) {
         mod.assignTo = null;
       }
+      mod.upgrade = false;
     });
     let considerationSet = this.mods.filter(mod => !lockList.includes(mod.currentCharacter));
 
@@ -133,10 +134,7 @@ class Optimizer {
     for (let setName in setBonuses) {
       if (setBonuses.hasOwnProperty(setName)) {
         let setBonus = setBonuses[setName];
-        setBonusValues.set(
-          setBonus,
-          setBonus.bonus.getOptimizationValue(character)
-        );
+        setBonusValues.set(setBonus, setBonus.maxBonus.getOptimizationValue(character));
 
         if (setBonusValues.get(setBonus) > 0) {
           potentialUsedSets.push(setBonus);
@@ -168,16 +166,14 @@ class Optimizer {
 
     // Go through each set bonus with a positive value, and find the best mod sub-sets (all possible pairs or quads)
     for (let setBonus of potentialUsedSets) {
-      if (setBonusValues.get(setBonus) > 0) {
-        baseSets.set(setBonus, new ModSet([
-          firstOrNull(squares.filter(mod => setBonus === mod.set)),
-          firstOrNull(arrows.filter(mod => setBonus === mod.set)),
-          firstOrNull(diamonds.filter(mod => setBonus === mod.set)),
-          firstOrNull(triangles.filter(mod => setBonus === mod.set)),
-          firstOrNull(circles.filter(mod => setBonus === mod.set)),
-          firstOrNull(crosses.filter(mod => setBonus === mod.set))
-        ]));
-      }
+      baseSets.set(setBonus, new ModSet([
+        firstOrNull(squares.filter(mod => setBonus === mod.set)),
+        firstOrNull(arrows.filter(mod => setBonus === mod.set)),
+        firstOrNull(diamonds.filter(mod => setBonus === mod.set)),
+        firstOrNull(triangles.filter(mod => setBonus === mod.set)),
+        firstOrNull(circles.filter(mod => setBonus === mod.set)),
+        firstOrNull(crosses.filter(mod => setBonus === mod.set))
+      ]));
     }
 
     // Make each possible set of 6 from the sub-sets found above, including filling in with the "base" set formed
@@ -234,7 +230,11 @@ class Optimizer {
   scoreMod(mod, character) {
     let score = 0;
 
-    score += mod.primaryStat.getOptimizationValue(character);
+    const primaryStat = character.optimizationPlan.upgradeMods ?
+      mod.primaryStat.upgradePrimary(mod.pips) :
+      mod.primaryStat;
+
+    score += primaryStat.getOptimizationValue(character);
     score += mod.secondaryStats.map(
       stat => stat.getOptimizationValue(character)
     ).reduce((a, b) => a + b, 0);

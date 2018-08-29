@@ -16,7 +16,8 @@ class OptimizationPlan {
               armor,
               resistance,
               accuracy,
-              critAvoid
+              critAvoid,
+              upgradeMods = true
   ) {
     this.name = name;
 
@@ -34,6 +35,8 @@ class OptimizationPlan {
     this.rawResistance = resistance || 0;
     this.rawAccuracy = accuracy || 0;
     this.rawCritAvoid = critAvoid || 0;
+
+    this.upgradeMods = upgradeMods;
 
 
     // Set the values that will actually be used for scoring based on the weights of each stat
@@ -72,7 +75,8 @@ class OptimizationPlan {
       this.rawArmor,
       this.rawResistance,
       this.rawAccuracy,
-      this.rawCritAvoid
+      this.rawCritAvoid,
+      this.upgradeMods
     );
   }
 
@@ -95,7 +99,8 @@ class OptimizationPlan {
       this.armor === that.armor &&
       this.resistance === that.resistance &&
       this.accuracy === that.accuracy &&
-      this.critAvoid === that.critAvoid;
+      this.critAvoid === that.critAvoid &&
+      this.upgradeMods === that.upgradeMods;
   }
 
   /**
@@ -145,6 +150,7 @@ class OptimizationPlan {
     planObject.resistance = this.rawResistance;
     planObject.accuracy = this.rawAccuracy;
     planObject.critAvoid = this.rawCritAvoid;
+    planObject.upgradeMods = this.upgradeMods;
 
     return planObject;
   }
@@ -171,7 +177,8 @@ class OptimizationPlan {
       planJson.armor,
       planJson.resistance,
       planJson.accuracy,
-      planJson.critAvoid
+      planJson.critAvoid,
+      'undefined' !== typeof planJson.upgradeMods ? planJson.upgradeMods : true
     );
   }
   /* eslint-enable no-unused-vars */
@@ -196,7 +203,8 @@ class OptimizationPlan {
       planJson.defense / 2,
       planJson.defense / 2,
       planJson.accuracy,
-      planJson.critAvoid
+      planJson.critAvoid,
+      true
     );
   }
 
@@ -220,7 +228,8 @@ class OptimizationPlan {
       (planJson.defense * OptimizationPlan.statWeight.armor) / 2,
       (planJson.defense * OptimizationPlan.statWeight.resistance) / 2,
       planJson.accuracy * OptimizationPlan.statWeight.accuracy,
-      planJson.critAvoid * OptimizationPlan.statWeight.critAvoid
+      planJson.critAvoid * OptimizationPlan.statWeight.critAvoid,
+      true
     );
   }
 }
