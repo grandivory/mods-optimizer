@@ -189,8 +189,16 @@ class Optimizer {
       if (candidateValues.get(left) !== candidateValues.get(right)) {
         return candidateValues.get(right) - candidateValues.get(left);
       } else {
-        return right.mods().filter(mod => mod.currentCharacter === character).length -
-          left.mods().filter(mod => mod.currentCharacter === character).length;
+        // If both sets have the same value, choose the set that moves the fewest mods
+        const leftUnmovedMods = left.mods().filter(mod => mod.currentCharacter === character).length;
+        const rightUnmovedMods = right.mods().filter(mod => mod.currentCharacter === character).length;
+
+        if (leftUnmovedMods !== rightUnmovedMods) {
+          return rightUnmovedMods - leftUnmovedMods;
+        } else {
+          // If both sets move the same number of mods, choose the set that uses the most mods
+          return right.mods().length - left.mods().length;
+        }
       }
     });
 
