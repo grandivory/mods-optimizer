@@ -1136,7 +1136,7 @@ let charactersArray = [
     {
       'Tanky': new OptimizationPlan('Tanky', 0, 40, 100, 0, 30, 0, 0, 0, 50, 0, 0, 0, 0)
     },
-    ['Light Side', 'Rebel', 'Phoenix', 'Tank', 'Crew Member'],
+    ['Light Side', 'Rebel', 'Phoenix', 'Tank', 'Crew Member', 'Jedi'],
     [],
     true
   ),
