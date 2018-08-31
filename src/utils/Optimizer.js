@@ -78,7 +78,7 @@ class Optimizer {
    *                  well as the optimization plan to use
    */
   findBestModSetForCharacter(mods, character) {
-    let availableMods;
+    let availableMods, usableMods;
     let squares, arrows, diamonds, triangles, circles, crosses;
     let modValues = new WeakMap();
     let setBonusValues = new WeakMap();
@@ -88,11 +88,18 @@ class Optimizer {
     let candidateSets;
     let candidateValues = new WeakMap();
 
+    // If the character is less than gear 12, remove any mods that are tier 6 or higher
+    if (character.gearLevel < 12) {
+      usableMods = mods.filter(mod => 6 > mod.pips);
+    } else {
+      usableMods = mods;
+    }
+
     // If the optimization plan says to only use 5-dot mods, then filter out any mods with fewer dots
     if (character.useOnly5DotMods) {
-      availableMods = mods.filter(mod => 5 === mod.pips);
+      availableMods = usableMods.filter(mod => 5 === mod.pips);
     } else {
-      availableMods = mods;
+      availableMods = usableMods;
     }
 
     // Go through all mods and assign a value to them based on the optimization plan
@@ -102,32 +109,32 @@ class Optimizer {
 
     // Sort all the mods by score, then break them into sets
     availableMods.sort(this.modSort(character, modValues));
-    mods.sort(this.modSort(character, modValues));
+    usableMods.sort(this.modSort(character, modValues));
 
     // Get the set of all possible mods to use for this character
     squares = availableMods.filter(mod => 'square' === mod.slot);
     if (0 === squares.length) {
-      squares = mods.filter(mod => 'square' === mod.slot);
+      squares = usableMods.filter(mod => 'square' === mod.slot);
     }
     arrows = availableMods.filter(mod => 'arrow' === mod.slot);
     if (0 === arrows.length) {
-      arrows = mods.filter(mod => 'arrow' === mod.slot);
+      arrows = usableMods.filter(mod => 'arrow' === mod.slot);
     }
     diamonds = availableMods.filter(mod => 'diamond' === mod.slot);
     if (0 === diamonds.length) {
-      diamonds = mods.filter(mod => 'diamond' === mod.slot);
+      diamonds = usableMods.filter(mod => 'diamond' === mod.slot);
     }
     triangles = availableMods.filter(mod => 'triangle' === mod.slot);
     if (0 === triangles.length) {
-      triangles = mods.filter(mod => 'triangle' === mod.slot);
+      triangles = usableMods.filter(mod => 'triangle' === mod.slot);
     }
     circles = availableMods.filter(mod => 'circle' === mod.slot);
     if (0 === circles.length) {
-      circles = mods.filter(mod => 'circle' === mod.slot);
+      circles = usableMods.filter(mod => 'circle' === mod.slot);
     }
     crosses = availableMods.filter(mod => 'cross' === mod.slot);
     if (0 === crosses.length) {
-      crosses = mods.filter(mod => 'cross' === mod.slot);
+      crosses = usableMods.filter(mod => 'cross' === mod.slot);
     }
 
     // Assign a value to each set bonus based on the optimization plan
