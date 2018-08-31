@@ -28,7 +28,8 @@ class ReviewSets extends React.Component {
       2: 1050,
       3: 1900,
       4: 3000,
-      5: 4750
+      5: 4750,
+      6: 8000
     };
     // A map from number of pips to a map from current mod level to the total cost to upgrade the mod to level 15
     const modUpgradeCosts = {
