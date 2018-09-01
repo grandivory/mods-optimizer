@@ -43,8 +43,8 @@
 }
 
 .mod-set-view .mod.square .pips {
-  left: -5px;
-  top: 3px;
+  left: 0;
+  top: 4px;
 }
 
 .mod-set-view .mod.arrow {
@@ -55,6 +55,7 @@
 }
 
 .mod-set-view .mod.arrow .pips {
+  left: 5px;
   top: 4px;
 }
 
@@ -71,6 +72,7 @@
 }
 
 .mod-set-view .mod.diamond .pips {
+  left: 5px;
   top: 5px;
 }
 
@@ -86,7 +88,7 @@
 }
 
 .mod-set-view .mod.triangle .pips {
-  left: -4px;
+  left: 0;
   top: 5px;
 }
 
@@ -102,6 +104,7 @@
 }
 
 .mod-set-view .mod.circle .pips {
+  left: 5px;
   top: 6px;
 }
 
@@ -118,7 +121,7 @@
 }
 
 .mod-set-view .mod.cross .pips {
-  left: 1px;
+  left: 6px;
   top: 5px;
 }
 

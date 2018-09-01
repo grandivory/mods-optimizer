@@ -1,7 +1,7 @@
 .pips {
   font-size: 0;
   padding: 1px;
-  margin: 5px;
+  margin: 5px 0;
   text-align: left;
 }
 
@@ -11,5 +11,5 @@
   height: 5px;
   background-color: #fae8da;
   border-radius: 3px;
-  margin: 2px;
+  margin: 2px 1.6px;
 }
