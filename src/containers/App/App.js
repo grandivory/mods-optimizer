@@ -18,7 +18,7 @@ import {modSets, modSlots, modStats} from "../../constants/enums";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.version = '1.2.11';
+    this.version = process.env.REACT_APP_VERSION;
 
     this.state = {
       'view': 'optimize',
