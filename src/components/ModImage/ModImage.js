@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import Pips from '../Pips/Pips';
 import './ModImage.css';

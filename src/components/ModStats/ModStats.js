@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import './ModStats.css';
 import CharacterAvatar from "../CharacterAvatar/CharacterAvatar";

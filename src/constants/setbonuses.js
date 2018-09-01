@@ -1,3 +1,5 @@
+// @flow
+
 import SetBonus from "../domain/SetBonus";
 import Stat from "../domain/Stat";
 

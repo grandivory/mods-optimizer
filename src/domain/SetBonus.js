@@ -1,3 +1,5 @@
+// @flow
+
 class SetBonus {
   /**
    * Instantiate a new Mod set

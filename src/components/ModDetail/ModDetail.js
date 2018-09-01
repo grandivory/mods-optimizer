@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import ModImage from '../ModImage/ModImage';
 import ModStats from '../ModStats/ModStats';

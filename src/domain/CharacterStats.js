@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * A class to represent the base values of any stats that are modified by mods. All values should be represented as if
  * the character were capped out at 7* g12 but had no mods on.

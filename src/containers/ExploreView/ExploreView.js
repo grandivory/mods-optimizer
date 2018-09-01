@@ -1,3 +1,5 @@
+// @flow
+
 import React from "react";
 import memoize from "memoize-one";
 import ModDetail from '../../components/ModDetail/ModDetail';

@@ -1,3 +1,5 @@
+// @flow
+
 import React from "react";
 import Optimizer from "../../utils/Optimizer";
 import ReviewList from "../ReviewList/ReviewList";

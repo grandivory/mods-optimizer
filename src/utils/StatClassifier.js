@@ -1,3 +1,5 @@
+// @flow
+
 class StatClassifier {
   classes = ['D', 'C', 'B', 'A', 'S'];
 

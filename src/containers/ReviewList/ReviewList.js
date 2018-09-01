@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import ModDetail from "../../components/ModDetail/ModDetail";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";

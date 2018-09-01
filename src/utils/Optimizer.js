@@ -1,3 +1,5 @@
+// @flow
+
 import setBonuses from "../constants/setbonuses";
 import firstOrNull from "./firstOrNull";
 import chooseFromArray from "./chooseFromArray";

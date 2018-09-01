@@ -1,3 +1,5 @@
+// @flow
+
 import OptimizationPlan from "../domain/OptimizationPlan";
 
 const optimizationStrategy = {

@@ -1,3 +1,5 @@
+// @flow
+
 import React from "react";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import Arrow from "../../components/Arrow/Arrow";

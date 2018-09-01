@@ -1,3 +1,4 @@
+// @flow
 
 /**
  * Copies a specified string into the clipboard

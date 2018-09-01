@@ -1,3 +1,5 @@
+// @flow
+
 import statTypeMap from "../constants/statTypeMap";
 
 class Stat {

@@ -1,3 +1,5 @@
+// @flow
+
 const modSets = {
   1: 'health',
   2: 'offense',

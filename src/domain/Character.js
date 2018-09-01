@@ -1,3 +1,5 @@
+// @flow
+
 import BaseStats, {NullCharacterStats} from "./CharacterStats";
 import OptimizationPlan from "./OptimizationPlan";
 

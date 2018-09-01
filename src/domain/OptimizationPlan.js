@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * A class to represent the weights that should be applied to each potential stat that a mod can have when
  * trying to optimize the mods assigned to each character. Each weight is on a scale from -100 to 100

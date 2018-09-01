@@ -1,3 +1,5 @@
+// @flow
+
 import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
 import Character from "./Character";

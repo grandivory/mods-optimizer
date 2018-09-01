@@ -1,3 +1,5 @@
+// @flow
+
 import React, {Component} from 'react';
 import StatClassifier from '../../utils/StatClassifier';
 import '../boilerplate.css';

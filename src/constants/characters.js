@@ -1,3 +1,5 @@
+// @flow
+
 import Character from "../domain/Character";
 import {DamageType} from "../domain/Character";
 import OptimizationPlan from "../domain/OptimizationPlan";

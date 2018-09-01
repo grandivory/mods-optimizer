@@ -1,3 +1,5 @@
+// @flow
+
 import setBonuses from "../constants/setbonuses";
 import statTypeMap from "../constants/statTypeMap";
 import Stat from "./Stat";

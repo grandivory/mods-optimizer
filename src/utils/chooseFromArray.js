@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * Return all possible combinations of choices items from the input array
  * @param input Array the array to choose items from

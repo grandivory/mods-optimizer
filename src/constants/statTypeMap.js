@@ -1,3 +1,5 @@
+// @flow
+
 // A map from the name of each stat as used in the mod exporter to
 // the name(s) of the property(ies) used internally by the mod optimizer
 const statTypeMap = {
