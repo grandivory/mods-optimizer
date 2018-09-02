@@ -29,8 +29,10 @@ then
     exit 0;
   fi
   endpoint="s3://mods-optimizer.swgoh.grandivory.com"
+  cloudfront_id="E1JP7YU7NLGZNZ"
 else
   endpoint="s3://staging.mods-optimizer.swgoh.grandivory.com"
+  cloudfront_id="E3FV4P0N9FDZ3B"
 fi
 
 current_version=`git branch | grep \* | cut -d ' ' -f 2`
@@ -53,9 +55,14 @@ fi
 git stash
 unstash=$?
 
+export REACT_APP_VERSION=${REACT_APP_VERSION}
+
 npm run build
 
 aws s3 sync --delete --profile grandivory build/ $endpoint
+
+# Invalidate Cloudfront
+aws cloudfront create-invalidation --profile grandivory --distribution-id ${cloudfront_id} --paths /
 
 # Return to the previous working state
 if [ ${unstash} -eq 0 ]
