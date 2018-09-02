@@ -14,8 +14,9 @@
   "scripts": {
     "start": "NODE_PATH=src,src/components HTTPS=true react-scripts start",
     "build": "NODE_PATH=src,src/components react-scripts build",
-    "test": "NODE_PATH=src,src/components react-scripts test --env=jsdom",
+    "test": "NODE_PATH=src,src/components CI=true react-scripts test --env=jsdom --coverage",
     "eject": "NODE_PATH=src,src/components react-scripts eject",
+    "lint": "node node_modules/eslint/bin/eslint.js --config node_modules/eslint-config-react-app/index.js",
     "flow": "flow"
   },
   "devDependencies": {
