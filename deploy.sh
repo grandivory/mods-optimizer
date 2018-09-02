@@ -53,6 +53,7 @@ fi
 
 # Stash any un-committed changes
 git stash
+# TODO: This doesn't actually work, as it will always store a 0, whether a stash entry was generated or not.
 unstash=$?
 
 export REACT_APP_VERSION=${REACT_APP_VERSION}

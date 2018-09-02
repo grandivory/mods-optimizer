@@ -99,7 +99,7 @@ class Optimizer {
 
     // If the optimization plan says to only use 5-dot mods, then filter out any mods with fewer dots
     if (character.useOnly5DotMods) {
-      availableMods = usableMods.filter(mod => 5 >= mod.pips);
+      availableMods = usableMods.filter(mod => 5 <= mod.pips);
     } else {
       availableMods = usableMods;
     }
