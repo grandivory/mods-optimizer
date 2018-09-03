@@ -52,9 +52,13 @@ then
 fi
 
 # Stash any un-committed changes
-git stash
-# TODO: This doesn't actually work, as it will always store a 0, whether a stash entry was generated or not.
-unstash=$?
+stash_result=$(git stash)
+# We only want to try to unstash if we successfully stashed something. Otherwise, we'll be trying to apply
+# changes that we don't want on top of our working branch
+if [[ ${stash_result} == Saved* ]]
+then
+unstash=True
+fi
 
 export REACT_APP_VERSION=${REACT_APP_VERSION}
 
@@ -66,7 +70,7 @@ aws s3 sync --delete --profile grandivory build/ $endpoint
 aws cloudfront create-invalidation --profile grandivory --distribution-id ${cloudfront_id} --paths /
 
 # Return to the previous working state
-if [ ${unstash} -eq 0 ]
+if [ ${unstash} -eq True ]
 then
   git stash pop
 fi
