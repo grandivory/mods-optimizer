@@ -73,3 +73,7 @@ fabric.properties
 
 # User-added files
 /.idea/sbt.xml
+
+#Visual Studio files
+/.vs
+/.vscode
