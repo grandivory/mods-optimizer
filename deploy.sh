@@ -57,7 +57,7 @@ stash_result=$(git stash)
 # changes that we don't want on top of our working branch
 if [[ ${stash_result} == Saved* ]]
 then
-unstash=True
+unstash=true
 fi
 
 export REACT_APP_VERSION=${REACT_APP_VERSION}
@@ -72,7 +72,7 @@ aws s3 sync --delete --profile grandivory build/ ${endpoint}
 aws s3 cp --profile grandivory ${endpoint}/index.html ${endpoint}/index.html --cache-control no-cache --metadata "{\"Cache-control\": \"no-cache\"}"
 
 # Return to the previous working state
-if [ ${unstash} -eq True ]
+if [ "${unstash}" = true ]
 then
   git stash pop
 fi
