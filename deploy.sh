@@ -62,12 +62,14 @@ fi
 
 export REACT_APP_VERSION=${REACT_APP_VERSION}
 
+# Build the app
 npm run build
 
-aws s3 sync --delete --profile grandivory build/ $endpoint
+# Deploy the app to S3
+aws s3 sync --delete --profile grandivory build/ ${endpoint}
 
-# Invalidate Cloudfront
-aws cloudfront create-invalidation --profile grandivory --distribution-id ${cloudfront_id} --paths /
+# Make sure that index.html is not cached
+aws s3 cp --profile grandivory ${endpoint}/index.html ${endpoint}/index.html --cache-control no-cache --metadata "{\"Cache-control\": \"no-cache\"}"
 
 # Return to the previous working state
 if [ ${unstash} -eq True ]
