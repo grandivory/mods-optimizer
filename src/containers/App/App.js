@@ -46,7 +46,7 @@ class App extends Component {
       restoredState.allyCode = allyCodeChunks.join('-');
 
       // This needs to be set in a timeout so that we don't try to call `setState` in the constructor
-      window.setTimeout(() => this.queryPlayerProfile(allyCode), 0);
+      window.setTimeout(() => this.queryPlayerProfile(restoredState.allyCode), 0);
     }
 
     // Remove the query string after reading anything we needed from it.
@@ -61,22 +61,22 @@ class App extends Component {
   saveState() {
     const saveProgressButton = document.getElementById('saveProgress');
 
-    window.localStorage.removeItem('availableCharacters');
-    window.localStorage.removeItem('selectedCharacters');
-    window.localStorage.removeItem('lockedCharacters');
+    window.localStorage.removeItem('availableCharacters.' + this.state.allyCode);
+    window.localStorage.removeItem('selectedCharacters.' + this.state.allyCode);
+    window.localStorage.removeItem('lockedCharacters.' + this.state.allyCode);
 
     window.localStorage.setItem('optimizer.allyCode', this.state.allyCode);
-    window.localStorage.setItem('optimizer.mods', JSON.stringify(this.state.mods.map(mod => mod.serialize())));
+    window.localStorage.setItem('optimizer.mods.' + this.state.allyCode, JSON.stringify(this.state.mods.map(mod => mod.serialize())));
     window.localStorage.setItem(
-      'optimizer.availableCharacters',
+      'optimizer.availableCharacters.' + this.state.allyCode,
       JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
     );
     window.localStorage.setItem(
-      'optimizer.selectedCharacters',
+      'optimizer.selectedCharacters.' + this.state.allyCode,
       JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
     );
     window.localStorage.setItem(
-      'optimizer.version',
+      'optimizer.version.' + this.state.allyCode,
       this.version
     );
 
@@ -89,11 +89,17 @@ class App extends Component {
   restoreState() {
     let state = {};
 
-    const version = window.localStorage.getItem('optimizer.version');
-
     state.allyCode = window.localStorage.getItem('optimizer.allyCode') || '';
 
-    const savedMods = window.localStorage.getItem('optimizer.mods');
+    let version = window.localStorage.getItem('optimizer.version');
+      let modifier = '';
+
+    if (!version) {
+      modifier = '.' + state.allyCode;
+      version = window.localStorage.getItem('optimizer.version' + modifier);
+    }
+
+    const savedMods = window.localStorage.getItem('optimizer.mods' + modifier);
     if (savedMods) {
       state.mods = this.processMods(JSON.parse(savedMods), false);
     }
@@ -121,9 +127,13 @@ class App extends Component {
       availableCharactersLocation = 'availableCharacters';
       selectedCharactersLocation = 'selectedCharacters';
       lockedCharactersLocation = 'lockedCharacters';
-    } else {
+    } else if (version <= '1.2.13') {
       availableCharactersLocation = 'optimizer.availableCharacters';
       selectedCharactersLocation = 'optimizer.selectedCharacters';
+      lockedCharactersLocation = '';
+    } else {
+      availableCharactersLocation = 'optimizer.availableCharacters.' + this.state.allyCode;
+      selectedCharactersLocation = 'optimizer.selectedCharacters.' + this.state.allyCode;
       lockedCharactersLocation = '';
     }
 
@@ -626,9 +636,9 @@ class App extends Component {
         <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
         {showActions &&
         <a id={'saveProgress'}
-           href={this.getProgressData()}
-           className={'button'}
-           download={`modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`}
+          href={this.getProgressData()}
+          className={'button'}
+          download={`modsOptimizer-${this.state.allyCode}-${(new Date()).toISOString().slice(0, 10)}.json`}
         >
           Save my progress
         </a>
@@ -766,14 +776,15 @@ class App extends Component {
    * Get all of the data needed to save the app state
    */
   getProgressData() {
+    let localAllyCode = '.' + window.localStorage.getItem('optimizer.allyCode') || '';
     return 'data:text/json;charset=utf-8,' + JSON.stringify({
       'state': {
-        'version': window.localStorage.getItem('optimizer.version'),
-        'mods': window.localStorage.getItem('optimizer.mods'),
-        'allyCode': window.localStorage.getItem('optimizer.allyCode'),
-        'availableCharacters': window.localStorage.getItem('optimizer.availableCharacters'),
-        'lockedCharacters': window.localStorage.getItem('optimizer.lockedCharacters'),
-        'selectedCharacters': window.localStorage.getItem('optimizer.selectedCharacters')
+        'allyCode': localAllyCode,
+        'version': window.localStorage.getItem('optimizer.version' + localAllyCode),
+        'mods': window.localStorage.getItem('optimizer.mods' + localAllyCode),
+        'availableCharacters': window.localStorage.getItem('optimizer.availableCharacters' + localAllyCode),
+        'lockedCharacters': window.localStorage.getItem('optimizer.lockedCharacters' + localAllyCode),
+        'selectedCharacters': window.localStorage.getItem('optimizer.selectedCharacters' + localAllyCode)
       }
     });
   }
