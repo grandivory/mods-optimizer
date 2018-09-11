@@ -482,7 +482,7 @@ let charactersArray = [
     'Darth Sion',
     'DARTHSION',
     DamageType.physical,
-    new OptimizationPlan('PvP', 25, 25, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0),
+    new OptimizationPlan('PvP', 15, 15, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0),
     {
       'PvP': new OptimizationPlan('PvP', 25, 25, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0)
     },
@@ -1348,6 +1348,7 @@ let charactersArray = [
     new OptimizationPlan('PvE', 0, 0, 100, 50, 25, 0, 75, 0, 50, 0, 0, 0, 0),
     {
       'PvE': new OptimizationPlan('PvE', 0, 0, 100, 50, 25, 0, 75, 0, 50, 0, 0, 0, 0),
+      'PvP': optimizationStrategy["Speed, Crit, Physical Damage, Potency"],
       'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 40, 0, 0, 50, 0, 100, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Attacker'],
