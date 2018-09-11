@@ -7,7 +7,7 @@
 .character-edit .selected-characters {
   float: right;
   max-width: calc(33% - 7em);
-  margin: 0 1em;
+  margin: 0 0 0 1em;
   height: 100%;
 }
 
@@ -35,6 +35,10 @@
   height: calc(100% - 4em);
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.character-edit .selected-characters .character-list {
+  padding-right: 1em;
 }
 
 .character-edit-form {

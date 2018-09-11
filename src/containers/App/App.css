@@ -61,6 +61,22 @@ html, body {
   font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
+
+::-webkit-scrollbar {
+  width: .4em;
+  margin-left: 1em;
+}
+
+::-webkit-scrollbar-track {
+  border: 1px inset dodgerblue;
+  background: #1e2f46;
+}
+
+::-webkit-scrollbar-thumb {
+  background: dodgerblue;
+  min-height: 3em;
+}
+
 .App-header {
   background-color: #222;
   padding: 0;
