@@ -7,9 +7,10 @@ class Stat {
     this.displayModifier = type.endsWith('%') || value.endsWith('%') ? '%' : '';
     this.type = type;
     this.displayType = type.endsWith('%') ? type.substr(0, type.length - 1).trim() : type;
-    this.displayValue = value.replace(/[+%]/g, '');
-    this.value = +this.displayValue;
+    this.rawValue = value.replace(/[+%]/g, '');
+    this.value = +this.rawValue;
     this.isPercent = '%' === this.displayModifier && Stat.mixedTypes.includes(this.displayType);
+    this.updateDisplayValue();
   }
 
   /**
@@ -51,7 +52,7 @@ class Stat {
     const percent = (this.isPercent || !Stat.mixedTypes.includes(this.displayType)) &&
     !this.type.includes('%') ? '%' : '';
 
-    return [this.type, `+${this.displayValue}${percent}`];
+    return [this.type, `+${this.rawValue}${percent}`];
   }
 
   /**
