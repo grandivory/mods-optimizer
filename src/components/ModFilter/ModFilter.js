@@ -205,10 +205,12 @@ class ModFilter extends React.Component {
 
     return <div>
       <div className={'toggle-label'}>Sort By:</div>
-      <select name={'sort-option'}>
-        <option value={''}>default</option>
-        {sortOptions}
-      </select>
+      <div className={'dropdown'}>
+        <select name={'sort-option'}>
+          <option value={''}>default</option>
+          {sortOptions}
+        </select>
+      </div>
     </div>;
   }
 

@@ -108,11 +108,13 @@ class CharacterList extends React.Component {
       <div className={'character-name'}>{character.name}</div>
       <div className={'target'}>
         <label>Target:</label>
-        <select value={selectedPlan} onChange={onSelect.bind(this)}>
-          {options}
-          <option value={'custom'}>Custom</option>
-          <option value={'lock'}>Lock</option>
-        </select>
+        <div className={'dropdown'}>
+          <select value={selectedPlan} onChange={onSelect.bind(this)}>
+            {options}
+            <option value={'custom'}>Custom</option>
+            <option value={'lock'}>Lock</option>
+          </select>
+        </div>
         <button type={'button'} onClick={() => onEdit(character, selectedPlan !== 'lock' ? selectedPlan : 'custom')}>
           Edit
         </button>

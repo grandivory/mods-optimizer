@@ -318,13 +318,15 @@ class ReviewList extends React.Component {
               onChange={viewAs => this.setState({'view': viewAs})}
       />
       <label htmlFor={'tag'}>Show characters by tag:</label>
-      <select id={'tag'}
-              value={this.state.tag}
-              onChange={e => this.updateDisplayedMods.bind(this)(sortBy, e.target.value, this.state.movingMods)}
-      >
-        <option value={''}>All</option>
-        {tagOptions}
-      </select>
+      <div className={'dropdown'}>
+        <select id={'tag'}
+                value={this.state.tag}
+                onChange={e => this.updateDisplayedMods.bind(this)(sortBy, e.target.value, this.state.movingMods)}
+        >
+          <option value={''}>All</option>
+          {tagOptions}
+        </select>
+      </div>
     </div>;
   }
 

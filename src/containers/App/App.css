@@ -338,7 +338,7 @@ strong {
   margin-top: 0;
 }
 
-.filter-form select {
+select {
   -webkit-appearance: none;
   -moz-appearance: none;
   font-size: 1em;
@@ -346,8 +346,31 @@ strong {
   background-color: rgb(0, 0, 64);
   border: 1px solid dodgerblue;
   border-radius: 0;
-  margin: .25em;
   padding: .25em;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin: .25em;
+}
+
+.dropdown select {
+  padding-right: 1em;
+}
+
+.dropdown::after {
+  content: '';
+  position: absolute;
+  display: block;
+  right: .2em;
+  top: calc(50% - .1em);
+  width: 0;
+  height: 0;
+  border: .4em solid transparent;
+  border-top-color: dodgerblue;
+  pointer-events: none
+}
 
 [draggable='true'] {
   cursor: grab;

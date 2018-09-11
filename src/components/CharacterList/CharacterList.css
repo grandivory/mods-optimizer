@@ -55,17 +55,10 @@
 
 .character-block select {
   display: inline-block;
-  width: 7em;
+  width: 7.8em;
   vertical-align: middle;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  font-size: 1em;
   color: rgb(28, 169, 212);
   background-color: rgb(30, 47, 70);
-  border: 1px solid dodgerblue;
-  border-radius: 0;
-  margin: .25em;
-  padding: .25em;
 }
 
 .character-block button {
