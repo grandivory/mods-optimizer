@@ -1021,6 +1021,18 @@ let charactersArray = [
     true
   ),
   Character.basicCharacter(
+    'Jango Fett',
+    'JANGOFETT',
+    DamageType.physical,
+    optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
+    {
+      'PvP': optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')
+    },
+    ['Dark Side', 'Attacker', 'Bounty Hunter', 'Scoundrel'],
+    [],
+    false
+  ),
+  Character.basicCharacter(
     'Jawa',
     'JAWA',
     DamageType.mixed,
