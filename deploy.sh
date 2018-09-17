@@ -69,7 +69,7 @@ npm run build
 aws s3 sync --delete --profile grandivory build/ ${endpoint}
 
 # Make sure that index.html is not cached
-aws s3 cp --profile grandivory ${endpoint}/index.html ${endpoint}/index.html --cache-control no-cache --metadata "{\"Cache-control\": \"no-cache\"}"
+aws s3 cp --profile grandivory ${endpoint}/index.html ${endpoint}/index.html --cache-control no-store --metadata "{\"Cache-control\": \"no-cache\"}"
 
 # Return to the previous working state
 if [ "${unstash}" = true ]
