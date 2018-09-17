@@ -290,23 +290,26 @@ class App extends Component {
                   ) :
                   NullCharacterStats;
 
-                const totalStats = statsObject.gear ?
-                  new BaseStats(
-                    baseStats.health + (statsObject.gear['Health'] || 0),
-                    baseStats.protection + (statsObject.gear['Protection'] || 0),
-                    baseStats.speed + (statsObject.gear['Speed'] || 0),
-                    baseStats.potency + (statsObject.gear['Potency'] || 0),
-                    baseStats.tenacity + (statsObject.gear['Tenacity'] || 0),
-                    baseStats.physDmg + (statsObject.gear['Physical Damage'] || 0),
-                    baseStats.physCritRating + (statsObject.gear['Physical Critical Rating'] || 0),
-                    baseStats.armor + (statsObject.gear['Armor'] || 0),
-                    baseStats.specDmg + (statsObject.gear['Special Damage'] || 0),
-                    baseStats.specCritRating + (statsObject.gear['Special Critical Rating'] || 0),
-                    baseStats.resistance + (statsObject.gear['Resistance'] || 0),
-                    baseCharacter.physDmgPct
-                  ) :
-                  NullCharacterStats;
+                let totalStats = NullCharacterStats;
 
+                if (statsObject.gear) {
+                  const gearStats = new BaseStats(
+                      statsObject.gear['Health'] || 0,
+                      statsObject.gear['Protection'] || 0,
+                      statsObject.gear['Speed'] || 0,
+                      statsObject.gear['Potency'] || 0,
+                      statsObject.gear['Tenacity'] || 0,
+                      statsObject.gear['Physical Damage'] || 0,
+                      statsObject.gear['Physical Critical Rating'] || 0,
+                      statsObject.gear['Armor'] || 0,
+                      statsObject.gear['Special Damage'] || 0,
+                      statsObject.gear['Special Critical Rating'] || 0,
+                      statsObject.gear['Resistance'] || 0,
+                      baseCharacter.physDmgPct
+                  );
+                  totalStats = baseStats.plus(gearStats);
+                }
+                
                 baseCharacter.baseStats = baseStats;
                 baseCharacter.totalStats = totalStats;
               }
