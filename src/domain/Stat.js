@@ -3,23 +3,28 @@
 import statTypeMap from "../constants/statTypeMap";
 
 class Stat {
-  constructor(type, value) {
+  constructor(type, value, rolls = 1) {
     this.displayModifier = type.endsWith('%') || value.endsWith('%') ? '%' : '';
     this.type = type;
     this.displayType = type.endsWith('%') ? type.substr(0, type.length - 1).trim() : type;
     this.rawValue = value.replace(/[+%]/g, '');
     this.value = +this.rawValue;
     this.isPercent = '%' === this.displayModifier && Stat.mixedTypes.includes(this.displayType);
+    this.rolls = rolls;
     this.updateDisplayValue();
   }
 
   /**
-   * Set a class value on this stat
-   *
-   * @param clazz string The class to associate with this stat
+   * Return a CSS class to represent this stat
    */
-  setClass(clazz) {
-    this.class = clazz;
+  getClass() {
+    switch (this.rolls) {
+      case 5: return 'S';
+      case 4: return 'A';
+      case 3: return 'B';
+      case 2: return 'C';
+      default: return 'D';
+    }
   }
 
   /**

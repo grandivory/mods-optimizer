@@ -19,17 +19,6 @@ class Mod {
   }
 
   /**
-   * Given a stat classifier, apply the proper class to each secondary stat this mod has.
-   * @param statClassifier
-   */
-  classifyStats(statClassifier) {
-    for (let j = 0; j < this.secondaryStats.length; j++) {
-      let stat = this.secondaryStats[j];
-      stat.setClass(statClassifier.classify(stat));
-    }
-  }
-
-  /**
    * Convert this mod to a simple JSON object so that it can be stringified
    */
   serialize() {
@@ -74,16 +63,16 @@ class Mod {
     let secondaryStats = [];
 
     if ('None' !== modJson.secondaryType_1 && '' !== modJson.secondaryValue_1) {
-      secondaryStats.push(new Stat(modJson.secondaryType_1, modJson.secondaryValue_1));
+      secondaryStats.push(new Stat(modJson.secondaryType_1, modJson.secondaryValue_1, +modJson.secondaryRoll_1 || 1));
     }
     if ('None' !== modJson.secondaryType_2 && '' !== modJson.secondaryValue_2) {
-      secondaryStats.push(new Stat(modJson.secondaryType_2, modJson.secondaryValue_2));
+      secondaryStats.push(new Stat(modJson.secondaryType_2, modJson.secondaryValue_2, +modJson.secondaryRoll_2 || 1));
     }
     if ('None' !== modJson.secondaryType_3 && '' !== modJson.secondaryValue_3) {
-      secondaryStats.push(new Stat(modJson.secondaryType_3, modJson.secondaryValue_3));
+      secondaryStats.push(new Stat(modJson.secondaryType_3, modJson.secondaryValue_3, +modJson.secondaryRoll_3 || 1));
     }
     if ('None' !== modJson.secondaryType_4 && '' !== modJson.secondaryValue_4) {
-      secondaryStats.push(new Stat(modJson.secondaryType_4, modJson.secondaryValue_4));
+      secondaryStats.push(new Stat(modJson.secondaryType_4, modJson.secondaryValue_4, +modJson.secondaryRoll_4 || 1));
     }
 
     const currentCharacter = ('' !== modJson.characterName && 'UNASSIGNED' !== modJson.characterName) ?

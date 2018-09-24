@@ -41,9 +41,9 @@ class ModStats extends React.Component {
    * @param index integer The array index of this stat for this mod
    */
   static showStatElement(stat, index) {
-    return <li key={index} className={'class-' + stat.class}>
-      {stat.show()}
-      <span className='class'>{stat.class}</span>
+    return <li key={index} className={'class-' + stat.getClass()}>
+      <span className={'rolls'}>({stat.rolls})</span> {stat.show()}
+      {/*<span className={'class'}>{stat.getClass()}</span>*/}
     </li>;
   }
 }

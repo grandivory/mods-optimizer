@@ -1,7 +1,6 @@
 // @flow
 
 import React, {Component} from 'react';
-import StatClassifier from '../../utils/StatClassifier';
 import '../boilerplate.css';
 import './App.css';
 import Mod from "../../domain/Mod";
@@ -472,11 +471,6 @@ class App extends Component {
       mods = Object.values(Object.assign(oldMods, newMods));
     } else {
       mods = Object.values(newMods);
-    }
-
-    const statClassifier = new StatClassifier(this.calculateStatCategoryRanges(mods));
-    for (let mod of mods) {
-      mod.classifyStats(statClassifier);
     }
 
     return mods;
