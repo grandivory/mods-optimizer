@@ -57,7 +57,7 @@ class Stat {
     const percent = (this.isPercent || !Stat.mixedTypes.includes(this.displayType)) &&
     !this.type.includes('%') ? '%' : '';
 
-    return [this.type, `+${this.rawValue}${percent}`];
+    return [this.type, `+${this.rawValue}${percent}`, this.rolls];
   }
 
   /**
