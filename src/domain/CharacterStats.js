@@ -94,6 +94,27 @@ class CharacterStats {
     return typeof number !== 'undefined' && null !== number && !isNaN(number);
   }
 
+  /**
+   * Add two CharacterStats objects together, returning the result in a new object
+   * @param that CharacterStats
+   */
+  plus(that) {
+    return new CharacterStats(
+        this.health + that.health,
+        this.protection + that.protection,
+        this.speed + that.speed,
+        (this.potency + that.potency) / 100,
+        (this.tenacity + that.tenacity) / 100,
+        this.physDmg + that.physDmg,
+        this.physCritRating + that.physCritRating,
+        this.armor + that.armor,
+        this.specDmg + that.specDmg,
+        this.specCritRating + that.specCritRating,
+        this.resistance + that.resistance,
+        this.physDmgPercent
+    )
+  }
+
   serialize() {
     let baseStatsObject = {};
 

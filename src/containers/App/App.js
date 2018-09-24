@@ -268,43 +268,47 @@ class App extends Component {
           try {
             const characterStats = JSON.parse(xhr.responseText);
             characterStats.forEach(characterObject => {
-              const baseCharacter = Object.values(characters).find(c => c.baseID === characterObject.unit.characterID);
+              const baseCharacter = Object.values(characters).find(c => c.baseID === characterObject.unit.defId);
 
               if (baseCharacter && characterObject.stats) {
-                const baseStats = characterObject.stats.base ?
+                const statsObject = characterObject.stats;
+                const baseStats = statsObject.base ?
                   new BaseStats(
-                    characterObject.stats.base['Health'] || 0,
-                    characterObject.stats.base['Protection'] || 0,
-                    characterObject.stats.base['Speed'] || 0,
-                    characterObject.stats.base['Potency'] || 0,
-                    characterObject.stats.base['Tenacity'] || 0,
-                    characterObject.stats.base['Physical Damage'] || 0,
-                    characterObject.stats.base['Physical Critical Rating'] || 0,
-                    characterObject.stats.base['Armor'] || 0,
-                    characterObject.stats.base['Special Damage'] || 0,
-                    characterObject.stats.base['Special Critical Rating'] || 0,
-                    characterObject.stats.base['Resistance'] || 0,
+                    statsObject.base['Health'] || 0,
+                    statsObject.base['Protection'] || 0,
+                    statsObject.base['Speed'] || 0,
+                    statsObject.base['Potency'] || 0,
+                    statsObject.base['Tenacity'] || 0,
+                    statsObject.base['Physical Damage'] || 0,
+                    statsObject.base['Physical Critical Rating'] || 0,
+                    statsObject.base['Armor'] || 0,
+                    statsObject.base['Special Damage'] || 0,
+                    statsObject.base['Special Critical Rating'] || 0,
+                    statsObject.base['Resistance'] || 0,
                     baseCharacter.physDmgPct
                   ) :
                   NullCharacterStats;
 
-                const totalStats = characterObject.gear ?
-                  new BaseStats(
-                    baseStats.health + (characterObject.gear['Health'] || 0),
-                    baseStats.protection + (characterObject.gear['Protection'] || 0),
-                    baseStats.speed + (characterObject.gear['Speed'] || 0),
-                    baseStats.potency + (characterObject.gear['Potency'] || 0),
-                    baseStats.tenacity + (characterObject.gear['Tenacity'] || 0),
-                    baseStats.physDmg + (characterObject.gear['Physical Damage'] || 0),
-                    baseStats.physCritRating + (characterObject.gear['Physical Critical Rating'] || 0),
-                    baseStats.armor + (characterObject.gear['Armor'] || 0),
-                    baseStats.specDmg + (characterObject.gear['Special Damage'] || 0),
-                    baseStats.specCritRating + (characterObject.gear['Special Critical Rating'] || 0),
-                    baseStats.resistance + (characterObject.gear['Resistance'] || 0),
-                    baseCharacter.physDmgPct
-                  ) :
-                  NullCharacterStats;
+                let totalStats = NullCharacterStats;
 
+                if (statsObject.gear) {
+                  const gearStats = new BaseStats(
+                      statsObject.gear['Health'] || 0,
+                      statsObject.gear['Protection'] || 0,
+                      statsObject.gear['Speed'] || 0,
+                      statsObject.gear['Potency'] || 0,
+                      statsObject.gear['Tenacity'] || 0,
+                      statsObject.gear['Physical Damage'] || 0,
+                      statsObject.gear['Physical Critical Rating'] || 0,
+                      statsObject.gear['Armor'] || 0,
+                      statsObject.gear['Special Damage'] || 0,
+                      statsObject.gear['Special Critical Rating'] || 0,
+                      statsObject.gear['Resistance'] || 0,
+                      baseCharacter.physDmgPct
+                  );
+                  totalStats = baseStats.plus(gearStats);
+                }
+                
                 baseCharacter.baseStats = baseStats;
                 baseCharacter.totalStats = totalStats;
               }
