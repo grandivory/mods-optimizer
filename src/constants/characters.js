@@ -484,7 +484,7 @@ let charactersArray = [
     DamageType.physical,
     new OptimizationPlan('PvP', 15, 15, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0),
     {
-      'PvP': new OptimizationPlan('PvP', 25, 25, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0)
+      'PvP': new OptimizationPlan('PvP', 15, 15, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0)
     },
     ['Dark Side', 'Sith', 'Tank'],
     ['Nightmare'],
