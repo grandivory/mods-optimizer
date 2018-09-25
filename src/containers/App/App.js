@@ -15,6 +15,8 @@ import BaseStats, {NullCharacterStats} from "../../domain/CharacterStats";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
 import {characters} from "../../constants/characters";
 import {modSets, modSlots, modStats} from "../../constants/enums";
+import {changeSection} from "../../state/actions";
+import {connect} from "react-redux";
 
 class App extends Component {
   constructor(props) {
@@ -22,7 +24,6 @@ class App extends Component {
     this.version = process.env.REACT_APP_VERSION || 'local';
 
     this.state = {
-      'view': 'optimize',
       'mods': []
     };
 
@@ -486,86 +487,31 @@ class App extends Component {
     return mods;
   }
 
-  /**
-   * For each type of secondary stat on a mod, calculate the minimum and maximum values found
-   *
-   * @param mods array
-   * @returns object An object with a property for each secondary stat type, with values of "min" and "max"
-   */
-  calculateStatCategoryRanges(mods) {
-    let allStats = [];
-    let statGroups = {};
-    let statRanges = {};
-
-    // Collect all stat values on all mods
-    for (let mod of mods) {
-      allStats = allStats.concat(mod.secondaryStats);
-    }
-
-    // Group the stat values by the stat type
-    for (let stat of allStats) {
-      if ('undefined' !== typeof statGroups[stat.type]) {
-        statGroups[stat.type].push(stat.value);
-      } else {
-        statGroups[stat.type] = [stat.value];
-      }
-    }
-
-    // Find the minimum and maximum of each stat type
-    for (let type in statGroups) {
-      statRanges[type] = statGroups[type].reduce(
-        (minMax, statValue) => {
-          if (statValue < minMax.min) {
-            minMax.min = statValue;
-          }
-          if (statValue > minMax.max) {
-            minMax.max = statValue;
-          }
-          return minMax;
-        },
-        {'min': Infinity, 'max': 0}
-      );
-    }
-
-    return statRanges;
-  }
-
   render() {
     const instructionsScreen = 0 === this.state.mods.length;
 
-    return (
-      <div className={'App'}>
-        {this.header(!instructionsScreen)}
-        <div className={'app-body'}>
-          {instructionsScreen && this.welcome()}
-          {!instructionsScreen && 'explore' === this.state.view &&
-          <ExploreView mods={this.state.mods} saveState={this.saveState.bind(this)}/>
-          }
-          {!instructionsScreen && 'optimize' === this.state.view &&
-          <OptimizerView
-            mods={this.state.mods}
-            availableCharacters={this.state.availableCharacters}
-            selectedCharacters={this.state.selectedCharacters}
-            saveState={this.saveState.bind(this)}
-          />
-          }
-          <Modal show={this.state.error} className={'error-modal'} content={this.errorModal(this.state.error)}/>
-          <Modal show={this.state.reset} className={'reset-modal'} content={this.resetModal()}/>
-          <Modal show={this.state.showChangeLog} className={'changelog-modal'} content={this.changeLogModal()}/>
-          <Spinner show={this.state.loading}/>
-        </div>
-        {this.footer()}
+    return <div className={'App'}>
+      {this.header(!instructionsScreen)}
+      <div className={'app-body'}>
+        {instructionsScreen && this.welcome()}
+        {!instructionsScreen && 'explore' === this.props.section &&
+        <ExploreView mods={this.state.mods} saveState={this.saveState.bind(this)}/>
+        }
+        {!instructionsScreen && 'optimize' === this.props.section &&
+        <OptimizerView
+          mods={this.state.mods}
+          availableCharacters={this.state.availableCharacters}
+          selectedCharacters={this.state.selectedCharacters}
+          saveState={this.saveState.bind(this)}
+        />
+        }
+        <Modal show={this.state.error} className={'error-modal'} content={this.errorModal(this.state.error)}/>
+        <Modal show={this.state.reset} className={'reset-modal'} content={this.resetModal()}/>
+        <Modal show={this.state.showChangeLog} className={'changelog-modal'} content={this.changeLogModal()}/>
+        <Spinner show={this.state.loading}/>
       </div>
-    );
-  }
-
-  /**
-   * Update the view to show a particular page.
-   *
-   * @param pageName string The page to show
-   */
-  showPage(pageName) {
-    this.setState({'view': pageName});
+      {this.footer()}
+    </div>;
   }
 
   /**
@@ -578,11 +524,11 @@ class App extends Component {
       <h1 className={'App-title'}>Grandivory's Mod Optimizer for Star Wars: Galaxy of Heroes™</h1>
       {showActions &&
       <nav>
-        <button className={'explore' === this.state.view ? 'active' : ''}
-                onClick={this.showPage.bind(this, 'explore')}>Explore my mods
+        <button className={'explore' === this.props.section ? 'active' : ''}
+                onClick={() => this.props.changeSection('explore')}>Explore my mods
         </button>
-        <button className={'optimize' === this.state.view ? 'active' : ''}
-                onClick={this.showPage.bind(this, 'optimize')}>Optimize my mods
+        <button className={'optimize' === this.props.section ? 'active' : ''}
+                onClick={() => this.props.changeSection('optimize')}>Optimize my mods
         </button>
       </nav>
       }
@@ -793,4 +739,14 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  changeSection: newSection => {
+    dispatch(changeSection(newSection));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

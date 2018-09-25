@@ -1,13 +1,8 @@
-function requestProfile(allyCode) {
-  return {
-    type: 'REQUEST_PROFILE',
-    allyCode: allyCode
-  };
-}
+export const CHANGE_SECTION = 'CHANGE_SECTION';
 
-function receiveProfile(profile) {
+export function changeSection(newSection) {
   return {
-    type: 'RECEIVE_PROFILE',
-    profile: profile
+    type: CHANGE_SECTION,
+    section: newSection
   };
 }
