@@ -15,7 +15,7 @@ import BaseStats, {NullCharacterStats} from "../../domain/CharacterStats";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
 import {characters} from "../../constants/characters";
 import {modSets, modSlots, modStats} from "../../constants/enums";
-import {changeSection} from "../../state/actions";
+import {changeSection, fetchProfile, logState} from "../../state/actions";
 import {connect} from "react-redux";
 
 class App extends Component {
@@ -26,6 +26,7 @@ class App extends Component {
     this.state = {
       'mods': []
     };
+
 
     const restoredState = this.restoreState();
 
@@ -175,6 +176,8 @@ class App extends Component {
   queryPlayerProfile(allyCode) {
     const xhr = new XMLHttpRequest();
     const me = this;
+
+    this.props.fetchProfile(allyCode);
 
     xhr.open('POST', `https://api.mods-optimizer.swgoh.grandivory.com/playerprofile/`, true);
     xhr.onload = function() {
@@ -586,7 +589,7 @@ class App extends Component {
         </a>
         }
         {showActions &&
-        <button type={'button'} className={'red'} onClick={() => this.setState({'reset': true})}>
+        <button type={'button'} className={'red'} onClick={() => this.props.logState()}>
           Reset Mods Optimizer
         </button>
         }
@@ -746,6 +749,12 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch => ({
   changeSection: newSection => {
     dispatch(changeSection(newSection));
+  },
+  fetchProfile: allyCode => {
+    dispatch(fetchProfile(allyCode));
+  },
+  logState: () => {
+    dispatch(logState());
   }
 });
 

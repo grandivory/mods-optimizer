@@ -39,7 +39,7 @@ class Character {
     this.isLocked = isLocked || false
   }
 
-  static basicCharacter(name, baseID, physDmgPct, defaultPlan, namedPlans, tags, extraTags, useOnly5dotMods) {
+  static statlessCharacter(name, baseID, physDmgPct, defaultPlan, namedPlans, tags, extraTags, useOnly5dotMods) {
     return new Character(
       name,
       baseID,
@@ -69,7 +69,7 @@ class Character {
       1,
       [],
       0,
-      1,
+      DamageType.physical,
       null,
       null,
       new OptimizationPlan(),
@@ -79,6 +79,27 @@ class Character {
       false,
       false
     );
+  }
+
+  static simpleCharacter(name, baseID, level, starLevel, gearLevel, gearPieces, galacticPower) {
+    return new Character(
+      name,
+      baseID,
+      level,
+      starLevel,
+      gearLevel,
+      gearPieces,
+      galacticPower,
+      DamageType.physical,
+      null,
+      null,
+      new OptimizationPlan(),
+      {},
+      [],
+      [],
+      false,
+      false
+    )
   }
 
   /**
@@ -91,7 +112,7 @@ class Character {
       this.level,
       this.starLevel,
       this.gearLevel,
-      this.gearPieces,
+      this.gearPieces.slice(0),
       this.galacticPower,
       this.physDmgPct,
       this.baseStats,
