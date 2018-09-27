@@ -232,7 +232,7 @@ let charactersArray = [
     },
     ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Support'],
     [],
-    false
+    true
   ),
   Character.basicCharacter(
     'Captain Han Solo',
@@ -281,6 +281,18 @@ let charactersArray = [
     },
     ['Light Side', 'Galactic Republic', 'Clone Trooper', 'Attacker'],
     ['zody'],
+    false
+  ),
+  Character.basicCharacter(
+    'Chewbacca',
+    'CHEWBACCA',
+    DamageType.physical,
+    optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+    {
+      'PvP': optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')
+    },
+    ['Light Side', 'Rebel', 'Scoundrel', 'Smuggler', 'Attacker'],
+    [],
     false
   ),
   Character.basicCharacter(
@@ -981,7 +993,7 @@ let charactersArray = [
     },
     ['Dark Side', 'Scoundrel', 'Bounty Hunter', 'Droid', 'Attacker'],
     [],
-    false
+    true
   ),
   Character.basicCharacter(
     'Ima-Gun Di',
