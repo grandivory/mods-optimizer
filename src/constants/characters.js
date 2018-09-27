@@ -1373,7 +1373,7 @@ let charactersArray = [
     {
       'PvE': new OptimizationPlan('PvE', 0, 0, 100, 50, 25, 0, 75, 0, 50, 0, 0, 0, 0),
       'PvP': optimizationStrategy["Speed, Crit, Physical Damage, Potency"],
-      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 40, 0, 0, 50, 0, 100, 0, 0, 0, 0)
+      'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 40, 0, 0, 100, 0, 0, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Attacker'],
     ['NS'],
