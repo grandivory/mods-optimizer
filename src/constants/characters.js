@@ -285,7 +285,7 @@ let charactersArray = [
   ),
   Character.basicCharacter(
     'Chewbacca',
-    'CHEWBACCA',
+    'CHEWBACCALEGENDARY',
     DamageType.physical,
     optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
     {
