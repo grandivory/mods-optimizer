@@ -1,6 +1,7 @@
 import {modSets, modSlots, modStats} from "../constants/enums";
 import {characters} from "../constants/characters";
 import Character from "../domain/Character";
+import Mod from "../domain/Mod";
 
 export const CHANGE_SECTION = 'CHANGE_SECTION';
 export const REQUEST_PROFILE = 'REQUEST_PROFILE';
@@ -103,7 +104,7 @@ export function fetchProfile(allyCode) {
           }).reduce((charactersObj, character) => Object.assign(charactersObj, {[character.baseID]: character}), {});
 
           return {
-            mods: profileMods,
+            mods: profileMods.map(Mod.deserialize),
             characters: profileCharacters
           };
         },

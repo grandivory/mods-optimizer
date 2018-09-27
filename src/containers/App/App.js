@@ -23,13 +23,8 @@ class App extends Component {
     super(props);
     this.version = process.env.REACT_APP_VERSION || 'local';
 
-    this.state = {
-      'mods': []
-    };
-
-
-    const restoredState = this.restoreState();
-
+    // const restoredState = this.restoreState();
+    //
     const queryParams = new URLSearchParams(document.location.search);
 
     if (queryParams.has('allyCode')) {
@@ -44,16 +39,17 @@ class App extends Component {
       // Split the numbers into chunks of 3
       const allyCodeChunks = allyCode.match(/\d{1,3}/g) || [];
 
-      restoredState.allyCode = allyCodeChunks.join('-');
+      // restoredState.allyCode = allyCodeChunks.join('-');
 
       // This needs to be set in a timeout so that we don't try to call `setState` in the constructor
-      window.setTimeout(() => this.queryPlayerProfile(allyCode), 0);
+      // window.setTimeout(() => this.queryPlayerProfile(allyCode), 0);
+      this.props.fetchProfile(allyCode);
     }
 
     // Remove the query string after reading anything we needed from it.
     window.history.replaceState({}, document.title, document.location.href.split('?')[0]);
 
-    this.state = Object.assign(this.state, restoredState);
+    // this.state = Object.assign(this.state, restoredState);
   }
 
   /**
@@ -74,8 +70,12 @@ class App extends Component {
     );
     window.localStorage.setItem(
       'optimizer.selectedCharacters',
-      JSON.stringify(this.state.selectedCharacters.map(character => character.serialize())));
-    window.localStorage.setItem('optimizer.version', this.version);
+      JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
+    );
+    window.localStorage.setItem(
+      'optimizer.version',
+      this.version
+    );
 
     if (saveProgressButton) {
       saveProgressButton.href = this.getProgressData();
@@ -173,96 +173,86 @@ class App extends Component {
    *
    * @param allyCode The player's ally code
    */
-  queryPlayerProfile(allyCode) {
-    const xhr = new XMLHttpRequest();
-    const me = this;
-
-    this.props.fetchProfile(allyCode);
-
-    xhr.open('POST', `https://api.mods-optimizer.swgoh.grandivory.com/playerprofile/`, true);
-    xhr.onload = function() {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-          try {
-            const playerProfile = JSON.parse(xhr.responseText);
-            const roster = playerProfile.roster.filter(entry => entry.combatType === 'CHARACTER');
-            const mods = roster
-            .map(character => character.mods.map(mod => {
-              mod.characterName = character.nameKey;
-              mod.mod_uid = mod.id;
-              mod.set = modSets[mod.set];
-              mod.slot = modSlots[mod.slot];
-              mod.primaryBonusType = modStats[mod.primaryStat.unitStat];
-              mod.primaryBonusValue = `${mod.primaryStat.value}`;
-              for (let i = 1; i <= 4; i++) {
-                const modStat = mod.secondaryStat[i - 1];
-                if (!modStat) {
-                  mod[`secondaryType_${i}`] = 'None';
-                  mod[`secondaryValue_${i}`] = '';
-                  mod[`secondaryRoll_${i}`] = '';
-                } else {
-                  mod[`secondaryType_${i}`] = modStats[modStat.unitStat];
-                  mod[`secondaryValue_${i}`] = `${modStat.value}`;
-                  mod[`secondaryRoll_${i}`] = modStat.roll;
-                }
-              }
-              return mod;
-            }))
-            .reduce((allMods, charMods) => allMods.concat(charMods), []);
-
-            roster.forEach(character => {
-              const baseCharacter = Object.values(characters).find(c => c.baseID === character.defId);
-
-              if (baseCharacter) {
-                baseCharacter.level = character.level;
-                baseCharacter.gearLevel = character.gear;
-                baseCharacter.starLevel = character.rarity;
-                baseCharacter.gearPieces = character.equipped;
-                baseCharacter.galacticPower = character.gp;
-              }
-            });
-
-            me.setState({
-              'mods': me.processMods(mods, document.getElementById('keep-old-mods').checked),
-              'loading': false,
-              'allyCode': allyCode
-            });
-            me.saveState();
-
-            // After we update characters, always update their stats, too
-            me.queryCharacterStats();
-          } catch (e) {
-            me.setState({
-              'error': e.message,
-              'loading': false
-            });
-          }
-        } else {
-          me.setState({
-            'error': xhr.responseText,
-            'loading': false
-          });
-        }
-      }
-    };
-
-    xhr.onerror = function() {
-      me.setState({
-        'error': xhr.responseText || 'Unknown error fetching your player profile.',
-        'loading': false
-      });
-    };
-
-    xhr.setRequestHeader('Accept', 'application/json');
-
-    xhr.send(JSON.stringify({
-      'ally-code': allyCode.replace(/[^\d]/g, '')
-    }));
-
-    this.setState({
-      loading: true
-    });
-  }
+  // queryPlayerProfile(allyCode) {
+  //   const xhr = new XMLHttpRequest();
+  //   const me = this;
+  //
+  //   this.props.fetchProfile(allyCode);
+  //
+  //   xhr.open('POST', `https://api.mods-optimizer.swgoh.grandivory.com/playerprofile/`, true);
+  //   xhr.onload = function() {
+  //     if (xhr.readyState === XMLHttpRequest.DONE) {
+  //       if (xhr.status === 200) {
+  //         try {
+  //           const playerProfile = JSON.parse(xhr.responseText);
+  //           const roster = playerProfile.roster.filter(entry => entry.type === 'CHARACTER');
+  //           const mods = roster
+  //             .map(character => character.mods.map(mod => {
+  //               mod.characterName = character.name;
+  //               mod.mod_uid = mod.id;
+  //               mod.set = modSets[mod.set];
+  //               mod.slot = modSlots[mod.slot];
+  //               mod.primaryBonusType = modStats[mod.primaryBonusType];
+  //               for (let i = 1; i <= 4; i++) {
+  //                 mod[`secondaryType_${i}`] = modStats[mod[`secondaryType_${i}`]];
+  //               }
+  //               return mod;
+  //             }))
+  //             .reduce((allMods, charMods) => allMods.concat(charMods), []);
+  //
+  //           roster.forEach(character => {
+  //             const baseCharacter = Object.values(characters).find(c => c.baseID === character.defId);
+  //
+  //             if (baseCharacter) {
+  //               baseCharacter.level = character.level;
+  //               baseCharacter.gearLevel = character.gear;
+  //               baseCharacter.starLevel = character.rarity;
+  //               baseCharacter.gearPieces = character.equipped;
+  //               baseCharacter.galacticPower = character.gp;
+  //             }
+  //           });
+  //
+  //           me.setState({
+  //             'mods': me.processMods(mods, document.getElementById('keep-old-mods').checked),
+  //             'loading': false,
+  //             'allyCode': allyCode
+  //           });
+  //           me.saveState();
+  //
+  //           // After we update characters, always update their stats, too
+  //           me.queryCharacterStats();
+  //         } catch (e) {
+  //           me.setState({
+  //             'error': e.message,
+  //             'loading': false
+  //           });
+  //         }
+  //       } else {
+  //         me.setState({
+  //           'error': xhr.responseText,
+  //           'loading': false
+  //         });
+  //       }
+  //     }
+  //   };
+  //
+  //   xhr.onerror = function() {
+  //     me.setState({
+  //       'error': xhr.responseText || 'Unknown error fetching your player profile.',
+  //       'loading': false
+  //     });
+  //   };
+  //
+  //   xhr.setRequestHeader('Accept', 'application/json');
+  //
+  //   xhr.send(JSON.stringify({
+  //     'ally-code': allyCode.replace(/[^\d]/g, '')
+  //   }));
+  //
+  //   this.setState({
+  //     loading: true
+  //   });
+  // }
 
   /**
    * Query for the base stats of every character known to the tool so that they can be optimized accurately
@@ -491,27 +481,30 @@ class App extends Component {
   }
 
   render() {
-    const instructionsScreen = 0 === this.state.mods.length;
+    const instructionsScreen = !this.props.profile;
+
+    console.log(this.props);
+    console.log(instructionsScreen);
 
     return <div className={'App'}>
       {this.header(!instructionsScreen)}
       <div className={'app-body'}>
         {instructionsScreen && this.welcome()}
         {!instructionsScreen && 'explore' === this.props.section &&
-        <ExploreView mods={this.state.mods} saveState={this.saveState.bind(this)}/>
+        <ExploreView mods={this.props.profile.mods}/>// saveState={this.saveState.bind(this)}/>
         }
         {!instructionsScreen && 'optimize' === this.props.section &&
         <OptimizerView
-          mods={this.state.mods}
-          availableCharacters={this.state.availableCharacters}
-          selectedCharacters={this.state.selectedCharacters}
-          saveState={this.saveState.bind(this)}
+          mods={this.props.profile.mods}
+          availableCharacters={Object.values(this.props.profile.characters)}
+          selectedCharacters={[]}
+          // saveState={this.saveState.bind(this)}
         />
         }
-        <Modal show={this.state.error} className={'error-modal'} content={this.errorModal(this.state.error)}/>
-        <Modal show={this.state.reset} className={'reset-modal'} content={this.resetModal()}/>
-        <Modal show={this.state.showChangeLog} className={'changelog-modal'} content={this.changeLogModal()}/>
-        <Spinner show={this.state.loading}/>
+        <Modal show={this.props.error} className={'error-modal'} content={this.props.error}/>
+        <Modal show={this.props.modal} className={'reset-modal'} content={this.props.modal}/>
+        {/*<Modal show={this.state.showChangeLog} className={'changelog-modal'} content={this.changeLogModal()}/>*/}
+        <Spinner show={this.props.isBusy}/>
       </div>
       {this.footer()}
     </div>;
@@ -538,10 +531,10 @@ class App extends Component {
       <div className={'actions'}>
         <label htmlFor={'ally-code'}>Ally code:</label>
         <input id={'ally-code'} type={'text'} inputMode={'numeric'}
-               defaultValue={this.state.allyCode || ''}
+               defaultValue={this.props.allyCode || ''}
                onKeyUp={(e) => {
                  if (e.key === 'Enter') {
-                   this.queryPlayerProfile(e.target.value);
+                   this.props.fetchProfile(e.target.value);
                  }
                  // Don't change the input if the user is trying to select something
                  if (window.getSelection().toString() !== '') {
@@ -568,9 +561,7 @@ class App extends Component {
                  e.target.value = allyCodeChunks.join('-');
                }}
         />
-        <button type={'button'} onClick={() => {
-          this.queryPlayerProfile(document.getElementById('ally-code').value);
-        }}>
+        <button type={'button'} onClick={() => {this.props.fetchProfile(document.getElementById('ally-code').value);}}>
           Fetch my data!
         </button>
         <input id={'keep-old-mods'} name={'keep-old-mods'} type={'checkbox'} value={'keep-old-mods'}
@@ -589,10 +580,13 @@ class App extends Component {
         </a>
         }
         {showActions &&
-        <button type={'button'} className={'red'} onClick={() => this.props.logState()}>
+        <button type={'button'} className={'red'} onClick={() => this.setState({reset: true})}>
           Reset Mods Optimizer
         </button>
         }
+        <button type={'button'} onClick={() => this.props.logState()}>
+          Log State
+        </button>
       </div>
     </header>;
   }
@@ -742,9 +736,19 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  ...state
-});
+const mapStateToProps = (state) => {
+  const appProps = {
+    isBusy: state.isBusy,
+    allyCode: state.allyCode,
+    section: state.section
+  };
+
+  if (state.allyCode) {
+    appProps.profile = state.profiles[state.allyCode]
+  }
+
+  return appProps;
+};
 
 const mapDispatchToProps = dispatch => ({
   changeSection: newSection => {

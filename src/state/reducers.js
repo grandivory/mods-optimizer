@@ -1,4 +1,5 @@
 import {CHANGE_SECTION, REQUEST_PROFILE, RECEIVE_PROFILE, LOG} from "./actions";
+import {saveState} from "./storage";
 
 const initialState = {
   section: 'optimize',
@@ -37,7 +38,9 @@ export function optimizerApp(state = initialState, action) {
     case REQUEST_PROFILE:
       return requestProfile(state, action);
     case RECEIVE_PROFILE:
-      return receiveProfile(state, action);
+      const newState = receiveProfile(state, action);
+      saveState(newState);
+      return newState;
     case LOG:
       console.log(state);
       return Object.assign({}, state);
