@@ -289,7 +289,8 @@ let charactersArray = [
     DamageType.physical,
     optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
     {
-      'PvP': optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')
+      'PvP': optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      'Chew Mix': new OptimizationPlan('Chew Mix', 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)
     },
     ['Light Side', 'Rebel', 'Scoundrel', 'Smuggler', 'Attacker'],
     [],
