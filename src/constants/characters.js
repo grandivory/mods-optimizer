@@ -242,7 +242,7 @@ let charactersArray = [
     {
       'PvP': new OptimizationPlan('PvP', 20, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0)
     },
-    ['Light Side', 'Scountrel', 'Rebel', 'Support'],
+    ['Light Side', 'Scoundrel', 'Rebel', 'Support'],
     ['CHS', 'CHolo', 'Snolo', 'Hoth Han'],
     false
   ),
@@ -293,7 +293,7 @@ let charactersArray = [
       'Chew Mix': new OptimizationPlan('Chew Mix', 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)
     },
     ['Light Side', 'Rebel', 'Scoundrel', 'Smuggler', 'Attacker'],
-    [],
+    ['Chex Mix'],
     false
   ),
   Character.basicCharacter(
