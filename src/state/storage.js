@@ -3,6 +3,8 @@
  * @param state Object
  */
 import {mapObject} from "../utils/mapObject";
+import Character from "../domain/Character";
+import Mod from "../domain/Mod";
 
 export function saveState(state) {
   const storedState = serializeState(state);
@@ -14,14 +16,26 @@ export function saveState(state) {
  * @returns Object state
  */
 export function restoreState() {
+  const state = window.localStorage.getItem('optimizer.state');
 
+  if (state) {
+    return deserializeState(state);
+  } else {
+    return {
+      version: process.env.REACT_APP_VERSION || 'local',
+      section: 'optimize',
+      allyCode: '',
+      isBusy: false,
+      profiles: {}
+    };
+  }
 }
 
 /**
  * Convert the state from an in-memory representation to a serialized representation
  * @param state Object
  */
-export function serializeState(state) {
+function serializeState(state) {
   if ('function' === typeof state.serialize) {
     return state.serialize();
   } else if (state instanceof Array) {
@@ -31,4 +45,25 @@ export function serializeState(state) {
   } else {
     return state;
   }
+}
+
+/**
+ * Convert the state from a serialized representation to the in-memory representation used by the app
+ * @param state Object
+ */
+function deserializeState(state) {
+  const jsonState = JSON.parse(state);
+
+  return {
+    version: process.env.REACT_APP_VERSION || 'local',
+    section: jsonState.section,
+    allyCode: jsonState.allyCode,
+    isBusy: false,
+    profiles: mapObject(jsonState.profiles, profile => {
+      return {
+        characters: mapObject(profile.characters, (Character.deserialize)),
+        mods: profile.mods.map(Mod.deserialize)
+      }
+    })
+  };
 }

@@ -14,14 +14,12 @@ import Character from "../../domain/Character";
 import BaseStats, {NullCharacterStats} from "../../domain/CharacterStats";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
 import {characters} from "../../constants/characters";
-import {modSets, modSlots, modStats} from "../../constants/enums";
 import {changeSection, fetchProfile, logState} from "../../state/actions";
 import {connect} from "react-redux";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.version = process.env.REACT_APP_VERSION || 'local';
 
     // const restoredState = this.restoreState();
     //
@@ -607,7 +605,7 @@ class App extends Component {
       &nbsp;or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'} className={'gold'}>Patreon</a>
       <div className={'version'}>
-        <a onClick={() => this.setState({showChangeLog: true})}>version {this.version}</a>
+        <a onClick={() => this.setState({showChangeLog: true})}>version {this.props.version}</a>
       </div>
     </footer>;
   }
@@ -738,6 +736,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   const appProps = {
+    version: state.version,
     isBusy: state.isBusy,
     allyCode: state.allyCode,
     section: state.section
