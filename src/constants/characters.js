@@ -74,7 +74,7 @@ let charactersArray = [
     new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 10, 10, 20, 0, 0, 0, 0),
     {
       'PvP': new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 10, 10, 20, 0, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 0, 0, 20, 100, 0, 0, 25, 25, 0, 0, 0, 0, 0),
+      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 0, 0, 0, 100, 0, 0, 25, 0, 0, 0, 0, 0, 0),
       'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 15, 0, 50, 100, 0, 0, 30, 30, 0, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Separatist', 'Support'],
@@ -1332,7 +1332,7 @@ let charactersArray = [
     new OptimizationPlan('PvP', 0, 0, 100, 0, 50, 0, 0, 25, 10, 0, 0, 0, 0),
     {
       'PvP': new OptimizationPlan('PvP', 0, 0, 100, 0, 50, 0, 0, 25, 10, 0, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 0, 0, 50, 0, 0, 0, 0, 75, 25, 0, 0, 0, 0),
+      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 0, 0, 0, 100, 0, 0, 0, 75, 25, 0, 0, 0, 0),
       'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 0, -5, 0, 0, 10, 0, 0, 100, 0, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Support'],
@@ -1388,7 +1388,7 @@ let charactersArray = [
     {
       'Weak Zombie': new OptimizationPlan('Weak Zombie', 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false),
       'Strong Zombie': new OptimizationPlan('Strong Zombie', 20, 20, 100, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', -5, -5, 100, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, false),
+      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
       'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 20, 0, 100, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Tank'],
@@ -1426,7 +1426,7 @@ let charactersArray = [
     new OptimizationPlan('PvP', 25, 0, 100, 0, 25, 15, 0, 0, 0, 0, 0, 0, 0),
     {
       'PvP': new OptimizationPlan('PvP', 25, 0, 100, 0, 25, 15, 0, 0, 0, 0, 0, 0, 0),
-      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 50, 0, 75, 0, 0, 25, 25, 0, 0, 0, 0, 0, 0),
+      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
       'hSTR Phase 3': new OptimizationPlan('hSTR Phase 3', 50, 0, 75, 0, 15, 0, 5, 0, 0, 0, 0, 0, 0)
     },
     ['Dark Side', 'Nightsister', 'Healer'],
@@ -1796,9 +1796,9 @@ let charactersArray = [
     'Talia',
     'TALIA',
     DamageType.mixed,
-    optimizationStrategy['Speedy Chex Mix'].rename('hSTR Phase 4'),
+    new OptimizationPlan('hSTR Phase 4', 0, 0, 0, 0, 0, 0, 100, 0, 100, 0, 0, 0, 0, true),
     {
-      'hSTR Phase 4': optimizationStrategy['Speedy Chex Mix'].rename('hSTR Phase 4')
+      'hSTR Phase 4': new OptimizationPlan('hSTR Phase 4', 0, 0, 0, 0, 0, 0, 100, 0, 100, 0, 0, 0, 0, true)
     },
     ['Dark Side', 'Nightsister', 'Healer'],
     ['NS', 'hSTR NS'],
