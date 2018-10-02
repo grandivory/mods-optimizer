@@ -1,5 +1,5 @@
 import {modSets, modSlots, modStats} from "../constants/enums";
-import {characters} from "../constants/characters";
+import {characters} from "../constants/characterSettings";
 import Character from "../domain/Character";
 import Mod from "../domain/Mod";
 
@@ -79,7 +79,7 @@ export function fetchProfile(allyCode) {
             }))
             .reduce((allMods, charMods) => allMods.concat(charMods), []);
 
-          // Link each character to the base character defined in characters.js
+          // Link each character to the base character defined in characterSettings.js
           const profileCharacters = roster.map(character => {
             const baseCharacter = Object.values(characters).find(c => c.baseID === character.defId);
 

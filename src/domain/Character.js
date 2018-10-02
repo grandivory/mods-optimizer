@@ -2,6 +2,7 @@
 
 import BaseStats, {NullCharacterStats} from "./CharacterStats";
 import OptimizationPlan from "./OptimizationPlan";
+import {DamageType} from "./CharacterSettings";
 
 class Character {
   constructor(name,
@@ -245,14 +246,4 @@ class Character {
   }
 }
 
-const DamageType = {
-  'physical': 1,
-  'special': 0,
-  'mixed': .5
-};
-
-Object.freeze(DamageType);
-
 export default Character;
-
-export {DamageType};

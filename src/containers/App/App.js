@@ -3,17 +3,13 @@
 import React, {Component} from 'react';
 import '../boilerplate.css';
 import './App.css';
-import Mod from "../../domain/Mod";
 import OptimizerView from "../OptimizerView/OptimizerView";
 import ExploreView from "../ExploreView/ExploreView";
 import FileInput from "../../components/FileInput/FileInput";
 import Modal from "../../components/Modal/Modal";
 import WarningLabel from "../../components/WarningLabel/WarningLabel";
 import Spinner from "../../components/Spinner/Spinner";
-import Character from "../../domain/Character";
-import BaseStats, {NullCharacterStats} from "../../domain/CharacterStats";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
-import {characters} from "../../constants/characters";
 import {changeSection, fetchProfile, logState} from "../../state/actions";
 import {connect} from "react-redux";
 
@@ -108,117 +104,137 @@ class App extends Component {
    *
    * @returns {{availableCharacters: Array[Character], selectedCharacters: Array[Character]}}
    */
-  restoreCharacterList(version) {
-    const characterDefaults = Object.values(characters);
-    let availableCharactersLocation, selectedCharactersLocation, lockedCharactersLocation;
-
-    if (!version || version < '1.1.0') {
-      availableCharactersLocation = 'availableCharacters';
-      selectedCharactersLocation = 'selectedCharacters';
-      lockedCharactersLocation = 'lockedCharacters';
-    } else {
-      availableCharactersLocation = 'optimizer.availableCharacters';
-      selectedCharactersLocation = 'optimizer.selectedCharacters';
-      lockedCharactersLocation = '';
-    }
-
-    const savedAvailableCharacters = (JSON.parse(window.localStorage.getItem(availableCharactersLocation)) || []).map(
-      characterJson => Character.deserialize(characterJson, version)
-    );
-    const savedSelectedCharacters = (JSON.parse(window.localStorage.getItem(selectedCharactersLocation)) || []).map(
-      characterJson => Character.deserialize(characterJson, version)
-    );
-    const savedLockedCharacters = (JSON.parse(window.localStorage.getItem(lockedCharactersLocation)) || []).map(
-      characterJson => Character.deserialize(characterJson, version)
-    );
-
-    const savedCharacters = savedAvailableCharacters.concat(savedSelectedCharacters, savedLockedCharacters);
-
-    const newCharacters = characterDefaults.filter(character =>
-      !savedCharacters.some(c => c.name === character.name)
-    );
-
-    let availableCharacters = [];
-    let selectedCharacters = [];
-
-    savedAvailableCharacters.forEach(character => {
-      const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
-        Character.defaultCharacter(character.name);
-      defaultCharacter.apply(character);
-      availableCharacters.push(defaultCharacter);
-    });
-    savedSelectedCharacters.forEach(character => {
-      const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
-        Character.defaultCharacter(character.name);
-      defaultCharacter.apply(character);
-      selectedCharacters.push(defaultCharacter);
-    });
-    savedLockedCharacters.forEach(character => {
-      const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
-        Character.defaultCharacter(character.name);
-      defaultCharacter.apply(character);
-      availableCharacters.push(defaultCharacter);
-    });
-
-    return {
-      'availableCharacters': availableCharacters.concat(newCharacters),
-      'selectedCharacters': selectedCharacters,
-    };
-  }
+  // restoreCharacterList(version) {
+  //   const characterDefaults = Object.values(characters);
+  //   let availableCharactersLocation, selectedCharactersLocation, lockedCharactersLocation;
+  //
+  //   if (!version || version < '1.1.0') {
+  //     availableCharactersLocation = 'availableCharacters';
+  //     selectedCharactersLocation = 'selectedCharacters';
+  //     lockedCharactersLocation = 'lockedCharacters';
+  //   } else {
+  //     availableCharactersLocation = 'optimizer.availableCharacters';
+  //     selectedCharactersLocation = 'optimizer.selectedCharacters';
+  //     lockedCharactersLocation = '';
+  //   }
+  //
+  //   const savedAvailableCharacters = (JSON.parse(window.localStorage.getItem(availableCharactersLocation)) || []).map(
+  //     characterJson => Character.deserialize(characterJson, version)
+  //   );
+  //   const savedSelectedCharacters = (JSON.parse(window.localStorage.getItem(selectedCharactersLocation)) || []).map(
+  //     characterJson => Character.deserialize(characterJson, version)
+  //   );
+  //   const savedLockedCharacters = (JSON.parse(window.localStorage.getItem(lockedCharactersLocation)) || []).map(
+  //     characterJson => Character.deserialize(characterJson, version)
+  //   );
+  //
+  //   const savedCharacters = savedAvailableCharacters.concat(savedSelectedCharacters, savedLockedCharacters);
+  //
+  //   const newCharacters = characterDefaults.filter(character =>
+  //     !savedCharacters.some(c => c.name === character.name)
+  //   );
+  //
+  //   let availableCharacters = [];
+  //   let selectedCharacters = [];
+  //
+  //   savedAvailableCharacters.forEach(character => {
+  //     const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
+  //       Character.defaultCharacter(character.name);
+  //     defaultCharacter.apply(character);
+  //     availableCharacters.push(defaultCharacter);
+  //   });
+  //   savedSelectedCharacters.forEach(character => {
+  //     const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
+  //       Character.defaultCharacter(character.name);
+  //     defaultCharacter.apply(character);
+  //     selectedCharacters.push(defaultCharacter);
+  //   });
+  //   savedLockedCharacters.forEach(character => {
+  //     const defaultCharacter = characterDefaults.find(c => c.name === character.name) ||
+  //       Character.defaultCharacter(character.name);
+  //     defaultCharacter.apply(character);
+  //     availableCharacters.push(defaultCharacter);
+  //   });
+  //
+  //   return {
+  //     'availableCharacters': availableCharacters.concat(newCharacters),
+  //     'selectedCharacters': selectedCharacters,
+  //   };
+  // }
 
   /**
-   * Query the player profile from swgoh.help and parse the mods from it
-   *
-   * @param allyCode The player's ally code
+   * Query for the base stats of every character known to the tool so that they can be optimized accurately
    */
-  // queryPlayerProfile(allyCode) {
+  // queryCharacterStats() {
   //   const xhr = new XMLHttpRequest();
   //   const me = this;
   //
-  //   this.props.fetchProfile(allyCode);
-  //
-  //   xhr.open('POST', `https://api.mods-optimizer.swgoh.grandivory.com/playerprofile/`, true);
+  //   xhr.open('POST', 'https://crinolo-swgoh.glitch.me/statCalc/api/characters', true);
   //   xhr.onload = function() {
   //     if (xhr.readyState === XMLHttpRequest.DONE) {
   //       if (xhr.status === 200) {
   //         try {
-  //           const playerProfile = JSON.parse(xhr.responseText);
-  //           const roster = playerProfile.roster.filter(entry => entry.type === 'CHARACTER');
-  //           const mods = roster
-  //             .map(character => character.mods.map(mod => {
-  //               mod.characterName = character.name;
-  //               mod.mod_uid = mod.id;
-  //               mod.set = modSets[mod.set];
-  //               mod.slot = modSlots[mod.slot];
-  //               mod.primaryBonusType = modStats[mod.primaryBonusType];
-  //               for (let i = 1; i <= 4; i++) {
-  //                 mod[`secondaryType_${i}`] = modStats[mod[`secondaryType_${i}`]];
+  //           const characterStats = JSON.parse(xhr.responseText);
+  //           characterStats.forEach(characterObject => {
+  //             const baseCharacter = Object.values(characters).find(c => c.baseID === characterObject.unit.defId);
+  //
+  //             if (baseCharacter && characterObject.stats) {
+  //               const statsObject = characterObject.stats;
+  //               const baseStats = statsObject.base ?
+  //                 new BaseStats(
+  //                   statsObject.base['Health'] || 0,
+  //                   statsObject.base['Protection'] || 0,
+  //                   statsObject.base['Speed'] || 0,
+  //                   statsObject.base['Potency'] || 0,
+  //                   statsObject.base['Tenacity'] || 0,
+  //                   statsObject.base['Physical Damage'] || 0,
+  //                   statsObject.base['Physical Critical Rating'] || 0,
+  //                   statsObject.base['Armor'] || 0,
+  //                   statsObject.base['Special Damage'] || 0,
+  //                   statsObject.base['Special Critical Rating'] || 0,
+  //                   statsObject.base['Resistance'] || 0,
+  //                   baseCharacter.physDmgPct
+  //                 ) :
+  //                 NullCharacterStats;
+  //
+  //               let totalStats = NullCharacterStats;
+  //
+  //               if (statsObject.gear) {
+  //                 const gearStats = new BaseStats(
+  //                   statsObject.gear['Health'] || 0,
+  //                   statsObject.gear['Protection'] || 0,
+  //                   statsObject.gear['Speed'] || 0,
+  //                   statsObject.gear['Potency'] || 0,
+  //                   statsObject.gear['Tenacity'] || 0,
+  //                   statsObject.gear['Physical Damage'] || 0,
+  //                   statsObject.gear['Physical Critical Rating'] || 0,
+  //                   statsObject.gear['Armor'] || 0,
+  //                   statsObject.gear['Special Damage'] || 0,
+  //                   statsObject.gear['Special Critical Rating'] || 0,
+  //                   statsObject.gear['Resistance'] || 0,
+  //                   baseCharacter.physDmgPct
+  //                 );
+  //                 totalStats = baseStats.plus(gearStats);
   //               }
-  //               return mod;
-  //             }))
-  //             .reduce((allMods, charMods) => allMods.concat(charMods), []);
   //
-  //           roster.forEach(character => {
-  //             const baseCharacter = Object.values(characters).find(c => c.baseID === character.defId);
-  //
-  //             if (baseCharacter) {
-  //               baseCharacter.level = character.level;
-  //               baseCharacter.gearLevel = character.gear;
-  //               baseCharacter.starLevel = character.rarity;
-  //               baseCharacter.gearPieces = character.equipped;
-  //               baseCharacter.galacticPower = character.gp;
+  //               baseCharacter.baseStats = baseStats;
+  //               baseCharacter.totalStats = totalStats;
   //             }
   //           });
   //
+  //           const errorCharacters = Object.values(characters).filter(
+  //             character => character.baseStats === NullCharacterStats || character.totalStats === NullCharacterStats
+  //           ).map(character => character.name);
+  //           const errorMessage = errorCharacters.length > 0 ?
+  //             'Missing stats for characters: ' + errorCharacters.join(', ') +
+  //             '. These characters may not optimize properly.'
+  //             : null;
+  //
   //           me.setState({
-  //             'mods': me.processMods(mods, document.getElementById('keep-old-mods').checked),
-  //             'loading': false,
-  //             'allyCode': allyCode
+  //             loading: false,
+  //             error: errorMessage
   //           });
   //           me.saveState();
-  //
-  //           // After we update characters, always update their stats, too
-  //           me.queryCharacterStats();
   //         } catch (e) {
   //           me.setState({
   //             'error': e.message,
@@ -236,138 +252,32 @@ class App extends Component {
   //
   //   xhr.onerror = function() {
   //     me.setState({
-  //       'error': xhr.responseText || 'Unknown error fetching your player profile.',
+  //       'error': xhr.responseText || 'Unknown error fetching character stats',
   //       'loading': false
   //     });
   //   };
   //
   //   xhr.setRequestHeader('Accept', 'application/json');
+  //   xhr.setRequestHeader('Content-Type', 'application/json');
   //
-  //   xhr.send(JSON.stringify({
-  //     'ally-code': allyCode.replace(/[^\d]/g, '')
-  //   }));
+  //   xhr.send(JSON.stringify(
+  //     Object.values(characters).map(character => {
+  //       return {
+  //         'defId': character.baseID,
+  //         'rarity': character.starLevel,
+  //         'level': character.level,
+  //         'gear': character.gearLevel,
+  //         'equipped': character.gearPieces.map(gear => {
+  //           return {'equipmentId': gear.equipmentId};
+  //         })
+  //       };
+  //     })
+  //   ));
   //
   //   this.setState({
   //     loading: true
   //   });
   // }
-
-  /**
-   * Query for the base stats of every character known to the tool so that they can be optimized accurately
-   */
-  queryCharacterStats() {
-    const xhr = new XMLHttpRequest();
-    const me = this;
-
-    xhr.open('POST', 'https://crinolo-swgoh.glitch.me/statCalc/api/characters', true);
-    xhr.onload = function() {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-          try {
-            const characterStats = JSON.parse(xhr.responseText);
-            characterStats.forEach(characterObject => {
-              const baseCharacter = Object.values(characters).find(c => c.baseID === characterObject.unit.defId);
-
-              if (baseCharacter && characterObject.stats) {
-                const statsObject = characterObject.stats;
-                const baseStats = statsObject.base ?
-                  new BaseStats(
-                    statsObject.base['Health'] || 0,
-                    statsObject.base['Protection'] || 0,
-                    statsObject.base['Speed'] || 0,
-                    statsObject.base['Potency'] || 0,
-                    statsObject.base['Tenacity'] || 0,
-                    statsObject.base['Physical Damage'] || 0,
-                    statsObject.base['Physical Critical Rating'] || 0,
-                    statsObject.base['Armor'] || 0,
-                    statsObject.base['Special Damage'] || 0,
-                    statsObject.base['Special Critical Rating'] || 0,
-                    statsObject.base['Resistance'] || 0,
-                    baseCharacter.physDmgPct
-                  ) :
-                  NullCharacterStats;
-
-                let totalStats = NullCharacterStats;
-
-                if (statsObject.gear) {
-                  const gearStats = new BaseStats(
-                    statsObject.gear['Health'] || 0,
-                    statsObject.gear['Protection'] || 0,
-                    statsObject.gear['Speed'] || 0,
-                    statsObject.gear['Potency'] || 0,
-                    statsObject.gear['Tenacity'] || 0,
-                    statsObject.gear['Physical Damage'] || 0,
-                    statsObject.gear['Physical Critical Rating'] || 0,
-                    statsObject.gear['Armor'] || 0,
-                    statsObject.gear['Special Damage'] || 0,
-                    statsObject.gear['Special Critical Rating'] || 0,
-                    statsObject.gear['Resistance'] || 0,
-                    baseCharacter.physDmgPct
-                  );
-                  totalStats = baseStats.plus(gearStats);
-                }
-
-                baseCharacter.baseStats = baseStats;
-                baseCharacter.totalStats = totalStats;
-              }
-            });
-
-            const errorCharacters = Object.values(characters).filter(
-              character => character.baseStats === NullCharacterStats || character.totalStats === NullCharacterStats
-            ).map(character => character.name);
-            const errorMessage = errorCharacters.length > 0 ?
-              'Missing stats for characters: ' + errorCharacters.join(', ') +
-              '. These characters may not optimize properly.'
-              : null;
-
-            me.setState({
-              loading: false,
-              error: errorMessage
-            });
-            me.saveState();
-          } catch (e) {
-            me.setState({
-              'error': e.message,
-              'loading': false
-            });
-          }
-        } else {
-          me.setState({
-            'error': xhr.responseText,
-            'loading': false
-          });
-        }
-      }
-    };
-
-    xhr.onerror = function() {
-      me.setState({
-        'error': xhr.responseText || 'Unknown error fetching character stats',
-        'loading': false
-      });
-    };
-
-    xhr.setRequestHeader('Accept', 'application/json');
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    xhr.send(JSON.stringify(
-      Object.values(characters).map(character => {
-        return {
-          'defId': character.baseID,
-          'rarity': character.starLevel,
-          'level': character.level,
-          'gear': character.gearLevel,
-          'equipped': character.gearPieces.map(gear => {
-            return {'equipmentId': gear.equipmentId};
-          })
-        };
-      })
-    ));
-
-    this.setState({
-      loading: true
-    });
-  }
 
   /**
    * File handler to process an input file containing mod data.
@@ -452,31 +362,31 @@ class App extends Component {
    *
    * @return Array[Mod]
    */
-  processMods(modsJson, keepOldMods) {
-    let mods = [];
-    let newMods = {};
-
-    for (let fileMod of modsJson) {
-      const mod = Mod.deserialize(fileMod, characters);
-      newMods[mod.id] = mod;
-    }
-
-    if (keepOldMods) {
-      let oldMods = {};
-      this.state.mods.forEach(mod => {
-        oldMods[mod.id] = mod;
-
-        // Unassign all old mods before adding in new ones. Any mods that are still assigned will be in the modsJson
-        oldMods[mod.id].currentCharacter = null;
-      });
-
-      mods = Object.values(Object.assign(oldMods, newMods));
-    } else {
-      mods = Object.values(newMods);
-    }
-
-    return mods;
-  }
+  // processMods(modsJson, keepOldMods) {
+  //   let mods = [];
+  //   let newMods = {};
+  //
+  //   for (let fileMod of modsJson) {
+  //     const mod = Mod.deserialize(fileMod, characters);
+  //     newMods[mod.id] = mod;
+  //   }
+  //
+  //   if (keepOldMods) {
+  //     let oldMods = {};
+  //     this.state.mods.forEach(mod => {
+  //       oldMods[mod.id] = mod;
+  //
+  //       // Unassign all old mods before adding in new ones. Any mods that are still assigned will be in the modsJson
+  //       oldMods[mod.id].currentCharacter = null;
+  //     });
+  //
+  //     mods = Object.values(Object.assign(oldMods, newMods));
+  //   } else {
+  //     mods = Object.values(newMods);
+  //   }
+  //
+  //   return mods;
+  // }
 
   render() {
     const instructionsScreen = !this.props.profile;

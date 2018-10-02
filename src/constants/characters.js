@@ -1,7 +1,7 @@
 // @flow
 
 import Character from "../domain/Character";
-import {DamageType} from "../domain/Character";
+import {DamageType} from "../domain/CharacterSettings";
 import OptimizationPlan from "../domain/OptimizationPlan";
 import optimizationStrategy from "./optimizationStrategy";
 
