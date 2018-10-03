@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * A class to hold static settings for each character that the optimizer knows about.
  */

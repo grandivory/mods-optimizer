@@ -4,7 +4,6 @@ import React from "react";
 import CharacterAvatar from "../CharacterAvatar/CharacterAvatar";
 
 import "./CharacterList.css";
-import {charDefaults} from "../../constants/characters";
 
 class CharacterList extends React.Component {
   characterBlockDragStart(characterName) {
@@ -56,7 +55,7 @@ class CharacterList extends React.Component {
   }
 
   renderCharacterBlock(character) {
-    const defaultChar = charDefaults[character.baseID];
+    const defaultTargets = character.defaultSettings.targets;
     const draggable = this.props.draggable;
     const onEdit = 'function' === typeof this.props.onEdit ? this.props.onEdit : function() {};
     const saveState = 'function' === typeof this.props.saveState ? this.props.saveState : function() {};
@@ -69,8 +68,8 @@ class CharacterList extends React.Component {
       ) || 'custom';
     const options = Object.keys(character.namedPlans).map(key => {
       const changeIndicator =
-        Object.keys(defaultChar.namedPlans).includes(key) &&
-        !defaultChar.namedPlans[key].equals(character.namedPlans[key]) ? '*' : '';
+        Object.keys(defaultTargets).includes(key) &&
+        !defaultTargets[key].equals(character.optimizerSettings.target) ? '*' : '';
       return <option value={key} key={key}>{changeIndicator}{key}</option>;
     });
     const onSelect = function(e) {

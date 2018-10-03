@@ -2,7 +2,6 @@
 
 import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
-import Character from "./Character";
 
 class Mod {
   constructor(id, slot, set, level, pips, primaryStat, secondaryStats, currentCharacter, assignTo, tier = 1) {
@@ -81,12 +80,11 @@ class Mod {
     }
 
     const currentCharacter = ('' !== modJson.characterName && 'UNASSIGNED' !== modJson.characterName) ?
-      characters[modJson.characterName.replace(/&amp;#39;/g, "'")] ||
-      Character.defaultCharacter(modJson.characterName) :
+      characters[modJson.characterName.replace(/&amp;#39;/g, "'")] || null :
       null;
 
     const assignTo = modJson.assignTo ?
-      characters[modJson.assignTo] || Character.defaultCharacter(modJson.assignTo) :
+      characters[modJson.assignTo] || null :
       null;
 
     const setBonus = setBonuses[modJson.set.toLowerCase().replace(' ', '')];

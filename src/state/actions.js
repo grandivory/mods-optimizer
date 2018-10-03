@@ -1,11 +1,12 @@
 import {modSets, modSlots, modStats} from "../constants/enums";
-import {characters} from "../constants/characterSettings";
 import Character from "../domain/Character";
 import Mod from "../domain/Mod";
 
 export const CHANGE_SECTION = 'CHANGE_SECTION';
 export const REQUEST_PROFILE = 'REQUEST_PROFILE';
 export const RECEIVE_PROFILE = 'RECEIVE_PROFILE';
+export const REQUEST_CHARACTERS = 'REQUEST_CHARACTERS';
+export const RECEIVE_CHARACTERS = 'RECEIVE_CHARACTERS';
 export const LOG = 'LOG';
 
 export function logState() {
@@ -36,6 +37,21 @@ export function receiveProfile(allyCode, profile) {
   };
 }
 
+export function requestCharacters(allyCode) {
+  return {
+    type: REQUEST_CHARACTERS,
+    allyCode: allyCode
+  };
+}
+
+export function receiveCharacters(allyCode, characters) {
+  return {
+    type: RECEIVE_CHARACTERS,
+    allyCode: allyCode,
+    characters: characters
+  };
+}
+
 function post(url='', data={}, extras={}) {
   return fetch(url, Object.assign({
     method: 'POST',
@@ -46,12 +62,29 @@ function post(url='', data={}, extras={}) {
 }
 
 /**
+ * Asynchronously fetch the set of all characters from swgoh.gg
+ *
+ * @param allyCode string The ally code under which to store the character information
+ */
+export function fetchCharacters(allyCode) {
+  const cleanAllyCode = allyCode.replace(/[^\d]/g, '');
+
+  return function(dispatch) {
+    dispatch(requestCharacters);
+    return fetch('https://api.mods-optimizer.swgoh.grandivory.com/characters/')
+      .then(response => response.json())
+      .then(characters => console.log(characters))
+      .then(characters => dispatch(receiveCharacters(cleanAllyCode, characters)))
+  }
+}
+
+/**
  * Asynchronously fetch a player's profile, updating state before the fetch to show that the app is busy, and after
  * the fetch to fill in with the response
  *
  * @param allyCode string The ally code to fetch a profile for
  */
-export function fetchProfile(allyCode) {
+export function fetchProfile(allyCode, oldCharacters) {
   const cleanAllyCode = allyCode.replace(/[^\d]/g, '');
 
   return function (dispatch) {
@@ -79,9 +112,11 @@ export function fetchProfile(allyCode) {
             }))
             .reduce((allMods, charMods) => allMods.concat(charMods), []);
 
-          // Link each character to the base character defined in characterSettings.js
+          // Link each character to the base character defined in the player's profile
           const profileCharacters = roster.map(character => {
-            const baseCharacter = Object.values(characters).find(c => c.baseID === character.defId);
+            const baseCharacter = oldCharacters.hasOwnProperty(character.baseID) ?
+              oldCharacters[character.baseID] :
+              Character.default(character.baseID);
 
             if (baseCharacter) {
               const char = baseCharacter.clone();

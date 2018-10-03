@@ -2,105 +2,39 @@
 
 import BaseStats, {NullCharacterStats} from "./CharacterStats";
 import OptimizationPlan from "./OptimizationPlan";
-import {DamageType} from "./CharacterSettings";
+import characterSettings from "../constants/characterSettings";
 
 class Character {
-  constructor(name,
-              baseID,
-              level,
-              starLevel,
-              gearLevel,
-              gearPieces,
-              galacticPower,
-              physDmgPct,
-              baseStats,
-              totalStats,
-              optimizationPlan,
-              namedPlans,
-              tags,
-              extraTags,
-              useOnly5DotMods,
-              isLocked
+  /**
+   * @param name
+   * @param defaultSettings CharacterSettings The unchangeable default settings for a character, including its
+   *                                          damage type, default targets, and extra searchable tags
+   * @param gameSettings The unchangeable settings for a character from in-game, including tags, name, etc.
+   * @param playerValues The player-specific
+   * @param optimizerSettings
+   */
+  constructor(baseID,
+              defaultSettings,
+              gameSettings = null,
+              playerValues = null,
+              optimizerSettings = null,
   ) {
-    this.name = name;
     this.baseID = baseID;
-    this.level = level;
-    this.starLevel = starLevel;
-    this.gearLevel = gearLevel;
-    this.gearPieces = gearPieces;
-    this.galacticPower = galacticPower;
-    this.physDmgPct = physDmgPct;
-    this.baseStats = baseStats;
-    this.totalStats = totalStats;
-    this.optimizationPlan = optimizationPlan;
-    this.namedPlans = namedPlans;
-    this.tags = tags;
-    this.extraTags = extraTags;
-    this.useOnly5DotMods = useOnly5DotMods || false;
-    this.isLocked = isLocked || false
+    this.defaultSettings = defaultSettings;
+    this.gameSettings = gameSettings;
+    this.playerValues = playerValues;
+    this.optimizerSettings = optimizerSettings;
   }
 
-  static statlessCharacter(name, baseID, physDmgPct, defaultPlan, namedPlans, tags, extraTags, useOnly5dotMods) {
+  /**
+   * Create a new character using only the static default settings
+   * @param baseID
+   */
+  static default(baseID) {
     return new Character(
-      name,
       baseID,
-      1,
-      1,
-      1,
-      [],
-      0,
-      physDmgPct,
-      null,
-      null,
-      defaultPlan,
-      namedPlans,
-      tags,
-      extraTags,
-      useOnly5dotMods,
-      false
+      characterSettings[baseID] || null
     );
-  }
-
-  static defaultCharacter(name) {
-    return new Character(
-      name,
-      '',
-      1,
-      1,
-      1,
-      [],
-      0,
-      DamageType.physical,
-      null,
-      null,
-      new OptimizationPlan(),
-      {},
-      [],
-      [],
-      false,
-      false
-    );
-  }
-
-  static simpleCharacter(name, baseID, level, starLevel, gearLevel, gearPieces, galacticPower) {
-    return new Character(
-      name,
-      baseID,
-      level,
-      starLevel,
-      gearLevel,
-      gearPieces,
-      galacticPower,
-      DamageType.physical,
-      null,
-      null,
-      new OptimizationPlan(),
-      {},
-      [],
-      [],
-      false,
-      false
-    )
   }
 
   /**
@@ -108,23 +42,28 @@ class Character {
    */
   clone() {
     return new Character(
-      this.name,
       this.baseID,
-      this.level,
-      this.starLevel,
-      this.gearLevel,
-      this.gearPieces.slice(0),
-      this.galacticPower,
-      this.physDmgPct,
-      this.baseStats,
-      this.totalStats,
-      this.optimizationPlan,
-      Object.assign({}, this.namedPlans),
-      this.tags,
-      this.extraTags,
-      this.useOnly5DotMods,
-      this.isLocked
+      this.defaultSettings,
+      this.gameSettings,
+      Object.assign({}, this.playerValues),
+      Object.assign({}, this.optimizerSettings)
     );
+  }
+
+  /**
+   * Create a new Character object that matches this one, but with defaultSettings overridden
+   * @param defaultSettings CharacterSettings
+   */
+  withDefaultSettings(defaultSettings) {
+    if (defaultSettings) {
+      return new Character(
+        this.baseID,
+        defaultSettings,
+        this.gameSettings,
+        this.playerValues,
+        this.optimizerSettings
+      );
+    }
   }
 
   /**
@@ -133,10 +72,10 @@ class Character {
    * @param that Character
    */
   compareGP(that) {
-    if (that.galacticPower === this.galacticPower) {
-      return this.name.localeCompare(that.name);
+    if (that.gameSettings.galacticPower === this.gameSettings.galacticPower) {
+      return this.gameSettings.name.localeCompare(that.gameSettings.name);
     }
-    return that.galacticPower - this.galacticPower;
+    return that.gameSettings.galacticPower - this.gameSettings.galacticPower;
   }
 
   /**
@@ -145,28 +84,13 @@ class Character {
    * @returns boolean
    */
   matchesFilter(filterString) {
-    return this.name.toLowerCase().includes(filterString) ||
-      (this.tags || []).concat(this.extraTags || []).some(tag => tag.toLowerCase().includes(filterString))
+    return this.gameSettings.name.toLowerCase().includes(filterString) ||
+      (this.gameSettings.tags || []).concat(this.defaultSettings.extraTags || []).some(
+        tag => tag.toLowerCase().includes(filterString)
+      )
   }
 
-  /**
-   * Apply any variable properties (level, starLevel, etc) from other to this character
-   * @param other Character
-   */
-  apply(other) {
-    this.level = other.level;
-    this.starLevel = other.starLevel;
-    this.gearLevel = other.gearLevel;
-    this.gearPieces = other.gearPieces;
-    this.baseStats = other.baseStats || this.baseStats;
-    this.totalStats = other.totalStats || this.totalStats;
-    this.galacticPower = other.galacticPower;
-    this.optimizationPlan = other.optimizationPlan;
-    this.namedPlans = Object.assign(this.namedPlans, other.namedPlans);
-    this.useOnly5DotMods = other.useOnly5DotMods;
-    this.isLocked = other.isLocked;
-  }
-
+  // TODO: Implement
   serialize() {
     let characterObject = {};
 
@@ -193,6 +117,7 @@ class Character {
     return characterObject;
   }
 
+  // TODO: Implement
   static deserialize(characterJson, version) {
     const serializedNamedPlans = characterJson.namedPlans || {
       unnamed: characterJson.optimizationPlan

@@ -3,6 +3,7 @@
 import {DamageType} from "../domain/CharacterSettings";
 import OptimizationPlan from "../domain/OptimizationPlan";
 import optimizationStrategy from "./optimizationStrategy";
+import CharacterSettings from "../domain/CharacterSettings";
 
 const characterSettings = {
   'AAYLASECURA': new CharacterSettings(

@@ -9,8 +9,6 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 import Modal from "../../components/Modal/Modal";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import Toggle from "../../components/Toggle/Toggle";
-import {characters, charDefaults} from "../../constants/characters";
-import Character from "../../domain/Character";
 
 class CharacterEditView extends React.Component {
   constructor(props) {
@@ -216,33 +214,35 @@ class CharacterEditView extends React.Component {
     });
   }
 
+  // TODO: Implement
   /**
    * Reset any named optimization targets to their default values for all characters
    */
-  resetAllCharacters() {
-    Object.values(characters).forEach(character => {
-      const characterDefault = charDefaults[character.baseID];
-      if (!characterDefault) {
-        return;
-      }
-
-      character.namedPlans = Object.assign(character.namedPlans, characterDefault.namedPlans);
-
-      // If the character had one of the default plans selected, update the selected plan to match the newly-reset value
-      if (Object.keys(characterDefault.namedPlans).includes(character.optimizationPlan.name)) {
-        character.optimizationPlan = characterDefault.namedPlans[character.optimizationPlan.name];
-      }
-    });
-
-    this.saveState();
-    this.setState({
-      resetCharsModal: false
-    });
-  }
+  // resetAllCharacters() {
+  //   Object.values(characters).forEach(character => {
+  //     const characterDefault = charDefaults[character.baseID];
+  //     if (!characterDefault) {
+  //       return;
+  //     }
+  //
+  //     character.namedPlans = Object.assign(character.namedPlans, characterDefault.namedPlans);
+  //
+  //     // If the character had one of the default plans selected, update the selected plan to match the newly-reset value
+  //     if (Object.keys(characterDefault.namedPlans).includes(character.optimizationPlan.name)) {
+  //       character.optimizationPlan = characterDefault.namedPlans[character.optimizationPlan.name];
+  //     }
+  //   });
+  //
+  //   this.saveState();
+  //   this.setState({
+  //     resetCharsModal: false
+  //   });
+  // }
 
   render() {
     const availableCharacters = this.state.availableCharacters.sort((left, right) => {
-      return left.compareGP(right);
+      // TODO: Fix this
+      return Math.random() - .5; //left.compareGP(right);
     });
     const selectedCharacters = this.state.selectedCharacters;
     const editCharacter = this.state.editCharacter;
@@ -341,7 +341,7 @@ class CharacterEditView extends React.Component {
   characterBlock(character, className) {
     return <div
       className={className ? 'character ' + className : 'character'}
-      key={character.name}
+      key={character.baseID}
     >
       <div draggable={true} onDragStart={this.dragStart(character)}
            onDoubleClick={() => this.selectCharacter(character)}>
@@ -361,7 +361,8 @@ class CharacterEditView extends React.Component {
       return null;
     }
 
-    const defaultChar = charDefaults[character.baseID] || Character.defaultCharacter(character.name);
+    const targetDefault =
+      character.defaultSettings.targets.find(target => target.name === this.state.selectedTarget) || null;
 
     let resetButton;
 
@@ -370,13 +371,13 @@ class CharacterEditView extends React.Component {
     // "Delete target" button, or nothing.
     if ('custom' === this.state.selectedTarget) {
       resetButton = null;
-    } else if (Object.keys(defaultChar.namedPlans).includes(this.state.selectedTarget)) {
+    } else if (targetDefault) {
       resetButton = <button
         type={'button'}
         id={'reset-button'}
-        disabled={defaultChar.namedPlans[this.state.selectedTarget].equals(character.optimizationPlan)}
+        disabled={targetDefault.equals(character.optimizationPlan)}
         onClick={() => {
-          character.optimizationPlan = defaultChar.namedPlans[this.state.selectedTarget];
+          character.optimizationPlan = targetDefault;
           character.namedPlans[this.state.selectedTarget] = character.optimizationPlan;
           this.setState({
             editCharacter: null
@@ -819,7 +820,8 @@ class CharacterEditView extends React.Component {
       </p>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.setState({resetCharsModal: false})}>Cancel</button>
-        <button type={'button'} className={'red'} onClick={this.resetAllCharacters.bind(this)}>Reset</button>
+        {/*TODO: Fix this*/}
+        <button type={'button'} className={'red'} onClick={() => {}}>Reset</button>
       </div>
     </div>
   }

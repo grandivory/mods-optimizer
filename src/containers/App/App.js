@@ -31,7 +31,7 @@ class App extends Component {
       allyCode = allyCode.substr(0, 9);
 
       // Split the numbers into chunks of 3
-      const allyCodeChunks = allyCode.match(/\d{1,3}/g) || [];
+      // const allyCodeChunks = allyCode.match(/\d{1,3}/g) || [];
 
       // restoredState.allyCode = allyCodeChunks.join('-');
 

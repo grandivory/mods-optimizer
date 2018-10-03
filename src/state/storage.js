@@ -2,9 +2,10 @@
  * Save the state of the application to localStorage
  * @param state Object
  */
-import {mapObject} from "../utils/mapObject";
+import {mapObject, mapObjectByKey} from "../utils/mapObject";
 import Character from "../domain/Character";
 import Mod from "../domain/Mod";
+import characterSettings from "../constants/characterSettings";
 
 export function saveState(state) {
   const storedState = serializeState(state);
@@ -21,10 +22,13 @@ export function restoreState() {
   if (state) {
     return deserializeState(state);
   } else {
+
+
     return {
       version: process.env.REACT_APP_VERSION || 'local',
       section: 'optimize',
       allyCode: '',
+      characters: mapObjectByKey(characterSettings, baseID => Character.default(baseID)),
       isBusy: false,
       profiles: {}
     };
