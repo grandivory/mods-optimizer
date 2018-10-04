@@ -5,6 +5,7 @@ import characterSettings from "../constants/characterSettings";
 import Character from "../domain/Character";
 import {GameSettings} from "../domain/CharacterDataClasses";
 import Mod from "../domain/Mod";
+import PlayerProfile from "../domain/PlayerProfile";
 
 function changeSection(state, action) {
   return Object.assign({}, state, {
@@ -77,14 +78,17 @@ function receiveProfile(state, action) {
   // Then, update the mods by deserializing each one
   const newMods = action.profile.mods.map(Mod.deserialize);
 
+  const oldProfile = state.profiles.hasOwnProperty(action.allyCode) ?
+    state.profiles[action.allyCode] :
+    new PlayerProfile();
+
+  const newProfile = oldProfile.withCharacters(newCharacters).withMods(newMods);
+
   return Object.assign({}, state, {
     isBusy: false,
     allyCode: action.allyCode,
     profiles: Object.assign({}, state.profiles, {
-      [action.allyCode]: {
-        mods: newMods,
-        characters: newCharacters
-      }
+      [action.allyCode]: newProfile
     })
   });
 }

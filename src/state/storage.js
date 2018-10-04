@@ -6,6 +6,7 @@ import {mapObject, mapObjectByKey} from "../utils/mapObject";
 import Character from "../domain/Character";
 import Mod from "../domain/Mod";
 import characterSettings from "../constants/characterSettings";
+import PlayerProfile from "../domain/PlayerProfile";
 
 export function saveState(state) {
   const storedState = serializeState(state);
@@ -25,6 +26,7 @@ export function restoreState() {
     return {
       version: process.env.REACT_APP_VERSION || 'local',
       section: 'optimize',
+      characterFilter: '',
       allyCode: '',
       characters: mapObjectByKey(characterSettings, baseID => Character.default(baseID)),
       isBusy: false,
@@ -60,14 +62,10 @@ function deserializeState(state) {
   return {
     version: version,
     section: jsonState.section,
+    characterFilter: jsonState.characterFilter || '',
     allyCode: jsonState.allyCode,
     isBusy: false,
     characters: mapObject(jsonState.characters, (character) => Character.deserialize(character, version)),
-    profiles: mapObject(jsonState.profiles, profile => {
-      return {
-        characters: mapObject(profile.characters, (character) => Character.deserialize(character, version)),
-        mods: profile.mods.map(Mod.deserialize)
-      }
-    })
+    profiles: mapObject(jsonState.profiles, PlayerProfile.deserialize)
   };
 }

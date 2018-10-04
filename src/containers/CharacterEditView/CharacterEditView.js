@@ -9,22 +9,9 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 import Modal from "../../components/Modal/Modal";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import Toggle from "../../components/Toggle/Toggle";
+import {connect} from "react-redux";
 
 class CharacterEditView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      'availableCharacters': props.availableCharacters,
-      'selectedCharacters': props.selectedCharacters,
-      'editCharacter': null,
-      'selectedTarget': null,
-      'instructions': false,
-      'filterString': ''
-    };
-
-    this.saveState = 'function' === typeof props.saveState ? props.saveState : function() {};
-  }
-
   dragStart(character) {
     return function(event) {
       event.dataTransfer.dropEffect = 'move';
@@ -47,6 +34,9 @@ class CharacterEditView extends React.Component {
     event.dataTransfer.dropEffect = 'move';
   }
 
+  /**
+   * TODO: Implement this with Redux
+   */
   availableCharactersDrop(event) {
     event.preventDefault();
     const movingCharacterName = event.dataTransfer.getData('text/plain');
@@ -62,14 +52,16 @@ class CharacterEditView extends React.Component {
     }
     selectedCharacters.splice(sourceCharacterIndex, 1);
 
-    this.saveState();
-
-    this.setState({
-      availableCharacters: availableCharacters,
-      selectedCharacters: selectedCharacters
-    });
+    // this.setState({
+    //   availableCharacters: availableCharacters,
+    //   selectedCharacters: selectedCharacters
+    // });
   }
 
+  /**
+   * TODO: Implement this with Redux
+   * @returns {Function}
+   */
   characterDrop() {
     const me = this;
     return function(targetList, dragTarget, dropTarget) {
@@ -91,17 +83,13 @@ class CharacterEditView extends React.Component {
       // Put it into the target list
       const targetIndex = targetList.findIndex((character) => character.name === dropTarget) + 1 || targetList.length;
       targetList.splice(targetIndex, 0, sourceCharacter);
-
-      me.saveState();
-
-      // Re-render
-      me.setState({});
     }
   }
 
   /**
    * Move a character from availableCharacters to the bottom of the selectedCharacters
    * @param character
+   * TODO: Implement this with Redux
    */
   selectCharacter(character) {
     const availableCharacters = this.state.availableCharacters;
@@ -110,19 +98,13 @@ class CharacterEditView extends React.Component {
     if (availableCharacters.includes(character)) {
       availableCharacters.splice(availableCharacters.indexOf(character), 1);
       selectedCharacters.push(character);
-
-      this.saveState();
-
-      this.setState({
-        availableCharacters: availableCharacters,
-        selectedCharacters: selectedCharacters
-      });
     }
   }
 
   /**
    * Move a character from selectedCharacters back to availableCharacters
    * @param character Character
+   * TODO: Implement this with Redux
    */
   unselectCharacter(character) {
     const availableCharacters = this.state.availableCharacters;
@@ -131,13 +113,6 @@ class CharacterEditView extends React.Component {
     if (selectedCharacters.includes(character)) {
       selectedCharacters.splice(selectedCharacters.indexOf(character), 1);
       availableCharacters.push(character);
-
-      this.saveState();
-
-      this.setState({
-        availableCharacters: availableCharacters,
-        selectedCharacters: selectedCharacters
-      });
     }
   }
 
@@ -146,15 +121,21 @@ class CharacterEditView extends React.Component {
    *
    * @param character Character
    * @param planName String The name of the optimization plan to edit
+   * TODO: Implement this with Redux
    */
-  editCharacter(character, planName) {
-    this.setState({
-      editCharacter: character,
-      selectedTarget: planName,
-      editMode: character.optimizationPlan.isBasic() ? 'basic' : 'advanced'
-    })
-  }
+  // editCharacter(character, planName) {
+  //   this.setState({
+  //     editCharacter: character,
+  //     selectedTarget: planName,
+  //     editMode: character.optimizationPlan.isBasic() ? 'basic' : 'advanced'
+  //   })
+  // }
 
+  /**
+   * TODO: Implement this with Redux
+   * @param character
+   * @param form
+   */
   saveOptimizationPlan(character, form) {
     const planName = form['plan-name'].value;
     let optimizationPlan;
@@ -206,12 +187,6 @@ class CharacterEditView extends React.Component {
       character.optimizationPlan = optimizationPlan;
     }
     character.useOnly5DotMods = form['5dot'].checked;
-
-    this.saveState();
-
-    this.setState({
-      'editCharacter': null
-    });
   }
 
   // TODO: Implement
@@ -240,18 +215,6 @@ class CharacterEditView extends React.Component {
   // }
 
   render() {
-    const availableCharacters = this.state.availableCharacters.sort((left, right) => {
-      // TODO: Fix this
-      return Math.random() - .5; //left.compareGP(right);
-    });
-    const selectedCharacters = this.state.selectedCharacters;
-    const editCharacter = this.state.editCharacter;
-
-    const characterFilter = character =>
-      '' === this.state.filterString || character.matchesFilter(this.state.filterString);
-
-    const filteredCharacters = availableCharacters.filter(characterFilter);
-    const unfilteredCharacters = availableCharacters.filter((c) => !characterFilter(c));
 
     return <div className={'character-edit'}>
       <div className={'sidebar'}>
@@ -263,11 +226,10 @@ class CharacterEditView extends React.Component {
         <CharacterList
           selfDrop={true}
           draggable={true}
-          characters={selectedCharacters}
+          characters={this.props.selectedCharacters}
           onDrop={this.characterDrop()}
           onDoubleClick={this.unselectCharacter.bind(this)}
-          onEdit={(character, planName) => this.editCharacter(character, planName)}
-          saveState={this.saveState}
+          onEdit={(character, planName) => {}} // this.editCharacter(character, planName)}
         />
       </div>
       <div className={'available-characters'}
@@ -278,16 +240,17 @@ class CharacterEditView extends React.Component {
       >
         <h3 className={'instructions'}>
           Double-click or drag characters to the selected column to pick who to optimize mods for.
-          <button type={'button'} className={'small'} onClick={() => this.setState({'instructions': true})}>
+          <button type={'button'} className={'small'} onClick={() => {}}>
+            {/*// this.setState({'instructions': true})}>*/}
             Show full instructions
           </button>
         </h3>
-        {filteredCharacters.map(character => this.characterBlock(character, 'active'))}
-        {unfilteredCharacters.map(character => this.characterBlock(character, 'inactive'))}
+        {this.props.highlightedCharacters.map(character => this.characterBlock(character, 'active'))}
+        {this.props.availableCharacters.map(character => this.characterBlock(character, 'inactive'))}
       </div>
-      <Modal show={editCharacter} content={this.characterEditModal(editCharacter)}/>
-      <Modal show={this.state.instructions} className={'instructions'} content={this.instructionsModal()}/>
-      <Modal show={this.state.resetCharsModal} className={'reset-modal'} content={this.resetCharsModal()}/>
+      {/*<Modal show={editCharacter} content={this.characterEditModal(editCharacter)}/>*/}
+      {/*<Modal show={this.state.instructions} className={'instructions'} content={this.instructionsModal()}/>*/}
+      {/*<Modal show={this.state.resetCharsModal} className={'reset-modal'} content={this.resetCharsModal()}/>*/}
     </div>;
   }
 
@@ -295,6 +258,7 @@ class CharacterEditView extends React.Component {
    * Renders a form for filtering available characters
    *
    * @returns JSX Element
+   * TODO: Implement this with Redux
    */
   filterForm() {
     return <div className={'filters'}>
@@ -311,6 +275,7 @@ class CharacterEditView extends React.Component {
    * Renders a sidebar box with action buttons
    *
    * @returns JSX Element
+   * TODO: Implement this with Redux
    */
   sidebarActions() {
     return <div className={'sidebar-actions'}>
@@ -318,7 +283,7 @@ class CharacterEditView extends React.Component {
       <button
         type={'button'}
         onClick={this.props.onOptimize}
-        disabled={this.state.selectedCharacters.length === 0}
+        disabled={true}
       >
         Optimize my mods!
       </button>
@@ -347,7 +312,7 @@ class CharacterEditView extends React.Component {
            onDoubleClick={() => this.selectCharacter(character)}>
         <CharacterAvatar character={character}/>
       </div>
-      <div className={'character-name'}>{character.name}</div>
+      <div className={'character-name'}>{character.gameSettings.name}</div>
     </div>;
   }
 
@@ -355,100 +320,101 @@ class CharacterEditView extends React.Component {
    * Render a modal for editing a character's base stats and optimization plan
    * @param character Character
    * @returns JSX Element
+   * TODO: Implement this with Redux
    */
-  characterEditModal(character) {
-    if (!character) {
-      return null;
-    }
-
-    const targetDefault =
-      character.defaultSettings.targets.find(target => target.name === this.state.selectedTarget) || null;
-
-    let resetButton;
-
-    // Determine whether the current optimization plan is a default (same name exists), user-defined (same name doesn't
-    // exist), or custom (name is 'custom') This determines whether to display a "Reset target to default" button, a
-    // "Delete target" button, or nothing.
-    if ('custom' === this.state.selectedTarget) {
-      resetButton = null;
-    } else if (targetDefault) {
-      resetButton = <button
-        type={'button'}
-        id={'reset-button'}
-        disabled={targetDefault.equals(character.optimizationPlan)}
-        onClick={() => {
-          character.optimizationPlan = targetDefault;
-          character.namedPlans[this.state.selectedTarget] = character.optimizationPlan;
-          this.setState({
-            editCharacter: null
-          });
-        }}>
-        Reset target to default
-      </button>
-    } else {
-      resetButton = <button type={'button'}
-                            id={'delete-button'}
-                            className={'red'}
-                            onClick={() => {
-                              delete character.namedPlans[this.state.selectedTarget];
-                              this.setState({
-                                editCharacter: null
-                              });
-                            }}>
-        Delete target
-      </button>
-    }
-
-    return <form
-      className={`character-edit-form`}
-      noValidate={'advanced' === this.state.editMode}
-      onSubmit={(e) => {
-        e.preventDefault();
-        this.saveOptimizationPlan.bind(this, character)(e.target);
-      }}>
-      <div className={'character-view'}>
-        <CharacterAvatar character={character}/>
-        <h2 className={'character-name'}>{character.name}</h2>
-      </div>
-      <div id={'character-level-options'}>
-        <div className={'form-row'}>
-          <label htmlFor="5dot" id={'fivedot-label'}>Use only 5-dot mods?</label>
-          <input
-            type={'checkbox'}
-            id={'5dot'}
-            name={'5dot'}
-            defaultChecked={character.useOnly5DotMods}/>
-        </div>
-      </div>
-      <div className={'instructions'}>
-        Give each stat type a value. This will be used to calculate the optimum mods to equip. You can give this plan
-        a name to easily select it later.
-      </div>
-      <div className={'header-row'}>
-        <label htmlFor={'plan-name'}>Plan Name: </label>
-        <input type={'text'} defaultValue={this.state.selectedTarget} id={'plan-name'} name={'plan-name'}/>
-      </div>
-      <div className={'header-row'}>
-        <Toggle
-          inputLabel={'Mode'}
-          name={'mode'}
-          leftLabel={'Basic'}
-          leftValue={'basic'}
-          rightLabel={'Advanced'}
-          rightValue={'advanced'}
-          value={this.state.editMode}
-          onChange={(newValue) => this.setState({editMode: newValue})}
-        />
-      </div>
-      {'basic' === this.state.editMode && this.basicForm(character.optimizationPlan)}
-      {'advanced' === this.state.editMode && this.advancedForm(character.optimizationPlan)}
-      <div className={'actions'}>
-        {resetButton}
-        <button type={'button'} onClick={() => this.setState({editCharacter: null})}>Cancel</button>
-        <button type={'submit'}>Save</button>
-      </div>
-    </form>;
-  }
+  // characterEditModal(character) {
+  //   if (!character) {
+  //     return null;
+  //   }
+  //
+  //   const targetDefault =
+  //     character.defaultSettings.targets.find(target => target.name === this.state.selectedTarget) || null;
+  //
+  //   let resetButton;
+  //
+  //   // Determine whether the current optimization plan is a default (same name exists), user-defined (same name doesn't
+  //   // exist), or custom (name is 'custom') This determines whether to display a "Reset target to default" button, a
+  //   // "Delete target" button, or nothing.
+  //   if ('custom' === this.state.selectedTarget) {
+  //     resetButton = null;
+  //   } else if (targetDefault) {
+  //     resetButton = <button
+  //       type={'button'}
+  //       id={'reset-button'}
+  //       disabled={targetDefault.equals(character.optimizationPlan)}
+  //       onClick={() => {
+  //         character.optimizationPlan = targetDefault;
+  //         character.namedPlans[this.state.selectedTarget] = character.optimizationPlan;
+  //         this.setState({
+  //           editCharacter: null
+  //         });
+  //       }}>
+  //       Reset target to default
+  //     </button>
+  //   } else {
+  //     resetButton = <button type={'button'}
+  //                           id={'delete-button'}
+  //                           className={'red'}
+  //                           onClick={() => {
+  //                             delete character.namedPlans[this.state.selectedTarget];
+  //                             this.setState({
+  //                               editCharacter: null
+  //                             });
+  //                           }}>
+  //       Delete target
+  //     </button>
+  //   }
+  //
+  //   return <form
+  //     className={`character-edit-form`}
+  //     noValidate={'advanced' === this.state.editMode}
+  //     onSubmit={(e) => {
+  //       e.preventDefault();
+  //       this.saveOptimizationPlan.bind(this, character)(e.target);
+  //     }}>
+  //     <div className={'character-view'}>
+  //       <CharacterAvatar character={character}/>
+  //       <h2 className={'character-name'}>{character.name}</h2>
+  //     </div>
+  //     <div id={'character-level-options'}>
+  //       <div className={'form-row'}>
+  //         <label htmlFor="5dot" id={'fivedot-label'}>Use only 5-dot mods?</label>
+  //         <input
+  //           type={'checkbox'}
+  //           id={'5dot'}
+  //           name={'5dot'}
+  //           defaultChecked={character.useOnly5DotMods}/>
+  //       </div>
+  //     </div>
+  //     <div className={'instructions'}>
+  //       Give each stat type a value. This will be used to calculate the optimum mods to equip. You can give this plan
+  //       a name to easily select it later.
+  //     </div>
+  //     <div className={'header-row'}>
+  //       <label htmlFor={'plan-name'}>Plan Name: </label>
+  //       <input type={'text'} defaultValue={this.state.selectedTarget} id={'plan-name'} name={'plan-name'}/>
+  //     </div>
+  //     <div className={'header-row'}>
+  //       <Toggle
+  //         inputLabel={'Mode'}
+  //         name={'mode'}
+  //         leftLabel={'Basic'}
+  //         leftValue={'basic'}
+  //         rightLabel={'Advanced'}
+  //         rightValue={'advanced'}
+  //         value={this.state.editMode}
+  //         onChange={(newValue) => this.setState({editMode: newValue})}
+  //       />
+  //     </div>
+  //     {'basic' === this.state.editMode && this.basicForm(character.optimizationPlan)}
+  //     {'advanced' === this.state.editMode && this.advancedForm(character.optimizationPlan)}
+  //     <div className={'actions'}>
+  //       {resetButton}
+  //       <button type={'button'} onClick={() => this.setState({editCharacter: null})}>Cancel</button>
+  //       <button type={'submit'}>Save</button>
+  //     </div>
+  //   </form>;
+  // }
 
   /**
    * Renders a form for stat weights that uses range inputs between -100 and 100
@@ -809,6 +775,7 @@ class CharacterEditView extends React.Component {
    * Renders an "Are you sure?" modal to reset all characters to their default optimization targets
    *
    * @return JSX Element
+   * TODO: Implement this with Redux
    */
   resetCharsModal() {
     return <div>
@@ -827,4 +794,26 @@ class CharacterEditView extends React.Component {
   }
 }
 
-export default CharacterEditView;
+const mapStateToProps = (state) => {
+  const profile = state.profiles[state.allyCode];
+  const availableCharacters = Object.values(profile.characters)
+    .filter(character => !profile.selectedCharacters.includes(character.baseID))
+    .sort((left, right) => left.compareGP(right));
+
+  console.log(state.characterFilter);
+
+  const characterFilter = character =>
+    '' === state.characterFilter || character.matchesFilter(state.characterFilter);
+
+  return {
+    highlightedCharacters: availableCharacters.filter(characterFilter),
+    availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
+    selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id])
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CharacterEditView);

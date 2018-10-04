@@ -1,7 +1,6 @@
 /**
  * A class to hold static settings for each character that the optimizer knows about.
  */
-import {mapObject} from "../utils/mapObject";
 import OptimizationPlan from "./OptimizationPlan";
 import CharacterStats from "./CharacterStats";
 

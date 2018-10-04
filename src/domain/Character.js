@@ -13,7 +13,7 @@ export default class Character {
   optimizerSettings;
 
   /**
-   * @param name
+   * @param baseID String
    * @param defaultSettings CharacterSettings The unchangeable default settings for a character, including its
    *                                          damage type, default targets, and extra searchable tags
    * @param gameSettings GameSettings The unchangeable settings for a character from in-game, including tags, name, etc.
@@ -138,10 +138,10 @@ export default class Character {
    * @param that Character
    */
   compareGP(that) {
-    if (that.gameSettings.galacticPower === this.gameSettings.galacticPower) {
+    if (that.playerValues.galacticPower === this.playerValues.galacticPower) {
       return this.gameSettings.name.localeCompare(that.gameSettings.name);
     }
-    return that.gameSettings.galacticPower - this.gameSettings.galacticPower;
+    return that.playerValues.galacticPower - this.playerValues.galacticPower;
   }
 
   /**
@@ -162,7 +162,7 @@ export default class Character {
     characterObject.baseID = this.baseID;
     characterObject.defaultSettings = this.defaultSettings.serialize();
     characterObject.gameSettings = this.gameSettings ? this.gameSettings.serialize() : null;
-    characterObject.playerValues = this.playervalues ? this.playerValues.serialize() : null;
+    characterObject.playerValues = this.playerValues ? this.playerValues.serialize() : null;
     characterObject.optimizerSettings = this.optimizerSettings ? this.optimizerSettings.serialize() : null;
 
     return characterObject;
