@@ -391,9 +391,6 @@ class App extends Component {
   render() {
     const instructionsScreen = !this.props.profile;
 
-    console.log(this.props);
-    console.log(instructionsScreen);
-
     return <div className={'App'}>
       {this.header(!instructionsScreen)}
       <div className={'app-body'}>

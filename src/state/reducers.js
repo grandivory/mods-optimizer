@@ -3,7 +3,7 @@ import {restoreState, saveState} from "./storage";
 import {mapObject, mapObjectByKeyAndValue} from "../utils/mapObject";
 import characterSettings from "../constants/characterSettings";
 import Character from "../domain/Character";
-import {GameSettings} from "../domain/CharacterDataClasses";
+import {GameSettings, OptimizerSettings} from "../domain/CharacterDataClasses";
 import Mod from "../domain/Mod";
 import PlayerProfile from "../domain/PlayerProfile";
 
@@ -69,11 +69,25 @@ function requestProfile(state, action) {
 function receiveProfile(state, action) {
   // First, update the characters by combining the PlayerValues objects in the action
   // with the base characters in the state
-  const newCharacters = mapObjectByKeyAndValue(action.profile.characters, (id, playerValues) =>
-    state.characters.hasOwnProperty(id) ?
+  const newCharacters = mapObjectByKeyAndValue(action.profile.characters, (id, playerValues) => {
+    const character = state.characters.hasOwnProperty(id) ?
       state.characters[id].withPlayerValues(playerValues) :
       Character.default(id).withPlayerValues(playerValues)
-  );
+
+    // When a profile is updated, make sure that the character has optimizer settings so that the optimizer can actually
+    // work with it. If nothing has been set yet, then set reasonable defaults.
+    if (character.optimizerSettings) {
+      return character;
+    } else {
+      console.log(character);
+      return character.withOptimizerSettings(new OptimizerSettings(
+        character.defaultSettings.targets[0],
+        [],
+        character.defaultSettings.extraTags.includes('Crew Member'),
+        false
+      ));
+    }
+  });
 
   // Then, update the mods by deserializing each one
   const newMods = action.profile.mods.map(Mod.deserialize);

@@ -800,8 +800,6 @@ const mapStateToProps = (state) => {
     .filter(character => !profile.selectedCharacters.includes(character.baseID))
     .sort((left, right) => left.compareGP(right));
 
-  console.log(state.characterFilter);
-
   const characterFilter = character =>
     '' === state.characterFilter || character.matchesFilter(state.characterFilter);
 

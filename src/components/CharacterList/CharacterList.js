@@ -55,56 +55,59 @@ class CharacterList extends React.Component {
   }
 
   renderCharacterBlock(character) {
-    const defaultTargets = character.defaultSettings.targets;
+    const defaultTargets = character.defaultSettings.targets.reduce((targets, target) => {
+      targets[target.name] = target;
+      return targets;
+    }, {});
     const draggable = this.props.draggable;
     const onEdit = 'function' === typeof this.props.onEdit ? this.props.onEdit : function() {};
-    const saveState = 'function' === typeof this.props.saveState ? this.props.saveState : function() {};
     const onDoubleClick = 'function' === typeof this.props.onDoubleClick ? this.props.onDoubleClick : function() {};
 
-    const selectedPlan = character.isLocked ?
-      'lock' :
-      Object.keys(character.namedPlans).find(
-        key => character.namedPlans[key].equals(character.optimizationPlan)
-      ) || 'custom';
-    const options = Object.keys(character.namedPlans).map(key => {
-      const changeIndicator =
-        Object.keys(defaultTargets).includes(key) &&
-        !defaultTargets[key].equals(character.optimizerSettings.target) ? '*' : '';
-      return <option value={key} key={key}>{changeIndicator}{key}</option>;
-    });
-    const onSelect = function(e) {
-      const optimizationTarget = e.target.value;
+    const selectedPlan = character.optimizerSettings.isLocked ?
+      'lock' : character.optimizerSettings.target;
+    const options = Object.keys(defaultTargets)
+      .concat(character.optimizerSettings.targets.map(target => target.name))
+      .filter((name, index, self) => index === self.indexOf(name))
+      .map(targetName => {
+        const changeIndicator = Object.keys(defaultTargets).includes(targetName) &&
+          character.optimizerSettings.targets.map(target => target.name).includes(targetName) &&
+          !defaultTargets[targetName].equals(
+            character.optimizerSettings.targets.find(target => target.name === targetName)
+          ) ? '*' : '';
 
-      if ('custom' === optimizationTarget) {
-        character.isLocked = false;
-        e.target.parentNode.parentNode.classList.remove('locked');
-        onEdit(character, 'custom');
-      } else if ('lock' === optimizationTarget) {
-        e.target.parentNode.parentNode.classList.add('locked');
-        character.isLocked = true;
-        saveState();
-        this.setState({});
-      } else {
-        character.isLocked = false;
-        e.target.parentNode.parentNode.classList.remove('locked');
-        character.optimizationPlan = character.namedPlans[optimizationTarget];
-        saveState();
-        this.setState({});
-      }
-    };
+        return <option value={targetName} key={targetName}>{changeIndicator}{targetName}</option>;
+      });
+
+    // TODO: Implement this
+    const onSelect = function(e) {};
+    //   const optimizationTarget = e.target.value;
+    //
+    //   if ('custom' === optimizationTarget) {
+    //     character.isLocked = false;
+    //     e.target.parentNode.parentNode.classList.remove('locked');
+    //     onEdit(character, 'custom');
+    //   } else if ('lock' === optimizationTarget) {
+    //     e.target.parentNode.parentNode.classList.add('locked');
+    //     character.isLocked = true;
+    //   } else {
+    //     character.isLocked = false;
+    //     e.target.parentNode.parentNode.classList.remove('locked');
+    //     character.optimizationPlan = character.namedPlans[optimizationTarget];
+    //   }
+    // };
     const baseClass = `character-block ${character.baseID}`;
 
-    return <div className={character.isLocked ? `${baseClass} locked` : baseClass}
+    return <div className={character.optimizerSettings.isLocked ? `${baseClass} locked` : baseClass}
                 key={character.baseID}
                 draggable={draggable}
-                onDragStart={this.characterBlockDragStart(character.name)}
+                onDragStart={this.characterBlockDragStart(character.gameSettings.name)}
                 onDragEnter={this.characterBlockDragEnter()}
                 onDragOver={this.characterBlockDragOver()}
                 onDragLeave={this.characterBlockDragLeave()}
-                onDrop={this.characterBlockDrop(character.name)}
+                onDrop={this.characterBlockDrop(character.gameSettings.name)}
                 onDoubleClick={() => onDoubleClick(character)}>
       <CharacterAvatar character={character}/>
-      <div className={'character-name'}>{character.name}</div>
+      <div className={'character-name'}>{character.gameSettings.name}</div>
       <div className={'target'}>
         <label>Target:</label>
         <div className={'dropdown'}>
@@ -122,32 +125,17 @@ class CharacterList extends React.Component {
   }
 
   render() {
-    const characters = this.props.characters;
-
-    const isFiltered = character => (
-      this.props.filterString === undefined || this.props.filterString.length === 0 ||
-      character.matchesFilter(this.props.filterString)
-    );
-
-    const filteredChars = characters.filter(isFiltered);
-    const unfilteredChars = characters.filter(character => !isFiltered(character));
-
     return (
       <div className={'character-list'}
       onDragEnter={this.characterBlockDragEnter()}
       onDragOver={this.characterBlockDragOver()}
       onDragLeave={this.characterBlockDragLeave()}
       onDrop={this.characterBlockDrop('')}>
-
-        {0 < filteredChars.length && filteredChars.map(character =>
+        {0 < this.props.characters.length && this.props.characters.map(character =>
           this.renderCharacterBlock(character)
         )}
 
-        {0 < unfilteredChars.length && unfilteredChars.map(character =>
-          this.renderCharacterBlock(character, true)
-        )}
-
-        {0 === filteredChars.length &&
+        {0 === this.props.characters.length &&
         <div
           className={'character-block'}
           onDragEnter={this.characterBlockDragEnter()}
