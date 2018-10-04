@@ -4,7 +4,18 @@ import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
 
 class Mod {
-  constructor(id, slot, set, level, pips, primaryStat, secondaryStats, currentCharacter, assignTo, tier = 1) {
+  id;
+  slot;
+  set;
+  level;
+  pips;
+  primaryStat;
+  secondaryStats;
+  characterID;
+  assignTo;
+  tier;
+
+  constructor(id, slot, set, level, pips, primaryStat, secondaryStats, characterID, assignTo, tier = 1) {
     this.id = id;
     this.slot = slot;
     this.set = set;
@@ -12,7 +23,7 @@ class Mod {
     this.pips = pips;
     this.primaryStat = primaryStat;
     this.secondaryStats = secondaryStats;
-    this.currentCharacter = currentCharacter ? currentCharacter : null;
+    this.characterID = characterID;
     this.assignTo = assignTo ? assignTo : null;
     this.tier = tier;
   }
@@ -44,14 +55,44 @@ class Mod {
     modObject.set = this.set.name;
     modObject.level = this.level;
     modObject.pips = this.pips;
-    modObject.characterName = this.currentCharacter ? this.currentCharacter.name : '';
+    modObject.characterID = this.characterID;
     modObject.tier = this.tier;
-
-    if (this.assignTo) {
-      modObject.assignTo = this.assignTo.name;
-    }
+    modObject.assignTo = this.assignTo;
 
     return modObject;
+  }
+
+  static deserialize(modJson) {
+    const primaryStat = new Stat(modJson.primaryBonusType, modJson.primaryBonusValue);
+    let secondaryStats = [];
+
+    if ('None' !== modJson.secondaryType_1 && '' !== modJson.secondaryValue_1) {
+      secondaryStats.push(new Stat(modJson.secondaryType_1, modJson.secondaryValue_1, +modJson.secondaryRoll_1 || 1));
+    }
+    if ('None' !== modJson.secondaryType_2 && '' !== modJson.secondaryValue_2) {
+      secondaryStats.push(new Stat(modJson.secondaryType_2, modJson.secondaryValue_2, +modJson.secondaryRoll_2 || 1));
+    }
+    if ('None' !== modJson.secondaryType_3 && '' !== modJson.secondaryValue_3) {
+      secondaryStats.push(new Stat(modJson.secondaryType_3, modJson.secondaryValue_3, +modJson.secondaryRoll_3 || 1));
+    }
+    if ('None' !== modJson.secondaryType_4 && '' !== modJson.secondaryValue_4) {
+      secondaryStats.push(new Stat(modJson.secondaryType_4, modJson.secondaryValue_4, +modJson.secondaryRoll_4 || 1));
+    }
+
+    const setBonus = setBonuses[modJson.set.toLowerCase().replace(' ', '')];
+
+    return new Mod(
+      modJson.mod_uid,
+      modJson.slot.toLowerCase(),
+      setBonus,
+      modJson.level,
+      modJson.pips,
+      primaryStat,
+      secondaryStats,
+      modJson.characterID,
+      modJson.assignTo,
+      modJson.tier
+    )
   }
 
   /**
@@ -62,7 +103,7 @@ class Mod {
    *
    * @return Mod
    */
-  static deserialize(modJson, characters) {
+  static deserializeVersionOneTwo(modJson, characters) {
     const primaryStat = new Stat(modJson.primaryBonusType, modJson.primaryBonusValue);
     let secondaryStats = [];
 

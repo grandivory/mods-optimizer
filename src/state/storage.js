@@ -19,9 +19,9 @@ export function saveState(state) {
 export function restoreState() {
   const state = window.localStorage.getItem('optimizer.state');
 
-  // if (state) {
-  //   return deserializeState(state);
-  // } else {
+  if (state) {
+    return deserializeState(state);
+  } else {
     return {
       version: process.env.REACT_APP_VERSION || 'local',
       section: 'optimize',
@@ -30,7 +30,7 @@ export function restoreState() {
       isBusy: false,
       profiles: {}
     };
-  // }
+  }
 }
 
 /**
@@ -52,19 +52,20 @@ function serializeState(state) {
 /**
  * Convert the state from a serialized representation to the in-memory representation used by the app
  * @param state Object
- * TODO: Fix this
  */
 function deserializeState(state) {
   const jsonState = JSON.parse(state);
+  const version = process.env.REACT_APP_VERSION || 'local';
 
   return {
-    version: process.env.REACT_APP_VERSION || 'local',
+    version: version,
     section: jsonState.section,
     allyCode: jsonState.allyCode,
     isBusy: false,
+    characters: mapObject(jsonState.characters, (character) => Character.deserialize(character, version)),
     profiles: mapObject(jsonState.profiles, profile => {
       return {
-        characters: mapObject(profile.characters, (Character.deserialize)),
+        characters: mapObject(profile.characters, (character) => Character.deserialize(character, version)),
         mods: profile.mods.map(Mod.deserialize)
       }
     })

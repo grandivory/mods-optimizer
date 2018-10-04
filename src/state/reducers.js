@@ -1,9 +1,10 @@
 import {CHANGE_SECTION, REQUEST_PROFILE, RECEIVE_PROFILE, LOG, REQUEST_CHARACTERS, RECEIVE_CHARACTERS} from "./actions";
 import {restoreState, saveState} from "./storage";
-import {mapObject} from "../utils/mapObject";
+import {mapObject, mapObjectByKeyAndValue} from "../utils/mapObject";
 import characterSettings from "../constants/characterSettings";
 import Character from "../domain/Character";
 import {GameSettings} from "../domain/CharacterDataClasses";
+import Mod from "../domain/Mod";
 
 function changeSection(state, action) {
   return Object.assign({}, state, {
@@ -20,15 +21,6 @@ function requestCharacters(state, action) {
         character => character.withDefaultSettings(characterSettings[character.baseID])
       )
     },
-    // {
-    //   profiles: Object.assign({}, state.profiles, {
-    //     [action.allyCode]: Object.assign({}, profile, {
-    //       characters: mapObject(
-    //         profile.characters, character => character.withDefaultSettings(characterSettings[character.baseID])
-    //       )
-    //     })
-    //   })
-    // },
     {isBusy: true});
 }
 
@@ -68,12 +60,31 @@ function requestProfile(state, action) {
   });
 }
 
+/**
+ * Update the profile for a particular ally code with new mod and character data
+ * @param state
+ * @param action
+ */
 function receiveProfile(state, action) {
+  // First, update the characters by combining the PlayerValues objects in the action
+  // with the base characters in the state
+  const newCharacters = mapObjectByKeyAndValue(action.profile.characters, (id, playerValues) =>
+    state.characters.hasOwnProperty(id) ?
+      state.characters[id].withPlayerValues(playerValues) :
+      Character.default(id).withPlayerValues(playerValues)
+  );
+
+  // Then, update the mods by deserializing each one
+  const newMods = action.profile.mods.map(Mod.deserialize);
+
   return Object.assign({}, state, {
     isBusy: false,
     allyCode: action.allyCode,
     profiles: Object.assign({}, state.profiles, {
-      [action.allyCode]: action.profile
+      [action.allyCode]: {
+        mods: newMods,
+        characters: newCharacters
+      }
     })
   });
 }

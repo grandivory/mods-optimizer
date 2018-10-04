@@ -163,27 +163,29 @@ class OptimizationPlan {
    * @param planJson Object
    * @returns {OptimizationPlan}
    */
-  /* eslint-disable no-unused-vars */
-  static deserialize(planJson, physDmgPct) {
-    return new OptimizationPlan(
-      planJson.name || 'unnamed',
-      planJson.health,
-      planJson.protection,
-      planJson.speed,
-      planJson.critDmg,
-      planJson.potency,
-      planJson.tenacity,
-      planJson.physDmg,
-      planJson.specDmg,
-      planJson.critChance,
-      planJson.armor,
-      planJson.resistance,
-      planJson.accuracy,
-      planJson.critAvoid,
-      'undefined' !== typeof planJson.upgradeMods ? planJson.upgradeMods : true
-    );
+  static deserialize(planJson) {
+    if (planJson) {
+      return new OptimizationPlan(
+        planJson.name || 'unnamed',
+        planJson.health,
+        planJson.protection,
+        planJson.speed,
+        planJson.critDmg,
+        planJson.potency,
+        planJson.tenacity,
+        planJson.physDmg,
+        planJson.specDmg,
+        planJson.critChance,
+        planJson.armor,
+        planJson.resistance,
+        planJson.accuracy,
+        planJson.critAvoid,
+        'undefined' !== typeof planJson.upgradeMods ? planJson.upgradeMods : true
+      );
+    } else {
+      return null;
+    }
   }
-  /* eslint-enable no-unused-vars */
 
   /**
    * Deserialize an OptimizationPlan that was serialized by version 1.1.*

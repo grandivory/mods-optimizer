@@ -3,6 +3,7 @@
 import BaseStats, {NullCharacterStats} from "./CharacterStats";
 import OptimizationPlan from "./OptimizationPlan";
 import characterSettings from "../constants/characterSettings";
+import {CharacterSettings, GameSettings, PlayerValues, OptimizerSettings} from "./CharacterDataClasses";
 
 export default class Character {
   baseID;
@@ -31,6 +32,8 @@ export default class Character {
     this.gameSettings = gameSettings;
     this.playerValues = playerValues;
     this.optimizerSettings = optimizerSettings;
+
+    Object.freeze(this);
   }
 
   /**
@@ -77,7 +80,7 @@ export default class Character {
 
   /**
    * Create a new Character object that matches this one, but with gameSettings overridden
-   * @param gameSettings
+   * @param gameSettings GameSettings
    */
   withGameSettings(gameSettings) {
     if (gameSettings) {
@@ -87,7 +90,43 @@ export default class Character {
         gameSettings,
         this.playerValues,
         this.optimizerSettings
-      )
+      );
+    } else {
+      return this;
+    }
+  }
+
+  /**
+   * Create a new Character object that matches this one, but with playerValues overridden
+   * @param playerValues
+   */
+  withPlayerValues(playerValues) {
+    if (playerValues) {
+      return new Character(
+        this.baseID,
+        this.defaultSettings,
+        this.gameSettings,
+        playerValues,
+        this.optimizerSettings
+      );
+    } else {
+      return this;
+    }
+  }
+
+  /**
+   * Create a new Character object that matches this one, but with optimizerSettings overridden
+   * @param optimizerSettings
+   */
+  withOptimizerSettings(optimizerSettings) {
+    if (optimizerSettings) {
+      return new Character(
+        this.baseID,
+        this.defaultSettings,
+        this.gameSettings,
+        this.playerValues,
+        optimizerSettings
+      );
     } else {
       return this;
     }
@@ -122,15 +161,25 @@ export default class Character {
 
     characterObject.baseID = this.baseID;
     characterObject.defaultSettings = this.defaultSettings.serialize();
-    characterObject.gameSettings = this.gameSettings ? this.gameSettings.serialize() : {};
-    characterObject.playerValues = this.playervalues ? this.playerValues.serialize() : {};
-    characterObject.optimizerSettings = this.optimizerSettings ? this.optimizerSettings.serialize() : {};
+    characterObject.gameSettings = this.gameSettings ? this.gameSettings.serialize() : null;
+    characterObject.playerValues = this.playervalues ? this.playerValues.serialize() : null;
+    characterObject.optimizerSettings = this.optimizerSettings ? this.optimizerSettings.serialize() : null;
 
     return characterObject;
   }
 
+  static deserialize(characterJson) {
+    return new Character(
+      characterJson.baseID,
+      CharacterSettings.deserialize(characterJson.defaultSettings),
+      GameSettings.deserialize(characterJson.gameSettings),
+      PlayerValues.deserialize(characterJson.playerValues),
+      OptimizerSettings.deserialize(characterJson.optimizerSettings)
+    );
+  }
+
   // TODO: Implement
-  static deserialize(characterJson, version) {
+  static deserializeVersionOneTwo(characterJson, version) {
     const serializedNamedPlans = characterJson.namedPlans || {
       unnamed: characterJson.optimizationPlan
     };

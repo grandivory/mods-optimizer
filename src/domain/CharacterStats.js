@@ -120,20 +120,24 @@ class CharacterStats {
   }
 
   static deserialize(baseStatsJson) {
-    return new CharacterStats(
-      baseStatsJson.health,
-      baseStatsJson.protection,
-      baseStatsJson.speed,
-      baseStatsJson.potency / 100,
-      baseStatsJson.tenacity / 100,
-      baseStatsJson.physDmg,
-      baseStatsJson.physCritRating,
-      baseStatsJson.armor,
-      baseStatsJson.specDmg,
-      baseStatsJson.specCritRating,
-      baseStatsJson.resistance,
-      baseStatsJson.physDmgPercent
-    );
+    if (baseStatsJson) {
+      return new CharacterStats(
+        baseStatsJson.health,
+        baseStatsJson.protection,
+        baseStatsJson.speed,
+        baseStatsJson.potency / 100,
+        baseStatsJson.tenacity / 100,
+        baseStatsJson.physDmg,
+        baseStatsJson.physCritRating,
+        baseStatsJson.armor,
+        baseStatsJson.specDmg,
+        baseStatsJson.specCritRating,
+        baseStatsJson.resistance,
+        baseStatsJson.physDmgPercent
+      );
+    } else {
+      return null;
+    }
   }
 }
 

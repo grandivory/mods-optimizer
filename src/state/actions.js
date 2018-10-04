@@ -80,7 +80,7 @@ function dispatchFetchProfile(dispatch, allyCode) {
         // Convert mods to the serialized format recognized by the optimizer
         const profileMods = roster.map(character =>
           character.mods.map(mod => {
-            mod.characterName = character.name;
+            mod.characterID = character.defId;
             mod.mod_uid = mod.id;
             mod.set = modSets[mod.set];
             mod.slot = modSlots[mod.slot];
@@ -93,13 +93,16 @@ function dispatchFetchProfile(dispatch, allyCode) {
           .reduce((allMods, charMods) => allMods.concat(charMods), []);
 
         // Convert each character to a PlayerValues object
-        const profileCharacters = roster.map(character => new PlayerValues(
-          character.level,
-          character.rarity,
-          character.gear,
-          character.equipped.map(gear => {return {equipmentId: gear.equipmentId};}),
-          character.gp
-        ));
+        const profileCharacters = roster.reduce((characters, character) => {
+          characters[character.defId] = new PlayerValues(
+            character.level,
+            character.rarity,
+            character.gear,
+            character.equipped.map(gear => {return {equipmentId: gear.equipmentId};}),
+            character.gp
+          );
+          return characters;
+        }, {});
 
         return {
           mods: profileMods,
@@ -119,7 +122,7 @@ export function refreshPlayerData(allyCode) {
 
   return function(dispatch) {
     return dispatchFetchCharacters(dispatch, cleanedAllyCode)
-      // .then(() => dispatchFetchProfile(dispatch, cleanedAllyCode));
+      .then(() => dispatchFetchProfile(dispatch, cleanedAllyCode));
   }
 }
 
