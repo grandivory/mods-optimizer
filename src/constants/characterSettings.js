@@ -1,9 +1,8 @@
 // @flow
 
-import {DamageType} from "../domain/CharacterSettings";
 import OptimizationPlan from "../domain/OptimizationPlan";
 import optimizationStrategy from "./optimizationStrategy";
-import CharacterSettings from "../domain/CharacterSettings";
+import {CharacterSettings, DamageType} from "../domain/CharacterDataClasses";
 
 const characterSettings = {
   'AAYLASECURA': new CharacterSettings(

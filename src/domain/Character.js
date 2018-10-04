@@ -4,14 +4,21 @@ import BaseStats, {NullCharacterStats} from "./CharacterStats";
 import OptimizationPlan from "./OptimizationPlan";
 import characterSettings from "../constants/characterSettings";
 
-class Character {
+export default class Character {
+  baseID;
+  defaultSettings;
+  gameSettings;
+  playerValues;
+  optimizerSettings;
+
   /**
    * @param name
    * @param defaultSettings CharacterSettings The unchangeable default settings for a character, including its
    *                                          damage type, default targets, and extra searchable tags
-   * @param gameSettings The unchangeable settings for a character from in-game, including tags, name, etc.
-   * @param playerValues The player-specific
-   * @param optimizerSettings
+   * @param gameSettings GameSettings The unchangeable settings for a character from in-game, including tags, name, etc.
+   * @param playerValues PlayerValues The player-specific character values from the game, like level, stars, etc.
+   * @param optimizerSettings OptimizerSettings Settings specific to the optimizer,
+   *                                            such as what target to use, and whether to lock mods
    */
   constructor(baseID,
               defaultSettings,
@@ -63,6 +70,26 @@ class Character {
         this.playerValues,
         this.optimizerSettings
       );
+    } else {
+      return this;
+    }
+  }
+
+  /**
+   * Create a new Character object that matches this one, but with gameSettings overridden
+   * @param gameSettings
+   */
+  withGameSettings(gameSettings) {
+    if (gameSettings) {
+      return new Character(
+        this.baseID,
+        this.defaultSettings,
+        gameSettings,
+        this.playerValues,
+        this.optimizerSettings
+      )
+    } else {
+      return this;
     }
   }
 
@@ -90,29 +117,14 @@ class Character {
       )
   }
 
-  // TODO: Implement
   serialize() {
     let characterObject = {};
 
-    const namedPlansObject = Object.keys(this.namedPlans).reduce((obj, key) => {
-      obj[key] = this.namedPlans[key].serialize();
-      return obj;
-    }, {});
-
-    characterObject.name = this.name;
     characterObject.baseID = this.baseID;
-    characterObject.level = this.level;
-    characterObject.starLevel = this.starLevel;
-    characterObject.gearLevel = this.gearLevel;
-    characterObject.gearPieces = this.gearPieces;
-    characterObject.galacticPower = this.galacticPower;
-    characterObject.physDmgPercent = this.physDmgPct;
-    characterObject.baseStats = this.baseStats;
-    characterObject.totalStats = this.totalStats;
-    characterObject.optimizationPlan = this.optimizationPlan.serialize();
-    characterObject.namedPlans = namedPlansObject;
-    characterObject.useOnly5DotMods = this.useOnly5DotMods;
-    characterObject.isLocked = this.isLocked;
+    characterObject.defaultSettings = this.defaultSettings.serialize();
+    characterObject.gameSettings = this.gameSettings ? this.gameSettings.serialize() : {};
+    characterObject.playerValues = this.playervalues ? this.playerValues.serialize() : {};
+    characterObject.optimizerSettings = this.optimizerSettings ? this.optimizerSettings.serialize() : {};
 
     return characterObject;
   }
@@ -170,5 +182,3 @@ class Character {
     );
   }
 }
-
-export default Character;

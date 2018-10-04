@@ -116,22 +116,7 @@ class CharacterStats {
   }
 
   serialize() {
-    let baseStatsObject = {};
-
-    baseStatsObject.health = this.health;
-    baseStatsObject.protection = this.protection;
-    baseStatsObject.speed = this.speed;
-    baseStatsObject.potency = this.potency;
-    baseStatsObject.tenacity = this.tenacity;
-    baseStatsObject.physDmg = this.physDmg;
-    baseStatsObject.physCritRating = this.physCritRating;
-    baseStatsObject.armor = this.armor;
-    baseStatsObject.specDmg = this.specDmg;
-    baseStatsObject.specCritRating = this.specCritRating;
-    baseStatsObject.resistance = this.resistance;
-    baseStatsObject.physDmgPercent = this.physDmgPercent;
-
-    return baseStatsObject;
+    return this;
   }
 
   static deserialize(baseStatsJson) {

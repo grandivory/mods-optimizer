@@ -10,7 +10,7 @@ import Modal from "../../components/Modal/Modal";
 import WarningLabel from "../../components/WarningLabel/WarningLabel";
 import Spinner from "../../components/Spinner/Spinner";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
-import {changeSection, fetchProfile, logState} from "../../state/actions";
+import {changeSection, logState, refreshPlayerData} from "../../state/actions";
 import {connect} from "react-redux";
 
 class App extends Component {
@@ -442,7 +442,7 @@ class App extends Component {
                defaultValue={this.props.allyCode || ''}
                onKeyUp={(e) => {
                  if (e.key === 'Enter') {
-                   this.props.fetchProfile(e.target.value);
+                   this.props.refreshPlayerData(e.target.value);
                  }
                  // Don't change the input if the user is trying to select something
                  if (window.getSelection().toString() !== '') {
@@ -469,7 +469,8 @@ class App extends Component {
                  e.target.value = allyCodeChunks.join('-');
                }}
         />
-        <button type={'button'} onClick={() => {this.props.fetchProfile(document.getElementById('ally-code').value);}}>
+        <button type={'button'}
+                onClick={() => {this.props.refreshPlayerData(document.getElementById('ally-code').value);}}>
           Fetch my data!
         </button>
         <input id={'keep-old-mods'} name={'keep-old-mods'} type={'checkbox'} value={'keep-old-mods'}
@@ -663,8 +664,8 @@ const mapDispatchToProps = dispatch => ({
   changeSection: newSection => {
     dispatch(changeSection(newSection));
   },
-  fetchProfile: allyCode => {
-    dispatch(fetchProfile(allyCode));
+  refreshPlayerData: allyCode => {
+    dispatch(refreshPlayerData(allyCode));
   },
   logState: () => {
     dispatch(logState());
