@@ -110,6 +110,38 @@ class PlayerValues {
     Object.freeze(this);
   }
 
+  withBaseStats(baseStats) {
+    if (baseStats) {
+      return new PlayerValues(
+        this.level,
+        this.stars,
+        this.gearLevel,
+        this.gearPieces,
+        this.galacticPower,
+        baseStats,
+        this.equippedStats
+      );
+    } else {
+      return this;
+    }
+  }
+
+  withEquippedStats(equippedStats) {
+    if (equippedStats) {
+      return new PlayerValues(
+        this.level,
+        this.stars,
+        this.gearLevel,
+        this.gearPieces,
+        this.galacticPower,
+        this.baseStats,
+        equippedStats
+      );
+    } else {
+      return this;
+    }
+  }
+
   serialize() {
     const baseStats = this.baseStats ? this.baseStats.serialize() : null;
     const equippedStats = this.equippedStats ? this.equippedStats.serialize() : null;

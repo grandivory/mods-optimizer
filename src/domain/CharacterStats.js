@@ -19,8 +19,6 @@ class CharacterStats {
    * @param specDmg Number
    * @param specCritRating Number
    * @param resistance Number
-   * @param physDmgPercent Number The percent of total offense that the character uses for physical damage (0-1, the
-   *                              rest is considered special damage)
    */
   constructor(health,
               protection,
@@ -32,8 +30,7 @@ class CharacterStats {
               armor,
               specDmg,
               specCritRating,
-              resistance,
-              physDmgPercent
+              resistance
   ) {
     // General stats
     this.health = health;
@@ -53,8 +50,6 @@ class CharacterStats {
     this.resistance = resistance;
 
     // Derived stats
-    this.physDmgPercent = physDmgPercent;
-    this.offense = physDmg * physDmgPercent + specDmg * (1 - physDmgPercent);
     this.physCritChance = physCritRating / 24 + 10;
     this.specCritChance = specCritRating / 24 + 10;
 
@@ -80,8 +75,7 @@ class CharacterStats {
       this.isNumberValid(this.armor) &&
       this.isNumberValid(this.specDmg) &&
       this.isNumberValid(this.specCritRating) &&
-      this.isNumberValid(this.resistance) &&
-      this.isNumberValid(this.physDmgPercent);
+      this.isNumberValid(this.resistance);
   }
 
   /**
@@ -110,8 +104,7 @@ class CharacterStats {
         this.armor + that.armor,
         this.specDmg + that.specDmg,
         this.specCritRating + that.specCritRating,
-        this.resistance + that.resistance,
-        this.physDmgPercent
+        this.resistance + that.resistance
     )
   }
 
@@ -132,8 +125,7 @@ class CharacterStats {
         baseStatsJson.armor,
         baseStatsJson.specDmg,
         baseStatsJson.specCritRating,
-        baseStatsJson.resistance,
-        baseStatsJson.physDmgPercent
+        baseStatsJson.resistance
       );
     } else {
       return null;
@@ -141,7 +133,7 @@ class CharacterStats {
   }
 }
 
-const NullCharacterStats = new CharacterStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+const NullCharacterStats = new CharacterStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 Object.freeze(NullCharacterStats);
 
 export default CharacterStats;

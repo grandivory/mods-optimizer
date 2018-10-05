@@ -4,7 +4,6 @@
  */
 import {mapObject, mapObjectByKey} from "../utils/mapObject";
 import Character from "../domain/Character";
-import Mod from "../domain/Mod";
 import characterSettings from "../constants/characterSettings";
 import PlayerProfile from "../domain/PlayerProfile";
 

@@ -12,6 +12,7 @@ import Spinner from "../../components/Spinner/Spinner";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
 import {changeSection, logState, refreshPlayerData} from "../../state/actions";
 import {connect} from "react-redux";
+import formatAllyCode from "../../utils/formatAllyCode";
 
 class App extends Component {
   constructor(props) {
@@ -436,7 +437,7 @@ class App extends Component {
       <div className={'actions'}>
         <label htmlFor={'ally-code'}>Ally code:</label>
         <input id={'ally-code'} type={'text'} inputMode={'numeric'}
-               defaultValue={this.props.allyCode || ''}
+               defaultValue={formatAllyCode(this.props.allyCode || '')}
                onKeyUp={(e) => {
                  if (e.key === 'Enter') {
                    this.props.refreshPlayerData(e.target.value);
@@ -450,20 +451,8 @@ class App extends Component {
                    return;
                  }
 
-                 // Grab the value from the input field
-                 let allyCode = e.target.value;
-
-                 // Take only numbers
-                 allyCode = allyCode.replace(/[^\d]/g, '');
-
-                 // Take only the first 9 digits
-                 allyCode = allyCode.substr(0, 9);
-
-                 // Split the numbers into chunks of 3
-                 const allyCodeChunks = allyCode.match(/\d{1,3}/g) || [];
-
-                 // Add dashes between each and set the value back on the field
-                 e.target.value = allyCodeChunks.join('-');
+                 // Format the input field
+                 e.target.Value = formatAllyCode(e.target.value);
                }}
         />
         <button type={'button'}
