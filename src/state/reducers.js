@@ -2,15 +2,20 @@
 
 import {
   CHANGE_SECTION,
+  HIDE_ERROR,
+  HIDE_MODAL,
   LOG,
   RECEIVE_CHARACTERS,
   RECEIVE_PROFILE,
   RECEIVE_STATS,
   REQUEST_CHARACTERS,
   REQUEST_PROFILE,
-  REQUEST_STATS
+  REQUEST_STATS,
+  RESET,
+  SHOW_ERROR,
+  SHOW_MODAL
 } from "./actions";
-import {restoreState, saveState} from "./storage";
+import {defaultState, restoreState, saveState} from "./storage";
 import {mapObject, mapObjectByKeyAndValue} from "../utils/mapObject";
 import characterSettings from "../constants/characterSettings";
 import Character from "../domain/Character";
@@ -45,6 +50,12 @@ function requestCharacters(state, action) {
  * @returns {*}
  */
 function receiveCharacters(state, action) {
+  if (!action.characters) {
+    return Object.assign({}, state, {
+      isBusy: false
+    });
+  }
+
   let newCharacters = {};
 
   action.characters.forEach(character => {
@@ -80,6 +91,12 @@ function requestProfile(state, action) {
  * @param action
  */
 function receiveProfile(state, action) {
+  if (!action.profile || !action.profile.characters) {
+    return Object.assign({}, state, {
+      isBusy: false
+    });
+  }
+
   // First, update the characters by combining the PlayerValues objects in the action
   // with the base characters in the state
   const newCharacters = mapObjectByKeyAndValue(action.profile.characters, (id, playerValues) => {
@@ -131,6 +148,12 @@ function requestStats(state, action) {
  * @param action
  */
 function receiveStats(state, action) {
+  if (!action.stats) {
+    return Object.assign({}, state, {
+      isBusy: false
+    });
+  }
+
   const profile = state.profiles[action.allyCode];
 
   const newProfile = profile.withCharacters(
@@ -179,13 +202,55 @@ function receiveStats(state, action) {
     }, {})
   );
 
+  const errorCharacters = Object.keys(profile.characters).filter(charID =>
+    !Object.keys(newProfile.characters).includes(charID)
+  ).map(charID => profile[charID].name);
+
+  const errorMessage = errorCharacters.length > 0 ?
+    'Missing stats for characters: ' + errorCharacters.join(', ') +
+    '. These characters may not optimize properly.'
+    : null;
+
   return Object.assign({}, state, {
-    isBusy: false,
     allyCode: action.allyCode,
+    error: errorMessage,
+    isBusy: false,
     profiles: Object.assign({}, state.profiles, {
       [action.allyCode]: newProfile
     })
   });
+}
+
+function showModal(state, action) {
+  return Object.assign({}, state, {
+    isBusy: false,
+    modal: action.content
+  });
+}
+
+function hideModal(state, action) {
+  return Object.assign({}, state, {
+    isBusy: false,
+    modal: null
+  });
+}
+
+function showError(state, action) {
+  return Object.assign({}, state, {
+    isBusy: false,
+    error: action.content
+  });
+}
+
+function hideError(state, action) {
+  return Object.assign({}, state, {
+    isBusy: false,
+    error: null
+  });
+}
+
+function reset(state, action) {
+  return Object.assign({}, defaultState);
 }
 
 export function optimizerApp(state, action) {
@@ -215,6 +280,18 @@ export function optimizerApp(state, action) {
       return requestStats(state, action);
     case RECEIVE_STATS:
       newState = receiveStats(state, action);
+      saveState(newState);
+      return newState;
+    case SHOW_MODAL:
+      return showModal(state, action);
+    case HIDE_MODAL:
+      return hideModal(state, action);
+    case SHOW_ERROR:
+      return showError(state, action);
+    case HIDE_ERROR:
+      return hideError(state, action);
+    case RESET:
+      newState = reset(state, action);
       saveState(newState);
       return newState;
     case LOG:

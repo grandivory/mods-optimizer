@@ -1,14 +1,21 @@
 import {modSets, modSlots, modStats} from "../constants/enums";
 import cleanAllyCode from "../utils/cleanAllyCode";
 import {PlayerValues} from "../domain/CharacterDataClasses";
+import WarningLabel from "../components/WarningLabel/WarningLabel";
+import React from "react";
 
 export const CHANGE_SECTION = 'CHANGE_SECTION';
-export const REQUEST_PROFILE = 'REQUEST_PROFILE';
-export const RECEIVE_PROFILE = 'RECEIVE_PROFILE';
 export const REQUEST_CHARACTERS = 'REQUEST_CHARACTERS';
 export const RECEIVE_CHARACTERS = 'RECEIVE_CHARACTERS';
+export const REQUEST_PROFILE = 'REQUEST_PROFILE';
+export const RECEIVE_PROFILE = 'RECEIVE_PROFILE';
 export const REQUEST_STATS = 'REQUEST_STATS';
 export const RECEIVE_STATS = 'RECEIVE_STATS';
+export const SHOW_MODAL = 'SHOW_MODAL';
+export const HIDE_MODAL = 'HIDE_MODAL';
+export const SHOW_ERROR = 'SHOW_ERROR';
+export const HIDE_ERROR = 'HIDE_ERROR';
+export const RESET = 'RESET';
 export const LOG = 'LOG';
 
 export function logState() {
@@ -73,7 +80,39 @@ export function receiveStats(allyCode, characterStats) {
     type: RECEIVE_STATS,
     allyCode: allyCode,
     stats: characterStats
-  }
+  };
+}
+
+export function showModal(modalContent) {
+  return {
+    type: SHOW_MODAL,
+    content: modalContent
+  };
+}
+
+export function hideModal() {
+  return {
+    type: HIDE_MODAL
+  };
+}
+
+export function showError(errorContent) {
+  return {
+    type: SHOW_ERROR,
+    content: errorContent
+  };
+}
+
+export function hideError() {
+  return {
+    type: HIDE_ERROR
+  };
+}
+
+export function reset() {
+  return {
+    type: RESET
+  };
 }
 
 function post(url='', data={}, extras={}) {
@@ -82,15 +121,24 @@ function post(url='', data={}, extras={}) {
     headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
     body: JSON.stringify(data),
     mode: "cors",
-  }, extras)).then(response => response.json());
+  }, extras))
+    .then(
+      response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.text().then(errorText => {console.dir(errorText); return Promise.reject(new Error(errorText));});
+        }
+      }
+    );
 }
 
 function dispatchFetchCharacters(dispatch) {
   dispatch(requestCharacters());
   return fetch('https://api.mods-optimizer.swgoh.grandivory.com/characters/')
     .then(response => response.json())
-    .then(characters => {console.log(characters); return characters;})
-    .then(characters => {dispatch(receiveCharacters(characters)); return characters;})
+    .catch(error => dispatch(showError(error.message)))
+    .then(characters => {dispatch(receiveCharacters(characters)); return characters;});
 }
 
 function dispatchFetchProfile(dispatch, allyCode) {
@@ -101,6 +149,7 @@ function dispatchFetchProfile(dispatch, allyCode) {
   )
     .then(
       playerProfile => {
+        console.dir(playerProfile);
         const roster = playerProfile.roster.filter(entry => entry.type === 'CHARACTER');
 
         // Convert mods to the serialized format recognized by the optimizer
@@ -135,31 +184,34 @@ function dispatchFetchProfile(dispatch, allyCode) {
           characters: profileCharacters
         };
       },
-      error => console.dir(error)
     )
+    .catch(error => dispatch(showError(error.message)))
     .then(profile => {
       dispatch(receiveProfile(allyCode, profile));
       return profile;
     });
 }
 
-function dispatchFetchCharacterStats(dispatch, allyCode, characters) {
-  console.dir(characters);
-  dispatch(requestStats());
-  return post(
-    'https://crinolo-swgoh.glitch.me/statCalc/api/characters',
-    Object.keys(characters).map(charID => {
-      return {
-        'defId': charID,
-        'rarity': characters[charID].stars,
-        'level': characters[charID].level,
-        'gear': characters[charID].gearLevel,
-        'equipped': characters[charID].gearPieces
-      };
-    })
-  )
-    .then(statsResponse => {console.dir(statsResponse); return statsResponse;})
-    .then(statsResponse => {dispatch(receiveStats(allyCode, statsResponse)); return statsResponse;});
+function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
+  if (null !== characters) {
+    return post(
+      'https://crinolo-swgoh.glitch.me/statCalc/api/characters',
+      Object.keys(characters).map(charID => {
+        return {
+          'defId': charID,
+          'rarity': characters[charID].stars,
+          'level': characters[charID].level,
+          'gear': characters[charID].gearLevel,
+          'equipped': characters[charID].gearPieces
+        };
+      })
+    )
+      .catch(error => dispatch(showError(error.message)))
+      .then(statsResponse => {dispatch(receiveStats(allyCode, statsResponse)); return statsResponse;});
+  } else {
+    return Promise.resolve()
+      .then(() => dispatch(receiveStats(allyCode, null)));
+  }
 }
 
 export function refreshPlayerData(allyCode) {
@@ -168,7 +220,8 @@ export function refreshPlayerData(allyCode) {
   return function(dispatch) {
     return dispatchFetchCharacters(dispatch, cleanedAllyCode)
       .then(() => dispatchFetchProfile(dispatch, cleanedAllyCode))
-      .then(profile => dispatchFetchCharacterStats(dispatch, cleanedAllyCode, profile.characters));
+      .then(profile => dispatchFetchCharacterStats(dispatch, cleanedAllyCode, profile ? profile.characters : null))
+      .catch(error => dispatch(showError(error.message)));
   }
 }
 
@@ -181,7 +234,8 @@ export function fetchCharacters(allyCode) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
 
   return function(dispatch) {
-    return dispatchFetchCharacters(dispatch, cleanedAllyCode);
+    return dispatchFetchCharacters(dispatch, cleanedAllyCode)
+      .catch(error => dispatch(showError(error.message)));
   }
 }
 
@@ -195,7 +249,8 @@ export function fetchProfile(allyCode) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
 
   return function (dispatch) {
-    return dispatchFetchProfile(dispatch, cleanedAllyCode);
+    return dispatchFetchProfile(dispatch, cleanedAllyCode)
+      .catch(error => dispatch(showError(error.message)));
   }
 }
 
@@ -203,6 +258,7 @@ export function fetchCharacterStats(allyCode, characters) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
 
   return function(dispatch) {
-    return dispatchFetchCharacterStats(dispatch, cleanedAllyCode, characters);
+    return dispatchFetchCharacterStats(dispatch, cleanedAllyCode, characters)
+      .catch(error => dispatch(showError(error.message)));
   }
 }

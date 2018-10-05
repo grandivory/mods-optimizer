@@ -12,6 +12,18 @@ export function saveState(state) {
   window.localStorage.setItem('optimizer.state', JSON.stringify(storedState));
 }
 
+export const defaultState = {
+  allyCode: '',
+  characterFilter: '',
+  characters: mapObjectByKey(characterSettings, baseID => Character.default(baseID)),
+  error: null,
+  isBusy: false,
+  modal: null,
+  profiles: {},
+  section: 'optimize',
+  version: process.env.REACT_APP_VERSION || 'local'
+};
+
 /**
  * Restore the application from localStorage
  * @returns Object state
@@ -22,15 +34,7 @@ export function restoreState() {
   if (state) {
     return deserializeState(state);
   } else {
-    return {
-      version: process.env.REACT_APP_VERSION || 'local',
-      section: 'optimize',
-      characterFilter: '',
-      allyCode: '',
-      characters: mapObjectByKey(characterSettings, baseID => Character.default(baseID)),
-      isBusy: false,
-      profiles: {}
-    };
+    return defaultState;
   }
 }
 
@@ -39,7 +43,9 @@ export function restoreState() {
  * @param state Object
  */
 function serializeState(state) {
-  if ('function' === typeof state.serialize) {
+  if (null === state) {
+    return null
+  } else if ('function' === typeof state.serialize) {
     return state.serialize();
   } else if (state instanceof Array) {
     return state.map(item => serializeState(item));
@@ -59,12 +65,14 @@ function deserializeState(state) {
   const version = process.env.REACT_APP_VERSION || 'local';
 
   return {
-    version: version,
-    section: jsonState.section,
-    characterFilter: jsonState.characterFilter || '',
     allyCode: jsonState.allyCode,
-    isBusy: false,
+    characterFilter: jsonState.characterFilter || '',
     characters: mapObject(jsonState.characters, (character) => Character.deserialize(character, version)),
-    profiles: mapObject(jsonState.profiles, PlayerProfile.deserialize)
+    error: null,
+    isBusy: false,
+    modal: null,
+    profiles: mapObject(jsonState.profiles, PlayerProfile.deserialize),
+    section: jsonState.section,
+    version: version,
   };
 }
