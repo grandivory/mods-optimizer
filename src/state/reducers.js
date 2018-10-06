@@ -11,7 +11,7 @@ import {
   REQUEST_CHARACTERS,
   REQUEST_PROFILE,
   REQUEST_STATS,
-  RESET, RESTORE_PROGRESS,
+  RESET, RESTORE_PROGRESS, SET_MODS,
   SHOW_ERROR,
   SHOW_MODAL, TOGGLE_KEEP_OLD_MODS
 } from "./actions";
@@ -276,7 +276,57 @@ function toggleKeepOldMods(state, action) {
 }
 
 function restoreProgress(state, action) {
-  return deserializeState(action.progressData);
+  try {
+    return deserializeState(action.progressData);
+  } catch (e) {
+    return Object.assign({}, state, {
+      error:
+        'Unable to restore your progress from the provided file. Please make sure that you uploaded the correct file.'
+    });
+  }
+}
+
+function setMods(state, action) {
+  try {
+    if (!state.allyCode) {
+      return Object.assign({}, state, {
+        error: 'You must fetch your data before overriding your mods.'
+      });
+    }
+
+    const modsData = JSON.parse(action.modsData);
+    const profile = state.profiles[state.allyCode];
+
+    const newMods = modsData.map(mod => Mod.deserializeVersionOneTwo(mod, profile.characters)).reduce((mods, mod) => {
+      mods[mod.id] = mod;
+      return mods;
+    }, {});
+
+    let finalMods;
+
+    if (state.keepOldMods) {
+      const oldMods = profile.mods.reduce((mods, mod) => {
+        mods[mod.id] = mod.unequip();
+        return mods;
+      }, {});
+
+      finalMods = Object.values(Object.assign({}, oldMods, newMods));
+    } else {
+      finalMods = Object.values(newMods);
+    }
+
+    return Object.assign({}, state, {
+      profiles: Object.assign({}, state.profiles, {
+        [state.allyCode]: Object.assign({}, profile, {
+          mods: finalMods
+        })
+      })
+    });
+  } catch (e) {
+    return Object.assign({}, state, {
+      error: 'Unable to set your mods from the provided file. Please make sure that you uploaded the correct file.'
+    })
+  }
 }
 
 export function optimizerApp(state, action) {
@@ -314,6 +364,8 @@ export function optimizerApp(state, action) {
       return saveState(toggleKeepOldMods(state, action));
     case RESTORE_PROGRESS:
       return saveState(restoreProgress(state, action));
+    case SET_MODS:
+      return saveState(setMods(state, action));
     case LOG:
       console.log(state);
       return Object.assign({}, state);

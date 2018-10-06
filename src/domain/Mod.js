@@ -116,7 +116,7 @@ class Mod {
   }
 
   /**
-   * Deserialize a JSON representation of a mod into a new mod
+   * Deserialize a JSON representation of a mod into a new mod (for app minor version 1.2 and below)
    *
    * @param modJson
    * @param characters Object An object, keyed by character name, of all possible characters
@@ -127,26 +127,32 @@ class Mod {
     const primaryStat = new Stat(modJson.primaryBonusType, modJson.primaryBonusValue);
     let secondaryStats = [];
 
-    if ('None' !== modJson.secondaryType_1 && '' !== modJson.secondaryValue_1) {
+    if (!['None', ''].includes(modJson.secondaryType_1) && '' !== modJson.secondaryValue_1) {
       secondaryStats.push(new Stat(modJson.secondaryType_1, modJson.secondaryValue_1, +modJson.secondaryRoll_1 || 1));
     }
-    if ('None' !== modJson.secondaryType_2 && '' !== modJson.secondaryValue_2) {
+    if (!['None', ''].includes(modJson.secondaryType_2) && '' !== modJson.secondaryValue_2) {
       secondaryStats.push(new Stat(modJson.secondaryType_2, modJson.secondaryValue_2, +modJson.secondaryRoll_2 || 1));
     }
-    if ('None' !== modJson.secondaryType_3 && '' !== modJson.secondaryValue_3) {
+    if (!['None', ''].includes(modJson.secondaryType_3) && '' !== modJson.secondaryValue_3) {
       secondaryStats.push(new Stat(modJson.secondaryType_3, modJson.secondaryValue_3, +modJson.secondaryRoll_3 || 1));
     }
-    if ('None' !== modJson.secondaryType_4 && '' !== modJson.secondaryValue_4) {
+    if (!['None', ''].includes(modJson.secondaryType_4) && '' !== modJson.secondaryValue_4) {
       secondaryStats.push(new Stat(modJson.secondaryType_4, modJson.secondaryValue_4, +modJson.secondaryRoll_4 || 1));
     }
 
-    const currentCharacter = ('' !== modJson.characterName && 'UNASSIGNED' !== modJson.characterName) ?
-      characters[modJson.characterName.replace(/&amp;#39;/g, "'")] || null :
+    const charactersByName = Object.values(characters).reduce((chars, char) => {
+      chars[char.gameSettings.name] = char;
+      return chars;
+    }, {});
+
+    const characterName = ('' !== modJson.characterName && 'UNASSIGNED' !== modJson.characterName) ?
+      modJson.characterName.replace(/&amp;#39;/g, "'") : null;
+
+    const currentCharacter = (characterName && charactersByName[characterName]) ?
+      charactersByName[characterName].baseID :
       null;
 
-    const assignTo = modJson.assignTo ?
-      characters[modJson.assignTo] || null :
-      null;
+    const assignTo = modJson.assignTo ? modJson.assignTo.baseID : null;
 
     const setBonus = setBonuses[modJson.set.toLowerCase().replace(' ', '')];
 

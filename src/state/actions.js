@@ -17,6 +17,7 @@ export const HIDE_ERROR = 'HIDE_ERROR';
 export const RESET = 'RESET';
 export const TOGGLE_KEEP_OLD_MODS = 'TOGGLE_KEEP_OLD_MODS';
 export const RESTORE_PROGRESS = 'RESTORE_PROGRESS';
+export const SET_MODS = 'SET_MODS';
 export const LOG = 'LOG';
 
 export function logState() {
@@ -126,6 +127,13 @@ export function restoreProgress(progressData) {
   return {
     type: RESTORE_PROGRESS,
     progressData: progressData
+  };
+}
+
+export function setMods(modsData) {
+  return {
+    type: SET_MODS,
+    modsData: modsData
   };
 }
 

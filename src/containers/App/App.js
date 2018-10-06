@@ -14,7 +14,7 @@ import {
   hideModal,
   logState,
   refreshPlayerData,
-  reset, restoreProgress,
+  reset, restoreProgress, setMods,
   showModal,
   toggleKeepOldMods
 } from "../../state/actions";
@@ -36,28 +36,30 @@ class App extends Component {
 
     // Remove the query string after reading anything we needed from it.
     window.history.replaceState({}, document.title, document.location.href.split('?')[0]);
+
+    if ((props.version < '1.2.0' || !props.version) && props.profile) {
+      this.props.showModal(this.changeLogModal());
+    }
   }
 
-  // TODO: Finish moving this to Redux
-  restoreState() {
-    let state = {};
+  /**
+   * Read a file as input and pass its contents to another function for processing
+   * @param fileInput The uploaded file
+   * @param handleResult Function string => *
+   */
+  readFile(fileInput, handleResult) {
+    const reader = new FileReader();
 
-    const version = window.localStorage.getItem('optimizer.version');
+    reader.onload = (event) => {
+      try {
+        const fileData = event.target.result;
+        handleResult(fileData);
+      } catch (e) {
+        this.props.showError(e.message);
+      }
+    };
 
-    state.allyCode = window.localStorage.getItem('optimizer.allyCode') || '';
-
-    const savedMods = window.localStorage.getItem('optimizer.mods');
-    if (savedMods) {
-      state.mods = this.processMods(JSON.parse(savedMods), false);
-    }
-
-    state = Object.assign(state, this.restoreCharacterList(version));
-
-    if ((version < '1.2.0' || !version) && state.mods) {
-      state.showChangeLog = true;
-    }
-
-    return state;
+    reader.readAsText(fileInput);
   }
 
   /**
@@ -93,27 +95,6 @@ class App extends Component {
         });
       }
 
-    };
-
-    reader.readAsText(fileInput);
-  }
-
-  /**
-   * Restore the app state from a file and refresh the app
-   */
-  restoreFromFile(fileInput) {
-    let reader = new FileReader();
-    const me = this;
-
-    reader.onload = (event) => {
-      try {
-        const progressData = event.target.result;
-        this.props.restoreProgress(progressData);
-      } catch (e) {
-        me.setState({
-          'error': 'Unable to read the progress file. Please make sure that you uploaded the correct file.'
-        });
-      }
     };
 
     reader.readAsText(fileInput);
@@ -168,7 +149,6 @@ class App extends Component {
           mods={this.props.profile.mods}
           availableCharacters={Object.values(this.props.profile.characters)}
           selectedCharacters={[]}
-          // saveState={this.saveState.bind(this)}
         />
         }
         <ErrorModal/>
@@ -235,8 +215,8 @@ class App extends Component {
         <label htmlFor={'keep-old-mods'}>Remember existing mods</label>
         <br/>
         {/*// TODO: Move to Redux*/}
-        <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
-        <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
+        <FileInput label={'Upload my mods!'} handler={(file) => this.readFile(file, this.props.setMods)}/>
+        <FileInput label={'Restore my progress'} handler={(file) => this.readFile(file, this.props.restoreProgress)}/>
         {showActions &&
         <a id={'saveProgress'}
            href={this.props.progressData}
@@ -406,6 +386,9 @@ const mapDispatchToProps = dispatch => ({
   },
   restoreProgress: (progressData) => {
     dispatch(restoreProgress(progressData));
+  },
+  setMods: (modsData) => {
+    dispatch(setMods(modsData));
   }
 });
 
