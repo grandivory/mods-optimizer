@@ -11,11 +11,11 @@ import {
   REQUEST_CHARACTERS,
   REQUEST_PROFILE,
   REQUEST_STATS,
-  RESET,
+  RESET, RESTORE_PROGRESS,
   SHOW_ERROR,
   SHOW_MODAL, TOGGLE_KEEP_OLD_MODS
 } from "./actions";
-import {defaultState, restoreState, saveState} from "./storage";
+import {defaultState, deserializeState, restoreState, saveState} from "./storage";
 import {mapObject, mapObjectByKeyAndValue} from "../utils/mapObject";
 import characterSettings from "../constants/characterSettings";
 import Character from "../domain/Character";
@@ -275,6 +275,10 @@ function toggleKeepOldMods(state, action) {
   });
 }
 
+function restoreProgress(state, action) {
+  return deserializeState(action.progressData);
+}
+
 export function optimizerApp(state, action) {
   if (null == state) {
     state = restoreState();
@@ -308,6 +312,8 @@ export function optimizerApp(state, action) {
       return saveState(reset(state, action));
     case TOGGLE_KEEP_OLD_MODS:
       return saveState(toggleKeepOldMods(state, action));
+    case RESTORE_PROGRESS:
+      return saveState(restoreProgress(state, action));
     case LOG:
       console.log(state);
       return Object.assign({}, state);

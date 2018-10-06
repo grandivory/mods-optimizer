@@ -16,6 +16,7 @@ export const SHOW_ERROR = 'SHOW_ERROR';
 export const HIDE_ERROR = 'HIDE_ERROR';
 export const RESET = 'RESET';
 export const TOGGLE_KEEP_OLD_MODS = 'TOGGLE_KEEP_OLD_MODS';
+export const RESTORE_PROGRESS = 'RESTORE_PROGRESS';
 export const LOG = 'LOG';
 
 export function logState() {
@@ -118,6 +119,13 @@ export function reset() {
 export function toggleKeepOldMods() {
   return {
     type: TOGGLE_KEEP_OLD_MODS,
+  };
+}
+
+export function restoreProgress(progressData) {
+  return {
+    type: RESTORE_PROGRESS,
+    progressData: progressData
   };
 }
 

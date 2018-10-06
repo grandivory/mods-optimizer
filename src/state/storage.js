@@ -49,7 +49,7 @@ export function restoreState() {
  * Convert the state from an in-memory representation to a serialized representation
  * @param state Object
  */
-function serializeState(state) {
+export function serializeState(state) {
   if (null === state) {
     return null
   } else if ('function' === typeof state.serialize) {
@@ -67,7 +67,7 @@ function serializeState(state) {
  * Convert the state from a serialized representation to the in-memory representation used by the app
  * @param state Object
  */
-function deserializeState(state) {
+export function deserializeState(state) {
   const jsonState = JSON.parse(state);
   const version = process.env.REACT_APP_VERSION || 'local';
 

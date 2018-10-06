@@ -34,11 +34,15 @@ class CharacterSettings {
   }
 
   static deserialize(settingsJson) {
-    return new CharacterSettings(
-      settingsJson.targets.map(target => OptimizationPlan.deserialize(target, settingsJson.damageType)),
-      settingsJson.extraTags,
-      settingsJson.damageType
-    );
+    if (settingsJson) {
+      return new CharacterSettings(
+        settingsJson.targets.map(target => OptimizationPlan.deserialize(target, settingsJson.damageType)),
+        settingsJson.extraTags,
+        settingsJson.damageType
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -64,12 +68,16 @@ class GameSettings {
   }
 
   static deserialize(settingsJson) {
-    return new GameSettings(
-      settingsJson.name,
-      settingsJson.avatarUrl,
-      settingsJson.tags,
-      settingsJson.description
-    );
+    if (settingsJson) {
+      return new GameSettings(
+        settingsJson.name,
+        settingsJson.avatarUrl,
+        settingsJson.tags,
+        settingsJson.description
+      );
+    } else {
+      return null;
+    }
   }
 }
 

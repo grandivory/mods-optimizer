@@ -9,10 +9,19 @@ import FileInput from "../../components/FileInput/FileInput";
 import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
-import {changeSection, hideModal, logState, refreshPlayerData, showModal, toggleKeepOldMods} from "../../state/actions";
+import {
+  changeSection,
+  hideModal,
+  logState,
+  refreshPlayerData,
+  reset, restoreProgress,
+  showModal,
+  toggleKeepOldMods
+} from "../../state/actions";
 import {connect} from "react-redux";
 import formatAllyCode from "../../utils/formatAllyCode";
 import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import {serializeState} from "../../state/storage";
 
 class App extends Component {
   constructor(props) {
@@ -98,24 +107,8 @@ class App extends Component {
 
     reader.onload = (event) => {
       try {
-        const state = JSON.parse(event.target.result).state;
-        const version = state.version || '1.0';
-
-        window.localStorage.setItem('optimizer.version', version);
-        window.localStorage.setItem('optimizer.mods', state.mods);
-        window.localStorage.setItem('optimizer.allyCode', state.allyCode || '');
-
-        if (version < '1.1.0') {
-          window.localStorage.setItem('availableCharacters', state.availableCharacters);
-          window.localStorage.setItem('lockedCharacters', state.lockedCharacters);
-          window.localStorage.setItem('selectedCharacters', state.selectedCharacters);
-        } else {
-          window.localStorage.setItem('optimizer.availableCharacters', state.availableCharacters);
-          window.localStorage.setItem('optimizer.lockedCharacters', state.lockedCharacters);
-          window.localStorage.setItem('optimizer.selectedCharacters', state.selectedCharacters);
-        }
-
-        window.location.reload();
+        const progressData = event.target.result;
+        this.props.restoreProgress(progressData);
       } catch (e) {
         me.setState({
           'error': 'Unable to read the progress file. Please make sure that you uploaded the correct file.'
@@ -236,18 +229,17 @@ class App extends Component {
                name={'keep-old-mods'}
                type={'checkbox'}
                value={'keep-old-mods'}
-               defaultChecked={this.props.keepOldMods}
+               checked={this.props.keepOldMods}
                onChange={() => this.props.toggleKeepOldMods()}
         />
         <label htmlFor={'keep-old-mods'}>Remember existing mods</label>
         <br/>
-        // TODO: Move to Redux
+        {/*// TODO: Move to Redux*/}
         <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
-        // TODO: Move to Redux
         <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
         {showActions &&
         <a id={'saveProgress'}
-           href={this.getProgressData()}
+           href={this.props.progressData}
            className={'button'}
            download={`modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`}
         >
@@ -352,20 +344,22 @@ class App extends Component {
   }
 
   /**
-   * Get all of the data needed to save the app state
+   * Renders the "Are you sure?" modal for resetting the app
+   * @returns JSX Element
    */
-  // TODO: Get this from Redux
-  getProgressData() {
-    return 'data:text/json;charset=utf-8,' + JSON.stringify({
-      'state': {
-        'version': window.localStorage.getItem('optimizer.version'),
-        'mods': window.localStorage.getItem('optimizer.mods'),
-        'allyCode': window.localStorage.getItem('optimizer.allyCode'),
-        'availableCharacters': window.localStorage.getItem('optimizer.availableCharacters'),
-        'lockedCharacters': window.localStorage.getItem('optimizer.lockedCharacters'),
-        'selectedCharacters': window.localStorage.getItem('optimizer.selectedCharacters')
-      }
-    });
+  resetModal() {
+    return <div>
+      <h2>Reset the mods optimizer?</h2>
+      <p>
+        If you click "Reset", everything that the application currently has saved - your mods,
+        character configuration, selected characters, etc. - will all be deleted.
+        Are you sure that's what you want?
+      </p>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button type={'button'} className={'red'} onClick={() => this.props.reset()}>Reset</button>
+      </div>
+    </div>;
   }
 }
 
@@ -376,6 +370,7 @@ const mapStateToProps = (state) => {
     isBusy: state.isBusy,
     keepOldMods: state.keepOldMods,
     modal: state.modal,
+    progressData: 'data:text/json;charset=utf-8,' + JSON.stringify(serializeState(state)),
     section: state.section,
     version: state.version
   };
@@ -405,6 +400,12 @@ const mapDispatchToProps = dispatch => ({
   },
   logState: () => {
     dispatch(logState());
+  },
+  reset: () => {
+    dispatch(reset());
+  },
+  restoreProgress: (progressData) => {
+    dispatch(restoreProgress(progressData));
   }
 });
 
