@@ -1,7 +1,6 @@
 import {modSets, modSlots, modStats} from "../constants/enums";
 import cleanAllyCode from "../utils/cleanAllyCode";
 import {PlayerValues} from "../domain/CharacterDataClasses";
-import WarningLabel from "../components/WarningLabel/WarningLabel";
 import React from "react";
 
 export const CHANGE_SECTION = 'CHANGE_SECTION';
@@ -16,6 +15,7 @@ export const HIDE_MODAL = 'HIDE_MODAL';
 export const SHOW_ERROR = 'SHOW_ERROR';
 export const HIDE_ERROR = 'HIDE_ERROR';
 export const RESET = 'RESET';
+export const TOGGLE_KEEP_OLD_MODS = 'TOGGLE_KEEP_OLD_MODS';
 export const LOG = 'LOG';
 
 export function logState() {
@@ -112,6 +112,12 @@ export function hideError() {
 export function reset() {
   return {
     type: RESET
+  };
+}
+
+export function toggleKeepOldMods() {
+  return {
+    type: TOGGLE_KEEP_OLD_MODS,
   };
 }
 

@@ -28,6 +28,26 @@ class Mod {
     this.tier = tier;
   }
 
+  assign(characterID) {
+    this.assignTo = characterID;
+    return this;
+  }
+
+  unassign() {
+    this.assignTo = null;
+    return this;
+  }
+
+  equip(characterID) {
+    this.characterID = characterID;
+    return this;
+  }
+
+  unequip() {
+    this.characterID = null;
+    return this;
+  }
+
   /**
    * Convert this mod to a simple JSON object so that it can be stringified
    */

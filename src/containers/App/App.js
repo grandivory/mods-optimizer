@@ -7,18 +7,9 @@ import OptimizerView from "../OptimizerView/OptimizerView";
 import ExploreView from "../ExploreView/ExploreView";
 import FileInput from "../../components/FileInput/FileInput";
 import Modal from "../../components/Modal/Modal";
-import WarningLabel from "../../components/WarningLabel/WarningLabel";
 import Spinner from "../../components/Spinner/Spinner";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
-import {
-  changeSection,
-  hideError,
-  hideModal,
-  logState,
-  refreshPlayerData,
-  showError,
-  showModal
-} from "../../state/actions";
+import {changeSection, hideModal, logState, refreshPlayerData, showModal, toggleKeepOldMods} from "../../state/actions";
 import {connect} from "react-redux";
 import formatAllyCode from "../../utils/formatAllyCode";
 import ErrorModal from "../../components/ErrorModal/ErrorModal";
@@ -27,6 +18,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    // If an ally code is passed in to the app, then fetch data for that ally code immediately
     const queryParams = new URLSearchParams(document.location.search);
 
     if (queryParams.has('allyCode')) {
@@ -37,37 +29,7 @@ class App extends Component {
     window.history.replaceState({}, document.title, document.location.href.split('?')[0]);
   }
 
-  /**
-   * Saves the application state to localStorage
-   */
-  saveState() {
-    const saveProgressButton = document.getElementById('saveProgress');
-
-    window.localStorage.removeItem('availableCharacters');
-    window.localStorage.removeItem('selectedCharacters');
-    window.localStorage.removeItem('lockedCharacters');
-
-    window.localStorage.setItem('optimizer.allyCode', this.state.allyCode);
-    window.localStorage.setItem('optimizer.mods', JSON.stringify(this.state.mods.map(mod => mod.serialize())));
-    window.localStorage.setItem(
-      'optimizer.availableCharacters',
-      JSON.stringify(this.state.availableCharacters.map(character => character.serialize()))
-    );
-    window.localStorage.setItem(
-      'optimizer.selectedCharacters',
-      JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
-    );
-    window.localStorage.setItem(
-      'optimizer.version',
-      this.version
-    );
-
-    if (saveProgressButton) {
-      saveProgressButton.href = this.getProgressData();
-      saveProgressButton.download = `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`
-    }
-  }
-
+  // TODO: Finish moving this to Redux
   restoreState() {
     let state = {};
 
@@ -216,7 +178,7 @@ class App extends Component {
           // saveState={this.saveState.bind(this)}
         />
         }
-        <ErrorModal />
+        <ErrorModal/>
         <Modal show={this.props.modal} className={'reset-modal'} content={this.props.modal}/>
         <Spinner show={this.props.isBusy}/>
       </div>
@@ -255,6 +217,7 @@ class App extends Component {
                    return;
                  }
                  // Don't change the input if the user is hitting the arrow keys
+                 // TODO: Change this to use a non-deprecated property
                  if ([38, 40, 37, 39].includes(e.keyCode)) {
                    return;
                  }
@@ -264,14 +227,23 @@ class App extends Component {
                }}
         />
         <button type={'button'}
-                onClick={() => {this.props.refreshPlayerData(document.getElementById('ally-code').value);}}>
+                onClick={() => {
+                  this.props.refreshPlayerData(document.getElementById('ally-code').value);
+                }}>
           Fetch my data!
         </button>
-        <input id={'keep-old-mods'} name={'keep-old-mods'} type={'checkbox'} value={'keep-old-mods'}
-               defaultChecked={true}/>
+        <input id={'keep-old-mods'}
+               name={'keep-old-mods'}
+               type={'checkbox'}
+               value={'keep-old-mods'}
+               defaultChecked={this.props.keepOldMods}
+               onChange={() => this.props.toggleKeepOldMods()}
+        />
         <label htmlFor={'keep-old-mods'}>Remember existing mods</label>
         <br/>
+        // TODO: Move to Redux
         <FileInput label={'Upload my mods!'} handler={this.readModsFile.bind(this)}/>
+        // TODO: Move to Redux
         <FileInput label={'Restore my progress'} handler={this.restoreFromFile.bind(this)}/>
         {showActions &&
         <a id={'saveProgress'}
@@ -344,41 +316,6 @@ class App extends Component {
   }
 
   /**
-   * Shows a popup with an error message
-   * @param errorMessage
-   * @returns JSX Element
-   */
-  errorModal(errorMessage) {
-    return <div>
-      <WarningLabel/>
-      <h2 key={'error-header'}>Error!</h2>
-      <p key={'error-message'}>{errorMessage}</p>
-      <div key={'error-actions'} className={'actions'}>
-        <button type={'button'} onClick={() => this.setState({'error': false})}>Ok</button>
-      </div>
-    </div>;
-  }
-
-  /**
-   * Renders the "Are you sure?" modal for resetting the app
-   * @returns JSX Element
-   */
-  resetModal() {
-    return <div>
-      <h2>Reset the mods optimizer?</h2>
-      <p>
-        If you click "Reset", everything that the application currently has saved - your mods,
-        character configuration, selected characters, etc. - will all be deleted.
-        Are you sure that's what you want?
-      </p>
-      <div className={'actions'}>
-        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
-        <button type={'button'} className={'red'} onClick={this.handleReset}>Reset</button>
-      </div>
-    </div>;
-  }
-
-  /**
    * Renders a popup describing the changes from the previous version, and any actions that the user needs to take.
    * @returns JSX Element
    */
@@ -417,6 +354,7 @@ class App extends Component {
   /**
    * Get all of the data needed to save the app state
    */
+  // TODO: Get this from Redux
   getProgressData() {
     return 'data:text/json;charset=utf-8,' + JSON.stringify({
       'state': {
@@ -429,14 +367,6 @@ class App extends Component {
       }
     });
   }
-
-  /**
-   * Handle the "Reset Mods Optimizer" button press. Remove all saved state and refresh the page
-   */
-  handleReset() {
-    window.localStorage.clear();
-    window.location.reload();
-  }
 }
 
 const mapStateToProps = (state) => {
@@ -444,6 +374,7 @@ const mapStateToProps = (state) => {
     allyCode: state.allyCode,
     error: state.error,
     isBusy: state.isBusy,
+    keepOldMods: state.keepOldMods,
     modal: state.modal,
     section: state.section,
     version: state.version
@@ -469,11 +400,8 @@ const mapDispatchToProps = dispatch => ({
   hideModal: () => {
     dispatch(hideModal());
   },
-  showError: content => {
-    dispatch(showError(content));
-  },
-  hideError: () => {
-    dispatch(hideError());
+  toggleKeepOldMods: () => {
+    dispatch(toggleKeepOldMods());
   },
   logState: () => {
     dispatch(logState());

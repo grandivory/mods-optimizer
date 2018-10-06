@@ -13,7 +13,7 @@ import {
   REQUEST_STATS,
   RESET,
   SHOW_ERROR,
-  SHOW_MODAL
+  SHOW_MODAL, TOGGLE_KEEP_OLD_MODS
 } from "./actions";
 import {defaultState, restoreState, saveState} from "./storage";
 import {mapObject, mapObjectByKeyAndValue} from "../utils/mapObject";
@@ -119,13 +119,29 @@ function receiveProfile(state, action) {
   });
 
   // Then, update the mods by deserializing each one
-  const newMods = action.profile.mods.map(Mod.deserialize);
+  const newMods = action.profile.mods.reduce((mods, mod) => {
+    mods[mod.mod_uid] = Mod.deserialize(mod);
+    return mods;
+  }, {});
 
   const oldProfile = state.profiles.hasOwnProperty(action.allyCode) ?
     state.profiles[action.allyCode] :
     new PlayerProfile();
 
-  const newProfile = oldProfile.withCharacters(newCharacters).withMods(newMods);
+  let finalMods;
+
+  if (state.keepOldMods) {
+    const oldMods = oldProfile.mods.reduce((mods, mod) => {
+      mods[mod.id] = mod.unequip();
+      return mods;
+    }, {});
+
+    finalMods = Object.values(Object.assign({}, oldMods, newMods));
+  } else {
+    finalMods = Object.values(newMods);
+  }
+
+  const newProfile = oldProfile.withCharacters(newCharacters).withMods(finalMods);
 
   return Object.assign({}, state, {
     isBusy: false,
@@ -253,9 +269,13 @@ function reset(state, action) {
   return Object.assign({}, defaultState);
 }
 
-export function optimizerApp(state, action) {
-  let newState;
+function toggleKeepOldMods(state, action) {
+  return Object.assign({}, state, {
+    keepOldMods: !state.keepOldMods
+  });
+}
 
+export function optimizerApp(state, action) {
   if (null == state) {
     state = restoreState();
   }
@@ -267,21 +287,15 @@ export function optimizerApp(state, action) {
     case REQUEST_CHARACTERS:
       return requestCharacters(state, action);
     case RECEIVE_CHARACTERS:
-      newState = receiveCharacters(state, action);
-      saveState(newState);
-      return newState;
+      return saveState(receiveCharacters(state, action));
     case REQUEST_PROFILE:
       return requestProfile(state, action);
     case RECEIVE_PROFILE:
-      newState = receiveProfile(state, action);
-      saveState(newState);
-      return newState;
+      return saveState(receiveProfile(state, action));
     case REQUEST_STATS:
       return requestStats(state, action);
     case RECEIVE_STATS:
-      newState = receiveStats(state, action);
-      saveState(newState);
-      return newState;
+      return saveState(receiveStats(state, action));
     case SHOW_MODAL:
       return showModal(state, action);
     case HIDE_MODAL:
@@ -291,9 +305,9 @@ export function optimizerApp(state, action) {
     case HIDE_ERROR:
       return hideError(state, action);
     case RESET:
-      newState = reset(state, action);
-      saveState(newState);
-      return newState;
+      return saveState(reset(state, action));
+    case TOGGLE_KEEP_OLD_MODS:
+      return saveState(toggleKeepOldMods(state, action));
     case LOG:
       console.log(state);
       return Object.assign({}, state);

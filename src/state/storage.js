@@ -7,9 +7,15 @@ import Character from "../domain/Character";
 import characterSettings from "../constants/characterSettings";
 import PlayerProfile from "../domain/PlayerProfile";
 
+/**
+ * Save the state of the application to localStorage, then return it so it can be chained
+ * @param state
+ * @returns {*}
+ */
 export function saveState(state) {
   const storedState = serializeState(state);
   window.localStorage.setItem('optimizer.state', JSON.stringify(storedState));
+  return state;
 }
 
 export const defaultState = {
@@ -18,6 +24,7 @@ export const defaultState = {
   characters: mapObjectByKey(characterSettings, baseID => Character.default(baseID)),
   error: null,
   isBusy: false,
+  keepOldMods: true,
   modal: null,
   profiles: {},
   section: 'optimize',
@@ -70,6 +77,7 @@ function deserializeState(state) {
     characters: mapObject(jsonState.characters, (character) => Character.deserialize(character, version)),
     error: null,
     isBusy: false,
+    keepOldMods: jsonState.keepOldMods,
     modal: null,
     profiles: mapObject(jsonState.profiles, PlayerProfile.deserialize),
     section: jsonState.section,
