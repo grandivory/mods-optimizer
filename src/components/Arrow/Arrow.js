@@ -4,7 +4,7 @@ import React from "react";
 
 import './Arrow.css';
 
-class Arrow extends React.Component {
+class Arrow extends React.PureComponent {
   render() {
     return (
       <svg viewBox="0 0 500 500" width="100" height="100">

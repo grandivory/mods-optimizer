@@ -22,10 +22,12 @@ export const defaultState = {
   allyCode: '',
   characterFilter: '',
   characters: mapObjectByKey(characterSettings, baseID => Character.default(baseID)),
+  characterEditMode: 'basic',
   error: null,
   isBusy: false,
   keepOldMods: true,
   modal: null,
+  optimizerView: 'edit',
   profiles: {},
   section: 'optimize',
   version: process.env.REACT_APP_VERSION || 'local'
@@ -73,12 +75,14 @@ export function deserializeState(state) {
 
   return {
     allyCode: jsonState.allyCode,
+    characterEditMode: jsonState.characterEditMode || 'basic',
     characterFilter: jsonState.characterFilter || '',
     characters: mapObject(jsonState.characters, (character) => Character.deserialize(character, version)),
     error: null,
     isBusy: false,
     keepOldMods: jsonState.keepOldMods,
     modal: null,
+    optimizerView: jsonState.optimizerView || 'edit',
     profiles: mapObject(jsonState.profiles, PlayerProfile.deserialize),
     section: jsonState.section,
     version: version,

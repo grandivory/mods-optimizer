@@ -1,9 +1,12 @@
 // @flow
 
 import {
-  CHANGE_SECTION,
+  CHANGE_CHARACTER_FILTER,
+  CHANGE_CHARACTER_TARGET,
+  CHANGE_OPTIMIZER_VIEW,
+  CHANGE_SECTION, CHANGE_USE_FIVE_DOT_MODS, DELETE_TARGET, FINISH_EDIT_CHARACTER_TARGET,
   HIDE_ERROR,
-  HIDE_MODAL,
+  HIDE_MODAL, LOCK_CHARACTER,
   LOG,
   RECEIVE_CHARACTERS,
   RECEIVE_PROFILE,
@@ -11,9 +14,9 @@ import {
   REQUEST_CHARACTERS,
   REQUEST_PROFILE,
   REQUEST_STATS,
-  RESET, RESTORE_PROGRESS, SET_MODS,
+  RESET, RESET_ALL_CHARACTER_TARGETS, RESET_CHARACTER_TARGET_TO_DEFAULT, RESTORE_PROGRESS, SELECT_CHARACTER, SET_MODS,
   SHOW_ERROR,
-  SHOW_MODAL, TOGGLE_KEEP_OLD_MODS
+  SHOW_MODAL, TOGGLE_KEEP_OLD_MODS, UNLOCK_CHARACTER, UNSELECT_CHARACTER
 } from "./actions";
 import {defaultState, deserializeState, restoreState, saveState} from "./storage";
 import {mapObject, mapObjectByKeyAndValue} from "../utils/mapObject";
@@ -23,10 +26,35 @@ import {GameSettings, OptimizerSettings} from "../domain/CharacterDataClasses";
 import Mod from "../domain/Mod";
 import PlayerProfile from "../domain/PlayerProfile";
 import CharacterStats, {NullCharacterStats} from "../domain/CharacterStats";
+import groupByKey from "../utils/groupByKey";
+
+/**
+ * Update the currently-selected character profile by calling an update function on the existing profile. Optionally
+ * update the base state with other auxiliary changes as well.
+ * @param state
+ * @param updateFunc Function PlayerProfile => PlayerProfile
+ * @param auxiliaryChanges object
+ * @returns {*}
+ */
+function updateCurrentProfile(state, updateFunc, auxiliaryChanges = {}) {
+  const profile = state.profiles[state.allyCode];
+
+  return Object.assign({}, state, auxiliaryChanges, {
+    profiles: Object.assign({}, state.profiles, {
+      [state.allyCode]: updateFunc(profile)
+    })
+  });
+}
 
 function changeSection(state, action) {
   return Object.assign({}, state, {
     section: action.section
+  });
+}
+
+function changeOptimizerView(state, action) {
+  return Object.assign({}, state, {
+    optimizerView: action.view
   });
 }
 
@@ -240,7 +268,10 @@ function receiveStats(state, action) {
 function showModal(state, action) {
   return Object.assign({}, state, {
     isBusy: false,
-    modal: action.content
+    modal: {
+      class: action.class,
+      content: action.content
+    }
   });
 }
 
@@ -295,32 +326,26 @@ function setMods(state, action) {
     }
 
     const modsData = JSON.parse(action.modsData);
-    const profile = state.profiles[state.allyCode];
+    return updateCurrentProfile(state, profile => {
+      const newMods = groupByKey(
+        modsData.map(mod => Mod.deserializeVersionOneTwo(mod, profile.characters)),
+        mod => mod.id
+      );
 
-    const newMods = modsData.map(mod => Mod.deserializeVersionOneTwo(mod, profile.characters)).reduce((mods, mod) => {
-      mods[mod.id] = mod;
-      return mods;
-    }, {});
+      let finalMods;
 
-    let finalMods;
+      if (state.keepOldMods) {
+        const oldMods = profile.mods.reduce((mods, mod) => {
+          mods[mod.id] = mod.unequip();
+          return mods;
+        }, {});
 
-    if (state.keepOldMods) {
-      const oldMods = profile.mods.reduce((mods, mod) => {
-        mods[mod.id] = mod.unequip();
-        return mods;
-      }, {});
+        finalMods = Object.values(Object.assign({}, oldMods, newMods));
+      } else {
+        finalMods = Object.values(newMods);
+      }
 
-      finalMods = Object.values(Object.assign({}, oldMods, newMods));
-    } else {
-      finalMods = Object.values(newMods);
-    }
-
-    return Object.assign({}, state, {
-      profiles: Object.assign({}, state.profiles, {
-        [state.allyCode]: Object.assign({}, profile, {
-          mods: finalMods
-        })
-      })
+      return Object.assign({}, profile, {mods: finalMods});
     });
   } catch (e) {
     return Object.assign({}, state, {
@@ -329,15 +354,149 @@ function setMods(state, action) {
   }
 }
 
+function selectCharacter(state, action) {
+  return updateCurrentProfile(state, profile => {
+    const oldSelectedCharacters = profile.selectedCharacters;
+    if (oldSelectedCharacters.includes(action.characterID)) {
+      // If the character is already in the list, remove it
+      oldSelectedCharacters.splice(oldSelectedCharacters.indexOf(action.characterID), 1);
+    }
+
+    if (!action.prevCharacterID || !profile.selectedCharacters.includes(action.prevCharacterID)) {
+      return profile.withSelectedCharacters(oldSelectedCharacters.concat([action.characterID]));
+    } else {
+      const newSelectedCharacters = oldSelectedCharacters.slice();
+      newSelectedCharacters.splice(newSelectedCharacters.indexOf(action.prevCharacterID) + 1, 0, action.characterID);
+
+      return profile.withSelectedCharacters(newSelectedCharacters);
+    }
+  });
+}
+
+function unselectCharacter(state, action) {
+  return updateCurrentProfile(state, profile => {
+    const newSelectedCharacters = profile.selectedCharacters.slice();
+
+    if (newSelectedCharacters.includes(action.characterID)) {
+      newSelectedCharacters.splice(newSelectedCharacters.indexOf(action.characterID), 1);
+    }
+
+    return profile.withSelectedCharacters(newSelectedCharacters);
+  });
+}
+
+function lockCharacter(state, action) {
+  return updateCurrentProfile(state, profile => {
+    const oldCharacter = profile.characters[action.characterID]
+    const newCharacters = Object.assign({}, profile.characters, {
+      [action.characterID]: oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.lock())
+    });
+
+    return profile.withCharacters(newCharacters);
+  });
+}
+
+function unlockCharacter(state, action) {
+  return updateCurrentProfile(state, profile => {
+    const oldCharacter = profile.characters[action.characterID]
+    const newCharacters = Object.assign({}, profile.characters, {
+      [action.characterID]: oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.unlock())
+    });
+
+    return profile.withCharacters(newCharacters);
+  });
+}
+
+function changeCharacterTarget(state, action) {
+  return updateCurrentProfile(state, profile => {
+    const oldCharacter = profile.characters[action.characterID];
+
+    return profile.withCharacters(Object.assign({}, profile.characters, {
+      [action.characterID]:
+        oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.unlock().withTarget(action.target))
+    }));
+  });
+}
+
+function finishEditCharacterTarget(state, action) {
+  const profile = state.profiles[state.allyCode];
+  const oldCharacter = profile.characters[action.characterID];
+
+  const newCharacter = oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withTarget(action.target));
+
+  return Object.assign({}, state, {
+    modal: null,
+    profiles: Object.assign({}, state.profiles, {
+      [state.allyCode]: profile.withCharacters(Object.assign({}, profile.characters, {
+        [newCharacter.baseID]: newCharacter
+      }))
+    })
+  });
+}
+
+function resetCharacterTargetToDefault(state, action) {
+  return updateCurrentProfile(
+    state,
+    profile => profile.withCharacters(Object.assign({}, profile.characters, {
+      [action.characterID]: profile.characters[action.characterID].withResetTarget()
+    })),
+    {modal: null}
+  );
+}
+
+function resetAllCharacterTargets(state, action) {
+  return updateCurrentProfile(
+    state,
+    profile => profile.withCharacters(mapObject(profile.characters, character => character.withResetTargets())),
+    {modal: null}
+  );
+}
+
+function deleteTarget(state, action) {
+  return updateCurrentProfile(
+    state,
+    profile => {
+      const oldCharacter = profile.characters[action.characterID];
+
+      return profile.withCharacters(Object.assign({}, profile.characters, {
+        [action.characterID]: oldCharacter.withDeletedTarget()
+      }));
+    },
+    {modal: null}
+  );
+}
+
+function changeUse5DotMods(state, action) {
+  return updateCurrentProfile(state, profile => {
+    const oldCharacter = profile.characters[action.characterID];
+
+    return profile.withCharacters(Object.assign({}, profile.characters, {
+      [action.characterID]:
+        oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withOnly5DotMods(action.use5DotMods))
+    }));
+  });
+}
+
+function changeCharacterFilter(state, action) {
+  return Object.assign({}, state, {
+    characterFilter: action.filter
+  });
+}
+
+function optimizeMods(state, action) {
+
+}
+
 export function optimizerApp(state, action) {
   if (null == state) {
     state = restoreState();
   }
 
-  console.log(action);
   switch (action.type) {
     case CHANGE_SECTION:
-      return changeSection(state, action);
+      return saveState(changeSection(state, action));
+    case CHANGE_OPTIMIZER_VIEW:
+      return saveState(changeOptimizerView(state, action));
     case REQUEST_CHARACTERS:
       return requestCharacters(state, action);
     case RECEIVE_CHARACTERS:
@@ -366,10 +525,33 @@ export function optimizerApp(state, action) {
       return saveState(restoreProgress(state, action));
     case SET_MODS:
       return saveState(setMods(state, action));
+    case SELECT_CHARACTER:
+      return saveState(selectCharacter(state, action));
+    case UNSELECT_CHARACTER:
+      return saveState(unselectCharacter(state, action));
+    case LOCK_CHARACTER:
+      return saveState(lockCharacter(state, action));
+    case UNLOCK_CHARACTER:
+      return saveState(unlockCharacter(state, action));
+    case CHANGE_CHARACTER_TARGET:
+      return saveState(changeCharacterTarget(state, action));
+    case FINISH_EDIT_CHARACTER_TARGET:
+      return saveState(finishEditCharacterTarget(state, action));
+    case RESET_CHARACTER_TARGET_TO_DEFAULT:
+      return saveState(resetCharacterTargetToDefault(state, action));
+    case RESET_ALL_CHARACTER_TARGETS:
+      return saveState(resetAllCharacterTargets(state, action));
+    case DELETE_TARGET:
+      return saveState(deleteTarget(state, action));
+    case CHANGE_USE_FIVE_DOT_MODS:
+      return saveState(changeUse5DotMods(state, action));
+    case CHANGE_CHARACTER_FILTER:
+      return saveState(changeCharacterFilter(state, action));
     case LOG:
       console.log(state);
       return Object.assign({}, state);
     default:
+      console.log(action);
       return state;
   }
 }

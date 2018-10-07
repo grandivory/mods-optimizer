@@ -4,7 +4,7 @@ import React from "react";
 
 import './Spinner.css';
 
-class Spinner extends React.Component {
+class Spinner extends React.PureComponent {
   render() {
     if (!this.props.show) {
       return null;

@@ -4,7 +4,7 @@ import React from "react";
 
 import './FileDropZone.css';
 
-class FileDropZone extends React.Component {
+class FileDropZone extends React.PureComponent {
 
   constructor() {
     super();

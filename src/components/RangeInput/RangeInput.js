@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-class RangeInput extends React.Component {
+class RangeInput extends React.PureComponent {
   render() {
     const id = this.props.id;
     const name = this.props.name;

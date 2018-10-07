@@ -4,6 +4,7 @@ import BaseStats, {NullCharacterStats} from "./CharacterStats";
 import OptimizationPlan from "./OptimizationPlan";
 import characterSettings from "../constants/characterSettings";
 import {CharacterSettings, GameSettings, PlayerValues, OptimizerSettings} from "./CharacterDataClasses";
+import groupByKey from "../utils/groupByKey";
 
 export default class Character {
   baseID;
@@ -130,6 +131,76 @@ export default class Character {
     } else {
       return this;
     }
+  }
+
+  /**
+   * Reset the current target to match the default, and update it in optimizer settings as well
+   */
+  withResetTarget() {
+    return new Character(
+      this.baseID,
+      this.defaultSettings,
+      this.gameSettings,
+      this.playerValues,
+      this.optimizerSettings.withTarget(
+        this.defaultSettings.targets.find(target => target.name = this.optimizerSettings.target.name)
+      )
+    );
+  }
+
+  /**
+   * Return a new Character object that matches this one, but with all targets reset to match their defaults
+   */
+  withResetTargets() {
+    // First, override all targets in the optimizer settings
+    // Then, find the current target from the list of all targets on the new character, and override that
+
+    const characterWithOverrides = new Character(
+      this.baseID,
+      this.defaultSettings,
+      this.gameSettings,
+      this.playerValues,
+      this.optimizerSettings.withTargetOverrides(this.defaultSettings.targets)
+    );
+
+    return new Character(
+      this.baseID,
+      this.defaultSettings,
+      this.gameSettings,
+      this.playerValues,
+      characterWithOverrides.optimizerSettings.withTarget(
+        characterWithOverrides.targets()
+          .find(target => target.name === this.optimizerSettings.target.name)
+      )
+    );
+  }
+
+  /**
+   * Return a new Character object that matches this one, but with the current target deleted, and the next
+   * target in the set of targets selected
+   */
+  withDeletedTarget() {
+    const newOptimizerSettings = this.optimizerSettings
+      .withDeletedTarget()
+      .withTarget(this.targets()[0] || new OptimizationPlan());
+
+    return new Character(
+      this.baseID,
+      this.defaultSettings,
+      this.gameSettings,
+      this.playerValues,
+      newOptimizerSettings
+    );
+  }
+
+  /**
+   * Get a set of all targets that can be set for this character
+   */
+  targets() {
+    const defaultTargets = groupByKey(this.defaultSettings.targets, target => target.name);
+    const playerTargets = groupByKey(this.optimizerSettings.targets, target => target.name);
+
+    return Object.values(Object.assign({}, defaultTargets, playerTargets));
   }
 
   /**

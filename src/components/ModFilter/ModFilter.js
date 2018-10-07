@@ -32,7 +32,7 @@ const images = importImages(require.context('./images', false, /\.png/));
  *  To filter an array of Mod objects, this.filter.apply_filter(mods);
  *
  */
-class ModFilter extends React.Component {
+class ModFilter extends React.PureComponent {
   /**
    * Render the slot filter inputs
    * @returns {JSX Element}

@@ -4,7 +4,7 @@ import React from 'react';
 
 import './Modal.css';
 
-class Modal extends React.Component {
+class Modal extends React.PureComponent {
   render() {
     if (!this.props.show) {
       return null;

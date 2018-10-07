@@ -2,6 +2,7 @@
 
 import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
+import groupByKey from "../utils/groupByKey";
 
 class Mod {
   id;
@@ -140,10 +141,7 @@ class Mod {
       secondaryStats.push(new Stat(modJson.secondaryType_4, modJson.secondaryValue_4, +modJson.secondaryRoll_4 || 1));
     }
 
-    const charactersByName = Object.values(characters).reduce((chars, char) => {
-      chars[char.gameSettings.name] = char;
-      return chars;
-    }, {});
+    const charactersByName = groupByKey(Object.values(characters), char => char.gameSettings.name);
 
     const characterName = ('' !== modJson.characterName && 'UNASSIGNED' !== modJson.characterName) ?
       modJson.characterName.replace(/&amp;#39;/g, "'") : null;

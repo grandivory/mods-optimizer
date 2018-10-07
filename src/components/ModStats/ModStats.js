@@ -4,7 +4,7 @@ import React from 'react';
 import './ModStats.css';
 import CharacterAvatar from "../CharacterAvatar/CharacterAvatar";
 
-class ModStats extends React.Component {
+class ModStats extends React.PureComponent {
   render() {
     const mod = this.props.mod;
     const showAvatar = 'showAvatar' in this.props;

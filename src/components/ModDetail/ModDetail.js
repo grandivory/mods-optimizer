@@ -6,7 +6,7 @@ import ModStats from '../ModStats/ModStats';
 import CharacterAvatar from '../CharacterAvatar/CharacterAvatar';
 import './ModDetail.css';
 
-class ModDetail extends React.Component {
+class ModDetail extends React.PureComponent {
   render() {
     const mod = this.props.mod;
 

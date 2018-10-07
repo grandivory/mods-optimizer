@@ -4,7 +4,7 @@ import React from "react";
 
 import './FileInput.css';
 
-class FileInput extends React.Component {
+class FileInput extends React.PureComponent {
   render() {
     const fileHandler = this.props.handler;
 

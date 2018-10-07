@@ -6,7 +6,7 @@ import ModStats from "../ModStats/ModStats";
 
 import "./ModSetView.css";
 
-class ModSetView extends React.Component {
+class ModSetView extends React.PureComponent {
   render() {
     const set = this.props.modSet;
     const changeClass = this.props.changeClass;

@@ -7,7 +7,7 @@ import ModSetView from "../ModSetView/ModSetView";
 import statTypeMap from "../../constants/statTypeMap";
 import Stat from "../../domain/Stat";
 
-class ModSetDetail extends React.Component {
+class ModSetDetail extends React.PureComponent {
   render() {
     const modSet = this.props.set;
     const diffSet = this.props.diffset;

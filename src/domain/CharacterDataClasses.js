@@ -3,6 +3,7 @@
  */
 import OptimizationPlan from "./OptimizationPlan";
 import CharacterStats from "./CharacterStats";
+import groupByKey from "../utils/groupByKey";
 
 class CharacterSettings {
   targets;
@@ -200,6 +201,95 @@ class OptimizerSettings {
     this.useOnly5DotMods = useOnly5DotMods;
     this.isLocked = isLocked;
     Object.freeze(this);
+  }
+
+  /**
+   * Return a new OptimizerSettings object that matches this one with the target overridden. If the target also exists
+   * in the array of targets, then modify it there as well.
+   * @param target OptimizationPlan
+   */
+  withTarget(target) {
+    if (!target) {
+      return this;
+    }
+
+    const targetsObject = groupByKey(this.targets, target => target.name);
+    const newTargetsObject = ['lock', 'custom'].includes(target.name) ?
+      this.targets :
+      Object.assign({}, targetsObject, {[target.name]: target});
+
+    return new OptimizerSettings(
+      target,
+      Object.values(newTargetsObject),
+      this.useOnly5DotMods,
+      this.isLocked
+    );
+  }
+
+  /**
+   * Return a new OptimizerSettings object that matches this one, but with the targets overridden with the passed-in
+   * targets. Any targets that match in name will be replaced, and those that don't will be unchanged.
+   * @param targets Array[OptimizationPlan]
+   */
+  withTargetOverrides(targets) {
+    const oldTargetsObject = groupByKey(this.targets, target => target.name);
+    const newTargetsObject = groupByKey(targets, target => target.name);
+    const newTarget = newTargetsObject.hasOwnProperty(this.target.name) ?
+      newTargetsObject[this.target.name] :
+      this.target;
+
+    return new OptimizerSettings(
+      newTarget,
+      Object.values(Object.assign({}, oldTargetsObject, newTargetsObject)),
+      this.useOnly5DotMods,
+      this.isLocked
+    );
+  }
+
+  /**
+   * Return a new OptimizerSettings object that matches this one, but with the current target deleted, and the next
+   * target in the set of targets selected
+   */
+  withDeletedTarget() {
+    const newTargets = this.targets.slice();
+    const targetIndex = newTargets.findIndex(target => target.name === this.target.name);
+    if (-1 !== targetIndex) {
+      newTargets.splice(targetIndex, 1);
+    }
+
+    return new OptimizerSettings(
+      null,
+      newTargets,
+      this.useOnly5DotMods,
+      this.isLocked
+    );
+  }
+
+  lock() {
+    return new OptimizerSettings(
+      this.target,
+      this.targets,
+      this.useOnly5DotMods,
+      true
+    );
+  }
+
+  unlock() {
+    return new OptimizerSettings(
+      this.target,
+      this.targets,
+      this.useOnly5DotMods,
+      false
+    );
+  }
+
+  withOnly5DotMods(useOnly5DotMods) {
+    return new OptimizerSettings(
+      this.target,
+      this.targets,
+      useOnly5DotMods,
+      this.isLocked
+    );
   }
 
   serialize() {

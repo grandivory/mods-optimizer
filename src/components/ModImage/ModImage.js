@@ -15,7 +15,7 @@ function importImages(context) {
 
 const mod_images = importImages(require.context('./images', false, /\.png/));
 
-class ModImage extends React.Component {
+class ModImage extends React.PureComponent {
 
   render() {
     const mod = this.props.mod;

@@ -4,7 +4,7 @@ import React from "react";
 
 import "./Toggle.css";
 
-class Toggle extends React.Component {
+class Toggle extends React.PureComponent {
   constructor(props) {
     super(props);
 

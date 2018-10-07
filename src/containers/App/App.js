@@ -1,7 +1,7 @@
 // @flow
 
-import React, {Component} from 'react';
-import '../boilerplate.css';
+import React, {PureComponent} from 'react';
+import './boilerplate.css';
 import './App.css';
 import OptimizerView from "../OptimizerView/OptimizerView";
 import ExploreView from "../ExploreView/ExploreView";
@@ -14,16 +14,18 @@ import {
   hideModal,
   logState,
   refreshPlayerData,
-  reset, restoreProgress, setMods,
+  reset,
+  restoreProgress,
+  setMods,
   showModal,
   toggleKeepOldMods
 } from "../../state/actions";
 import {connect} from "react-redux";
 import formatAllyCode from "../../utils/formatAllyCode";
-import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import ErrorModal from "../ErrorModal/ErrorModal";
 import {serializeState} from "../../state/storage";
 
-class App extends Component {
+class App extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -100,40 +102,6 @@ class App extends Component {
     reader.readAsText(fileInput);
   }
 
-  /**
-   * Given a JSON representation of mods, read mods into memory in the format used by this application
-   *
-   * @param modsJson array A serialized representation of a player's mods
-   * @param keepOldMods boolean If true, will keep any mods already in state, even if they aren't found again
-   *
-   * @return Array[Mod]
-   */
-  // processMods(modsJson, keepOldMods) {
-  //   let mods = [];
-  //   let newMods = {};
-  //
-  //   for (let fileMod of modsJson) {
-  //     const mod = Mod.deserialize(fileMod, characters);
-  //     newMods[mod.id] = mod;
-  //   }
-  //
-  //   if (keepOldMods) {
-  //     let oldMods = {};
-  //     this.state.mods.forEach(mod => {
-  //       oldMods[mod.id] = mod;
-  //
-  //       // Unassign all old mods before adding in new ones. Any mods that are still assigned will be in the modsJson
-  //       oldMods[mod.id].currentCharacter = null;
-  //     });
-  //
-  //     mods = Object.values(Object.assign(oldMods, newMods));
-  //   } else {
-  //     mods = Object.values(newMods);
-  //   }
-  //
-  //   return mods;
-  // }
-
   render() {
     const instructionsScreen = !this.props.profile;
 
@@ -152,7 +120,7 @@ class App extends Component {
         />
         }
         <ErrorModal/>
-        <Modal show={this.props.modal} className={'reset-modal'} content={this.props.modal}/>
+        <Modal show={this.props.displayModal} className={this.props.modalClass} content={this.props.modalContent}/>
         <Spinner show={this.props.isBusy}/>
       </div>
       {this.footer()}
@@ -214,7 +182,6 @@ class App extends Component {
         />
         <label htmlFor={'keep-old-mods'}>Remember existing mods</label>
         <br/>
-        {/*// TODO: Move to Redux*/}
         <FileInput label={'Upload my mods!'} handler={(file) => this.readFile(file, this.props.setMods)}/>
         <FileInput label={'Restore my progress'} handler={(file) => this.readFile(file, this.props.restoreProgress)}/>
         {showActions &&
@@ -227,7 +194,8 @@ class App extends Component {
         </a>
         }
         {showActions &&
-        <button type={'button'} className={'red'} onClick={() => this.props.showModal(this.resetModal())}>
+        <button type={'button'} className={'red'}
+                onClick={() => this.props.showModal('reset-modal', this.resetModal())}>
           Reset Mods Optimizer
         </button>
         }
@@ -349,7 +317,9 @@ const mapStateToProps = (state) => {
     error: state.error,
     isBusy: state.isBusy,
     keepOldMods: state.keepOldMods,
-    modal: state.modal,
+    displayModal: !!state.modal,
+    modalClass: state.modal ? state.modal.class : '',
+    modalContent: state.modal ? state.modal.content : '',
     progressData: 'data:text/json;charset=utf-8,' + JSON.stringify(serializeState(state)),
     section: state.section,
     version: state.version
@@ -369,8 +339,8 @@ const mapDispatchToProps = dispatch => ({
   refreshPlayerData: allyCode => {
     dispatch(refreshPlayerData(allyCode));
   },
-  showModal: content => {
-    dispatch(showModal(content));
+  showModal: (clazz, content) => {
+    dispatch(showModal(clazz, content));
   },
   hideModal: () => {
     dispatch(hideModal());

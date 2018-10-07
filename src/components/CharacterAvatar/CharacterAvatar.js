@@ -3,7 +3,7 @@
 import React from 'react';
 import './CharacterAvatar.css';
 
-class CharacterAvatar extends React.Component {
+class CharacterAvatar extends React.PureComponent {
   render() {
     const character = this.props.character;
     const displayStars = 'undefined' !== typeof this.props.displayStars ? this.props.displayStars : true;
