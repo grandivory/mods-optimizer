@@ -6,9 +6,7 @@ import chooseFromArray from "./chooseFromArray";
 import ModSet from "../domain/ModSet";
 
 class Optimizer {
-  constructor(mods) {
-    this.mods = mods;
-
+  constructor() {
     // This will be used later. It's calculated here in the constructor so that it only needs to be calculated once
     let fourSlotOptions = chooseFromArray(ModSet.slots, 4);
 
@@ -36,39 +34,49 @@ class Optimizer {
    * Find the optimum configuration for mods for a list of characters by optimizing mods for the first character,
    * optimizing mods for the second character after removing those used for the first, etc.
    *
-   * @param characterList Array An array of characters to optimize, in order
-   * @param lockList Array An array of characters whose mods not to consider when optimizing
+   * @param modsList Array[Mod] An array of mods that could potentially be assign to each character
+   * @param characters {Character.baseID => Character} A set of characters that might be optimized
+   * @param order Array[Character.baseID] The characters to optimize, in order
    *
-   * @return Array an array of objects with character and modSet properties
+   * @return {character.baseID => ModSet}
    */
-  optimizeMods(characterList, lockList) {
-    let assignedModSets = [];
+  optimizeMods(modsList, characters, order) {
     // First, unassign any mods that have been assigned, but not locked
-    this.mods.forEach(mod => {
-      if (!mod.isLocked) {
-        mod.assignTo = null;
-      }
-      mod.upgrade = false;
-    });
-    let considerationSet = this.mods.filter(mod => !lockList.includes(mod.currentCharacter));
+    const unassignedMods = modsList.map(mod => mod.isLocked ? mod : mod.unassign());
+
+    const considerationSet = unassignedMods.filter(mod => !characters[mod.characterID].optimizerSettings.isLocked);
 
     // For each character in the list, find the best mod set for that character
-    for (let character of characterList) {
-      let modSet = this.findBestModSetForCharacter(considerationSet, character);
+    const {assignedSets} = order.reduce((accumulator, characterID) => {
+      const {considerationSet: availableMods, assignedSets: completedSets} = accumulator;
+      const character = characters[characterID];
 
-      // Assign the character to each mod, then remove the mods from the consideration set
-      // While assigning the character to each mod, remove them from any other mods in the set
-      // While doing this, collect the mods into an array to return
-      considerationSet.filter(mod => character === mod.assignTo).forEach(mod => mod.assignTo = null);
-      modSet.assignTo(character);
-      considerationSet = considerationSet.filter(mod => !modSet.contains(mod));
-      assignedModSets.push({
-        character: character,
-        modSet: modSet
-      });
-    }
+      const modSetForCharacter = this.findBestModSetForCharacter(availableMods, character);
+      return {
+        considerationSet: availableMods.filter(mod => !modSetForCharacter.contains(mod)),
+        assignedSets: Object.assign(completedSets, {
+          [characterID]: modSetForCharacter
+        })
+      };
+    }, {considerationSet: considerationSet, assignedSets: {}});
 
-    return assignedModSets;
+    return assignedSets;
+    // for (let character of characters) {
+    //   let modSet = this.findBestModSetForCharacter(considerationSet, character);
+    //
+    //   // Assign the character to each mod, then remove the mods from the consideration set
+    //   // While assigning the character to each mod, remove them from any other mods in the set
+    //   // While doing this, collect the mods into an array to return
+    //   considerationSet.filter(mod => character === mod.assignTo).forEach(mod => mod.assignTo = null);
+    //   modSet.assignTo(character);
+    //   considerationSet = considerationSet.filter(mod => !modSet.contains(mod));
+    //   assignedModSets.push({
+    //     character: character,
+    //     modSet: modSet
+    //   });
+    // }
+    //
+    // return assignedModSets;
   }
 
   /**
@@ -91,14 +99,14 @@ class Optimizer {
     let candidateValues = new WeakMap();
 
     // If the character is less than gear 12, remove any mods that are tier 6 or higher
-    if (character.gearLevel < 12) {
+    if (character.playerValues.gearLevel < 12) {
       usableMods = mods.filter(mod => 6 > mod.pips);
     } else {
       usableMods = mods;
     }
 
     // If the optimization plan says to only use 5-dot mods, then filter out any mods with fewer dots
-    if (character.useOnly5DotMods) {
+    if (character.optimizerSettings.useOnly5DotMods) {
       availableMods = usableMods.filter(mod => 5 <= mod.pips);
     } else {
       availableMods = usableMods;
@@ -151,11 +159,20 @@ class Optimizer {
       }
     }
 
+    /**
+     * Given a sorted array of mods, return either the first mod (if it has a positive score or the character wants to
+     * use only 5-dot mods) or null. This allows for empty slots on characters where the mods might be better used
+     * elsewhere, or where mods have negative values.
+     * @param candidates Array[Mod]
+     * @returns Mod
+     */
     const topMod = (candidates) => {
       const mod = firstOrNull(candidates);
       // If we've already limited a character to using only 5-dot mods, then having any mod is likely worth something,
       // so allow for 0-value mods.
-      if (mod && (modValues.get(mod) > 0 || (modValues.get(mod) === 0 && character.useOnly5DotMods))) {
+      if (mod &&
+        (modValues.get(mod) > 0 || (modValues.get(mod) === 0 && character.optimizerSettings.useOnly5DotMods))
+      ) {
         return mod;
       } else {
         return null;
@@ -199,13 +216,13 @@ class Optimizer {
         return candidateValues.get(right) - candidateValues.get(left);
       } else {
         // If both sets have the same value, choose the set that moves the fewest mods
-        const leftUnmovedMods = left.mods().filter(mod => mod.currentCharacter === character).length;
-        const rightUnmovedMods = right.mods().filter(mod => mod.currentCharacter === character).length;
+        const leftUnmovedMods = left.mods().filter(mod => mod.characterID === character.baseID).length;
+        const rightUnmovedMods = right.mods().filter(mod => mod.characterID === character.baseID).length;
 
         if (leftUnmovedMods !== rightUnmovedMods) {
           return rightUnmovedMods - leftUnmovedMods;
         } else {
-          // If both sets move the same number of mods, choose the set that uses the most mods
+          // If both sets move the same number of unmoved mods, choose the set that uses the most mods overall
           return right.mods().length - left.mods().length;
         }
       }
@@ -225,9 +242,9 @@ class Optimizer {
     return (left, right) => {
       if (modValues.get(right) === modValues.get(left)) {
         // If mods have equal value, then favor the one that's already equipped
-        if (left.currentCharacter && character.name === left.currentCharacter.name) {
+        if (left.characterID && character.baseID === left.characterID) {
           return -1;
-        } else if (right.currentCharacter && character.name === right.currentCharacter.name) {
+        } else if (right.characterID && character.baseID === right.characterID) {
           return 1;
         } else {
           return 0;
@@ -247,7 +264,7 @@ class Optimizer {
   scoreMod(mod, character) {
     let score = 0;
 
-    const primaryStat = character.optimizationPlan.upgradeMods ?
+    const primaryStat = character.optimizerSettings.target.upgradeMods ?
       mod.primaryStat.upgradePrimary(mod.pips) :
       mod.primaryStat;
 

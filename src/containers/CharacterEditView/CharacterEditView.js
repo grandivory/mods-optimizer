@@ -8,8 +8,12 @@ import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import {connect} from "react-redux";
 import {
   changeCharacterFilter,
-  changeCharacterTarget, hideModal, optimizeMods, resetAllCharacterTargets,
-  selectCharacter, showModal,
+  changeCharacterTarget,
+  hideModal,
+  optimizeMods,
+  resetAllCharacterTargets,
+  selectCharacter,
+  showModal,
   unselectCharacter
 } from "../../state/actions";
 
@@ -51,7 +55,7 @@ class CharacterEditView extends PureComponent {
       </div>
       <div className={'selected-characters'}>
         <h4>Selected Characters</h4>
-        <CharacterList selfDrop={true} draggable={true} />
+        <CharacterList selfDrop={true} draggable={true}/>
       </div>
       <div className={'available-characters'}
            onDragEnter={CharacterEditView.availableCharactersDragEnter}
@@ -101,7 +105,11 @@ class CharacterEditView extends PureComponent {
       <h3>Actions</h3>
       <button
         type={'button'}
-        onClick={this.props.optimizeMods}
+        onClick={() => this.props.optimizeMods(
+          this.props.mods,
+          this.props.allCharacters,
+          this.props.selectedCharacters.map(c => c.baseID))
+        }
         disabled={!this.props.selectedCharacters.length}
       >
         Optimize my mods!
@@ -230,6 +238,8 @@ const mapStateToProps = (state) => {
     '' === state.characterFilter || character.matchesFilter(state.characterFilter);
 
   return {
+    allCharacters: profile.characters,
+    mods: profile.mods,
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
     selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id])
@@ -244,7 +254,7 @@ const mapDispatchToProps = dispatch => ({
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
-  optimizeMods: () => dispatch(optimizeMods())
+  optimizeMods: (mods, characters, order) => dispatch(optimizeMods(mods, characters, order))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterEditView);

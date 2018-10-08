@@ -105,11 +105,12 @@ class Stat {
 
     if (this.isPercent) {
       return statTypes.map(statType =>
-        character.optimizationPlan[statType] * Math.floor(character.baseStats[statType] * this.value / 100)
+        character.optimizerSettings.target[statType] *
+        Math.floor(character.playerValues.baseStats[statType] * this.value / 100)
       ).reduce((a, b) => a + b, 0);
     } else {
       return statTypes.map(statType =>
-        character.optimizationPlan[statType] * this.value
+        character.optimizerSettings.target[statType] * this.value
       ).reduce((a, b) => a + b, 0);
     }
   }

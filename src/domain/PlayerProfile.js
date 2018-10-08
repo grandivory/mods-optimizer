@@ -4,21 +4,25 @@
 import Character from "./Character";
 import Mod from "./Mod";
 import {mapObject} from "../utils/mapObject";
+import ModSet from "./ModSet";
 
 export default class PlayerProfile {
   characters;
   mods;
   selectedCharacters;
+  modAssignments;
 
   /**
    * @param characters Object{Character.baseID => Character}
    * @param mods Array[Mod]
    * @param selectedCharacters Array[Character.baseID]
+   * @param modAssignments {Character.baseID => ModSet}
    */
-  constructor(characters = {}, mods = [], selectedCharacters = []) {
+  constructor(characters = {}, mods = [], selectedCharacters = [], modAssignments = {}) {
     this.characters = characters;
     this.mods = mods;
     this.selectedCharacters = selectedCharacters;
+    this.modAssignments = modAssignments;
   }
 
   withCharacters(characters) {
@@ -26,7 +30,8 @@ export default class PlayerProfile {
       return new PlayerProfile(
         characters,
         this.mods,
-        this.selectedCharacters
+        this.selectedCharacters,
+        this.modAssignments
       );
     } else {
       return this;
@@ -38,7 +43,8 @@ export default class PlayerProfile {
       return new PlayerProfile(
         this.characters,
         mods,
-        this.selectedCharacters
+        this.selectedCharacters,
+        this.modAssignments
       );
     } else {
       return this;
@@ -50,7 +56,21 @@ export default class PlayerProfile {
       return new PlayerProfile(
         this.characters,
         this.mods,
-        selectedCharacters
+        selectedCharacters,
+        this.modAssignments
+      );
+    } else {
+      return this;
+    }
+  }
+
+  withModAssignments(modAssignments) {
+    if (modAssignments) {
+      return new PlayerProfile(
+        this.characters,
+        this.mods,
+        this.selectedCharacters,
+        modAssignments
       );
     } else {
       return this;
@@ -61,7 +81,8 @@ export default class PlayerProfile {
     return {
       characters: mapObject(this.characters, character => character.serialize()),
       mods: this.mods.map(mod => mod.serialize()),
-      selectedCharacters: this.selectedCharacters
+      selectedCharacters: this.selectedCharacters,
+      modAssignments: mapObject(this.modAssignments, modSet => modSet.serialize())
     };
   }
 
@@ -70,7 +91,8 @@ export default class PlayerProfile {
       return new PlayerProfile(
         mapObject(profileJson.characters, Character.deserialize),
         profileJson.mods.map(Mod.deserialize),
-        profileJson.selectedCharacters
+        profileJson.selectedCharacters,
+        mapObject(profileJson.modAssignments || {}, ModSet.deserialize)
       )
     } else {
       return null;

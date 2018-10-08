@@ -3,6 +3,7 @@
 import setBonuses from "../constants/setbonuses";
 import statTypeMap from "../constants/statTypeMap";
 import Stat from "./Stat";
+import Mod from "./Mod";
 
 class ModSet {
   constructor(mods) {
@@ -142,7 +143,9 @@ class ModSet {
       statMap = statTypeMap;
     }
 
+    // Holds the number of mods in each set
     let smallSetCounts = new WeakMap();
+    // Hold the number of mods in each set that have been or will be leveled fully (thus providing the max set bonus)
     let maxSetCounts = new WeakMap();
 
     for (let slot of ModSet.slots) {
@@ -153,7 +156,7 @@ class ModSet {
       const set = mod.set;
 
       // Update the summary for each stat on each mod
-      const primaryStat = character.optimizationPlan.upgradeMods ?
+      const primaryStat = character.optimizerSettings.target.upgradeMods ?
         mod.primaryStat.upgradePrimary(mod.pips) :
         mod.primaryStat;
 
@@ -167,7 +170,7 @@ class ModSet {
       const currentMaxCount = maxSetCounts.get(set) || 0;
       if (set) {
         smallSetCounts.set(set, currentSmallCount + 1);
-        if (character.optimizationPlan.upgradeMods || 15 === mod.level) {
+        if (character.optimizerSettings.target.upgradeMods || 15 === mod.level) {
           maxSetCounts.set(set, currentMaxCount + 1);
         }
       }
@@ -234,7 +237,7 @@ class ModSet {
           summary[propertyDisplayName] = new Stat(statType, '0');
       }
       if (stat.isPercent) {
-        summary[propertyDisplayName].value += stat.value * character.baseStats[propertyName] / 100;
+        summary[propertyDisplayName].value += stat.value * character.playerValues.baseStats[propertyName] / 100;
       } else {
         summary[propertyDisplayName].value += stat.value;
       }
@@ -249,6 +252,14 @@ class ModSet {
   getOptimizationValue(character) {
     return Object.values(this.getSummary(character))
       .reduce((setValue, stat) => setValue + stat.getOptimizationValue(character), 0);
+  }
+
+  serialize() {
+    return this.mods().filter(mod => null !== mod).map(mod => mod.serialize());
+  }
+
+  static deserialize(modSetJson) {
+    return new ModSet(modSetJson.map(Mod.deserialize));
   }
 }
 

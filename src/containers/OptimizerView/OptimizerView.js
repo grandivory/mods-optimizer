@@ -8,13 +8,9 @@ import CharacterEditView from "../CharacterEditView/CharacterEditView";
 
 import "./OptimizerView.css";
 import {connect} from "react-redux";
-import {changeOptimizerView, optimizeMods} from "../../state/actions";
+import {changeOptimizerView, startModOptimization} from "../../state/actions";
 
 class OptimizerView extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className={'optimizer-view'}>
@@ -40,49 +36,6 @@ class OptimizerView extends PureComponent {
       </div>
     );
   }
-
-  /**
-   * Update the view with a new page
-   *
-   * @param view The name of the new view to show.
-   * TODO: Move to Redux
-   */
-  // updateView(view) {
-  //   if (view === this.state.view) {
-  //     return;
-  //   }
-  //
-  //   const missingData =
-  //     this.state.selectedCharacters.filter(character => !character.baseStats || !character.baseStats.isValid());
-  //
-  //   if (missingData.length > 0) {
-  //     this.setState({
-  //       'error': 'Missing character data required to optimize your mods. Please fetch your data again.'
-  //     });
-  //     return
-  //   }
-  //
-  //
-  //   if ('edit' === this.state.view) {
-  //     this.setState({
-  //       'loading': true
-  //     });
-  //
-  //     // Set a timeout so that the loading state is propagated before the optimizer runs
-  //     setTimeout(() => {
-  //       // If we're going from edit to another view, then run the optimization
-  //       this.optimizeMods(this.props.mods);
-  //       this.setState({
-  //         'view': view,
-  //         'loading': false
-  //       });
-  //     }, 0);
-  //   } else {
-  //     this.setState({
-  //       'view': view
-  //     });
-  //   }
-  // }
 
   /**
    * Run the optimizer, and store the results in this.state.modAssignments
@@ -117,7 +70,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeOptimizerView(view))
   },
   optimizeMods: (allyCode) => {
-    dispatch(optimizeMods(allyCode))
+    dispatch(startModOptimization(allyCode))
   }
 });
 

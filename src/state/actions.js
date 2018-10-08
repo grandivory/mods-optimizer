@@ -1,7 +1,7 @@
 import {modSets, modSlots, modStats} from "../constants/enums";
 import cleanAllyCode from "../utils/cleanAllyCode";
 import {PlayerValues} from "../domain/CharacterDataClasses";
-import React from "react";
+import Optimizer from "../utils/Optimizer";
 
 export const CHANGE_SECTION = 'CHANGE_SECTION';
 export const CHANGE_OPTIMIZER_VIEW = 'CHANGE_OPTIMIZER_VIEW';
@@ -31,6 +31,7 @@ export const DELETE_TARGET = 'DELETE_TARGET';
 export const CHANGE_USE_FIVE_DOT_MODS = 'CHANGE_USE_FIVE_DOT_MODS';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
 export const OPTIMIZE_MODS = 'OPTIMIZE_MODS';
+export const FINISH_OPTIMIZE_MODS = 'FINISH_OPTIMIZE_MODS';
 export const LOG = 'LOG';
 
 export function logState() {
@@ -158,9 +159,16 @@ export function setMods(modsData) {
   };
 }
 
-export function optimizeMods() {
+export function startModOptimization() {
   return {
     type: OPTIMIZE_MODS
+  };
+}
+
+export function finishModOptimization(result) {
+  return {
+    type: FINISH_OPTIMIZE_MODS,
+    result: result
   };
 }
 
@@ -446,4 +454,21 @@ export function fetchCharacterStats(allyCode, characters) {
     return dispatchFetchCharacterStats(dispatch, cleanedAllyCode, characters)
       .catch(error => dispatch(showError(error.message)));
   }
+}
+
+/**
+ * Run the optimization algorithm and update the player's profile with the results
+ * @param mods Array[Mod]
+ * @param characters {Character.baseID => Character}
+ * @param order Array[Character.baseID]
+ */
+export function optimizeMods(mods, characters, order) {
+  return function(dispatch) {
+    dispatch(startModOptimization());
+    const optimize = new Promise((resolve) => {
+      setTimeout(() => resolve((new Optimizer()).optimizeMods(mods, characters, order)), 0);
+    });
+
+    optimize.then(result => dispatch(finishModOptimization(result)));
+  };
 }

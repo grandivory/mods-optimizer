@@ -4,10 +4,10 @@ import {
   CHANGE_CHARACTER_FILTER,
   CHANGE_CHARACTER_TARGET,
   CHANGE_OPTIMIZER_VIEW,
-  CHANGE_SECTION, CHANGE_USE_FIVE_DOT_MODS, DELETE_TARGET, FINISH_EDIT_CHARACTER_TARGET,
+  CHANGE_SECTION, CHANGE_USE_FIVE_DOT_MODS, DELETE_TARGET, FINISH_EDIT_CHARACTER_TARGET, FINISH_OPTIMIZE_MODS,
   HIDE_ERROR,
   HIDE_MODAL, LOCK_CHARACTER,
-  LOG,
+  LOG, OPTIMIZE_MODS,
   RECEIVE_CHARACTERS,
   RECEIVE_PROFILE,
   RECEIVE_STATS,
@@ -484,7 +484,20 @@ function changeCharacterFilter(state, action) {
 }
 
 function optimizeMods(state, action) {
+  return Object.assign({}, state, {
+    isBusy: true
+  });
+}
 
+function finishOptimizeMods(state, action) {
+  return updateCurrentProfile(
+    state,
+    profile => profile.withModAssignments(action.result),
+    {
+      isBusy: false/*,
+      optimizerView: 'sets'*/
+    }
+  );
 }
 
 export function optimizerApp(state, action) {
@@ -547,6 +560,10 @@ export function optimizerApp(state, action) {
       return saveState(changeUse5DotMods(state, action));
     case CHANGE_CHARACTER_FILTER:
       return saveState(changeCharacterFilter(state, action));
+    case OPTIMIZE_MODS:
+      return optimizeMods(state, action);
+    case FINISH_OPTIMIZE_MODS:
+      return saveState(finishOptimizeMods(state, action));
     case LOG:
       console.log(state);
       return Object.assign({}, state);
