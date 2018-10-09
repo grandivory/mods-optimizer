@@ -32,6 +32,7 @@ export const CHANGE_USE_FIVE_DOT_MODS = 'CHANGE_USE_FIVE_DOT_MODS';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
 export const OPTIMIZE_MODS = 'OPTIMIZE_MODS';
 export const FINISH_OPTIMIZE_MODS = 'FINISH_OPTIMIZE_MODS';
+export const CHANGE_MOD_SET_FILTER = 'CHANGE_MOD_SET_FILTER';
 export const LOG = 'LOG';
 
 export function logState() {
@@ -304,6 +305,18 @@ export function changeUse5DotMods(character, use5DotMods) {
 export function changeCharacterFilter(newFilter) {
   return {
     type: CHANGE_CHARACTER_FILTER,
+    filter: newFilter
+  };
+}
+
+/**
+ * Update the filter that is used to limit which mod sets are shown after optimizing mods
+ * @param newFilter string
+ * @returns {{type: string, filter: *}}
+ */
+export function changeModSetFilter(newFilter) {
+  return {
+    type: CHANGE_MOD_SET_FILTER,
     filter: newFilter
   };
 }

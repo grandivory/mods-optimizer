@@ -2,7 +2,7 @@
 
 import {
   CHANGE_CHARACTER_FILTER,
-  CHANGE_CHARACTER_TARGET,
+  CHANGE_CHARACTER_TARGET, CHANGE_MOD_SET_FILTER,
   CHANGE_OPTIMIZER_VIEW,
   CHANGE_SECTION, CHANGE_USE_FIVE_DOT_MODS, DELETE_TARGET, FINISH_EDIT_CHARACTER_TARGET, FINISH_OPTIMIZE_MODS,
   HIDE_ERROR,
@@ -494,10 +494,16 @@ function finishOptimizeMods(state, action) {
     state,
     profile => profile.withModAssignments(action.result),
     {
-      isBusy: false/*,
-      optimizerView: 'sets'*/
+      isBusy: false,
+      optimizerView: 'sets'
     }
   );
+}
+
+function changeModSetFilter(state, action) {
+  return Object.assign({}, state, {
+    modSetsFilter: action.filter
+  });
 }
 
 export function optimizerApp(state, action) {
@@ -560,6 +566,8 @@ export function optimizerApp(state, action) {
       return saveState(changeUse5DotMods(state, action));
     case CHANGE_CHARACTER_FILTER:
       return saveState(changeCharacterFilter(state, action));
+    case CHANGE_MOD_SET_FILTER:
+      return saveState(changeModSetFilter(state, action));
     case OPTIMIZE_MODS:
       return optimizeMods(state, action);
     case FINISH_OPTIMIZE_MODS:

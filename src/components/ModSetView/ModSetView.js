@@ -9,12 +9,13 @@ import "./ModSetView.css";
 class ModSetView extends React.PureComponent {
   render() {
     const set = this.props.modSet;
+    const assignedCharacter = this.props.assignedCharacter;
     const changeClass = this.props.changeClass;
 
     const modDetails = Object.keys(set).filter(slot => null !== set[slot]).map(slot =>
       <div className={'mod ' + slot} key={set[slot].id}>
         <ModImage
-          className={set[slot].currentCharacter !== set[slot].assignTo ? changeClass : ''}
+          className={set[slot].characterID !== assignedCharacter ? changeClass : ''}
           mod={set[slot]}/>
         <ModStats mod={set[slot]} showAvatar />
       </div>

@@ -11,6 +11,8 @@ import ModSet from "../../domain/ModSet";
 import ModSetView from "../../components/ModSetView/ModSetView";
 import Modal from "../../components/Modal/Modal";
 import copyToClipboard from "../../utils/clipboard"
+import {changeOptimizerView} from "../../state/actions";
+import {connect} from "react-redux";
 
 class ReviewList extends React.Component {
 
@@ -338,17 +340,11 @@ class ReviewList extends React.Component {
   sidebarActions() {
     return <div className={'sidebar-actions'}>
       <h3>I don't like these results...</h3>
-      <button
-        type={'button'}
-        onClick={this.props.onBack}
-      >
+      <button type={'button'} onClick={this.props.edit}>
         Change my selection
       </button>
       <h3>I want to review changes again</h3>
-      <button
-        type={'button'}
-        onClick={this.props.onNextView}
-      >
+      <button type={'button'} onClick={this.props.back}>
         Show me the mod sets
       </button>
     </div>
@@ -440,5 +436,13 @@ class ReviewList extends React.Component {
   }
 }
 
-export default ReviewList;
+const mapStateToProps = (state) => ({
 
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  edit: () => dispatch(changeOptimizerView('edit')),
+  back: () => dispatch(changeOptimizerView('sets'))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReviewList);

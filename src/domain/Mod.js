@@ -13,10 +13,9 @@ class Mod {
   primaryStat;
   secondaryStats;
   characterID;
-  assignTo;
   tier;
 
-  constructor(id, slot, set, level, pips, primaryStat, secondaryStats, characterID, assignTo, tier = 1) {
+  constructor(id, slot, set, level, pips, primaryStat, secondaryStats, characterID, tier = 1) {
     this.id = id;
     this.slot = slot;
     this.set = set;
@@ -25,18 +24,7 @@ class Mod {
     this.primaryStat = primaryStat;
     this.secondaryStats = secondaryStats;
     this.characterID = characterID;
-    this.assignTo = assignTo ? assignTo : null;
     this.tier = tier;
-  }
-
-  assign(characterID) {
-    this.assignTo = characterID;
-    return this;
-  }
-
-  unassign() {
-    this.assignTo = null;
-    return this;
   }
 
   equip(characterID) {
@@ -78,7 +66,6 @@ class Mod {
     modObject.pips = this.pips;
     modObject.characterID = this.characterID;
     modObject.tier = this.tier;
-    modObject.assignTo = this.assignTo;
 
     return modObject;
   }
@@ -111,7 +98,6 @@ class Mod {
       primaryStat,
       secondaryStats,
       modJson.characterID,
-      modJson.assignTo,
       modJson.tier
     )
   }
@@ -150,8 +136,6 @@ class Mod {
       charactersByName[characterName].baseID :
       null;
 
-    const assignTo = modJson.assignTo ? modJson.assignTo.baseID : null;
-
     const setBonus = setBonuses[modJson.set.toLowerCase().replace(' ', '')];
 
     return new Mod(
@@ -163,7 +147,6 @@ class Mod {
       primaryStat,
       secondaryStats,
       currentCharacter,
-      assignTo,
       modJson.tier
     );
   }

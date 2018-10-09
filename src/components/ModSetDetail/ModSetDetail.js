@@ -28,14 +28,14 @@ class ModSetDetail extends React.PureComponent {
       }
 
       const statProperty = statTypeMap[stat.displayType] ? statTypeMap[stat.displayType][0] : '';
-      let statValue = character.totalStats[statProperty] + stat.value;
+      let statValue = character.playerValues.equippedStats[statProperty] + stat.value;
 
       if (['armor', 'resistance'].includes(statProperty)) {
         // Convert armor and resistance to percent stats
-        const baseStat = character.totalStats[statProperty];
-        const baseStatValue = 100 * baseStat / (character.level * 7.5 + baseStat);
+        const baseStat = character.playerValues.equippedStats[statProperty];
+        const baseStatValue = 100 * baseStat / (character.playerValues.level * 7.5 + baseStat);
 
-        statValue = 100 * statValue / (character.level * 7.5 + statValue);
+        statValue = 100 * statValue / (character.playerValues.level * 7.5 + statValue);
 
         const statDiff = statValue - baseStatValue;
         stat = new Stat(`${stat.displayType} %`, `${statDiff % 1 ? Math.round(statDiff * 100) / 100 : statDiff}`);
@@ -59,7 +59,7 @@ class ModSetDetail extends React.PureComponent {
 
     return (
       <div className={'mod-set-detail'}>
-        <ModSetView modSet={modSet} changeClass={changeClass} />
+        <ModSetView modSet={modSet} changeClass={changeClass} assignedCharacter={character.baseID}/>
         <div className={'summary'}>
           <table>
             <thead>
