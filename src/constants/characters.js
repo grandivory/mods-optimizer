@@ -373,9 +373,9 @@ let charactersArray = [
     'Colonel Starck',
     'COLONELSTARCK',
     DamageType.physical,
-    optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
+    new OptimizationPlan('PvP', 0, 0, 100, 10, 5, 0, 5, 0, 5, 0, 0, 0, 0),
     {
-      'PvP': optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')
+      'PvP': new OptimizationPlan('PvP', 0, 0, 100, 10, 5, 0, 5, 0, 5, 0, 0, 0, 0)
     },
     ['Dark Side', 'Empire', 'Imperial Trooper', 'Support'],
     ['Tony Stark', 'Troopers'],
@@ -1734,10 +1734,9 @@ let charactersArray = [
     'Snowtrooper',
     'SNOWTROOPER',
     DamageType.physical,
-    new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 50, 0, 100, 0, 0, 0, 0),
+    new OptimizationPlan('PvP', 0, 0, 0, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0),
     {
-      'PvP': new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 50, 0, 100, 0, 0, 0, 0),
-      'PvE': new OptimizationPlan('PvE', 0, 0, 80, 50, 0, 0, 25, 0, 100, 0, 0, 0, 0)
+      'PvP': new OptimizationPlan('PvP', 0, 0, 0, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0)
     },
     ['Dark Side', 'Empire', 'Imperial Trooper', 'Attacker'],
     ['Troopers'],
