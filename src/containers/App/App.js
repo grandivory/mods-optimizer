@@ -72,12 +72,8 @@ class App extends Component {
     );
     window.localStorage.setItem(
       'optimizer.selectedCharacters',
-      JSON.stringify(this.state.selectedCharacters.map(character => character.serialize()))
-    );
-    window.localStorage.setItem(
-      'optimizer.version',
-      this.version
-    );
+      JSON.stringify(this.state.selectedCharacters.map(character => character.serialize())));
+    window.localStorage.setItem('optimizer.version', this.version);
 
     if (saveProgressButton) {
       saveProgressButton.href = this.getProgressData();
@@ -185,20 +181,30 @@ class App extends Component {
         if (xhr.status === 200) {
           try {
             const playerProfile = JSON.parse(xhr.responseText);
-            const roster = playerProfile.roster.filter(entry => entry.type === 'CHARACTER');
+            const roster = playerProfile.roster.filter(entry => entry.combatType === 'CHARACTER');
             const mods = roster
-              .map(character => character.mods.map(mod => {
-                mod.characterName = character.name;
-                mod.mod_uid = mod.id;
-                mod.set = modSets[mod.set];
-                mod.slot = modSlots[mod.slot];
-                mod.primaryBonusType = modStats[mod.primaryBonusType];
-                for (let i = 1; i <= 4; i++) {
-                  mod[`secondaryType_${i}`] = modStats[mod[`secondaryType_${i}`]];
+            .map(character => character.mods.map(mod => {
+              mod.characterName = character.nameKey;
+              mod.mod_uid = mod.id;
+              mod.set = modSets[mod.set];
+              mod.slot = modSlots[mod.slot];
+              mod.primaryBonusType = modStats[mod.primaryStat.unitStat];
+              mod.primaryBonusValue = `${mod.primaryStat.value}`;
+              for (let i = 1; i <= 4; i++) {
+                const modStat = mod.secondaryStat[i - 1];
+                if (!modStat) {
+                  mod[`secondaryType_${i}`] = 'None';
+                  mod[`secondaryValue_${i}`] = '';
+                  mod[`secondaryRoll_${i}`] = '';
+                } else {
+                  mod[`secondaryType_${i}`] = modStats[modStat.unitStat];
+                  mod[`secondaryValue_${i}`] = `${modStat.value}`;
+                  mod[`secondaryRoll_${i}`] = modStat.roll;
                 }
-                return mod;
-              }))
-              .reduce((allMods, charMods) => allMods.concat(charMods), []);
+              }
+              return mod;
+            }))
+            .reduce((allMods, charMods) => allMods.concat(charMods), []);
 
             roster.forEach(character => {
               const baseCharacter = Object.values(characters).find(c => c.baseID === character.defId);
@@ -293,22 +299,22 @@ class App extends Component {
 
                 if (statsObject.gear) {
                   const gearStats = new BaseStats(
-                      statsObject.gear['Health'] || 0,
-                      statsObject.gear['Protection'] || 0,
-                      statsObject.gear['Speed'] || 0,
-                      statsObject.gear['Potency'] || 0,
-                      statsObject.gear['Tenacity'] || 0,
-                      statsObject.gear['Physical Damage'] || 0,
-                      statsObject.gear['Physical Critical Rating'] || 0,
-                      statsObject.gear['Armor'] || 0,
-                      statsObject.gear['Special Damage'] || 0,
-                      statsObject.gear['Special Critical Rating'] || 0,
-                      statsObject.gear['Resistance'] || 0,
-                      baseCharacter.physDmgPct
+                    statsObject.gear['Health'] || 0,
+                    statsObject.gear['Protection'] || 0,
+                    statsObject.gear['Speed'] || 0,
+                    statsObject.gear['Potency'] || 0,
+                    statsObject.gear['Tenacity'] || 0,
+                    statsObject.gear['Physical Damage'] || 0,
+                    statsObject.gear['Physical Critical Rating'] || 0,
+                    statsObject.gear['Armor'] || 0,
+                    statsObject.gear['Special Damage'] || 0,
+                    statsObject.gear['Special Critical Rating'] || 0,
+                    statsObject.gear['Resistance'] || 0,
+                    baseCharacter.physDmgPct
                   );
                   totalStats = baseStats.plus(gearStats);
                 }
-                
+
                 baseCharacter.baseStats = baseStats;
                 baseCharacter.totalStats = totalStats;
               }
@@ -360,7 +366,7 @@ class App extends Component {
           'level': character.level,
           'gear': character.gearLevel,
           'equipped': character.gearPieces.map(gear => {
-              return {'equipmentId': gear.equipmentId};
+            return {'equipmentId': gear.equipmentId};
           })
         };
       })

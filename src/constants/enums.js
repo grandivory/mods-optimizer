@@ -22,6 +22,7 @@ const modSlots = {
 
 const modStats = {
   0: 'None',
+  'NOUNITSTAT': 'None',
   'UNITSTATACCURACY': 'Potency %',
   'UNITSTATCRITICALCHANCEPERCENTADDITIVE': 'Critical Chance %',
   'UNITSTATCRITICALDAMAGE': 'Critical Damage %',
