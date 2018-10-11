@@ -1736,7 +1736,9 @@ let charactersArray = [
     DamageType.physical,
     new OptimizationPlan('PvP', 0, 0, 0, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0),
     {
-      'PvP': new OptimizationPlan('PvP', 0, 0, 0, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0)
+      'PvP': new OptimizationPlan('PvP', 0, 0, 0, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0),
+      'Fast PvP': new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 50, 0, 100, 0, 0, 0, 0),
+      'Fast PvE': new OptimizationPlan('PvE', 0, 0, 80, 50, 0, 0, 25, 0, 100, 0, 0, 0, 0)
     },
     ['Dark Side', 'Empire', 'Imperial Trooper', 'Attacker'],
     ['Troopers'],
