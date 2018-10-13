@@ -41,7 +41,10 @@ class Optimizer {
    * @return {character.baseID => ModSet}
    */
   optimizeMods(modsList, characters, order) {
-    const considerationSet = modsList.filter(mod => !characters[mod.characterID].optimizerSettings.isLocked);
+    const considerationSet = modsList.filter(mod =>
+      // Use any mod that isn't assigned or that is assigned to a character that isn't locked
+      !mod.characterID || !characters[mod.characterID].optimizerSettings.isLocked
+    );
 
     // For each character in the list, find the best mod set for that character
     const {assignedSets} = order.reduce((accumulator, characterID) => {

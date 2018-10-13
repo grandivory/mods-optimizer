@@ -166,6 +166,21 @@ class PlayerValues {
     };
   }
 
+  /**
+   * Deserialize a PlayerValues object from an swgoh.help API response
+   * @param valuesJson {{}}
+   * @returns {PlayerValues}
+   */
+  static fromSwgohHelp(valuesJson) {
+    return new PlayerValues(
+      valuesJson.level,
+      valuesJson.rarity,
+      valuesJson.gear,
+      valuesJson.equipped.map(gear => {return {equipmentId: gear.equipmentId};}),
+      valuesJson.gp
+    );
+  }
+
   static deserialize(valuesJson) {
     if (valuesJson) {
       return new PlayerValues(

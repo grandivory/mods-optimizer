@@ -1,6 +1,7 @@
 // @flow
 
 import statTypeMap from "../constants/statTypeMap";
+import {modStats} from "../constants/enums";
 
 class Stat {
   constructor(type, value, rolls = 1) {
@@ -48,16 +49,6 @@ class Stat {
    */
   showValue() {
     return `${this.displayValue}${this.displayModifier}`;
-  }
-
-  /**
-   * Extract the type and value of this stat for serialization
-   */
-  serialize() {
-    const percent = (this.isPercent || !Stat.mixedTypes.includes(this.displayType)) &&
-    !this.type.includes('%') ? '%' : '';
-
-    return [this.type, `+${this.rawValue}${percent}`, this.rolls];
   }
 
   /**
@@ -113,6 +104,25 @@ class Stat {
         character.optimizerSettings.target[statType] * this.value
       ).reduce((a, b) => a + b, 0);
     }
+  }
+
+  /**
+   * Extract the type and value of this stat for serialization
+   */
+  serialize() {
+    const percent = (this.isPercent || !Stat.mixedTypes.includes(this.displayType)) &&
+    !this.type.includes('%') ? '%' : '';
+
+    return [this.type, `+${this.rawValue}${percent}`, this.rolls];
+  }
+
+  /**
+   * Deserialize a stat from a swgoh.help API response
+   * @param statJson {{}}
+   * @returns {Stat}
+   */
+  static fromSwgohHelp(statJson) {
+    return new Stat(modStats[statJson.unitStat], `${statJson.value}`, statJson.roll);
   }
 }
 

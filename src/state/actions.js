@@ -1,7 +1,7 @@
-import {modSets, modSlots, modStats} from "../constants/enums";
 import cleanAllyCode from "../utils/cleanAllyCode";
 import {PlayerValues} from "../domain/CharacterDataClasses";
 import Optimizer from "../utils/Optimizer";
+import Mod from "../domain/Mod";
 
 export const CHANGE_SECTION = 'CHANGE_SECTION';
 export const CHANGE_OPTIMIZER_VIEW = 'CHANGE_OPTIMIZER_VIEW';
@@ -321,7 +321,7 @@ export function changeModSetFilter(newFilter) {
   };
 }
 
-function post(url='', data={}, extras={}) {
+function post(url = '', data = {}, extras = {}) {
   return fetch(url, Object.assign({
     method: 'POST',
     headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
@@ -333,7 +333,10 @@ function post(url='', data={}, extras={}) {
         if (response.ok) {
           return response.json();
         } else {
-          return response.text().then(errorText => {console.dir(errorText); return Promise.reject(new Error(errorText));});
+          return response.text().then(errorText => {
+            console.dir(errorText);
+            return Promise.reject(new Error(errorText));
+          });
         }
       }
     );
@@ -344,7 +347,10 @@ function dispatchFetchCharacters(dispatch) {
   return fetch('https://api.mods-optimizer.swgoh.grandivory.com/characters/')
     .then(response => response.json())
     .catch(error => dispatch(showError(error.message)))
-    .then(characters => {dispatch(receiveCharacters(characters)); return characters;});
+    .then(characters => {
+      dispatch(receiveCharacters(characters));
+      return characters;
+    });
 }
 
 function dispatchFetchProfile(dispatch, allyCode) {
@@ -356,32 +362,15 @@ function dispatchFetchProfile(dispatch, allyCode) {
     .then(
       playerProfile => {
         console.dir(playerProfile);
-        const roster = playerProfile.roster.filter(entry => entry.type === 'CHARACTER');
+        const roster = playerProfile.roster.filter(entry => entry.combatType === 'CHARACTER');
 
         // Convert mods to the serialized format recognized by the optimizer
-        const profileMods = roster.map(character =>
-          character.mods.map(mod => {
-            mod.characterID = character.defId;
-            mod.mod_uid = mod.id;
-            mod.set = modSets[mod.set];
-            mod.slot = modSlots[mod.slot];
-            mod.primaryBonusType = modStats[mod.primaryBonusType];
-            for (let i = 1; i <= 4; i++) {
-              mod[`secondaryType_${i}`] = modStats[mod[`secondaryType_${i}`]];
-            }
-            return mod;
-          }))
+        const profileMods = roster.map(character => character.mods.map(mod => Mod.fromSwgohHelp(mod, character.defId)))
           .reduce((allMods, charMods) => allMods.concat(charMods), []);
 
         // Convert each character to a PlayerValues object
         const profileCharacters = roster.reduce((characters, character) => {
-          characters[character.defId] = new PlayerValues(
-            character.level,
-            character.rarity,
-            character.gear,
-            character.equipped.map(gear => {return {equipmentId: gear.equipmentId};}),
-            character.gp
-          );
+          characters[character.defId] = PlayerValues.fromSwgohHelp(character);
           return characters;
         }, {});
 
@@ -391,7 +380,15 @@ function dispatchFetchProfile(dispatch, allyCode) {
         };
       },
     )
-    .catch(error => dispatch(showError(error.message)))
+    .catch(error => {
+      if (error instanceof TypeError) {
+        dispatch(showError(
+          'Your character and mod data is taking a long time to update. Please wait a few minutes and try again.'
+        ))
+      } else {
+        dispatch(showError(error.message));
+      }
+    })
     .then(profile => {
       dispatch(receiveProfile(allyCode, profile));
       return profile;
@@ -413,7 +410,10 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
       })
     )
       .catch(error => dispatch(showError(error.message)))
-      .then(statsResponse => {dispatch(receiveStats(allyCode, statsResponse)); return statsResponse;});
+      .then(statsResponse => {
+        dispatch(receiveStats(allyCode, statsResponse));
+        return statsResponse;
+      });
   } else {
     return Promise.resolve()
       .then(() => dispatch(receiveStats(allyCode, null)));
@@ -454,7 +454,7 @@ export function fetchCharacters(allyCode) {
 export function fetchProfile(allyCode) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
 
-  return function (dispatch) {
+  return function(dispatch) {
     return dispatchFetchProfile(dispatch, cleanedAllyCode)
       .catch(error => dispatch(showError(error.message)));
   }

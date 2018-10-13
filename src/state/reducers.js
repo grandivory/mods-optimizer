@@ -147,10 +147,7 @@ function receiveProfile(state, action) {
   });
 
   // Then, update the mods by deserializing each one
-  const newMods = action.profile.mods.reduce((mods, mod) => {
-    mods[mod.mod_uid] = Mod.deserialize(mod);
-    return mods;
-  }, {});
+  const newMods = groupByKey(action.profile.mods, mod => mod.id);
 
   const oldProfile = state.profiles.hasOwnProperty(action.allyCode) ?
     state.profiles[action.allyCode] :

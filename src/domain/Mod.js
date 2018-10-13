@@ -3,6 +3,7 @@
 import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
 import groupByKey from "../utils/groupByKey";
+import {modSets, modSlots} from "../constants/enums";
 
 class Mod {
   id;
@@ -68,6 +69,26 @@ class Mod {
     modObject.tier = this.tier;
 
     return modObject;
+  }
+
+  /**
+   * Deserialize a Mod object from a response from swgoh.help
+   * @param modJson {{}}
+   * @param characterID {string}
+   * @returns {Mod}
+   */
+  static fromSwgohHelp(modJson, characterID) {
+      return new Mod(
+        modJson.id,
+        modSlots[modJson.slot],
+        setBonuses[modSets[modJson.set]],
+        modJson.level,
+        modJson.pips,
+        Stat.fromSwgohHelp(modJson.primaryStat),
+        modJson.secondaryStat.map(Stat.fromSwgohHelp),
+        characterID,
+        modJson.tier
+      );
   }
 
   static deserialize(modJson) {
