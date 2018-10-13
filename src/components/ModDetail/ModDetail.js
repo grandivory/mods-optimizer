@@ -9,14 +9,15 @@ import './ModDetail.css';
 class ModDetail extends React.PureComponent {
   render() {
     const mod = this.props.mod;
+    const character = this.props.character;
 
     return (
       <div className='mod-detail'>
         <ModImage mod={mod}/>
-        {mod.currentCharacter &&
-        <CharacterAvatar character={mod.currentCharacter}/>
+        {character &&
+        <CharacterAvatar character={character}/>
         }
-        < ModStats mod={mod} />
+        <ModStats mod={mod} />
       </div>
     );
   }

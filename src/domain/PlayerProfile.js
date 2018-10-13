@@ -13,10 +13,10 @@ export default class PlayerProfile {
   modAssignments;
 
   /**
-   * @param characters Object{Character.baseID => Character}
-   * @param mods Array[Mod]
-   * @param selectedCharacters Array[Character.baseID]
-   * @param modAssignments {Character.baseID => ModSet}
+   * @param characters {Object<string, Character>} A map from character IDs to character objects
+   * @param mods {Array<Mod>} An array of Mods
+   * @param selectedCharacters {Array<string>} An array of Character IDs
+   * @param modAssignments {Object<string, Array<string>>} A map from Character ID to mod IDs
    */
   constructor(characters = {}, mods = [], selectedCharacters = [], modAssignments = {}) {
     this.characters = characters;
@@ -82,7 +82,7 @@ export default class PlayerProfile {
       characters: mapObject(this.characters, character => character.serialize()),
       mods: this.mods.map(mod => mod.serialize()),
       selectedCharacters: this.selectedCharacters,
-      modAssignments: mapObject(this.modAssignments, modSet => modSet.serialize())
+      modAssignments: this.modAssignments
     };
   }
 
@@ -92,7 +92,7 @@ export default class PlayerProfile {
         mapObject(profileJson.characters, Character.deserialize),
         profileJson.mods.map(Mod.deserialize),
         profileJson.selectedCharacters,
-        mapObject(profileJson.modAssignments || {}, ModSet.deserialize)
+        profileJson.modAssignments
       )
     } else {
       return null;

@@ -11,21 +11,15 @@ class ModSetDetail extends React.PureComponent {
   render() {
     const modSet = this.props.set;
     const diffSet = this.props.diffset;
-    let diffSummary;
     const character = this.props.character;
     const changeClass = this.props.changeClass || '';
+    const showStatDiff = this.props.showStatDiff;
 
     const statSummary = modSet.getSummary(character, true);
-    if (diffSet) {
-      diffSummary = diffSet.getSummary(character, true);
-    }
+    const diffSummary = (diffSet && showStatDiff) ? diffSet.getSummary(character, true) : null;
 
     const statsDisplay = Object.values(statSummary).map((stat, index) => {
-      let diffStat;
-
-      if (diffSet) {
-        diffStat = stat.minus(diffSummary[stat.displayType]);
-      }
+      const diffStat = diffSummary ? stat.minus(diffSummary[stat.displayType]) : null;
 
       const statProperty = statTypeMap[stat.displayType] ? statTypeMap[stat.displayType][0] : '';
       let statValue = character.playerValues.equippedStats[statProperty] + stat.value;
@@ -49,7 +43,7 @@ class ModSetDetail extends React.PureComponent {
           </span>
           <span className={'mods-value'}>({stat.showValue()})</span>
         </td>
-        {diffSet &&
+        {diffStat &&
         <td className={'stat-diff' + (diffStat.value > 0 ? ' increase' : diffStat.value < 0 ? ' decrease' : '')}>
           {diffStat.showValue()}
         </td>
@@ -59,12 +53,12 @@ class ModSetDetail extends React.PureComponent {
 
     return (
       <div className={'mod-set-detail'}>
-        <ModSetView modSet={modSet} changeClass={changeClass} assignedCharacter={character.baseID}/>
+        <ModSetView modSet={modSet} diffSet={diffSet} changeClass={changeClass} />
         <div className={'summary'}>
           <table>
             <thead>
             <tr>
-              <th colSpan={diffSet ? 3 : 2}>Stats Summary</th>
+              <th colSpan={diffSet && showStatDiff ? 3 : 2}>Stats Summary</th>
             </tr>
             </thead>
             <tbody>

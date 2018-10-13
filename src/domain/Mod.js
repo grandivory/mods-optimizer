@@ -34,8 +34,17 @@ class Mod {
   }
 
   unequip() {
-    this.characterID = null;
-    return this;
+    return new Mod(
+      this.id,
+      this.slot,
+      this.set,
+      this.level,
+      this.pips,
+      this.primaryStat,
+      this.secondaryStats,
+      null,
+      this.tier
+    );
   }
 
   /**

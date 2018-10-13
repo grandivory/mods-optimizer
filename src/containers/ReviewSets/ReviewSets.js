@@ -11,9 +11,10 @@ import Toggle from "../../components/Toggle/Toggle";
 import Credits from "../../components/Credits/Credits";
 import {connect} from "react-redux";
 import {changeModSetFilter, changeOptimizerView} from "../../state/actions";
-import {mapObjectByKeyAndValue} from "../../utils/mapObject";
+import {mapObject, mapObjectByKeyAndValue} from "../../utils/mapObject";
 import objectFromEntries from "../../utils/objectFromEntries";
 import collectByKey from "../../utils/collectByKey";
+import groupByKey from "../../utils/groupByKey";
 
 // A map from number of pips that a mod has to the cost to remove (but not destroy) it
 const modRemovalCosts = {
@@ -119,8 +120,8 @@ class ReviewSets extends React.PureComponent {
     const modsByCharacter = collectByKey(this.props.mods, mod => mod.characterID);
 
     const movingMods = Object.values(
-      mapObjectByKeyAndValue(this.props.modAssignments, (characterID, modSet) =>
-        modSet.mods().filter(mod => mod.characterID !== characterID)
+      mapObjectByKeyAndValue(this.props.modAssignments, (characterID, mods) =>
+        mods.filter(mod => mod.characterID !== characterID)
       )
     ).reduce((allMods, characterMods) => allMods.concat(characterMods), []);
 
@@ -131,7 +132,7 @@ class ReviewSets extends React.PureComponent {
         movingMods.includes(mod) ||
         // The character is equipping a different mod in that slot
         (this.props.modAssignments.hasOwnProperty(mod.characterID) &&
-          !this.props.modAssignments[mod.characterID].contains(mod))
+          !this.props.modAssignments[mod.characterID].includes(mod))
       )
     );
 
@@ -139,29 +140,33 @@ class ReviewSets extends React.PureComponent {
     const modRemovalCost = modsBeingRemoved.reduce((cost, mod) => cost + modRemovalCosts[mod.pips], 0);
 
     const modsBeingUpgraded = Object.entries(this.props.modAssignments)
-      .filter(([characterID, modSet]) => this.props.characters[characterID].optimizerSettings.target.upgradeMods)
-      .map(([characterID, modSet]) => modSet.mods().filter(mod => 15 !== mod.level && 5 <= mod.pips))
+      .filter(([characterID, mods]) => this.props.characters[characterID].optimizerSettings.target.upgradeMods)
+      .map(([characterID, mods]) => mods.filter(mod => 15 !== mod.level && 5 <= mod.pips))
       .reduce((allMods, characterMods) => allMods.concat(characterMods, []));
 
     const modUpgradeCost = modsBeingUpgraded.reduce((cost, mod) => cost + modUpgradeCosts[mod.pips][mod.level], 0);
 
     // Create sets for everything each character already has equipped
-    const rows = Object.values(mapObjectByKeyAndValue(this.props.modAssignments, (characterID, modSet) => {
+    const rows = Object.values(mapObjectByKeyAndValue(this.props.modAssignments, (characterID, mods) => {
       const character = this.props.characters[characterID];
       const currentSet = new ModSet(modsByCharacter[characterID] || []);
+      const newSet = new ModSet(mods);
 
       return (
         <div className={'set-row'} key={characterID}>
           <ModSetDetail
             changeClass={'remove'}
             set={currentSet}
+            diffset={newSet}
+            showStatDiff={false}
             character={character}/>
           <CharacterAvatar character={character}/>
           <Arrow/>
           <ModSetDetail
             changeClass={'add'}
-            set={modSet}
+            set={newSet}
             diffset={currentSet}
+            showStatDiff={true}
             character={character}/>
         </div>
       );
@@ -255,12 +260,15 @@ class ReviewSets extends React.PureComponent {
 
 const mapStateToProps = (state) => {
   const profile = state.profiles[state.allyCode];
+  const modsByID = groupByKey(profile.mods, mod => mod.id);
 
-  const modAssignments = 'all' === state.modSetsFilter ?
-    profile.modAssignments :
+  const modAssignments = mapObject(profile.modAssignments, modIDs => modIDs.map(modID => modsByID[modID]));
+
+  const displayedModAssignments = 'all' === state.modSetsFilter ?
+    modAssignments :
     objectFromEntries(
-      Object.entries(profile.modAssignments).filter(
-        ([characterID, modSet]) => modSet.mods().some(mod => mod.characterID !== characterID))
+      Object.entries(modAssignments).filter(
+        ([characterID, mods]) => mods.some(mod => mod.characterID !== characterID))
     );
 
   console.dir(modAssignments);
@@ -268,7 +276,7 @@ const mapStateToProps = (state) => {
   return {
     characters: profile.characters,
     mods: profile.mods,
-    modAssignments: modAssignments,
+    modAssignments: displayedModAssignments,
     numShownCharacters: Object.keys(modAssignments).length,
     numOptimizedCharacters: Object.keys(profile.modAssignments).length
   };

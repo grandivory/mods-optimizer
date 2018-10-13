@@ -10,7 +10,7 @@ import {
   LOG, OPTIMIZE_MODS,
   RECEIVE_CHARACTERS,
   RECEIVE_PROFILE,
-  RECEIVE_STATS,
+  RECEIVE_STATS, UNEQUIP_MOD,
   REQUEST_CHARACTERS,
   REQUEST_PROFILE,
   REQUEST_STATS,
@@ -503,6 +503,22 @@ function changeModSetFilter(state, action) {
   });
 }
 
+function unequipMod(state, action) {
+  console.dir(action);
+
+  return updateCurrentProfile(state, profile => {
+    const mods = groupByKey(profile.mods, mod => mod.id);
+    const oldMod = mods[action.mod];
+    const newMod = oldMod ? oldMod.unequip() : null;
+
+    return newMod ?
+      profile.withMods(Object.values(Object.assign({}, mods, {
+        [action.mod]: newMod
+      }))) :
+      profile;
+  });
+}
+
 export function optimizerApp(state, action) {
   if (null == state) {
     state = restoreState();
@@ -569,6 +585,8 @@ export function optimizerApp(state, action) {
       return optimizeMods(state, action);
     case FINISH_OPTIMIZE_MODS:
       return saveState(finishOptimizeMods(state, action));
+    case UNEQUIP_MOD:
+      return saveState(unequipMod(state, action));
     case LOG:
       console.log(state);
       return Object.assign({}, state);

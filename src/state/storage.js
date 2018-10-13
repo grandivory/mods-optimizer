@@ -28,6 +28,11 @@ export const defaultState = {
   keepOldMods: true,
   modal: null,
   modSetsFilter: 'all',
+  modListFilter: {
+    view: 'list',
+    sort: 'assignedCharacter',
+    tag: null
+  },
   optimizerView: 'edit',
   profiles: {},
   section: 'optimize',
@@ -83,6 +88,11 @@ export function deserializeState(state) {
     isBusy: false,
     keepOldMods: jsonState.keepOldMods,
     modal: null,
+    modListFilter: jsonState.modListFilter || {
+      view: 'list',
+      sort: 'assignedCharacter',
+      tag: null
+    },
     modSetsFilter: jsonState.modSetsFilter || 'all',
     optimizerView: jsonState.optimizerView || 'edit',
     profiles: mapObject(jsonState.profiles, PlayerProfile.deserialize),

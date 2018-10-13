@@ -55,7 +55,7 @@ class Optimizer {
       return {
         considerationSet: availableMods.filter(mod => !modSetForCharacter.contains(mod)),
         assignedSets: Object.assign(completedSets, {
-          [characterID]: modSetForCharacter
+          [characterID]: modSetForCharacter.mods().map(mod => mod.id)
         })
       };
     }, {considerationSet: considerationSet, assignedSets: {}});

@@ -11,11 +11,14 @@ import ModSet from "../../domain/ModSet";
 import ModSetView from "../../components/ModSetView/ModSetView";
 import Modal from "../../components/Modal/Modal";
 import copyToClipboard from "../../utils/clipboard"
-import {changeOptimizerView} from "../../state/actions";
+import {changeOptimizerView, unequipMod} from "../../state/actions";
 import {connect} from "react-redux";
+import {mapObjectByKeyAndValue} from "../../utils/mapObject";
+import groupByKey from "../../utils/groupByKey";
 
 class ReviewList extends React.Component {
 
+  // TODO: Redux
   constructor(props) {
     super(props);
     this.sortOptions = {
@@ -60,8 +63,8 @@ class ReviewList extends React.Component {
     this.state.orderedCharacters = characters;
   }
 
+  // TODO: Redux
   render() {
-    const modsLeft = this.state.movingMods.length;
     let modRows;
 
     const summaryButton = (
@@ -72,16 +75,16 @@ class ReviewList extends React.Component {
 
     switch (this.state.view) {
       case this.viewOptions.list:
-        modRows = this.listView(this.state.displayedMods);
+        modRows = this.listView(this.props.displayedMods);
         break;
       case this.viewOptions.sets:
-        modRows = this.setsView(this.state.displayedMods);
+        modRows = this.setsView(this.props.displayedMods);
         break;
       default:
         throw new Error(`Unknown view type ${this.state.view} - should be one of "list" or "sets"`);
     }
 
-    if (0 === modsLeft) {
+    if (0 === this.props.numMovingMods) {
       return (
         <div className={'review-list'}>
           <div className={'sidebar'}>
@@ -100,13 +103,13 @@ class ReviewList extends React.Component {
             </div>
             {this.sidebarActions()}
           </div>
-          <h2>Reassigning {modsLeft} mods {summaryButton}</h2>
-          {(0 < this.state.displayedMods.length) &&
+          <h2>Reassigning {this.props.numMovingMods} mods {summaryButton}</h2>
+          {(0 < this.props.displayedMods.length) &&
           <div className={'mods-list'}>
             {modRows}
           </div>
           }
-          {(0 === this.state.displayedMods.length) &&
+          {(0 === this.props.displayedMods.length) &&
           <h3>No more mods to move under that filter. Try a different filter now!</h3>
           }
           <Modal show={this.state.showSummaryModal} content={this.reviewModal()}/>
@@ -121,17 +124,19 @@ class ReviewList extends React.Component {
    * @returns array[JSX Element]
    */
   listView(displayedMods) {
-    return displayedMods.map(mod =>
-      <div className={'mod-row individual'} key={mod.id}>
-        <ModDetail key={mod.id} mod={mod}/>
+    return displayedMods.map(([characterID, mod]) => {
+      const modCharacter = mod.characterID ? this.props.characters[mod.characterID] : null;
+
+      return <div className={'mod-row individual'} key={mod.id}>
+        <ModDetail mod={mod} character={modCharacter}/>
         <Arrow/>
-        <CharacterAvatar character={mod.assignTo}/>
+        <CharacterAvatar character={this.props.characters[characterID]}/>
         <div className={'actions'}>
-          <button onClick={this.removeMod.bind(this, mod)}>I removed this mod</button>
+          <button onClick={this.props.unequipMod.bind(this, mod.id)}>I removed this mod</button>
           <button onClick={this.reassignMod.bind(this, mod)}>I reassigned this mod</button>
         </div>
       </div>
-    );
+    });
   }
 
   /***
@@ -139,6 +144,7 @@ class ReviewList extends React.Component {
    * @param displayedMods array[Mod]
    * @returns array[JSX Element]
    */
+  // TODO: Redux
   setsView(displayedMods) {
     const me = this;
 
@@ -187,22 +193,10 @@ class ReviewList extends React.Component {
   }
 
   /**
-   * Unassign a mod from any character and re-render the view to show the change.
-   * @param mod Mod
-   */
-  removeMod(mod) {
-    mod.currentCharacter = null;
-    const movingMods = this.updateMovingMods();
-    this.saveState();
-    this.setState({
-      'movingMods': movingMods
-    });
-  }
-
-  /**
    * Remove set of mods from a character and re-render the view to show the change.
    * @param mods array[Mod]
    */
+  // TODO: Redux
   removeMods(mods) {
     mods.forEach(mod => {
       mod.currentCharacter = null;
@@ -216,6 +210,7 @@ class ReviewList extends React.Component {
    * Move a mod from its currently assigned character to its assignTo charcter and re-render the view.
    * @param mod Mod
    */
+  // TODO: Redux
   reassignMod(mod) {
     this.props.mods
       .filter(m => m.currentCharacter === mod.assignTo && m.slot === mod.slot)
@@ -230,6 +225,7 @@ class ReviewList extends React.Component {
    * Move a set of mods from their currently assigned characters to their assignTo character and re-render the view.
    * @param mods array[Mod]
    */
+  // TODO: Redux
   reassignMods(mods) {
     mods.forEach(mod => {
       this.props.mods.filter(m => m.currentCharacter === mod.assignTo && m.slot === mod.slot)
@@ -244,6 +240,7 @@ class ReviewList extends React.Component {
   /**
    * Re-filter all of the mods this view is aware of to get a list of those that are moving
    */
+  // TODO: Redux
   updateMovingMods() {
     return this.props.mods.filter(mod => mod.assignTo && mod.currentCharacter !== mod.assignTo);
   }
@@ -253,6 +250,7 @@ class ReviewList extends React.Component {
    * @param characterPropertyName string The name of the property from which to read the character name
    * @returns {Function}
    */
+  // TODO: Redux
   characterSort(characterPropertyName) {
     const slotOrder = this.slotOrder;
     const characterOrder = this.state.orderedCharacters;
@@ -276,6 +274,7 @@ class ReviewList extends React.Component {
   /**
    * Sorting function for reordering mods into the same order the characters were selected for.
    */
+  // TODO: Redux
   optimizerOrder(left, right) {
     const characterList = this.props.characters;
     const slotOrder = this.slotOrder;
@@ -293,6 +292,7 @@ class ReviewList extends React.Component {
    * Render a form used to filter and sort the mods displayed on the page
    * @returns JSX Element
    */
+  // TODO: Redux
   filterForm() {
     const sortBy = this.state.sortBy;
     const tags = this.state.movingMods
@@ -337,6 +337,7 @@ class ReviewList extends React.Component {
    *
    * @returns JSX Element
    */
+  // TODO: Redux
   sidebarActions() {
     return <div className={'sidebar-actions'}>
       <h3>I don't like these results...</h3>
@@ -353,6 +354,7 @@ class ReviewList extends React.Component {
   /**
    * Update the list of mods that's shown based on the values in the filter form and re-render the form
    */
+  // TODO: Redux
   updateDisplayedMods(sortBy, tag, movingMods, reRender = true) {
     let displayedMods = movingMods;
 
@@ -385,6 +387,7 @@ class ReviewList extends React.Component {
    * Render a modal with a copy-paste-able review of the mods to move
    * @returns Array[JSX Element]
    */
+  // TODO: Redux
   reviewModal() {
     return [
       <div key={'summary_modal_content'}>
@@ -404,10 +407,12 @@ class ReviewList extends React.Component {
   /**
    * Copies the summary display text into the clipboard
    */
+  // TODO: Redux
   copySummaryToClipboard() {
     copyToClipboard(this.summaryListContent());
   };
 
+  // TODO: Redux
   summaryListContent() {
     const capitalize = function(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
@@ -436,13 +441,58 @@ class ReviewList extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => {
+  const profile = state.profiles[state.allyCode];
+  const modsById = groupByKey(profile.mods, mod => mod.id);
+  const movingModsByAssignedCharacter = mapObjectByKeyAndValue(
+    profile.modAssignments,
+    (characterID, modIDs) => modIDs.map(modID => modsById[modID]).filter(mod => mod.characterID !== characterID)
+  );
+  const characterModPairs = Object.entries(movingModsByAssignedCharacter)
+    .map(([characterID, mods]) => mods.map(mod => [characterID, mod]))
+    .reduce((mods, chunk) => mods.concat(chunk), []);
+  const displayedMods = characterModPairs.slice();
 
-});
+  switch (state.modListFilter.sort) {
+    case 'assignedCharacter':
+      // If we're sorting by assigned character, then sort in the order that the characters were selected
+      // (meaning we don't actually have to change the order at all!)
+      break;
+    default:
+      // Sort by current character if anything else is selected as the sort option
+      // When sorting by current character, have unassigned mods show up first, then order the characters by GP
+      displayedMods.sort((left, right) => {
+        const leftMod = left[1];
+        const rightMod = right[1];
+        const leftCharacter = leftMod.characterID ? profile.characters[leftMod.characterID] : null;
+        const rightCharacter = rightMod.characterID ? profile.characters[rightMod.characterID] : null;
+
+        if (!leftCharacter) {
+          return -1;
+        } else if (!rightCharacter) {
+          return 1;
+        } else {
+          return leftCharacter.compareGP(rightCharacter);
+        }
+      });
+  }
+
+  /**
+   * {{
+   *   displayedMods: [[CharacterID, Mod]]
+   * }}
+   */
+  return {
+    characters: profile.characters,
+    displayedMods: displayedMods,
+    numMovingMods: characterModPairs.length
+  };
+};
 
 const mapDispatchToProps = (dispatch) => ({
   edit: () => dispatch(changeOptimizerView('edit')),
-  back: () => dispatch(changeOptimizerView('sets'))
+  back: () => dispatch(changeOptimizerView('sets')),
+  unequipMod: (modID) => dispatch(unequipMod(modID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewList);
