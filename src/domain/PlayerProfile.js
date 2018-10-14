@@ -4,7 +4,6 @@
 import Character from "./Character";
 import Mod from "./Mod";
 import {mapObject} from "../utils/mapObject";
-import ModSet from "./ModSet";
 
 export default class PlayerProfile {
   characters;

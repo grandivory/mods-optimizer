@@ -29,8 +29,17 @@ class Mod {
   }
 
   equip(characterID) {
-    this.characterID = characterID;
-    return this;
+    return new Mod(
+      this.id,
+      this.slot,
+      this.set,
+      this.level,
+      this.pips,
+      this.primaryStat,
+      this.secondaryStats,
+      characterID,
+      this.tier
+    );
   }
 
   unequip() {
