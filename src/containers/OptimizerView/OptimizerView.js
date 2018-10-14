@@ -26,33 +26,11 @@ class OptimizerView extends PureComponent {
       </div>
     );
   }
-
-  /**
-   * Run the optimizer, and store the results in this.state.modAssignments
-   *
-   * @param mods Array the mods to use in the optimization
-   * TODO: Move to Redux
-   */
-  optimizeMods(mods) {
-    const selectedCharacters = this.state.selectedCharacters.filter(character => !character.isLocked);
-    const lockedCharacters = this.state.selectedCharacters.filter(character => character.isLocked);
-
-    const modAssignments = new Optimizer(mods).optimizeMods(selectedCharacters, lockedCharacters);
-
-    this.setState({
-      'modAssignments': modAssignments
-    });
-
-    this.saveState();
-  }
 }
 
 const mapStateToProps = (state) => ({
   allyCode: state.allyCode,
-  view: state.optimizerView,
-  availableCharacters: [],
-  selectedCharacters: [],
-  mods: []
+  view: state.optimizerView
 });
 
 const mapDispatchToProps = (dispatch) => ({

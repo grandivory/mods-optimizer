@@ -110,16 +110,12 @@ class App extends PureComponent {
       <div className={'app-body'}>
         {instructionsScreen && this.welcome()}
         {!instructionsScreen && 'explore' === this.props.section &&
-        <ExploreView mods={this.props.profile.mods}/>// saveState={this.saveState.bind(this)}/>
+        <ExploreView />
         }
         {!instructionsScreen && 'optimize' === this.props.section &&
-        <OptimizerView
-          mods={this.props.profile.mods}
-          availableCharacters={Object.values(this.props.profile.characters)}
-          selectedCharacters={[]}
-        />
+        <OptimizerView />
         }
-        <ErrorModal/>
+        <ErrorModal />
         <Modal show={this.props.displayModal} className={this.props.modalClass} content={this.props.modalContent}/>
         <Spinner show={this.props.isBusy}/>
       </div>

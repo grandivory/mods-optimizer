@@ -3,7 +3,7 @@
 import {
   CHANGE_CHARACTER_FILTER,
   CHANGE_CHARACTER_TARGET,
-  CHANGE_MOD_SET_FILTER, CHANGE_MODLIST_FILTER,
+  CHANGE_MOD_SET_FILTER, CHANGE_MODLIST_FILTER, CHANGE_MODS_FILTER,
   CHANGE_OPTIMIZER_VIEW,
   CHANGE_SECTION,
   CHANGE_USE_FIVE_DOT_MODS,
@@ -584,6 +584,12 @@ function changeModListFilter(state, action) {
   });
 }
 
+function changeModsFilter(state, action) {
+  return Object.assign({}, state, {
+    modsFilter: action.filter
+  });
+}
+
 export function optimizerApp(state, action) {
   if (null == state) {
     state = restoreState();
@@ -660,6 +666,8 @@ export function optimizerApp(state, action) {
       return saveState(reassignMods(state, action));
     case CHANGE_MODLIST_FILTER:
       return saveState(changeModListFilter(state, action));
+    case CHANGE_MODS_FILTER:
+      return saveState(changeModsFilter(state, action));
     case LOG:
       console.log(state);
       return Object.assign({}, state);

@@ -5,6 +5,8 @@ import React from 'react';
 import './ModFilter.css';
 import ModSet from "../../domain/ModSet";
 import setBonuses from "../../constants/setbonuses";
+import {connect} from "react-redux";
+import {changeModsFilter} from "../../state/actions";
 
 function importImages(context) {
   let images = {};
@@ -51,7 +53,11 @@ class ModFilter extends React.PureComponent {
       const inputName = `slot-filter-${slot}`;
 
       return <label htmlFor={inputName} key={slot}>
-          <input type={'checkbox'} id={inputName} name={inputName} value={slot} defaultChecked={false} />
+          <input type={'checkbox'}
+                 id={inputName}
+                 name={inputName}
+                 value={slot}
+                 defaultChecked={this.props.filter.slot.includes(slot)} />
           <img src={images[`empty_${slot}.png`]} alt={slot} />
         </label>
     });
@@ -88,7 +94,11 @@ class ModFilter extends React.PureComponent {
       const inputName = `set-filter-${set}`;
 
       return <label htmlFor={inputName} key={set}>
-        <input type={'checkbox'} id={inputName} name={inputName} value={set} defaultChecked={false} />
+        <input type={'checkbox'}
+               id={inputName}
+               name={inputName}
+               value={set}
+               defaultChecked={this.props.filter.set.includes(set)} />
         <img src={images[`icon_buff_${set}.png`]} alt={set} />
       </label>
     });
@@ -128,7 +138,11 @@ class ModFilter extends React.PureComponent {
       const inputName = `primary-filter-${stat}`;
 
       return <label htmlFor={inputName} key={stat}>
-        <input type={'checkbox'} id={inputName} name={inputName} value={stat} defaultChecked={false} />
+        <input type={'checkbox'}
+               id={inputName}
+               name={inputName}
+               value={stat}
+               defaultChecked={this.props.filter.primary.includes(stat)} />
         <span className={'option'}>{stat}</span>
       </label>
     });
@@ -170,7 +184,11 @@ class ModFilter extends React.PureComponent {
       const inputName = `secondary-filter-${stat}`;
 
       return <label htmlFor={inputName} key={stat}>
-        <input type={'checkbox'} id={inputName} name={inputName} value={stat} defaultChecked={false} />
+        <input type={'checkbox'}
+               id={inputName}
+               name={inputName}
+               value={stat}
+               defaultChecked={this.props.filter.secondary.includes(stat)} />
         <span className={'option'}>{stat}</span>
       </label>
     });
@@ -206,7 +224,7 @@ class ModFilter extends React.PureComponent {
     return <div>
       <div className={'toggle-label'}>Sort By:</div>
       <div className={'dropdown'}>
-        <select name={'sort-option'}>
+        <select name={'sort-option'} value={this.props.filter.sort}>
           <option value={''}>default</option>
           {sortOptions}
         </select>
@@ -222,6 +240,9 @@ class ModFilter extends React.PureComponent {
       if ('checkbox' === element.type) {
         element.checked = false;
       }
+    });
+    [...document.getElementById('mod-filters').getElementsByTagName('select')].forEach(element => {
+      element.value = '';
     });
   }
 
@@ -257,10 +278,9 @@ class ModFilter extends React.PureComponent {
 
   render() {
     const mods = this.props.mods;
-    const onUpdate = 'function' === typeof this.props.onUpdate ? this.props.onUpdate : function() {};
     const onSubmit = (e) => {
         e.preventDefault();
-        onUpdate(this.collectFilters(e.target))
+        this.props.updateFilter(this.collectFilters(e.target))
       };
 
     return <form className={'mod-filters filter-form'} id={'mod-filters'} onSubmit={onSubmit}>
@@ -281,4 +301,13 @@ class ModFilter extends React.PureComponent {
   }
 }
 
-export default ModFilter;
+const mapStateToProps = (state) => ({
+  filter: state.modsFilter,
+  mods: state.profiles[state.allyCode].mods
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  updateFilter: (filter) => dispatch(changeModsFilter(filter))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModFilter);

@@ -38,6 +38,7 @@ export const REASSIGN_MOD = 'REASSIGN_MOD';
 export const UNEQUIP_MODS = 'UNEQUIP_MODS';
 export const REASSIGN_MODS = 'REASSIGN_MODS';
 export const CHANGE_MODLIST_FILTER = 'CHANGE_MODLIST_FILTER';
+export const CHANGE_MODS_FILTER = 'CHANGE_MODS_FILTER';
 export const LOG = 'LOG';
 
 export function logState() {
@@ -386,6 +387,18 @@ export function reassignMods(modIDs, characterID) {
 export function changeModListFilter(newFilter) {
   return {
     type: CHANGE_MODLIST_FILTER,
+    filter: newFilter
+  };
+}
+
+/**
+ * Update the filter for the explore view
+ * @param newFilter
+ * @returns {{type: string, filter: *}}
+ */
+export function changeModsFilter(newFilter) {
+  return {
+    type: CHANGE_MODS_FILTER,
     filter: newFilter
   };
 }

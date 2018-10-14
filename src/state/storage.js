@@ -27,6 +27,13 @@ export const defaultState = {
   isBusy: false,
   keepOldMods: true,
   modal: null,
+  modsFilter: {
+    slot: [],
+    set: [],
+    primary: [],
+    secondary: [],
+    sort: ''
+  },
   modSetsFilter: 'all',
   modListFilter: {
     view: 'list',
@@ -88,6 +95,13 @@ export function deserializeState(state) {
     isBusy: false,
     keepOldMods: jsonState.keepOldMods,
     modal: null,
+    modsFilter: jsonState.modsFilter || {
+      slot: [],
+      set: [],
+      primary: [],
+      secondary: [],
+      sort: ''
+    },
     modListFilter: jsonState.modListFilter || {
       view: 'list',
       sort: 'assignedCharacter',
