@@ -3,10 +3,12 @@
 import React from 'react';
 import './ModStats.css';
 import CharacterAvatar from "../CharacterAvatar/CharacterAvatar";
+import {connect} from "react-redux";
 
 class ModStats extends React.PureComponent {
   render() {
     const mod = this.props.mod;
+    const character = mod.characterID ? this.props.characters[mod.characterID] : null;
     const showAvatar = 'showAvatar' in this.props;
     const statsDisplay = mod.secondaryStats.length > 0 ?
       mod.secondaryStats.map(
@@ -23,11 +25,11 @@ class ModStats extends React.PureComponent {
         <ul className='secondary'>
           {statsDisplay}
         </ul>
-        {showAvatar && mod.currentCharacter &&
+        {showAvatar && character &&
           <div className={'assigned-character'}>
             <h4>Assigned To</h4>
-            <CharacterAvatar character={mod.currentCharacter}/>
-            <span className="avatar-name">{mod.currentCharacter.name}</span>
+            <CharacterAvatar character={character}/>
+            <span className="avatar-name">{character.gameSettings.name}</span>
           </div>
         }
       </div>
@@ -43,9 +45,14 @@ class ModStats extends React.PureComponent {
   static showStatElement(stat, index) {
     return <li key={index} className={'class-' + stat.getClass()}>
       <span className={'rolls'}>({stat.rolls})</span> {stat.show()}
-      {/*<span className={'class'}>{stat.getClass()}</span>*/}
     </li>;
   }
 }
 
-export default ModStats;
+const mapStateToProps = (state) => ({
+  characters: state.profiles[state.allyCode].characters
+});
+
+const mapDispatchToProps = (dispatch) => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModStats);

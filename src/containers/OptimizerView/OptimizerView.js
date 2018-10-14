@@ -18,20 +18,10 @@ class OptimizerView extends PureComponent {
         <CharacterEditView />
         }
         {'sets' === this.props.view &&
-        <ReviewSets
-          characterSets={{}/*this.state.modAssignments*/}
-          mods={this.props.mods}
-          onBack={() => this.props.changeView('edit')}
-          onNextView={() => this.props.changeView('mods')}
-        />
+        <ReviewSets />
         }
         {'mods' === this.props.view &&
-        <ReviewList
-          mods={this.props.mods}
-          characters={this.props.selectedCharacters}
-          onBack={() => this.props.changeView('edit')}
-          onNextView={() => this.props.changeView('sets')}
-        />
+        <ReviewList />
         }
       </div>
     );

@@ -185,7 +185,7 @@ class ReviewList extends React.PureComponent {
       <label htmlFor={'tag'}>Show characters by tag:</label>
       <div className={'dropdown'}>
         <select id={'tag'}
-                value={filter.tag}
+                value={filter.tag || ''}
                 onChange={e => this.props.changeFilter(Object.assign({}, filter, {tag: e.target.value}))}
         >
           <option value={''}>All</option>
