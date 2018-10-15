@@ -9,6 +9,7 @@ import PlayerProfile from "../../domain/PlayerProfile";
 import CharacterStats, {NullCharacterStats} from "../../domain/CharacterStats";
 import Mod from "../../domain/Mod";
 import {updateCurrentProfile} from "./modsOptimizer";
+import OptimizationPlan from "../../domain/OptimizationPlan";
 
 export function toggleKeepOldMods(state, action) {
   return Object.assign({}, state, {
@@ -97,7 +98,7 @@ export function receiveProfile(state, action) {
     } else {
       // If there are no optimizer settings for this character yet, then set reasonable defaults
       return character.withOptimizerSettings(new OptimizerSettings(
-        character.defaultSettings.targets[0],
+        character.defaultSettings.targets[0] || new OptimizationPlan(),
         [],
         character.defaultSettings.extraTags.includes('Crew Member'),
         false

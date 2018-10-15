@@ -45,7 +45,7 @@ export default class Character {
   static default(baseID) {
     return new Character(
       baseID,
-      characterSettings[baseID] || null
+      characterSettings[baseID] || new CharacterSettings()
     );
   }
 
