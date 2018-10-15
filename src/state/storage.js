@@ -73,11 +73,15 @@ export function restoreState() {
     const availableCharacters = JSON.parse(window.localStorage.getItem('optimizer.availableCharacters'));
     const selectedCharacters = JSON.parse(window.localStorage.getItem('optimizer.selectedCharacters'));
 
-    const newState = deserializeStateVersionOneTwo(allyCode, availableCharacters, selectedCharacters, mods);
-    // After restoring from the old version, free up the space
-    window.localStorage.clear();
+    try {
+      const newState = deserializeStateVersionOneTwo(allyCode, availableCharacters, selectedCharacters, mods);
+      // After restoring from the old version, free up the space
+      window.localStorage.clear();
 
-    return newState;
+      return newState;
+    } catch (e) {
+      return defaultState;
+    }
   }
 }
 
