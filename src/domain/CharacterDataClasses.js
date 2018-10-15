@@ -176,7 +176,7 @@ class PlayerValues {
       valuesJson.level,
       valuesJson.rarity,
       valuesJson.gear,
-      valuesJson.equipped.map(gear => {return {equipmentId: gear.equipmentId};}),
+      valuesJson.equipped.map(gear => ({equipmentId: gear.equipmentId})),
       valuesJson.gp
     );
   }

@@ -6,16 +6,15 @@ import "./CharacterEditView.css";
 import CharacterList from "../CharacterList/CharacterList";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import {connect} from "react-redux";
+import {hideModal, showModal} from "../../state/actions/app";
 import {
   changeCharacterFilter,
   changeCharacterTarget,
-  hideModal,
-  optimizeMods,
   resetAllCharacterTargets,
   selectCharacter,
-  showModal,
   unselectCharacter
-} from "../../state/actions";
+} from "../../state/actions/characterEdit";
+import {optimizeMods} from "../../state/actions/optimize";
 
 class CharacterEditView extends PureComponent {
   dragStart(character) {

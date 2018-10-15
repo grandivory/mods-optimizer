@@ -88,27 +88,17 @@ export function deserializeState(state) {
 
   return {
     allyCode: jsonState.allyCode,
-    characterEditMode: jsonState.characterEditMode || 'basic',
-    characterFilter: jsonState.characterFilter || '',
+    characterEditMode: jsonState.characterEditMode || defaultState.characterEditMode,
+    characterFilter: jsonState.characterFilter || defaultState.characterFilter,
     characters: mapObject(jsonState.characters, (character) => Character.deserialize(character, version)),
     error: null,
     isBusy: false,
     keepOldMods: jsonState.keepOldMods,
     modal: null,
-    modsFilter: jsonState.modsFilter || {
-      slot: [],
-      set: [],
-      primary: [],
-      secondary: [],
-      sort: ''
-    },
-    modListFilter: jsonState.modListFilter || {
-      view: 'list',
-      sort: 'assignedCharacter',
-      tag: null
-    },
-    modSetsFilter: jsonState.modSetsFilter || 'all',
-    optimizerView: jsonState.optimizerView || 'edit',
+    modsFilter: jsonState.modsFilter || defaultState.modsFilter,
+    modListFilter: jsonState.modListFilter || defaultState.modListFilter,
+    modSetsFilter: jsonState.modSetsFilter || defaultState.modSetsFilter,
+    optimizerView: jsonState.optimizerView || defaultState.optimizerView,
     profiles: mapObject(jsonState.profiles, PlayerProfile.deserialize),
     section: jsonState.section,
     version: version,

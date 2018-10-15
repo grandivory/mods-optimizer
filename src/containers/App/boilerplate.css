@@ -90,22 +90,6 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -235,7 +219,6 @@ textarea {
    * Don't show links that are fragment identifiers,
    * or use the `javascript:` pseudo protocol
    */
-
   a[href^="#"]:after,
   a[href^="javascript:"]:after {
     content: "";
@@ -244,6 +227,7 @@ textarea {
   pre {
     white-space: pre-wrap !important;
   }
+
   pre,
   blockquote {
     border: 1px solid #999;
@@ -254,7 +238,6 @@ textarea {
    * Printing Tables:
    * http://css-discuss.incutio.com/wiki/Printing_Tables
    */
-
   thead {
     display: table-header-group;
   }

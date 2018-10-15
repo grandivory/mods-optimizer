@@ -67,14 +67,14 @@ class Mod {
     for (let i = 0; i < 4; i++) {
       if (i < this.secondaryStats.length) {
         [
-            modObject[`secondaryType_${i+1}`],
-            modObject[`secondaryValue_${i+1}`],
-            modObject[`secondaryRoll_${i+1}`]
+          modObject[`secondaryType_${i + 1}`],
+          modObject[`secondaryValue_${i + 1}`],
+          modObject[`secondaryRoll_${i + 1}`]
         ] = this.secondaryStats[i].serialize();
       } else {
-        modObject[`secondaryType_${i+1}`] = '';
-        modObject[`secondaryValue_${i+1}`] = '';
-        modObject[`secondaryRoll_${i+1}`] = '';
+        modObject[`secondaryType_${i + 1}`] = '';
+        modObject[`secondaryValue_${i + 1}`] = '';
+        modObject[`secondaryRoll_${i + 1}`] = '';
       }
     }
 
@@ -96,17 +96,17 @@ class Mod {
    * @returns {Mod}
    */
   static fromSwgohHelp(modJson, characterID) {
-      return new Mod(
-        modJson.id,
-        modSlots[modJson.slot],
-        setBonuses[modSets[modJson.set]],
-        modJson.level,
-        modJson.pips,
-        Stat.fromSwgohHelp(modJson.primaryStat),
-        modJson.secondaryStat.map(Stat.fromSwgohHelp),
-        characterID,
-        modJson.tier
-      );
+    return new Mod(
+      modJson.id,
+      modSlots[modJson.slot],
+      setBonuses[modSets[modJson.set]],
+      modJson.level,
+      modJson.pips,
+      Stat.fromSwgohHelp(modJson.primaryStat),
+      modJson.secondaryStat.map(Stat.fromSwgohHelp),
+      characterID,
+      modJson.tier
+    );
   }
 
   static deserialize(modJson) {

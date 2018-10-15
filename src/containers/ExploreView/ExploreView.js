@@ -7,20 +7,19 @@ import ModFilter from '../../components/ModFilter/ModFilter';
 
 import './ExploreView.css';
 import {connect} from "react-redux";
-import {changeModsFilter} from "../../state/actions";
 
 class ExploreView extends React.PureComponent {
   render() {
     const modElements = this.props.displayedMods.map(mod => {
       const character = mod.characterID ? this.props.characters[mod.characterID] : null;
-      return <ModDetail key={mod.id} mod={mod} character={character} />;
+      return <ModDetail key={mod.id} mod={mod} character={character}/>;
     });
 
     return (
       [
         <div className={'sidebar'} key={'sidebar'}>
           <div className={'filters'} key={'filters'}>
-            <ModFilter />
+            <ModFilter/>
           </div>
         </div>,
         <div className='mods' key={'mods'}>
@@ -33,7 +32,7 @@ class ExploreView extends React.PureComponent {
 
 const getFilteredMods = memoize(
   (mods, filter) => {
-    let filteredMods = mods;
+    let filteredMods = mods.slice();
 
     if (filter.slot && 0 < filter.slot.length) {
       filteredMods = filteredMods.filter(mod => filter.slot.includes(mod.slot));

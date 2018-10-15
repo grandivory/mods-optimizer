@@ -21,16 +21,16 @@ class CharacterStats {
    * @param resistance Number
    */
   constructor(health,
-              protection,
-              speed,
-              potency,
-              tenacity,
-              physDmg,
-              physCritRating,
-              armor,
-              specDmg,
-              specCritRating,
-              resistance
+    protection,
+    speed,
+    potency,
+    tenacity,
+    physDmg,
+    physCritRating,
+    armor,
+    specDmg,
+    specCritRating,
+    resistance
   ) {
     // General stats
     this.health = health;
@@ -94,17 +94,17 @@ class CharacterStats {
    */
   plus(that) {
     return new CharacterStats(
-        this.health + that.health,
-        this.protection + that.protection,
-        this.speed + that.speed,
-        (this.potency + that.potency) / 100,
-        (this.tenacity + that.tenacity) / 100,
-        this.physDmg + that.physDmg,
-        this.physCritRating + that.physCritRating,
-        this.armor + that.armor,
-        this.specDmg + that.specDmg,
-        this.specCritRating + that.specCritRating,
-        this.resistance + that.resistance
+      this.health + that.health,
+      this.protection + that.protection,
+      this.speed + that.speed,
+      (this.potency + that.potency) / 100,
+      (this.tenacity + that.tenacity) / 100,
+      this.physDmg + that.physDmg,
+      this.physCritRating + that.physCritRating,
+      this.armor + that.armor,
+      this.specDmg + that.specDmg,
+      this.specCritRating + that.specCritRating,
+      this.resistance + that.resistance
     )
   }
 

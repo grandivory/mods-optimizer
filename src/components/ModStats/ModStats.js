@@ -26,11 +26,11 @@ class ModStats extends React.PureComponent {
           {statsDisplay}
         </ul>
         {showAvatar && character &&
-          <div className={'assigned-character'}>
-            <h4>Assigned To</h4>
-            <CharacterAvatar character={character}/>
-            <span className="avatar-name">{character.gameSettings.name}</span>
-          </div>
+        <div className={'assigned-character'}>
+          <h4>Assigned To</h4>
+          <CharacterAvatar character={character}/>
+          <span className="avatar-name">{character.gameSettings.name}</span>
+        </div>
         }
       </div>
     );

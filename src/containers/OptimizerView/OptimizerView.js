@@ -1,27 +1,27 @@
 // @flow
 
 import React, {PureComponent} from "react";
-import Optimizer from "../../utils/Optimizer";
 import ReviewList from "../ReviewList/ReviewList";
 import ReviewSets from "../ReviewSets/ReviewSets";
 import CharacterEditView from "../CharacterEditView/CharacterEditView";
 
 import "./OptimizerView.css";
 import {connect} from "react-redux";
-import {changeOptimizerView, startModOptimization} from "../../state/actions";
+import {changeOptimizerView} from "../../state/actions/review";
+import {startModOptimization} from "../../state/actions/optimize";
 
 class OptimizerView extends PureComponent {
   render() {
     return (
       <div className={'optimizer-view'}>
         {'edit' === this.props.view &&
-        <CharacterEditView />
+        <CharacterEditView/>
         }
         {'sets' === this.props.view &&
-        <ReviewSets />
+        <ReviewSets/>
         }
         {'mods' === this.props.view &&
-        <ReviewList />
+        <ReviewList/>
         }
       </div>
     );
@@ -34,12 +34,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  changeView: (view) => {
-    dispatch(changeOptimizerView(view))
-  },
-  optimizeMods: (allyCode) => {
-    dispatch(startModOptimization(allyCode))
-  }
+  changeView: (view) => dispatch(changeOptimizerView(view)),
+  optimizeMods: (allyCode) => dispatch(startModOptimization(allyCode))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OptimizerView);

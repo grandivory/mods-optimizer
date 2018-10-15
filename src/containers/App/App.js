@@ -9,21 +9,12 @@ import FileInput from "../../components/FileInput/FileInput";
 import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
 import FileDropZone from "../../components/FileDropZone/FileDropZone";
-import {
-  changeSection,
-  hideModal,
-  logState,
-  refreshPlayerData,
-  reset,
-  restoreProgress,
-  setMods,
-  showModal,
-  toggleKeepOldMods
-} from "../../state/actions";
 import {connect} from "react-redux";
 import formatAllyCode from "../../utils/formatAllyCode";
 import ErrorModal from "../ErrorModal/ErrorModal";
 import {serializeState} from "../../state/storage";
+import {changeSection, hideModal, reset, restoreProgress, showModal} from "../../state/actions/app";
+import {refreshPlayerData, setMods, toggleKeepOldMods} from "../../state/actions/data";
 
 class App extends PureComponent {
   constructor(props) {
@@ -110,12 +101,12 @@ class App extends PureComponent {
       <div className={'app-body'}>
         {instructionsScreen && this.welcome()}
         {!instructionsScreen && 'explore' === this.props.section &&
-        <ExploreView />
+        <ExploreView/>
         }
         {!instructionsScreen && 'optimize' === this.props.section &&
-        <OptimizerView />
+        <OptimizerView/>
         }
-        <ErrorModal />
+        <ErrorModal/>
         <Modal show={this.props.displayModal} className={this.props.modalClass} content={this.props.modalContent}/>
         <Spinner show={this.props.isBusy}/>
       </div>
@@ -195,9 +186,6 @@ class App extends PureComponent {
           Reset Mods Optimizer
         </button>
         }
-        <button type={'button'} onClick={() => this.props.logState()}>
-          Log State
-        </button>
       </div>
     </header>;
   }
@@ -329,33 +317,14 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  changeSection: newSection => {
-    dispatch(changeSection(newSection));
-  },
-  refreshPlayerData: allyCode => {
-    dispatch(refreshPlayerData(allyCode));
-  },
-  showModal: (clazz, content) => {
-    dispatch(showModal(clazz, content));
-  },
-  hideModal: () => {
-    dispatch(hideModal());
-  },
-  toggleKeepOldMods: () => {
-    dispatch(toggleKeepOldMods());
-  },
-  logState: () => {
-    dispatch(logState());
-  },
-  reset: () => {
-    dispatch(reset());
-  },
-  restoreProgress: (progressData) => {
-    dispatch(restoreProgress(progressData));
-  },
-  setMods: (modsData) => {
-    dispatch(setMods(modsData));
-  }
+  changeSection: newSection => dispatch(changeSection(newSection)),
+  refreshPlayerData: allyCode => dispatch(refreshPlayerData(allyCode)),
+  showModal: (clazz, content) => dispatch(showModal(clazz, content)),
+  hideModal: () => dispatch(hideModal()),
+  toggleKeepOldMods: () => dispatch(toggleKeepOldMods()),
+  reset: () => dispatch(reset()),
+  restoreProgress: (progressData) => dispatch(restoreProgress(progressData)),
+  setMods: (modsData) => dispatch(setMods(modsData))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

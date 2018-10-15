@@ -1,6 +1,6 @@
 .mod-set-view {
   width: 12em;
-  height: calc(12em * 701/400);
+  height: calc(12em * 701 / 400);
   display: inline-block;
   background-image: url('/img/modset-background.png');
   background-size: 100%;

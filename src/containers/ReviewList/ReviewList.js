@@ -10,21 +10,20 @@ import Toggle from "../../components/Toggle/Toggle";
 import ModSet from "../../domain/ModSet";
 import ModSetView from "../../components/ModSetView/ModSetView";
 import copyToClipboard from "../../utils/clipboard"
-import {
-  changeModListFilter,
-  changeOptimizerView,
-  hideModal,
-  reassignMod,
-  reassignMods,
-  showModal,
-  unequipMod,
-  unequipMods
-} from "../../state/actions";
 import {connect} from "react-redux";
 import {mapObject, mapObjectByKeyAndValue} from "../../utils/mapObject";
 import groupByKey from "../../utils/groupByKey";
 import flatten from "../../utils/flatten";
 import collectByKey from "../../utils/collectByKey";
+import {
+  changeModListFilter,
+  changeOptimizerView,
+  reassignMod,
+  reassignMods,
+  unequipMod,
+  unequipMods
+} from "../../state/actions/review";
+import {hideModal, showModal} from "../../state/actions/app";
 
 const sortOptions = {
   'currentCharacter': 'currentCharacter',

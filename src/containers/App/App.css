@@ -42,9 +42,9 @@
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background-image: linear-gradient(30deg,#afa992 10%, /*#796f3e 30%, #2f2a13 50%, */black 70%);
+  background-image: linear-gradient(30deg, #afa992 10%, /*#796f3e 30%, #2f2a13 50%, */ black 70%);
   border-radius: 2px;
-  z-index:-2;
+  z-index: -2;
 }
 
 html, body {
@@ -60,7 +60,6 @@ html, body {
   height: 100%;
   font-family: 'Helvetica', 'Arial', sans-serif;
 }
-
 
 ::-webkit-scrollbar {
   width: .4em;
@@ -381,7 +380,7 @@ select {
 }
 
 input {
-    color: #222222;
+  color: #222222;
 }
 
 li {

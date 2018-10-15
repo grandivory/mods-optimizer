@@ -53,7 +53,7 @@ class ModSetDetail extends React.PureComponent {
 
     return (
       <div className={'mod-set-detail'}>
-        <ModSetView modSet={modSet} diffSet={diffSet} changeClass={changeClass} />
+        <ModSetView modSet={modSet} diffSet={diffSet} changeClass={changeClass}/>
         <div className={'summary'}>
           <table>
             <thead>

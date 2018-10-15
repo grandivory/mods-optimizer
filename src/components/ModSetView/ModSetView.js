@@ -17,7 +17,7 @@ class ModSetView extends React.PureComponent {
         <ModImage
           className={diffSet[slot] !== set[slot] ? changeClass : ''}
           mod={set[slot]}/>
-        <ModStats mod={set[slot]} showAvatar />
+        <ModStats mod={set[slot]} showAvatar/>
       </div>
     );
 

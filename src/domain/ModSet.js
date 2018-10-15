@@ -234,7 +234,7 @@ class ModSet {
           Stat.mixedTypes.includes(propertyDisplayName) ?
             stat.displayType :
             stat.displayType + ' %';
-          summary[propertyDisplayName] = new Stat(statType, '0');
+        summary[propertyDisplayName] = new Stat(statType, '0');
       }
       if (stat.isPercent) {
         summary[propertyDisplayName].value += stat.value * character.playerValues.baseStats[propertyName] / 100;

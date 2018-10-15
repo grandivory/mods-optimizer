@@ -17,7 +17,7 @@ class ModDetail extends React.PureComponent {
         {character &&
         <CharacterAvatar character={character}/>
         }
-        <ModStats mod={mod} />
+        <ModStats mod={mod}/>
       </div>
     );
   }

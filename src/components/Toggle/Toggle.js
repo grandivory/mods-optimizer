@@ -55,7 +55,7 @@ class Toggle extends React.PureComponent {
                onChange={this.onChange.bind(this)}
         />
         <span className={'toggle-left-value'}>{this.props.leftLabel}</span>
-        <span className={'toggle-switch ' + (this.value === this.props.leftValue ? 'left' : 'right')} />
+        <span className={'toggle-switch ' + (this.value === this.props.leftValue ? 'left' : 'right')}/>
         <span className={'toggle-right-value'}>{this.props.rightLabel}</span>
       </label>
     </div>;

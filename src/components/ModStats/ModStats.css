@@ -50,13 +50,13 @@
   color: #ccfffe;
 }
 
-.mod-stats .avatar{
+.mod-stats .avatar {
   display: inline-block;
   vertical-align: middle;
   font-size: .8em;
 }
 
-.mod-stats .avatar-name{
+.mod-stats .avatar-name {
   vertical-align: middle;
   margin-left: .5em;
 }

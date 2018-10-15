@@ -11,7 +11,7 @@ class Spinner extends React.PureComponent {
     }
 
     return <div className={'overlay'}>
-      <div className={'spinner'} />
+      <div className={'spinner'}/>
     </div>
   }
 }

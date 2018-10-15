@@ -2,7 +2,7 @@ import Modal from "../../components/Modal/Modal";
 import React from "react";
 import {connect} from "react-redux";
 import WarningLabel from "../../components/WarningLabel/WarningLabel";
-import {hideError} from "../../state/actions";
+import {hideError} from "../../state/actions/app";
 
 class ErrorModal extends Modal {
   render() {

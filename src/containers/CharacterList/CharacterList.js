@@ -5,14 +5,15 @@ import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 
 import "./CharacterList.css";
 import {connect} from "react-redux";
+import groupByKey from "../../utils/groupByKey";
+import CharacterEditForm from "../../containers/CharacterEditForm/CharacterEditForm";
+import {showModal} from "../../state/actions/app";
 import {
   changeCharacterTarget,
   lockCharacter,
-  selectCharacter, showModal,
+  selectCharacter,
   unselectCharacter
-} from "../../state/actions";
-import groupByKey from "../../utils/groupByKey";
-import CharacterEditForm from "../../containers/CharacterEditForm/CharacterEditForm";
+} from "../../state/actions/characterEdit";
 
 class CharacterList extends PureComponent {
   characterBlockDragStart(characterID) {
@@ -76,10 +77,10 @@ class CharacterList extends PureComponent {
       .map(target => target.name)
       .map(targetName => {
         const changeIndicator = Object.keys(defaultTargets).includes(targetName) &&
-          character.optimizerSettings.targets.map(target => target.name).includes(targetName) &&
-          !defaultTargets[targetName].equals(
-            character.optimizerSettings.targets.find(target => target.name === targetName)
-          ) ? '*' : '';
+        character.optimizerSettings.targets.map(target => target.name).includes(targetName) &&
+        !defaultTargets[targetName].equals(
+          character.optimizerSettings.targets.find(target => target.name === targetName)
+        ) ? '*' : '';
 
         return <option value={targetName} key={targetName}>{changeIndicator}{targetName}</option>;
       });
@@ -148,10 +149,10 @@ class CharacterList extends PureComponent {
   render() {
     return (
       <div className={'character-list'}
-      onDragEnter={this.characterBlockDragEnter()}
-      onDragOver={this.characterBlockDragOver()}
-      onDragLeave={this.characterBlockDragLeave()}
-      onDrop={this.characterBlockDrop('')}>
+           onDragEnter={this.characterBlockDragEnter()}
+           onDragOver={this.characterBlockDragOver()}
+           onDragLeave={this.characterBlockDragLeave()}
+           onDrop={this.characterBlockDrop('')}>
         {0 < this.props.characters.length && this.props.characters.map(character =>
           this.renderCharacterBlock(character)
         )}
@@ -162,7 +163,7 @@ class CharacterList extends PureComponent {
           onDragEnter={this.characterBlockDragEnter()}
           onDragOver={this.characterBlockDragOver()}
           onDragLeave={this.characterBlockDragLeave()}
-          onDrop={this.characterBlockDrop(null)} />
+          onDrop={this.characterBlockDrop(null)}/>
         }
       </div>
     )

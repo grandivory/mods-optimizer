@@ -6,7 +6,7 @@ import './ModFilter.css';
 import ModSet from "../../domain/ModSet";
 import setBonuses from "../../constants/setbonuses";
 import {connect} from "react-redux";
-import {changeModsFilter} from "../../state/actions";
+import {changeModsFilter} from "../../state/actions/explore";
 
 function importImages(context) {
   let images = {};
@@ -53,13 +53,13 @@ class ModFilter extends React.PureComponent {
       const inputName = `slot-filter-${slot}`;
 
       return <label htmlFor={inputName} key={slot}>
-          <input type={'checkbox'}
-                 id={inputName}
-                 name={inputName}
-                 value={slot}
-                 defaultChecked={this.props.filter.slot.includes(slot)} />
-          <img src={images[`empty_${slot}.png`]} alt={slot} />
-        </label>
+        <input type={'checkbox'}
+               id={inputName}
+               name={inputName}
+               value={slot}
+               defaultChecked={this.props.filter.slot.includes(slot)}/>
+        <img src={images[`empty_${slot}.png`]} alt={slot}/>
+      </label>
     });
 
     return <div id={'slot-filters'}>
@@ -98,8 +98,8 @@ class ModFilter extends React.PureComponent {
                id={inputName}
                name={inputName}
                value={set}
-               defaultChecked={this.props.filter.set.includes(set)} />
-        <img src={images[`icon_buff_${set}.png`]} alt={set} />
+               defaultChecked={this.props.filter.set.includes(set)}/>
+        <img src={images[`icon_buff_${set}.png`]} alt={set}/>
       </label>
     });
 
@@ -142,7 +142,7 @@ class ModFilter extends React.PureComponent {
                id={inputName}
                name={inputName}
                value={stat}
-               defaultChecked={this.props.filter.primary.includes(stat)} />
+               defaultChecked={this.props.filter.primary.includes(stat)}/>
         <span className={'option'}>{stat}</span>
       </label>
     });
@@ -188,7 +188,7 @@ class ModFilter extends React.PureComponent {
                id={inputName}
                name={inputName}
                value={stat}
-               defaultChecked={this.props.filter.secondary.includes(stat)} />
+               defaultChecked={this.props.filter.secondary.includes(stat)}/>
         <span className={'option'}>{stat}</span>
       </label>
     });
@@ -224,7 +224,7 @@ class ModFilter extends React.PureComponent {
     return <div>
       <div className={'toggle-label'}>Sort By:</div>
       <div className={'dropdown'}>
-        <select name={'sort-option'} value={this.props.filter.sort}>
+        <select name={'sort-option'} defaultValue={this.props.filter.sort}>
           <option value={''}>default</option>
           {sortOptions}
         </select>
@@ -279,9 +279,9 @@ class ModFilter extends React.PureComponent {
   render() {
     const mods = this.props.mods;
     const onSubmit = (e) => {
-        e.preventDefault();
-        this.props.updateFilter(this.collectFilters(e.target))
-      };
+      e.preventDefault();
+      this.props.updateFilter(this.collectFilters(e.target))
+    };
 
     return <form className={'mod-filters filter-form'} id={'mod-filters'} onSubmit={onSubmit}>
       <div className={'form-actions'}>

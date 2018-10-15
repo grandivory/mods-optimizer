@@ -20,11 +20,16 @@ class Stat {
    */
   getClass() {
     switch (this.rolls) {
-      case 5: return 'S';
-      case 4: return 'A';
-      case 3: return 'B';
-      case 2: return 'C';
-      default: return 'D';
+      case 5:
+        return 'S';
+      case 4:
+        return 'A';
+      case 3:
+        return 'B';
+      case 2:
+        return 'C';
+      default:
+        return 'D';
     }
   }
 

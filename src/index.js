@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './containers/App/App';
 import registerServiceWorker from './registerServiceWorker';
-import {optimizerApp} from "./state/reducers";
 import {applyMiddleware, createStore} from "redux";
 import thunkMiddleware from "redux-thunk";
 import {Provider} from "react-redux";
+import modsOptimizer from "./state/reducers/modsOptimizer";
 
 const store = createStore(
-  optimizerApp,
+  modsOptimizer,
   applyMiddleware(
     thunkMiddleware
   )

@@ -3,7 +3,7 @@
 import BaseStats, {NullCharacterStats} from "./CharacterStats";
 import OptimizationPlan from "./OptimizationPlan";
 import characterSettings from "../constants/characterSettings";
-import {CharacterSettings, GameSettings, PlayerValues, OptimizerSettings} from "./CharacterDataClasses";
+import {CharacterSettings, GameSettings, OptimizerSettings, PlayerValues} from "./CharacterDataClasses";
 import groupByKey from "../utils/groupByKey";
 
 export default class Character {
@@ -23,10 +23,10 @@ export default class Character {
    *                                            such as what target to use, and whether to lock mods
    */
   constructor(baseID,
-              defaultSettings,
-              gameSettings = null,
-              playerValues = null,
-              optimizerSettings = null,
+    defaultSettings,
+    gameSettings = null,
+    playerValues = null,
+    optimizerSettings = null,
   ) {
     this.baseID = baseID;
     this.defaultSettings = defaultSettings;

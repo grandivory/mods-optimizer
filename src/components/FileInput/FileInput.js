@@ -12,7 +12,7 @@ class FileInput extends React.PureComponent {
       <form>
         <label className={'file button'}>{this.props.label}
           <input type={'file'} ref={fileInput => this.input = fileInput}
-                 onChange={() => this.input.files[0] && fileHandler(this.input.files[0])} />
+                 onChange={() => this.input.files[0] && fileHandler(this.input.files[0])}/>
         </label>
       </form>
     );

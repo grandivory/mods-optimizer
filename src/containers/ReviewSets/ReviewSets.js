@@ -10,11 +10,11 @@ import './ReviewSets.css';
 import Toggle from "../../components/Toggle/Toggle";
 import Credits from "../../components/Credits/Credits";
 import {connect} from "react-redux";
-import {changeModSetFilter, changeOptimizerView} from "../../state/actions";
 import {mapObject, mapObjectByKeyAndValue} from "../../utils/mapObject";
 import objectFromEntries from "../../utils/objectFromEntries";
 import collectByKey from "../../utils/collectByKey";
 import groupByKey from "../../utils/groupByKey";
+import {changeModSetFilter, changeOptimizerView} from "../../state/actions/review";
 
 // A map from number of pips that a mod has to the cost to remove (but not destroy) it
 const modRemovalCosts = {
@@ -270,8 +270,6 @@ const mapStateToProps = (state) => {
       Object.entries(modAssignments).filter(
         ([characterID, mods]) => mods.some(mod => mod.characterID !== characterID))
     );
-
-  console.dir(modAssignments);
 
   return {
     characters: profile.characters,

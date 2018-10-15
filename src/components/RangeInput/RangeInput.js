@@ -12,7 +12,8 @@ class RangeInput extends React.PureComponent {
     const step = 'undefined' === typeof this.props.step ? 1 : this.props.step;
     const isPercent = this.props.isPercent || false;
     const editable = this.props.editable || false;
-    const onChange = this.props.onChange || function() {};
+    const onChange = this.props.onChange || function() {
+    };
 
     if (editable) {
       return [

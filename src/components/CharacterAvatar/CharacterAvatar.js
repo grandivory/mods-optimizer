@@ -20,13 +20,13 @@ class CharacterAvatar extends React.PureComponent {
         className={`avatar gear-${character.playerValues.gearLevel} star-${character.playerValues.stars}`}
         id={id}>
         {displayStars &&
-          [1,2,3,4,5,6,7].map(star)
+        [1, 2, 3, 4, 5, 6, 7].map(star)
         }
         <img
           src={character.gameSettings.avatarUrl}
           alt={character.gameSettings.name}
           title={character.gameSettings.name}
-          draggable={false} />
+          draggable={false}/>
         <div className={'character-level'}>{character.playerValues.level || '??'}</div>
       </div>
     );

@@ -1,17 +1,17 @@
 import {connect} from "react-redux";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import React, {PureComponent} from "react";
+import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
+import Toggle from "../../components/Toggle/Toggle";
+import OptimizationPlan from "../../domain/OptimizationPlan";
+import {hideModal} from "../../state/actions/app";
 import {
   changeUse5DotMods,
   deleteTarget,
   finishEditCharacterTarget,
-  hideModal,
   resetCharacterTargetToDefault,
   unlockCharacter
-} from "../../state/actions";
-import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
-import Toggle from "../../components/Toggle/Toggle";
-import OptimizationPlan from "../../domain/OptimizationPlan";
+} from "../../state/actions/characterEdit";
 
 class CharacterEditForm extends PureComponent {
   render() {

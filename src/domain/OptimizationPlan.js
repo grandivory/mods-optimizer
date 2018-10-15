@@ -6,20 +6,20 @@
  */
 class OptimizationPlan {
   constructor(name,
-              health,
-              protection,
-              speed,
-              critDmg,
-              potency,
-              tenacity,
-              physDmg,
-              specDmg,
-              critChance,
-              armor,
-              resistance,
-              accuracy,
-              critAvoid,
-              upgradeMods = true
+    health,
+    protection,
+    speed,
+    critDmg,
+    potency,
+    tenacity,
+    physDmg,
+    specDmg,
+    critChance,
+    armor,
+    resistance,
+    accuracy,
+    critAvoid,
+    upgradeMods = true
   ) {
     this.name = name;
 
@@ -40,12 +40,11 @@ class OptimizationPlan {
 
     this.upgradeMods = upgradeMods;
 
-
     // Set the values that will actually be used for scoring based on the weights of each stat
     this.health = this.rawHealth / OptimizationPlan.statWeight.health;
-    this.protection =  this.rawProtection / OptimizationPlan.statWeight.protection;
+    this.protection = this.rawProtection / OptimizationPlan.statWeight.protection;
     this.speed = this.rawSpeed / OptimizationPlan.statWeight.speed;
-    this.critDmg =  this.rawCritDmg / OptimizationPlan.statWeight.critDmg;
+    this.critDmg = this.rawCritDmg / OptimizationPlan.statWeight.critDmg;
     this.potency = this.rawPotency / OptimizationPlan.statWeight.potency;
     this.tenacity = this.rawTenacity / OptimizationPlan.statWeight.tenacity;
     this.physDmg = this.rawPhysDmg / OptimizationPlan.statWeight.physDmg;
@@ -53,7 +52,7 @@ class OptimizationPlan {
     this.critChance = this.rawCritChance / OptimizationPlan.statWeight.critChance;
     this.armor = this.rawArmor / OptimizationPlan.statWeight.armor;
     this.resistance = this.rawResistance / OptimizationPlan.statWeight.resistance;
-    this.accuracy = this.rawAccuracy/ OptimizationPlan.statWeight.accuracy;
+    this.accuracy = this.rawAccuracy / OptimizationPlan.statWeight.accuracy;
     this.critAvoid = this.rawCritAvoid / OptimizationPlan.statWeight.critAvoid;
   }
 

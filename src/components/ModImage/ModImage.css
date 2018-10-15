@@ -107,6 +107,7 @@
 .mod-image.gold .modset {
   filter: drop-shadow(0 0 .05em #eeca44);
 }
+
 .mod-image.gold .modset path {
   fill: #eeca44;
 }
@@ -114,6 +115,7 @@
 .mod-image.purple .modset {
   filter: drop-shadow(0 0 .05em #a35ef9);
 }
+
 .mod-image.purple .modset path {
   fill: #a35ef9;
 }
@@ -121,6 +123,7 @@
 .mod-image.blue .modset {
   filter: drop-shadow(0 0 .05em #2997f1);
 }
+
 .mod-image.blue .modset path {
   fill: #2997f1;
 }
@@ -128,6 +131,7 @@
 .mod-image.green .modset {
   filter: drop-shadow(0 0 .05em #8fff3a);
 }
+
 .mod-image.green .modset path {
   fill: #8fff3a;
 }
@@ -135,6 +139,7 @@
 .mod-image.gray .modset {
   filter: drop-shadow(0 0 .05em #ccfffe);
 }
+
 .mod-image.gray .modset path {
   fill: #ccfffe;
 }

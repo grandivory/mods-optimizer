@@ -6,8 +6,7 @@ import './Pips.css';
 class Pips extends React.PureComponent {
   render() {
     const pips = this.props.pips;
-    const pipElements = Array.from(Array(pips).keys()).map((_, index) => <span key={index} className='pip' />);
-
+    const pipElements = Array.from(Array(pips).keys()).map((_, index) => <span key={index} className='pip'/>);
 
     return (
       <div className='pips inset'>
