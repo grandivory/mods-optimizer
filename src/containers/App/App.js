@@ -30,8 +30,8 @@ class App extends PureComponent {
     // Remove the query string after reading anything we needed from it.
     window.history.replaceState({}, document.title, document.location.href.split('?')[0]);
 
-    if ((props.version < '1.2.0' || !props.version) && props.profile) {
-      this.props.showModal(this.changeLogModal());
+    if ((props.previousVersion < '1.3.0') && props.profile) {
+      this.props.showModal('changelog-modal', this.changeLogModal());
     }
   }
 
@@ -206,7 +206,9 @@ class App extends PureComponent {
       &nbsp;or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'} className={'gold'}>Patreon</a>
       <div className={'version'}>
-        <a onClick={() => this.props.showModal(this.changeLogModal())}>version {this.props.version}</a>
+        <a onClick={() => this.props.showModal('changelog-modal', this.changeLogModal())}>
+          version {this.props.version}
+        </a>
       </div>
     </footer>;
   }
@@ -245,27 +247,27 @@ class App extends PureComponent {
    */
   changeLogModal() {
     return <div>
-      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.2!</h2>
+      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.3!</h2>
       <h3>Here's a short summary of the changes included in this version:</h3>
       <ul>
         <li>
-          Now, rather than selecting stat weights for <strong>Offense</strong> and <strong>Defense</strong>, characters
-          are optimized by selecting weights for <strong>Physical Damage</strong>, <strong>Special Damage</strong>
-          , <strong>Armor</strong>, and <strong>Resistance</strong>. This means that you now have the opportunity to
-          give different weights to different attacks for characters that deal both physical and special damage. All
-          optimization targets have been updated to match this new format.
+          The internals of the mods optimizer have undergone a major refactor. The behavior should be mostly the same,
+          but if you see anything behaving in an unexpected way, please submit a bug via the discord link in the footer!
         </li>
         <li>
-          When reviewing the mods that the optimizer suggests, the optimizer will now show you not only the sum of the
-          stats on the mods, but their effect on your character's total stats! Now you can easily see what the final
-          speed of your arena team will be, or more easily target specific speeds, damage numbers, or critical chance
-          numbers for various phases of the raids!
+          Default character data (name, avatar, tags, etc.) is now pulled directly from swgoh.gg every time you fetch
+          your character data. This means a couple things. First, you'll notice that all of your characters have the
+          "missing character" portrait. Don't worry - the character data is still there, and the next time you fetch
+          your data, the avatars should be fixed. Second, you no longer have to wait for me to put new characters into
+          the optimizer every time a new one is added to the game! As soon as swgoh.gg adds the character and Crinolo
+          adds their stats, the optimizer will know how to use them. I'll still try to get some default targets added
+          as quickly as I can, but a failure on my part will no longer prevent people from using the optimizer on their
+          favorite new characters!
         </li>
         <li>
-          Because many of the default optimization targets have changed, I've added the ability to reset all characters
-          to their default targets. This will reset any optimization target that has the same name as one of the
-          defaults, but will leave any custom targets unchanged. This is meant to be a quick way to either accept
-          changes after a major update like this, or to reset your characters if you don't like the changes you've made.
+          All player data is now stored internally by ally code. This means that if you're fetching data for multiple
+          ally codes, the optimizer will now properly separate your mods, selected characters, targets, etc. The
+          currently active ally code is switched every time you fetch your data!
         </li>
       </ul>
       <h3>Happy Modding!</h3>
@@ -304,6 +306,7 @@ const mapStateToProps = (state) => {
     displayModal: !!state.modal,
     modalClass: state.modal ? state.modal.class : '',
     modalContent: state.modal ? state.modal.content : '',
+    previousVersion: state.previousVersion,
     progressData: 'data:text/json;charset=utf-8,' + JSON.stringify(serializeState(state)),
     section: state.section,
     version: state.version

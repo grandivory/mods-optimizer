@@ -2,7 +2,7 @@
  * Save the state of the application to localStorage
  * @param state Object
  */
-import {mapObject, mapObjectByKey} from "../utils/mapObject";
+import {mapObject, mapObjectByKey, mapObjectByKeyAndValue} from "../utils/mapObject";
 import Character from "../domain/Character";
 import characterSettings from "../constants/characterSettings";
 import PlayerProfile from "../domain/PlayerProfile";
@@ -44,6 +44,7 @@ export const defaultState = {
     tag: null
   },
   optimizerView: 'edit',
+  previousVersion: process.env.REACT_APP_VERSION || 'local',
   profiles: {},
   section: 'optimize',
   version: process.env.REACT_APP_VERSION || 'local'
@@ -80,6 +81,8 @@ export function restoreState() {
   }
 }
 
+const ignoredStateKeys = ['error', 'isBusy', 'modal', 'previousVersion'];
+
 /**
  * Convert the state from an in-memory representation to a serialized representation
  * @param state {object}
@@ -92,7 +95,10 @@ export function serializeState(state) {
   } else if (state instanceof Array) {
     return state.map(item => serializeState(item));
   } else if (state instanceof Object) {
-    return mapObject(state, serializeState);
+    return mapObjectByKeyAndValue(
+      state,
+      (key, value) => !ignoredStateKeys.includes(key) ? serializeState(value) : null
+    );
   } else {
     return state;
   }
@@ -118,6 +124,7 @@ export function deserializeState(state) {
     modListFilter: state.modListFilter || defaultState.modListFilter,
     modSetsFilter: state.modSetsFilter || defaultState.modSetsFilter,
     optimizerView: state.optimizerView || defaultState.optimizerView,
+    previousVersion: state.version,
     profiles: mapObject(state.profiles, PlayerProfile.deserialize),
     section: state.section,
     version: version
@@ -131,11 +138,7 @@ export function deserializeState(state) {
  * @param selectedCharacters {Array<object>}
  * @param mods {Array<object>}
  */
-export function deserializeStateVersionOneTwo(
-  allyCode,
-  availableCharacters,
-  selectedCharacters,
-  mods) {
+export function deserializeStateVersionOneTwo(allyCode, availableCharacters, selectedCharacters, mods) {
   const version = process.env.REACT_APP_VERSION || 'local';
 
   const charactersObj = Object.assign(
@@ -161,6 +164,7 @@ export function deserializeStateVersionOneTwo(
     modListFilter: defaultState.modListFilter,
     modSetsFilter: defaultState.modSetsFilter,
     optimizerView: defaultState.optimizerView,
+    previousVersion: '1.2',
     profiles: {
       [playerAllyCode]: new PlayerProfile(playerCharacters, playerMods, playerSelectedCharacters)
     },
