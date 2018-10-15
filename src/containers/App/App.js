@@ -13,7 +13,7 @@ import {connect} from "react-redux";
 import formatAllyCode from "../../utils/formatAllyCode";
 import ErrorModal from "../ErrorModal/ErrorModal";
 import {serializeState} from "../../state/storage";
-import {changeSection, hideModal, reset, restoreProgress, showModal} from "../../state/actions/app";
+import {changeSection, hideModal, reset, restoreProgress, showError, showModal} from "../../state/actions/app";
 import {refreshPlayerData, setMods, toggleKeepOldMods} from "../../state/actions/data";
 
 class App extends PureComponent {
@@ -321,6 +321,7 @@ const mapDispatchToProps = dispatch => ({
   refreshPlayerData: allyCode => dispatch(refreshPlayerData(allyCode)),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),
+  showError: (message) => dispatch(showError(message)),
   toggleKeepOldMods: () => dispatch(toggleKeepOldMods()),
   reset: () => dispatch(reset()),
   restoreProgress: (progressData) => dispatch(restoreProgress(progressData)),

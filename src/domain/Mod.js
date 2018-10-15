@@ -144,8 +144,8 @@ class Mod {
   /**
    * Deserialize a JSON representation of a mod into a new mod (for app minor version 1.2 and below)
    *
-   * @param modJson
-   * @param characters Object An object, keyed by character name, of all possible characters
+   * @param modJson {string}
+   * @param characters {Object<string, Character>} An object, keyed by character ID, of all possible characters
    *
    * @return Mod
    */

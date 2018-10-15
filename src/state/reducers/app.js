@@ -1,6 +1,6 @@
 // @flow
 
-import {defaultState, deserializeState} from "../storage";
+import {defaultState, deserializeState, deserializeStateVersionOneTwo} from "../storage";
 
 export function changeSection(state, action) {
   return Object.assign({}, state, {
@@ -45,11 +45,23 @@ export function reset(state, action) {
 
 export function restoreProgress(state, action) {
   try {
-    return deserializeState(action.progressData);
+    const stateObj = JSON.parse(action.progressData);
+    return deserializeState(stateObj);
   } catch (e) {
-    return Object.assign({}, state, {
-      error:
-        'Unable to restore your progress from the provided file. Please make sure that you uploaded the correct file.'
-    });
+    try {
+      const stateObj = JSON.parse(action.progressData);
+      const allyCode = stateObj.state.allyCode;
+      const availableCharacters = JSON.parse(stateObj.state.availableCharacters);
+      const selectedCharacters = JSON.parse(stateObj.state.selectedCharacters);
+      const mods = JSON.parse(stateObj.state.mods);
+      return deserializeStateVersionOneTwo(allyCode, availableCharacters, selectedCharacters, mods);
+    } catch (e) {
+      console.log(e);
+      return Object.assign({}, state, {
+        error:
+          'Unable to restore your progress from the provided file. Please make sure that you uploaded the correct file.'
+      });
+    }
   }
 }
+

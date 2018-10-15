@@ -185,56 +185,6 @@ class OptimizationPlan {
       return null;
     }
   }
-
-  /**
-   * Deserialize an OptimizationPlan that was serialized by version 1.1.*
-   * @param planJson Object
-   * @param physDmgPct Number The amount of offense to attribute to physical damage (the rest goes to special damage)
-   */
-  static deserializeVersionOneOne(planJson, physDmgPct) {
-    return new OptimizationPlan(
-      planJson.name || 'unnamed',
-      planJson.health,
-      planJson.protection,
-      planJson.speed,
-      planJson.critDmg,
-      planJson.potency,
-      planJson.tenacity,
-      planJson.offense * physDmgPct,
-      planJson.offense * (1 - physDmgPct),
-      planJson.critChance,
-      planJson.defense / 2,
-      planJson.defense / 2,
-      planJson.accuracy,
-      planJson.critAvoid,
-      true
-    );
-  }
-
-  /**
-   * Deserialize an OptimizationPlan that was serialized prior to normalization
-   * @param planJson Object
-   * @param physDmgPct Number The amount of offense to attribute to physical damage (the rest goes to special damage)
-   */
-  static deserializeVersionOne(planJson, physDmgPct) {
-    return new OptimizationPlan(
-      'unnamed',
-      planJson.health * OptimizationPlan.statWeight.health,
-      planJson.protection * OptimizationPlan.statWeight.protection,
-      planJson.speed * OptimizationPlan.statWeight.speed,
-      planJson.critDmg * OptimizationPlan.statWeight.critDmg,
-      planJson.potency * OptimizationPlan.statWeight.potency,
-      planJson.tenacity * OptimizationPlan.statWeight.tenacity,
-      planJson.offense * OptimizationPlan.statWeight.physDmg * physDmgPct,
-      planJson.offense * OptimizationPlan.statWeight.specDmg * (1 - physDmgPct),
-      planJson.critChance * OptimizationPlan.statWeight.critChance,
-      (planJson.defense * OptimizationPlan.statWeight.armor) / 2,
-      (planJson.defense * OptimizationPlan.statWeight.resistance) / 2,
-      planJson.accuracy * OptimizationPlan.statWeight.accuracy,
-      planJson.critAvoid * OptimizationPlan.statWeight.critAvoid,
-      true
-    );
-  }
 }
 
 OptimizationPlan.statWeight = {

@@ -5,6 +5,7 @@ import OptimizationPlan from "./OptimizationPlan";
 import characterSettings from "../constants/characterSettings";
 import {CharacterSettings, GameSettings, OptimizerSettings, PlayerValues} from "./CharacterDataClasses";
 import groupByKey from "../utils/groupByKey";
+import {mapObject} from "../utils/mapObject";
 
 export default class Character {
   baseID;
@@ -249,56 +250,53 @@ export default class Character {
     );
   }
 
-  // TODO: Implement
-  static deserializeVersionOneTwo(characterJson, version) {
+  static deserializeVersionOneTwo(characterJson) {
     const serializedNamedPlans = characterJson.namedPlans || {
       unnamed: characterJson.optimizationPlan
     };
-    const planDeserializer = (() => {
-      if (!version || version < '1.1.0') {
-        return OptimizationPlan.deserializeVersionOne;
-      } else if (version < '1.2.0') {
-        return OptimizationPlan.deserializeVersionOneOne;
-      } else {
-        return OptimizationPlan.deserialize;
-      }
-    })();
-    const physDmgPct = 'undefined' !== typeof characterJson.physDmgPercent ? characterJson.physDmgPercent : 1;
 
-    const namedPlansObject = Object.keys(serializedNamedPlans).reduce((obj, key) => {
-      obj[key] = planDeserializer(serializedNamedPlans[key], physDmgPct).rename(key);
-      return obj;
-    }, {});
+    const namedPlans = Object.values(mapObject(serializedNamedPlans, OptimizationPlan.deserialize));
 
-    let selectedTarget = planDeserializer(characterJson.optimizationPlan, physDmgPct);
+    let selectedTarget = OptimizationPlan.deserialize(characterJson.optimizationPlan);
 
     // If the selected plan is unnamed, try to find if a matching plan does exist, so that the matching plan can
     // be selected
     if ('unnamed' === selectedTarget.name) {
-      Object.values(namedPlansObject).forEach(target => {
+      namedPlans.forEach(target => {
         if (selectedTarget.rename(target.name).equals(target)) {
           selectedTarget = target;
         }
       });
     }
 
-    return new Character(
+    const gameSettings = new GameSettings(
       characterJson.name,
-      '',
+      '//swgoh.gg/static/img/assets/blank-character.png',
+      [],
+      ''
+    );
+    const playerValues = new PlayerValues(
       characterJson.level,
-      characterJson.starLevel || 1,
-      characterJson.gearLevel || 1,
-      characterJson.gearPieces || [],
-      characterJson.galacticPower || 0,
-      characterJson.physDmgPercent,
+      characterJson.starLevel,
+      characterJson.gearLevel,
+      characterJson.gearPieces,
+      characterJson.galacticPower,
       characterJson.baseStats ? BaseStats.deserialize(characterJson.baseStats) : NullCharacterStats,
       characterJson.totalStats ? BaseStats.deserialize(characterJson.totalStats) : NullCharacterStats,
+    );
+    const optimizerSettings = new OptimizerSettings(
       selectedTarget,
-      namedPlansObject,
-      [],
-      [],
+      namedPlans || [],
       characterJson.useOnly5DotMods,
       characterJson.isLocked || false
+    );
+
+    return new Character(
+      characterJson.baseID,
+      characterSettings[characterJson.baseID] || null,
+      gameSettings,
+      playerValues,
+      optimizerSettings
     );
   }
 }
