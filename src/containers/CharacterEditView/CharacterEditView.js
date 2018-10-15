@@ -80,7 +80,6 @@ class CharacterEditView extends PureComponent {
    * Renders a form for filtering available characters
    *
    * @returns JSX Element
-   * TODO: Implement this with Redux
    */
   filterForm() {
     return <div className={'filters'}>
@@ -97,7 +96,6 @@ class CharacterEditView extends PureComponent {
    * Renders a sidebar box with action buttons
    *
    * @returns JSX Element
-   * TODO: Implement this with Redux
    */
   sidebarActions() {
     return <div className={'sidebar-actions'}>
@@ -209,7 +207,6 @@ class CharacterEditView extends PureComponent {
    * Renders an "Are you sure?" modal to reset all characters to their default optimization targets
    *
    * @return JSX Element
-   * TODO: Implement this with Redux
    */
   resetCharsModal() {
     return <div>
