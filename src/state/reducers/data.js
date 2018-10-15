@@ -83,48 +83,53 @@ export function receiveProfile(state, action) {
     });
   }
 
-  return updateCurrentProfile(state, profile => {
-    // Collect the new character objects by combining the default characters with the player values from the action
-    // and the optimizer settings from the current profile.
-    const newCharacters = mapObjectByKeyAndValue(action.profile.characters, (id, playerValues) => {
-      const character = state.characters.hasOwnProperty(id) ?
-        state.characters[id].withPlayerValues(playerValues) :
-        Character.default(id).withPlayerValues(playerValues);
+  const profile = state.profiles[state.allyCode] || new PlayerProfile();
 
-      if (profile.characters.hasOwnProperty(id)) {
-        return character.withOptimizerSettings(profile.characters[id].optimizerSettings);
-      } else {
-        // If there are no optimizer settings for this character yet, then set reasonable defaults
-        return character.withOptimizersettings(new OptimizerSettings(
-          character.defaultSettings.targets[0],
-          [],
-          character.defaultSettings.extraTags.includes('Crew Member'),
-          false
-        ));
-      }
-    })
+  // Collect the new character objects by combining the default characters with the player values from the action
+  // and the optimizer settings from the current profile.
+  const newCharacters = mapObjectByKeyAndValue(action.profile.characters, (id, playerValues) => {
+    const character = state.characters.hasOwnProperty(id) ?
+      state.characters[id].withPlayerValues(playerValues) :
+      Character.default(id).withPlayerValues(playerValues);
 
-    // Then, update the mods by deserializing each one
-    const newMods = groupByKey(action.profile.mods, mod => mod.id);
-
-    // If "Remember Existing Mods" is selected, then only overwrite the mods we see in this profile
-    let finalMods;
-
-    if (state.keepOldMods) {
-      const oldMods = profile.mods.reduce((mods, mod) => {
-        mods[mod.id] = mod.unequip();
-        return mods;
-      }, {});
-
-      finalMods = Object.values(Object.assign({}, oldMods, newMods));
+    if (profile.characters.hasOwnProperty(id)) {
+      return character.withOptimizerSettings(profile.characters[id].optimizerSettings);
     } else {
-      finalMods = Object.values(newMods);
+      // If there are no optimizer settings for this character yet, then set reasonable defaults
+      return character.withOptimizerSettings(new OptimizerSettings(
+        character.defaultSettings.targets[0],
+        [],
+        character.defaultSettings.extraTags.includes('Crew Member'),
+        false
+      ));
     }
+  });
 
-    return profile.withCharacters(newCharacters).withMods(finalMods);
-  }, {
+  // Then, update the mods by deserializing each one
+  const newMods = groupByKey(action.profile.mods, mod => mod.id);
+
+  // If "Remember Existing Mods" is selected, then only overwrite the mods we see in this profile
+  let finalMods;
+
+  if (state.keepOldMods) {
+    const oldMods = profile.mods.reduce((mods, mod) => {
+      mods[mod.id] = mod.unequip();
+      return mods;
+    }, {});
+
+    finalMods = Object.values(Object.assign({}, oldMods, newMods));
+  } else {
+    finalMods = Object.values(newMods);
+  }
+
+  const newProfile = profile.withCharacters(newCharacters).withMods(finalMods);
+
+  return Object.assign({}, state, {
     isBusy: false,
-    allyCode: action.allyCode
+    allyCode: action.allyCode,
+    profiles: Object.assign({}, state.profiles, {
+      [action.allyCode]: newProfile
+    })
   });
 }
 

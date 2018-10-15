@@ -74,9 +74,9 @@ import {
 /**
  * Update the currently-selected character profile by calling an update function on the existing profile. Optionally
  * update the base state with other auxiliary changes as well.
- * @param state
- * @param updateFunc Function PlayerProfile => PlayerProfile
- * @param auxiliaryChanges object
+ * @param state {object}
+ * @param updateFunc {function(PlayerProfile): PlayerProfile}
+ * @param auxiliaryChanges {object} An object used to add additional changes to the state at a level above the profile
  * @returns {*}
  */
 export function updateCurrentProfile(state, updateFunc, auxiliaryChanges = {}) {
