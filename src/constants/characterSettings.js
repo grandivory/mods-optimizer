@@ -163,7 +163,7 @@ const characterSettings = {
     ['CWC']
   ),
   'COLONELSTARCK': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
+    [new OptimizationPlan('PvP', 0, 0, 100, 10, 5, 0, 5, 0, 5, 0, 0, 0, 0)],
     ['Tony Stark', 'Troopers']
   ),
   'COMMANDERLUKESKYWALKER': new CharacterSettings(
@@ -701,8 +701,9 @@ const characterSettings = {
   ),
   'SNOWTROOPER': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 50, 0, 100, 0, 0, 0, 0, true),
-      new OptimizationPlan('PvE', 0, 0, 80, 50, 0, 0, 25, 0, 100, 0, 0, 0, 0, true)
+      new OptimizationPlan('PvP', 0, 0, 0, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('Fast PvP', 0, 0, 100, 50, 0, 0, 50, 0, 100, 0, 0, 0, 0, true),
+      new OptimizationPlan('Fast PvE', 0, 0, 80, 50, 0, 0, 25, 0, 100, 0, 0, 0, 0, true)
     ],
     ['Troopers']
   ),
