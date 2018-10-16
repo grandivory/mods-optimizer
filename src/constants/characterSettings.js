@@ -264,7 +264,7 @@ const characterSettings = {
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('Offense'),
       new OptimizationPlan('hSTR Phase 3', 25, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)
     ],
-    ['Nesty', 'Baby Wampa', '#solo']
+    ['Nesty', 'Baby Wampa', 'solo']
   ),
   'EWOKELDER': new CharacterSettings(
     [new OptimizationPlan('PvP', 25, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -479,7 +479,7 @@ const characterSettings = {
       new OptimizationPlan('Tanky', 40, 20, 50, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
       new OptimizationPlan('Speedy', 40, 20, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)
     ],
-    ['#solo', 'Crew Member']
+    ['solo', 'Crew Member']
   ),
   'LOBOT': new CharacterSettings(
     [new OptimizationPlan('PvE', 0, 0, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
@@ -601,7 +601,7 @@ const characterSettings = {
   ),
   'QIRA': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
-    ['#solo']
+    ['solo']
   ),
   'QUIGONJINN': new CharacterSettings(
     [
@@ -789,15 +789,15 @@ const characterSettings = {
   ),
   'YOUNGCHEWBACCA': new CharacterSettings(
     [new OptimizationPlan('PvE', 50, 0, 100, 50, 0, 0, 25, 0, 50, 0, 0, 0, 0, true)],
-    ['Dwight', '#solo']
+    ['Dwight', 'solo']
   ),
   'YOUNGHAN': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
-    ['YOLO', '#solo', 'Jim']
+    ['YOLO', 'solo', 'Jim']
   ),
   'YOUNGLANDO': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
-    ['#solo', 'Crew Member']
+    ['solo', 'Crew Member']
   ),
   'ZAALBAR': new CharacterSettings(
     [new OptimizationPlan('PvP', 25, 25, 100, 0, 25, 0, 10, 0, 20, 0, 0, 0, 0, true)]
