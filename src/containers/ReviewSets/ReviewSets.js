@@ -275,7 +275,7 @@ const mapStateToProps = (state) => {
     characters: profile.characters,
     mods: profile.mods,
     modAssignments: displayedModAssignments,
-    numShownCharacters: Object.keys(modAssignments).length,
+    numShownCharacters: Object.keys(displayedModAssignments).length,
     numOptimizedCharacters: Object.keys(profile.modAssignments).length
   };
 };
