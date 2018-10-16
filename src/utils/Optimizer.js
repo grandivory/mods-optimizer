@@ -46,8 +46,9 @@ class Optimizer {
       !mod.characterID || !characters[mod.characterID].optimizerSettings.isLocked
     );
 
-    // For each character in the list, find the best mod set for that character
-    const {assignedSets} = order.reduce((accumulator, characterID) => {
+    // For each not-locked character in the list, find the best mod set for that character
+    const {assignedSets} = order.filter(charID => !characters[charID].optimizerSettings.isLocked)
+      .reduce((accumulator, characterID) => {
       const {considerationSet: availableMods, assignedSets: completedSets} = accumulator;
       const character = characters[characterID];
 
@@ -61,22 +62,6 @@ class Optimizer {
     }, {considerationSet: considerationSet, assignedSets: {}});
 
     return assignedSets;
-    // for (let character of characters) {
-    //   let modSet = this.findBestModSetForCharacter(considerationSet, character);
-    //
-    //   // Assign the character to each mod, then remove the mods from the consideration set
-    //   // While assigning the character to each mod, remove them from any other mods in the set
-    //   // While doing this, collect the mods into an array to return
-    //   considerationSet.filter(mod => character === mod.assignTo).forEach(mod => mod.assignTo = null);
-    //   modSet.assignTo(character);
-    //   considerationSet = considerationSet.filter(mod => !modSet.contains(mod));
-    //   assignedModSets.push({
-    //     character: character,
-    //     modSet: modSet
-    //   });
-    // }
-    //
-    // return assignedModSets;
   }
 
   /**
