@@ -84,7 +84,7 @@ export function receiveProfile(state, action) {
     });
   }
 
-  const profile = state.profiles[state.allyCode] || new PlayerProfile();
+  const profile = state.profiles[action.allyCode] || new PlayerProfile();
 
   // Collect the new character objects by combining the default characters with the player values from the action
   // and the optimizer settings from the current profile.
