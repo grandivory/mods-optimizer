@@ -144,7 +144,7 @@ export default class Character {
       this.gameSettings,
       this.playerValues,
       this.optimizerSettings.withTarget(
-        this.defaultSettings.targets.find(target => target.name = this.optimizerSettings.target.name)
+        this.defaultSettings.targets.find(target => target.name === this.optimizerSettings.target.name)
       )
     );
   }
