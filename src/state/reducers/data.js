@@ -201,8 +201,9 @@ export function receiveStats(state, action) {
   );
 
   const errorCharacters = Object.keys(profile.characters).filter(charID =>
-    !Object.keys(newProfile.characters).includes(charID)
-  ).map(charID => profile[charID].name);
+    !Object.keys(newProfile.characters).includes(charID) ||
+    newProfile.characters[charID].playerValues.baseStats === NullCharacterStats
+  ).map(charID => state.characters[charID].gameSettings.name);
 
   const errorMessage = errorCharacters.length > 0 ?
     'Missing stats for characters: ' + errorCharacters.join(', ') +
