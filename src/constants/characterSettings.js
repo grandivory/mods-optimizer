@@ -447,6 +447,11 @@ const characterSettings = {
     [new OptimizationPlan('PvE', 40, 20, 100, 0, 50, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)],
     ['JKG']
   ),
+  'JEDIKNIGHTREVAN': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 90, 100, 0, 0, 0, 100, 50, 0, 0, 0, 0, true)],
+    [],
+    DamageType.special
+  ),
   'JOLEEBINDO': new CharacterSettings(
     [new OptimizationPlan('Healer', 50, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
