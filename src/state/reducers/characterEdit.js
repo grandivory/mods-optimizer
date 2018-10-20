@@ -24,12 +24,17 @@ export function selectCharacter(state, action) {
 export function unselectCharacter(state, action) {
   return updateCurrentProfile(state, profile => {
     const newSelectedCharacters = profile.selectedCharacters.slice();
+    const oldCharacter = profile.characters[action.characterID];
 
     if (newSelectedCharacters.includes(action.characterID)) {
       newSelectedCharacters.splice(newSelectedCharacters.indexOf(action.characterID), 1);
     }
 
-    return profile.withSelectedCharacters(newSelectedCharacters);
+    return profile.withSelectedCharacters(newSelectedCharacters)
+      // If we unselect a character, we also need to unlock it
+      .withCharacters(Object.assign({}, profile.characters, {
+        [action.characterID]: oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.unlock())
+      }));
   });
 }
 
