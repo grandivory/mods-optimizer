@@ -93,7 +93,7 @@ const ignoredStateKeys = ['error', 'isBusy', 'modal', 'previousVersion'];
  */
 export function serializeState(state) {
   if (null === state) {
-    return null
+    return null;
   } else if ('function' === typeof state.serialize) {
     return state.serialize();
   } else if (state instanceof Array) {

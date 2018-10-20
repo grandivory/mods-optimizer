@@ -236,9 +236,9 @@ class ModSet {
             stat.displayType + ' %';
         summary[propertyDisplayName] = new Stat(statType, '0');
       }
-      if (stat.isPercent) {
+      if (stat.isPercent && character.playerValues.baseStats) {
         summary[propertyDisplayName].value += stat.value * character.playerValues.baseStats[propertyName] / 100;
-      } else {
+      } else if (!stat.isPercent) {
         summary[propertyDisplayName].value += stat.value;
       }
     });

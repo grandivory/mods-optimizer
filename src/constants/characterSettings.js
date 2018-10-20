@@ -188,7 +188,10 @@ const characterSettings = {
     ['Crew Member']
   ),
   'CT7567': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 0, 100, 0, 10, 20, 0, 0, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 10, 0, 100, 0, 10, 20, 0, 0, 0, 0, 0, 0, 0, true),
+      optimizationStrategy.Speed.rename('Chex Mix')
+    ],
     ['Titans', 'Crew Member']
   ),
   'CT210408': new CharacterSettings(

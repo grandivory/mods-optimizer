@@ -90,7 +90,7 @@ export function updateCurrentProfile(state, updateFunc, auxiliaryChanges = {}) {
 }
 
 export default function modsOptimizer(state, action) {
-  if (null == state) {
+  if (!state) {
     return saveState(restoreState());
   }
 
