@@ -103,7 +103,7 @@ function dispatchFetchCharacters(dispatch) {
   dispatch(requestCharacters());
   return fetch('https://api.mods-optimizer.swgoh.grandivory.com/characters/')
     .then(response => response.json())
-    .catch(error => dispatch(showError(error.message)))
+    .catch(() => {throw new Error('Error when fetching character definitions from swgoh.gg. Please try again.')})
     .then(characters => {
       dispatch(receiveCharacters(characters));
       return characters;
@@ -138,11 +138,11 @@ function dispatchFetchProfile(dispatch, allyCode) {
     )
     .catch(error => {
       if (error instanceof TypeError) {
-        dispatch(showError(
+        throw new Error(
           'Your character and mod data is taking a long time to update. Please wait a few minutes and try again.'
-        ))
+        );
       } else {
-        dispatch(showError(error.message));
+        throw error;
       }
     })
     .then(profile => {
@@ -165,7 +165,7 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
         };
       })
     )
-      .catch(error => dispatch(showError(error.message)))
+      .catch(() => {throw new Error('Error fetching your character\'s stats. Please try again.')})
       .then(statsResponse => {
         dispatch(receiveStats(allyCode, statsResponse));
         return statsResponse;
@@ -181,7 +181,8 @@ export function refreshPlayerData(allyCode) {
 
   return function(dispatch) {
     return dispatchFetchCharacters(dispatch, cleanedAllyCode)
-      .then(() => dispatchFetchProfile(dispatch, cleanedAllyCode))
+    // Only continue to fetch the player's profile if the character fetch was successful
+      .then((characters) => characters && dispatchFetchProfile(dispatch, cleanedAllyCode))
       .then(profile => dispatchFetchCharacterStats(dispatch, cleanedAllyCode, profile ? profile.characters : null))
       .catch(error => dispatch(showError(error.message)));
   }
