@@ -21,6 +21,18 @@ class ModSetDetail extends React.PureComponent {
     const statsDisplay = Object.values(statSummary).map((stat, index) => {
       const diffStat = diffSummary ? stat.minus(diffSummary[stat.displayType]) : null;
 
+      if (!character.playerValues.equippedStats) {
+        return <tr key={index}>
+          <td className={'stat-type'}>{stat.displayType}</td>
+          <td className={'stat-value'}>???(???)</td>
+          {diffStat &&
+          <td className={'stat-diff' + (diffStat.value > 0 ? ' increase' : diffStat.value < 0 ? ' decrease' : '')}>
+            {diffStat.showValue()}
+          </td>
+          }
+        </tr>;
+      }
+
       const statProperty = statTypeMap[stat.displayType] ? statTypeMap[stat.displayType][0] : '';
       let statValue = character.playerValues.equippedStats[statProperty] + stat.value;
 
@@ -48,7 +60,7 @@ class ModSetDetail extends React.PureComponent {
           {diffStat.showValue()}
         </td>
         }
-      </tr>
+      </tr>;
     });
 
     return (
