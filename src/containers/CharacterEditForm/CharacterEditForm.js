@@ -6,6 +6,7 @@ import Toggle from "../../components/Toggle/Toggle";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import {hideModal} from "../../state/actions/app";
 import {
+  changeCharacterEditMode,
   changeUse5DotMods,
   deleteTarget,
   finishEditCharacterTarget,
@@ -87,8 +88,7 @@ class CharacterEditForm extends PureComponent {
           rightLabel={'Advanced'}
           rightValue={'advanced'}
           value={this.props.editMode}
-          onChange={(newValue) => {
-          }} // this.setState({editMode: newValue})}
+          onChange={(newValue) => this.props.changeCharacterEditMode(newValue)}
         />
       </div>
       {'basic' === this.props.editMode && this.basicForm(target)}
@@ -445,7 +445,8 @@ class CharacterEditForm extends PureComponent {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) =>
+  ({
   editMode: state.characterEditMode
 });
 
@@ -457,7 +458,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(finishEditCharacterTarget(characterID, target));
   },
   resetCharacterTargetToDefault: (characterID) => dispatch(resetCharacterTargetToDefault(characterID)),
-  deleteTarget: (characterID) => dispatch(deleteTarget(characterID))
+  deleteTarget: (characterID) => dispatch(deleteTarget(characterID)),
+  changeCharacterEditMode: (mode) => dispatch(changeCharacterEditMode(mode))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterEditForm);

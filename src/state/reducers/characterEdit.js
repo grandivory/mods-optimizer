@@ -71,6 +71,12 @@ export function changeCharacterTarget(state, action) {
   });
 }
 
+export function changeCharacterEditMode(state, action) {
+  return Object.assign({}, state, {
+    characterEditMode: action.mode
+  });
+}
+
 export function finishEditCharacterTarget(state, action) {
   const profile = state.profiles[state.allyCode];
   const oldCharacter = profile.characters[action.characterID];

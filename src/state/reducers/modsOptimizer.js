@@ -2,6 +2,7 @@
 import {restoreState, saveState} from "../storage";
 import {CHANGE_SECTION, HIDE_ERROR, HIDE_MODAL, RESET, RESTORE_PROGRESS, SHOW_ERROR, SHOW_MODAL} from "../actions/app";
 import {
+  CHANGE_CHARACTER_EDIT_MODE,
   CHANGE_CHARACTER_FILTER,
   CHANGE_CHARACTER_TARGET,
   CHANGE_USE_FIVE_DOT_MODS,
@@ -37,6 +38,7 @@ import {
 } from "../actions/review";
 import {changeSection, hideError, hideModal, reset, restoreProgress, showError, showModal} from "./app";
 import {
+  changeCharacterEditMode,
   changeCharacterFilter,
   changeCharacterTarget,
   changeUse5DotMods,
@@ -120,6 +122,8 @@ export default function modsOptimizer(state, action) {
       return saveState(unlockCharacter(state, action));
     case CHANGE_CHARACTER_TARGET:
       return saveState(changeCharacterTarget(state, action));
+    case CHANGE_CHARACTER_EDIT_MODE:
+      return saveState(changeCharacterEditMode(state, action));
     case FINISH_EDIT_CHARACTER_TARGET:
       return saveState(finishEditCharacterTarget(state, action));
     case RESET_CHARACTER_TARGET_TO_DEFAULT:

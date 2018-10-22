@@ -4,6 +4,7 @@ export const UNSELECT_CHARACTER = 'UNSELECT_CHARACTER';
 export const LOCK_CHARACTER = 'LOCK_CHARACTER';
 export const UNLOCK_CHARACTER = 'UNLOCK_CHARACTER';
 export const CHANGE_CHARACTER_TARGET = 'CHANGE_CHARACTER_TARGET';
+export const CHANGE_CHARACTER_EDIT_MODE = 'CHANGE_CHARACTER_EDIT_MODE';
 export const FINISH_EDIT_CHARACTER_TARGET = 'FINISH_EDIT_CHARACTER_TARGET';
 export const RESET_CHARACTER_TARGET_TO_DEFAULT = 'RESET_CHARACTER_TARGET_TO_DEFAULT';
 export const RESET_ALL_CHARACTER_TARGETS = 'RESET_ALL_CHARACTER_TARGETS';
@@ -72,6 +73,18 @@ export function changeCharacterTarget(character, target) {
     type: CHANGE_CHARACTER_TARGET,
     characterID: character,
     target: target
+  };
+}
+
+/**
+ * Switch between basic and advanced edit mode
+ * @param mode
+ * @returns {{type: string, mode: *}}
+ */
+export function changeCharacterEditMode(mode) {
+  return {
+    type: CHANGE_CHARACTER_EDIT_MODE,
+    mode: mode
   };
 }
 
