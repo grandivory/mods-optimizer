@@ -201,7 +201,9 @@ export default class Character {
     const defaultTargets = groupByKey(this.defaultSettings.targets, target => target.name);
     const playerTargets = groupByKey(this.optimizerSettings.targets, target => target.name);
 
-    return Object.values(Object.assign({}, defaultTargets, playerTargets));
+    return Object.values(Object.assign({}, defaultTargets, playerTargets, {
+      [this.optimizerSettings.target.name]: this.optimizerSettings.target
+    }));
   }
 
   /**
