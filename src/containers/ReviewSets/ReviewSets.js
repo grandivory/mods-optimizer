@@ -142,7 +142,7 @@ class ReviewSets extends React.PureComponent {
     const modsBeingUpgraded = Object.entries(this.props.modAssignments)
       .filter(([characterID, mods]) => this.props.characters[characterID].optimizerSettings.target.upgradeMods)
       .map(([characterID, mods]) => mods.filter(mod => 15 !== mod.level && 5 <= mod.pips))
-      .reduce((allMods, characterMods) => allMods.concat(characterMods, []));
+      .reduce((allMods, characterMods) => allMods.concat(characterMods), []);
 
     const modUpgradeCost = modsBeingUpgraded.reduce((cost, mod) => cost + modUpgradeCosts[mod.pips][mod.level], 0);
 
