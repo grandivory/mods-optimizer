@@ -227,7 +227,7 @@ class ReviewSets extends React.PureComponent {
               leftValue={'move'}
               rightLabel={'All sets'}
               rightValue={'all'}
-              value={'all'}
+              value={this.props.modSetsFilter}
               onChange={this.props.updateFilter}
       />
     </div>;
@@ -274,6 +274,7 @@ const mapStateToProps = (state) => {
   return {
     characters: profile.characters,
     mods: profile.mods,
+    modSetsFilter: state.modSetsFilter,
     modAssignments: displayedModAssignments,
     numShownCharacters: Object.keys(displayedModAssignments).length,
     numOptimizedCharacters: Object.keys(profile.modAssignments).length
