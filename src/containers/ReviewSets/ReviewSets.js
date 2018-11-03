@@ -262,7 +262,10 @@ const mapStateToProps = (state) => {
   const profile = state.profiles[state.allyCode];
   const modsByID = groupByKey(profile.mods, mod => mod.id);
 
-  const modAssignments = mapObject(profile.modAssignments, modIDs => modIDs.map(modID => modsByID[modID]));
+  const modAssignments = mapObject(
+    profile.modAssignments,
+    modIDs => modIDs.filter(modID => modsByID.hasOwnProperty(modID)).map(modID => modsByID[modID])
+  );
 
   const displayedModAssignments = 'all' === state.modSetsFilter ?
     modAssignments :
