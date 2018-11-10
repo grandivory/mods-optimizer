@@ -8,7 +8,6 @@ import ExploreView from "../ExploreView/ExploreView";
 import FileInput from "../../components/FileInput/FileInput";
 import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
-import FileDropZone from "../../components/FileDropZone/FileDropZone";
 import {connect} from "react-redux";
 import formatAllyCode from "../../utils/formatAllyCode";
 import ErrorModal from "../ErrorModal/ErrorModal";
@@ -230,14 +229,6 @@ class App extends PureComponent {
         To get started, enter your ally code in the box in the header and click "Get my mods!". Note that your mods
         will only be updated a maximum of once per hour.
       </p>
-      <p>
-        If you have a mods file from either the SCORPIO bot (check out the discord server below) or from the <a
-        className={'call-out'} target={'_blank'} rel={'noopener'}
-        href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy">
-        Google Sheet
-      </a>, you can drop them in the box below, or use the "Upload my mods!" button above!
-      </p>
-      <FileDropZone handler={this.readModsFile.bind(this)} label={'Drop your mods file here!'}/>
     </div>;
   }
 
