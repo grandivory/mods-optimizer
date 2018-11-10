@@ -31,11 +31,22 @@ export function unselectCharacter(state, action) {
     }
 
     return profile.withSelectedCharacters(newSelectedCharacters)
-      // If we unselect a character, we also need to unlock it
+    // If we unselect a character, we also need to unlock it
       .withCharacters(Object.assign({}, profile.characters, {
         [action.characterID]: oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.unlock())
       }));
   });
+}
+
+export function unselectAllCharacters(state, action) {
+  return updateCurrentProfile(state, profile =>
+    profile.withCharacters(
+      mapObject(
+        profile.characters,
+        character => character.withOptimizerSettings(character.optimizerSettings.unlock())
+      )
+    ).withSelectedCharacters([])
+    );
 }
 
 export function lockCharacter(state, action) {

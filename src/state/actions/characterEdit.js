@@ -1,6 +1,7 @@
 // @flow
 export const SELECT_CHARACTER = 'SELECT_CHARACTER';
 export const UNSELECT_CHARACTER = 'UNSELECT_CHARACTER';
+export const UNSELECT_ALL_CHARACTERS = 'UNSELECT_ALL_CHARACTERS';
 export const LOCK_CHARACTER = 'LOCK_CHARACTER';
 export const UNLOCK_CHARACTER = 'UNLOCK_CHARACTER';
 export const CHANGE_CHARACTER_TARGET = 'CHANGE_CHARACTER_TARGET';
@@ -36,6 +37,16 @@ export function unselectCharacter(character) {
   return {
     type: UNSELECT_CHARACTER,
     characterID: character
+  };
+}
+
+/**
+ * Action to remove all characters from the "selected characters" pool, returning them to "available characters".
+ * @returns {{type: string}}
+ */
+export function unselectAllCharacters() {
+  return {
+    type: UNSELECT_ALL_CHARACTERS
   };
 }
 

@@ -12,7 +12,7 @@ import {
   RESET_ALL_CHARACTER_TARGETS,
   RESET_CHARACTER_TARGET_TO_DEFAULT,
   SELECT_CHARACTER,
-  UNLOCK_CHARACTER,
+  UNLOCK_CHARACTER, UNSELECT_ALL_CHARACTERS,
   UNSELECT_CHARACTER
 } from "../actions/characterEdit";
 import {
@@ -48,7 +48,7 @@ import {
   resetAllCharacterTargets,
   resetCharacterTargetToDefault,
   selectCharacter,
-  unlockCharacter,
+  unlockCharacter, unselectAllCharacters,
   unselectCharacter
 } from "./characterEdit";
 import {
@@ -116,6 +116,8 @@ export default function modsOptimizer(state, action) {
       return saveState(selectCharacter(state, action));
     case UNSELECT_CHARACTER:
       return saveState(unselectCharacter(state, action));
+    case UNSELECT_ALL_CHARACTERS:
+      return saveState(unselectAllCharacters(state, action));
     case LOCK_CHARACTER:
       return saveState(lockCharacter(state, action));
     case UNLOCK_CHARACTER:

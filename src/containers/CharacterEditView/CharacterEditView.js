@@ -11,7 +11,7 @@ import {
   changeCharacterFilter,
   changeCharacterTarget,
   resetAllCharacterTargets,
-  selectCharacter,
+  selectCharacter, unselectAllCharacters,
   unselectCharacter
 } from "../../state/actions/characterEdit";
 import {optimizeMods} from "../../state/actions/optimize";
@@ -53,7 +53,10 @@ class CharacterEditView extends PureComponent {
         {this.sidebarActions()}
       </div>
       <div className={'selected-characters'}>
-        <h4>Selected Characters</h4>
+        <h4>Selected Characters <button className={'small'} onClick={this.props.clearSelectedCharacters}>
+          Clear
+        </button>
+        </h4>
         <CharacterList selfDrop={true} draggable={true}/>
       </div>
       <div className={'available-characters'}
@@ -248,6 +251,7 @@ const mapDispatchToProps = dispatch => ({
   changeCharacterFilter: (filter) => dispatch(changeCharacterFilter(filter)),
   selectCharacter: (characterID, prevCharacterID) => dispatch(selectCharacter(characterID, prevCharacterID)),
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),
+  clearSelectedCharacters: () => dispatch(unselectAllCharacters()),
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
   optimizeMods: (mods, characters, order) => dispatch(optimizeMods(mods, characters, order))
