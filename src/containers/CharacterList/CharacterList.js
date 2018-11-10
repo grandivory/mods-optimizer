@@ -75,6 +75,7 @@ class CharacterList extends PureComponent {
     const selectedPlan = character.optimizerSettings.isLocked ? 'lock' : character.optimizerSettings.target.name;
     const options = character.targets()
       .map(target => target.name)
+      .filter(targetName => 'custom' !== targetName)
       .map(targetName => {
         const changeIndicator = Object.keys(defaultTargets).includes(targetName) &&
         character.optimizerSettings.targets.map(target => target.name).includes(targetName) &&
