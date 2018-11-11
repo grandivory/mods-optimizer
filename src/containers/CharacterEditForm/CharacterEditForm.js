@@ -7,7 +7,7 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 import {hideModal} from "../../state/actions/app";
 import {
   changeCharacterEditMode,
-  changeMinimumModDots,
+  changeMinimumModDots, changeSliceMods,
   deleteTarget,
   finishEditCharacterTarget,
   resetCharacterTargetToDefault,
@@ -62,14 +62,22 @@ class CharacterEditForm extends PureComponent {
         <h2 className={'character-name'}>{character.gameSettings.name}</h2>
       </div>
       <div id={'character-level-options'}>
-        <div className={'form-row'}>
-          <label htmlFor='mod-dots' id={'fivedot-label'}>
+        <div className={'form-row center'}>
+          <label htmlFor='mod-dots' id={'mod-dots-label'}>
             Use only mods with at least&nbsp;
             <select name={'mod-dots'} id={'mod-dots'} defaultValue={character.optimizerSettings.minimumModDots}>
               {[1, 2, 3, 4, 5, 6].map(dots => <option key={dots} value={dots}>{dots}</option>)}
             </select>
             &nbsp;dot(s)
           </label>
+        </div>
+        <div className={'form-row'}>
+          <label htmlFor={'slice-mods'} id={'slice-mods-label'}>Slice 5-dot mods to 6E during optimization?</label>
+          <input
+            type={'checkbox'}
+            id={'slice-mods'}
+            name={'slice-mods'}
+            defaultChecked={character.optimizerSettings.sliceMods} />
         </div>
       </div>
       <div className={'instructions'}>
@@ -441,7 +449,8 @@ class CharacterEditForm extends PureComponent {
     this.props.submitForm(
       this.props.character.baseID,
       newTarget,
-      +this.form['mod-dots'].value
+      +this.form['mod-dots'].value,
+      this.form['slice-mods'].checked
     );
   }
 }
@@ -452,8 +461,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   hideModal: () => dispatch(hideModal()),
-  submitForm: (characterID, target, minimumModDots) => {
+  submitForm: (characterID, target, minimumModDots, sliceMods) => {
     dispatch(changeMinimumModDots(characterID, minimumModDots));
+    dispatch(changeSliceMods(characterID, sliceMods));
     dispatch(unlockCharacter(characterID));
     dispatch(finishEditCharacterTarget(characterID, target));
   },

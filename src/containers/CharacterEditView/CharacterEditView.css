@@ -77,6 +77,10 @@
   line-height: 1em;
 }
 
+.character-edit-form .form-row.center {
+  text-align: center;
+}
+
 .character-edit-form .form-row input {
   vertical-align: middle;
 }

@@ -290,6 +290,7 @@ export default class Character {
       selectedTarget,
       namedPlans || [],
       characterJson.useOnly5DotMods ? 5 : 1,
+      characterJson.sliceMods || false,
       characterJson.isLocked || false
     );
 

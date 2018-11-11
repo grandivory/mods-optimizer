@@ -11,6 +11,7 @@ export const RESET_CHARACTER_TARGET_TO_DEFAULT = 'RESET_CHARACTER_TARGET_TO_DEFA
 export const RESET_ALL_CHARACTER_TARGETS = 'RESET_ALL_CHARACTER_TARGETS';
 export const DELETE_TARGET = 'DELETE_TARGET';
 export const CHANGE_MINIMUM_MOD_DOTS = 'CHANGE_MINIMUM_MOD_DOTS';
+export const CHANGE_SLICE_MODS = 'CHANGE_SLICE_MODS';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
 
 /**
@@ -156,6 +157,20 @@ export function changeMinimumModDots(character, minimumModDots) {
     type: CHANGE_MINIMUM_MOD_DOTS,
     characterID: character,
     minimumModDots: minimumModDots
+  };
+}
+
+/**
+ * Change whether to slice mods when optimizing a given character
+ * @param character string The character ID of the character being updated
+ * @param sliceMods boolean
+ * @returns {{type: string, characterID: string, sliceMods: boolean}}
+ */
+export function changeSliceMods(character, sliceMods) {
+  return {
+    type: CHANGE_SLICE_MODS,
+    characterID: character,
+    sliceMods: sliceMods
   };
 }
 

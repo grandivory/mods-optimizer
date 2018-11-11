@@ -202,18 +202,21 @@ class OptimizerSettings {
   target;
   targets;
   minimumModDots;
+  sliceMods;
   isLocked;
 
   /**
    * @param target OptimizationPlan
    * @param targets Array[OptimizationPlan]
    * @param minimumModDots Integer
+   * @param sliceMods Boolean
    * @param isLocked Boolean
    */
-  constructor(target, targets, minimumModDots, isLocked) {
+  constructor(target, targets, minimumModDots, sliceMods, isLocked) {
     this.target = target;
     this.targets = targets;
     this.minimumModDots = minimumModDots;
+    this.sliceMods = sliceMods;
     this.isLocked = isLocked;
     Object.freeze(this);
   }
@@ -237,6 +240,7 @@ class OptimizerSettings {
       target,
       Object.values(newTargetsObject),
       this.minimumModDots,
+      this.sliceMods,
       this.isLocked
     );
   }
@@ -257,6 +261,7 @@ class OptimizerSettings {
       newTarget,
       Object.values(Object.assign({}, oldTargetsObject, newTargetsObject)),
       this.minimumModDots,
+      this.sliceMods,
       this.isLocked
     );
   }
@@ -276,6 +281,7 @@ class OptimizerSettings {
       null,
       newTargets,
       this.minimumModDots,
+      this.sliceMods,
       this.isLocked
     );
   }
@@ -285,6 +291,7 @@ class OptimizerSettings {
       this.target,
       this.targets,
       this.minimumModDots,
+      this.sliceMods,
       true
     );
   }
@@ -294,6 +301,7 @@ class OptimizerSettings {
       this.target,
       this.targets,
       this.minimumModDots,
+      this.sliceMods,
       false
     );
   }
@@ -303,6 +311,17 @@ class OptimizerSettings {
       this.target,
       this.targets,
       minimumModDots,
+      this.sliceMods,
+      this.isLocked
+    );
+  }
+
+  withModSlicing(sliceMods) {
+    return new OptimizerSettings(
+      this.target,
+      this.targets,
+      this.minimumModDots,
+      sliceMods,
       this.isLocked
     );
   }
@@ -312,6 +331,7 @@ class OptimizerSettings {
       target: this.target.serialize(),
       targets: this.targets.map(target => target.serialize()),
       minimumModDots: this.minimumModDots,
+      sliceMods: this.sliceMods,
       isLocked: this.isLocked
     };
   }
@@ -332,6 +352,7 @@ class OptimizerSettings {
         OptimizationPlan.deserialize(settingsJson.target),
         settingsJson.targets.map(OptimizationPlan.deserialize),
         minimumModDots,
+        settingsJson.sliceMods || false,
         settingsJson.isLocked
       );
     } else {

@@ -149,19 +149,27 @@ class ModSet {
     let maxSetCounts = new WeakMap();
 
     for (let slot of ModSet.slots) {
+      let workingMod;
+
       const mod = this[slot];
       if (null === mod) {
         continue;
       }
       const set = mod.set;
 
-      // Update the summary for each stat on each mod
-      const primaryStat = character.optimizerSettings.target.upgradeMods ?
-        mod.primaryStat.upgradePrimary(mod.pips) :
-        mod.primaryStat;
+      // Upgrade or slice each mod as necessary based on the optimizer settings and level of the mod
+      workingMod = mod;
+      // If the mod is less than level 15, then check if we need to level it and upgrade the primary stat
+      if (15 > workingMod.level && character.optimizerSettings.target.upgradeMods) {
+        workingMod = workingMod.levelUp();
+      }
+      // If the mod is 5-dot and level 15, then check if we need to slice it
+      if (15 === workingMod.level && 5 === workingMod.pips && character.optimizerSettings.sliceMods) {
+        workingMod = workingMod.slice();
+      }
 
-      this.updateSummary(summary, primaryStat, character, statMap);
-      for (let secondaryStat of mod.secondaryStats) {
+      this.updateSummary(summary, workingMod.primaryStat, character, statMap);
+      for (let secondaryStat of workingMod.secondaryStats) {
         this.updateSummary(summary, secondaryStat, character, statMap);
       }
 
@@ -170,7 +178,7 @@ class ModSet {
       const currentMaxCount = maxSetCounts.get(set) || 0;
       if (set) {
         smallSetCounts.set(set, currentSmallCount + 1);
-        if (character.optimizerSettings.target.upgradeMods || 15 === mod.level) {
+        if (character.optimizerSettings.target.upgradeMods || 15 === workingMod.level) {
           maxSetCounts.set(set, currentMaxCount + 1);
         }
       }

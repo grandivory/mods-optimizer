@@ -57,6 +57,43 @@ class Mod {
   }
 
   /**
+   * Simulate leveling this mod up to level 15, upgrading the primary stat as needed, but not changing any of the
+   * secondary stats
+   * @returns {Mod}
+   */
+  levelUp() {
+    return new Mod(
+      this.id,
+      this.slot,
+      this.set,
+      15,
+      this.pips,
+      this.primaryStat.upgradePrimary(this.pips),
+      this.secondaryStats,
+      this.characterID,
+      this.tier
+    );
+  }
+
+  /**
+   * Upgrade all of the stats on this mod to see what it would be like after slicing from 5A to 6E
+   * @returns {Mod}
+   */
+  slice() {
+    return new Mod(
+      this.id,
+      this.slot,
+      this.set,
+      this.level,
+      6,
+      this.primaryStat.upgradePrimary(6),
+      this.secondaryStats.map(stat => stat.upgradeSecondary()),
+      this.characterID,
+      1
+    );
+  }
+
+  /**
    * Convert this mod to a simple JSON object so that it can be stringified
    */
   serialize() {

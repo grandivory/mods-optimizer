@@ -239,13 +239,19 @@ class Optimizer {
    */
   scoreMod(mod, character) {
     let score = 0;
+    let workingMod = mod;
 
-    const primaryStat = character.optimizerSettings.target.upgradeMods ?
-      mod.primaryStat.upgradePrimary(mod.pips) :
-      mod.primaryStat;
+    // If the mod is less than level 15, then check if we need to level it and upgrade the primary stat
+    if (15 > workingMod.level && character.optimizerSettings.target.upgradeMods) {
+      workingMod = workingMod.levelUp();
+    }
+    // If the mod is 5-dot and level 15, then check if we need to slice it
+    if (15 === workingMod.level && 5 === workingMod.pips && character.optimizerSettings.sliceMods) {
+      workingMod = workingMod.slice();
+    }
 
-    score += primaryStat.getOptimizationValue(character);
-    score += mod.secondaryStats.map(
+    score += workingMod.primaryStat.getOptimizationValue(character);
+    score += workingMod.secondaryStats.map(
       stat => stat.getOptimizationValue(character)
     ).reduce((a, b) => a + b, 0);
 

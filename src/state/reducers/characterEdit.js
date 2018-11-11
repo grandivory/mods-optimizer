@@ -147,6 +147,17 @@ export function changeMinimumModDots(state, action) {
   });
 }
 
+export function changeSliceMods(state, action) {
+  return updateCurrentProfile(state, profile => {
+    const oldCharacter = profile.characters[action.characterID];
+
+    return profile.withCharacters(Object.assign({}, profile.characters, {
+      [action.characterID]:
+        oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withModSlicing(action.sliceMods))
+    }));
+  });
+}
+
 export function changeCharacterFilter(state, action) {
   return Object.assign({}, state, {
     characterFilter: action.filter

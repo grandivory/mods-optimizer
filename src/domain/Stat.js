@@ -92,6 +92,20 @@ class Stat {
   }
 
   /**
+   * Return the value this stat would have if it were upgraded on a mod sliced from 5A to 6E
+   * @returns {Stat}
+   */
+  upgradeSecondary() {
+    if (Stat.secondaryUpgradeFactors.hasOwnProperty(this.type)) {
+      return new Stat(this.type, `${Stat.secondaryUpgradeFactors[this.type] * this.value}`)
+    } else if ('Speed' === this.type) {
+      return new Stat(this.type, `${this.value + 1}`)
+    } else {
+      return this;
+    }
+  }
+
+  /**
    * Get the value of this stat for optimization
    *
    * @param character
@@ -254,6 +268,20 @@ Stat.maxPrimaries = {
     5: "24%",
     6: "35%"
   }
+};
+
+Stat.secondaryUpgradeFactors = {
+  'Offense %': 3.02,
+  'Defense %': 2.34,
+  'Health %': 1.86,
+  'Defense': 1.63,
+  'Tenacity %': 1.33,
+  'Potency %': 1.33,
+  'Protection %': 1.33,
+  'Health': 1.26,
+  'Protection': 1.11,
+  'Offense': 1.10,
+  'Critical Chance %': 1.04
 };
 
 export default Stat;
