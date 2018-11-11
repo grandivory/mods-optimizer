@@ -100,7 +100,8 @@ export function receiveProfile(state, action) {
       return character.withOptimizerSettings(new OptimizerSettings(
         character.defaultSettings.targets[0] || new OptimizationPlan(),
         [],
-        character.defaultSettings.extraTags.includes('Crew Member'),
+        character.defaultSettings.extraTags.includes('Crew Member') ? 5 : 1,
+        false,
         false
       ));
     }
