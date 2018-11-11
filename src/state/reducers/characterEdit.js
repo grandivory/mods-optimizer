@@ -136,13 +136,13 @@ export function deleteTarget(state, action) {
   );
 }
 
-export function changeUse5DotMods(state, action) {
+export function changeMinimumModDots(state, action) {
   return updateCurrentProfile(state, profile => {
     const oldCharacter = profile.characters[action.characterID];
 
     return profile.withCharacters(Object.assign({}, profile.characters, {
       [action.characterID]:
-        oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withOnly5DotMods(action.use5DotMods))
+        oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withMinimumModDots(action.minimumModDots))
     }));
   });
 }

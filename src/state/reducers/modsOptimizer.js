@@ -5,6 +5,7 @@ import {
   CHANGE_CHARACTER_EDIT_MODE,
   CHANGE_CHARACTER_FILTER,
   CHANGE_CHARACTER_TARGET,
+  CHANGE_MINIMUM_MOD_DOTS,
   CHANGE_USE_FIVE_DOT_MODS,
   DELETE_TARGET,
   FINISH_EDIT_CHARACTER_TARGET,
@@ -12,7 +13,8 @@ import {
   RESET_ALL_CHARACTER_TARGETS,
   RESET_CHARACTER_TARGET_TO_DEFAULT,
   SELECT_CHARACTER,
-  UNLOCK_CHARACTER, UNSELECT_ALL_CHARACTERS,
+  UNLOCK_CHARACTER,
+  UNSELECT_ALL_CHARACTERS,
   UNSELECT_CHARACTER
 } from "../actions/characterEdit";
 import {
@@ -41,14 +43,15 @@ import {
   changeCharacterEditMode,
   changeCharacterFilter,
   changeCharacterTarget,
-  changeUse5DotMods,
+  changeMinimumModDots,
   deleteTarget,
   finishEditCharacterTarget,
   lockCharacter,
   resetAllCharacterTargets,
   resetCharacterTargetToDefault,
   selectCharacter,
-  unlockCharacter, unselectAllCharacters,
+  unlockCharacter,
+  unselectAllCharacters,
   unselectCharacter
 } from "./characterEdit";
 import {
@@ -134,8 +137,8 @@ export default function modsOptimizer(state, action) {
       return saveState(resetAllCharacterTargets(state, action));
     case DELETE_TARGET:
       return saveState(deleteTarget(state, action));
-    case CHANGE_USE_FIVE_DOT_MODS:
-      return saveState(changeUse5DotMods(state, action));
+    case CHANGE_MINIMUM_MOD_DOTS:
+      return saveState(changeMinimumModDots(state, action));
     case CHANGE_CHARACTER_FILTER:
       return saveState(changeCharacterFilter(state, action));
 

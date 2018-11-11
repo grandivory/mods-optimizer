@@ -81,8 +81,10 @@
   vertical-align: middle;
 }
 
-.character-edit-form .form-row label {
-  margin-right: 1em;
+.character-edit-form .form-row label + input,
+.character-edit-form .form-row label + select
+{
+  margin-left: 1em;
 }
 
 .character-edit-form .form-row input[type=range],

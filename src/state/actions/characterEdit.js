@@ -10,7 +10,7 @@ export const FINISH_EDIT_CHARACTER_TARGET = 'FINISH_EDIT_CHARACTER_TARGET';
 export const RESET_CHARACTER_TARGET_TO_DEFAULT = 'RESET_CHARACTER_TARGET_TO_DEFAULT';
 export const RESET_ALL_CHARACTER_TARGETS = 'RESET_ALL_CHARACTER_TARGETS';
 export const DELETE_TARGET = 'DELETE_TARGET';
-export const CHANGE_USE_FIVE_DOT_MODS = 'CHANGE_USE_FIVE_DOT_MODS';
+export const CHANGE_MINIMUM_MOD_DOTS = 'CHANGE_MINIMUM_MOD_DOTS';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
 
 /**
@@ -146,16 +146,16 @@ export function deleteTarget(character) {
 }
 
 /**
- * Change whether to use only 5-dot mods for a character
+ * Change the minimum dots that a mod needs to be used for a character
  * @param character string The character ID of the character being updated
- * @param use5DotMods boolean
- * @returns {{type: string, characterID: *, use5DotMods: *}}
+ * @param minimumModDots Integer
+ * @returns {{type: string, characterID: string, minimumModDots: number}}
  */
-export function changeUse5DotMods(character, use5DotMods) {
+export function changeMinimumModDots(character, minimumModDots) {
   return {
-    type: CHANGE_USE_FIVE_DOT_MODS,
+    type: CHANGE_MINIMUM_MOD_DOTS,
     characterID: character,
-    use5DotMods: use5DotMods
+    minimumModDots: minimumModDots
   };
 }
 

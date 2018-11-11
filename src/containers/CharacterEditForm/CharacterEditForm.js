@@ -7,7 +7,7 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 import {hideModal} from "../../state/actions/app";
 import {
   changeCharacterEditMode,
-  changeUse5DotMods,
+  changeMinimumModDots,
   deleteTarget,
   finishEditCharacterTarget,
   resetCharacterTargetToDefault,
@@ -63,12 +63,13 @@ class CharacterEditForm extends PureComponent {
       </div>
       <div id={'character-level-options'}>
         <div className={'form-row'}>
-          <label htmlFor="5dot" id={'fivedot-label'}>Use only 5-dot mods?</label>
-          <input
-            type={'checkbox'}
-            id={'5dot'}
-            name={'5dot'}
-            defaultChecked={character.optimizerSettings.useOnly5DotMods}/>
+          <label htmlFor='mod-dots' id={'fivedot-label'}>
+            Use only mods with at least&nbsp;
+            <select name={'mod-dots'} id={'mod-dots'} defaultValue={character.optimizerSettings.minimumModDots}>
+              {[1, 2, 3, 4, 5, 6].map(dots => <option key={dots} value={dots}>{dots}</option>)}
+            </select>
+            &nbsp;dot(s)
+          </label>
         </div>
       </div>
       <div className={'instructions'}>
@@ -440,20 +441,19 @@ class CharacterEditForm extends PureComponent {
     this.props.submitForm(
       this.props.character.baseID,
       newTarget,
-      this.form['5dot'].checked
+      +this.form['mod-dots'].value
     );
   }
 }
 
-const mapStateToProps = (state) =>
-  ({
+const mapStateToProps = (state) => ({
   editMode: state.characterEditMode
 });
 
 const mapDispatchToProps = (dispatch) => ({
   hideModal: () => dispatch(hideModal()),
-  submitForm: (characterID, target, use5DotMods) => {
-    dispatch(changeUse5DotMods(characterID, use5DotMods));
+  submitForm: (characterID, target, minimumModDots) => {
+    dispatch(changeMinimumModDots(characterID, minimumModDots));
     dispatch(unlockCharacter(characterID));
     dispatch(finishEditCharacterTarget(characterID, target));
   },

@@ -289,7 +289,7 @@ export default class Character {
     const optimizerSettings = new OptimizerSettings(
       selectedTarget,
       namedPlans || [],
-      characterJson.useOnly5DotMods,
+      characterJson.useOnly5DotMods ? 5 : 1,
       characterJson.isLocked || false
     );
 

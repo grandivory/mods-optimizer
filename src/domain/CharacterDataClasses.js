@@ -201,19 +201,19 @@ class PlayerValues {
 class OptimizerSettings {
   target;
   targets;
-  useOnly5DotMods;
+  minimumModDots;
   isLocked;
 
   /**
    * @param target OptimizationPlan
    * @param targets Array[OptimizationPlan]
-   * @param useOnly5DotMods Boolean
+   * @param minimumModDots Integer
    * @param isLocked Boolean
    */
-  constructor(target, targets, useOnly5DotMods, isLocked) {
+  constructor(target, targets, minimumModDots, isLocked) {
     this.target = target;
     this.targets = targets;
-    this.useOnly5DotMods = useOnly5DotMods;
+    this.minimumModDots = minimumModDots;
     this.isLocked = isLocked;
     Object.freeze(this);
   }
@@ -236,7 +236,7 @@ class OptimizerSettings {
     return new OptimizerSettings(
       target,
       Object.values(newTargetsObject),
-      this.useOnly5DotMods,
+      this.minimumModDots,
       this.isLocked
     );
   }
@@ -256,7 +256,7 @@ class OptimizerSettings {
     return new OptimizerSettings(
       newTarget,
       Object.values(Object.assign({}, oldTargetsObject, newTargetsObject)),
-      this.useOnly5DotMods,
+      this.minimumModDots,
       this.isLocked
     );
   }
@@ -275,7 +275,7 @@ class OptimizerSettings {
     return new OptimizerSettings(
       null,
       newTargets,
-      this.useOnly5DotMods,
+      this.minimumModDots,
       this.isLocked
     );
   }
@@ -284,7 +284,7 @@ class OptimizerSettings {
     return new OptimizerSettings(
       this.target,
       this.targets,
-      this.useOnly5DotMods,
+      this.minimumModDots,
       true
     );
   }
@@ -293,16 +293,16 @@ class OptimizerSettings {
     return new OptimizerSettings(
       this.target,
       this.targets,
-      this.useOnly5DotMods,
+      this.minimumModDots,
       false
     );
   }
 
-  withOnly5DotMods(useOnly5DotMods) {
+  withMinimumModDots(minimumModDots) {
     return new OptimizerSettings(
       this.target,
       this.targets,
-      useOnly5DotMods,
+      minimumModDots,
       this.isLocked
     );
   }
@@ -311,17 +311,27 @@ class OptimizerSettings {
     return {
       target: this.target.serialize(),
       targets: this.targets.map(target => target.serialize()),
-      useOnly5DotMods: this.useOnly5DotMods,
+      minimumModDots: this.minimumModDots,
       isLocked: this.isLocked
     };
   }
 
   static deserialize(settingsJson) {
     if (settingsJson) {
+      let minimumModDots;
+
+      if (settingsJson.minimumModDots) {
+        minimumModDots = settingsJson.minimumModDots;
+      } else if (settingsJson.useOnly5DotMods) {
+        minimumModDots = 5;
+      } else {
+        minimumModDots = 1;
+      }
+
       return new OptimizerSettings(
         OptimizationPlan.deserialize(settingsJson.target),
         settingsJson.targets.map(OptimizationPlan.deserialize),
-        settingsJson.useOnly5DotMods,
+        minimumModDots,
         settingsJson.isLocked
       );
     } else {

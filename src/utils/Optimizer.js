@@ -90,12 +90,8 @@ class Optimizer {
       usableMods = mods;
     }
 
-    // If the optimization plan says to only use 5-dot mods, then filter out any mods with fewer dots
-    if (character.optimizerSettings.useOnly5DotMods) {
-      availableMods = usableMods.filter(mod => 5 <= mod.pips);
-    } else {
-      availableMods = usableMods;
-    }
+    // Filter out the mods to only those that meet the minimum requirement for dots
+    availableMods = usableMods.filter(mod => character.optimizerSettings.minimumModDots <= mod.pips);
 
     // Go through all mods and assign a value to them based on the optimization plan
     for (let mod of mods) {
@@ -145,19 +141,14 @@ class Optimizer {
     }
 
     /**
-     * Given a sorted array of mods, return either the first mod (if it has a positive score or the character wants to
-     * use only 5-dot mods) or null. This allows for empty slots on characters where the mods might be better used
-     * elsewhere, or where mods have negative values.
+     * Given a sorted array of mods, return either the first mod (if it has a non-negative score) or null. This allows
+     * for empty slots on characters where the mods might be better used elsewhere.
      * @param candidates Array[Mod]
      * @returns Mod
      */
     const topMod = (candidates) => {
       const mod = firstOrNull(candidates);
-      // If we've already limited a character to using only 5-dot mods, then having any mod is likely worth something,
-      // so allow for 0-value mods.
-      if (mod &&
-        (modValues.get(mod) > 0 || (modValues.get(mod) === 0 && character.optimizerSettings.useOnly5DotMods))
-      ) {
+      if (mod && modValues.get(mod) >= 0) {
         return mod;
       } else {
         return null;
