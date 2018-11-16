@@ -46,7 +46,7 @@ export default class Character {
     return new Character(
       baseID,
       characterSettings[baseID] || new CharacterSettings()
-    ).withGameSettings(baseID);
+    ).withGameSettings(new GameSettings(baseID));
   }
 
   /**
