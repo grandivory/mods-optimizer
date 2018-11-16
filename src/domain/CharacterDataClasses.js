@@ -56,7 +56,7 @@ class GameSettings {
   tags;
   description;
 
-  constructor(name, avatarUrl, tags, description) {
+  constructor(name, avatarUrl = '//swgoh.gg/static/img/assets/blank-character.png', tags = [], description = '') {
     this.name = name;
     this.avatarUrl = avatarUrl;
     this.tags = tags;
