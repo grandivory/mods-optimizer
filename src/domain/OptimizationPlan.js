@@ -200,8 +200,8 @@ OptimizationPlan.statWeight = {
   'critChance': 10,
   'armor': 33,
   'resistance': 33,
-  'accuracy': 50,
-  'critAvoid': 25
+  'accuracy': 10,
+  'critAvoid': 10
 };
 
 export default OptimizationPlan;
