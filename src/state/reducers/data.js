@@ -49,7 +49,9 @@ export function receiveCharacters(state, action) {
     const gameSettings = new GameSettings(
       character.name,
       character.image,
-      character.categories.concat([character.alignment, character.role]),
+      character.categories
+        .concat([character.alignment, character.role])
+        .concat(character.ship_slot ? ['Crew Member'] : []),
       character.description
     );
 
