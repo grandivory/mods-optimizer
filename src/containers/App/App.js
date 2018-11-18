@@ -41,7 +41,7 @@ class App extends PureComponent {
       }
     }
   }
-  
+
   componentDidMount() {
     document.addEventListener('keyup', this.escapeListener);
   }

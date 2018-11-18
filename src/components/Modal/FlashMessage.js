@@ -3,7 +3,7 @@
 import React from 'react';
 
 import './Modal.css';
-import {hideFlash, hideModal} from "../../state/actions/app";
+import {hideFlash} from "../../state/actions/app";
 import {connect} from "react-redux";
 
 class FlashMessage extends React.PureComponent {
