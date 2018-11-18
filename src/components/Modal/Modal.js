@@ -16,7 +16,7 @@ class Modal extends React.PureComponent {
     const content = this.props.content;
 
     return <div className={'overlay'} onClick={this.props.hideModal}>
-      <div className={className}>
+      <div className={className} onClick={(e) => e.stopPropagation()}>
         {content}
       </div>
     </div>;

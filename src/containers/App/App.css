@@ -249,7 +249,6 @@ button:hover, button:focus,
 nav button.active {
   border-bottom: none;
   color: white;
-  bottom: -1px;
   position: relative;
 }
 
