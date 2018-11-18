@@ -16,7 +16,7 @@ class ErrorModal extends Modal {
         <h2 key={'error-header'}>Error!</h2>
         <p key={'error-message'}>{this.props.content}</p>
         <div key={'error-actions'} className={'actions'}>
-          <button type={'button'} onClick={() => this.props.close()}>Ok</button>
+          <button type={'button'} onClick={this.props.close}>Ok</button>
         </div>
       </div>
     </div>;

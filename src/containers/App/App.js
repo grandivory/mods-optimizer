@@ -14,6 +14,7 @@ import ErrorModal from "../ErrorModal/ErrorModal";
 import {serializeState} from "../../state/storage";
 import {changeSection, hideModal, reset, restoreProgress, showError, showModal} from "../../state/actions/app";
 import {refreshPlayerData, setMods, toggleKeepOldMods} from "../../state/actions/data";
+import FlashMessage from "../../components/Modal/FlashMessage";
 
 class App extends PureComponent {
 
@@ -122,6 +123,7 @@ class App extends PureComponent {
         {!instructionsScreen && 'optimize' === this.props.section &&
         <OptimizerView/>
         }
+        <FlashMessage/>
         <ErrorModal/>
         <Modal show={this.props.displayModal} className={this.props.modalClass} content={this.props.modalContent}/>
         <Spinner show={this.props.isBusy}/>

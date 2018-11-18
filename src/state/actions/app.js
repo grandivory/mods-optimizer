@@ -4,6 +4,8 @@ export const SHOW_MODAL = 'SHOW_MODAL';
 export const HIDE_MODAL = 'HIDE_MODAL';
 export const SHOW_ERROR = 'SHOW_ERROR';
 export const HIDE_ERROR = 'HIDE_ERROR';
+export const SHOW_FLASH = 'SHOW_FLASH';
+export const HIDE_FLASH = 'HIDE_FLASH';
 export const RESET = 'RESET';
 export const RESTORE_PROGRESS = 'RESTORE_PROGRESS';
 
@@ -38,6 +40,20 @@ export function showError(errorContent) {
 export function hideError() {
   return {
     type: HIDE_ERROR
+  };
+}
+
+export function showFlash(heading, flashContent) {
+  return {
+    type: SHOW_FLASH,
+    heading: heading,
+    content: flashContent
+  };
+}
+
+export function hideFlash() {
+  return {
+    type: HIDE_FLASH
   };
 }
 

@@ -132,7 +132,8 @@ function dispatchFetchProfile(dispatch, allyCode) {
 
         return {
           mods: profileMods,
-          characters: profileCharacters
+          characters: profileCharacters,
+          updated: playerProfile.updated
         };
       },
     )

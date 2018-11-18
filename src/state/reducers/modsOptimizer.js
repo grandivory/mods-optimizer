@@ -1,6 +1,15 @@
 // @flow
 import {restoreState, saveState} from "../storage";
-import {CHANGE_SECTION, HIDE_ERROR, HIDE_MODAL, RESET, RESTORE_PROGRESS, SHOW_ERROR, SHOW_MODAL} from "../actions/app";
+import {
+  CHANGE_SECTION,
+  HIDE_ERROR, HIDE_FLASH,
+  HIDE_MODAL,
+  RESET,
+  RESTORE_PROGRESS,
+  SHOW_ERROR,
+  SHOW_FLASH,
+  SHOW_MODAL
+} from "../actions/app";
 import {
   CHANGE_CHARACTER_EDIT_MODE,
   CHANGE_CHARACTER_FILTER,
@@ -37,7 +46,17 @@ import {
   UNEQUIP_MOD,
   UNEQUIP_MODS
 } from "../actions/review";
-import {changeSection, hideError, hideModal, reset, restoreProgress, showError, showModal} from "./app";
+import {
+  changeSection,
+  hideError,
+  hideFlash,
+  hideModal,
+  reset,
+  restoreProgress,
+  showError,
+  showFlash,
+  showModal
+} from "./app";
 import {
   changeCharacterEditMode,
   changeCharacterFilter,
@@ -109,6 +128,10 @@ export default function modsOptimizer(state, action) {
       return showError(state, action);
     case HIDE_ERROR:
       return hideError(state, action);
+    case SHOW_FLASH:
+      return showFlash(state, action);
+    case HIDE_FLASH:
+      return hideFlash(state, action);
     case RESET:
       return saveState(reset(state, action));
     case RESTORE_PROGRESS:

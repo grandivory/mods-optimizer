@@ -39,6 +39,23 @@ export function hideError(state, action) {
   });
 }
 
+export function showFlash(state, action) {
+  return Object.assign({}, state, {
+    flashMessage: {
+      heading: action.heading,
+      content: action.content
+    },
+    isBusy: false
+  });
+}
+
+export function hideFlash(state, action) {
+  return Object.assign({}, state, {
+    isBusy: false,
+    flashMessage: null
+  });
+}
+
 export function reset(state, action) {
   return Object.assign({}, defaultState);
 }

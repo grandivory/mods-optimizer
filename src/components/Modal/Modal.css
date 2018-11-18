@@ -28,3 +28,7 @@
   max-height: 100%;
   overflow-y: auto;
 }
+
+.modal.flash h2 {
+  color: #eeca44;
+}

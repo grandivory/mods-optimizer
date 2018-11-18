@@ -127,13 +127,23 @@ export function receiveProfile(state, action) {
   }
 
   const newProfile = profile.withCharacters(newCharacters).withMods(finalMods);
+  const lastUpdate = new Date(action.profile.updated);
+  const nextUpdate = new Date(lastUpdate.getTime() + 60 * 60 * 1000); // plus one hour
 
   return Object.assign({}, state, {
     isBusy: false,
     allyCode: action.allyCode,
     profiles: Object.assign({}, state.profiles, {
       [action.allyCode]: newProfile
-    })
+    }),
+    optimizerView: 'edit',
+    flashMessage: {
+      heading: 'Success!',
+      content: `Successfully pulled data for ${Object.keys(action.profile.characters).length} characters and ` +
+        `${action.profile.mods.length} mods.<br />` +
+        `Your data was last updated as of ${lastUpdate.toLocaleString()}.<br />` +
+        `You should be able to fetch fresh data any time after ${nextUpdate.toLocaleString()}`
+    }
   });
 }
 
