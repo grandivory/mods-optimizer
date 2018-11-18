@@ -3,6 +3,8 @@
 import React from 'react';
 
 import './Modal.css';
+import {hideModal} from "../../state/actions/app";
+import {connect} from "react-redux";
 
 class Modal extends React.PureComponent {
   render() {
@@ -13,7 +15,7 @@ class Modal extends React.PureComponent {
     const className = this.props.className ? ('modal ' + this.props.className) : 'modal';
     const content = this.props.content;
 
-    return <div className={'overlay'}>
+    return <div className={'overlay'} onClick={this.props.hideModal}>
       <div className={'modal ' + className}>
         {content}
       </div>
@@ -21,4 +23,10 @@ class Modal extends React.PureComponent {
   }
 }
 
-export default Modal;
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = (dispatch) => ({
+  hideModal: () => dispatch(hideModal())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

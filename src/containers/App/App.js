@@ -16,6 +16,7 @@ import {changeSection, hideModal, reset, restoreProgress, showError, showModal} 
 import {refreshPlayerData, setMods, toggleKeepOldMods} from "../../state/actions/data";
 
 class App extends PureComponent {
+
   constructor(props) {
     super(props);
 
@@ -32,6 +33,22 @@ class App extends PureComponent {
     if ((props.previousVersion < '1.3.0') && props.profile) {
       this.props.showModal('changelog-modal', this.changeLogModal());
     }
+
+    this.escapeListener = (e) => {
+      if (e.key === 'Escape') {
+        this.props.hideModal();
+      }
+    }
+  }
+
+
+
+  componentDidMount() {
+    document.addEventListener('keyup', this.escapeListener);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keyup', this.escapeListener);
   }
 
   /**
