@@ -39,7 +39,6 @@
 .mod-set-view .mod.square {
   left: .25em;
   top: .7em;
-  width: 4em;
 }
 
 .mod-set-view .mod.square .pips {
@@ -47,84 +46,81 @@
   top: 4px;
 }
 
+.mod-set-view .mod.square .mod-level {
+  top: 1.83em;
+}
+
 .mod-set-view .mod.arrow {
-  right: .95em;
-  top: -.2em;
-  width: 4em;
-  font-size: 1.11em;
+  right: 1.09em;
+  top: -.08em;
 }
 
 .mod-set-view .mod.arrow .pips {
-  left: 5px;
-  top: 4px;
+  left: 3px;
+  top: 3px;
 }
 
 .mod-set-view .mod.arrow .mod-level {
-  bottom: -1.14em;
-  right: 1.75em;
+  bottom: -.95em;
+  right: 1.7em;
 }
 
 .mod-set-view .mod.diamond {
-  left: 1.85em;
-  top: 7.95em;
-  width: 4em;
-  font-size: 1.11em;
+  left: 2.16em;
+  top: 9.1em;
 }
 
 .mod-set-view .mod.diamond .pips {
-  left: 5px;
-  top: 5px;
+  left: 4px;
+  top: 2px;
 }
 
 .mod-set-view .mod.diamond .mod-level {
-  bottom: -17px;
-  right: 7px;
+  bottom: -.9em;
+  right: .4em;
 }
 
 .mod-set-view .mod.triangle {
-  right: 1.8em;
-  top: 7.2em;
-  width: 4em;
+  right: 1.7em;
+  top: 7.17em;
 }
 
 .mod-set-view .mod.triangle .pips {
-  left: 0;
+  left: 1px;
   top: 5px;
 }
 
 .mod-set-view .mod.triangle .mod-level {
-  right: -20px;
+  right: -1.25em;
+  bottom: 1em;
 }
 
 .mod-set-view .mod.circle {
-  left: .95em;
-  bottom: .45em;
-  width: 4em;
-  font-size: 1.11em;
+  left: 1.05em;
+  bottom: .2em;
 }
 
 .mod-set-view .mod.circle .pips {
   left: 5px;
-  top: 6px;
+  top: 3px;
 }
 
 .mod-set-view .mod.circle .mod-level {
   left: -1.25em;
-  top: .57em;
+  top: 1.9em;
 }
 
 .mod-set-view .mod.cross {
-  right: .92em;
-  bottom: 1.95em;
-  width: 4em;
-  font-size: 1.1375em;
+  right: 1.12em;
+  bottom: 1.9em;
 }
 
 .mod-set-view .mod.cross .pips {
   left: 6px;
-  top: 5px;
+  top: 4px;
 }
 
 .mod-set-view .mod.cross .mod-level {
-  bottom: -13px;
+  left: -.35em;
+  bottom: -.5em;
 }

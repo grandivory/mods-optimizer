@@ -5,14 +5,6 @@
   z-index: 100;
 }
 
-.mod-image.remove img {
-  filter: drop-shadow(0 0 .5em darkred);
-}
-
-.mod-image.add img {
-  filter: drop-shadow(0 0 .5em #60bd1b);
-}
-
 .mod-image.square {
   left: 20px;
 }
@@ -25,11 +17,6 @@
   left: 3px;
 }
 
-.mod-image img {
-  max-width: 100%;
-  display: block;
-}
-
 .mod-image .avatar {
   position: absolute;
   left: -.5em;
@@ -38,12 +25,159 @@
   height: 2em;
 }
 
-.mod-image .avatar img {
-  filter: none;
-}
-
 .mod-slot-image {
   position: relative;
+  background-image: url('/img/mod-shape-atlas.png');
+  background-size: 48em 20em;
+  width: 4em;
+  height: 4em;
+}
+
+.mod-image.arrow .mod-slot-image {
+  font-size: 1.05em;
+}
+
+.mod-image.diamond .mod-slot-image {
+  font-size: 1.05em;
+}
+
+.mod-image.triangle .mod-slot-image {
+  font-size: 1.04em;
+}
+
+.mod-image.circle .mod-slot-image {
+  font-size: 1.05em;
+}
+
+.mod-image.cross .mod-slot-image {
+  font-size: 1.1em;
+}
+
+.mod-image.square .mod-slot-image {}
+.mod-image.arrow .mod-slot-image {
+  background-position-x: -4em;
+}
+.mod-image.diamond .mod-slot-image {
+  background-position-x: -8em;
+}
+.mod-image.triangle .mod-slot-image {
+  background-position-x: -12em;
+}
+.mod-image.circle .mod-slot-image {
+  background-position-x: -16em;
+}
+.mod-image.cross .mod-slot-image {
+  background-position-x: -20em;
+}
+.mod-image.square.dots-6 .mod-slot-image {
+  background-position-x: -24em;
+}
+.mod-image.arrow.dots-6 .mod-slot-image {
+  background-position-x: -28em;
+}
+.mod-image.diamond.dots-6 .mod-slot-image {
+  background-position-x: -32em;
+}
+.mod-image.triangle.dots-6 .mod-slot-image {
+  background-position-x: -36em;
+}
+.mod-image.circle.dots-6 .mod-slot-image {
+  background-position-x: -40em;
+}
+.mod-image.cross.dots-6 .mod-slot-image {
+  background-position-x: -44em;
+}
+
+.mod-image.gray .mod-slot-image {
+  background-position-y: -0.2em;
+}
+.mod-image.green .mod-slot-image {
+  background-position-y: -4.2em;
+}
+.mod-image.blue .mod-slot-image {
+  background-position-y: -8.2em;
+}
+.mod-image.purple .mod-slot-image {
+  background-position-y: -12.2em;
+}
+.mod-image.gold .mod-slot-image {
+  background-position-y: -16.2em;
+}
+
+.mod-slot-image::after {
+  content: '';
+  display: block;
+  position: absolute;
+  background-image: url('/img/mod-icon-atlas.png');
+  background-size: 8em 5em;
+  width: 1em;
+  height: 1em;
+}
+
+.mod-image.square .mod-slot-image::after {
+  font-size: 1.3em;
+  left: 1.3em;
+  top: .68em;
+}
+.mod-image.arrow .mod-slot-image::after {
+  font-size: 1.1em;
+  left: 1.8em;
+  top: .7em;
+}
+.mod-image.diamond .mod-slot-image::after {
+  font-size: 1.2em;
+  left: 1.16em;
+  top: 1.01em;
+}
+.mod-image.triangle .mod-slot-image::after {
+  font-size: 1.05em;
+  left: 1.4em;
+  top: 1.45em;
+}
+.mod-image.circle .mod-slot-image::after {
+  font-size: 1.2em;
+  left: 1.17em;
+  top: 1.01em;
+}
+.mod-image.cross .mod-slot-image::after {
+  font-size: 1.2em;
+  left: 1.18em;
+  top: 1.03em;
+}
+
+.mod-image.offense .mod-slot-image::after {
+  background-position-x: -1em;
+}
+.mod-image.defense .mod-slot-image::after {
+  background-position-x: -2em;
+}
+.mod-image.speed .mod-slot-image::after {
+  background-position-x: -3em;
+}
+.mod-image.critchance .mod-slot-image::after {
+  background-position-x: -4em;
+}
+.mod-image.critdamage .mod-slot-image::after {
+  background-position-x: -5em;
+}
+.mod-image.potency .mod-slot-image::after {
+  background-position-x: -6em;
+}
+.mod-image.tenacity .mod-slot-image::after {
+  background-position-x: -7em;
+}
+
+.mod-image.green .mod-slot-image::after {
+  background-position-y: -1em;
+}
+.mod-image.blue .mod-slot-image::after {
+  background-position-y: -2em;
+}
+.mod-image.purple .mod-slot-image::after {
+  background-position-y: -3em;
+}
+.mod-image.gold .mod-slot-image::after {
+  background-position-y: -4em;
 }
 
 .mod-level {
@@ -62,8 +196,8 @@
   background-image: url('/img/modlevel-square.png');
   width: 2.08em;
   height: 1.5em;
-  left: -1.4em;
-  top: .3em;
+  left: -1.45em;
+  top: 1.85em;
   padding: .15em .6em .15em .15em;
 }
 
@@ -71,8 +205,8 @@
   background-image: url('/img/modlevel-arrow.png');
   width: 1.56em;
   height: 1.71em;
-  bottom: -1.14em;
-  right: 1.5em;
+  bottom: -.85em;
+  right: 1.4em;
   padding: .43em .14em .14em;
 }
 
@@ -80,8 +214,8 @@
   background-image: url('/img/modlevel-diamond.png');
   width: 1.71em;
   height: 2.64em;
-  bottom: -1.22em;
-  right: .38em;
+  bottom: -.86em;
+  right: .19em;
   padding: 1.29em .14em .14em;
 }
 
@@ -89,8 +223,8 @@
   background-image: url('/img/modlevel-triangle.png');
   width: 2.29em;
   height: 1.57em;
-  bottom: .52em;
-  right: -1.58em;
+  bottom: 1.06em;
+  right: -1.67em;
   padding: .14em .14em .14em .64em;
 }
 
@@ -98,8 +232,8 @@
   background-image: url('/img/modlevel-circle.png');
   width: 2.5em;
   height: 1.57em;
-  left: -1.14em;
-  top: .49em;
+  left: -1.24em;
+  top: 1.95em;
   padding: .14em 1.07em .14em .14em;
 }
 
@@ -107,133 +241,7 @@
   background-image: url('/img/modlevel-cross.png');
   width: 1.79em;
   height: 2.21em;
-  left: -.18em;
-  bottom: -1em;
+  left: -.2em;
+  bottom: -.67em;
   padding: .86em .21em .14em .14em;
-}
-
-.modset {
-  position: absolute;
-}
-
-.mod-image.gold .modset {
-  filter: drop-shadow(0 0 .05em #eeca44);
-}
-
-.mod-image.gold .modset path {
-  fill: #eeca44;
-}
-
-.mod-image.purple .modset {
-  filter: drop-shadow(0 0 .05em #a35ef9);
-}
-
-.mod-image.purple .modset path {
-  fill: #a35ef9;
-}
-
-.mod-image.blue .modset {
-  filter: drop-shadow(0 0 .05em #2997f1);
-}
-
-.mod-image.blue .modset path {
-  fill: #2997f1;
-}
-
-.mod-image.green .modset {
-  filter: drop-shadow(0 0 .05em #8fff3a);
-}
-
-.mod-image.green .modset path {
-  fill: #8fff3a;
-}
-
-.mod-image.gray .modset {
-  filter: drop-shadow(0 0 .05em #ccfffe);
-}
-
-.mod-image.gray .modset path {
-  fill: #ccfffe;
-}
-
-.mod-image .modset path[class='2x'],
-.mod-image .modset path.bang {
-  fill: #000000;
-}
-
-.mod-image.square .modset {
-  top: .84em;
-  right: .98em;
-  width: 1.3em;
-}
-
-.mod-image.arrow .modset {
-  top: .77em;
-  right: .98em;
-  width: 1.1em;
-}
-
-.mod-image.diamond .modset {
-  top: 1.2em;
-  left: 1.35em;
-  width: 1.3em;
-}
-
-.mod-image.triangle .modset {
-  top: 1.58em;
-  left: 1.39em;
-  width: 1.18em;
-}
-
-.mod-image.triangle .modset.potency {
-  top: 1.5em;
-}
-
-.mod-image.circle .modset {
-  top: 1.24em;
-  left: 1.35em;
-  width: 1.3em;
-}
-
-.mod-image.circle .modset.defense {
-  top: 1.28em;
-  left: 1.33em;
-}
-
-.mod-image.cross .modset {
-  top: 1.23em;
-  left: 1.41em;
-  width: 1.22em;
-}
-
-.mod-highlight {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
-
-.mod-highlight path {
-  fill: none;
-  stroke-width: .2em;
-}
-
-.mod-image.gold .mod-highlight {
-  stroke: #eeca44;
-}
-
-.mod-image.purple .mod-highlight {
-  stroke: #a35ef9;
-}
-
-.mod-image.blue .mod-highlight {
-  stroke: #2997f1;
-}
-
-.mod-image.green .mod-highlight {
-  stroke: #8fff3a;
-}
-
-.mod-image.gray .mod-highlight {
-  stroke: #ccfffe;
 }
