@@ -4,7 +4,6 @@ import OptimizationPlan from "../domain/OptimizationPlan";
 import optimizationStrategy from "./optimizationStrategy";
 import {CharacterSettings, DamageType} from "../domain/CharacterDataClasses";
 
-// TODO: Don't have "Crew Member" in extra tags - get it from a data source
 const characterSettings = {
   'AAYLASECURA': new CharacterSettings(
     [
@@ -17,11 +16,11 @@ const characterSettings = {
   ),
   'ADMIRALACKBAR': new CharacterSettings(
     [new OptimizationPlan('Survivability', 20, 20, 100, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, true)],
-    ['AA', 'Snackbar', 'ABC', 'Crew Member']
+    ['AA', 'Snackbar', 'ABC']
   ),
   'AHSOKATANO': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
-    ['Snips', 'Crew Member']
+    ['Snips']
   ),
   'AMILYNHOLDO': new CharacterSettings(
     [new OptimizationPlan('PvP', 20, 10, 100, 0, 50, 25, 0, 0, 0, 5, 5, 0, 0, true)],
@@ -69,6 +68,14 @@ const characterSettings = {
     [],
     DamageType.special
   ),
+  'BASTILASHANDARK': new CharacterSettings(
+    [
+      new OptimizationPlan('Low Star', 10, 20, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('7-star', 0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)
+    ],
+    [],
+    DamageType.special
+  ),
   'BAZEMALBUS': new CharacterSettings(
     [
       new OptimizationPlan('Slow Tank', 50, 50, 0, 0, 10, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
@@ -85,20 +92,20 @@ const characterSettings = {
   ),
   'BIGGSDARKLIGHTER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
-    ['Wiggs', 'Chiggs', 'Crew Member']
+    ['Wiggs', 'Chiggs']
   ),
   'BISTAN': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
-    ['Rogue 1', 'SuperStar2D2', 'Crew Member']
+    ['Rogue 1', 'SuperStar2D2']
   ),
   'BOBAFETT': new CharacterSettings(
     [
       new OptimizationPlan('PvE', 0, 0, 50, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true),
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
       new OptimizationPlan('hSTR Phase 2', 0, 0, 100, 75, 0, 0, 25, 0, 50, 0, 0, 0, 0, true),
-      new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 50, 0, 0, 100, 0, 25, 0, 0, 0, 0, true)
-    ],
-    ['Crew Member']
+      new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 50, 0, 0, 100, 0, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('hSTR Phase 3 Greedo', 0, 0, 20, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'BODHIROOK': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -108,16 +115,17 @@ const characterSettings = {
     [
       new OptimizationPlan('Leader', 20, 20, 100, 25, 25, 0, 25, 0, 25, 0, 0, 0, 0, true),
       new OptimizationPlan('Non-leader', 20, 0, 100, 25, 25, 0, 25, 0, 25, 0, 0, 0, 0, true)
-    ],
-    ['Crew Member']
+    ]
   ),
   'CADBANE': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
-    ['Crew Member']
+    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
+  ),
+  'CANDEROUSORDO': new CharacterSettings(
+    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
   ),
   'CASSIANANDOR': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 20, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
-    ['Rogue 1', 'SuperStar2D2', 'Crew Member'],
+    ['Rogue 1', 'SuperStar2D2'],
     DamageType.mixed
   ),
   'CC2224': new CharacterSettings(
@@ -131,7 +139,8 @@ const characterSettings = {
   'CHEWBACCALEGENDARY': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
-      new OptimizationPlan('Chew Mix', 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('Chew Mix', 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('hSTR Phase 3 Greedo', 0, 0, 75, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)
     ],
     ['Chex Mix']
   ),
@@ -151,12 +160,11 @@ const characterSettings = {
     ['Rogue 1', 'Chaze', 'Chiggs', 'Chex Mix']
   ),
   'CHOPPERS3': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 40, 100, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, true)],
-    ['Crew Member']
+    [new OptimizationPlan('PvP', 20, 40, 100, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'CLONESERGEANTPHASEI': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
-    ['Sarge', 'Crew Member']
+    ['Sarge']
   ),
   'CLONEWARSCHEWBACCA': new CharacterSettings(
     [new OptimizationPlan('Tanky', 50, 50, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)],
@@ -184,15 +192,14 @@ const characterSettings = {
     DamageType.mixed
   ),
   'CT5555': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
-    ['Crew Member']
+    [new OptimizationPlan('PvP', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'CT7567': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 10, 0, 100, 0, 10, 20, 0, 0, 0, 0, 0, 0, 0, true),
       optimizationStrategy.Speed.rename('Chex Mix')
     ],
-    ['Titans', 'Crew Member']
+    ['Titans']
   ),
   'CT210408': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
@@ -232,7 +239,7 @@ const characterSettings = {
   ),
   'DEATHTROOPER': new CharacterSettings(
     [new OptimizationPlan('Damage', 0, 0, 80, 100, 25, 0, 25, 0, 25, 0, 0, 0, 0, true)],
-    ['Troopers', 'Chex Mix', 'Crew Member']
+    ['Troopers', 'Chex Mix']
   ),
   'DENGAR': new CharacterSettings(
     [
@@ -282,12 +289,11 @@ const characterSettings = {
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
       new OptimizationPlan('hSTR P1 Jedi', 0, -5, 100, 75, 0, 0, 50, 0, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P2 Jedi', 0, 0, 60, 100, 0, 0, 75, 0, 75, 0, 0, 0, 0, true)
-    ],
-    ['Crew Member']
+    ]
   ),
   'FINN': new CharacterSettings(
     [optimizationStrategy["Slow Crit, Physical Damage, Potency"].rename('PvP')],
-    ['Zinn', 'Crew Member']
+    ['Zinn']
   ),
   'FIRSTORDEREXECUTIONER': new CharacterSettings(
     [new OptimizationPlan('PvP', 25, 0, 100, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true)],
@@ -299,16 +305,16 @@ const characterSettings = {
   ),
   'FIRSTORDERSPECIALFORCESPILOT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
-    ['SFTP', 'FO', 'Crew Member'],
+    ['SFTP', 'FO'],
     DamageType.mixed
   ),
   'FIRSTORDERTIEPILOT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
-    ['FOTP', 'FO', 'Crew Member']
+    ['FOTP', 'FO']
   ),
   'FIRSTORDERTROOPER': new CharacterSettings(
     [new OptimizationPlan('PvP', 20, 20, 100, 50, 50, 25, 0, 0, 0, 5, 5, 0, 0, true)],
-    ['FOST', 'FO', 'Crew Member']
+    ['FOST', 'FO']
   ),
   'FULCRUMAHSOKA': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
@@ -319,8 +325,7 @@ const characterSettings = {
     ['Piggy']
   ),
   'GARSAXON': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
-    ['Crew Member']
+    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
   'GENERALKENOBI': new CharacterSettings(
     [
@@ -332,16 +337,14 @@ const characterSettings = {
     ['GK', 'Titans']
   ),
   'GEONOSIANSOLDIER': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
-    ['Crew Member']
+    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
   ),
   'GEONOSIANSPY': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
-    ['Crew Member']
+    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
   ),
   'GRANDADMIRALTHRAWN': new CharacterSettings(
     [optimizationStrategy["Speed with survivability"].rename('PvP')],
-    ['GAT', 'Imperial Grancor Maneuver', 'Wampanader', 'ABC', 'Titans', 'Crew Member'],
+    ['GAT', 'Imperial Grancor Maneuver', 'Wampanader', 'ABC', 'Titans'],
     DamageType.special
   ),
   'GRANDMASTERYODA': new CharacterSettings(
@@ -355,11 +358,14 @@ const characterSettings = {
   ),
   'GRANDMOFFTARKIN': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 15, 15, 50, 0, 0, 0, 0, true)],
-    ['GMT', 'Auto Lightzader', 'Imperial Grancor Maneuver', 'Crew Member'],
+    ['GMT', 'Auto Lightzader', 'Imperial Grancor Maneuver'],
     DamageType.mixed
   ),
   'GREEDO': new CharacterSettings(
-    [new OptimizationPlan('Crits', 0, 0, 100, 50, 25, 0, 25, 0, 100, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('Crits', 0, 0, 100, 50, 25, 0, 25, 0, 100, 0, 0, 0, 0, true),
+      new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true)
+    ]
   ),
   'GRIEVOUS': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
@@ -373,8 +379,7 @@ const characterSettings = {
     ['Raid Han', 'rHan', 'OG Han', 'Zolo', 'Chex Mix', 'Titans']
   ),
   'HERASYNDULLAS3': new CharacterSettings(
-    [optimizationStrategy["Speedy debuffer"].rename('Speed')],
-    ['Crew Member']
+    [optimizationStrategy["Speedy debuffer"].rename('Speed')]
   ),
   'HERMITYODA': new CharacterSettings(
     [optimizationStrategy.Speed.rename('Speed')],
@@ -407,8 +412,7 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
   ),
   'IG88': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('Damage')],
-    ['Crew Member']
+    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('Damage')]
   ),
   'IMAGUNDI': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
@@ -423,7 +427,7 @@ const characterSettings = {
   ),
   'IMPERIALSUPERCOMMANDO': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
-    ['ISC', 'Crew Member']
+    ['ISC']
   ),
   'JANGOFETT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
@@ -443,7 +447,7 @@ const characterSettings = {
   ),
   'JEDIKNIGHTCONSULAR': new CharacterSettings(
     [new OptimizationPlan('Healer', 50, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)],
-    ['JC', 'Crew Member'],
+    ['JC'],
     DamageType.mixed
   ),
   'JEDIKNIGHTGUARDIAN': new CharacterSettings(
@@ -460,15 +464,14 @@ const characterSettings = {
   ),
   'JYNERSO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 50, 50, 0, 20, 0, 75, 0, 0, 0, 0, true)],
-    ['Rogue 1', 'Auto Lightzader', 'Imperial Grancor Maneuver', 'SuperStar2D2', 'Crew Member']
+    ['Rogue 1', 'Auto Lightzader', 'Imperial Grancor Maneuver', 'SuperStar2D2']
   ),
   'K2SO': new CharacterSettings(
     [new OptimizationPlan('Tanky', 20, 20, 100, 0, 50, 50, 0, 0, 0, 0, 0, 0, 0, true)],
-    ['Rogue 1', 'Cass-2SO', 'K2', 'Crew Member']
+    ['Rogue 1', 'Cass-2SO', 'K2']
   ),
   'KANANJARRUSS3': new CharacterSettings(
-    [new OptimizationPlan('Tanky', 0, 40, 100, 0, 30, 0, 0, 0, 50, 0, 0, 0, 0, true)],
-    ['Crew Member']
+    [new OptimizationPlan('Tanky', 0, 40, 100, 0, 30, 0, 0, 0, 50, 0, 0, 0, 0, true)]
   ),
   'KITFISTO': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE')],
@@ -476,18 +479,18 @@ const characterSettings = {
   ),
   'KYLOREN': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
-    ['Old Kylo', 'zylo', 'FO', 'Crew Member']
+    ['Old Kylo', 'zylo', 'FO']
   ),
   'KYLORENUNMASKED': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
-    ['kru', 'matt', 'Snape', 'FO', 'Crew Member']
+    ['kru', 'matt', 'Snape', 'FO']
   ),
   'L3_37': new CharacterSettings(
     [
       new OptimizationPlan('Tanky', 40, 20, 50, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
       new OptimizationPlan('Speedy', 40, 20, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)
     ],
-    ['solo', 'Crew Member']
+    ['solo']
   ),
   'LOBOT': new CharacterSettings(
     [new OptimizationPlan('PvE', 0, 0, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
@@ -505,7 +508,7 @@ const characterSettings = {
   ),
   'MACEWINDU': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE')],
-    ['Crew Member'],
+    [],
     DamageType.mixed
   ),
   'MAGMATROOPER': new CharacterSettings(
@@ -518,8 +521,7 @@ const characterSettings = {
     [new OptimizationPlan('Balanced', 20, 20, 100, 25, 50, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)]
   ),
   'MAUL': new CharacterSettings(
-    [optimizationStrategy["Special Damage with Potency"].rename('PvP')],
-    ['Crew Member']
+    [optimizationStrategy["Special Damage with Potency"].rename('PvP')]
   ),
   'MISSIONVAO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 75, 0, 50, 0, 0, 0, 0, true)]
@@ -586,16 +588,15 @@ const characterSettings = {
   ),
   'PHASMA': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 25, 25, 0, 25, 0, 25, 0, 0, 0, 0, true)],
-    ['FO', 'Crew Member']
+    ['FO']
   ),
   'PLOKOON': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
-    ['Crew Member'],
+    [],
     DamageType.mixed
   ),
   'POE': new CharacterSettings(
-    [optimizationStrategy["Speedy debuffer"].rename('Speed')],
-    ['Crew Member']
+    [optimizationStrategy["Speedy debuffer"].rename('Speed')]
   ),
   'POGGLETHELESSER': new CharacterSettings(
     [optimizationStrategy["Speedy debuffer"].rename('PvE')]
@@ -633,7 +634,7 @@ const characterSettings = {
   ),
   'RESISTANCEPILOT': new CharacterSettings(
     [optimizationStrategy["Slow Crit, Physical Damage, Potency"].rename('PvP')],
-    ['RP', 'Crew Member']
+    ['RP']
   ),
   'RESISTANCETROOPER': new CharacterSettings(
     [
@@ -647,7 +648,7 @@ const characterSettings = {
       new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 25, 0, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 1', 0, -5, 90, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
     ],
-    ['scav rey', 'Crew Member']
+    ['scav rey']
   ),
   'REYJEDITRAINING': new CharacterSettings(
     [
@@ -669,8 +670,7 @@ const characterSettings = {
     [
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
       new OptimizationPlan('hSTR Phase 2', 20, 20, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
-    ],
-    ['Crew Member']
+    ]
   ),
   'SAVAGEOPRESS': new CharacterSettings(
     [new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)],
@@ -681,15 +681,15 @@ const characterSettings = {
       new OptimizationPlan('PvP', 20, 20, 100, 0, 25, 10, 0, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 2', 20, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
-    ['Rogue 1', 'SRP', 'Crew Member']
+    ['Rogue 1', 'SRP']
   ),
   'SHORETROOPER': new CharacterSettings(
     [new OptimizationPlan('Speedy Tank', 50, 50, 100, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, true)],
-    ['ShT', 'Troopers', 'Imperial Grancor Maneuver', 'Crew Member']
+    ['ShT', 'Troopers', 'Imperial Grancor Maneuver']
   ),
   'SITHASSASSIN': new CharacterSettings(
     [optimizationStrategy["Special Damage with Potency"].rename('PvP')],
-    ['SA', 'Sassy', 'Crew Member']
+    ['SA', 'Sassy']
   ),
   'SITHMARAUDER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
@@ -727,8 +727,7 @@ const characterSettings = {
     ['STHan']
   ),
   'SUNFAC': new CharacterSettings(
-    [new OptimizationPlan('Tanky', 40, 40, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)],
-    ['Crew Member']
+    [new OptimizationPlan('Tanky', 40, 40, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
   ),
   'T3_M4': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 25, 10, 0, 10, 10, 0, 0, 0, 0, true)],
@@ -746,7 +745,7 @@ const characterSettings = {
   ),
   'TIEFIGHTERPILOT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
-    ['TFP', 'Auto Lightzader', 'Crew Member']
+    ['TFP', 'Auto Lightzader']
   ),
   'TUSKENRAIDER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
@@ -767,7 +766,7 @@ const characterSettings = {
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
       new OptimizationPlan('Raids', 0, 0, 100, 50, 25, 0, 25, 0, 25, 0, 0, 0, 0, true)
     ],
-    ['Auto Lightzader', 'Wampanader', 'Nightmare', 'Crew Member']
+    ['Auto Lightzader', 'Wampanader', 'Nightmare']
   ),
   'VEERS': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
@@ -789,7 +788,7 @@ const characterSettings = {
   ),
   'WEDGEANTILLES': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
-    ['Wiggs', 'chiggs', 'SuperStar2D2', 'Crew Member']
+    ['Wiggs', 'chiggs', 'SuperStar2D2']
   ),
   'WICKET': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
@@ -805,7 +804,7 @@ const characterSettings = {
   ),
   'YOUNGLANDO': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
-    ['solo', 'Crew Member']
+    ['solo']
   ),
   'ZAALBAR': new CharacterSettings(
     [new OptimizationPlan('PvP', 25, 25, 100, 0, 25, 0, 10, 0, 20, 0, 0, 0, 0, true)]
@@ -814,8 +813,7 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 0, 0, 100, 40, 50, 0, 25, 0, 40, 0, 0, 0, 0, true)]
   ),
   'ZEBS3': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 40, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
-    ['Crew Member']
+    [new OptimizationPlan('PvP', 0, 40, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   )
 };
 
