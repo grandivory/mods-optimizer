@@ -53,6 +53,6 @@ const mapStateToProps = (state) => ({
   characters: state.profiles[state.allyCode].characters
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = () => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModStats);

@@ -61,6 +61,10 @@
   font-size: 1.5em;
 }
 
+.mod-row.set .mod-image .avatar {
+  font-size: 1em;
+}
+
 .mod-row.set .mod-stats .avatar {
   font-size: .8em;
 }

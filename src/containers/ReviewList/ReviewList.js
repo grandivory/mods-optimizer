@@ -141,6 +141,7 @@ class ReviewList extends React.PureComponent {
         <div className={'mod-set-block'}>
           <ModSetView modSet={new ModSet(mods)}
                       diffSet={new ModSet([])}
+                      showAvatars={sortOptions.currentCharacter === this.props.filter.sort ? false : true}
                       changeClass={sortOptions.currentCharacter === this.props.filter.sort ? 'remove' : 'add'}
           />
         </div>

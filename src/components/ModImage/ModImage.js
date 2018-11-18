@@ -3,6 +3,8 @@
 import React from 'react';
 import Pips from '../Pips/Pips';
 import './ModImage.css';
+import CharacterAvatar from "../CharacterAvatar/CharacterAvatar";
+import connect from "react-redux/es/connect/connect";
 
 function importImages(context) {
   let images = {};
@@ -22,6 +24,8 @@ class ModImage extends React.PureComponent {
     const modImageName = this.modImageName(mod);
     const modColor = this.modColor(mod);
     const extraClass = this.props.className ? ` ${this.props.className}` : '';
+    const showAvatar = this.props.showAvatar;
+    const character = mod.characterID ? this.props.characters[mod.characterID] : null;
 
     return (
       <div className={`mod-image ${mod.slot} ${modColor} ${extraClass}`}>
@@ -32,6 +36,9 @@ class ModImage extends React.PureComponent {
           {this.modHighlight(mod.slot)}
           <div className={'mod-level ' + (15 === mod.level ? 'gold ' : 'gray ') + mod.slot}>{mod.level}</div>
         </div>
+        {showAvatar &&
+          <CharacterAvatar character={character} displayStars={false} displayGear={false} displayLevel={false}/>
+        }
       </div>
     );
   }
@@ -179,7 +186,12 @@ class ModImage extends React.PureComponent {
       {path}
     </svg>
   }
-
 }
 
-export default ModImage;
+const mapStateToProps = (state) => ({
+  characters: state.profiles[state.allyCode].characters
+});
+
+const mapDispatchToProps = () => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModImage);

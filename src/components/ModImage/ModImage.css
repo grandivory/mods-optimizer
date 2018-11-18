@@ -30,6 +30,18 @@
   display: block;
 }
 
+.mod-image .avatar {
+  position: absolute;
+  left: -.5em;
+  bottom: -.5em;
+  width: 2em;
+  height: 2em;
+}
+
+.mod-image .avatar img {
+  filter: none;
+}
+
 .mod-slot-image {
   position: relative;
 }

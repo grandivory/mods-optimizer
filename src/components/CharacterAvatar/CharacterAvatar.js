@@ -7,7 +7,12 @@ class CharacterAvatar extends React.PureComponent {
   render() {
     const character = this.props.character;
     const displayStars = 'undefined' !== typeof this.props.displayStars ? this.props.displayStars : true;
+    const displayGear = 'undefined' !== typeof this.props.displayGear ? this.props.displayGear : true;
+    const displayLevel = 'undefined' !== typeof this.props.displayLevel ? this.props.displayLevel : true;
     const id = this.props.id || null;
+    const className = `avatar gear-${displayGear ?
+      character.playerValues.gearLevel :
+      0} star-${character.playerValues.stars}`;
 
     const star = position => {
       const isActive = position <= character.playerValues.stars;
@@ -17,7 +22,7 @@ class CharacterAvatar extends React.PureComponent {
 
     return (
       <div
-        className={`avatar gear-${character.playerValues.gearLevel} star-${character.playerValues.stars}`}
+        className={className}
         id={id}>
         {displayStars &&
         [1, 2, 3, 4, 5, 6, 7].map(star)
@@ -27,7 +32,7 @@ class CharacterAvatar extends React.PureComponent {
           alt={character.gameSettings.name}
           title={character.gameSettings.name}
           draggable={false}/>
-        <div className={'character-level'}>{character.playerValues.level || '??'}</div>
+        {displayLevel && <div className={'character-level'}>{character.playerValues.level || '??'}</div>}
       </div>
     );
   }

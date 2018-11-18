@@ -159,6 +159,7 @@ class ReviewSets extends React.PureComponent {
             set={currentSet}
             diffset={newSet}
             showStatDiff={false}
+            showAvatars={false}
             character={character}/>
           <CharacterAvatar character={character}/>
           <Arrow/>
@@ -167,6 +168,7 @@ class ReviewSets extends React.PureComponent {
             set={newSet}
             diffset={currentSet}
             showStatDiff={true}
+            showAvatars={true}
             character={character}/>
         </div>
       );

@@ -45,6 +45,10 @@
   pointer-events: none;
 }
 
+.avatar.gear-0 {
+  border: 1px inset #ccfffe;
+}
+
 .avatar.gear-1::after {
   border-radius: 100%;
   border: 1px inset #ccfffe;

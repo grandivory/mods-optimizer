@@ -14,6 +14,7 @@ class ModSetDetail extends React.PureComponent {
     const character = this.props.character;
     const changeClass = this.props.changeClass || '';
     const showStatDiff = this.props.showStatDiff;
+    const showAvatars = 'undefined' !== typeof this.props.showAvatars ? this.props.showAvatars : false;
 
     const statSummary = modSet.getSummary(character, true);
     const diffSummary = (diffSet && showStatDiff) ? diffSet.getSummary(character, true) : null;
@@ -65,7 +66,7 @@ class ModSetDetail extends React.PureComponent {
 
     return (
       <div className={'mod-set-detail'}>
-        <ModSetView modSet={modSet} diffSet={diffSet} changeClass={changeClass}/>
+        <ModSetView modSet={modSet} diffSet={diffSet} changeClass={changeClass} showAvatars={showAvatars} />
         <div className={'summary'}>
           <table>
             <thead>
