@@ -41,9 +41,7 @@ class App extends PureComponent {
       }
     }
   }
-
-
-
+  
   componentDidMount() {
     document.addEventListener('keyup', this.escapeListener);
   }
@@ -67,44 +65,6 @@ class App extends PureComponent {
       } catch (e) {
         this.props.showError(e.message);
       }
-    };
-
-    reader.readAsText(fileInput);
-  }
-
-  /**
-   * File handler to process an input file containing mod data.
-   *
-   * @param fileInput The uploaded mods file
-   */
-  readModsFile(fileInput) {
-    let reader = new FileReader();
-    const me = this;
-
-    reader.onload = (event) => {
-      try {
-        const fileMods = JSON.parse(event.target.result);
-        if (fileMods.length > 0) {
-          const mods = me.processMods(
-            JSON.parse(event.target.result),
-            document.getElementById('keep-old-mods').checked
-          );
-
-          me.setState({
-            'mods': mods
-          });
-          me.saveState();
-        } else {
-          me.setState({
-            'error': 'No mods were found in your mods file! Please try to generate a new file.'
-          });
-        }
-      } catch (e) {
-        me.setState({
-          'error': 'Unable to read mods from the provided file. Please make sure that you uploaded the correct file.'
-        });
-      }
-
     };
 
     reader.readAsText(fileInput);
@@ -187,7 +147,6 @@ class App extends PureComponent {
         />
         <label htmlFor={'keep-old-mods'}>Remember existing mods</label>
         <br/>
-        <FileInput label={'Upload my mods!'} handler={(file) => this.readFile(file, this.props.setMods)}/>
         <FileInput label={'Restore my progress'} handler={(file) => this.readFile(file, this.props.restoreProgress)}/>
         {showActions &&
         <a id={'saveProgress'}
