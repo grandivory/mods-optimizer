@@ -6,6 +6,11 @@ import './CharacterAvatar.css';
 class CharacterAvatar extends React.PureComponent {
   render() {
     const character = this.props.character;
+
+    if (!character) {
+      return null;
+    }
+
     const displayStars = 'undefined' !== typeof this.props.displayStars ? this.props.displayStars : true;
     const displayGear = 'undefined' !== typeof this.props.displayGear ? this.props.displayGear : true;
     const displayLevel = 'undefined' !== typeof this.props.displayLevel ? this.props.displayLevel : true;
