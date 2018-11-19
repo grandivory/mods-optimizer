@@ -25,6 +25,10 @@
   height: 2em;
 }
 
+.mod-image.cross .avatar {
+  left: 2em;
+}
+
 .mod-slot-image {
   position: relative;
   background-image: url('/img/mod-shape-atlas.png');
