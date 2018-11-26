@@ -23,6 +23,7 @@ class ExploreView extends React.PureComponent {
           </div>
         </div>,
         <div className='mods' key={'mods'}>
+          <h3>Showing {this.props.displayedMods.length} out of {this.props.modCount} mods.</h3>
           {modElements}
         </div>
       ]
@@ -70,8 +71,9 @@ const mapStateToProps = (state) => {
 
   return {
     characters: profile.characters,
-    displayedMods: mods
-  }
+    displayedMods: mods,
+    modCount: profile.mods.length
+  };
 };
 
 const mapDispatchToProps = (dispatch) => ({});
