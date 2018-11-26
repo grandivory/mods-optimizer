@@ -7,7 +7,6 @@ import ModFilter from '../../components/ModFilter/ModFilter';
 
 import './ExploreView.css';
 import {connect} from "react-redux";
-import {toggleSidebar} from "../../state/actions/app";
 import Sidebar from "../../components/Sidebar/Sidebar";
 
 class ExploreView extends React.PureComponent {
@@ -58,15 +57,24 @@ const getFilteredMods = memoize(
     }
 
     if (filter.sort) {
-      filteredMods = filteredMods.sort((left, right) => {
-        const leftStat = left.secondaryStats.find(stat => stat.type === filter.sort);
-        const rightStat = right.secondaryStats.find(stat => stat.type === filter.sort);
+      if ('rolls' === filter.sort) {
+        filteredMods = filteredMods.sort((left, right) => {
+          const leftValue = left.secondaryStats.reduce((acc, stat) => acc + stat.rolls, 0);
+          const rightValue = right.secondaryStats.reduce((acc, stat) => acc + stat.rolls, 0);
 
-        const leftValue = leftStat ? leftStat.value : 0;
-        const rightValue = rightStat ? rightStat.value : 0;
+          return rightValue - leftValue;
+        })
+      } else {
+        filteredMods = filteredMods.sort((left, right) => {
+          const leftStat = left.secondaryStats.find(stat => stat.type === filter.sort);
+          const rightStat = right.secondaryStats.find(stat => stat.type === filter.sort);
 
-        return rightValue - leftValue;
-      });
+          const leftValue = leftStat ? leftStat.value : 0;
+          const rightValue = rightStat ? rightStat.value : 0;
+
+          return rightValue - leftValue;
+        });
+      }
     }
 
     return filteredMods;

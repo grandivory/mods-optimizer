@@ -7,7 +7,8 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 import {hideModal} from "../../state/actions/app";
 import {
   changeCharacterEditMode,
-  changeMinimumModDots, changeSliceMods,
+  changeMinimumModDots,
+  changeSliceMods,
   deleteTarget,
   finishEditCharacterTarget,
   resetCharacterTargetToDefault,

@@ -11,7 +11,8 @@ import {
   changeCharacterFilter,
   changeCharacterTarget,
   resetAllCharacterTargets,
-  selectCharacter, unselectAllCharacters,
+  selectCharacter,
+  unselectAllCharacters,
   unselectCharacter
 } from "../../state/actions/characterEdit";
 import {optimizeMods} from "../../state/actions/optimize";
