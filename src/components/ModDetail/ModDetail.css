@@ -1,4 +1,6 @@
-.mod-detail {
+.mod-detail,
+.delete-mod-display {
+  position: relative;
   display: inline-grid;
   grid-template-columns: 5em 1fr;
   grid-template-rows: 1fr fit-content();
@@ -13,21 +15,30 @@
   width: 19em;
 }
 
-.mod-detail .mod-image {
+.mod-detail .mod-image,
+.delete-mod-display .mod-image {
   vertical-align: top;
   grid-row: 1;
   grid-column: 1;
   width: 4em;
 }
 
-.mod-detail .avatar {
+.mod-detail .avatar,
+.delete-mod-display .avatar {
   grid-row: 2;
   grid-column: 1;
   text-align: center;
   font-size: .8em;
 }
 
-.mod-detail .mod-stats {
+.mod-detail .mod-stats,
+.delete-mod-display .mod-stats {
   grid-row: 1 / span 2;
   grid-column: 2;
+}
+
+.mod-detail button.delete-button {
+  position: absolute;
+  top: 0;
+  right: 0;
 }

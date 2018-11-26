@@ -73,6 +73,14 @@ export function reassignMods(state, action) {
   });
 }
 
+export function deleteMod(state, action) {
+  return updateCurrentProfile(state, profile => {
+    const oldMods = profile.mods;
+
+    return profile.withMods(oldMods.filter(mod => mod !== action.mod));
+  });
+}
+
 export function changeModListFilter(state, action) {
   return Object.assign({}, state, {
     modListFilter: action.filter

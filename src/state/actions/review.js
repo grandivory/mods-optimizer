@@ -6,6 +6,7 @@ export const UNEQUIP_MOD = 'UNEQUIP_MOD';
 export const REASSIGN_MOD = 'REASSIGN_MOD';
 export const UNEQUIP_MODS = 'UNEQUIP_MODS';
 export const REASSIGN_MODS = 'REASSIGN_MODS';
+export const DELETE_MOD = 'DELETE_MOD';
 export const CHANGE_MODLIST_FILTER = 'CHANGE_MODLIST_FILTER';
 
 export function changeOptimizerView(newView) {
@@ -76,6 +77,18 @@ export function reassignMods(modIDs, characterID) {
     type: REASSIGN_MODS,
     mods: modIDs,
     character: characterID
+  };
+}
+
+/**
+ * Remove a mod from a player's profile
+ * @param mod {Mod}
+ * @returns {{type: string, mod: Mod}}
+ */
+export function deleteMod(mod) {
+  return {
+    type: DELETE_MOD,
+    mod: mod
   };
 }
 

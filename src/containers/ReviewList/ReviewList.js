@@ -263,7 +263,8 @@ const mapStateToProps = (state) => {
   const modsById = groupByKey(profile.mods, mod => mod.id);
   const movingModsByAssignedCharacter = mapObjectByKeyAndValue(
     profile.modAssignments,
-    (characterID, modIDs) => modIDs.map(modID => modsById[modID]).filter(mod => mod.characterID !== characterID)
+    (characterID, modIDs) => modIDs.map(modID => modsById[modID])
+      .filter(mod => mod && mod.characterID !== characterID)
   );
   const characterModPairs = Object.entries(movingModsByAssignedCharacter)
     .map(([characterID, mods]) => mods.map(mod => [characterID, mod]))

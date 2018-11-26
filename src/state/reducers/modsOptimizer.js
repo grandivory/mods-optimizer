@@ -40,7 +40,7 @@ import {FINISH_OPTIMIZE_MODS, OPTIMIZE_MODS} from "../actions/optimize";
 import {
   CHANGE_MOD_SET_FILTER,
   CHANGE_MODLIST_FILTER,
-  CHANGE_OPTIMIZER_VIEW,
+  CHANGE_OPTIMIZER_VIEW, DELETE_MOD,
   REASSIGN_MOD,
   REASSIGN_MODS,
   UNEQUIP_MOD,
@@ -87,7 +87,7 @@ import {finishOptimizeMods, optimizeMods} from "./optimize";
 import {
   changeModListFilter,
   changeModSetFilter,
-  changeOptimizerView,
+  changeOptimizerView, deleteMod,
   reassignMod,
   reassignMods,
   unequipMod,
@@ -203,6 +203,8 @@ export default function modsOptimizer(state, action) {
       return saveState(reassignMod(state, action));
     case UNEQUIP_MODS:
       return saveState(unequipMods(state, action));
+    case DELETE_MOD:
+      return saveState(deleteMod(state, action));
     case REASSIGN_MODS:
       return saveState(reassignMods(state, action));
 
