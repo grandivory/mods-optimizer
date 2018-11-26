@@ -211,6 +211,49 @@ class ModFilter extends React.PureComponent {
   }
 
   /**
+   * Render the level filter inputs
+   * @returns {*}
+   */
+  levelFilter() {
+    const selectAll = (e) => {
+      e.preventDefault();
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        .forEach(rarity => document.getElementById(`level-filter-${rarity}`).checked = true);
+    };
+    const selectNone = (e) => {
+      e.preventDefault();
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        .forEach(rarity => document.getElementById(`level-filter-${rarity}`).checked = false);
+    };
+
+    const levelButtons = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(level => {
+      const inputName = `level-filter-${level}`;
+
+      return <label htmlFor={inputName} key={inputName}>
+        <input type={'checkbox'}
+               id={inputName}
+               name={inputName}
+               value={level}
+               defaultChecked={this.props.filter.level.includes(level)}/>
+        <span className={'option'}>
+          {level}
+        </span>
+      </label>
+    });
+
+    return <div id={'level-filters'}>
+      <div className={'toggle-label'}>Level</div>
+      <div className={'level'}>
+        {levelButtons}
+      </div>
+      <div className={'actions'}>
+        <button onClick={selectAll}>All</button>
+        <button onClick={selectNone}>None</button>
+      </div>
+    </div>;
+  }
+
+  /**
    * Render the primary stat filter inputs, using the given mods as the source of possible values
    * @param mods [Mod] the list of mods being filtered
    * @returns {JSX Element}
@@ -359,6 +402,14 @@ class ModFilter extends React.PureComponent {
       .filter(element => element.id.includes('pips-filter') && element.checked)
       .map(element => +element.value);
 
+    const tier = [...form.elements]
+      .filter(element => element.id.includes('tier-filter') && element.checked)
+      .map(element => +element.value);
+
+    const level = [...form.elements]
+      .filter(element => element.id.includes('level-filter') && element.checked)
+      .map(element => +element.value);
+
     const primary = [...form.elements]
       .filter(element => element.id.includes('primary-filter') && element.checked)
       .map(element => element.value);
@@ -367,18 +418,15 @@ class ModFilter extends React.PureComponent {
       .filter(element => element.id.includes('secondary-filter') && element.checked)
       .map(element => element.value);
 
-    const tier = [...form.elements]
-      .filter(element => element.id.includes('tier-filter') && element.checked)
-      .map(element => +element.value);
-
     return {
       'slot': slot,
       'set': set,
-      'primary': primary,
       'rarity': rarity,
+      'tier': tier,
+      'level': level,
+      'primary': primary,
       'secondary': secondary,
-      'sort': form['sort-option'].value,
-      'tier': tier
+      'sort': form['sort-option'].value
     }
   }
 
@@ -398,6 +446,7 @@ class ModFilter extends React.PureComponent {
       {this.setFilter()}
       {this.rarityFilter()}
       {this.tierFilter()}
+      {this.levelFilter()}
       {this.primaryStatFilter(mods)}
       {this.secondaryStatFilter(mods)}
       {this.sortOption(mods)}

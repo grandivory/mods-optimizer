@@ -51,15 +51,18 @@ const getFilteredMods = memoize(
     if (filter.rarity && 0 < filter.rarity.length) {
       filteredMods = filteredMods.filter(mod => filter.rarity.includes(mod.pips));
     }
+    if (filter.tier && 0 < filter.tier.length) {
+      filteredMods = filteredMods.filter(mod => filter.tier.includes(mod.tier));
+    }
+    if (filter.level && 0 < filter.level.length) {
+      filteredMods = filteredMods.filter(mod => filter.level.includes(mod.level));
+    }
     if (filter.primary && 0 < filter.primary.length) {
       filteredMods = filteredMods.filter(mod => filter.primary.includes(mod.primaryStat.type));
     }
     if (filter.secondary && 0 < filter.secondary.length) {
       filteredMods = filteredMods.filter(
         mod => mod.secondaryStats.some(stat => filter.secondary.includes(stat.type)));
-    }
-    if (filter.tier && 0 < filter.tier.length) {
-      filteredMods = filteredMods.filter(mod => filter.tier.includes(mod.tier));
     }
 
     if (filter.sort) {

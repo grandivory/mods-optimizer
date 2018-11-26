@@ -34,11 +34,12 @@ export const defaultState = {
   modsFilter: {
     slot: [],
     set: [],
-    primary: [],
     rarity: [],
+    tier: [],
+    level: [],
+    primary: [],
     secondary: [],
-    sort: '',
-    tier: []
+    sort: ''
   },
   modSetsFilter: 'all',
   modListFilter: {
