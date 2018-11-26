@@ -88,9 +88,19 @@
 #slot-filters,
 #set-filters,
 #pips-filters,
-#tier-filters {
+#tier-filters,
+#level-filters,
+#equipped-filters {
   width: 7em;
   margin: 0 .5em;
   vertical-align: top;
   display: inline-block;
+}
+
+#level-filters {
+  width: 10em;
+}
+
+#equipped-filters {
+  width: 6em;
 }

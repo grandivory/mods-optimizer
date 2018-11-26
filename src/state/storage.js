@@ -37,6 +37,7 @@ export const defaultState = {
     rarity: [],
     tier: [],
     level: [],
+    equipped: [],
     primary: [],
     secondary: [],
     sort: ''

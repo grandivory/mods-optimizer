@@ -253,6 +253,45 @@ class ModFilter extends React.PureComponent {
     </div>;
   }
 
+  equippedFilter() {
+    const selectAll = (e) => {
+      e.preventDefault();
+      document.getElementById('equipped-filter-equipped').checked = true;
+      document.getElementById('equipped-filter-unequipped').checked = true;
+    };
+    const selectNone = (e) => {
+      e.preventDefault();
+      document.getElementById('equipped-filter-equipped').checked = false;
+      document.getElementById('equipped-filter-unequipped').checked = false;
+    };
+
+    const equippedButtons = ['equipped', 'unequipped'].map(equippedState => {
+      const inputName = `equipped-filter-${equippedState}`;
+
+      return <label htmlFor={inputName} key={inputName}>
+        <input type={'checkbox'}
+               id={inputName}
+               name={inputName}
+               value={'equipped' === equippedState}
+               defaultChecked={this.props.filter.equipped.includes(equippedState)}/>
+        <span className={'option'}>
+          {equippedState[0].toUpperCase() + equippedState.substr(1)}
+        </span>
+      </label>
+    });
+
+    return <div id={'equipped-filters'}>
+      <div className={'toggle-label'}>Equipped</div>
+      <div className={'level'}>
+        {equippedButtons}
+      </div>
+      <div className={'actions'}>
+        <button onClick={selectAll}>All</button>
+        <button onClick={selectNone}>None</button>
+      </div>
+    </div>;
+  }
+
   /**
    * Render the primary stat filter inputs, using the given mods as the source of possible values
    * @param mods [Mod] the list of mods being filtered
@@ -410,6 +449,10 @@ class ModFilter extends React.PureComponent {
       .filter(element => element.id.includes('level-filter') && element.checked)
       .map(element => +element.value);
 
+    const equipped = [...form.elements]
+      .filter(element => element.id.includes('equipped-filter') && element.checked)
+      .map(element => 'true' === element.value);
+
     const primary = [...form.elements]
       .filter(element => element.id.includes('primary-filter') && element.checked)
       .map(element => element.value);
@@ -424,6 +467,7 @@ class ModFilter extends React.PureComponent {
       'rarity': rarity,
       'tier': tier,
       'level': level,
+      'equipped': equipped,
       'primary': primary,
       'secondary': secondary,
       'sort': form['sort-option'].value
@@ -447,6 +491,7 @@ class ModFilter extends React.PureComponent {
       {this.rarityFilter()}
       {this.tierFilter()}
       {this.levelFilter()}
+      {this.equippedFilter()}
       {this.primaryStatFilter(mods)}
       {this.secondaryStatFilter(mods)}
       {this.sortOption(mods)}

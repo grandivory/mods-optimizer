@@ -57,6 +57,9 @@ const getFilteredMods = memoize(
     if (filter.level && 0 < filter.level.length) {
       filteredMods = filteredMods.filter(mod => filter.level.includes(mod.level));
     }
+    if (filter.equipped && 0 < filter.equipped.length) {
+      filteredMods = filteredMods.filter(mod => filter.equipped.includes(!!mod.characterID))
+    }
     if (filter.primary && 0 < filter.primary.length) {
       filteredMods = filteredMods.filter(mod => filter.primary.includes(mod.primaryStat.type));
     }
