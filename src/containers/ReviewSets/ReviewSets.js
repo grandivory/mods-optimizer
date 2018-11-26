@@ -178,12 +178,12 @@ class ReviewSets extends React.PureComponent {
     const formatNumber = number => number.toLocaleString(navigator.language, {'useGrouping': true});
 
     if (0 === this.props.numOptimizedCharacters) {
-      return (
-        <div className={'review-sets'}>
-          <Sidebar content={this.sidebar()}/>
+      return [
+        <Sidebar key={'sidebar'} content={this.sidebar()}/>,
+        <div key={'content'} className={'review-sets'}>
           <h2>You haven't selected any characters! Go back and select characters to optimize.</h2>
         </div>
-      );
+      ];
     } else {
       const subHeading = 0 < modUpgradeCost ?
         <h3>
@@ -194,18 +194,18 @@ class ReviewSets extends React.PureComponent {
           Your mods will cost {formatNumber(modRemovalCost)} <Credits/> to move
         </h3>
 
-      return (
-        <div className={'review-sets'}>
+      return [
+        <Sidebar key={'sidebar'} content={this.sidebar()}/>,
+        <div key={'content'} className={'review-sets'}>
           <h2>
             Showing mod sets for {this.props.numShownCharacters} out of {this.props.numOptimizedCharacters} characters
           </h2>
           {subHeading}
-          <Sidebar content={this.sidebar()}/>
           <div className={'sets-list'}>
             {rows}
           </div>
         </div>
-      );
+      ];
     }
   }
 
