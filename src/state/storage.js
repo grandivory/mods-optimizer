@@ -35,6 +35,7 @@ export const defaultState = {
     slot: [],
     set: [],
     primary: [],
+    rarity: [],
     secondary: [],
     sort: ''
   },
@@ -127,7 +128,7 @@ export function deserializeState(state) {
     isBusy: false,
     keepOldMods: state.keepOldMods,
     modal: null,
-    modsFilter: state.modsFilter || defaultState.modsFilter,
+    modsFilter: Object.assign({}, defaultState.modsFilter, state.modsFilter),
     modListFilter: state.modListFilter || defaultState.modListFilter,
     modSetsFilter: state.modSetsFilter || defaultState.modSetsFilter,
     optimizerView: state.optimizerView || defaultState.optimizerView,

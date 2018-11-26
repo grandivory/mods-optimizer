@@ -7,6 +7,7 @@ import ModSet from "../../domain/ModSet";
 import setBonuses from "../../constants/setbonuses";
 import {connect} from "react-redux";
 import {changeModsFilter} from "../../state/actions/explore";
+import Pips from "../Pips/Pips";
 
 function importImages(context) {
   let images = {};
@@ -107,6 +108,45 @@ class ModFilter extends React.PureComponent {
       <div className={'toggle-label'}>Set</div>
       <div className={'sets'}>
         {sets}
+      </div>
+      <div className={'actions'}>
+        <button onClick={selectAll}>All</button>
+        <button onClick={selectNone}>None</button>
+      </div>
+    </div>;
+  }
+
+  rarityFilter() {
+    const selectAll = (e) => {
+      e.preventDefault();
+      [1, 2, 3, 4, 5, 6]
+        .forEach(rarity => document.getElementById(`pips-filter-${rarity}`).checked = true);
+    };
+    const selectNone = (e) => {
+      e.preventDefault();
+      [1, 2, 3, 4, 5, 6]
+        .forEach(rarity => document.getElementById(`pips-filter-${rarity}`).checked = false);
+    };
+
+    const pips = [6, 5, 4, 3, 2, 1].map(rarity => {
+      const inputName = `pips-filter-${rarity}`;
+
+      return <label htmlFor={inputName} key={inputName}>
+        <input type={'checkbox'}
+               id={inputName}
+               name={inputName}
+               value={rarity}
+               defaultChecked={this.props.filter.rarity.includes(rarity)}/>
+        <span className={'option pips-button'}>
+          <Pips pips={rarity}/>
+        </span>
+      </label>
+    });
+
+    return <div id={'pips-filters'}>
+      <div className={'toggle-label'}>Rarity</div>
+      <div className={'rarity'}>
+        {pips}
       </div>
       <div className={'actions'}>
         <button onClick={selectAll}>All</button>
@@ -260,6 +300,10 @@ class ModFilter extends React.PureComponent {
       .filter(element => element.id.includes('set-filter') && element.checked)
       .map(element => element.value);
 
+    const rarity = [...form.elements]
+      .filter(element => element.id.includes('pips-filter') && element.checked)
+      .map(element => +element.value);
+
     const primary = [...form.elements]
       .filter(element => element.id.includes('primary-filter') && element.checked)
       .map(element => element.value);
@@ -272,6 +316,7 @@ class ModFilter extends React.PureComponent {
       'slot': slot,
       'set': set,
       'primary': primary,
+      'rarity': rarity,
       'secondary': secondary,
       'sort': form['sort-option'].value
     }
@@ -291,6 +336,7 @@ class ModFilter extends React.PureComponent {
       </div>
       {this.slotFilter()}
       {this.setFilter()}
+      {this.rarityFilter()}
       {this.primaryStatFilter(mods)}
       {this.secondaryStatFilter(mods)}
       {this.sortOption(mods)}

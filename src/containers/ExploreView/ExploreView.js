@@ -48,6 +48,9 @@ const getFilteredMods = memoize(
     if (filter.set && 0 < filter.set.length) {
       filteredMods = filteredMods.filter(mod => filter.set.includes(mod.set.name));
     }
+    if (filter.rarity && 0 < filter.rarity.length) {
+      filteredMods = filteredMods.filter(mod => filter.rarity.includes(mod.pips));
+    }
     if (filter.primary && 0 < filter.primary.length) {
       filteredMods = filteredMods.filter(mod => filter.primary.includes(mod.primaryStat.type));
     }

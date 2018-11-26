@@ -20,6 +20,12 @@
   font-size: 0.9em;
 }
 
+.mod-filters span.option.pips-button {
+  display: block;
+  width: 4em;
+  padding: .2em .4em;
+}
+
 .mod-filters img {
   height: 2.5em;
   padding: .2em;
@@ -70,4 +76,21 @@
 
 #mod-filters > div:last-child {
   margin-bottom: 0;
+}
+
+#slot-filters,
+#set-filters,
+#pips-filters {
+  width: 6em;
+  margin: 0 .5em;
+  vertical-align: top;
+  display: inline-block;
+}
+
+#slot-filters {
+  margin-left: 0;
+}
+
+#pips-filters {
+  margin-right: 0;
 }
