@@ -37,7 +37,8 @@ export const defaultState = {
     primary: [],
     rarity: [],
     secondary: [],
-    sort: ''
+    sort: '',
+    tier: []
   },
   modSetsFilter: 'all',
   modListFilter: {

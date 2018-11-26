@@ -116,6 +116,10 @@ class ModFilter extends React.PureComponent {
     </div>;
   }
 
+  /**
+   * Render the pips filter inputs
+   * @returns {*}
+   */
   rarityFilter() {
     const selectAll = (e) => {
       e.preventDefault();
@@ -147,6 +151,57 @@ class ModFilter extends React.PureComponent {
       <div className={'toggle-label'}>Rarity</div>
       <div className={'rarity'}>
         {pips}
+      </div>
+      <div className={'actions'}>
+        <button onClick={selectAll}>All</button>
+        <button onClick={selectNone}>None</button>
+      </div>
+    </div>;
+  }
+
+  /**
+   * Render the mod tier filter inputs
+   * @returns {*}
+   */
+  tierFilter() {
+    const tiers = {
+      5: 'gold',
+      4: 'purple',
+      3: 'blue',
+      2: 'green',
+      1: 'gray'
+    };
+
+    const selectAll = (e) => {
+      e.preventDefault();
+      Object.keys(tiers)
+        .forEach(rarity => document.getElementById(`tier-filter-${rarity}`).checked = true);
+    };
+    const selectNone = (e) => {
+      e.preventDefault();
+      Object.keys(tiers)
+        .forEach(rarity => document.getElementById(`tier-filter-${rarity}`).checked = false);
+    };
+
+    const tierButtons = Object.keys(tiers).sort().reverse().map(tier => {
+      const inputName = `tier-filter-${tier}`;
+
+      return <label htmlFor={inputName} key={inputName}>
+        <input type={'checkbox'}
+               id={inputName}
+               name={inputName}
+               value={tier}
+               defaultChecked={this.props.filter.tier.includes(tier)}/>
+        <span className={`option tier ${tiers[tier]}`}>
+          {tiers[tier][0].toUpperCase() + tiers[tier].substr(1)}
+        </span>
+      </label>
+    });
+
+    return <div id={'tier-filters'}>
+      <div className={'toggle-label'}>Tier</div>
+      <div className={'tier'}>
+        {tierButtons}
       </div>
       <div className={'actions'}>
         <button onClick={selectAll}>All</button>
@@ -312,13 +367,18 @@ class ModFilter extends React.PureComponent {
       .filter(element => element.id.includes('secondary-filter') && element.checked)
       .map(element => element.value);
 
+    const tier = [...form.elements]
+      .filter(element => element.id.includes('tier-filter') && element.checked)
+      .map(element => +element.value);
+
     return {
       'slot': slot,
       'set': set,
       'primary': primary,
       'rarity': rarity,
       'secondary': secondary,
-      'sort': form['sort-option'].value
+      'sort': form['sort-option'].value,
+      'tier': tier
     }
   }
 
@@ -337,6 +397,7 @@ class ModFilter extends React.PureComponent {
       {this.slotFilter()}
       {this.setFilter()}
       {this.rarityFilter()}
+      {this.tierFilter()}
       {this.primaryStatFilter(mods)}
       {this.secondaryStatFilter(mods)}
       {this.sortOption(mods)}

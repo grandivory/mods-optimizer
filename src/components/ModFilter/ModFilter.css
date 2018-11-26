@@ -23,7 +23,14 @@
 .mod-filters span.option.pips-button {
   display: block;
   width: 4em;
+  margin: .25em auto;
   padding: .2em .4em;
+}
+
+.mod-filters span.option.tier {
+  display: block;
+  width: 4em;
+  margin: .25em auto;
 }
 
 .mod-filters img {
@@ -80,17 +87,10 @@
 
 #slot-filters,
 #set-filters,
-#pips-filters {
-  width: 6em;
+#pips-filters,
+#tier-filters {
+  width: 7em;
   margin: 0 .5em;
   vertical-align: top;
   display: inline-block;
-}
-
-#slot-filters {
-  margin-left: 0;
-}
-
-#pips-filters {
-  margin-right: 0;
 }

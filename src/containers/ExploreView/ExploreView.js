@@ -58,6 +58,9 @@ const getFilteredMods = memoize(
       filteredMods = filteredMods.filter(
         mod => mod.secondaryStats.some(stat => filter.secondary.includes(stat.type)));
     }
+    if (filter.tier && 0 < filter.tier.length) {
+      filteredMods = filteredMods.filter(mod => filter.tier.includes(mod.tier));
+    }
 
     if (filter.sort) {
       if ('rolls' === filter.sort) {
