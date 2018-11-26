@@ -10,15 +10,19 @@
 
 .sidebar .toggle-sidebar {
   display: block;
-  position: absolute;
+  position: fixed;
   top: calc(50% - 1em);
-  right: 0;
+  left: 14em;
   width: 1em;
   height: 2em;
   border-radius: 1em;
   border: 1px solid gray;
   background-color: #333;
   transition: all ease-in-out .5s;
+}
+
+.sidebar.hide .toggle-sidebar {
+  left: .7em;
 }
 
 .sidebar .toggle-sidebar.show {
@@ -50,7 +54,7 @@
 }
 
 .sidebar.hide {
-  right: 20em;
+  left: -20em;
   margin-right: -20em;
   overflow-x: hidden;
   overflow-y: hidden;
