@@ -4,6 +4,14 @@ import statTypeMap from "../constants/statTypeMap";
 import {modStats} from "../constants/enums";
 
 class Stat {
+  displayModifier;
+  type;
+  displayType;
+  rawValue;
+  value;
+  isPercent;
+  rolls;
+
   constructor(type, value, rolls = 1) {
     this.displayModifier = type.endsWith('%') || value.endsWith('%') ? '%' : '';
     this.type = type;

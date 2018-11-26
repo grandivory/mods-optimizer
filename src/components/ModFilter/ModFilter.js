@@ -121,7 +121,7 @@ class ModFilter extends React.PureComponent {
    * @returns {JSX Element}
    */
   primaryStatFilter(mods) {
-    const primaryStats = mods.map(mod => mod.primaryStat.displayType)
+    const primaryStats = mods.map(mod => mod.primaryStat.type)
       .reduce((acc, stat) => acc.includes(stat) ? acc : acc.concat([stat]), [])
       .sort();
 
@@ -167,7 +167,7 @@ class ModFilter extends React.PureComponent {
   secondaryStatFilter(mods) {
     const secondaryStats = mods.map(mod => mod.secondaryStats)
       .reduce((acc, stats) => acc.concat(stats), [])
-      .map(stat => stat.displayType)
+      .map(stat => stat.type)
       .reduce((acc, stat) => acc.includes(stat) ? acc : acc.concat([stat]), [])
       .sort();
 
@@ -213,7 +213,7 @@ class ModFilter extends React.PureComponent {
   sortOption(mods) {
     const secondaryStats = mods.map(mod => mod.secondaryStats)
       .reduce((acc, stats) => acc.concat(stats), [])
-      .map(stat => stat.displayType)
+      .map(stat => stat.type)
       .reduce((acc, stat) => acc.includes(stat) ? acc : acc.concat([stat]), [])
       .sort();
 

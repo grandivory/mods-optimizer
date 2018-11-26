@@ -42,17 +42,17 @@ const getFilteredMods = memoize(
       filteredMods = filteredMods.filter(mod => filter.set.includes(mod.set.name));
     }
     if (filter.primary && 0 < filter.primary.length) {
-      filteredMods = filteredMods.filter(mod => filter.primary.includes(mod.primaryStat.displayType));
+      filteredMods = filteredMods.filter(mod => filter.primary.includes(mod.primaryStat.type));
     }
     if (filter.secondary && 0 < filter.secondary.length) {
       filteredMods = filteredMods.filter(
-        mod => mod.secondaryStats.some(stat => filter.secondary.includes(stat.displayType)));
+        mod => mod.secondaryStats.some(stat => filter.secondary.includes(stat.type)));
     }
 
     if (filter.sort) {
       filteredMods = filteredMods.sort((left, right) => {
-        const leftStat = left.secondaryStats.find(stat => stat.displayType === filter.sort);
-        const rightStat = right.secondaryStats.find(stat => stat.displayType === filter.sort);
+        const leftStat = left.secondaryStats.find(stat => stat.type === filter.sort);
+        const rightStat = right.secondaryStats.find(stat => stat.type === filter.sort);
 
         const leftValue = leftStat ? leftStat.value : 0;
         const rightValue = rightStat ? rightStat.value : 0;
