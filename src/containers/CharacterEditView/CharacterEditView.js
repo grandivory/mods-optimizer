@@ -15,6 +15,7 @@ import {
   unselectCharacter
 } from "../../state/actions/characterEdit";
 import {optimizeMods} from "../../state/actions/optimize";
+import Sidebar from "../../components/Sidebar/Sidebar";
 
 class CharacterEditView extends PureComponent {
   dragStart(character) {
@@ -48,10 +49,7 @@ class CharacterEditView extends PureComponent {
   render() {
 
     return <div className={'character-edit'}>
-      <div className={'sidebar'}>
-        {this.filterForm()}
-        {this.sidebarActions()}
-      </div>
+      <Sidebar content={[this.filterForm(), this.sidebarActions()]}/>
       <div className={'selected-characters'}>
         <h4>Selected Characters <button className={'small'} onClick={this.props.clearSelectedCharacters}>
           Clear

@@ -2,19 +2,22 @@
 import {restoreState, saveState} from "../storage";
 import {
   CHANGE_SECTION,
-  HIDE_ERROR, HIDE_FLASH,
+  HIDE_ERROR,
+  HIDE_FLASH,
   HIDE_MODAL,
   RESET,
   RESTORE_PROGRESS,
   SHOW_ERROR,
   SHOW_FLASH,
-  SHOW_MODAL
+  SHOW_MODAL,
+  TOGGLE_SIDEBAR
 } from "../actions/app";
 import {
   CHANGE_CHARACTER_EDIT_MODE,
   CHANGE_CHARACTER_FILTER,
   CHANGE_CHARACTER_TARGET,
-  CHANGE_MINIMUM_MOD_DOTS, CHANGE_SLICE_MODS,
+  CHANGE_MINIMUM_MOD_DOTS,
+  CHANGE_SLICE_MODS,
   DELETE_TARGET,
   FINISH_EDIT_CHARACTER_TARGET,
   LOCK_CHARACTER,
@@ -40,7 +43,8 @@ import {FINISH_OPTIMIZE_MODS, OPTIMIZE_MODS} from "../actions/optimize";
 import {
   CHANGE_MOD_SET_FILTER,
   CHANGE_MODLIST_FILTER,
-  CHANGE_OPTIMIZER_VIEW, DELETE_MOD,
+  CHANGE_OPTIMIZER_VIEW,
+  DELETE_MOD,
   REASSIGN_MOD,
   REASSIGN_MODS,
   UNEQUIP_MOD,
@@ -55,13 +59,15 @@ import {
   restoreProgress,
   showError,
   showFlash,
-  showModal
+  showModal,
+  toggleSidebar
 } from "./app";
 import {
   changeCharacterEditMode,
   changeCharacterFilter,
   changeCharacterTarget,
-  changeMinimumModDots, changeSliceMods,
+  changeMinimumModDots,
+  changeSliceMods,
   deleteTarget,
   finishEditCharacterTarget,
   lockCharacter,
@@ -87,7 +93,8 @@ import {finishOptimizeMods, optimizeMods} from "./optimize";
 import {
   changeModListFilter,
   changeModSetFilter,
-  changeOptimizerView, deleteMod,
+  changeOptimizerView,
+  deleteMod,
   reassignMod,
   reassignMods,
   unequipMod,
@@ -136,6 +143,8 @@ export default function modsOptimizer(state, action) {
       return saveState(reset(state, action));
     case RESTORE_PROGRESS:
       return saveState(restoreProgress(state, action));
+    case TOGGLE_SIDEBAR:
+      return saveState(toggleSidebar(state, action));
 
     case SELECT_CHARACTER:
       return saveState(selectCharacter(state, action));

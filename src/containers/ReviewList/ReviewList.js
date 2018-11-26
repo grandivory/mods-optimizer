@@ -24,6 +24,7 @@ import {
   unequipMods
 } from "../../state/actions/review";
 import {hideModal, showModal} from "../../state/actions/app";
+import Sidebar from "../../components/Sidebar/Sidebar";
 
 const sortOptions = {
   'currentCharacter': 'currentCharacter',
@@ -59,9 +60,7 @@ class ReviewList extends React.PureComponent {
     if (0 === this.props.numMovingMods) {
       return (
         <div className={'review-list'}>
-          <div className={'sidebar'}>
-            {this.sidebarActions()}
-          </div>
+          <Sidebar content={this.sidebarActions()}/>
           <h2>You don't have any mods left to move! Great job!</h2>
           <h3>Don't forget to assign mods to all your pilots!</h3>
         </div>
@@ -69,12 +68,7 @@ class ReviewList extends React.PureComponent {
     } else {
       return (
         <div className={'review-list'}>
-          <div className={'sidebar'}>
-            <div className={'filters'}>
-              {this.filterForm()}
-            </div>
-            {this.sidebarActions()}
-          </div>
+          <Sidebar content={this.fullSidebar()}/>
           <h2>Reassigning {this.props.numMovingMods} mods {summaryButton}</h2>
           {(0 < this.props.displayedMods.length) &&
           <div className={'mods-list'}>
@@ -211,6 +205,19 @@ class ReviewList extends React.PureComponent {
         Show me the mod sets
       </button>
     </div>
+  }
+
+  /**
+   * Render both the filter form and standard sidebar actions
+   * @returns {*[]}
+   */
+  fullSidebar() {
+    return [
+      <div className={'filters'}>
+        {this.filterForm()}
+      </div>,
+      this.sidebarActions()
+    ];
   }
 
   /**

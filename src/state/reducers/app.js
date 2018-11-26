@@ -82,3 +82,8 @@ export function restoreProgress(state, action) {
   }
 }
 
+export function toggleSidebar(state, action) {
+  return Object.assign({}, state, {
+    showSidebar: !state.showSidebar
+  });
+}

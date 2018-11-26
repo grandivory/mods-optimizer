@@ -15,6 +15,7 @@ import objectFromEntries from "../../utils/objectFromEntries";
 import collectByKey from "../../utils/collectByKey";
 import groupByKey from "../../utils/groupByKey";
 import {changeModSetFilter, changeOptimizerView} from "../../state/actions/review";
+import Sidebar from "../../components/Sidebar/Sidebar";
 
 // A map from number of pips that a mod has to the cost to remove (but not destroy) it
 const modRemovalCosts = {
@@ -179,12 +180,7 @@ class ReviewSets extends React.PureComponent {
     if (0 === this.props.numOptimizedCharacters) {
       return (
         <div className={'review-sets'}>
-          <div className={'sidebar'}>
-            <div className={'filters'}>
-              {this.filterForm()}
-            </div>
-            {this.sidebarActions()}
-          </div>
+          <Sidebar content={this.sidebar()}/>
           <h2>You haven't selected any characters! Go back and select characters to optimize.</h2>
         </div>
       );
@@ -204,12 +200,7 @@ class ReviewSets extends React.PureComponent {
             Showing mod sets for {this.props.numShownCharacters} out of {this.props.numOptimizedCharacters} characters
           </h2>
           {subHeading}
-          <div className={'sidebar'}>
-            <div className={'filters'}>
-              {this.filterForm()}
-            </div>
-            {this.sidebarActions()}
-          </div>
+          <Sidebar content={this.sidebar()}/>
           <div className={'sets-list'}>
             {rows}
           </div>
@@ -257,6 +248,19 @@ class ReviewSets extends React.PureComponent {
         Show me the mods to move
       </button>
     </div>
+  }
+
+  /**
+   * Render all the sidebar content for this page
+   * @returns {array<*>}
+   */
+  sidebar() {
+    return [
+      <div className={'filters'}>
+        {this.filterForm()}
+      </div>,
+      this.sidebarActions()
+    ];
   }
 }
 

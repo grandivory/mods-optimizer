@@ -7,6 +7,8 @@ import ModFilter from '../../components/ModFilter/ModFilter';
 
 import './ExploreView.css';
 import {connect} from "react-redux";
+import {toggleSidebar} from "../../state/actions/app";
+import Sidebar from "../../components/Sidebar/Sidebar";
 
 class ExploreView extends React.PureComponent {
   render() {
@@ -17,17 +19,23 @@ class ExploreView extends React.PureComponent {
 
     return (
       [
-        <div className={'sidebar'} key={'sidebar'}>
-          <div className={'filters'} key={'filters'}>
-            <ModFilter/>
-          </div>
-        </div>,
+        <Sidebar content={this.sidebar()} />,
         <div className='mods' key={'mods'}>
           <h3>Showing {this.props.displayedMods.length} out of {this.props.modCount} mods.</h3>
           {modElements}
         </div>
       ]
     );
+  }
+
+  /**
+   * Render the sidebar content
+   * @returns {*}
+   */
+  sidebar() {
+    return <div className={'filters'} key={'filters'}>
+      <ModFilter/>
+    </div>;
   }
 }
 

@@ -1,0 +1,97 @@
+.sidebar {
+  float: left;
+  position: relative;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  transition: all ease-in-out .5s;
+}
+
+.sidebar .toggle-sidebar {
+  display: block;
+  position: absolute;
+  top: calc(50% - 1em);
+  right: 0;
+  width: 1em;
+  height: 2em;
+  border-radius: 1em;
+  border: 1px solid gray;
+  background-color: #333;
+  transition: all ease-in-out .5s;
+}
+
+.sidebar .toggle-sidebar.show {
+  transform: rotate(180deg);
+}
+
+.sidebar .toggle-sidebar::before {
+  content: '';
+  position: absolute;
+  top: calc(50% - .5em);
+  right: .25em;
+  width: 0;
+  height: 0;
+  border-top: .5em solid transparent;
+  border-bottom: .5em solid transparent;
+  border-right: .5em solid #ccc;
+}
+
+.sidebar .toggle-sidebar::after {
+  content: '';
+  position: absolute;
+  top: calc(50% - .5em);
+  right: 0;
+  width: 0;
+  height: 0;
+  border-top: .5em solid transparent;
+  border-bottom: .5em solid transparent;
+  border-right: .5em solid #333;
+}
+
+.sidebar.hide {
+  right: 20em;
+  margin-right: -20em;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.filters,
+.sidebar-actions {
+  background-color: #444;
+  padding: 1em;
+  border-radius: 0 .5em .5em 0;
+  border: 1px solid #888;
+  border-left-width: 0;
+  margin: 1em 1em 1em 0;
+  width: 20em;
+}
+
+.sidebar-actions {
+  text-align: center;
+}
+
+.sidebar-actions button {
+  margin-bottom: .5em;
+}
+
+.sidebar-actions button:last-of-type {
+  margin-bottom: 0;
+}
+
+.filter-form {
+  text-align: center;
+}
+
+.filter-form label,
+.sidebar-actions h3 {
+  display: block;
+  border-bottom: 1px solid white;
+  font-size: 1.2em;
+  margin-top: .5em;
+  margin-bottom: .25em;
+}
+
+.sidebar-actions h3 {
+  margin-top: 0;
+}

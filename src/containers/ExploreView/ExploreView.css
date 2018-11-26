@@ -10,3 +10,7 @@
   max-height: 100%;
   overflow-y: auto;
 }
+
+.mods h3 {
+  margin-left: 1em;
+}

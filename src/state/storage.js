@@ -48,6 +48,7 @@ export const defaultState = {
   previousVersion: process.env.REACT_APP_VERSION || 'local',
   profiles: {},
   section: 'optimize',
+  showSidebar: true,
   version: process.env.REACT_APP_VERSION || 'local'
 };
 
@@ -133,6 +134,7 @@ export function deserializeState(state) {
     previousVersion: state.version,
     profiles: mapObject(state.profiles, PlayerProfile.deserialize),
     section: state.section,
+    showSidebar: 'undefined' !== typeof state.showSidebar ? state.showSidebar : defaultState.showSidebar,
     version: version
   };
 }
@@ -176,6 +178,7 @@ export function deserializeStateVersionOneTwo(allyCode, availableCharacters, sel
       [playerAllyCode]: new PlayerProfile(playerCharacters, playerMods, playerSelectedCharacters)
     },
     section: defaultState.section,
+    showSidebar: true,
     version: version
   }
 }

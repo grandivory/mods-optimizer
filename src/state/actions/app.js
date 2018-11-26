@@ -8,6 +8,7 @@ export const SHOW_FLASH = 'SHOW_FLASH';
 export const HIDE_FLASH = 'HIDE_FLASH';
 export const RESET = 'RESET';
 export const RESTORE_PROGRESS = 'RESTORE_PROGRESS';
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 
 export function changeSection(newSection) {
   return {
@@ -67,5 +68,11 @@ export function restoreProgress(progressData) {
   return {
     type: RESTORE_PROGRESS,
     progressData: progressData
+  };
+}
+
+export function toggleSidebar() {
+  return {
+    type: TOGGLE_SIDEBAR
   };
 }
