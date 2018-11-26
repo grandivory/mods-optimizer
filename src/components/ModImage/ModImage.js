@@ -20,7 +20,7 @@ class ModImage extends React.PureComponent {
         <Pips pips={mod.pips}/>
         <div className={'mod-slot-image'} />
         <div className={'mod-level ' + (15 === mod.level ? 'gold ' : 'gray ') + mod.slot}>{mod.level}</div>
-        {showAvatar &&
+        {showAvatar && character &&
           <CharacterAvatar character={character} displayStars={false} displayGear={false} displayLevel={false}/>
         }
       </div>
