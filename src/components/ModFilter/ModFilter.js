@@ -404,6 +404,7 @@ class ModFilter extends React.PureComponent {
         <select name={'sort-option'} defaultValue={this.props.filter.sort}>
           <option value={''}>default</option>
           <option value={'rolls'}># of Stat Upgrades</option>
+          <option value={'character'}>Character</option>
           {sortOptions}
         </select>
       </div>

@@ -39,7 +39,7 @@ class ExploreView extends React.PureComponent {
 }
 
 const getFilteredMods = memoize(
-  (mods, filter) => {
+  (mods, filter, characters) => {
     let filteredMods = mods.slice();
 
     if (filter.slot && 0 < filter.slot.length) {
@@ -68,15 +68,33 @@ const getFilteredMods = memoize(
         mod => mod.secondaryStats.some(stat => filter.secondary.includes(stat.type)));
     }
 
-    if (filter.sort) {
-      if ('rolls' === filter.sort) {
+    switch (filter.sort) {
+      case 'rolls':
         filteredMods = filteredMods.sort((left, right) => {
           const leftValue = left.secondaryStats.reduce((acc, stat) => acc + stat.rolls, 0);
           const rightValue = right.secondaryStats.reduce((acc, stat) => acc + stat.rolls, 0);
 
           return rightValue - leftValue;
-        })
-      } else {
+        });
+        break;
+      case 'character':
+        filteredMods = filteredMods.sort((left, right) => {
+          const leftChar = left.characterID ? characters[left.characterID] : null;
+          const rightChar = right.characterID ? characters[right.characterID] : null;
+
+          if (leftChar && rightChar) {
+            return leftChar.compareGP(rightChar);
+          } else if (leftChar) {
+            return -1;
+          } else if (rightChar) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        break;
+      case '': break;
+      default:
         filteredMods = filteredMods.sort((left, right) => {
           const leftStat = left.secondaryStats.find(stat => stat.type === filter.sort);
           const rightStat = right.secondaryStats.find(stat => stat.type === filter.sort);
@@ -86,7 +104,6 @@ const getFilteredMods = memoize(
 
           return rightValue - leftValue;
         });
-      }
     }
 
     return filteredMods;
@@ -95,7 +112,7 @@ const getFilteredMods = memoize(
 
 const mapStateToProps = (state) => {
   const profile = state.profiles[state.allyCode];
-  const mods = getFilteredMods(profile.mods, state.modsFilter);
+  const mods = getFilteredMods(profile.mods, state.modsFilter, profile.characters);
 
   return {
     characters: profile.characters,
