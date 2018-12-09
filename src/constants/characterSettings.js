@@ -123,6 +123,9 @@ const characterSettings = {
   'CANDEROUSORDO': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
   ),
+  'CARTHONASI': new CharacterSettings(
+    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
+  ),
   'CASSIANANDOR': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 20, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['Rogue 1', 'SuperStar2D2'],
@@ -228,7 +231,10 @@ const characterSettings = {
     ['Nightmare']
   ),
   'DARTHTRAYA': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 0, 50, 10, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 0, 50, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('Tanky', 25, 75, 65, 0, 0, 65, 0, 0, 0, 0, 0, 0, 100, true)
+    ],
     [],
     DamageType.special
   ),
@@ -461,6 +467,9 @@ const characterSettings = {
   ),
   'JOLEEBINDO': new CharacterSettings(
     [new OptimizationPlan('Healer', 50, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)]
+  ),
+  'JUHANI': new CharacterSettings(
+    [new OptimizationPlan('Tank', 50, 25, 100, 0, 25, 0, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
   ),
   'JYNERSO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 50, 50, 0, 20, 0, 75, 0, 0, 0, 0, true)],
