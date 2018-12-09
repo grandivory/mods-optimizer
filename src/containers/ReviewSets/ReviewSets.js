@@ -232,7 +232,7 @@ class ReviewSets extends React.PureComponent {
    * @returns JSX Element
    */
   sidebarActions() {
-    return <div className={'sidebar-actions'}>
+    return <div className={'sidebar-actions'} key={'sidebar-actions'}>
       <h3>I don't like these results...</h3>
       <button
         type={'button'}
@@ -256,7 +256,7 @@ class ReviewSets extends React.PureComponent {
    */
   sidebar() {
     return [
-      <div className={'filters'}>
+      <div className={'filters'} key={'filters'}>
         {this.filterForm()}
       </div>,
       this.sidebarActions()

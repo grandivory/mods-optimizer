@@ -195,7 +195,7 @@ class ReviewList extends React.PureComponent {
    * @returns JSX Element
    */
   sidebarActions() {
-    return <div className={'sidebar-actions'}>
+    return <div className={'sidebar-actions'} key={'sidebar-actions'}>
       <h3>I don't like these results...</h3>
       <button type={'button'} onClick={this.props.edit}>
         Change my selection
@@ -213,7 +213,7 @@ class ReviewList extends React.PureComponent {
    */
   fullSidebar() {
     return [
-      <div className={'filters'}>
+      <div className={'filters'} key={'filters'}>
         {this.filterForm()}
       </div>,
       this.sidebarActions()

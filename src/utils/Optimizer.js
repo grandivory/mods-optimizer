@@ -47,21 +47,28 @@ class Optimizer {
     );
 
     // For each not-locked character in the list, find the best mod set for that character
-    const {assignedSets} = order.filter(charID => !characters[charID].optimizerSettings.isLocked)
+    const {assignedSets, messages} = order.filter(charID => !characters[charID].optimizerSettings.isLocked)
       .reduce((accumulator, characterID) => {
-      const {considerationSet: availableMods, assignedSets: completedSets} = accumulator;
-      const character = characters[characterID];
+        const {considerationSet: availableMods, assignedSets: completedSets, messages: messages} = accumulator;
+        const character = characters[characterID];
 
-      const modSetForCharacter = this.findBestModSetForCharacter(availableMods, character);
-      return {
-        considerationSet: availableMods.filter(mod => !modSetForCharacter.contains(mod)),
-        assignedSets: Object.assign(completedSets, {
-          [characterID]: modSetForCharacter.mods().map(mod => mod.id)
-        })
-      };
-    }, {considerationSet: considerationSet, assignedSets: {}});
+        const {modSet: modSetForCharacter, messages: characterMessages} =
+          this.findBestModSetForCharacter(availableMods, character);
+        return {
+          considerationSet: availableMods.filter(mod => !modSetForCharacter.contains(mod)),
+          assignedSets: Object.assign(completedSets, {
+            [characterID]: modSetForCharacter.mods().map(mod => mod.id)
+          }),
+          messages: characterMessages.length > 0 ?
+            Object.assign({}, messages, {[characterID]: characterMessages}) :
+            messages
+        };
+      }, {considerationSet: considerationSet, assignedSets: {}, messages: {}});
 
-    return assignedSets;
+    return {
+      assignedSets: assignedSets,
+      messages: messages
+    };
   }
 
   /**
@@ -82,6 +89,7 @@ class Optimizer {
     let setlessMods;
     let candidateSets;
     let candidateValues = new WeakMap();
+    let messages = [];
 
     // If the character is less than gear 12, remove any mods that are tier 6 or higher
     if (character.playerValues.gearLevel < 12) {
@@ -105,26 +113,50 @@ class Optimizer {
     // Get the set of all possible mods to use for this character
     squares = availableMods.filter(mod => 'square' === mod.slot);
     if (0 === squares.length) {
+      messages.push(
+        `No ${character.optimizerSettings.minimumModDots}-dot squares were available, ` +
+        'so the minimum dot requirement was dropped.'
+      );
       squares = usableMods.filter(mod => 'square' === mod.slot);
     }
     arrows = availableMods.filter(mod => 'arrow' === mod.slot);
     if (0 === arrows.length) {
+      messages.push(
+        `No ${character.optimizerSettings.minimumModDots}-dot arrows were available, ` +
+        'so the minimum dot requirement was dropped.'
+      );
       arrows = usableMods.filter(mod => 'arrow' === mod.slot);
     }
     diamonds = availableMods.filter(mod => 'diamond' === mod.slot);
     if (0 === diamonds.length) {
+      messages.push(
+        `No ${character.optimizerSettings.minimumModDots}-dot diamonds were available, ` +
+        'so the minimum dot requirement was dropped.'
+      );
       diamonds = usableMods.filter(mod => 'diamond' === mod.slot);
     }
     triangles = availableMods.filter(mod => 'triangle' === mod.slot);
     if (0 === triangles.length) {
+      messages.push(
+        `No ${character.optimizerSettings.minimumModDots}-dot triangles were available, ` +
+        'so the minimum dot requirement was dropped.'
+      );
       triangles = usableMods.filter(mod => 'triangle' === mod.slot);
     }
     circles = availableMods.filter(mod => 'circle' === mod.slot);
     if (0 === circles.length) {
+      messages.push(
+        `No ${character.optimizerSettings.minimumModDots}-dot circles were available, ` +
+        'so the minimum dot requirement was dropped.'
+      );
       circles = usableMods.filter(mod => 'circle' === mod.slot);
     }
     crosses = availableMods.filter(mod => 'cross' === mod.slot);
     if (0 === crosses.length) {
+      messages.push(
+        `No ${character.optimizerSettings.minimumModDots}-dot crosses were available, ` +
+        'so the minimum dot requirement was dropped.'
+      );
       crosses = usableMods.filter(mod => 'cross' === mod.slot);
     }
 
@@ -204,7 +236,10 @@ class Optimizer {
       }
     });
 
-    return candidateSets[0];
+    return {
+      modSet: candidateSets[0],
+      messages: messages
+    };
   }
 
   /**

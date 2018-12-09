@@ -17,7 +17,7 @@ class FlashMessage extends React.PureComponent {
     return <div className={'overlay'}>
       <div className={className}>
         <h2>{this.props.content.heading}</h2>
-        <p dangerouslySetInnerHTML={{__html: this.props.content.content}}/>
+        <div className={'content'}>{this.props.content.content}</div>
         <div className={'actions'}>
           <button type={'button'} onClick={this.props.hideFlash}>OK</button>
         </div>

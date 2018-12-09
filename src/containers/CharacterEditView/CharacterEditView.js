@@ -84,7 +84,7 @@ class CharacterEditView extends PureComponent {
    * @returns JSX Element
    */
   filterForm() {
-    return <div className={'filters'}>
+    return <div className={'filters'} key={'filterForm'}>
       <div className={'filter-form'}>
         <label htmlFor={'character-filter'}>Search by character name, tag, or common abbreviation:</label>
         <input autoFocus={true} id='character-filter' type='text'
@@ -100,7 +100,7 @@ class CharacterEditView extends PureComponent {
    * @returns JSX Element
    */
   sidebarActions() {
-    return <div className={'sidebar-actions'}>
+    return <div className={'sidebar-actions'} key={'sidebar-actions'}>
       <h3>Actions</h3>
       <button
         type={'button'}

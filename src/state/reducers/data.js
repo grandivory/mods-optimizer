@@ -10,6 +10,7 @@ import CharacterStats, {NullCharacterStats} from "../../domain/CharacterStats";
 import Mod from "../../domain/Mod";
 import {updateCurrentProfile} from "./modsOptimizer";
 import OptimizationPlan from "../../domain/OptimizationPlan";
+import React from "react";
 
 export function toggleKeepOldMods(state, action) {
   return Object.assign({}, state, {
@@ -139,10 +140,12 @@ export function receiveProfile(state, action) {
     optimizerView: 'edit',
     flashMessage: {
       heading: 'Success!',
-      content: `Successfully pulled data for ${Object.keys(action.profile.characters).length} characters and ` +
-        `${action.profile.mods.length} mods.<br />` +
-        `Your data was last updated as of ${lastUpdate.toLocaleString()}.<br />` +
-        `You should be able to fetch fresh data any time after ${nextUpdate.toLocaleString()}`
+      content: [
+        <p key={0}>{`Successfully pulled data for ${Object.keys(action.profile.characters).length} ` +
+          `characters and ${action.profile.mods.length} mods.`}</p>,
+        <p key={1}>{`Your data was last updated as of ${lastUpdate.toLocaleString()}.`}</p>,
+        <p key={2}>{`You should be able to fetch fresh data any time after ${nextUpdate.toLocaleString()}`}</p>
+        ]
     }
   });
 }
