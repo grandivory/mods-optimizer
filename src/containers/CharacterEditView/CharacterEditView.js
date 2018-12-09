@@ -87,7 +87,7 @@ class CharacterEditView extends PureComponent {
     return <div className={'filters'} key={'filterForm'}>
       <div className={'filter-form'}>
         <label htmlFor={'character-filter'}>Search by character name, tag, or common abbreviation:</label>
-        <input autoFocus={true} id='character-filter' type='text'
+        <input autoFocus={true} id='character-filter' type='text' defaultValue={this.props.characterFilter}
                onChange={(e) => this.props.changeCharacterFilter(e.target.value.toLowerCase())}
         />
       </div>
@@ -238,6 +238,7 @@ const mapStateToProps = (state) => {
   return {
     allCharacters: profile.characters,
     mods: profile.mods,
+    characterFilter: state.characterFilter,
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
     selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id])
