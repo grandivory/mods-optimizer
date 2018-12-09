@@ -3,7 +3,7 @@
 import Mod from "../../domain/Mod";
 import {PlayerValues} from "../../domain/CharacterDataClasses";
 import cleanAllyCode from "../../utils/cleanAllyCode";
-import {showError} from "./app";
+import {hideFlash, showError} from "./app";
 
 export const TOGGLE_KEEP_OLD_MODS = 'TOGGLE_KEEP_OLD_MODS';
 export const REQUEST_CHARACTERS = 'REQUEST_CHARACTERS';
@@ -223,6 +223,9 @@ export function fetchCharacterStats(allyCode, characters) {
 
   return function(dispatch) {
     return dispatchFetchCharacterStats(dispatch, cleanedAllyCode, characters)
-      .catch(error => dispatch(showError(error.message)));
+      .catch(error => {
+        dispatch(hideFlash());
+        dispatch(showError(error.message))
+      });
   }
 }
