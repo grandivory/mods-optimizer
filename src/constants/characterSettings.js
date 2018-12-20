@@ -117,6 +117,12 @@ const characterSettings = {
       new OptimizationPlan('Non-leader', 20, 0, 100, 25, 25, 0, 25, 0, 25, 0, 0, 0, 0, true)
     ]
   ),
+  'C3POLEGENDARY': new CharacterSettings(
+    [
+      optimizationStrategy["Speedy debuffer"],
+      optimizationStrategy.Speed
+    ]
+  ),
   'CADBANE': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
@@ -181,7 +187,8 @@ const characterSettings = {
     [
       new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 25, 0, 50, 0, 0, 0, 0, true),
       optimizationStrategy["Speedy Chex Mix"].rename('Chex Mix'),
-      new OptimizationPlan('Raids', 0, 0, 100, 0, 25, 0, 25, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('Raids', 0, 0, 100, 0, 25, 0, 25, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Slow and Strong', 0, 0, 0, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true)
     ],
     ['CLS', 'Wampanader', 'Chex Mix', 'ABC', 'Titans']
   ),
