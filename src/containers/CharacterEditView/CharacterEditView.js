@@ -9,9 +9,9 @@ import {connect} from "react-redux";
 import {hideModal, showModal} from "../../state/actions/app";
 import {
   changeCharacterFilter,
-  changeCharacterTarget,
+  changeCharacterTarget, lockSelectedCharacters,
   resetAllCharacterTargets,
-  selectCharacter,
+  selectCharacter, unlockSelectedCharacters,
   unselectAllCharacters,
   unselectCharacter
 } from "../../state/actions/characterEdit";
@@ -52,9 +52,11 @@ class CharacterEditView extends PureComponent {
     return <div className={'character-edit'}>
       <Sidebar content={[this.filterForm(), this.sidebarActions()]}/>
       <div className={'selected-characters'}>
-        <h4>Selected Characters <button className={'small'} onClick={this.props.clearSelectedCharacters}>
-          Clear
-        </button>
+        <h4>
+          Selected Characters
+          <button className={'small'} onClick={this.props.clearSelectedCharacters}>Clear</button>
+          <button className={'small'} onClick={this.props.lockSelectedCharacters}>Lock All</button>
+          <button className={'small'} onClick={this.props.unlockSelectedCharacters}>Unlock All</button>
         </h4>
         <CharacterList selfDrop={true} draggable={true}/>
       </div>
@@ -252,6 +254,8 @@ const mapDispatchToProps = dispatch => ({
   selectCharacter: (characterID, prevCharacterID) => dispatch(selectCharacter(characterID, prevCharacterID)),
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),
   clearSelectedCharacters: () => dispatch(unselectAllCharacters()),
+  lockSelectedCharacters: () => dispatch(lockSelectedCharacters()),
+  unlockSelectedCharacters: () => dispatch(unlockSelectedCharacters()),
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
   optimizeMods: (mods, characters, order) => dispatch(optimizeMods(mods, characters, order))

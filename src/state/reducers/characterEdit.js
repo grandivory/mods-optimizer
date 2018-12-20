@@ -49,6 +49,32 @@ export function unselectAllCharacters(state, action) {
     );
 }
 
+export function lockAllSelectedCharacters(state, action) {
+  return updateCurrentProfile(state, profile =>
+    profile.withCharacters(
+      mapObject(
+        profile.characters,
+        character => profile.selectedCharacters.includes(character.baseID) ?
+          character.withOptimizerSettings(character.optimizerSettings.lock()) :
+          character
+      )
+    )
+  );
+}
+
+export function unlockAllSelectedCharacters(state, action) {
+  return updateCurrentProfile(state, profile =>
+    profile.withCharacters(
+      mapObject(
+        profile.characters,
+        character => profile.selectedCharacters.includes(character.baseID) ?
+          character.withOptimizerSettings(character.optimizerSettings.unlock()) :
+          character
+      )
+    )
+  );
+}
+
 export function lockCharacter(state, action) {
   return updateCurrentProfile(state, profile => {
     const oldCharacter = profile.characters[action.characterID]

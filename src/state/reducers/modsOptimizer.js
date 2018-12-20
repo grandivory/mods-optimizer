@@ -19,11 +19,11 @@ import {
   CHANGE_MINIMUM_MOD_DOTS,
   CHANGE_SLICE_MODS,
   DELETE_TARGET,
-  FINISH_EDIT_CHARACTER_TARGET,
+  FINISH_EDIT_CHARACTER_TARGET, LOCK_ALL_SELECTED_CHARACTERS,
   LOCK_CHARACTER,
   RESET_ALL_CHARACTER_TARGETS,
   RESET_CHARACTER_TARGET_TO_DEFAULT,
-  SELECT_CHARACTER,
+  SELECT_CHARACTER, UNLOCK_ALL_SELECTED_CHARACTERS,
   UNLOCK_CHARACTER,
   UNSELECT_ALL_CHARACTERS,
   UNSELECT_CHARACTER
@@ -69,11 +69,11 @@ import {
   changeMinimumModDots,
   changeSliceMods,
   deleteTarget,
-  finishEditCharacterTarget,
+  finishEditCharacterTarget, lockAllSelectedCharacters,
   lockCharacter,
   resetAllCharacterTargets,
   resetCharacterTargetToDefault,
-  selectCharacter,
+  selectCharacter, unlockAllSelectedCharacters,
   unlockCharacter,
   unselectAllCharacters,
   unselectCharacter
@@ -152,6 +152,10 @@ export default function modsOptimizer(state, action) {
       return saveState(unselectCharacter(state, action));
     case UNSELECT_ALL_CHARACTERS:
       return saveState(unselectAllCharacters(state, action));
+    case LOCK_ALL_SELECTED_CHARACTERS:
+      return saveState(lockAllSelectedCharacters(state, action));
+    case UNLOCK_ALL_SELECTED_CHARACTERS:
+      return saveState(unlockAllSelectedCharacters(state, action));
     case LOCK_CHARACTER:
       return saveState(lockCharacter(state, action));
     case UNLOCK_CHARACTER:

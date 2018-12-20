@@ -2,6 +2,8 @@
 export const SELECT_CHARACTER = 'SELECT_CHARACTER';
 export const UNSELECT_CHARACTER = 'UNSELECT_CHARACTER';
 export const UNSELECT_ALL_CHARACTERS = 'UNSELECT_ALL_CHARACTERS';
+export const LOCK_ALL_SELECTED_CHARACTERS = 'LOCK_ALL_SELECTED_CHARACTERS';
+export const UNLOCK_ALL_SELECTED_CHARACTERS = 'UNLOCK_ALL_SELECTED_CHARACTERS';
 export const LOCK_CHARACTER = 'LOCK_CHARACTER';
 export const UNLOCK_CHARACTER = 'UNLOCK_CHARACTER';
 export const CHANGE_CHARACTER_TARGET = 'CHANGE_CHARACTER_TARGET';
@@ -50,6 +52,27 @@ export function unselectAllCharacters() {
     type: UNSELECT_ALL_CHARACTERS
   };
 }
+
+/**
+ * Action to lock all characters from the "selected characters" pool
+ * @returns {{type: string}}
+ */
+export function lockSelectedCharacters() {
+  return {
+    type: LOCK_ALL_SELECTED_CHARACTERS
+  };
+}
+
+/**
+ * Action to unlock all characters from the "selected characters" pool
+ * @returns {{type: string}}
+ */
+export function unlockSelectedCharacters() {
+  return {
+    type: UNLOCK_ALL_SELECTED_CHARACTERS
+  };
+}
+
 
 /**
  * Lock a character so that their mods won't be assigned to other characters
