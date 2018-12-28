@@ -362,7 +362,8 @@ const characterSettings = {
   ),
   'GRANDMASTERYODA': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 50, 25, 0, 0, 80, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('Speedy', 0, 0, 100, 50, 25, 0, 0, 80, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('Offense', 0, 0, 50, 100, 0, 0, 0, 100, 25, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P1 Jedi', 0, -5, 100, 100, 0, 0, 0, 100, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P2 Jedi', 0, 0, 60, 100, 0, 0, 0, 75, 80, 0, 0, 0, 0, true)
     ],
