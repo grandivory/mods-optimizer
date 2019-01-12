@@ -26,7 +26,7 @@ import {
   SELECT_CHARACTER, UNLOCK_ALL_SELECTED_CHARACTERS,
   UNLOCK_CHARACTER,
   UNSELECT_ALL_CHARACTERS,
-  UNSELECT_CHARACTER
+  UNSELECT_CHARACTER, UPDATE_MOD_CHANGE_THRESHOLD
 } from "../actions/characterEdit";
 import {
   RECEIVE_CHARACTERS,
@@ -76,7 +76,7 @@ import {
   selectCharacter, unlockAllSelectedCharacters,
   unlockCharacter,
   unselectAllCharacters,
-  unselectCharacter
+  unselectCharacter, updateModChangeThreshold
 } from "./characterEdit";
 import {
   receiveCharacters,
@@ -182,6 +182,8 @@ export default function modsOptimizer(state, action) {
       return saveState(changeSliceMods(state, action));
     case CHANGE_CHARACTER_FILTER:
       return saveState(changeCharacterFilter(state, action));
+    case UPDATE_MOD_CHANGE_THRESHOLD:
+      return saveState(updateModChangeThreshold(state, action));
 
     case REQUEST_CHARACTERS:
       return requestCharacters(state, action);

@@ -41,6 +41,10 @@
   padding-right: 1em;
 }
 
+.global-settings input[type=range] {
+  vertical-align: middle;
+}
+
 .character-edit-form {
   width: 30em;
   text-align: center;

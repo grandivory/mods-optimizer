@@ -9,14 +9,17 @@ import {connect} from "react-redux";
 import {hideModal, showModal} from "../../state/actions/app";
 import {
   changeCharacterFilter,
-  changeCharacterTarget, lockSelectedCharacters,
+  changeCharacterTarget,
+  lockSelectedCharacters,
   resetAllCharacterTargets,
-  selectCharacter, unlockSelectedCharacters,
+  selectCharacter,
+  unlockSelectedCharacters,
   unselectAllCharacters,
-  unselectCharacter
+  unselectCharacter, updateModChangeThreshold
 } from "../../state/actions/characterEdit";
 import {optimizeMods} from "../../state/actions/optimize";
 import Sidebar from "../../components/Sidebar/Sidebar";
+import RangeInput from "../../components/RangeInput/RangeInput";
 
 class CharacterEditView extends PureComponent {
   dragStart(character) {
@@ -48,9 +51,8 @@ class CharacterEditView extends PureComponent {
   }
 
   render() {
-
     return <div className={'character-edit'}>
-      <Sidebar content={[this.filterForm(), this.sidebarActions()]}/>
+      <Sidebar content={[this.filterForm(), this.globalSettings(), this.sidebarActions()]}/>
       <div className={'selected-characters'}>
         <h4>
           Selected Characters
@@ -97,6 +99,29 @@ class CharacterEditView extends PureComponent {
   }
 
   /**
+   * Renders the player's global optimizer settings
+   *
+   * @returns JSX Element
+   */
+  globalSettings() {
+    return <div className={'global-settings'} key={'global-settings'}>
+      <h3>Global Settings</h3>
+      <div className={'form-row'}>
+        <label>Threshold to Change Mods:</label><br/>
+        <RangeInput
+          min={0}
+          max={100}
+          step={1}
+          isPercent={true}
+          editable={true}
+          defaultValue={this.props.modChangeThreshold}
+          onChange={(threshold) => this.props.updateModChangeThreshold(threshold)}
+        />
+      </div>
+    </div>;
+  }
+
+  /**
    * Renders a sidebar box with action buttons
    *
    * @returns JSX Element
@@ -109,8 +134,9 @@ class CharacterEditView extends PureComponent {
         onClick={() => this.props.optimizeMods(
           this.props.mods,
           this.props.allCharacters,
-          this.props.selectedCharacters.map(c => c.baseID))
-        }
+          this.props.selectedCharacters.map(c => c.baseID),
+          this.props.modChangeThreshold
+        )}
         disabled={!this.props.selectedCharacters.length}
       >
         Optimize my mods!
@@ -240,6 +266,7 @@ const mapStateToProps = (state) => {
   return {
     allCharacters: profile.characters,
     mods: profile.mods,
+    modChangeThreshold: profile.modChangeThreshold,
     characterFilter: state.characterFilter,
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
@@ -258,7 +285,8 @@ const mapDispatchToProps = dispatch => ({
   unlockSelectedCharacters: () => dispatch(unlockSelectedCharacters()),
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
-  optimizeMods: (mods, characters, order) => dispatch(optimizeMods(mods, characters, order))
+  optimizeMods: (mods, characters, order, threshold) => dispatch(optimizeMods(mods, characters, order, threshold)),
+  updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterEditView);

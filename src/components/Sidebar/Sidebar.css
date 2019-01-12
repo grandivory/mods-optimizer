@@ -61,8 +61,7 @@
   overflow-y: hidden;
 }
 
-.filters,
-.sidebar-actions {
+.sidebar > div {
   background-color: #444;
   padding: 1em;
   border-radius: 0 .5em .5em 0;
@@ -89,7 +88,7 @@
 }
 
 .filter-form label,
-.sidebar-actions h3 {
+.sidebar > div h3 {
   display: block;
   border-bottom: 1px solid white;
   font-size: 1.2em;

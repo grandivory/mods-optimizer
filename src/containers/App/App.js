@@ -303,10 +303,12 @@ class App extends PureComponent {
    * Renders a modal with a form for adding a new ally code
    */
   addAllyCodeModal() {
+    let allyCodeInput;
+
     return <div className={'add-ally-code-form'}>
       <h4>Add a new Ally Code</h4>
       <label htmlFor={'new-ally-code'}>Ally code: </label>
-      <input id={'new-ally-code'} type={'text'} inputMode={'numeric'} size={12}
+      <input id={'new-ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodeInput = input}
              onKeyUp={(e) => {
                if (e.key === 'Enter') {
                  this.props.hideModal();
@@ -329,7 +331,7 @@ class App extends PureComponent {
         <button type={'button'}
                 onClick={() => {
                   this.props.hideModal();
-                  this.props.refreshPlayerData(document.getElementById('new-ally-code').value);
+                  this.props.refreshPlayerData(allyCodeInput.value);
                 }}>
           Fetch my data!
         </button>

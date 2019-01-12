@@ -24,8 +24,9 @@ export function finishModOptimization(result) {
  * @param mods Array[Mod]
  * @param characters {Character.baseID => Character}
  * @param order Array[Character.baseID]
+ * @param threshold {Number}
  */
-export function optimizeMods(mods, characters, order) {
+export function optimizeMods(mods, characters, order, threshold) {
   return function(dispatch) {
     // If any of the characters being optimized don't have stats, then show an error message
     if (Object.values(characters)
@@ -38,7 +39,7 @@ export function optimizeMods(mods, characters, order) {
 
     dispatch(startModOptimization());
     const optimize = new Promise((resolve) => {
-      setTimeout(() => resolve((new Optimizer()).optimizeMods(mods, characters, order)), 0);
+      setTimeout(() => resolve((new Optimizer()).optimizeMods(mods, characters, order, threshold)), 0);
     });
 
     optimize.then(result => dispatch(finishModOptimization(result)));

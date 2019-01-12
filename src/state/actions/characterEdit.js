@@ -15,6 +15,7 @@ export const DELETE_TARGET = 'DELETE_TARGET';
 export const CHANGE_MINIMUM_MOD_DOTS = 'CHANGE_MINIMUM_MOD_DOTS';
 export const CHANGE_SLICE_MODS = 'CHANGE_SLICE_MODS';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
+export const UPDATE_MOD_CHANGE_THRESHOLD = 'UPDATE_MOD_CHANGE_THRESHOLD';
 
 /**
  * Action to move a character from the "available characters" pool to the "selected characters" pool, moving the
@@ -206,5 +207,17 @@ export function changeCharacterFilter(newFilter) {
   return {
     type: CHANGE_CHARACTER_FILTER,
     filter: newFilter
+  };
+}
+
+/**
+ * Update the threshold before the optimizer will suggest changing mods on a character
+ * @param threshold
+ * @returns {{type: string, threshold: *}}
+ */
+export function updateModChangeThreshold(threshold) {
+  return {
+    type: UPDATE_MOD_CHANGE_THRESHOLD,
+    threshold: threshold
   };
 }

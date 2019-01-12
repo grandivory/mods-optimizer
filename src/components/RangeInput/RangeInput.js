@@ -12,23 +12,25 @@ class RangeInput extends React.PureComponent {
     const step = 'undefined' === typeof this.props.step ? 1 : this.props.step;
     const isPercent = this.props.isPercent || false;
     const editable = this.props.editable || false;
-    const onChange = this.props.onChange || function() {
-    };
+    const onChange = this.props.onChange || function() {};
+
+    let slider, textField, output;
 
     if (editable) {
       return [
         <input
           type={'range'}
-          id={name + '-slider'}
+          id={name && name + '-slider'}
           defaultValue={defaultValue}
           min={min}
           max={max}
           step={step}
           onChange={(e) => {
-            document.getElementById(id).value = e.target.value + (isPercent ? '%' : '');
-            onChange(e.target.value);
+            textField.value = +e.target.value;
+            onChange(+e.target.value);
           }}
           key={name + 'slider'}
+          ref={input => slider = input}
         />,
         <input
           type={'number'}
@@ -40,12 +42,13 @@ class RangeInput extends React.PureComponent {
           max={max}
           step={step}
           onChange={(e) => {
-            const value = e.target.value.replace(/%/g, '');
-            document.getElementById(name + '-slider').value = value;
-            onChange(value);
+            slider.value = e.target.value;
+            onChange(+e.target.value);
           }}
           key={name + 'input'}
-        />
+          ref={input => textField = input}
+        />,
+        <span key={'percent'}>{isPercent && '%'}</span>
       ];
     } else {
       return [
@@ -58,12 +61,12 @@ class RangeInput extends React.PureComponent {
           max={max}
           step={step}
           onChange={(e) => {
-            document.getElementById(name + '-display').value = e.target.value + (isPercent ? '%' : '');
-            onChange(e.target.value);
+            output.value = e.target.value + (isPercent ? '%' : '');
+            onChange(+e.target.value);
           }}
           key={name + 'input'}
         />,
-        <output id={name + '-display'} htmlFor={id} key={name + 'output'}>
+        <output id={name && name + '-display'} htmlFor={id} key={name + 'output'} ref={element => output = element}>
           {defaultValue}{isPercent && '%'}
         </output>
       ];

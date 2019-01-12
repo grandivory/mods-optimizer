@@ -193,3 +193,7 @@ export function changeCharacterFilter(state, action) {
     characterFilter: action.filter
   });
 }
+
+export function updateModChangeThreshold(state, action) {
+  return updateCurrentProfile(state, profile => profile.withModChangeThreshold(action.threshold));
+}

@@ -37,10 +37,12 @@ class Optimizer {
    * @param modsList Array[Mod] An array of mods that could potentially be assign to each character
    * @param characters {Character.baseID => Character} A set of characters that might be optimized
    * @param order Array[Character.baseID] The characters to optimize, in order
+   * @param changeThreshold {Number} The % value that a new mod set has to improve upon the existing equipped mods
+   *                                 before the optimizer will suggest changing it
    *
    * @return {character.baseID => ModSet}
    */
-  optimizeMods(modsList, characters, order) {
+  optimizeMods(modsList, characters, order, changeThreshold) {
     const considerationSet = modsList.filter(mod =>
       // Use any mod that isn't assigned or that is assigned to a character that isn't locked
       !mod.characterID || !characters[mod.characterID].optimizerSettings.isLocked
@@ -49,18 +51,31 @@ class Optimizer {
     // For each not-locked character in the list, find the best mod set for that character
     const {assignedSets, messages} = order.filter(charID => !characters[charID].optimizerSettings.isLocked)
       .reduce((accumulator, characterID) => {
-        const {considerationSet: availableMods, assignedSets: completedSets, messages: messages} = accumulator;
+        const {considerationSet: availableMods, assignedSets: completedSets, messages} = accumulator;
         const character = characters[characterID];
 
-        const {modSet: modSetForCharacter, messages: characterMessages} =
+        const {modSet: newModSetForCharacter, messages: characterMessages} =
           this.findBestModSetForCharacter(availableMods, character);
+
+        const oldModSetForCharacter = new ModSet(availableMods.filter(mod => mod.characterID === character.baseID));
+
+        const newModSetValue = newModSetForCharacter.getOptimizationValue(character);
+        const oldModSetValue = oldModSetForCharacter.getOptimizationValue(character);
+        
+        const [assignedModSet, assignmentMessages] = (newModSetValue / oldModSetValue) * 100 - 100 > changeThreshold ||
+        (oldModSetForCharacter.mods().length < 6 &&
+          newModSetForCharacter.mods().length > oldModSetForCharacter.mods().length)
+          ?
+          [newModSetForCharacter, characterMessages] :
+          [oldModSetForCharacter, []];
+
         return {
-          considerationSet: availableMods.filter(mod => !modSetForCharacter.contains(mod)),
+          considerationSet: availableMods.filter(mod => !assignedModSet.contains(mod)),
           assignedSets: Object.assign(completedSets, {
-            [characterID]: modSetForCharacter.mods().map(mod => mod.id)
+            [characterID]: assignedModSet.mods().map(mod => mod.id)
           }),
-          messages: characterMessages.length > 0 ?
-            Object.assign({}, messages, {[characterID]: characterMessages}) :
+          messages: assignmentMessages.length > 0 ?
+            Object.assign({}, messages, {[characterID]: assignmentMessages}) :
             messages
         };
       }, {considerationSet: considerationSet, assignedSets: {}, messages: {}});
