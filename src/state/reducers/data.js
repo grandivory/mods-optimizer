@@ -52,7 +52,7 @@ export function receiveCharacters(state, action) {
       character.image,
       character.categories
         .concat([character.alignment, character.role])
-        .concat(character.ship_slot ? ['Crew Member'] : []),
+        .concat(null !== character.ship_slot ? ['Crew Member'] : []),
       character.description
     );
 
