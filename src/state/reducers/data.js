@@ -141,10 +141,21 @@ export function receiveProfile(state, action) {
     flashMessage: {
       heading: 'Success!',
       content: [
-        <p key={0}>{`Successfully pulled data for ${Object.keys(action.profile.characters).length} ` +
-          `characters and ${action.profile.mods.length} mods.`}</p>,
-        <p key={1}>{`Your data was last updated as of ${lastUpdate.toLocaleString()}.`}</p>,
-        <p key={2}>{`You should be able to fetch fresh data any time after ${nextUpdate.toLocaleString()}`}</p>
+        <p key={0}>
+          Successfully pulled data for <span className={'gold'}>{Object.keys(action.profile.characters).length}
+          </span> characters and <span className={'gold'}>{action.profile.mods.length}</span> mods.</p>,
+        <p key={1}>Your data was last updated as of <span className={'gold'}>{lastUpdate.toLocaleString()}</span>.</p>,
+        <p key={2}>You should be able to fetch fresh data any time after <span className={'gold'}>
+          {nextUpdate.toLocaleString()}</span>
+        </p>,
+        <hr key={3} />,
+        <h3 key={4}><strong>
+          Remember: The optimizer can only pull data for mods that you currently have equipped!
+        </strong></h3>,
+        <p key={5}>
+          If it looks like you're missing mods, try equipping them on your characters and fetching data again after the
+          time listed above.
+        </p>,
         ]
     }
   });
