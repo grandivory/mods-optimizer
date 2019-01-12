@@ -6,8 +6,12 @@ export function selectCharacter(state, action) {
   return updateCurrentProfile(state, profile => {
     const oldSelectedCharacters = profile.selectedCharacters;
     if (oldSelectedCharacters.includes(action.characterID)) {
-      // If the character is already in the list, remove it
-      oldSelectedCharacters.splice(oldSelectedCharacters.indexOf(action.characterID), 1);
+      // If the character is already in the list, remove it unless the prevCharacterID matches itself (it wasn't moved)
+      if (action.prevCharacterID === action.characterID) {
+        return profile;
+      } else {
+        oldSelectedCharacters.splice(oldSelectedCharacters.indexOf(action.characterID), 1);
+      }
     }
 
     if (!action.prevCharacterID || !profile.selectedCharacters.includes(action.prevCharacterID)) {
