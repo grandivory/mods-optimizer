@@ -113,10 +113,14 @@ html, body {
 }
 
 .App-header .actions label:not(.button),
-.App-header .actions input:not(.button) {
+.App-header .actions input:not(.button){
   font-size: 1.2em;
   margin: 0 .25em;
   vertical-align: middle;
+}
+
+.App-header select {
+  font-size: 1.2em;
 }
 
 .App-header .actions form {
@@ -303,6 +307,7 @@ select {
 .dropdown {
   position: relative;
   display: inline-block;
+  vertical-align: middle;
   margin: .25em;
 }
 
@@ -329,6 +334,21 @@ select {
 
 .filter-form input[type='text'] {
   font-size: 1.2em;
+}
+
+.add-ally-code-form,
+.add-ally-code-form input[type='text'] {
+  font-size: 1.2em;
+}
+
+.add-ally-code-form h4 {
+  color: #eeca44;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.add-ally-code-form .actions {
+  margin-top: 1em;
 }
 
 input {

@@ -9,6 +9,8 @@ export const HIDE_FLASH = 'HIDE_FLASH';
 export const RESET = 'RESET';
 export const RESTORE_PROGRESS = 'RESTORE_PROGRESS';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
+export const SWITCH_PROFILE = 'SWITCH_PROFILE';
+export const DELETE_PROFILE = 'DELETE_PROFILE';
 
 export function changeSection(newSection) {
   return {
@@ -74,5 +76,19 @@ export function restoreProgress(progressData) {
 export function toggleSidebar() {
   return {
     type: TOGGLE_SIDEBAR
+  };
+}
+
+export function switchProfile(allyCode) {
+  return {
+    type: SWITCH_PROFILE,
+    allyCode: allyCode
+  };
+}
+
+export function deleteProfile(allyCode) {
+  return {
+    type: DELETE_PROFILE,
+    allyCode: allyCode
   };
 }

@@ -12,7 +12,15 @@ import {connect} from "react-redux";
 import formatAllyCode from "../../utils/formatAllyCode";
 import ErrorModal from "../ErrorModal/ErrorModal";
 import {serializeState} from "../../state/storage";
-import {changeSection, hideModal, reset, restoreProgress, showError, showModal} from "../../state/actions/app";
+import {
+  changeSection, deleteProfile,
+  hideModal,
+  reset,
+  restoreProgress,
+  showError,
+  showModal,
+  switchProfile
+} from "../../state/actions/app";
 import {refreshPlayerData, setMods, toggleKeepOldMods} from "../../state/actions/data";
 import FlashMessage from "../../components/Modal/FlashMessage";
 
@@ -112,8 +120,9 @@ class App extends PureComponent {
       }
       <div className={'actions'}>
         <label htmlFor={'ally-code'}>Ally code:</label>
-        <input id={'ally-code'} type={'text'} inputMode={'numeric'}
-               defaultValue={formatAllyCode(this.props.allyCode || '')}
+        {/* If there is no active ally code, then show the regular input field */}
+        {!this.props.allyCode &&
+        <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12}
                onKeyUp={(e) => {
                  if (e.key === 'Enter') {
                    this.props.refreshPlayerData(e.target.value);
@@ -123,8 +132,7 @@ class App extends PureComponent {
                    return;
                  }
                  // Don't change the input if the user is hitting the arrow keys
-                 // TODO: Change this to use a non-deprecated property
-                 if ([38, 40, 37, 39].includes(e.keyCode)) {
+                 if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
                    return;
                  }
 
@@ -132,10 +140,36 @@ class App extends PureComponent {
                  e.target.value = formatAllyCode(e.target.value);
                }}
         />
-        <button type={'button'}
-                onClick={() => {
-                  this.props.refreshPlayerData(document.getElementById('ally-code').value);
-                }}>
+        }
+        {/* If there is an active ally code, show a dropdown */}
+        {this.props.allyCode &&
+        <div className={'dropdown'}>
+          <select
+            id={'ally-code'}
+            value={this.props.allyCode}
+            onChange={e => {
+              if ('' === e.target.value) {
+                this.props.showModal('', this.addAllyCodeModal());
+              } else {
+                this.props.switchProfile(e.target.value);
+              }
+            }}>
+            {this.props.allyCodes.map(allyCode =>
+              <option key={allyCode} value={allyCode}>{formatAllyCode(allyCode)}</option>
+            )}
+            <option key={'new'} value={''}>New Code...</option>
+          </select>
+        </div>
+        }
+        {this.props.allyCode &&
+          <button type={'button'}
+                  className={'red'}
+                  onClick={() => this.props.showModal('', this.deleteAllyCodeModal())}
+                  >
+            X
+          </button>
+        }
+        <button type={'button'} onClick={() => {this.props.refreshPlayerData(this.props.allyCode);}}>
           Fetch my data!
         </button>
         <input id={'keep-old-mods'}
@@ -264,11 +298,72 @@ class App extends PureComponent {
       </div>
     </div>;
   }
+
+  /**
+   * Renders a modal with a form for adding a new ally code
+   */
+  addAllyCodeModal() {
+    return <div className={'add-ally-code-form'}>
+      <h4>Add a new Ally Code</h4>
+      <label htmlFor={'new-ally-code'}>Ally code: </label>
+      <input id={'new-ally-code'} type={'text'} inputMode={'numeric'} size={12}
+             onKeyUp={(e) => {
+               if (e.key === 'Enter') {
+                 this.props.hideModal();
+                 this.props.refreshPlayerData(e.target.value);
+               }
+               // Don't change the input if the user is trying to select something
+               if (window.getSelection().toString() !== '') {
+                 return;
+               }
+               // Don't change the input if the user is hitting the arrow keys
+               if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+                 return;
+               }
+
+               // Format the input field
+               e.target.value = formatAllyCode(e.target.value);
+             }}
+      />
+      <div className={'actions'}>
+        <button type={'button'}
+                onClick={() => {
+                  this.props.hideModal();
+                  this.props.refreshPlayerData(document.getElementById('new-ally-code').value);
+                }}>
+          Fetch my data!
+        </button>
+      </div>
+    </div>
+  }
+
+  /**
+   * Renders the "Are you sure?" modal for deleting an ally code
+   */
+  deleteAllyCodeModal() {
+    return <div>
+      <h2>Delete <strong>{formatAllyCode(this.props.allyCode)}</strong>?</h2>
+      <p>This will delete the ally code, all of its mods, character selections, and targets from stored data.</p>
+      <p>You will be able to restore the character and mod data by fetching with this ally code again.</p>
+      <p>Are you sure you want to delete this code?</p>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button type={'button'} className={'red'}
+                onClick={() => {
+                  this.props.hideModal();
+                  this.props.deleteProfile(this.props.allyCode);
+                }}>
+          Delete
+        </button>
+      </div>
+    </div>;
+  }
 }
 
 const mapStateToProps = (state) => {
   const appProps = {
     allyCode: state.allyCode,
+    allyCodes: Object.keys(state.profiles),
     error: state.error,
     isBusy: state.isBusy,
     keepOldMods: state.keepOldMods,
@@ -297,7 +392,9 @@ const mapDispatchToProps = dispatch => ({
   toggleKeepOldMods: () => dispatch(toggleKeepOldMods()),
   reset: () => dispatch(reset()),
   restoreProgress: (progressData) => dispatch(restoreProgress(progressData)),
-  setMods: (modsData) => dispatch(setMods(modsData))
+  setMods: (modsData) => dispatch(setMods(modsData)),
+  switchProfile: (allyCode) => dispatch(switchProfile(allyCode)),
+  deleteProfile: (allyCode) => dispatch(deleteProfile(allyCode))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

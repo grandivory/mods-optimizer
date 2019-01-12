@@ -87,3 +87,30 @@ export function toggleSidebar(state, action) {
     showSidebar: !state.showSidebar
   });
 }
+
+export function switchProfile(state, action) {
+  if (!state.profiles.hasOwnProperty(action.allyCode)) {
+    return state;
+  } else {
+    return Object.assign({}, state, {
+      allyCode: action.allyCode
+    });
+  }
+}
+
+export function deleteProfile(state, action) {
+  if (!state.profiles.hasOwnProperty(action.allyCode)) {
+    return state;
+  }
+
+  const newProfiles = Object.assign({}, state.profiles);
+  delete newProfiles[action.allyCode];
+
+  const allyCodes = Object.keys(newProfiles);
+  const newAllyCode = allyCodes.length ? allyCodes[0] : '';
+
+  return Object.assign({}, state, {
+    allyCode: newAllyCode,
+    profiles: newProfiles
+  });
+}

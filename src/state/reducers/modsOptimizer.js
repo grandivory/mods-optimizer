@@ -1,7 +1,7 @@
 // @flow
 import {restoreState, saveState} from "../storage";
 import {
-  CHANGE_SECTION,
+  CHANGE_SECTION, DELETE_PROFILE,
   HIDE_ERROR,
   HIDE_FLASH,
   HIDE_MODAL,
@@ -9,7 +9,7 @@ import {
   RESTORE_PROGRESS,
   SHOW_ERROR,
   SHOW_FLASH,
-  SHOW_MODAL,
+  SHOW_MODAL, SWITCH_PROFILE,
   TOGGLE_SIDEBAR
 } from "../actions/app";
 import {
@@ -51,7 +51,7 @@ import {
   UNEQUIP_MODS
 } from "../actions/review";
 import {
-  changeSection,
+  changeSection, deleteProfile,
   hideError,
   hideFlash,
   hideModal,
@@ -59,7 +59,7 @@ import {
   restoreProgress,
   showError,
   showFlash,
-  showModal,
+  showModal, switchProfile,
   toggleSidebar
 } from "./app";
 import {
@@ -145,6 +145,10 @@ export default function modsOptimizer(state, action) {
       return saveState(restoreProgress(state, action));
     case TOGGLE_SIDEBAR:
       return saveState(toggleSidebar(state, action));
+    case SWITCH_PROFILE:
+      return saveState(switchProfile(state, action));
+    case DELETE_PROFILE:
+      return saveState(deleteProfile(state, action));
 
     case SELECT_CHARACTER:
       return saveState(selectCharacter(state, action));
