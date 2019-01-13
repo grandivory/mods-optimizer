@@ -120,29 +120,7 @@ class App extends PureComponent {
       }
       <div className={'actions'}>
         <label htmlFor={'ally-code'}>Ally code:</label>
-        {/* If there is no active ally code, then show the regular input field */}
-        {!this.props.allyCode &&
-        <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12}
-               onKeyUp={(e) => {
-                 if (e.key === 'Enter') {
-                   this.props.refreshPlayerData(e.target.value);
-                 }
-                 // Don't change the input if the user is trying to select something
-                 if (window.getSelection().toString() !== '') {
-                   return;
-                 }
-                 // Don't change the input if the user is hitting the arrow keys
-                 if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
-                   return;
-                 }
-
-                 // Format the input field
-                 e.target.value = formatAllyCode(e.target.value);
-               }}
-        />
-        }
         {/* If there is an active ally code, show a dropdown */}
-        {this.props.allyCode &&
         <div className={'dropdown'}>
           <select
             id={'ally-code'}
@@ -154,13 +132,16 @@ class App extends PureComponent {
                 this.props.switchProfile(e.target.value);
               }
             }}>
+            {/* If there is no active ally code, then show an empty option field */}
+            {!this.props.allyCode &&
+              <option key={''} value={''}></option>
+            }
             {this.props.allyCodes.map(allyCode =>
               <option key={allyCode} value={allyCode}>{formatAllyCode(allyCode)}</option>
             )}
             <option key={'new'} value={''}>New Code...</option>
           </select>
         </div>
-        }
         {this.props.allyCode &&
           <button type={'button'}
                   className={'red'}
