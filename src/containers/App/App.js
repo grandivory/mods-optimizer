@@ -106,6 +106,8 @@ class App extends PureComponent {
    * @returns JSX Element
    */
   header(showActions) {
+    let allyCodyInput;
+
     return <header className={'App-header'}>
       <h1 className={'App-title'}>Grandivory's Mod Optimizer for Star Wars: Galaxy of Heroes™</h1>
       {showActions &&
@@ -122,7 +124,7 @@ class App extends PureComponent {
         <label htmlFor={'ally-code'}>Ally code:</label>
         {/* If there is no active ally code, then show the regular input field */}
         {!this.props.allyCode &&
-        <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12}
+        <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodyInput = input}
                onKeyUp={(e) => {
                  if (e.key === 'Enter') {
                    this.props.refreshPlayerData(e.target.value);
@@ -169,7 +171,8 @@ class App extends PureComponent {
             X
           </button>
         }
-        <button type={'button'} onClick={() => {this.props.refreshPlayerData(this.props.allyCode);}}>
+        <button type={'button'}
+                onClick={() => {this.props.refreshPlayerData(this.props.allyCode || allyCodyInput.value);}}>
           Fetch my data!
         </button>
         <input id={'keep-old-mods'}
