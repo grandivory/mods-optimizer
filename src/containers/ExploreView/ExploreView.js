@@ -9,6 +9,8 @@ import './ExploreView.css';
 import {connect} from "react-redux";
 import Sidebar from "../../components/Sidebar/Sidebar";
 
+import offenseScore from "../../utils/subjectiveScoring";
+
 class ExploreView extends React.PureComponent {
   render() {
     const modElements = this.props.displayedMods.map(mod => {
@@ -73,6 +75,14 @@ const getFilteredMods = memoize(
         filteredMods = filteredMods.sort((left, right) => {
           const leftValue = left.secondaryStats.reduce((acc, stat) => acc + stat.rolls, 0);
           const rightValue = right.secondaryStats.reduce((acc, stat) => acc + stat.rolls, 0);
+
+          return rightValue - leftValue;
+        });
+        break;
+      case 'offenseScore':
+        filteredMods = filteredMods.sort((left, right) => {
+          const leftValue = offenseScore(left);
+          const rightValue = offenseScore(right);
 
           return rightValue - leftValue;
         });
