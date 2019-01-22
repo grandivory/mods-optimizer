@@ -20,7 +20,7 @@ class ExploreView extends React.PureComponent {
 
     return (
       [
-        <Sidebar content={this.sidebar()} />,
+        <Sidebar key={'sidebar'} content={this.sidebar()} />,
         <div className='mods' key={'mods'}>
           <h3>Showing {this.props.displayedMods.length} out of {this.props.modCount} mods.</h3>
           {modElements}
