@@ -19,7 +19,18 @@ class OptimizationPlan {
     resistance,
     accuracy,
     critAvoid,
-    upgradeMods = true
+    upgradeMods = true,
+    triangleSpec = 'Any',
+    circleSpec = 'Any',
+    crossSpec = 'Any',
+    includeHealthSets = true,
+    includeSpeedSets = true,
+    includePotencySets = true,
+    includeDefenseSets = true,
+    includeCritChanceSets = true,
+    includeCritDmgSets = true,
+    includeOffenseSets = true,
+    includeTenacitySets = true
   ) {
     this.name = name;
 
@@ -54,6 +65,19 @@ class OptimizationPlan {
     this.resistance = this.rawResistance / OptimizationPlan.statWeight.resistance;
     this.accuracy = this.rawAccuracy / OptimizationPlan.statWeight.accuracy;
     this.critAvoid = this.rawCritAvoid / OptimizationPlan.statWeight.critAvoid;
+
+    this.triangleSpec=triangleSpec;
+    this.circleSpec=circleSpec;
+    this.crossSpec=crossSpec;
+
+    this.includeHealthSets = includeHealthSets;
+    this.includeSpeedSets = includeSpeedSets;
+    this.includePotencySets = includePotencySets;
+    this.includeDefenseSets = includeDefenseSets;
+    this.includeCritChanceSets = includeCritChanceSets;
+    this.includeCritDmgSets = includeCritDmgSets;
+    this.includeOffenseSets = includeOffenseSets;
+    this.includeTenacitySets = includeTenacitySets;
   }
 
   /**
@@ -77,7 +101,18 @@ class OptimizationPlan {
       this.rawResistance,
       this.rawAccuracy,
       this.rawCritAvoid,
-      this.upgradeMods
+      this.upgradeMods,
+      this.triangleSpec,
+      this.circleSpec,
+      this.crossSpec,
+      this.includeHealthSets,
+      this.includeSpeedSets,
+      this.includePotencySets,
+      this.includeDefenseSets,
+      this.includeCritChanceSets,
+      this.includeCritDmgSets,
+      this.includeOffenseSets,
+      this.includeTenacitySets
     );
   }
 
@@ -101,7 +136,18 @@ class OptimizationPlan {
       this.resistance === that.resistance &&
       this.accuracy === that.accuracy &&
       this.critAvoid === that.critAvoid &&
-      this.upgradeMods === that.upgradeMods;
+      this.upgradeMods === that.upgradeMods &&
+      this.triangleSpec === that.triangleSpec &&
+      this.circleSpec === that.circleSpec &&
+      this.crossSpec === that.crossSpec &&
+      this.includeHealthSets === that.includeHealthSets &&
+      this.includeSpeedSets === that.includeSpeedSets &&
+      this.includePotencySets === that.includePotencySets &&
+      this.includeDefenseSets === that.includeDefenseSets &&
+      this.includeCritChanceSets === that.includeCritChanceSets &&
+      this.includeCritDmgSets === that.includeCritDmgSets &&
+      this.includeOffenseSets === that.includeOffenseSets &&
+      this.includeTenacitySets === that.includeTenacitySets;
   }
 
   /**
@@ -152,6 +198,17 @@ class OptimizationPlan {
     planObject.accuracy = this.rawAccuracy;
     planObject.critAvoid = this.rawCritAvoid;
     planObject.upgradeMods = this.upgradeMods;
+    planObject.triangleSpec = this.triangleSpec;
+    planObject.circleSpec = this.circleSpec;
+    planObject.crossSpec = this.crossSpec;
+    planObject.includeHealthSets = this.includeHealthSets;
+    planObject.includeSpeedSets = this.includeSpeedSets;
+    planObject.includePotencySets = this.includePotencySets;
+    planObject.includeDefenseSets = this.includeDefenseSets;
+    planObject.includeCritChanceSets = this.includeCritChanceSets;
+    planObject.includeCritDmgSets = this.includeCritDmgSets;
+    planObject.includeOffenseSets = this.includeOffenseSets;
+    planObject.includeTenacitySets = this.includeTenacitySets;
 
     return planObject;
   }
@@ -179,7 +236,18 @@ class OptimizationPlan {
         planJson.resistance,
         planJson.accuracy,
         planJson.critAvoid,
-        'undefined' !== typeof planJson.upgradeMods ? planJson.upgradeMods : true
+        'undefined' !== typeof planJson.upgradeMods ? planJson.upgradeMods : true,
+        planJson.triangleSpec,
+        planJson.circleSpec,
+        planJson.crossSpec,
+        planJson.includeHealthSets,
+        planJson.includeSpeedSets,
+        planJson.includePotencySets,
+        planJson.includeDefenseSets,
+        planJson.includeCritChanceSets,
+        planJson.includeCritDmgSets,
+        planJson.includeOffenseSets,
+        planJson.includeTenacitySets
       );
     } else {
       return null;
