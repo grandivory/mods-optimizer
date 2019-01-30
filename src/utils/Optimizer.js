@@ -161,7 +161,12 @@ class Optimizer {
       );
       squares = usableMods.filter(mod => 'square' === mod.slot);
     }
-    arrows = availableMods.filter(mod => 'arrow' === mod.slot);
+
+    if (character.optimizerSettings.target.arrowSpec !== 'Any') { //they specified a primary stat for arrow
+      arrows = availableMods.filter(mod => 'arrow' === mod.slot && mod.primaryStat.type === character.optimizerSettings.target.arrowSpec);
+    } else {
+      arrows = availableMods.filter(mod => 'arrow' === mod.slot);
+    }
     if (0 === arrows.length) {
       messages.push(
         `No ${character.optimizerSettings.minimumModDots}-dot arrows were available, ` +
@@ -169,6 +174,7 @@ class Optimizer {
       );
       arrows = usableMods.filter(mod => 'arrow' === mod.slot);
     }
+
     diamonds = availableMods.filter(mod => 'diamond' === mod.slot);
     if (0 === diamonds.length) {
       messages.push(

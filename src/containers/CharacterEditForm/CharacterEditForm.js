@@ -162,7 +162,16 @@ class CharacterEditForm extends PureComponent {
 
       </div>
 
-
+      <div className={'header-row'}>
+        <label htmlFor={'arrow-prim'}>Restrict Arrow To:</label>
+        <select name={'arrow-spec'} id={'arrow-spec'} defaultValue={character.optimizerSettings.target.arrowSpec}>
+          <option value={'Any'}>Any</option>
+          <option value={modStats.UNITSTATSPEED}>Speed</option>
+          <option value={modStats.UNITSTATOFFENSEPERCENTADDITIVE}>Offense %</option>
+          <option value={modStats.UNITSTATMAXSHIELDPERCENTADDITIVE}>Protection %</option>
+          <option value={modStats.UNITSTATEVASIONNEGATEPERCENTADDITIVE}>Accuracy %</option>
+        </select>
+      </div>
         <div className={'header-row'}>
             <label htmlFor={'triangle-prim'}>Restrict Triangle To:</label>
             <select name={'triangle-spec'} id={'triangle-spec'} defaultValue={character.optimizerSettings.target.triangleSpec}>
@@ -516,6 +525,7 @@ class CharacterEditForm extends PureComponent {
         this.form['accuracy-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.accuracy,
         this.form['critAvoid-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critAvoid,
         this.form['upgrade-mods'].checked,
+        this.form['arrow-spec'].options[this.form['arrow-spec'].selectedIndex].value,
         this.form['triangle-spec'].options[this.form['triangle-spec'].selectedIndex].value,
         this.form['circle-spec'].options[this.form['circle-spec'].selectedIndex].value,
         this.form['cross-spec'].options[this.form['cross-spec'].selectedIndex].value,
@@ -547,6 +557,7 @@ class CharacterEditForm extends PureComponent {
         this.form['accuracy-stat'].valueAsNumber,
         this.form['critAvoid-stat'].valueAsNumber,
         this.form['upgrade-mods'].checked,
+        this.form['arrow-spec'].options[this.form['arrow-spec'].selectedIndex].value,
         this.form['triangle-spec'].options[this.form['triangle-spec'].selectedIndex].value,
         this.form['circle-spec'].options[this.form['circle-spec'].selectedIndex].value,
         this.form['cross-spec'].options[this.form['cross-spec'].selectedIndex].value,

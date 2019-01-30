@@ -20,6 +20,7 @@ class OptimizationPlan {
     accuracy,
     critAvoid,
     upgradeMods = true,
+    arrowSpec = 'Any',
     triangleSpec = 'Any',
     circleSpec = 'Any',
     crossSpec = 'Any',
@@ -66,6 +67,7 @@ class OptimizationPlan {
     this.accuracy = this.rawAccuracy / OptimizationPlan.statWeight.accuracy;
     this.critAvoid = this.rawCritAvoid / OptimizationPlan.statWeight.critAvoid;
 
+    this.arrowSpec=arrowSpec;
     this.triangleSpec=triangleSpec;
     this.circleSpec=circleSpec;
     this.crossSpec=crossSpec;
@@ -102,6 +104,7 @@ class OptimizationPlan {
       this.rawAccuracy,
       this.rawCritAvoid,
       this.upgradeMods,
+      this.arrowSpec,
       this.triangleSpec,
       this.circleSpec,
       this.crossSpec,
@@ -137,6 +140,7 @@ class OptimizationPlan {
       this.accuracy === that.accuracy &&
       this.critAvoid === that.critAvoid &&
       this.upgradeMods === that.upgradeMods &&
+      this.arrowSpec === that.arrowSpec &&
       this.triangleSpec === that.triangleSpec &&
       this.circleSpec === that.circleSpec &&
       this.crossSpec === that.crossSpec &&
@@ -198,6 +202,7 @@ class OptimizationPlan {
     planObject.accuracy = this.rawAccuracy;
     planObject.critAvoid = this.rawCritAvoid;
     planObject.upgradeMods = this.upgradeMods;
+    planObject.arrowSpec = this.arrowSpec;
     planObject.triangleSpec = this.triangleSpec;
     planObject.circleSpec = this.circleSpec;
     planObject.crossSpec = this.crossSpec;
@@ -237,6 +242,7 @@ class OptimizationPlan {
         planJson.accuracy,
         planJson.critAvoid,
         'undefined' !== typeof planJson.upgradeMods ? planJson.upgradeMods : true,
+        planJson.arrowSpec,
         planJson.triangleSpec,
         planJson.circleSpec,
         planJson.crossSpec,
