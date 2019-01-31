@@ -135,8 +135,8 @@ class Optimizer {
     if (!character.optimizerSettings.target.includeDefenseSets) {
       availableMods = availableMods.filter(mod => 'defense' !== mod.set.name);
     }
-    if (!character.optimizerSettings.target.includePotencySets) {
-      availableMods = availableMods.filter(mod => 'potency' !== mod.set.name);
+    if (!character.optimizerSettings.target.includeOffenseSets) {
+      availableMods = availableMods.filter(mod => 'offense' !== mod.set.name);
     }
     if (!character.optimizerSettings.target.includeTenacitySets) {
       availableMods = availableMods.filter(mod => 'tenacity' !== mod.set.name);
