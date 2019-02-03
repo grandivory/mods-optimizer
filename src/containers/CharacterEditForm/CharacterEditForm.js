@@ -14,7 +14,8 @@ import {
   resetCharacterTargetToDefault,
   unlockCharacter
 } from "../../state/actions/characterEdit";
-import {modStats} from "../../constants/enums";
+
+import "./CharacterEditForm.css";
 
 class CharacterEditForm extends PureComponent {
   render() {
@@ -64,6 +65,7 @@ class CharacterEditForm extends PureComponent {
         <h2 className={'character-name'}>{character.gameSettings.name}</h2>
       </div>
       <div id={'character-level-options'}>
+        <h3>Character-level options</h3>
         <div className={'form-row center'}>
           <label htmlFor='mod-dots' id={'mod-dots-label'}>
             Use only mods with at least&nbsp;
@@ -79,130 +81,58 @@ class CharacterEditForm extends PureComponent {
             type={'checkbox'}
             id={'slice-mods'}
             name={'slice-mods'}
-            defaultChecked={character.optimizerSettings.sliceMods} />
+            defaultChecked={character.optimizerSettings.sliceMods}/>
         </div>
       </div>
-      <div className={'instructions'}>
-        Give each stat type a value. This will be used to calculate the optimum mods to equip. You can give this plan
-        a name to easily select it later.
-      </div>
-      <div className={'header-row'}>
-        <label htmlFor={'plan-name'}>Plan Name: </label>
-        <input type={'text'} defaultValue={target.name} id={'plan-name'} name={'plan-name'}/>
-      </div>
-      <div className={'header-row'}>
-        <Toggle
-          inputLabel={'Mode'}
-          name={'mode'}
-          leftLabel={'Basic'}
-          leftValue={'basic'}
-          rightLabel={'Advanced'}
-          rightValue={'advanced'}
-          value={this.props.editMode}
-          onChange={(newValue) => this.props.changeCharacterEditMode(newValue)}
-        />
-      </div>
-      <div className={'header-row'}>
-          <label htmlFor={'include-sets'}>Include Mod Sets: </label>
-          <label htmlFor={'include-health-set'}>  Health</label>
-          <input
-              type={'checkbox'}
-              id={'include-health-set'}
-              name={'include-health-set'}
-              defaultChecked={character.optimizerSettings.target.includeHealthSets} />
-
-          <label htmlFor="{'include-defense-set'}">  Defense</label>
-          <input
-              type={'checkbox'}
-              id={'include-defense-set'}
-              name={'include-defense-set'}
-              defaultChecked={character.optimizerSettings.target.includeDefenseSets}/>
-
-          <label htmlFor={'include-critdmg-set'}>  Crit Dmg</label>
-          <input
-              type={'checkbox'}
-              id={'include-critdmg-set'}
-              name={'include-critdmg-set'}
-              defaultChecked={character.optimizerSettings.target.includeCritDmgSets}/>
-
-          <label htmlFor={'include-critchance-set'}>  Crit Chance</label>
-          <input
-              type={'checkbox'}
-              id={'include-critchance-set'}
-              name={'include-critchance-set'}
-              defaultChecked={character.optimizerSettings.target.includeCritChanceSets}/>
-
-          <label htmlFor={'include-tenacity-set'}>  Tenacity</label>
-          <input
-              type={'checkbox'}
-              id={'include-tenacity-set'}
-              name={'include-tenacity-set'}
-              defaultChecked={character.optimizerSettings.target.includeTenacitySets}/>
-
-          <label htmlFor={'include-offense-set'}>  Offense</label>
-          <input
-              type={'checkbox'}
-              id={'include-offense-set'}
-              name={'include-offense-set'}
-              defaultChecked={character.optimizerSettings.target.includeOffenseSets}/>
-
-          <label htmlFor={'include-potency-set'}>  Potency</label>
-          <input
-              type={'checkbox'}
-              id={'include-potency-set'}
-              name={'include-potency-set'}
-              defaultChecked={character.optimizerSettings.target.includePotencySets}/>
-
-          <label htmlFor="{'include-speed-set'}">  Speed</label>
-          <input
-              type={'checkbox'}
-              id={'include-speed-set'}
-              name={'include-speed-set'}
-              defaultChecked={character.optimizerSettings.target.includeSpeedSets}/>
-
-      </div>
-
-      <div className={'header-row'}>
-        <label htmlFor={'arrow-prim'}>Restrict Arrow To:</label>
-        <select name={'arrow-spec'} id={'arrow-spec'} defaultValue={character.optimizerSettings.target.arrowSpec}>
-          <option value={'Any'}>Any</option>
-          <option value={modStats.UNITSTATSPEED}>Speed</option>
-          <option value={modStats.UNITSTATOFFENSEPERCENTADDITIVE}>Offense %</option>
-          <option value={modStats.UNITSTATMAXSHIELDPERCENTADDITIVE}>Protection %</option>
-          <option value={modStats.UNITSTATEVASIONNEGATEPERCENTADDITIVE}>Accuracy %</option>
-        </select>
-      </div>
+      <div className={'target-level-options'}>
+        <h3>Target-specific Options</h3>
         <div className={'header-row'}>
-            <label htmlFor={'triangle-prim'}>Restrict Triangle To:</label>
-            <select name={'triangle-spec'} id={'triangle-spec'} defaultValue={character.optimizerSettings.target.triangleSpec}>
-                <option value={'Any'}>Any</option>
-                <option value={modStats.UNITSTATCRITICALCHANCEPERCENTADDITIVE}>Critical Chance %</option>
-                <option value={modStats.UNITSTATCRITICALDAMAGE}>Critical Damage %</option>
-                <option value={modStats.UNITSTATMAXHEALTHPERCENTADDITIVE}>Health %</option>
-                <option value={modStats.UNITSTATOFFENSEPERCENTADDITIVE}>Offense %</option>
-                <option value={modStats.UNITSTATMAXSHIELDPERCENTADDITIVE}>Protection %</option>
-            </select>
+          <label htmlFor={'plan-name'}>Target Name: </label>
+          <input type={'text'} defaultValue={target.name} id={'plan-name'} name={'plan-name'}/>
         </div>
-        <div className={'header-row'}>
-            <label htmlFor={'circle-prim'}>Restrict Circle To:</label>
-            <select name={'circle-spec'} id={'circle-spec'} defaultValue={character.optimizerSettings.target.circleSpec}>
-                <option value={'Any'}>Any</option>
-                <option value={modStats.UNITSTATMAXHEALTHPERCENTADDITIVE}>Health %</option>
-                <option value={modStats.UNITSTATMAXSHIELDPERCENTADDITIVE}>Protection %</option>
-            </select>
+        <div className={'non-stats'}>
+          <div className={'form-row center'}>
+            <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
+            <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
+                   defaultChecked={character.optimizerSettings.target.upgradeMods}/>
+          </div>
         </div>
-        <div className={'header-row'}>
-            <label htmlFor={'cross-prim'}>Restrict Cross To:</label>
-            <select name={'cross-spec'} id={'cross-spec'} defaultValue={character.optimizerSettings.target.crossSpec}>
-                <option value={'Any'}>Any</option>
-                <option value={modStats.UNITSTATACCURACY}>Potency %</option>
-                <option value={modStats.UNITSTATMAXHEALTHPERCENTADDITIVE}>Health %</option>
-                <option value={modStats.UNITSTATOFFENSEPERCENTADDITIVE}>Offense %</option>
-                <option value={modStats.UNITSTATMAXSHIELDPERCENTADDITIVE}>Protection %</option>
-            </select>
+        <div className={'header-row group'}>
+          <h4>Restrict Primary Stats:</h4>
+          <div className={'mod-blocks'}>
+            {['arrow', 'triangle', 'circle', 'cross'].map(slot =>
+              <div key={`mod-block-${slot}`} className={'mod-block'}>
+                <select name={`${slot}-primary`} id={`${slot}-primary`}
+                        defaultValue={character.optimizerSettings.target.primaryStatRestrictions[slot]}>
+                  <option value={''}>Any</option>
+                  {this.props[`${slot}Primaries`].map(
+                    primary => <option key={primary} value={primary}>{primary}</option>)}
+                </select>
+                <div className={`mod-image mod-image-${slot}`}/>
+              </div>
+            )}
+          </div>
         </div>
-      {'basic' === this.props.editMode && this.basicForm(target)}
-      {'advanced' === this.props.editMode && this.advancedForm(target)}
+        <div className={'header-row stat-weights-toggle'}>
+          <Toggle
+            inputLabel={'Stat Weights'}
+            name={'mode'}
+            leftLabel={'Basic'}
+            leftValue={'basic'}
+            rightLabel={'Advanced'}
+            rightValue={'advanced'}
+            value={this.props.editMode}
+            onChange={(newValue) => this.props.changeCharacterEditMode(newValue)}
+          />
+        </div>
+        <div className={'instructions'}>
+          Give each stat type a value. These values are used as the "goodness" of each stat to calculate the optimum
+          mods to equip. <strong>These are not the amount of each stat you want!</strong> Instead, they are multiplied
+          with the amount of each stat on a mod to determine a score for each mod.
+        </div>
+        {'basic' === this.props.editMode && this.basicForm(target)}
+        {'advanced' === this.props.editMode && this.advancedForm(target)}
+      </div>
       <div className={'actions'}>
         {resetButton}
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
@@ -218,11 +148,6 @@ class CharacterEditForm extends PureComponent {
    */
   basicForm(optimizationPlan) {
     return <div id={'basic-form'}>
-      <div className={'form-row'}>
-        <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
-        <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
-               defaultChecked={optimizationPlan.upgradeMods}/>
-      </div>
       <div className={'form-row'}>
         <label htmlFor="health-stat">Health:</label>
         <RangeInput
@@ -365,11 +290,6 @@ class CharacterEditForm extends PureComponent {
    */
   advancedForm(optimizationPlan) {
     return <div id={'advanced-form'}>
-      <div className={'form-row'}>
-        <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
-        <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
-               defaultChecked={optimizationPlan.upgradeMods}/>
-      </div>
       <div className={'form-row'}>
         <label htmlFor="health-stat-advanced">Health:</label>
         <input
@@ -525,22 +445,16 @@ class CharacterEditForm extends PureComponent {
         this.form['accuracy-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.accuracy,
         this.form['critAvoid-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critAvoid,
         this.form['upgrade-mods'].checked,
-        this.form['arrow-spec'].options[this.form['arrow-spec'].selectedIndex].value,
-        this.form['triangle-spec'].options[this.form['triangle-spec'].selectedIndex].value,
-        this.form['circle-spec'].options[this.form['circle-spec'].selectedIndex].value,
-        this.form['cross-spec'].options[this.form['cross-spec'].selectedIndex].value,
-        this.form['include-health-set'].checked,
-        this.form['include-speed-set'].checked,
-        this.form['include-potency-set'].checked,
-        this.form['include-defense-set'].checked,
-        this.form['include-critchance-set'].checked,
-        this.form['include-critdmg-set'].checked,
-        this.form['include-offense-set'].checked,
-        this.form['include-tenacity-set'].checked
+        {
+          'arrow': this.form['arrow-primary'].value,
+          'triangle': this.form['triangle-primary'].value,
+          'circle': this.form['circle-primary'].value,
+          'cross': this.form['cross-primary'].value
+        },
+        {}
       );
     } else {
       // Basic form
-
       newTarget = new OptimizationPlan(
         planName,
         this.form['health-stat'].valueAsNumber,
@@ -557,19 +471,13 @@ class CharacterEditForm extends PureComponent {
         this.form['accuracy-stat'].valueAsNumber,
         this.form['critAvoid-stat'].valueAsNumber,
         this.form['upgrade-mods'].checked,
-        this.form['arrow-spec'].options[this.form['arrow-spec'].selectedIndex].value,
-        this.form['triangle-spec'].options[this.form['triangle-spec'].selectedIndex].value,
-        this.form['circle-spec'].options[this.form['circle-spec'].selectedIndex].value,
-        this.form['cross-spec'].options[this.form['cross-spec'].selectedIndex].value,
-        this.form['include-health-set'].checked,
-        this.form['include-speed-set'].checked,
-        this.form['include-potency-set'].checked,
-        this.form['include-defense-set'].checked,
-        this.form['include-critchance-set'].checked,
-        this.form['include-critdmg-set'].checked,
-        this.form['include-offense-set'].checked,
-        this.form['include-tenacity-set'].checked
-
+        {
+          'arrow': this.form['arrow-primary'].value,
+          'triangle': this.form['triangle-primary'].value,
+          'circle': this.form['circle-primary'].value,
+          'cross': this.form['cross-primary'].value
+        },
+        {}
       );
     }
 
@@ -582,9 +490,18 @@ class CharacterEditForm extends PureComponent {
   }
 }
 
-const mapStateToProps = (state) => ({
-  editMode: state.characterEditMode
-});
+const mapStateToProps = (state) => {
+  const mods = state.profiles[state.allyCode].mods;
+
+  return {
+    editMode: state.characterEditMode,
+    arrowPrimaries: Array.from(new Set(mods.filter(mod => mod.slot === 'arrow').map(mod => mod.primaryStat.type))),
+    trianglePrimaries:
+      Array.from(new Set(mods.filter(mod => mod.slot === 'triangle').map(mod => mod.primaryStat.type))),
+    circlePrimaries: Array.from(new Set(mods.filter(mod => mod.slot === 'circle').map(mod => mod.primaryStat.type))),
+    crossPrimaries: Array.from(new Set(mods.filter(mod => mod.slot === 'cross').map(mod => mod.primaryStat.type)))
+  }
+};
 
 const mapDispatchToProps = (dispatch) => ({
   hideModal: () => dispatch(hideModal()),

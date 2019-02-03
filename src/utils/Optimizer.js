@@ -4,7 +4,6 @@ import setBonuses from "../constants/setbonuses";
 import firstOrNull from "./firstOrNull";
 import chooseFromArray from "./chooseFromArray";
 import ModSet from "../domain/ModSet";
-import {modSets} from "../constants/enums";
 
 class Optimizer {
   constructor() {
@@ -36,12 +35,12 @@ class Optimizer {
    * optimizing mods for the second character after removing those used for the first, etc.
    *
    * @param modsList Array[Mod] An array of mods that could potentially be assign to each character
-   * @param characters {Character.baseID => Character} A set of characters that might be optimized
+   * @param characters {Object<String, Character>} A set of characters keyed by base ID that might be optimized
    * @param order Array[Character.baseID] The characters to optimize, in order
    * @param changeThreshold {Number} The % value that a new mod set has to improve upon the existing equipped mods
    *                                 before the optimizer will suggest changing it
    *
-   * @return {character.baseID => ModSet}
+   * @return {Object<String, ModSet>} An optimized set of mods, keyed by character base ID
    */
   optimizeMods(modsList, characters, order, changeThreshold) {
     const considerationSet = modsList.filter(mod =>
@@ -61,13 +60,26 @@ class Optimizer {
 
         const newModSetValue = newModSetForCharacter.getOptimizationValue(character);
         const oldModSetValue = oldModSetForCharacter.getOptimizationValue(character);
-        
-        const [assignedModSet, assignmentMessages] = (newModSetValue / oldModSetValue) * 100 - 100 > changeThreshold ||
-        (oldModSetForCharacter.mods().length < 6 &&
-          newModSetForCharacter.mods().length > oldModSetForCharacter.mods().length)
-          ?
-          [newModSetForCharacter, characterMessages] :
-          [oldModSetForCharacter, []];
+
+        // Assign the new mod set if any of the following are true:
+        const [assignedModSet, assignmentMessages] =
+          // Treat a threshold of 0 as "always change"
+          changeThreshold === 0 ||
+          // If the old set doesn't satisfy the character/target restrictions, but the new set does
+          (!oldModSetForCharacter.satisfiesRestrictions(
+              character.optimizerSettings.minimumModDots, character.optimizerSettings.target
+            ) &&
+            newModSetForCharacter.satisfiesRestrictions(
+              character.optimizerSettings.minimumModDots, character.optimizerSettings.target)
+          ) ||
+          // If the new set is better than the old set
+          (newModSetValue / oldModSetValue) * 100 - 100 > changeThreshold ||
+          // If the old set now has less than 6 mods and the new set has more mods
+          (oldModSetForCharacter.mods().length < 6 &&
+            newModSetForCharacter.mods().length > oldModSetForCharacter.mods().length)
+            ?
+            [newModSetForCharacter, characterMessages] :
+            [oldModSetForCharacter, []];
 
         return {
           considerationSet: availableMods.filter(mod => !assignedModSet.contains(mod)),
@@ -95,7 +107,7 @@ class Optimizer {
    *                  well as the optimization plan to use
    */
   findBestModSetForCharacter(mods, character) {
-    let availableMods, usableMods;
+    let usableMods;
     let squares, arrows, diamonds, triangles, circles, crosses;
     let modValues = new WeakMap();
     let setBonusValues = new WeakMap();
@@ -104,7 +116,7 @@ class Optimizer {
     let setlessMods;
     let candidateSets;
     let candidateValues = new WeakMap();
-    let messages = [];
+    let messages = [], submessages;
 
     // If the character is less than gear 12, remove any mods that are tier 6 or higher
     if (character.playerValues.gearLevel < 12) {
@@ -113,116 +125,56 @@ class Optimizer {
       usableMods = mods;
     }
 
-    // Filter out the mods to only those that meet the minimum requirement for dots
-    availableMods = usableMods.filter(mod => character.optimizerSettings.minimumModDots <= mod.pips);
-
-    //filter out the mods that belong to sets that weren't included
-    if (!character.optimizerSettings.target.includeHealthSets) {
-      availableMods = availableMods.filter(mod => 'health' !== mod.set.name);
-    }
-    if (!character.optimizerSettings.target.includeSpeedSets) {
-      availableMods = availableMods.filter(mod => 'speed' !== mod.set.name);
-    }
-    if (!character.optimizerSettings.target.includePotencySets) {
-      availableMods = availableMods.filter(mod => 'potency' !== mod.set.name);
-    }
-    if (!character.optimizerSettings.target.includeCritChanceSets) {
-      availableMods = availableMods.filter(mod => 'critchance' !== mod.set.name);
-    }
-    if (!character.optimizerSettings.target.includeCritDmgSets) {
-      availableMods = availableMods.filter(mod => 'critdamage' !== mod.set.name);
-    }
-    if (!character.optimizerSettings.target.includeDefenseSets) {
-      availableMods = availableMods.filter(mod => 'defense' !== mod.set.name);
-    }
-    if (!character.optimizerSettings.target.includeOffenseSets) {
-      availableMods = availableMods.filter(mod => 'offense' !== mod.set.name);
-    }
-    if (!character.optimizerSettings.target.includeTenacitySets) {
-      availableMods = availableMods.filter(mod => 'tenacity' !== mod.set.name);
-    }
-
-
     // Go through all mods and assign a value to them based on the optimization plan
     for (let mod of mods) {
       modValues.set(mod, this.scoreMod(mod, character));
     }
 
     // Sort all the mods by score, then break them into sets
-    availableMods.sort(this.modSort(character, modValues));
     usableMods.sort(this.modSort(character, modValues));
 
-    // Get the set of all possible mods to use for this character
-    squares = availableMods.filter(mod => 'square' === mod.slot);
-    if (0 === squares.length) {
-      messages.push(
-        `No ${character.optimizerSettings.minimumModDots}-dot squares were available, ` +
-        'so the minimum dot requirement was dropped.'
-      );
-      squares = usableMods.filter(mod => 'square' === mod.slot);
-    }
-
-    if (character.optimizerSettings.target.arrowSpec !== 'Any') { //they specified a primary stat for arrow
-      arrows = availableMods.filter(mod => 'arrow' === mod.slot && mod.primaryStat.type === character.optimizerSettings.target.arrowSpec);
-    } else {
-      arrows = availableMods.filter(mod => 'arrow' === mod.slot);
-    }
-    if (0 === arrows.length) {
-      messages.push(
-        `No ${character.optimizerSettings.minimumModDots}-dot arrows were available, ` +
-        'so the minimum dot requirement was dropped.'
-      );
-      arrows = usableMods.filter(mod => 'arrow' === mod.slot);
-    }
-
-    diamonds = availableMods.filter(mod => 'diamond' === mod.slot);
-    if (0 === diamonds.length) {
-      messages.push(
-        `No ${character.optimizerSettings.minimumModDots}-dot diamonds were available, ` +
-        'so the minimum dot requirement was dropped.'
-      );
-      diamonds = usableMods.filter(mod => 'diamond' === mod.slot);
-    }
-
-    if (character.optimizerSettings.target.triangleSpec !== 'Any') { //they specified a primary stat for triangle
-      triangles = availableMods.filter(mod => 'triangle' === mod.slot && mod.primaryStat.type === character.optimizerSettings.target.triangleSpec);
-    } else {
-      triangles = availableMods.filter(mod => 'triangle' === mod.slot);
-    }
-    if (0 === triangles.length) {
-      messages.push(
-        `No ${character.optimizerSettings.minimumModDots}-dot triangles were available, ` +
-        'so the minimum dot requirement was dropped.'
-      );
-      triangles = usableMods.filter(mod => 'triangle' === mod.slot);
-    }
-
-    if (character.optimizerSettings.target.circleSpec !== 'Any') { //they specified a primary stat for circle
-      circles = availableMods.filter(mod => 'circle' === mod.slot && mod.primaryStat.type === character.optimizerSettings.target.circleSpec);
-    } else {
-      circles = availableMods.filter(mod => 'circle' === mod.slot);
-    }
-    if (0 === circles.length) {
-      messages.push(
-        `No ${character.optimizerSettings.minimumModDots}-dot circles were available, ` +
-        'so the minimum dot requirement was dropped.'
-      );
-      circles = usableMods.filter(mod => 'circle' === mod.slot);
-    }
-
-
-    if (character.optimizerSettings.target.crossSpec !== 'Any') { //they specified a primary stat for cross
-      crosses = availableMods.filter(mod => 'cross' === mod.slot && mod.primaryStat.type === character.optimizerSettings.target.crossSpec);
-    } else {
-      crosses = availableMods.filter(mod => 'cross' === mod.slot);
-    }
-    if (0 === crosses.length) {
-      messages.push(
-        `No ${character.optimizerSettings.minimumModDots}-dot crosses were available, ` +
-        'so the minimum dot requirement was dropped.'
-      );
-      crosses = usableMods.filter(mod => 'cross' === mod.slot);
-    }
+    ({mods: squares, messages: submessages} = this.filterMods(
+      usableMods,
+      'square',
+      character.optimizerSettings.minimumModDots,
+      character.optimizerSettings.target.primaryStatRestrictions.square
+    ));
+    messages = messages.concat(submessages);
+    ({mods: arrows, messages: submessages} = this.filterMods(
+      usableMods,
+      'arrow',
+      character.optimizerSettings.minimumModDots,
+      character.optimizerSettings.target.primaryStatRestrictions.arrow
+    ));
+    messages = messages.concat(submessages);
+    ({mods: diamonds, messages: submessages} = this.filterMods(
+      usableMods,
+      'diamond',
+      character.optimizerSettings.minimumModDots,
+      character.optimizerSettings.target.primaryStatRestrictions.diamond
+    ));
+    messages = messages.concat(submessages);
+    ({mods: triangles, messages: submessages} = this.filterMods(
+      usableMods,
+      'triangle',
+      character.optimizerSettings.minimumModDots,
+      character.optimizerSettings.target.primaryStatRestrictions.triangle
+    ));
+    messages = messages.concat(submessages);
+    ({mods: circles, messages: submessages} = this.filterMods(
+      usableMods,
+      'circle',
+      character.optimizerSettings.minimumModDots,
+      character.optimizerSettings.target.primaryStatRestrictions.circle
+    ));
+    messages = messages.concat(submessages);
+    ({mods: crosses, messages: submessages} = this.filterMods(
+      usableMods,
+      'cross',
+      character.optimizerSettings.minimumModDots,
+      character.optimizerSettings.target.primaryStatRestrictions.cross
+    ));
+    messages = messages.concat(submessages);
 
     // Assign a value to each set bonus based on the optimization plan
     for (let setName in setBonuses) {
@@ -304,6 +256,44 @@ class Optimizer {
       modSet: candidateSets[0],
       messages: messages
     };
+  }
+
+  /**
+   * Filter a set of mods based on a minimum dot level and a specified primary stat. If there aren't any mods that fit
+   * the filter, then the primary stat restriction will be dropped first, followed by the minimum dot restriction.
+   * Return both the filtered mods and any messages to display about changes that were made
+   *
+   * @param baseMods {Array<Mod>} The set of mods to filter
+   * @param slot {String} The slot that the mods have to fill
+   * @param minDots {Number} The minimum dot level of the mod
+   * @param primaryStat {String} The primary stat that each mod needs to have
+   *
+   * @returns {mods, messages}
+   */
+  filterMods(baseMods, slot, minDots, primaryStat) {
+    if (primaryStat) { // Only filter if some primary stat restriction is set
+      const fullyFilteredMods =
+        baseMods.filter(mod => mod.slot === slot && mod.pips >= minDots && mod.primaryStat.type === primaryStat);
+      if (fullyFilteredMods.length > 0) {
+        return {mods: fullyFilteredMods, messages: []};
+      }
+    }
+
+    const dotFilteredMods = baseMods.filter(mod => mod.slot === slot && mod.pips >= minDots);
+    if (dotFilteredMods.length > 0) {
+      return {
+        mods: dotFilteredMods,
+        // Only pass a message back if primaryStat was actually set
+        messages: (primaryStat &&
+          [`No ${primaryStat} ${slot} mods were available, so the primary stat restriction was dropped.`]) || []
+      };
+    }
+
+    const slotFilteredMods = baseMods.filter(mod => mod.slot === slot);
+    return {
+      mods: slotFilteredMods,
+      messages: [`No ${primaryStat} or ${minDots}-dot ${slot} mods were available, so both restrictions were dropped.`]
+    }
   }
 
   /**

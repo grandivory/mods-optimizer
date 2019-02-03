@@ -13,8 +13,6 @@ export function optimizeMods(state, action) {
 }
 
 export function finishOptimizeMods(state, action) {
-  console.dir(action);
-
   return updateCurrentProfile(
     state,
     profile => profile.withModAssignments(action.result.assignedSets),

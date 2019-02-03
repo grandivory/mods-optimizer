@@ -9,6 +9,7 @@
   padding: 2em;
   z-index: 10000;
   text-align: center;
+  overflow: hidden;
 }
 
 .overlay::before {

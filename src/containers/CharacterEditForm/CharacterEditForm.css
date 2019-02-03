@@ -1,0 +1,156 @@
+.character-edit-form {
+  width: 40em;
+  text-align: center;
+}
+
+.character-edit-form h3 {
+  font-weight: normal;
+  border-bottom: 1px solid white;
+}
+
+.character-edit-form h4 {
+  margin: 0;
+}
+
+.character-edit-form #character-level-options,
+.character-edit-form #basic-form,
+.character-edit-form #advanced-form {
+  display: inline-block;
+  margin: 0 2em;
+}
+
+.character-edit-form .character-view .avatar {
+  font-size: 1.5em;
+}
+
+.character-edit-form .character-name {
+  margin-bottom: 0;
+}
+
+.character-edit-form .instructions {
+  max-width: 30em;
+  margin: .5em auto;
+}
+
+.character-edit-form .header-row {
+  width: 38em;
+  margin: 0 auto .5em;
+}
+
+.character-edit-form .header-row.stat-weights-toggle {
+  max-width: 30em;
+}
+
+.target-level-options > .group {
+  border: 1px solid white;
+  box-sizing: border-box;
+  padding: .5em;
+}
+
+.target-level-options > .group h4 {
+  margin-bottom: 1em;
+}
+
+.target-level-options .non-stats {
+  display: inline-block;
+}
+
+.character-edit-form .form-row {
+  text-align: right;
+  margin: .25em auto;
+  padding: .25em .5em;
+  line-height: 1em;
+}
+
+.character-edit-form .form-row.center {
+  text-align: center;
+}
+
+.character-edit-form div.mod-blocks {
+  text-align: center;
+}
+
+.character-edit-form div.mod-block {
+  display: inline-block;
+  margin: 0 .5em;
+}
+
+.character-edit-form div.mod-block .mod-image {
+  display: block;
+  width: 4em;
+  height: 4em;
+  margin: auto;
+  background-image: url('/img/mod-shape-atlas.png');
+  background-size: 48em 20em;
+}
+
+.character-edit-form div.mod-block .mod-image.mod-image-arrow {
+  background-position-x: -4em;
+}
+
+.character-edit-form div.mod-block .mod-image.mod-image-triangle {
+  background-position-x: -12em;
+}
+
+.character-edit-form div.mod-block .mod-image.mod-image-circle {
+  background-position-x: -16em;
+}
+
+.character-edit-form div.mod-block .mod-image.mod-image-cross {
+  background-position-x: -20em;
+}
+
+.character-edit-form .form-row input {
+  vertical-align: middle;
+}
+
+.character-edit-form .form-row label + input,
+.character-edit-form .form-row label + select
+{
+  margin-left: 1em;
+}
+
+.character-edit-form .form-row input[type=range],
+.character-edit-form .form-row input[type=number] {
+  width: 5em;
+  padding: .1em .25em;
+}
+
+.character-edit-form .form-row input[type=range] {
+  width: 9em;
+}
+
+.character-edit-form .form-row output {
+  display: inline-block;
+  width: 3em;
+}
+
+.character-edit-form .form-row input.slider-input {
+  width: 3.5em;
+  margin-left: .5em;
+}
+
+.character-edit-form .form-row:nth-child(odd) {
+  background-color: rgb(30, 47, 70);
+  color: rgb(117, 203, 203);
+}
+
+.character-edit-form .form-row:nth-child(even) {
+  background-color: rgb(28, 56, 93);
+  color: rgb(28, 169, 212);
+}
+
+.character-edit-form #plan-name {
+  font-size: 1.2em;
+  width: 7em;
+}
+
+.character-edit-form .actions {
+  text-align: right;
+}
+
+.character-edit-form #reset-button,
+.character-edit-form #delete-button {
+  float: left;
+}
+

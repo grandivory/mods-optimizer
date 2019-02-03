@@ -64,6 +64,20 @@ class ModSet {
   }
 
   /**
+   * Checks to see if this mod set satisfies all the restrictions from the optimization plan
+   *
+   * @param target {OptimizationPlan}
+   * @returns {boolean}
+   */
+  satisfiesRestrictions(minimumDots, target) {
+    return this.mods.every(mod => mod.pips >= minimumDots) &&
+      this.arrow && this.arrow.primaryStat.type === target.primaryStatRestrictions.arrow &&
+      this.triangle && this.triangle.primaryStat.type === target.primaryStatRestrictions.triangle &&
+      this.circle && this.circle.primaryStat.type === target.primaryStatRestrictions.circle &&
+      this.cross && this.cross.primaryStat.type === target.primaryStatRestrictions.cross;
+  }
+
+  /**
    * Overwrite the slots given in `slots` with the mods from modSet
    *
    * @param slots Array
