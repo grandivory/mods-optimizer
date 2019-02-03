@@ -4,6 +4,7 @@ import setBonuses from "../constants/setbonuses";
 import firstOrNull from "./firstOrNull";
 import chooseFromArray from "./chooseFromArray";
 import ModSet from "../domain/ModSet";
+import {modSets} from "../constants/enums";
 
 class Optimizer {
   constructor() {
@@ -53,7 +54,6 @@ class Optimizer {
       .reduce((accumulator, characterID) => {
         const {considerationSet: availableMods, assignedSets: completedSets, messages} = accumulator;
         const character = characters[characterID];
-
         const {modSet: newModSetForCharacter, messages: characterMessages} =
           this.findBestModSetForCharacter(availableMods, character);
 
@@ -116,6 +116,33 @@ class Optimizer {
     // Filter out the mods to only those that meet the minimum requirement for dots
     availableMods = usableMods.filter(mod => character.optimizerSettings.minimumModDots <= mod.pips);
 
+    //filter out the mods that belong to sets that weren't included
+    if (!character.optimizerSettings.target.includeHealthSets) {
+      availableMods = availableMods.filter(mod => 'health' !== mod.set.name);
+    }
+    if (!character.optimizerSettings.target.includeSpeedSets) {
+      availableMods = availableMods.filter(mod => 'speed' !== mod.set.name);
+    }
+    if (!character.optimizerSettings.target.includePotencySets) {
+      availableMods = availableMods.filter(mod => 'potency' !== mod.set.name);
+    }
+    if (!character.optimizerSettings.target.includeCritChanceSets) {
+      availableMods = availableMods.filter(mod => 'critchance' !== mod.set.name);
+    }
+    if (!character.optimizerSettings.target.includeCritDmgSets) {
+      availableMods = availableMods.filter(mod => 'critdamage' !== mod.set.name);
+    }
+    if (!character.optimizerSettings.target.includeDefenseSets) {
+      availableMods = availableMods.filter(mod => 'defense' !== mod.set.name);
+    }
+    if (!character.optimizerSettings.target.includeOffenseSets) {
+      availableMods = availableMods.filter(mod => 'offense' !== mod.set.name);
+    }
+    if (!character.optimizerSettings.target.includeTenacitySets) {
+      availableMods = availableMods.filter(mod => 'tenacity' !== mod.set.name);
+    }
+
+
     // Go through all mods and assign a value to them based on the optimization plan
     for (let mod of mods) {
       modValues.set(mod, this.scoreMod(mod, character));
@@ -134,7 +161,12 @@ class Optimizer {
       );
       squares = usableMods.filter(mod => 'square' === mod.slot);
     }
-    arrows = availableMods.filter(mod => 'arrow' === mod.slot);
+
+    if (character.optimizerSettings.target.arrowSpec !== 'Any') { //they specified a primary stat for arrow
+      arrows = availableMods.filter(mod => 'arrow' === mod.slot && mod.primaryStat.type === character.optimizerSettings.target.arrowSpec);
+    } else {
+      arrows = availableMods.filter(mod => 'arrow' === mod.slot);
+    }
     if (0 === arrows.length) {
       messages.push(
         `No ${character.optimizerSettings.minimumModDots}-dot arrows were available, ` +
@@ -142,6 +174,7 @@ class Optimizer {
       );
       arrows = usableMods.filter(mod => 'arrow' === mod.slot);
     }
+
     diamonds = availableMods.filter(mod => 'diamond' === mod.slot);
     if (0 === diamonds.length) {
       messages.push(
@@ -150,7 +183,12 @@ class Optimizer {
       );
       diamonds = usableMods.filter(mod => 'diamond' === mod.slot);
     }
-    triangles = availableMods.filter(mod => 'triangle' === mod.slot);
+
+    if (character.optimizerSettings.target.triangleSpec !== 'Any') { //they specified a primary stat for triangle
+      triangles = availableMods.filter(mod => 'triangle' === mod.slot && mod.primaryStat.type === character.optimizerSettings.target.triangleSpec);
+    } else {
+      triangles = availableMods.filter(mod => 'triangle' === mod.slot);
+    }
     if (0 === triangles.length) {
       messages.push(
         `No ${character.optimizerSettings.minimumModDots}-dot triangles were available, ` +
@@ -158,7 +196,12 @@ class Optimizer {
       );
       triangles = usableMods.filter(mod => 'triangle' === mod.slot);
     }
-    circles = availableMods.filter(mod => 'circle' === mod.slot);
+
+    if (character.optimizerSettings.target.circleSpec !== 'Any') { //they specified a primary stat for circle
+      circles = availableMods.filter(mod => 'circle' === mod.slot && mod.primaryStat.type === character.optimizerSettings.target.circleSpec);
+    } else {
+      circles = availableMods.filter(mod => 'circle' === mod.slot);
+    }
     if (0 === circles.length) {
       messages.push(
         `No ${character.optimizerSettings.minimumModDots}-dot circles were available, ` +
@@ -166,7 +209,13 @@ class Optimizer {
       );
       circles = usableMods.filter(mod => 'circle' === mod.slot);
     }
-    crosses = availableMods.filter(mod => 'cross' === mod.slot);
+
+
+    if (character.optimizerSettings.target.crossSpec !== 'Any') { //they specified a primary stat for cross
+      crosses = availableMods.filter(mod => 'cross' === mod.slot && mod.primaryStat.type === character.optimizerSettings.target.crossSpec);
+    } else {
+      crosses = availableMods.filter(mod => 'cross' === mod.slot);
+    }
     if (0 === crosses.length) {
       messages.push(
         `No ${character.optimizerSettings.minimumModDots}-dot crosses were available, ` +

@@ -14,6 +14,7 @@ import {
   resetCharacterTargetToDefault,
   unlockCharacter
 } from "../../state/actions/characterEdit";
+import {modStats} from "../../constants/enums";
 
 class CharacterEditForm extends PureComponent {
   render() {
@@ -101,6 +102,105 @@ class CharacterEditForm extends PureComponent {
           onChange={(newValue) => this.props.changeCharacterEditMode(newValue)}
         />
       </div>
+      <div className={'header-row'}>
+          <label htmlFor={'include-sets'}>Include Mod Sets: </label>
+          <label htmlFor={'include-health-set'}>  Health</label>
+          <input
+              type={'checkbox'}
+              id={'include-health-set'}
+              name={'include-health-set'}
+              defaultChecked={character.optimizerSettings.target.includeHealthSets} />
+
+          <label htmlFor="{'include-defense-set'}">  Defense</label>
+          <input
+              type={'checkbox'}
+              id={'include-defense-set'}
+              name={'include-defense-set'}
+              defaultChecked={character.optimizerSettings.target.includeDefenseSets}/>
+
+          <label htmlFor={'include-critdmg-set'}>  Crit Dmg</label>
+          <input
+              type={'checkbox'}
+              id={'include-critdmg-set'}
+              name={'include-critdmg-set'}
+              defaultChecked={character.optimizerSettings.target.includeCritDmgSets}/>
+
+          <label htmlFor={'include-critchance-set'}>  Crit Chance</label>
+          <input
+              type={'checkbox'}
+              id={'include-critchance-set'}
+              name={'include-critchance-set'}
+              defaultChecked={character.optimizerSettings.target.includeCritChanceSets}/>
+
+          <label htmlFor={'include-tenacity-set'}>  Tenacity</label>
+          <input
+              type={'checkbox'}
+              id={'include-tenacity-set'}
+              name={'include-tenacity-set'}
+              defaultChecked={character.optimizerSettings.target.includeTenacitySets}/>
+
+          <label htmlFor={'include-offense-set'}>  Offense</label>
+          <input
+              type={'checkbox'}
+              id={'include-offense-set'}
+              name={'include-offense-set'}
+              defaultChecked={character.optimizerSettings.target.includeOffenseSets}/>
+
+          <label htmlFor={'include-potency-set'}>  Potency</label>
+          <input
+              type={'checkbox'}
+              id={'include-potency-set'}
+              name={'include-potency-set'}
+              defaultChecked={character.optimizerSettings.target.includePotencySets}/>
+
+          <label htmlFor="{'include-speed-set'}">  Speed</label>
+          <input
+              type={'checkbox'}
+              id={'include-speed-set'}
+              name={'include-speed-set'}
+              defaultChecked={character.optimizerSettings.target.includeSpeedSets}/>
+
+      </div>
+
+      <div className={'header-row'}>
+        <label htmlFor={'arrow-prim'}>Restrict Arrow To:</label>
+        <select name={'arrow-spec'} id={'arrow-spec'} defaultValue={character.optimizerSettings.target.arrowSpec}>
+          <option value={'Any'}>Any</option>
+          <option value={modStats.UNITSTATSPEED}>Speed</option>
+          <option value={modStats.UNITSTATOFFENSEPERCENTADDITIVE}>Offense %</option>
+          <option value={modStats.UNITSTATMAXSHIELDPERCENTADDITIVE}>Protection %</option>
+          <option value={modStats.UNITSTATEVASIONNEGATEPERCENTADDITIVE}>Accuracy %</option>
+        </select>
+      </div>
+        <div className={'header-row'}>
+            <label htmlFor={'triangle-prim'}>Restrict Triangle To:</label>
+            <select name={'triangle-spec'} id={'triangle-spec'} defaultValue={character.optimizerSettings.target.triangleSpec}>
+                <option value={'Any'}>Any</option>
+                <option value={modStats.UNITSTATCRITICALCHANCEPERCENTADDITIVE}>Critical Chance %</option>
+                <option value={modStats.UNITSTATCRITICALDAMAGE}>Critical Damage %</option>
+                <option value={modStats.UNITSTATMAXHEALTHPERCENTADDITIVE}>Health %</option>
+                <option value={modStats.UNITSTATOFFENSEPERCENTADDITIVE}>Offense %</option>
+                <option value={modStats.UNITSTATMAXSHIELDPERCENTADDITIVE}>Protection %</option>
+            </select>
+        </div>
+        <div className={'header-row'}>
+            <label htmlFor={'circle-prim'}>Restrict Circle To:</label>
+            <select name={'circle-spec'} id={'circle-spec'} defaultValue={character.optimizerSettings.target.circleSpec}>
+                <option value={'Any'}>Any</option>
+                <option value={modStats.UNITSTATMAXHEALTHPERCENTADDITIVE}>Health %</option>
+                <option value={modStats.UNITSTATMAXSHIELDPERCENTADDITIVE}>Protection %</option>
+            </select>
+        </div>
+        <div className={'header-row'}>
+            <label htmlFor={'cross-prim'}>Restrict Cross To:</label>
+            <select name={'cross-spec'} id={'cross-spec'} defaultValue={character.optimizerSettings.target.crossSpec}>
+                <option value={'Any'}>Any</option>
+                <option value={modStats.UNITSTATACCURACY}>Potency %</option>
+                <option value={modStats.UNITSTATMAXHEALTHPERCENTADDITIVE}>Health %</option>
+                <option value={modStats.UNITSTATOFFENSEPERCENTADDITIVE}>Offense %</option>
+                <option value={modStats.UNITSTATMAXSHIELDPERCENTADDITIVE}>Protection %</option>
+            </select>
+        </div>
       {'basic' === this.props.editMode && this.basicForm(target)}
       {'advanced' === this.props.editMode && this.advancedForm(target)}
       <div className={'actions'}>
@@ -424,10 +524,23 @@ class CharacterEditForm extends PureComponent {
         this.form['resistance-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.resistance,
         this.form['accuracy-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.accuracy,
         this.form['critAvoid-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critAvoid,
-        this.form['upgrade-mods'].checked
+        this.form['upgrade-mods'].checked,
+        this.form['arrow-spec'].options[this.form['arrow-spec'].selectedIndex].value,
+        this.form['triangle-spec'].options[this.form['triangle-spec'].selectedIndex].value,
+        this.form['circle-spec'].options[this.form['circle-spec'].selectedIndex].value,
+        this.form['cross-spec'].options[this.form['cross-spec'].selectedIndex].value,
+        this.form['include-health-set'].checked,
+        this.form['include-speed-set'].checked,
+        this.form['include-potency-set'].checked,
+        this.form['include-defense-set'].checked,
+        this.form['include-critchance-set'].checked,
+        this.form['include-critdmg-set'].checked,
+        this.form['include-offense-set'].checked,
+        this.form['include-tenacity-set'].checked
       );
     } else {
       // Basic form
+
       newTarget = new OptimizationPlan(
         planName,
         this.form['health-stat'].valueAsNumber,
@@ -443,7 +556,20 @@ class CharacterEditForm extends PureComponent {
         this.form['defense-stat'].valueAsNumber / 2,
         this.form['accuracy-stat'].valueAsNumber,
         this.form['critAvoid-stat'].valueAsNumber,
-        this.form['upgrade-mods'].checked
+        this.form['upgrade-mods'].checked,
+        this.form['arrow-spec'].options[this.form['arrow-spec'].selectedIndex].value,
+        this.form['triangle-spec'].options[this.form['triangle-spec'].selectedIndex].value,
+        this.form['circle-spec'].options[this.form['circle-spec'].selectedIndex].value,
+        this.form['cross-spec'].options[this.form['cross-spec'].selectedIndex].value,
+        this.form['include-health-set'].checked,
+        this.form['include-speed-set'].checked,
+        this.form['include-potency-set'].checked,
+        this.form['include-defense-set'].checked,
+        this.form['include-critchance-set'].checked,
+        this.form['include-critdmg-set'].checked,
+        this.form['include-offense-set'].checked,
+        this.form['include-tenacity-set'].checked
+
       );
     }
 
