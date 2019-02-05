@@ -185,7 +185,10 @@ export function refreshPlayerData(allyCode) {
     // Only continue to fetch the player's profile if the character fetch was successful
       .then((characters) => characters && dispatchFetchProfile(dispatch, cleanedAllyCode))
       .then(profile => dispatchFetchCharacterStats(dispatch, cleanedAllyCode, profile ? profile.characters : null))
-      .catch(error => dispatch(showError(error.message)));
+      .catch(error => {
+        dispatch(hideFlash());
+        dispatch(showError(error.message));
+      });
   }
 }
 
