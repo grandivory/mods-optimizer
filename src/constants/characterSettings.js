@@ -120,7 +120,8 @@ const characterSettings = {
   'C3POLEGENDARY': new CharacterSettings(
     [
       optimizationStrategy["Speedy debuffer"],
-      optimizationStrategy.Speed
+      optimizationStrategy.Speed,
+      new OptimizationPlan('hSTR Phase 1', 0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
   'CADBANE': new CharacterSettings(
@@ -469,12 +470,12 @@ const characterSettings = {
     ['JKG']
   ),
   'JEDIKNIGHTREVAN': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 90, 100, 0, 0, 0, 100, 50, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 0, 10, 0, 0, 0, 0, 0, true)],
     [],
     DamageType.special
   ),
   'JOLEEBINDO': new CharacterSettings(
-    [new OptimizationPlan('Healer', 50, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('Healer', 30, 0, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'JUHANI': new CharacterSettings(
     [new OptimizationPlan('Tank', 50, 25, 100, 0, 25, 0, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
@@ -670,7 +671,8 @@ const characterSettings = {
   'REYJEDITRAINING': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 100, 20, 0, 20, 0, 50, 0, 0, 0, 0, true),
-      new OptimizationPlan('hSTR Phase 1', 0, -5, 90, 100, 50, 0, 50, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('hSTR Phase 1', 0, -5, 90, 100, 50, 0, 50, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('hSTR p1 C3PO', 0, -5, 90, 100, 60, 60, 50, 0, 0, 0, 0, 0, 0, true)
     ],
     ['JTR', 'RJT', 'Jedi Rey', 'Jey Z']
   ),
