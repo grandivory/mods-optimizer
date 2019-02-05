@@ -70,7 +70,7 @@ class ModSet {
    * @returns {boolean}
    */
   satisfiesRestrictions(minimumDots, target) {
-    return this.mods.every(mod => mod.pips >= minimumDots) &&
+    return this.mods().every(mod => mod.pips >= minimumDots) &&
       this.arrow && this.arrow.primaryStat.type === target.primaryStatRestrictions.arrow &&
       this.triangle && this.triangle.primaryStat.type === target.primaryStatRestrictions.triangle &&
       this.circle && this.circle.primaryStat.type === target.primaryStatRestrictions.circle &&
