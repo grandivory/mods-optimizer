@@ -77,7 +77,7 @@ class ModSet {
         (this.triangle && this.triangle.primaryStat.type === target.primaryStatRestrictions.triangle)) &&
       (!target.primaryStatRestrictions.circle ||
         (this.circle && this.circle.primaryStat.type === target.primaryStatRestrictions.circle)) &&
-      (!target.primaryStatRestrictions.cross`` ||
+      (!target.primaryStatRestrictions.cross ||
         (this.cross && this.cross.primaryStat.type === target.primaryStatRestrictions.cross));
   }
 
