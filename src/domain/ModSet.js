@@ -71,10 +71,14 @@ class ModSet {
    */
   satisfiesRestrictions(minimumDots, target) {
     return this.mods().every(mod => mod.pips >= minimumDots) &&
-      this.arrow && this.arrow.primaryStat.type === target.primaryStatRestrictions.arrow &&
-      this.triangle && this.triangle.primaryStat.type === target.primaryStatRestrictions.triangle &&
-      this.circle && this.circle.primaryStat.type === target.primaryStatRestrictions.circle &&
-      this.cross && this.cross.primaryStat.type === target.primaryStatRestrictions.cross;
+      (!target.primaryStatRestrictions.arrow ||
+        (this.arrow && this.arrow.primaryStat.type === target.primaryStatRestrictions.arrow)) &&
+      (!target.primaryStatRestrictions.triangle ||
+        (this.triangle && this.triangle.primaryStat.type === target.primaryStatRestrictions.triangle)) &&
+      (!target.primaryStatRestrictions.circle ||
+        (this.circle && this.circle.primaryStat.type === target.primaryStatRestrictions.circle)) &&
+      (!target.primaryStatRestrictions.cross`` ||
+        (this.cross && this.cross.primaryStat.type === target.primaryStatRestrictions.cross));
   }
 
   /**
