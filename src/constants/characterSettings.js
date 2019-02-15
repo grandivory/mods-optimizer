@@ -50,6 +50,9 @@ const characterSettings = {
       new OptimizationPlan('PvP', 0, 0, 100, 80, 20, 0, 50, 0, 25, 0, 0, 0, 0, true)
     ]
   ),
+  'B1BATTLEDROIDV2': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 75, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'B2SUPERBATTLEDROID': new CharacterSettings(
     [new OptimizationPlan('Survival', 50, 50, 0, 0, 50, 25, 0, 0, 0, 0, 0, 50, 0, true)]
   ),
