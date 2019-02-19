@@ -340,7 +340,7 @@ class Optimizer {
 
     // Make each possible set of 6 from the sub-sets found above, including filling in with the "base" set formed
     // without taking sets into account
-    candidateSets = this.getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse);
+    candidateSets = candidateSets.concat(this.getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse));
 
     // Choose the set with the highest value
     for (let candidateSet of candidateSets) {
