@@ -78,7 +78,28 @@ class ModSet {
       (!target.primaryStatRestrictions.circle ||
         (this.circle && this.circle.primaryStat.type === target.primaryStatRestrictions.circle)) &&
       (!target.primaryStatRestrictions.cross ||
-        (this.cross && this.cross.primaryStat.type === target.primaryStatRestrictions.cross));
+        (this.cross && this.cross.primaryStat.type === target.primaryStatRestrictions.cross)) &&
+      this.fulfillsSetRestriction(target.setRestrictions);
+  }
+
+  /**
+   * Checks to see if this mod set satisfies all of the sets listed in setDefinition
+   *
+   * @param setDefinition {Object<String, Number>}
+   * @returns {Boolean}
+   */
+  fulfillsSetRestriction(setDefinition) {
+    // Count how many mods exist in each set
+    const setCounts = this.mods().reduce((acc, mod) => {
+      return Object.assign({}, acc, {
+        [mod.set.name]: (acc[mod.set.name] || 0) + 1
+      })
+    }, {});
+
+    // Check that each set in the setDefinition has a corresponding value at least that high in setCounts
+    return Object.entries(setDefinition).every(([setName, count]) =>
+      count <= (setCounts[setName] || 0) / setBonuses[setName].numberOfModsRequired
+    );
   }
 
   /**

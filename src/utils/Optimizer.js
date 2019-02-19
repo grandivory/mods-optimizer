@@ -105,32 +105,126 @@ class Optimizer {
    * @param mods The set of mods that is available to be used for this character
    * @param character A Character object that represents all of the base stats required for percentage calculations as
    *                  well as the optimization plan to use
+   * @returns {{messages: Array<String>, modSet: ModSet}}
    */
   findBestModSetForCharacter(mods, character) {
-    let usableMods;
-    let squares, arrows, diamonds, triangles, circles, crosses;
-    let modValues = new WeakMap();
-    let setBonusValues = new WeakMap();
-    let potentialUsedSets = [];
-    let baseSets = new WeakMap();
-    let setlessMods;
-    let candidateSets;
-    let candidateValues = new WeakMap();
-    let messages = [], submessages;
+    let usableMods
+      , setRestrictions = character.optimizerSettings.target.setRestrictions;
 
-    // If the character is less than gear 12, remove any mods that are tier 6 or higher
+    // Characters that aren't at least gear 12 can never use 6-dot mods
     if (character.playerValues.gearLevel < 12) {
       usableMods = mods.filter(mod => 6 > mod.pips);
     } else {
       usableMods = mods;
     }
 
+    // Get a list of the restrictions to iterate over for this character, in order of most restrictive (exactly what was
+    // selected) to least restrictive (the last entry will always be no restrictions).
+    const possibleRestrictions = this.loosenRestrictions(setRestrictions);
+
+    // Try to find a mod set using each set of restrictions until one is found
+    for (let i = 0; i < possibleRestrictions.length; i++) {
+      const {restriction, messages: restrictionMessages} = possibleRestrictions[i];
+
+      // Filter the usable mods based on the given restrictions
+      const restrictedMods = this.restrictMods(usableMods, restriction);
+
+      // Try to optimize using this set of mods
+      let {modSet: bestModSet, messages: setMessages} = this.findBestModSet(restrictedMods, character, restriction);
+
+      if (bestModSet) {
+        return {
+          modSet: bestModSet,
+          messages: restrictionMessages.concat(setMessages)
+        };
+      }
+    }
+  }
+
+  /**
+   * Given a set of set restrictions, systematically reduce their severity, returning an array sorted by most to least
+   * restrictive
+   *
+   * @param setRestrictions {Object}
+   * @returns {{restriction: Object, messages: Array<String>}[]}
+   */
+  loosenRestrictions(setRestrictions) {
+    let restrictionsArray = [{
+      restriction: setRestrictions,
+      messages: []
+    }];
+
+    // Try without sets
+    restrictionsArray = restrictionsArray.concat(
+      restrictionsArray.flatMap(({restriction, messages}) => {
+        if (0 === Object.entries(restriction).length) {
+          return [];
+        } else {
+          return [{
+            restriction: {},
+            messages:
+              messages.concat('No mod sets could be found using the given sets, so the sets restriction was removed')
+          }];
+        }
+      })
+    );
+
+    return restrictionsArray;
+  }
+
+  /**
+   * Given a set of mods and a definition of setRestriction, return only those mods that fit the setRestriction
+   *
+   * @param allMods {Array<Mod>}
+   * @param setRestriction {Object}
+   * @returns {Array<Mod>}
+   */
+  restrictMods(allMods, setRestriction) {
+    const potentialSets = this.areSetsComplete(setRestriction) ?
+      Object.entries(setRestriction).filter(setArray => setArray[1] > 0).map(setArray => setArray[0]) :
+      Object.values(setBonuses).map(setBonus => setBonus.name);
+
+    return allMods.filter(mod => potentialSets.includes(mod.set.name));
+  }
+
+  /**
+   * Utility function to determine if a given sets definition covers all 6 mod slots
+   *
+   * @param setDefinition {Object<SetBonus, Number>}
+   * @returns {Boolean}
+   */
+  areSetsComplete(setDefinition) {
+    return 6 === Object.entries(setDefinition).reduce((acc, setArray) => {
+      return acc + setBonuses[setArray[0]].numberOfModsRequired * setArray[1];
+    }, 0);
+  }
+
+  /**
+   * Find the best configuration of mods from a set of usable mods
+   * @param mods {Array<Mod>}
+   * @param character {Character}
+   * @param setRestrictions {Object} The sets to use for this mod set. This function will return null if these sets
+   *                                 can't be used.
+   * @returns {{messages: Array<String>, modSet: ModSet}}
+   */
+  findBestModSet(usableMods, character, setsToUse) {
+    let squares, arrows, diamonds, triangles, circles, crosses;
+    let modValues = new WeakMap();
+    let setBonusValues = new WeakMap();
+    let potentialUsedSets = new Set();
+    let baseSets = new WeakMap();
+    let setlessMods;
+    let candidateSets = [];
+    let candidateValues = new WeakMap();
+    let messages = [], submessages;
+
     // Go through all mods and assign a value to them based on the optimization plan
-    for (let mod of mods) {
+    for (let mod of usableMods) {
       modValues.set(mod, this.scoreMod(mod, character));
     }
 
-    // Sort all the mods by score, then break them into sets
+    // Sort all the mods by score, then break them into sets.
+    // For each slot, try to use the most restrictions possible from what has been set for that character
     usableMods.sort(this.modSort(character, modValues));
 
     ({mods: squares, messages: submessages} = this.filterMods(
@@ -176,18 +270,6 @@ class Optimizer {
     ));
     messages = messages.concat(submessages);
 
-    // Assign a value to each set bonus based on the optimization plan
-    for (let setName in setBonuses) {
-      if (setBonuses.hasOwnProperty(setName)) {
-        let setBonus = setBonuses[setName];
-        setBonusValues.set(setBonus, setBonus.maxBonus.getOptimizationValue(character));
-
-        if (setBonusValues.get(setBonus) > 0) {
-          potentialUsedSets.push(setBonus);
-        }
-      }
-    }
-
     /**
      * Given a sorted array of mods, return either the first mod (if it has a non-negative score) or null. This allows
      * for empty slots on characters where the mods might be better used elsewhere.
@@ -203,16 +285,44 @@ class Optimizer {
       }
     };
 
-    // Start with the highest-value mod in each slot. If the highest-value mod has a negative value,
-    // leave the slot empty
-    setlessMods = new ModSet([
-      topMod(squares),
-      topMod(arrows),
-      topMod(diamonds),
-      topMod(triangles),
-      topMod(circles),
-      topMod(crosses)
-    ]);
+    // If sets are 100% deterministic, make potentialUsedSets only them
+    const usedSets = Object.entries(setsToUse)
+      .filter(setArray => setArray[1] > 0).map(setArray => setArray[0]);
+
+    if (this.areSetsComplete(setsToUse)) {
+      for (let setName of usedSets) {
+        const setBonus = setBonuses[setName];
+        setBonusValues.set(setBonus, setBonus.maxBonus.getOptimizationValue(character));
+        potentialUsedSets.add(setBonus);
+      }
+      setlessMods = null;
+    } else {
+      // Otherwise, use any set bonus with positive value
+      for (let setBonus of Object.values(setBonuses)) {
+        setBonusValues.set(setBonus, setBonus.maxBonus.getOptimizationValue(character));
+
+        if (setBonusValues.get(setBonus) > 0) {
+          potentialUsedSets.add(setBonus);
+        }
+      }
+
+      // Still make sure that any chosen sets are in the potential used sets
+      for (let setName of usedSets) {
+        potentialUsedSets.add(setBonuses[setName]);
+      }
+
+      // Start with the highest-value mod in each slot. If the highest-value mod has a negative value,
+      // leave the slot empty
+      setlessMods = new ModSet([
+        topMod(squares),
+        topMod(arrows),
+        topMod(diamonds),
+        topMod(triangles),
+        topMod(circles),
+        topMod(crosses)
+      ]);
+
+    }
 
     // Go through each set bonus with a positive value, and find the best mod sub-sets (all possible pairs or quads)
     for (let setBonus of potentialUsedSets) {
@@ -224,17 +334,19 @@ class Optimizer {
         firstOrNull(circles.filter(mod => setBonus === mod.set)),
         firstOrNull(crosses.filter(mod => setBonus === mod.set))
       ]));
+
+      candidateSets.push(setlessMods);
     }
 
     // Make each possible set of 6 from the sub-sets found above, including filling in with the "base" set formed
     // without taking sets into account
-    candidateSets = this.getCandidateSets(potentialUsedSets, baseSets, setlessMods);
-    candidateSets.push(setlessMods);
+    candidateSets = this.getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse);
 
     // Choose the set with the highest value
     for (let candidateSet of candidateSets) {
       candidateValues.set(candidateSet, candidateSet.getOptimizationValue(character));
     }
+
     candidateSets.sort((left, right) => {
       if (candidateValues.get(left) !== candidateValues.get(right)) {
         return candidateValues.get(right) - candidateValues.get(left);
@@ -253,7 +365,7 @@ class Optimizer {
     });
 
     return {
-      modSet: candidateSets[0],
+      modSet: candidateSets.length ? candidateSets[0] : null,
       messages: messages
     };
   }
@@ -350,13 +462,13 @@ class Optimizer {
   /**
    * Find all the potential combinations of mods to consider by taking into account mod sets and keeping set bonuses
    *
-   * @param potentialUsedSets Array[SetBonus] The SetBonuses that have sets provided for use
+   * @param potentialUsedSets {Set<SetBonus>} The SetBonuses that have sets provided for use
    * @param baseSets WeakMap(SetBonus -> ModSet) The best mods available for each SetBonus in potentialUsedSets
    * @param setlessMods ModSet The best raw mod for each slot, regardless of set
-   *
+   * @param setsToUse {Object<SetBonus, Number>} The sets to fulfill for every candidate set
    * @return Array[ModSet]
    */
-  getCandidateSets(potentialUsedSets, baseSets, setlessMods) {
+  getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse) {
     /**
      * Possible sets:
      *
@@ -374,15 +486,18 @@ class Optimizer {
      * Set(2 * 2) + Set(2)
      * Set(2) + Set(2) + Set(2)
      */
-    let fourModSets = potentialUsedSets.filter(modSet => 4 === modSet.numberOfModsRequired);
-    let twoModSets = potentialUsedSets.filter(modSet => 2 === modSet.numberOfModsRequired);
+    const potentialSetsArray = Array.from(potentialUsedSets.values());
+    const fourModSets = potentialSetsArray.filter(modSet => 4 === modSet.numberOfModsRequired);
+    const twoModSets = potentialSetsArray.filter(modSet => 2 === modSet.numberOfModsRequired);
     let candidateSets = [];
 
     for (let firstSetType of fourModSets) {
       let firstSet = baseSets.get(firstSetType);
 
       // the whole set plus setless mods
-      candidateSets = candidateSets.concat(this.combineSets(firstSet, setlessMods));
+      if (setlessMods) {
+        candidateSets = candidateSets.concat(this.combineSets(firstSet, setlessMods));
+      }
 
       // the whole set plus any 2-mod set
       for (let secondSetType of twoModSets) {
@@ -395,14 +510,18 @@ class Optimizer {
       let firstSet = baseSets.get(twoModSets[i]);
 
       // the whole set plus setless mods
-      candidateSets = candidateSets.concat(this.combineSets(setlessMods, firstSet));
+      if (setlessMods) {
+        candidateSets = candidateSets.concat(this.combineSets(setlessMods, firstSet));
+      }
 
       // the whole set plus a set of 4 from any 2-mod sets and the base set
       for (let j = i; j < twoModSets.length; j++) {
         let secondSet = baseSets.get(twoModSets[j]);
 
         // the first set plus the second set plus setless mods
-        candidateSets = candidateSets.concat(this.combineSets(setlessMods, firstSet, secondSet));
+        if (setlessMods) {
+          candidateSets = candidateSets.concat(this.combineSets(setlessMods, firstSet, secondSet));
+        }
 
         // the first set plus the second set plus another set
         for (let k = j; k < twoModSets.length; k++) {
@@ -413,7 +532,7 @@ class Optimizer {
       }
     }
 
-    return candidateSets;
+    return candidateSets.filter(modSet => modSet.fulfillsSetRestriction(setsToUse));
   }
 
   /**
