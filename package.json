@@ -5,6 +5,7 @@
   "dependencies": {
     "ajv": "^6.5.5",
     "cross-env": "^5.2.0",
+    "file-saver": "^2.0.1",
     "flow-bin": "^0.80.0",
     "memoize-one": "^3.1.1",
     "npm": "^5.10.0",

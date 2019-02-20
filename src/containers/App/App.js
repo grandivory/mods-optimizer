@@ -23,6 +23,7 @@ import {
 } from "../../state/actions/app";
 import {refreshPlayerData, setMods, toggleKeepOldMods} from "../../state/actions/data";
 import FlashMessage from "../../components/Modal/FlashMessage";
+import {saveAs} from 'file-saver';
 
 class App extends PureComponent {
 
@@ -186,13 +187,12 @@ class App extends PureComponent {
         <br/>
         <FileInput label={'Restore my progress'} handler={(file) => this.readFile(file, this.props.restoreProgress)}/>
         {showActions &&
-        <a id={'saveProgress'}
-           href={this.props.progressData}
-           className={'button'}
-           download={`modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`}
-        >
+        <button type={'button'} onClick={() => {
+          const userData = new Blob([this.props.progressData], {type: 'application/json;charset=utf-8'});
+          saveAs(userData, `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}`);
+        }}>
           Save my progress
-        </a>
+        </button>
         }
         {showActions &&
         <button type={'button'} className={'red'}
@@ -376,7 +376,7 @@ const mapStateToProps = (state) => {
     modalClass: state.modal ? state.modal.class : '',
     modalContent: state.modal ? state.modal.content : '',
     previousVersion: state.previousVersion,
-    progressData: 'data:text/json;charset=utf-8,' + JSON.stringify(serializeState(state)),
+    progressData: JSON.stringify(serializeState(state)),
     section: state.section,
     version: state.version
   };
