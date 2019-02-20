@@ -234,11 +234,16 @@ export function selectSetBonus(state, action) {
 export function removeSetBonus(state, action) {
   const currentRestrictions = Object.assign({}, state.setRestrictions);
 
-  if (currentRestrictions[action.setBonus] && currentRestrictions[action.setBonus] > 0) {
+  if (currentRestrictions[action.setBonus] && currentRestrictions[action.setBonus] > 1) {
     return Object.assign({}, state, {
       setRestrictions: Object.assign({}, currentRestrictions, {
         [action.setBonus]: currentRestrictions[action.setBonus] - 1
       })
+    });
+  } else if (currentRestrictions[action.setBonus] && currentRestrictions[action.setBonus] === 1) {
+    delete currentRestrictions[action.setBonus];
+    return Object.assign({}, state, {
+      setRestrictions: Object.assign({}, currentRestrictions)
     });
   }
 
