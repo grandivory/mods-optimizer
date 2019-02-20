@@ -20,10 +20,10 @@ import {
   CHANGE_SLICE_MODS,
   DELETE_TARGET,
   FINISH_EDIT_CHARACTER_TARGET, LOCK_ALL_SELECTED_CHARACTERS,
-  LOCK_CHARACTER,
+  LOCK_CHARACTER, POPULATE_SET_RESTRICTIONS, REMOVE_SET_BONUS,
   RESET_ALL_CHARACTER_TARGETS,
   RESET_CHARACTER_TARGET_TO_DEFAULT,
-  SELECT_CHARACTER, UNLOCK_ALL_SELECTED_CHARACTERS,
+  SELECT_CHARACTER, SELECT_SET_BONUS, UNLOCK_ALL_SELECTED_CHARACTERS,
   UNLOCK_CHARACTER,
   UNSELECT_ALL_CHARACTERS,
   UNSELECT_CHARACTER, UPDATE_MOD_CHANGE_THRESHOLD
@@ -70,10 +70,10 @@ import {
   changeSliceMods,
   deleteTarget,
   finishEditCharacterTarget, lockAllSelectedCharacters,
-  lockCharacter,
+  lockCharacter, populateSetRestrictions, removeSetBonus,
   resetAllCharacterTargets,
   resetCharacterTargetToDefault,
-  selectCharacter, unlockAllSelectedCharacters,
+  selectCharacter, selectSetBonus, unlockAllSelectedCharacters,
   unlockCharacter,
   unselectAllCharacters,
   unselectCharacter, updateModChangeThreshold
@@ -184,6 +184,12 @@ export default function modsOptimizer(state, action) {
       return saveState(changeCharacterFilter(state, action));
     case UPDATE_MOD_CHANGE_THRESHOLD:
       return saveState(updateModChangeThreshold(state, action));
+    case POPULATE_SET_RESTRICTIONS:
+      return populateSetRestrictions(state, action);
+    case SELECT_SET_BONUS:
+      return selectSetBonus(state, action);
+    case REMOVE_SET_BONUS:
+      return removeSetBonus(state, action);
 
     case REQUEST_CHARACTERS:
       return requestCharacters(state, action);

@@ -16,6 +16,9 @@ export const CHANGE_MINIMUM_MOD_DOTS = 'CHANGE_MINIMUM_MOD_DOTS';
 export const CHANGE_SLICE_MODS = 'CHANGE_SLICE_MODS';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
 export const UPDATE_MOD_CHANGE_THRESHOLD = 'UPDATE_MOD_CHANGE_THRESHOLD';
+export const POPULATE_SET_RESTRICTIONS = 'POPULATE_SET_RESTRICTIONS';
+export const SELECT_SET_BONUS = 'SELECT_SET_BONUS';
+export const REMOVE_SET_BONUS = 'REMOVE_SET_BONUS';
 
 /**
  * Action to move a character from the "available characters" pool to the "selected characters" pool, moving the
@@ -219,5 +222,43 @@ export function updateModChangeThreshold(threshold) {
   return {
     type: UPDATE_MOD_CHANGE_THRESHOLD,
     threshold: threshold
+  };
+}
+
+/**
+ * Fill the set restrictions to display on the character edit form
+ * @param setRestrictions
+ * @returns {{setRestrictions: *, type: string}}
+ */
+export function populateSetRestrictions(setRestrictions) {
+  return {
+    type: POPULATE_SET_RESTRICTIONS,
+    setRestrictions: setRestrictions
+  };
+}
+
+/**
+ * Add a set bonus to the currently selected sets
+ *
+ * @param setBonus
+ * @returns {{setBonus: *, type: string}}
+ */
+export function selectSetBonus(setBonus) {
+  return {
+    type: SELECT_SET_BONUS,
+    setBonus: setBonus
+  };
+}
+
+/**
+ * Remove a set bonus from the currently selected sets
+ *
+ * @param setBonus
+ * @returns {{setBonus: *, type: string}}
+ */
+export function removeSetBonus(setBonus) {
+  return {
+    type: REMOVE_SET_BONUS,
+    setBonus: setBonus
   };
 }

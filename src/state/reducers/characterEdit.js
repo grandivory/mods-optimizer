@@ -1,6 +1,7 @@
 // @flow
 import {mapObject} from "../../utils/mapObject";
 import {updateCurrentProfile} from "./modsOptimizer";
+import setBonuses from "../../constants/setbonuses";
 
 export function selectCharacter(state, action) {
   return updateCurrentProfile(state, profile => {
@@ -50,7 +51,7 @@ export function unselectAllCharacters(state, action) {
         character => character.withOptimizerSettings(character.optimizerSettings.unlock())
       )
     ).withSelectedCharacters([])
-    );
+  );
 }
 
 export function lockAllSelectedCharacters(state, action) {
@@ -126,6 +127,7 @@ export function finishEditCharacterTarget(state, action) {
 
   return Object.assign({}, state, {
     modal: null,
+    setRestrictions: null,
     profiles: Object.assign({}, state.profiles, {
       [state.allyCode]: profile.withCharacters(Object.assign({}, profile.characters, {
         [newCharacter.baseID]: newCharacter
@@ -140,7 +142,10 @@ export function resetCharacterTargetToDefault(state, action) {
     profile => profile.withCharacters(Object.assign({}, profile.characters, {
       [action.characterID]: profile.characters[action.characterID].withResetTarget()
     })),
-    {modal: null}
+    {
+      modal: null,
+      setRestrictions: null
+    }
   );
 }
 
@@ -162,7 +167,10 @@ export function deleteTarget(state, action) {
         [action.characterID]: oldCharacter.withDeletedTarget()
       }));
     },
-    {modal: null}
+    {
+      modal: null,
+      setRestrictions: null
+    }
   );
 }
 
@@ -196,4 +204,43 @@ export function changeCharacterFilter(state, action) {
 
 export function updateModChangeThreshold(state, action) {
   return updateCurrentProfile(state, profile => profile.withModChangeThreshold(action.threshold));
+}
+
+export function populateSetRestrictions(state, action) {
+  return Object.assign({}, state, {
+    setRestrictions: action.setRestrictions
+  });
+}
+
+export function selectSetBonus(state, action) {
+  const currentRestrictions = Object.assign({}, state.setRestrictions);
+  const updatedRestrictions = Object.assign({}, currentRestrictions, {
+    [action.setBonus]: (currentRestrictions[action.setBonus] || 0) + 1
+  });
+
+  // Only update the set restrictions if the sets can still be fulfilled
+  const requiredSlots = Object.entries(updatedRestrictions).reduce((acc, [setName, count]) =>
+    acc + setBonuses[setName].numberOfModsRequired * count, 0);
+
+  if (requiredSlots <= 6) {
+    return Object.assign({}, state, {
+      setRestrictions: updatedRestrictions
+    });
+  } else {
+    return state;
+  }
+}
+
+export function removeSetBonus(state, action) {
+  const currentRestrictions = Object.assign({}, state.setRestrictions);
+
+  if (currentRestrictions[action.setBonus] && currentRestrictions[action.setBonus] > 0) {
+    return Object.assign({}, state, {
+      setRestrictions: Object.assign({}, currentRestrictions, {
+        [action.setBonus]: currentRestrictions[action.setBonus] - 1
+      })
+    });
+  }
+
+  return state;
 }

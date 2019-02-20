@@ -335,7 +335,9 @@ class Optimizer {
         firstOrNull(crosses.filter(mod => setBonus === mod.set))
       ]));
 
-      candidateSets.push(setlessMods);
+      if (setlessMods) {
+        candidateSets.push(setlessMods);
+      }
     }
 
     // Make each possible set of 6 from the sub-sets found above, including filling in with the "base" set formed

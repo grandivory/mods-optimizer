@@ -1,5 +1,4 @@
 .character-edit-form {
-  width: 42em;
   text-align: center;
 }
 
@@ -41,18 +40,25 @@
   max-width: 30em;
 }
 
-.target-level-options > .group {
+.column {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 2em;
+}
+
+.target-level-options .group {
   border: 1px solid white;
   box-sizing: border-box;
   padding: .5em;
 }
 
-.target-level-options > .group h4 {
+.target-level-options .group h4 {
   margin-bottom: 1em;
 }
 
 .target-level-options .non-stats {
   display: inline-block;
+  margin-bottom: .5em;
 }
 
 .character-edit-form .form-row {
@@ -98,6 +104,34 @@
 
 .character-edit-form div.mod-block .mod-image.mod-image-cross {
   background-position-x: -20em;
+}
+
+.character-edit-form div.mod-sets div.set-options img {
+  height: 3em;
+  padding: .25em;
+}
+
+.character-edit-form div.mod-sets div.set-options img.disabled {
+  opacity: .5;
+}
+
+.character-edit-form div.mod-sets div.selected-sets p {
+  margin-bottom: 0;
+}
+
+.character-edit-form div.mod-sets div.selected-sets img {
+  height: 3em;
+  padding: .25em;
+}
+
+.character-edit-form div.mod-sets div.selected-sets span.empty-set {
+  display: inline-block;
+  height: 3em;
+  width: 3em;
+  margin: .25em;
+  vertical-align: middle;
+  box-sizing: border-box;
+  border: .1em dashed #ccfffe;
 }
 
 .character-edit-form .form-row input {

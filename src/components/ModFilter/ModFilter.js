@@ -100,7 +100,7 @@ class ModFilter extends React.PureComponent {
                name={inputName}
                value={set}
                defaultChecked={this.props.filter.set.includes(set)}/>
-        <img src={images[`icon_buff_${set}.png`]} alt={set}/>
+        <img src={`/img/icon_buff_${set}.png`} alt={set}/>
       </label>
     });
 

@@ -11,13 +11,24 @@ import {
   changeSliceMods,
   deleteTarget,
   finishEditCharacterTarget,
+  populateSetRestrictions,
+  removeSetBonus,
   resetCharacterTargetToDefault,
+  selectSetBonus,
   unlockCharacter
 } from "../../state/actions/characterEdit";
 
 import "./CharacterEditForm.css";
+import setBonuses from "../../constants/setbonuses";
 
 class CharacterEditForm extends PureComponent {
+  constructor(props) {
+    super(props);
+    if (!props.setRestrictions) {
+      props.populateSetRestrictions(props.character.optimizerSettings.target.setRestrictions);
+    }
+  }
+
   render() {
     const character = this.props.character;
     const target = this.props.target;
@@ -60,7 +71,7 @@ class CharacterEditForm extends PureComponent {
         this.saveTarget();
       }}
       ref={form => this.form = form}>
-      <div className={'character-view'}>
+      <div className={'character-view column'}>
         <CharacterAvatar character={character}/>
         <h2 className={'character-name'}>{character.gameSettings.name}</h2>
       </div>
@@ -86,52 +97,60 @@ class CharacterEditForm extends PureComponent {
       </div>
       <div className={'target-level-options'}>
         <h3>Target-specific Options</h3>
-        <div className={'header-row'}>
-          <label htmlFor={'plan-name'}>Target Name: </label>
-          <input type={'text'} defaultValue={target.name} id={'plan-name'} name={'plan-name'}/>
-        </div>
-        <div className={'non-stats'}>
-          <div className={'form-row center'}>
-            <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
-            <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
-                   defaultChecked={character.optimizerSettings.target.upgradeMods}/>
+        <div className={'column'}>
+          <div className={'header-row'}>
+            <label htmlFor={'plan-name'}>Target Name: </label>
+            <input type={'text'} defaultValue={target.name} id={'plan-name'} name={'plan-name'}/>
+          </div>
+          <div className={'non-stats'}>
+            <div className={'form-row center'}>
+              <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
+              <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
+                     defaultChecked={character.optimizerSettings.target.upgradeMods}/>
+            </div>
+          </div>
+          <div className={'header-row group'}>
+            <h4>Restrict Primary Stats:</h4>
+            <div className={'mod-blocks'}>
+              {['arrow', 'triangle', 'circle', 'cross'].map(slot =>
+                <div key={`mod-block-${slot}`} className={'mod-block'}>
+                  <select name={`${slot}-primary`} id={`${slot}-primary`}
+                          defaultValue={character.optimizerSettings.target.primaryStatRestrictions[slot]}>
+                    <option value={''}>Any</option>
+                    {this.props[`${slot}Primaries`].map(
+                      primary => <option key={primary} value={primary}>{primary}</option>)}
+                  </select>
+                  <div className={`mod-image mod-image-${slot}`}/>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className={'header-row group'}>
+            <h4>Restrict Set Bonuses:</h4>
+            {this.setRestrictionsForm(this.props.setRestrictions || character.optimizerSettings.target.setRestrictions)}
           </div>
         </div>
-        <div className={'header-row group'}>
-          <h4>Restrict Primary Stats:</h4>
-          <div className={'mod-blocks'}>
-            {['arrow', 'triangle', 'circle', 'cross'].map(slot =>
-              <div key={`mod-block-${slot}`} className={'mod-block'}>
-                <select name={`${slot}-primary`} id={`${slot}-primary`}
-                        defaultValue={character.optimizerSettings.target.primaryStatRestrictions[slot]}>
-                  <option value={''}>Any</option>
-                  {this.props[`${slot}Primaries`].map(
-                    primary => <option key={primary} value={primary}>{primary}</option>)}
-                </select>
-                <div className={`mod-image mod-image-${slot}`}/>
-              </div>
-            )}
+        <div className={'column'}>
+          <div className={'header-row stat-weights-toggle'}>
+            <Toggle
+              inputLabel={'Stat Weights'}
+              name={'mode'}
+              leftLabel={'Basic'}
+              leftValue={'basic'}
+              rightLabel={'Advanced'}
+              rightValue={'advanced'}
+              value={this.props.editMode}
+              onChange={(newValue) => this.props.changeCharacterEditMode(newValue)}
+            />
           </div>
+          <div className={'instructions'}>
+            Give each stat type a value. These values are used as the "goodness" of each stat to calculate the optimum
+            mods to equip. <strong>These are not the amount of each stat you want!</strong> Instead, they are multiplied
+            with the amount of each stat on a mod to determine a score for each mod.
+          </div>
+          {'basic' === this.props.editMode && this.basicForm(target)}
+          {'advanced' === this.props.editMode && this.advancedForm(target)}
         </div>
-        <div className={'header-row stat-weights-toggle'}>
-          <Toggle
-            inputLabel={'Stat Weights'}
-            name={'mode'}
-            leftLabel={'Basic'}
-            leftValue={'basic'}
-            rightLabel={'Advanced'}
-            rightValue={'advanced'}
-            value={this.props.editMode}
-            onChange={(newValue) => this.props.changeCharacterEditMode(newValue)}
-          />
-        </div>
-        <div className={'instructions'}>
-          Give each stat type a value. These values are used as the "goodness" of each stat to calculate the optimum
-          mods to equip. <strong>These are not the amount of each stat you want!</strong> Instead, they are multiplied
-          with the amount of each stat on a mod to determine a score for each mod.
-        </div>
-        {'basic' === this.props.editMode && this.basicForm(target)}
-        {'advanced' === this.props.editMode && this.advancedForm(target)}
       </div>
       <div className={'actions'}>
         {resetButton}
@@ -139,6 +158,51 @@ class CharacterEditForm extends PureComponent {
         <button type={'submit'}>Save</button>
       </div>
     </form>;
+  }
+
+  /**
+   * Renders a form element for managing set restrictions
+   *
+   * @param setRestrictions {Object<String, Number>}
+   * @returns {JSX Element}
+   */
+  setRestrictionsForm(setRestrictions) {
+    const selectedSets = Object.entries(setRestrictions).flatMap(([setName, count]) => {
+      return new Array(count).fill(setName);
+    });
+    const emptySlots = 3 - selectedSets.reduce((acc, setName) => acc + setBonuses[setName].numberOfModsRequired / 2, 0);
+
+    return <div className={'mod-sets'}>
+      <p className={'instructions'}>
+        Click on a set bonus to add it to or remove it from the selected sets.
+      </p>
+      <div className={'set-options'}>
+        {Object.values(setBonuses).map((setBonus, index) => {
+          const className = setBonus.numberOfModsRequired > (2 * emptySlots) ? 'disabled' : ''
+          return <img
+            src={`/img/icon_buff_${setBonus.name}.png`}
+            alt={setBonus.name}
+            key={index}
+            className={className}
+            onClick={() => this.props.selectSetBonus(setBonus.name)}
+          />
+        })}
+      </div>
+      <div className={'selected-sets'}>
+        <p>Selected Sets:</p>
+        {selectedSets.map((setName, index) =>
+          <img
+            src={`/img/icon_buff_${setName}.png`}
+            alt={setName}
+            key={index}
+            onClick={() => this.props.removeSetBonus(setName)}
+          />
+        )}
+        {Array.from({length: emptySlots}, (_, index) =>
+          <span className={'empty-set'} key={index}/>
+        )}
+      </div>
+    </div>;
   }
 
   /**
@@ -451,7 +515,7 @@ class CharacterEditForm extends PureComponent {
           'circle': this.form['circle-primary'].value,
           'cross': this.form['cross-primary'].value
         },
-        {}
+        this.props.setRestrictions
       );
     } else {
       // Basic form
@@ -477,7 +541,7 @@ class CharacterEditForm extends PureComponent {
           'circle': this.form['circle-primary'].value,
           'cross': this.form['cross-primary'].value
         },
-        {}
+        this.props.setRestrictions
       );
     }
 
@@ -495,6 +559,7 @@ const mapStateToProps = (state) => {
 
   return {
     editMode: state.characterEditMode,
+    setRestrictions: state.setRestrictions,
     arrowPrimaries: Array.from(new Set(mods.filter(mod => mod.slot === 'arrow').map(mod => mod.primaryStat.type))),
     trianglePrimaries:
       Array.from(new Set(mods.filter(mod => mod.slot === 'triangle').map(mod => mod.primaryStat.type))),
@@ -513,7 +578,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
   resetCharacterTargetToDefault: (characterID) => dispatch(resetCharacterTargetToDefault(characterID)),
   deleteTarget: (characterID) => dispatch(deleteTarget(characterID)),
-  changeCharacterEditMode: (mode) => dispatch(changeCharacterEditMode(mode))
+  changeCharacterEditMode: (mode) => dispatch(changeCharacterEditMode(mode)),
+  populateSetRestrictions: (setRestrictions) => dispatch(populateSetRestrictions(setRestrictions)),
+  selectSetBonus: (setBonus) => dispatch(selectSetBonus(setBonus)),
+  removeSetBonus: (setBonus) => dispatch(removeSetBonus(setBonus))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterEditForm);

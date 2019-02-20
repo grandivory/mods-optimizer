@@ -21,6 +21,7 @@ export function showModal(state, action) {
 export function hideModal(state, action) {
   return Object.assign({}, state, {
     isBusy: false,
+    setRestrictions: null,
     modal: null
   });
 }
@@ -73,7 +74,6 @@ export function restoreProgress(state, action) {
       const mods = JSON.parse(stateObj.state.mods);
       return deserializeStateVersionOneTwo(allyCode, availableCharacters, selectedCharacters, mods);
     } catch (e) {
-      console.log(e);
       return Object.assign({}, state, {
         error:
           'Unable to restore your progress from the provided file. Please make sure that you uploaded the correct file.'
