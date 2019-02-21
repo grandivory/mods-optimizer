@@ -167,8 +167,11 @@ class CharacterEditForm extends PureComponent {
    * @returns {JSX Element}
    */
   setRestrictionsForm(setRestrictions) {
-    const selectedSets = Object.entries(setRestrictions).flatMap(([setName, count]) => {
-      return new Array(count).fill(setName);
+    let selectedSets = [];
+    Object.entries(setRestrictions).forEach(([setName, count]) => {
+      for (let i = 0; i < count; i++) {
+        selectedSets.push(setName);
+      }
     });
     const emptySlots = 3 - selectedSets.reduce((acc, setName) => acc + setBonuses[setName].numberOfModsRequired / 2, 0);
 

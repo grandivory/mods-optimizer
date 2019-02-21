@@ -155,19 +155,15 @@ class Optimizer {
     }];
 
     // Try without sets
-    restrictionsArray = restrictionsArray.concat(
-      restrictionsArray.flatMap(({restriction, messages}) => {
-        if (0 === Object.entries(restriction).length) {
-          return [];
-        } else {
-          return [{
-            restriction: {},
-            messages:
-              messages.concat('No mod sets could be found using the given sets, so the sets restriction was removed')
-          }];
-        }
-      })
-    );
+    restrictionsArray.forEach(({restriction, messages}) => {
+      if (Object.entries(restriction).length) {
+        restrictionsArray.push({
+          restriction: {},
+          messages:
+            messages.concat('No mod sets could be found using the given sets, so the sets restriction was removed')
+        });
+      }
+    });
 
     return restrictionsArray;
   }
