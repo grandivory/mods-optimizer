@@ -533,7 +533,7 @@ class Optimizer {
       }
     }
 
-    return candidateSets.filter(modSet => modSet.fulfillsSetRestriction(setsToUse));
+    return candidateSets.filter(modSet => modSet && modSet.fulfillsSetRestriction(setsToUse));
   }
 
   /**
