@@ -334,10 +334,6 @@ class Optimizer {
         firstOrNull(circles.filter(mod => setBonus === mod.set)),
         firstOrNull(crosses.filter(mod => setBonus === mod.set))
       ]));
-
-      if (setlessMods) {
-        candidateSets.push(setlessMods);
-      }
     }
 
     // Make each possible set of 6 from the sub-sets found above, including filling in with the "base" set formed
@@ -474,7 +470,7 @@ class Optimizer {
     /**
      * Possible sets:
      *
-     * base set (already added)
+     * base set
      *
      * 4-mod sets
      * Set(4) + base set
@@ -492,6 +488,9 @@ class Optimizer {
     const fourModSets = potentialSetsArray.filter(modSet => 4 === modSet.numberOfModsRequired);
     const twoModSets = potentialSetsArray.filter(modSet => 2 === modSet.numberOfModsRequired);
     let candidateSets = [];
+
+    // The base set
+    candidateSets.push(setlessMods);
 
     for (let firstSetType of fourModSets) {
       let firstSet = baseSets.get(firstSetType);
