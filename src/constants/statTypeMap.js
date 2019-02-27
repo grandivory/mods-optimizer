@@ -12,7 +12,7 @@ const statTypeMap = {
   'Offense': ['physDmg', 'specDmg'],
   'Physical Damage': ['physDmg'],
   'Special Damage': ['specDmg'],
-  'Critical Chance': ['critChance'],
+  'Critical Chance': ['physCritChance', 'specCritChance'],
   'Physical Critical Chance': ['physCritChance'],
   'Special Critical Chance': ['specCritChance'],
   'Defense': ['armor', 'resistance'],

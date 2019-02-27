@@ -67,8 +67,8 @@ class Stat {
   /**
    * Take the difference between this stat and that stat
    *
-   * @param that Stat
-   * @returns Stat with the same type and a value representing the difference
+   * @param that {Stat}
+   * @returns {Stat} with the same type and a value representing the difference
    */
   minus(that) {
     if (!(that instanceof Stat)) {
@@ -84,7 +84,47 @@ class Stat {
       valueDiff = `${valueDiff}`;
     }
 
-    return new Stat(this.type, `${valueDiff}${this.displayModifier}`)
+    return new Stat(this.type, `${valueDiff}${this.displayModifier}`);
+  }
+
+  /**
+   * Add two stats together, producing a new stat with the sum of their values
+   *
+   * @param that {Stat}
+   * @returns {Stat} with the same type and a value representing the sum
+   */
+  plus(that) {
+    if (!(that instanceof Stat)) {
+      throw new Error("Can't add a non-Stat to a Stat");
+    }
+    if (that.displayType !== this.displayType || that.isPercent !== this.isPercent) {
+      throw new Error("Can't add two Stats of different types");
+    }
+    const valueSum = this.value + that.value;
+
+    return new Stat(this.type, `${valueSum}${this.displayModifier}`);
+  }
+
+  /**
+   * Convert this stat to one or more with flat values, even if it had a percent-based value before
+   * @param character
+   * @returns {Array<Stat>}
+   */
+  getFlatValuesForCharacter(character) {
+    const statPropertyNames = statTypeMap[this.displayType];
+
+    return statPropertyNames.map(statName => {
+      const displayName = Stat.displayNames[statName];
+      const statType = Stat.mixedTypes.includes(displayName) ? displayName : `${displayName} %`;
+
+      if (this.isPercent && character.playerValues.baseStats) {
+        return new Stat(statType, `${this.value * character.playerValues.baseStats[statName] / 100}`);
+      } else if (!this.isPercent) {
+        return new Stat(statType, this.rawValue);
+      } else {
+        throw new Error(`Stat is given as a percentage, but ${character.gameSettings.name} has no base stats`);
+      }
+    });
   }
 
   /**
@@ -119,7 +159,14 @@ class Stat {
    * @param character
    */
   getOptimizationValue(character) {
-    const statTypes = statTypeMap[this.displayType];
+    // Optimization Plans don't have separate physical and special critical chances, since both are always affected
+    // equally. If this is a physical crit chance stat, then use 'critChance' as the stat type. If it's special crit
+    // chance, ignore it altogether.
+    if (this.displayType === 'Special Critical Chance') {
+      return 0;
+    }
+
+    const statTypes = 'Physical Critical Chance' === this.displayType ? ['critChance'] : statTypeMap[this.displayType];
 
     if (this.isPercent) {
       return statTypes.map(statType =>

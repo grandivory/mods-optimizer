@@ -94,6 +94,49 @@ class Mod {
   }
 
   /**
+   * Get a summary of how this mod affects a character's stats
+   * @param character {Character}
+   * @param forDisplay {Boolean} Whether the stat summary is intended for display to the end user (so that things like
+   *                             physical and special crit chance are separated) or not
+   * @returns {Object<String, Number>} A map from stat name to value
+   */
+  getStatSummaryForCharacter(character) {
+    let workingMod = this;
+
+    const summary = {
+      'Health': new Stat('Health', '0'),
+      'Protection': new Stat('Protection', '0'),
+      'Speed': new Stat('Speed', '0'),
+      'Critical Damage': new Stat('Critical Damage %', '0'),
+      'Potency': new Stat('Potency', '0'),
+      'Tenacity': new Stat('Tenacity', '0'),
+      'Physical Damage': new Stat('Physical Damage', '0'),
+      'Physical Critical Chance': new Stat('Physical Critical Chance %', '0'),
+      'Armor': new Stat('Armor', '0'),
+      'Special Damage': new Stat('Special Damage', '0'),
+      'Special Critical Chance': new Stat('Special Critical Chance %', '0'),
+      'Resistance': new Stat('Resistance', '0'),
+      'Accuracy': new Stat('Accuracy %', '0'),
+      'Critical Avoidance': new Stat('Critical Avoidance %', '0')
+    };
+
+    // Upgrade or slice each mod as necessary based on the optimizer settings and level of the mod
+    if (15 > workingMod.level && character.optimizerSettings.target.upgradeMods) {
+      workingMod = workingMod.levelUp();
+    }
+    if (15 === workingMod.level && 5 === workingMod.pips && character.optimizerSettings.sliceMods) {
+      workingMod = workingMod.slice();
+    }
+
+    for (let modStat of [workingMod.primaryStat].concat(workingMod.secondaryStats)) {
+      const flatStats = modStat.getFlatValuesForCharacter(character);
+      flatStats.forEach(stat => summary[stat.displayType] = summary[stat.displayType].plus(stat));
+    }
+
+    return summary;
+  }
+
+  /**
    * Convert this mod to a simple JSON object so that it can be stringified
    */
   serialize() {
