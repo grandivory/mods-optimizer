@@ -20,6 +20,7 @@ import {
 import {optimizeMods} from "../../state/actions/optimize";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import RangeInput from "../../components/RangeInput/RangeInput";
+import {changeOptimizerView} from "../../state/actions/review";
 
 class CharacterEditView extends PureComponent {
   dragStart(character) {
@@ -141,12 +142,15 @@ class CharacterEditView extends PureComponent {
       >
         Optimize my mods!
       </button>
+      {this.props.showReviewButton && <button type={'button'} onClick={this.props.reviewOldAssignments}>
+        Review recommendations
+      </button>}
       <button
         type={'button'}
         className={'blue'}
         onClick={() => this.props.showModal('reset-modal', this.resetCharsModal())}
       >
-        Reset all characters
+        Reset all targets
       </button>
     </div>
   }
@@ -270,7 +274,8 @@ const mapStateToProps = (state) => {
     characterFilter: state.characterFilter,
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
-    selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id])
+    selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id]),
+    showReviewButton: profile.modAssignments && Object.keys(profile.modAssignments).length
   };
 };
 
@@ -278,6 +283,7 @@ const mapDispatchToProps = dispatch => ({
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),
   changeCharacterFilter: (filter) => dispatch(changeCharacterFilter(filter)),
+  reviewOldAssignments: () => dispatch(changeOptimizerView('sets')),
   selectCharacter: (characterID, prevCharacterID) => dispatch(selectCharacter(characterID, prevCharacterID)),
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),
   clearSelectedCharacters: () => dispatch(unselectAllCharacters()),
