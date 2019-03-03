@@ -3,6 +3,7 @@
 import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
 import Mod from "./Mod";
+import statTypeMap from "../constants/statTypeMap";
 
 class ModSet {
   constructor(mods) {
@@ -65,10 +66,12 @@ class ModSet {
   /**
    * Checks to see if this mod set satisfies all the restrictions from the optimization plan
    *
+   * @param minimumDots {Number}
    * @param target {OptimizationPlan}
+   * @param character {Character} The character to check, used for target stat restrictions
    * @returns {boolean}
    */
-  satisfiesRestrictions(minimumDots, target) {
+  satisfiesRestrictions(minimumDots, target, character) {
     return this.mods().every(mod => mod.pips >= minimumDots) &&
       (!target.primaryStatRestrictions.arrow ||
         (this.arrow && this.arrow.primaryStat.type === target.primaryStatRestrictions.arrow)) &&
@@ -78,7 +81,8 @@ class ModSet {
         (this.circle && this.circle.primaryStat.type === target.primaryStatRestrictions.circle)) &&
       (!target.primaryStatRestrictions.cross ||
         (this.cross && this.cross.primaryStat.type === target.primaryStatRestrictions.cross)) &&
-      this.fulfillsSetRestriction(target.setRestrictions);
+      this.fulfillsSetRestriction(target.setRestrictions) &&
+      this.fulfillsTargetStatRestriction(target.targetStat, character);
   }
 
   /**
@@ -95,10 +99,37 @@ class ModSet {
       })
     }, {});
 
-    // Check that each set in the setDefinition has a corresponding value at least that high in setCounts
-    return Object.entries(setDefinition).every(([setName, count]) =>
-      count <= (setCounts[setName] || 0) / setBonuses[setName].numberOfModsRequired
-    );
+    // Check that each set in the setDefinition has a corresponding value at least that high in setCounts, unless
+    // the given count is -1, meaning the set should be actively avoided
+    return Object.entries(setDefinition).every(([setName, count]) => {
+      const numberOfFullSets = Math.floor((setCounts[setName] || 0) / setBonuses[setName].numberOfModsRequired);
+        return (numberOfFullSets >= count && count >= 0) || numberOfFullSets === 0;
+    });
+  }
+
+  /**
+   * Checks to see if this mod set meets the target stat
+   *
+   * @param targetStat {TargetStat}
+   * @param character {Character}
+   * @returns {boolean}
+   */
+  fulfillsTargetStatRestriction(targetStat, character) {
+    if (!targetStat) {
+      return true;
+    }
+    if (statTypeMap[targetStat.stat].length > 1) {
+      throw new Error(
+        "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
+      );
+    }
+    const statProperty = statTypeMap[targetStat.stat][0];
+
+    const setValue = this.getSummary(character)[targetStat.stat];
+    const baseValue = character.playerValues.equippedStats[statProperty];
+    const totalValue = baseValue + setValue;
+
+    return totalValue > targetStat.minimum && totalValue < targetStat.maximum;
   }
 
   /**

@@ -1,7 +1,7 @@
 export default function areObjectsEquivalent(left, right) {
   // If either object is null, then Object.getOwnPropertyNames will fail. Do these checks first
-  if (left === null && !right === null) {
-    return false;
+  if (left === null) {
+    return right === null;
   } else if (right === null) {
     return false;
   }

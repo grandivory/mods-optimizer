@@ -91,14 +91,14 @@ export function restoreState() {
   }
 }
 
-const ignoredStateKeys = ['error', 'isBusy', 'modal', 'previousVersion'];
+const ignoredStateKeys = ['error', 'flashMessage', 'isBusy', 'modal', 'optimizerProgres', 'previousVersion'];
 
 /**
  * Convert the state from an in-memory representation to a serialized representation
  * @param state {object}
  */
 export function serializeState(state) {
-  if (null === state) {
+  if (null === state || undefined === typeof state) {
     return null;
   } else if ('function' === typeof state.serialize) {
     return state.serialize();
@@ -121,16 +121,12 @@ export function serializeState(state) {
 export function deserializeState(state) {
   const version = process.env.REACT_APP_VERSION || 'local';
 
-  return {
+  return Object.assign({}, defaultState, {
     allyCode: state.allyCode,
     characterEditMode: state.characterEditMode || defaultState.characterEditMode,
     characterFilter: state.characterFilter || defaultState.characterFilter,
     characters: mapObject(state.characters, (character) => Character.deserialize(character, version)),
-    error: null,
-    flashMessage: null,
-    isBusy: false,
     keepOldMods: state.keepOldMods,
-    modal: null,
     modsFilter: Object.assign({}, defaultState.modsFilter, state.modsFilter),
     modListFilter: state.modListFilter || defaultState.modListFilter,
     modSetsFilter: state.modSetsFilter || defaultState.modSetsFilter,
@@ -140,7 +136,7 @@ export function deserializeState(state) {
     section: state.section,
     showSidebar: 'undefined' !== typeof state.showSidebar ? state.showSidebar : defaultState.showSidebar,
     version: version
-  };
+  });
 }
 
 /**
@@ -163,26 +159,13 @@ export function deserializeStateVersionOneTwo(allyCode, availableCharacters, sel
   const playerMods = mods.map(mod => Mod.deserializeVersionOneTwo(mod, playerCharacters));
   const playerSelectedCharacters = selectedCharacters.map(char => char.baseID);
 
-  return {
+  return Object.assign({}, defaultState, {
     allyCode: playerAllyCode,
-    characterEditMode: defaultState.characterEditMode,
-    characterFilter: defaultState.characterFilter,
     characters: mapObject(playerCharacters, char => new Character(char.baseID, char.defaultSettings, char.gameSettings)),
-    error: null,
-    flashMessage: null,
-    isBusy: false,
-    keepOldMods: defaultState.keepOldMods,
-    modal: null,
-    modsFilter: defaultState.modsFilter,
-    modListFilter: defaultState.modListFilter,
-    modSetsFilter: defaultState.modSetsFilter,
-    optimizerView: defaultState.optimizerView,
     previousVersion: '1.2',
     profiles: {
       [playerAllyCode]: new PlayerProfile(playerCharacters, playerMods, playerSelectedCharacters)
     },
-    section: defaultState.section,
-    showSidebar: true,
     version: version
-  }
+  });
 }

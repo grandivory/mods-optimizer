@@ -19,6 +19,7 @@ export function finishOptimizeMods(state, action) {
     {
       isBusy: false,
       optimizerView: 'sets',
+      modal: null,
       flashMessage: Object.keys(action.result.messages).length > 0 ?
         {
           heading: '',
@@ -51,4 +52,23 @@ export function finishOptimizeMods(state, action) {
         } : null
     }
   );
+}
+
+export function cancelOptimizeMods(state, action) {
+  return Object.assign({}, state, {
+    isBusy: false,
+    flashMessage: null,
+    modal: null
+  });
+}
+
+export function updateOptimizerProgress(state, action) {
+  return Object.assign({}, state, {
+    isBusy: false,
+    optimizerProgress: {
+      character: action.character,
+      step: action.step,
+      progress: action.progress
+    }
+  });
 }

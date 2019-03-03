@@ -1,12 +1,32 @@
 // @flow
 
 import areObjectsEquivalent from "../utils/areObjectsEquivalent";
+import TargetStat from "./TargetStat";
 
 /**
  * A class to represent the weights that should be applied to each potential stat that a mod can have when
  * trying to optimize the mods assigned to each character. Each weight is on a scale from -100 to 100
  */
 class OptimizationPlan {
+  name;
+  health;
+  protection;
+  speed;
+  critDmg;
+  potency;
+  tenacity;
+  physDmg;
+  specDmg;
+  critChance;
+  armor;
+  resistance;
+  accuracy;
+  critAvoid;
+  upgradeMods;
+  primaryStatRestrictions;
+  setRestrictions;
+  targetStat;
+
   constructor(name,
               health,
               protection,
@@ -23,7 +43,8 @@ class OptimizationPlan {
               critAvoid,
               upgradeMods = true,
               primaryStatRestrictions = {},
-              setRestrictions = {}
+              setRestrictions = {},
+              targetStat = null
   ) {
     this.name = name;
 
@@ -61,6 +82,7 @@ class OptimizationPlan {
 
     this.primaryStatRestrictions = primaryStatRestrictions;
     this.setRestrictions = setRestrictions;
+    this.targetStat = targetStat;
   }
 
   /**
@@ -86,7 +108,8 @@ class OptimizationPlan {
       this.rawCritAvoid,
       this.upgradeMods,
       this.primaryStatRestrictions,
-      this.setRestrictions
+      this.setRestrictions,
+      this.targetStat
     );
   }
 
@@ -112,7 +135,8 @@ class OptimizationPlan {
       this.critAvoid === that.critAvoid &&
       this.upgradeMods === that.upgradeMods &&
       areObjectsEquivalent(this.primaryStatRestrictions, that.primaryStatRestrictions) &&
-      areObjectsEquivalent(this.setRestrictions, that.setRestrictions)
+      areObjectsEquivalent(this.setRestrictions, that.setRestrictions) &&
+      areObjectsEquivalent(this.targetStat, that.targetStat)
   }
 
   /**
@@ -165,6 +189,7 @@ class OptimizationPlan {
     planObject.upgradeMods = this.upgradeMods;
     planObject.primaryStatRestrictions = this.primaryStatRestrictions;
     planObject.setRestrictions = this.setRestrictions;
+    planObject.targetStat = this.targetStat;
 
     return planObject;
   }
@@ -194,7 +219,10 @@ class OptimizationPlan {
         planJson.critAvoid,
         'undefined' !== typeof planJson.upgradeMods ? planJson.upgradeMods : true,
         planJson.primaryStatRestrictions || {},
-        planJson.setRestrictions || {}
+        planJson.setRestrictions || {},
+        planJson.targetStat ?
+          new TargetStat(planJson.targetStat.stat, planJson.targetStat.minimum, planJson.targetStat.maximum) :
+          null
       );
     } else {
       return null;

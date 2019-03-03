@@ -13,7 +13,8 @@ import formatAllyCode from "../../utils/formatAllyCode";
 import ErrorModal from "../ErrorModal/ErrorModal";
 import {serializeState} from "../../state/storage";
 import {
-  changeSection, deleteProfile,
+  changeSection,
+  deleteProfile,
   hideModal,
   reset,
   restoreProgress,
@@ -45,7 +46,8 @@ class App extends PureComponent {
     }
 
     this.escapeListener = (e) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' && this.props.isModalCancelable) {
+
         this.props.hideModal();
       }
     }
@@ -375,6 +377,7 @@ const mapStateToProps = (state) => {
     displayModal: !!state.modal,
     modalClass: state.modal ? state.modal.class : '',
     modalContent: state.modal ? state.modal.content : '',
+    isModalCancelable: state.modal && state.modal.cancelable,
     previousVersion: state.previousVersion,
     progressData: JSON.stringify(serializeState(state)),
     section: state.section,

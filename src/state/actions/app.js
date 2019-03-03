@@ -19,11 +19,12 @@ export function changeSection(newSection) {
   };
 }
 
-export function showModal(modalClass, modalContent) {
+export function showModal(modalClass, modalContent, cancelable = true) {
   return {
     type: SHOW_MODAL,
     class: modalClass,
-    content: modalContent
+    content: modalContent,
+    cancelable: cancelable
   };
 }
 

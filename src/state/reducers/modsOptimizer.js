@@ -1,7 +1,8 @@
 // @flow
 import {restoreState, saveState} from "../storage";
 import {
-  CHANGE_SECTION, DELETE_PROFILE,
+  CHANGE_SECTION,
+  DELETE_PROFILE,
   HIDE_ERROR,
   HIDE_FLASH,
   HIDE_MODAL,
@@ -9,7 +10,8 @@ import {
   RESTORE_PROGRESS,
   SHOW_ERROR,
   SHOW_FLASH,
-  SHOW_MODAL, SWITCH_PROFILE,
+  SHOW_MODAL,
+  SWITCH_PROFILE,
   TOGGLE_SIDEBAR
 } from "../actions/app";
 import {
@@ -19,14 +21,20 @@ import {
   CHANGE_MINIMUM_MOD_DOTS,
   CHANGE_SLICE_MODS,
   DELETE_TARGET,
-  FINISH_EDIT_CHARACTER_TARGET, LOCK_ALL_SELECTED_CHARACTERS,
-  LOCK_CHARACTER, POPULATE_SET_RESTRICTIONS, REMOVE_SET_BONUS,
+  FINISH_EDIT_CHARACTER_TARGET,
+  LOCK_ALL_SELECTED_CHARACTERS,
+  LOCK_CHARACTER,
+  POPULATE_SET_RESTRICTIONS,
+  REMOVE_SET_BONUS,
   RESET_ALL_CHARACTER_TARGETS,
   RESET_CHARACTER_TARGET_TO_DEFAULT,
-  SELECT_CHARACTER, SELECT_SET_BONUS, UNLOCK_ALL_SELECTED_CHARACTERS,
+  SELECT_CHARACTER,
+  SELECT_SET_BONUS,
+  UNLOCK_ALL_SELECTED_CHARACTERS,
   UNLOCK_CHARACTER,
   UNSELECT_ALL_CHARACTERS,
-  UNSELECT_CHARACTER, UPDATE_MOD_CHANGE_THRESHOLD
+  UNSELECT_CHARACTER,
+  UPDATE_MOD_CHANGE_THRESHOLD
 } from "../actions/characterEdit";
 import {
   RECEIVE_CHARACTERS,
@@ -39,7 +47,12 @@ import {
   TOGGLE_KEEP_OLD_MODS
 } from "../actions/data";
 import {CHANGE_MODS_FILTER} from "../actions/explore";
-import {FINISH_OPTIMIZE_MODS, OPTIMIZE_MODS} from "../actions/optimize";
+import {
+  CANCEL_OPTIMIZE_MODS,
+  FINISH_OPTIMIZE_MODS,
+  OPTIMIZE_MODS,
+  UPDATE_OPTIMIZER_PROGRESS
+} from "../actions/optimize";
 import {
   CHANGE_MOD_SET_FILTER,
   CHANGE_MODLIST_FILTER,
@@ -51,7 +64,8 @@ import {
   UNEQUIP_MODS
 } from "../actions/review";
 import {
-  changeSection, deleteProfile,
+  changeSection,
+  deleteProfile,
   hideError,
   hideFlash,
   hideModal,
@@ -59,7 +73,8 @@ import {
   restoreProgress,
   showError,
   showFlash,
-  showModal, switchProfile,
+  showModal,
+  switchProfile,
   toggleSidebar
 } from "./app";
 import {
@@ -69,14 +84,20 @@ import {
   changeMinimumModDots,
   changeSliceMods,
   deleteTarget,
-  finishEditCharacterTarget, lockAllSelectedCharacters,
-  lockCharacter, populateSetRestrictions, removeSetBonus,
+  finishEditCharacterTarget,
+  lockAllSelectedCharacters,
+  lockCharacter,
+  populateSetRestrictions,
+  removeSetBonus,
   resetAllCharacterTargets,
   resetCharacterTargetToDefault,
-  selectCharacter, selectSetBonus, unlockAllSelectedCharacters,
+  selectCharacter,
+  selectSetBonus,
+  unlockAllSelectedCharacters,
   unlockCharacter,
   unselectAllCharacters,
-  unselectCharacter, updateModChangeThreshold
+  unselectCharacter,
+  updateModChangeThreshold
 } from "./characterEdit";
 import {
   receiveCharacters,
@@ -89,7 +110,7 @@ import {
   toggleKeepOldMods
 } from "./data";
 import {changeModsFilter} from "./explore";
-import {finishOptimizeMods, optimizeMods} from "./optimize";
+import {cancelOptimizeMods, finishOptimizeMods, optimizeMods, updateOptimizerProgress} from "./optimize";
 import {
   changeModListFilter,
   changeModSetFilter,
@@ -215,6 +236,10 @@ export default function modsOptimizer(state, action) {
       return optimizeMods(state, action);
     case FINISH_OPTIMIZE_MODS:
       return saveState(finishOptimizeMods(state, action));
+    case CANCEL_OPTIMIZE_MODS:
+      return saveState(cancelOptimizeMods(state, action));
+    case UPDATE_OPTIMIZER_PROGRESS:
+      return updateOptimizerProgress(state, action);
 
     case CHANGE_OPTIMIZER_VIEW:
       return saveState(changeOptimizerView(state, action));

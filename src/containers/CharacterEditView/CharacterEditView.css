@@ -60,3 +60,37 @@
 .modal.instructions .actions {
   text-align: right;
 }
+
+.modal.optimizer-progress h3 {
+  color: #a35ef9;
+}
+
+.modal.optimizer-progress .progress {
+  height: 1em;
+  width: 17em;
+  margin: .5em auto;
+  border-radius: .5em;
+  border: 1px solid limegreen;
+  padding: 0;
+  overflow: hidden;
+}
+
+.modal.optimizer-progress .progress .progress-bar {
+  display: block;
+  height: 100%;
+  background-image: repeating-linear-gradient(-45deg, #8fff3a, #46801a 1em, #8fff3a 2em);
+  background-size: 2.828em 1em;
+  background-repeat: repeat-x;
+  animation: Progress 1s linear infinite;
+  transition: width .5s;
+}
+
+@keyframes Progress {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 2.828em 0;
+  }
+}
