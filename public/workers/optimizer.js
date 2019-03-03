@@ -116,8 +116,8 @@ const setBonuses = {
   'speed': {
     name: 'speed',
     numberOfModsRequired: 4,
-    smallBonus: {displayType: 'Speed', value: 5},
-    maxBonus: {displayType: 'Speed', value: 10}
+    smallBonus: {displayType: 'Speed', value: 5, isPercent: true},
+    maxBonus: {displayType: 'Speed', value: 10, isPercent: true}
   }
 };
 
@@ -348,9 +348,14 @@ function optimizeMods(modsList, characters, order, changeThreshold) {
       const oldModSetValue = scoreModSet(oldModSetForCharacter, character);
 
       // Assign the new mod set if any of the following are true:
-      const [assignedModSet, assignmentMessages] =
+      let assignedModSet, assignmentMessages = [];
+      if (
         // Treat a threshold of 0 as "always change", so long as the new mod set is better than the old at all
-        (changeThreshold === 0 && newModSetValue > oldModSetValue) ||
+        (changeThreshold === 0 && newModSetValue >= oldModSetValue) ||
+        // If the new set is the same mods as the old set
+        (newModSetForCharacter.length === oldModSetForCharacter.length &&
+          oldModSetForCharacter.every(oldMod => newModSetForCharacter.find(newMod => newMod.id === oldMod.id))
+        ) ||
         // If the old set doesn't satisfy the character/target restrictions, but the new set does
         (!modSetSatisfiesCharacterRestrictions(oldModSetForCharacter, character) &&
           modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character)
@@ -360,9 +365,17 @@ function optimizeMods(modsList, characters, order, changeThreshold) {
         // If the old set now has less than 6 mods and the new set has more mods
         (oldModSetForCharacter.length < 6 &&
           newModSetForCharacter.length > oldModSetForCharacter.length)
-          ?
-          [newModSetForCharacter, characterMessages] :
-          [oldModSetForCharacter, []];
+      ) {
+        assignedModSet = newModSetForCharacter;
+        assignmentMessages = characterMessages;
+      } else {
+        assignedModSet = oldModSetForCharacter;
+        if (!modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character)) {
+          assignmentMessages.push(
+            'Could not find a new mod set that satisfies the given restrictions. Leaving the old mods equipped.'
+          )
+        }
+      }
 
       return {
         considerationSet: availableMods.filter(mod => !assignedModSet.includes(mod)),
@@ -427,7 +440,7 @@ function modSetFulfillsSetRestriction(modSet, setDefinition) {
   // the given count is -1, meaning the set should be actively avoided
   return Object.entries(setDefinition).every(([setName, count]) => {
     const numberOfFullSets = Math.floor((setCounts[setName] || 0) / setBonuses[setName].numberOfModsRequired);
-    return (numberOfFullSets >= count && count >= 0) || numberOfFullSets === 0;
+    return (count >= 0 && numberOfFullSets >= count) || (count < 0 && numberOfFullSets === 0);
   });
 }
 
@@ -441,7 +454,6 @@ function modSetFulfillsSetRestriction(modSet, setDefinition) {
 function modSetFulfillsTargetStatRestriction(modSet, character) {
   const targetStat = character.optimizerSettings.target.targetStat;
 
-  // TODO: Test that this actually works when there's a speed set in the mix
   if (!targetStat) {
     return true;
   }
@@ -462,7 +474,7 @@ function modSetFulfillsTargetStatRestriction(modSet, character) {
 
   const totalValue = baseValue + setValue;
 
-  return totalValue > targetStat.minimum && totalValue < targetStat.maximum;
+  return totalValue >= targetStat.minimum && totalValue <= targetStat.maximum;
 }
 
 /**
@@ -609,14 +621,14 @@ function findBestModSetForCharacter(mods, character) {
 
     // Iterate over each potential mod set to get the best set of mods using that set.
     let percentComplete = -1;
-    const candidateBestSets = potentialModSets.map(([mods, setRestrictions], idx) => {
+    const candidateBestSets = potentialModSets.map(([mods, candidateSetRestrictions], idx) => {
       const newPercentComplete = Math.floor(idx / numModSetsToCheck * 100);
       // Only update the progress bar on major changes. Otherwise all the messages destroy the performance of the page
       if (newPercentComplete !== percentComplete) {
         percentComplete = newPercentComplete;
         progressMessage(character, 'Calculating the value of all potential sets', percentComplete);
       }
-      return findBestModSetWithoutChangingRestrictions(mods, character, setRestrictions);
+      return findBestModSetWithoutChangingRestrictions(mods, character, candidateSetRestrictions);
     });
 
     // Filter to only complete mod sets

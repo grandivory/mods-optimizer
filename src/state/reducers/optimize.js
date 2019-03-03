@@ -23,9 +23,8 @@ export function finishOptimizeMods(state, action) {
       flashMessage: Object.keys(action.result.messages).length > 0 ?
         {
           heading: '',
-          content: <div>
-            <h3>The following changes were made to your character settings in order to successfully finish optimizing
-              your characters</h3>
+          content: <div className={'optimizer-messages'}>
+            <h3>Important messages regarding your selected targets</h3>
             <table>
               <thead>
               <tr>

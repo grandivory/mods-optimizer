@@ -20,6 +20,7 @@ import {
 
 import "./CharacterEditForm.css";
 import setBonuses from "../../constants/setbonuses";
+import TargetStat from "../../domain/TargetStat";
 
 class CharacterEditForm extends PureComponent {
   constructor(props) {
@@ -129,6 +130,9 @@ class CharacterEditForm extends PureComponent {
             <h4>Restrict Set Bonuses:</h4>
             {this.setRestrictionsForm(this.props.setRestrictions || character.optimizerSettings.target.setRestrictions)}
           </div>
+          <div className={'header-row group'}>
+            {this.targetStatForm(character.optimizerSettings.target.targetStat)}
+          </div>
         </div>
         <div className={'column'}>
           <div className={'header-row stat-weights-toggle'}>
@@ -204,6 +208,54 @@ class CharacterEditForm extends PureComponent {
         {Array.from({length: emptySlots}, (_, index) =>
           <span className={'empty-set'} key={index}/>
         )}
+      </div>
+    </div>;
+  }
+
+  /**
+   * Renders a form element for managing a target stat
+   *
+   * @param targetStat {TargetStat}
+   * @returns {*}
+   */
+  targetStatForm(targetStat) {
+    const possibleTargetStats = [
+      'Health',
+      'Protection',
+      'Speed',
+      'Critical Damage',
+      'Potency',
+      'Tenacity',
+      'Physical Damage',
+      'Physical Critical Chance',
+      'Armor',
+      'Special Damage',
+      'Special Critical Chance',
+      'Resistance',
+      'Accuracy',
+      'Critical Avoidance'
+    ];
+
+    return <div>
+      <h4>Set a Target Stat:</h4>
+      <p><em>Note that adding a target stats makes the optimizer take a <strong>LONG</strong> time to complete.</em></p>
+      <div className={'form-row center'}>
+        <select name={'target-stat-name'} defaultValue={targetStat ? targetStat.stat : ''}>
+          <option value={''}>No Target</option>
+          {possibleTargetStats.map(stat => <option key={stat} value={stat}>{stat}</option>)}
+        </select>
+        &nbsp;must be between&nbsp;
+        <input
+          type={'number'}
+          step={'any'}
+          name={'target-stat-min'}
+          defaultValue={targetStat ? targetStat.minimum : ''}/>
+        &nbsp;and&nbsp;
+        <input
+          type={'number'}
+          step={'any'}
+          name={'target-stat-max'}
+          defaultValue={targetStat ? targetStat.maximum : ''}/>
       </div>
     </div>;
   }
@@ -493,6 +545,20 @@ class CharacterEditForm extends PureComponent {
   saveTarget() {
     const planName = 'lock' !== this.form['plan-name'].value ? this.form['plan-name'].value : 'custom';
     let newTarget;
+    let primaryStatRestrictions = {};
+    const targetStat = this.form['target-stat-name'].value ?
+      new TargetStat(
+        this.form['target-stat-name'].value,
+        +this.form['target-stat-min'].value,
+        +this.form['target-stat-max'].value
+      ) :
+      null;
+
+    for (let stat of ['arrow', 'triangle', 'circle', 'cross']) {
+      if (this.form[`${stat}-primary`].value) {
+        primaryStatRestrictions[stat] = this.form[`${stat}-primary`].value;
+      }
+    }
 
     if ('advanced' === this.props.editMode) {
       // Advanced form
@@ -512,13 +578,9 @@ class CharacterEditForm extends PureComponent {
         this.form['accuracy-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.accuracy,
         this.form['critAvoid-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critAvoid,
         this.form['upgrade-mods'].checked,
-        {
-          'arrow': this.form['arrow-primary'].value,
-          'triangle': this.form['triangle-primary'].value,
-          'circle': this.form['circle-primary'].value,
-          'cross': this.form['cross-primary'].value
-        },
-        this.props.setRestrictions
+        primaryStatRestrictions,
+        this.props.setRestrictions,
+        targetStat
       );
     } else {
       // Basic form
@@ -538,13 +600,9 @@ class CharacterEditForm extends PureComponent {
         this.form['accuracy-stat'].valueAsNumber,
         this.form['critAvoid-stat'].valueAsNumber,
         this.form['upgrade-mods'].checked,
-        {
-          'arrow': this.form['arrow-primary'].value,
-          'triangle': this.form['triangle-primary'].value,
-          'circle': this.form['circle-primary'].value,
-          'cross': this.form['cross-primary'].value
-        },
-        this.props.setRestrictions
+        primaryStatRestrictions,
+        this.props.setRestrictions,
+        targetStat
       );
     }
 

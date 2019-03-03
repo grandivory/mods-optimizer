@@ -66,7 +66,7 @@ export function optimizeMods(mods, characters, order, threshold) {
         case 'OptimizationSuccess':
           dispatch(showModal(
             'optimizer-progress',
-            optimizerProgressModal(null, 'Rendering results', 100, dispatch)
+            optimizerProgressModal(null, 'Rendering your results', 100, dispatch)
           ));
           // Set a timeout so the modal has time to display
           setTimeout(() => dispatch(finishModOptimization(message.data.result)), 0);

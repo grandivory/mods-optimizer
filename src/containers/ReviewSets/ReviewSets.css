@@ -39,3 +39,7 @@
   margin: 1em;
   text-align: center;
 }
+
+.optimizer-messages h3 {
+  color: #a35ef9;
+}
