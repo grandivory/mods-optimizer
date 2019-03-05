@@ -41,7 +41,7 @@ class App extends PureComponent {
     // Remove the query string after reading anything we needed from it.
     window.history.replaceState({}, document.title, document.location.href.split('?')[0]);
 
-    if ((props.previousVersion < '1.3.0') && props.profile) {
+    if ((props.previousVersion < '1.4.0') && props.profile) {
       this.props.showModal('changelog-modal', this.changeLogModal());
     }
 
@@ -255,27 +255,28 @@ class App extends PureComponent {
    */
   changeLogModal() {
     return <div>
-      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.3!</h2>
+      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.4!</h2>
       <h3>Here's a short summary of the changes included in this version:</h3>
       <ul>
         <li>
-          The internals of the mods optimizer have undergone a major refactor. The behavior should be mostly the same,
-          but if you see anything behaving in an unexpected way, please submit a bug via the discord link in the footer!
+          The optimizer now supports target stats! Please note that setting a target stat makes the optimizer
+          take <strong>A LOT LONGER</strong> (potentially over an hour for some characters). Things that will help keep
+          this time low include setting very narrow target windows or setting targets that are hard to hit. For example,
+          if you set a speed target of 170-174 for Han (thinking about hSTR phase 3), that's better than 170-179, but
+          not nearly as good as 270-274 in terms of how long they'll all take.
         </li>
         <li>
-          Default character data (name, avatar, tags, etc.) is now pulled directly from swgoh.gg every time you fetch
-          your character data. This means a couple things. First, you'll notice that all of your characters have the
-          "missing character" portrait. Don't worry - the character data is still there, and the next time you fetch
-          your data, the avatars should be fixed. Second, you no longer have to wait for me to put new characters into
-          the optimizer every time a new one is added to the game! As soon as swgoh.gg adds the character and Crinolo
-          adds their stats, the optimizer will know how to use them. I'll still try to get some default targets added
-          as quickly as I can, but a failure on my part will no longer prevent people from using the optimizer on their
-          favorite new characters!
+          Some new targets have been made for Death Trooper, Han Solo, and Greedo for hSTR Phase 3 that utilize target
+          stats. You'll see these appear after fetching your data.
         </li>
         <li>
-          All player data is now stored internally by ally code. This means that if you're fetching data for multiple
-          ally codes, the optimizer will now properly separate your mods, selected characters, targets, etc. The
-          currently active ally code is switched every time you fetch your data!
+          The optimization itself now runs on a separate thread so it won't freeze the browser while running all of its
+          calculations. You'll notice a progress window while running optimizations now, with a button to be able to
+          cancel at any time.
+        </li>
+        <li>
+          Because optimization can sometimes take a very long time now, a button has been added to the character
+          selection screen to review previous recommendations.
         </li>
       </ul>
       <h3>Happy Modding!</h3>

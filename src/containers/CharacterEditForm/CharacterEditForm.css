@@ -46,6 +46,10 @@
   margin: 0 2em;
 }
 
+.target-level-options h3 {
+  margin-top: 0;
+}
+
 .target-level-options .group {
   border: 1px solid white;
   box-sizing: border-box;
@@ -53,7 +57,11 @@
 }
 
 .target-level-options .group h4 {
-  margin-bottom: 1em;
+  margin-bottom: .5em;
+}
+
+.target-level-options .group p {
+  margin: .25em auto;
 }
 
 .target-level-options .non-stats {
@@ -108,7 +116,7 @@
 
 .character-edit-form div.mod-sets div.set-options img {
   height: 3em;
-  padding: .25em;
+  padding: 0 .25em;
 }
 
 .character-edit-form div.mod-sets div.set-options img.disabled {
@@ -121,14 +129,14 @@
 
 .character-edit-form div.mod-sets div.selected-sets img {
   height: 3em;
-  padding: .25em;
+  padding: 0 .25em;
 }
 
 .character-edit-form div.mod-sets div.selected-sets span.empty-set {
   display: inline-block;
   height: 3em;
   width: 3em;
-  margin: .25em;
+  margin: 0 .25em;
   vertical-align: middle;
   box-sizing: border-box;
   border: .1em dashed #ccfffe;

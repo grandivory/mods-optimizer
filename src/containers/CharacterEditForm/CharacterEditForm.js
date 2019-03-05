@@ -239,6 +239,9 @@ class CharacterEditForm extends PureComponent {
     return <div>
       <h4>Set a Target Stat:</h4>
       <p><em>Note that adding a target stats makes the optimizer take a <strong>LONG</strong> time to complete.</em></p>
+      <p>
+        Setting a Target Stat will make the optimizer assume that all mods are being leveled to 15 for this character.
+      </p>
       <div className={'form-row center'}>
         <select name={'target-stat-name'} defaultValue={targetStat ? targetStat.stat : ''}>
           <option value={''}>No Target</option>
@@ -577,7 +580,7 @@ class CharacterEditForm extends PureComponent {
         this.form['resistance-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.resistance,
         this.form['accuracy-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.accuracy,
         this.form['critAvoid-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critAvoid,
-        this.form['upgrade-mods'].checked,
+        this.form['upgrade-mods'].checked || null !== targetStat,
         primaryStatRestrictions,
         this.props.setRestrictions,
         targetStat
@@ -599,7 +602,7 @@ class CharacterEditForm extends PureComponent {
         this.form['defense-stat'].valueAsNumber / 2,
         this.form['accuracy-stat'].valueAsNumber,
         this.form['critAvoid-stat'].valueAsNumber,
-        this.form['upgrade-mods'].checked,
+        this.form['upgrade-mods'].checked || null !== targetStat,
         primaryStatRestrictions,
         this.props.setRestrictions,
         targetStat
