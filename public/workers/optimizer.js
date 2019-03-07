@@ -300,6 +300,9 @@ for (let firstSetSlots of twoSlotOptions) {
   }
 }
 
+Object.freeze(chooseFourOptions);
+Object.freeze(chooseTwoOptions);
+
 function optimizationSuccessMessage(modsByCharacter) {
   postMessage({
     type: 'OptimizationSuccess',
@@ -329,65 +332,66 @@ function progressMessage(character, step, progress = 100) {
  * @return {Object<String, ModSet>} An optimized set of mods, keyed by character base ID
  */
 function optimizeMods(modsList, characters, order, changeThreshold) {
-  const considerationSet = modsList.filter(mod =>
+  const assignedSets = {};
+  const messages = {};
+  const availableMods = modsList.filter(mod =>
     // Use any mod that isn't assigned or that is assigned to a character that isn't locked
     !mod.characterID || !characters[mod.characterID].optimizerSettings.isLocked
   );
 
   // For each not-locked character in the list, find the best mod set for that character
-  const {assignedSets, messages} = order.filter(charID => !characters[charID].optimizerSettings.isLocked)
-    .reduce((accumulator, characterID) => {
-      const {considerationSet: availableMods, assignedSets: completedSets, messages} = accumulator;
-      const character = characters[characterID];
+  order.forEach(characterID => {
+    const character = characters[characterID];
 
-      const {modSet: newModSetForCharacter, messages: characterMessages} =
-        findBestModSetForCharacter(availableMods, character);
+    const {modSet: newModSetForCharacter, messages: characterMessages} =
+      findBestModSetForCharacter(availableMods, character);
 
-      const oldModSetForCharacter = availableMods.filter(mod => mod.characterID === character.baseID);
+    const oldModSetForCharacter = availableMods.filter(mod => mod.characterID === character.baseID);
 
-      const newModSetValue = scoreModSet(newModSetForCharacter, character);
-      const oldModSetValue = scoreModSet(oldModSetForCharacter, character);
+    const newModSetValue = scoreModSet(newModSetForCharacter, character);
+    const oldModSetValue = scoreModSet(oldModSetForCharacter, character);
 
-      // Assign the new mod set if any of the following are true:
-      let assignedModSet, assignmentMessages = [];
-      if (
-        // Treat a threshold of 0 as "always change", so long as the new mod set is better than the old at all
-        (changeThreshold === 0 && newModSetValue >= oldModSetValue) ||
-        // If the new set is the same mods as the old set
-        (newModSetForCharacter.length === oldModSetForCharacter.length &&
-          oldModSetForCharacter.every(oldMod => newModSetForCharacter.find(newMod => newMod.id === oldMod.id))
-        ) ||
-        // If the old set doesn't satisfy the character/target restrictions, but the new set does
-        (!modSetSatisfiesCharacterRestrictions(oldModSetForCharacter, character) &&
-          modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character)
-        ) ||
-        // If the new set is better than the old set
-        (newModSetValue / oldModSetValue) * 100 - 100 > changeThreshold ||
-        // If the old set now has less than 6 mods and the new set has more mods
-        (oldModSetForCharacter.length < 6 &&
-          newModSetForCharacter.length > oldModSetForCharacter.length)
-      ) {
-        assignedModSet = newModSetForCharacter;
-        assignmentMessages = characterMessages;
-      } else {
-        assignedModSet = oldModSetForCharacter;
-        if (!modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character)) {
-          assignmentMessages.push(
-            'Could not find a new mod set that satisfies the given restrictions. Leaving the old mods equipped.'
-          )
-        }
+    // Assign the new mod set if any of the following are true:
+    let assignedModSet, assignmentMessages = [];
+    if (
+      // Treat a threshold of 0 as "always change", so long as the new mod set is better than the old at all
+      (changeThreshold === 0 && newModSetValue >= oldModSetValue) ||
+      // If the new set is the same mods as the old set
+      (newModSetForCharacter.length === oldModSetForCharacter.length &&
+        oldModSetForCharacter.every(oldMod => newModSetForCharacter.find(newMod => newMod.id === oldMod.id))
+      ) ||
+      // If the old set doesn't satisfy the character/target restrictions, but the new set does
+      (!modSetSatisfiesCharacterRestrictions(oldModSetForCharacter, character) &&
+        modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character)
+      ) ||
+      // If the new set is better than the old set
+      (newModSetValue / oldModSetValue) * 100 - 100 > changeThreshold ||
+      // If the old set now has less than 6 mods and the new set has more mods
+      (oldModSetForCharacter.length < 6 &&
+        newModSetForCharacter.length > oldModSetForCharacter.length)
+    ) {
+      assignedModSet = newModSetForCharacter;
+      assignmentMessages = characterMessages;
+    } else {
+      assignedModSet = oldModSetForCharacter;
+      if (!modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character)) {
+        assignmentMessages.push(
+          'Could not find a new mod set that satisfies the given restrictions. Leaving the old mods equipped.'
+        )
       }
+    }
 
-      return {
-        considerationSet: availableMods.filter(mod => !assignedModSet.includes(mod)),
-        assignedSets: Object.assign(completedSets, {
-          [characterID]: assignedModSet.map(mod => mod.id)
-        }),
-        messages: assignmentMessages.length > 0 ?
-          Object.assign({}, messages, {[characterID]: assignmentMessages}) :
-          messages
-      };
-    }, {considerationSet: considerationSet, assignedSets: {}, messages: {}});
+    assignedSets[characterID] = assignedModSet.map(mod => mod.id);
+    if (assignmentMessages.length) {
+      messages[characterID] = assignmentMessages;
+    }
+    // Remove any assigned mods from the available pool
+    for (let i = availableMods.length - 1; i >= 0; i--) {
+      if (assignedModSet.includes(availableMods[i])) {
+        availableMods.splice(i, 1);
+      }
+    }
+  });
 
   // Delete any cache that we had saved
   clearCache();
@@ -468,9 +472,9 @@ function modSetFulfillsTargetStatRestriction(modSet, character) {
 
   const setStats = getFlatStatsFromModSet(modSet, character);
 
-  const setValue = setStats.reduce((acc, stat) =>
+  const setValue = setStats.reduce((setValueSum, stat) =>
       // Check to see if the stat is the target stat. If it is, add its value to the total.
-      stat.displayType === targetStat.stat ? acc + stat.value : acc
+      stat.displayType === targetStat.stat ? setValueSum + stat.value : setValueSum
     , 0);
 
   const totalValue = baseValue + setValue;
@@ -489,36 +493,41 @@ function getFlatStatsFromModSet(modSet, character) {
     modSet,
     character.optimizerSettings.target.upgradeMods
   );
-  const statsDirectlyFromMods = modSet.reduce((acc, mod) => {
+  const statsDirectlyFromMods = [];
+  const flattenedStats = [];
+  const combinedStats = {};
+
+  modSet.forEach(mod => {
     const workingMod = getUpgradedMod(mod, character);
-    return acc.concat([workingMod.primaryStat]).concat(workingMod.secondaryStats)
-  }, []);
+    statsDirectlyFromMods.push(workingMod.primaryStat);
+    statsDirectlyFromMods.push(...workingMod.secondaryStats);
+  });
 
-  const flattenedStats = statsFromSetBonus.concat(statsDirectlyFromMods).reduce((acc, stat) =>
-      acc.concat(flattenStatValues(stat, character))
-    , []);
+  statsFromSetBonus.forEach(stat =>
+    flattenedStats.push(...flattenStatValues(stat, character))
+  );
 
-  const combinedStats = flattenedStats.reduce((acc, stat) => {
-    const oldStat = acc[stat.displayType];
+  statsDirectlyFromMods.forEach(stat =>
+    flattenedStats.push(...flattenStatValues(stat, character))
+  );
+
+  flattenedStats.forEach(stat => {
+    const oldStat = combinedStats[stat.displayType];
     if (oldStat) {
-      return Object.assign(acc, {
-        [stat.displayType]: {
-          displayType: stat.displayType,
-          isPercent: stat.isPercent,
-          value: oldStat.value + stat.value
-        }
-      });
+      combinedStats[stat.displayType] = {
+        displayType: stat.displayType,
+        isPercent: stat.isPercent,
+        value: oldStat.value + stat.value
+      };
     } else {
-      return Object.assign(acc, {
-        [stat.displayType]: stat
-      })
+      combinedStats[stat.displayType] = stat
     }
-  }, {});
+  });
 
   // Truncate any stat that can only have a whole value
   return Object.values(combinedStats).map(stat => {
     if (wholeStatTypes.includes(stat.displayType)) {
-      return Object.assign({}, stat, {
+      return Object.assign(stat, {
         value: Math.trunc(stat.value)
       });
     } else {
@@ -536,19 +545,18 @@ function getFlatStatsFromModSet(modSet, character) {
  */
 function getSetBonusStatsFromModSet(modSet, upgradeMods) {
   let setStats = [];
+  const setBonusCounts = {};
 
-  const setBonusCounts = modSet.reduce((acc, mod) => {
+  modSet.forEach(mod => {
     const setName = mod.set.name;
     const highCountValue = upgradeMods || mod.level === 15 ? 1 : 0;
 
-    return Object.assign(acc, {
-      [setName]: {
-        setBonus: mod.set,
-        lowCount: acc[setName] ? acc[setName].lowCount + 1 : 1,
-        highCount: acc[setName] ? acc[setName].highCount + highCountValue : highCountValue
-      }
-    });
-  }, {});
+    setBonusCounts[setName] = {
+      setBonus: mod.set,
+      lowCount: setBonusCounts[setName] ? setBonusCounts[setName].lowCount + 1 : 1,
+      highCount: setBonusCounts[setName] ? setBonusCounts[setName].highCount + highCountValue : highCountValue
+    }
+  });
 
   Object.values(setBonusCounts).forEach(({setBonus, lowCount, highCount}) => {
     const maxBonusCount = Math.floor(highCount / setBonus.numberOfModsRequired);
@@ -639,8 +647,12 @@ function findBestModSetForCharacter(mods, character) {
     }
 
     // Filter to only complete mod sets
-    const completeSets = candidateBestSets.filter(({modSet}) => null !== modSet);
-    if (!completeSets.length) {
+    for (let i = candidateBestSets.length - 1; i >= 0; i--) {
+      if (null === candidateBestSets[i].modSet) {
+        candidateBestSets.splice(i, i+1);
+      }
+    }
+    if (!candidateBestSets.length) {
       const {modSet: fallbackSet, messages: fallbackMessages} =
         findBestModSetByLooseningSetRestrictions(usableMods, character, setRestrictions);
       return {
@@ -650,20 +662,19 @@ function findBestModSetForCharacter(mods, character) {
       };
     }
 
-    // Free more memory
-    candidateBestSets = null;
-
     progressMessage(character, 'Sorting candidate mod sets by score');
     // Sort by the score of each set
-    completeSets.sort(({modSet: leftSet}, {modSet: rightSet}) =>
-      scoreModSet(leftSet, character) - scoreModSet(rightSet, character)
+    candidateBestSets.sort(({modSet: leftSet}, {modSet: rightSet}) =>
+      scoreModSet(rightSet, character) - scoreModSet(leftSet, character)
     );
 
+    debugger;
+
     // Return the best set and set of messages
-    return completeSets.shift();
+    return candidateBestSets.shift();
   } else {
-    progressMessage(character, 'Finding the best mod set');
     // If not, simply iterate over all levels of restrictions until a suitable set is found.
+    progressMessage(character, 'Finding the best mod set');
     return findBestModSetByLooseningSetRestrictions(usableMods, character, setRestrictions);
   }
 }
@@ -672,11 +683,11 @@ function findBestModSetForCharacter(mods, character) {
  * Given a set of mods and a target stat, get all of the
  * @param usableMods {Array<Mod>}
  * @param character {Character}
- * @returns {Array<(Array<Mod>|{Object<String, Number>})>} An array of potential mods that could be used to create a set
+ * @returns {Array<Array<Mod>,Object<String, Number>>} An array of potential mods that could be used to create a set
  *   that fulfills the target stat as [mods, setRestriction]
  */
 function getPotentialModsToSatisfyTargetStat(usableMods, character) {
-  let potentialModSets = [];
+  const potentialModSets = [];
   const setRestrictions = character.optimizerSettings.target.setRestrictions;
   const targetStat = character.optimizerSettings.target.targetStat;
   // A map from mod ID to the absolute value that mod provides for the target stat
@@ -691,15 +702,33 @@ function getPotentialModsToSatisfyTargetStat(usableMods, character) {
       "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
     );
   }
-  const baseValue = character.playerValues.equippedStats[characterStatProperties[0]] || 0;
+  const characterValue = character.playerValues.equippedStats[characterStatProperties[0]] || 0;
 
-  // First, get the raw value for the stat from each mod in the set, and collect them into slots
+  // Get the raw value for the stat from each mod in the set, and collect them into slots
   const valuesBySlot = {};
   modSlots.forEach(slot => valuesBySlot[slot] = new Set([0]));
   usableMods.forEach(mod => {
-    const modSummary = [mod.primaryStat].concat(mod.secondaryStats)
-      .reduce((acc, stat) => acc.concat(flattenStatValues(stat, character)), []);
-    const statForTarget = modSummary.find(stat => stat.displayType === targetStat.stat);
+    const workingMod = getUpgradedMod(mod, character);
+    const modSummary = [];
+    const combinedModSummary = {};
+    modSummary.push(...flattenStatValues(workingMod.primaryStat, character));
+    workingMod.secondaryStats.forEach(stat =>
+      modSummary.push(...flattenStatValues(stat, character))
+    );
+    modSummary.forEach(stat => {
+      const oldStat = combinedModSummary[stat.displayType];
+      if (oldStat) {
+        combinedModSummary[stat.displayType] = {
+          displayType: stat.displayType,
+          isPercent: stat.isPercent,
+          value: oldStat.value + stat.value
+        };
+      } else {
+        combinedModSummary[stat.displayType] = stat
+      }
+    });
+
+    const statForTarget = combinedModSummary[targetStat.stat];
     const statValue = statForTarget ? statForTarget.value : 0;
 
     modValues[mod.id] = statValue;
@@ -708,14 +737,13 @@ function getPotentialModsToSatisfyTargetStat(usableMods, character) {
 
   // Also check to see if any mod set a) provides a value for the stat and b) can be added to the set restrictions
   const modSlotsOpen = 6 - Object.entries(setRestrictions).reduce(
-    (acc, [setName, setCount]) =>
-      acc + setBonuses[setName].numberOfModsRequired * setCount,
-    0
+    (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
   );
   for (let setBonus of Object.values(setBonuses)) {
     // TODO: Eventually support non-max bonuses
     const setStats = flattenStatValues(setBonus.maxBonus, character);
 
+    // This works on the assumption that only one mod set could ever fill a given stat
     const valuableStat = setStats.find(stat => stat.displayType === targetStat.stat);
 
     if (valuableStat) {
@@ -738,7 +766,7 @@ function getPotentialModsToSatisfyTargetStat(usableMods, character) {
         [setValue.set.name]: numSetsUsed === 0 ? -1 : numSetsUsed
       });
 
-      const nonModValue = baseValue + setValue.value * numSetsUsed;
+      const nonModValue = characterValue + setValue.value * numSetsUsed;
       const potentialModValues = findStatValuesThatMeetTarget(
         valuesBySlot,
         targetStat.minimum - nonModValue,
@@ -746,25 +774,35 @@ function getPotentialModsToSatisfyTargetStat(usableMods, character) {
       );
 
       // Filter out mods into only those that have those values
-      potentialModSets = potentialModSets.concat(potentialModValues.map(potentialModValuesObject => {
-        const modsThatFitGivenValues = usableMods.filter(mod =>
-          modValues[mod.id] === potentialModValuesObject[mod.slot]
-        );
+      potentialModValues.map(potentialModValuesObject => {
+        const modsThatFitGivenValues = [];
+
+        usableMods.forEach(mod => {
+          if (modValues[mod.id] === potentialModValuesObject[mod.slot]) {
+            modsThatFitGivenValues.push(mod);
+          }
+        });
+
         return [modsThatFitGivenValues, updatedSetRestriction];
-      }));
+      }).forEach(potentialModSet => potentialModSets.push(potentialModSet));
     }
   } else {
     const potentialModValues = findStatValuesThatMeetTarget(
       valuesBySlot,
-      targetStat.minimum - baseValue,
-      targetStat.maximum - baseValue
+      targetStat.minimum - characterValue,
+      targetStat.maximum - characterValue
     );
 
     // Filter out mods into only those that have those values
-    potentialModSets = potentialModSets.concat(potentialModValues.map(potentialModValuesObject => {
-      const modsThatFitGivenValues = usableMods.filter(mod =>
-        modValues[mod.id] === potentialModValuesObject[mod.slot]
-      );
+    potentialModSets.push(...potentialModValues.map(potentialModValuesObject => {
+      const modsThatFitGivenValues = [];
+
+      usableMods.forEach(mod => {
+        if (modValues[mod.id] === potentialModValuesObject[mod.slot]) {
+          modsThatFitGivenValues.push(mod);
+        }
+      });
+
       return [modsThatFitGivenValues, setRestrictions];
     }));
   }
@@ -783,6 +821,8 @@ function getPotentialModsToSatisfyTargetStat(usableMods, character) {
 function findStatValuesThatMeetTarget(valuesBySlot, targetMin, targetMax) {
   const passingValues = [];
 
+  // This is essentially a fancy nested for loop iterating over each value in each slot.
+  // That means this is O(n^6) for 6 mod slots (which is terrible!).
   function slotRecursor(slots, valuesObject) {
     if (slots.length) {
       const slotsCopy = Array.from(slots);
@@ -887,8 +927,8 @@ function restrictMods(allMods, setRestriction) {
  * @returns {Boolean}
  */
 function areSetsComplete(setDefinition) {
-  return 6 === Object.entries(setDefinition).reduce((acc, [setName, setCount]) => {
-    return acc + setBonuses[setName].numberOfModsRequired * setCount;
+  return 6 === Object.entries(setDefinition).reduce((filledSlots, [setName, setCount]) => {
+    return filledSlots + setBonuses[setName].numberOfModsRequired * setCount;
   }, 0);
 }
 
@@ -901,12 +941,13 @@ function areSetsComplete(setDefinition) {
  * @returns {{messages: Array<String>, modSet: Array<Mod>}}
  */
 function findBestModSetWithoutChangingRestrictions(usableMods, character, setsToUse) {
+  const potentialUsedSets = new Set();
+  const baseSets = {};
+  const candidateSets = [];
+  const messages = [];
   let squares, arrows, diamonds, triangles, circles, crosses;
-  let potentialUsedSets = new Set();
-  let baseSets = {};
   let setlessMods;
-  let candidateSets = [];
-  let messages = [], subMessages;
+  let subMessages;
 
   // Sort all the mods by score, then break them into sets.
   // For each slot, try to use the most restrictions possible from what has been set for that character
@@ -918,42 +959,42 @@ function findBestModSetWithoutChangingRestrictions(usableMods, character, setsTo
     character.optimizerSettings.minimumModDots,
     character.optimizerSettings.target.primaryStatRestrictions.square
   ));
-  messages = messages.concat(subMessages);
+  messages.push(...subMessages);
   ({mods: arrows, messages: subMessages} = filterMods(
     usableMods,
     'arrow',
     character.optimizerSettings.minimumModDots,
     character.optimizerSettings.target.primaryStatRestrictions.arrow
   ));
-  messages = messages.concat(subMessages);
+  messages.push(...subMessages);
   ({mods: diamonds, messages: subMessages} = filterMods(
     usableMods,
     'diamond',
     character.optimizerSettings.minimumModDots,
     character.optimizerSettings.target.primaryStatRestrictions.diamond
   ));
-  messages = messages.concat(subMessages);
+  messages.push(...subMessages);
   ({mods: triangles, messages: subMessages} = filterMods(
     usableMods,
     'triangle',
     character.optimizerSettings.minimumModDots,
     character.optimizerSettings.target.primaryStatRestrictions.triangle
   ));
-  messages = messages.concat(subMessages);
+  messages.push(...subMessages);
   ({mods: circles, messages: subMessages} = filterMods(
     usableMods,
     'circle',
     character.optimizerSettings.minimumModDots,
     character.optimizerSettings.target.primaryStatRestrictions.circle
   ));
-  messages = messages.concat(subMessages);
+  messages.push(...subMessages);
   ({mods: crosses, messages: subMessages} = filterMods(
     usableMods,
     'cross',
     character.optimizerSettings.minimumModDots,
     character.optimizerSettings.target.primaryStatRestrictions.cross
   ));
-  messages = messages.concat(subMessages);
+  messages.push(...subMessages);
 
   /**
    * Given a sorted array of mods, return either the first mod (if it has a non-negative score) or null. This allows
@@ -981,9 +1022,15 @@ function findBestModSetWithoutChangingRestrictions(usableMods, character, setsTo
     }
     setlessMods = null;
   } else {
-    // Otherwise, use any set bonus with positive value
+    // Otherwise, use any set bonus with positive value that fits into the set restriction
+    const modSlotsOpen = 6 - Object.entries(setsToUse).reduce(
+      (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
+    );
+
     for (let setBonus of Object.values(setBonuses)) {
-      if (scoreStat(setBonus.maxBonus, character.optimizerSettings.target) > 0) {
+      if (setBonus.numberOfModsRequired <= modSlotsOpen &&
+        scoreStat(setBonus.maxBonus, character.optimizerSettings.target) > 0
+      ) {
         potentialUsedSets.add(setBonus);
       }
     }
@@ -1005,7 +1052,7 @@ function findBestModSetWithoutChangingRestrictions(usableMods, character, setsTo
     }
   }
 
-  // Go through each set bonus with a positive value, and find the best mod sub-sets (all possible pairs or quads)
+  // Go through each set bonus with a positive value, and find the best mod sub-sets
   for (let setBonus of potentialUsedSets) {
     baseSets[setBonus.name] = {
       square: firstOrNull(squares.filter(mod => setBonus.name === mod.set.name)),
@@ -1019,7 +1066,7 @@ function findBestModSetWithoutChangingRestrictions(usableMods, character, setsTo
 
   // Make each possible set of 6 from the sub-sets found above, including filling in with the "base" set formed
   // without taking sets into account
-  candidateSets = candidateSets.concat(getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse));
+  candidateSets.push(...getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse));
 
   candidateSets.sort((left, right) => {
     const leftScore = scoreModSet(left, character);
@@ -1139,9 +1186,12 @@ function scoreMod(mod, character) {
 
   const workingMod = getUpgradedMod(mod, character);
 
-  const modScore = [workingMod.primaryStat].concat(workingMod.secondaryStats)
-    .reduce((acc, stat) => acc.concat(flattenStatValues(stat, character)), [])
-    .reduce((acc, stat) => acc + scoreStat(stat, character.optimizerSettings.target), 0);
+  const flattenedStatValues = [];
+  flattenedStatValues.push(...flattenStatValues(workingMod.primaryStat, character));
+  workingMod.secondaryStats.forEach(stat => flattenedStatValues.push(...flattenStatValues(stat, character)));
+
+  const modScore = flattenedStatValues
+    .reduce((score, stat) => score + scoreStat(stat, character.optimizerSettings.target), 0);
 
   cache.modScores[cacheKey] = modScore;
   return modScore;
@@ -1163,7 +1213,7 @@ function getUpgradedMod(mod, character) {
 
   const workingMod = Object.assign({}, mod);
 
-  // Level the mod if the target says to, or if any target stat is set
+  // Level the mod if the target says to
   if (15 > workingMod.level && character.optimizerSettings.target.upgradeMods) {
     workingMod.primaryStat = {
       displayType: workingMod.primaryStat.displayType,
@@ -1173,6 +1223,7 @@ function getUpgradedMod(mod, character) {
     workingMod.level = 15;
   }
 
+  // Slice the mod to 6E if needed
   if (15 === workingMod.level && 5 === workingMod.pips && character.optimizerSettings.sliceMods) {
     workingMod.pips = 6;
     workingMod.primaryStat = {
@@ -1203,14 +1254,14 @@ function getUpgradedMod(mod, character) {
  * @param character {Character}
  */
 function scoreModSet(modSet, character) {
-  const cacheKey = modSet.map(mod => mod.id).sort().reduce((acc, id) => acc + id, '') + character.baseID;
+  const cacheKey = modSet.map(mod => mod.id).sort().reduce((key, id) => key + id, '') + character.baseID;
   const cacheHit = cache.setScores[cacheKey];
   if (cacheHit) {
     return cacheHit;
   }
 
   const setScore = getFlatStatsFromModSet(modSet, character)
-    .reduce((acc, stat) => acc + scoreStat(stat, character.optimizerSettings.target), 0);
+    .reduce((score, stat) => score + scoreStat(stat, character.optimizerSettings.target), 0);
 
   cache.setScores[cacheKey] = setScore;
   return setScore;
@@ -1250,23 +1301,25 @@ function getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse) {
   const twoModSets = potentialSetsArray
     .filter(modSet => 2 === modSet.numberOfModsRequired)
     .map(set => set.name);
-  let candidateSets = [];
+  const candidateSets = [];
 
   // The base set
-  candidateSets.push(setlessMods);
+  if (setlessMods) {
+    candidateSets.push(setlessMods);
+  }
 
   for (let firstSetType of fourModSets) {
     let firstSet = baseSets[firstSetType];
 
     // the whole set plus setless mods
     if (setlessMods) {
-      candidateSets = candidateSets.concat(combineSets(firstSet, setlessMods));
+      candidateSets.push(...combineSets(firstSet, setlessMods));
     }
 
     // the whole set plus any 2-mod set
     for (let secondSetType of twoModSets) {
       let secondSet = baseSets[secondSetType];
-      candidateSets = candidateSets.concat(combineSets(firstSet, secondSet));
+      candidateSets.push(...combineSets(firstSet, secondSet));
     }
   }
 
@@ -1275,7 +1328,7 @@ function getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse) {
 
     // the whole set plus setless mods
     if (setlessMods) {
-      candidateSets = candidateSets.concat(combineSets(setlessMods, firstSet));
+      candidateSets.push(...combineSets(setlessMods, firstSet));
     }
 
     // the whole set plus a set of 4 from any 2-mod sets and the base set
@@ -1284,21 +1337,38 @@ function getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse) {
 
       // the first set plus the second set plus setless mods
       if (setlessMods) {
-        candidateSets = candidateSets.concat(combineSets(setlessMods, firstSet, secondSet));
+        candidateSets.push(...combineSets(setlessMods, firstSet, secondSet));
       }
 
       // the first set plus the second set plus another set
       for (let k = j; k < twoModSets.length; k++) {
         let thirdSet = baseSets[twoModSets[k]];
 
-        candidateSets = candidateSets.concat(combineSets(firstSet, secondSet, thirdSet));
+        candidateSets.push(...combineSets(firstSet, secondSet, thirdSet));
       }
     }
   }
 
-  return candidateSets.filter(modSet => modSet)
-    .map(modSet => Object.values(modSet).filter(mod => mod))
-    .filter(mods => modSetFulfillsSetRestriction(mods, setsToUse));
+  // Filter out any sets that don't fit the set restriction
+  const candidateSetsAsArrays = candidateSets.map(modSet => {
+    const modArray = Object.values(modSet)
+
+    for (let i = modArray.length - 1; i >= 0; i--) {
+      if (!modArray[i]) {
+        modArray.splice(i, i+1);
+      }
+    }
+
+    return modArray;
+  });
+
+  for (let i = candidateSetsAsArrays.length - 1; i >= 0; i--) {
+    if (!modSetFulfillsSetRestriction(candidateSetsAsArrays[i], setsToUse)) {
+      candidateSetsAsArrays.splice(i, i+1);
+    }
+  }
+
+  return candidateSetsAsArrays;
 }
 
 /**
