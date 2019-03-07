@@ -142,9 +142,12 @@ class CharacterEditView extends PureComponent {
       >
         Optimize my mods!
       </button>
-      {this.props.showReviewButton && <button type={'button'} onClick={this.props.reviewOldAssignments}>
-        Review recommendations
-      </button>}
+      {this.props.showReviewButton ?
+        <button type={'button'} onClick={this.props.reviewOldAssignments}>
+          Review recommendations
+        </button> :
+        null
+      }
       <button
         type={'button'}
         className={'blue'}
