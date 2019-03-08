@@ -20,7 +20,7 @@ class ModSetDetail extends React.PureComponent {
     const diffSummary = (diffSet && showStatDiff) ? diffSet.getSummary(character, true) : null;
 
     const statsDisplay = Object.values(statSummary).map((stat, index) => {
-      const diffStat = diffSummary ? stat.minus(diffSummary[stat.displayType]) : null;
+      const diffStat = diffSummary && diffSummary[stat.displayType] ? stat.minus(diffSummary[stat.displayType]) : null;
 
       if (!character.playerValues.equippedStats) {
         return <tr key={index}>

@@ -203,6 +203,25 @@ class ModSet {
       }
     }
 
+    if (Object.keys(summary).length === 0) {
+      summary = {
+        'Health': new Stat('Health', '0'),
+        'Protection': new Stat('Protection', '0'),
+        'Speed': new Stat('Speed', '0'),
+        'Critical Damage': new Stat('Critical Damage %', '0'),
+        'Potency': new Stat('Potency', '0'),
+        'Tenacity': new Stat('Tenacity', '0'),
+        'Physical Damage': new Stat('Physical Damage', '0'),
+        'Physical Critical Chance': new Stat('Physical Critical Chance %', '0'),
+        'Armor': new Stat('Armor', '0'),
+        'Special Damage': new Stat('Special Damage', '0'),
+        'Special Critical Chance': new Stat('Special Critical Chance %', '0'),
+        'Resistance': new Stat('Resistance', '0'),
+        'Accuracy': new Stat('Accuracy %', '0'),
+        'Critical Avoidance': new Stat('Critical Avoidance %', '0')
+      };
+    }
+
     // Update the summary for each stat from each complete mod set
     for (let setKey in setBonuses) {
       const setDescription = setBonuses[setKey];
