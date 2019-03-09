@@ -343,6 +343,10 @@ function optimizeMods(modsList, characters, order, changeThreshold) {
   order.forEach(characterID => {
     const character = characters[characterID];
 
+    if (character.optimizerSettings.isLocked) {
+      return;
+    }
+
     const {modSet: newModSetForCharacter, messages: characterMessages} =
       findBestModSetForCharacter(availableMods, character);
 
