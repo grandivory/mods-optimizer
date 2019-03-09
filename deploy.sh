@@ -46,7 +46,7 @@ fi
 git checkout ${REACT_APP_VERSION}
 
 # If the checkout failed, then stop the build
-if [ $? -ne 0 ]
+if [[ $? -ne 0 ]]
 then
   exit 1;
 fi
@@ -68,11 +68,12 @@ npm run build
 # Deploy the app to S3
 aws s3 sync --delete --profile grandivory build/ ${endpoint}
 
-# Make sure that index.html is not cached
+# Make sure that index.html and optimizer.js are not cached
 aws s3 cp --profile grandivory ${endpoint}/index.html ${endpoint}/index.html --cache-control no-store --metadata "{\"Cache-control\": \"no-cache\"}"
+aws s3 cp --profile grandivory ${endpoint}/workers/optimizer.js ${endpoint}/workers/optimizer.js --cache-control no-store --metadata "{\"Cache-control\": \"no-cache\"}"
 
 # Return to the previous working state
-if [ "${unstash}" = true ]
+if [[ "${unstash}" = true ]]
 then
   git stash pop
 fi
