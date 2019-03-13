@@ -726,8 +726,6 @@ function findBestModSetForCharacter(mods, character) {
       scoreModSet(rightSet, character) - scoreModSet(leftSet, character)
     );
 
-    debugger;
-
     // Return the best set and set of messages
     return candidateBestSets.shift();
   } else {
@@ -1089,7 +1087,11 @@ function findBestModSetWithoutChangingRestrictions(usableMods, character, setsTo
   const usedSets = Object.entries(setsToUse)
     .filter(([setName, count]) => count > 0).map(([setName]) => setName);
 
-  if (areSetsComplete(setsToUse)) {
+  const modSlotsOpen = 6 - Object.entries(setsToUse).reduce(
+    (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
+  );
+
+  if (0 === modSlotsOpen) {
     for (let setName of usedSets) {
       const setBonus = setBonuses[setName];
       potentialUsedSets.add(setBonus);
@@ -1097,10 +1099,6 @@ function findBestModSetWithoutChangingRestrictions(usableMods, character, setsTo
     setlessMods = null;
   } else {
     // Otherwise, use any set bonus with positive value that fits into the set restriction
-    const modSlotsOpen = 6 - Object.entries(setsToUse).reduce(
-      (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
-    );
-
     for (let setBonus of Object.values(setBonuses)) {
       if (setBonus.numberOfModsRequired <= modSlotsOpen &&
         scoreStat(setBonus.maxBonus, character.optimizerSettings.target) > 0
@@ -1376,57 +1374,118 @@ function getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse) {
     .filter(modSet => 2 === modSet.numberOfModsRequired)
     .map(set => set.name);
   const candidateSets = [];
-
-  // The base set
-  if (setlessMods) {
-    candidateSets.push(setlessMods);
+  const forcedSets = {4: [], 2: []};
+  for (let setName in setsToUse) {
+    for (let i = 0; i < setsToUse[setName]; i++) {
+      forcedSets[setBonuses[setName].numberOfModsRequired].push(setName);
+    }
   }
 
-  //TODO: Only look through sets that actually fulfill the set requirement
-  for (let firstSetType of fourModSets) {
-    let firstSet = baseSets[firstSetType];
+  let firstSet, secondSet, thirdSet;
 
-    // the whole set plus setless mods
-    if (setlessMods) {
-      candidateSets.push(...combineSets(firstSet, setlessMods));
-    }
+  // If there's a forced 4-mod set
+  if (forcedSets[4].length > 0) {
+    firstSet = baseSets[forcedSets[4][0]];
 
-    // the whole set plus any 2-mod set
-    for (let secondSetType of twoModSets) {
-      let secondSet = baseSets[secondSetType];
+    if (forcedSets[2].length > 0) {
+      // Every set is completely deterministic. Combine the first and second sets in every way possible
+      secondSet = baseSets[forcedSets[2][0]];
       candidateSets.push(...combineSets(firstSet, secondSet));
-    }
-  }
+    } else {
+      // The sets aren't completely deterministic. We need to check...
+      // The four-mod set plus setless mods
+      candidateSets.push(...combineSets(firstSet, setlessMods));
 
-  for (let i = 0; i < twoModSets.length; i++) {
-    let firstSet = baseSets[twoModSets[i]];
-
-    // the whole set plus setless mods
-    if (setlessMods) {
-      candidateSets.push(...combineSets(setlessMods, firstSet));
-    }
-
-    // the whole set plus a set of 4 from any 2-mod sets and the base set
-    for (let j = i; j < twoModSets.length; j++) {
-      let secondSet = baseSets[twoModSets[j]];
-
-      // the first set plus the second set plus setless mods
-      if (setlessMods) {
-        candidateSets.push(...combineSets(setlessMods, firstSet, secondSet));
+      // The four-mod set plus any two-mod sets with value
+      for (let secondSetType of twoModSets) {
+        secondSet = baseSets[secondSetType];
+        candidateSets.push(...combineSets(firstSet, secondSet));
       }
+    }
+  } else if (1 === forcedSets[2].length) {
+    // If there's exactly one forced 2-mod set, there should be 4 slots open
+    firstSet = baseSets[forcedSets[2][0]];
 
-      // the first set plus the second set plus another set
-      for (let k = j; k < twoModSets.length; k++) {
-        let thirdSet = baseSets[twoModSets[k]];
+    // The two-mod set plus setless mods
+    candidateSets.push(...combineSets(setlessMods, firstSet));
 
+    // The two-mod set plus any two two-mod sets with value
+    for (let i = 0; i < twoModSets.length; i++) {
+      secondSet = baseSets[twoModSets[i]];
+
+      // The forced set plus the second set plus setless mods
+      candidateSets.push(...combineSets(setlessMods, firstSet, secondSet));
+
+      for (let j = i; j < twoModSets.length; j++) {
+        thirdSet = baseSets[twoModSets[j]];
+
+        // The forced set plus the two other sets
         candidateSets.push(...combineSets(firstSet, secondSet, thirdSet));
       }
     }
+  } else if (2 === forcedSets[2].length) {
+    // With 2 forced 2-mod sets, there should be 2 slots open
+    firstSet = baseSets[forcedSets[2][0]];
+    secondSet = baseSets[forcedSets[2][1]];
+
+    // The two sets plus setless mods
+    candidateSets.push(...combineSets(firstSet, secondSet, setlessMods));
+
+    // The two sets plus any two-mod sets with value
+    for (let thirdSetType of twoModSets) {
+      thirdSet = baseSets[thirdSetType];
+      candidateSets.push(...combineSets(firstSet, secondSet, thirdSet));
+    }
+  } else if (3 === forcedSets[2].length) {
+    // Every set is deterministic
+    firstSet = baseSets[forcedSets[2][0]];
+    secondSet = baseSets[forcedSets[2][1]];
+    thirdSet = baseSets[forcedSets[2][2]];
+    candidateSets.push(...combineSets(firstSet, secondSet, thirdSet));
+  } else {
+    // If no sets are forced, we can check every possible combination
+    // The base set
+    candidateSets.push(setlessMods);
+
+    for (let firstSetType of fourModSets) {
+      let firstSet = baseSets[firstSetType];
+
+      // the whole set plus setless mods
+      candidateSets.push(...combineSets(firstSet, setlessMods));
+
+      // the whole set plus any 2-mod set
+      for (let secondSetType of twoModSets) {
+        let secondSet = baseSets[secondSetType];
+        candidateSets.push(...combineSets(firstSet, secondSet));
+      }
+    }
+
+    for (let i = 0; i < twoModSets.length; i++) {
+      let firstSet = baseSets[twoModSets[i]];
+
+      // the whole set plus setless mods
+      candidateSets.push(...combineSets(setlessMods, firstSet));
+
+      // the whole set plus a set of 4 from any 2-mod sets and the base set
+      for (let j = i; j < twoModSets.length; j++) {
+        let secondSet = baseSets[twoModSets[j]];
+
+        // the first set plus the second set plus setless mods
+        candidateSets.push(...combineSets(setlessMods, firstSet, secondSet));
+
+        // the first set plus the second set plus another set
+        for (let k = j; k < twoModSets.length; k++) {
+          let thirdSet = baseSets[twoModSets[k]];
+
+          candidateSets.push(...combineSets(firstSet, secondSet, thirdSet));
+        }
+      }
+    }
   }
 
-  // Filter out any sets that don't fit the set restriction
+  // Convert each modSet from an object to an array and remove any empty values
   const candidateSetsAsArrays = candidateSets.map(modSet => {
-    const modArray = Object.values(modSet)
+    const modArray = Object.values(modSet);
 
     for (let i = modArray.length - 1; i >= 0; i--) {
       if (!modArray[i]) {
@@ -1436,12 +1495,6 @@ function getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse) {
 
     return modArray;
   });
-
-  for (let i = candidateSetsAsArrays.length - 1; i >= 0; i--) {
-    if (!modSetFulfillsSetRestriction(candidateSetsAsArrays[i], setsToUse)) {
-      candidateSetsAsArrays.splice(i, i+1);
-    }
-  }
 
   return candidateSetsAsArrays;
 }
