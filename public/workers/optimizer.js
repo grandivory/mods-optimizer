@@ -257,6 +257,34 @@ function chooseFromArray(input, choices) {
   return combinations;
 }
 
+function areObjectsEquivalent(left, right) {
+  // If either object is null, then Object.getOwnPropertyNames will fail. Do these checks first
+  if (left === null) {
+    return right === null;
+  } else if (right === null) {
+    return false;
+  }
+
+  // Create arrays of property names
+  const leftProps = Object.getOwnPropertyNames(left);
+  const rightProps = Object.getOwnPropertyNames(right);
+
+  // If number of properties is different,
+  // objects are not equivalent
+  if (leftProps.length !== rightProps.length) {
+    return false;
+  }
+
+  // Check that every property is equivalent
+  return leftProps.every(propName => {
+    if (left[propName] instanceof Object) {
+      return areObjectsEquivalent(left[propName], right[propName]);
+    } else {
+      return left[propName] === right[propName];
+    }
+  });
+};
+
 /*********************************************************************************************************************
  * End of shitty code section                                                                                        *
  ********************************************************************************************************************/
@@ -328,20 +356,46 @@ function progressMessage(character, step, progress = 100) {
  * @param order Array[Character.baseID] The characters to optimize, in order
  * @param changeThreshold {Number} The % value that a new mod set has to improve upon the existing equipped mods
  *                                 before the optimizer will suggest changing it
- *
+ * @param previousRun {Object} The settings from the last time the optimizer was run, used to limit expensive
+ *                             recalculations for optimizing mods
  * @return {Object<String, ModSet>} An optimized set of mods, keyed by character base ID
  */
-function optimizeMods(modsList, characters, order, changeThreshold) {
+function optimizeMods(modsList, characters, order, changeThreshold, previousRun) {
   const assignedSets = {};
   const messages = {};
   const availableMods = modsList.filter(mod =>
     // Use any mod that isn't assigned or that is assigned to a character that isn't locked
     !mod.characterID || !characters[mod.characterID].optimizerSettings.isLocked
   );
+  let optimizationChanged = false;
+
 
   // For each not-locked character in the list, find the best mod set for that character
-  order.forEach(characterID => {
+  order.forEach((characterID, index) => {
     const character = characters[characterID];
+    const previousCharacter = previousRun.characters ? previousRun.characters[characterID] : null;
+    // For each character, check if the settings for the previous run were the same, and skip the character if so
+    if (
+      !optimizationChanged &&
+      changeThreshold === previousRun.threshold &&
+      previousRun.order &&
+      characterID === previousRun.order[index] &&
+      previousCharacter &&
+      previousCharacter.playerValues &&
+      areObjectsEquivalent(character.playerValues, previousCharacter.playerValues) &&
+      previousCharacter.optimizerSettings &&
+      areObjectsEquivalent(
+        character.optimizerSettings.target,
+        previousCharacter.optimizerSettings.target) &&
+      character.optimizerSettings.minimumModDots === previousCharacter.optimizerSettings.minimumModDots &&
+      character.optimizerSettings.sliceMods === previousCharacter.optimizerSettings.sliceMods &&
+      character.optimizerSettings.isLocked === previousCharacter.optimizerSettings.isLocked
+    ) {
+      console.log(`Skipping ${characterID}`);
+      return;
+    } else {
+      optimizationChanged = true;
+    }
 
     if (character.optimizerSettings.isLocked) {
       return;
@@ -1000,6 +1054,22 @@ function findBestModSetWithoutChangingRestrictions(usableMods, character, setsTo
   ));
   messages.push(...subMessages);
 
+  if (
+    squares.length === 1 &&
+    arrows.length === 1 &&
+    diamonds.length === 1 &&
+    triangles.length === 1 &&
+    circles.length === 1 &&
+    crosses.length === 1
+  ) {
+    const modSet = [squares[0], arrows[0], diamonds[0], triangles[0], circles[0], crosses[0]];
+    if (modSetFulfillsSetRestriction(modSet, setsToUse)) {
+      return {modSet: modSet, messages: messages};
+    } else {
+      return {modSet: null, messages: []};
+    }
+  }
+
   /**
    * Given a sorted array of mods, return either the first mod (if it has a non-negative score) or null. This allows
    * for empty slots on characters where the mods might be better used elsewhere.
@@ -1312,6 +1382,7 @@ function getCandidateSets(potentialUsedSets, baseSets, setlessMods, setsToUse) {
     candidateSets.push(setlessMods);
   }
 
+  //TODO: Only look through sets that actually fulfill the set requirement
   for (let firstSetType of fourModSets) {
     let firstSet = baseSets[firstSetType];
 

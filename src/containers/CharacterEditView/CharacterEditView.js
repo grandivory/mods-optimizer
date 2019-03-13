@@ -136,7 +136,8 @@ class CharacterEditView extends PureComponent {
           this.props.mods,
           this.props.allCharacters,
           this.props.selectedCharacters.map(c => c.baseID),
-          this.props.modChangeThreshold
+          this.props.modChangeThreshold,
+          this.props.previousSettings
         )}
         disabled={!this.props.selectedCharacters.length}
       >
@@ -278,7 +279,8 @@ const mapStateToProps = (state) => {
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
     selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id]),
-    showReviewButton: profile.modAssignments && Object.keys(profile.modAssignments).length
+    showReviewButton: profile.modAssignments && Object.keys(profile.modAssignments).length,
+    previousSettings: profile.previousSettings
   };
 };
 
@@ -294,7 +296,8 @@ const mapDispatchToProps = dispatch => ({
   unlockSelectedCharacters: () => dispatch(unlockSelectedCharacters()),
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
-  optimizeMods: (mods, characters, order, threshold) => dispatch(optimizeMods(mods, characters, order, threshold)),
+  optimizeMods: (mods, characters, order, threshold, previousRun) =>
+    dispatch(optimizeMods(mods, characters, order, threshold, previousRun)),
   updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold))
 });
 

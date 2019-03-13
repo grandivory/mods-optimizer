@@ -11,6 +11,7 @@ export default class PlayerProfile {
   selectedCharacters;
   modAssignments;
   modChangeThreshold;
+  previousSettings;
 
   /**
    * @param characters {Object<string, Character>} A map from character IDs to character objects
@@ -19,13 +20,23 @@ export default class PlayerProfile {
    * @param modAssignments {Object<string, Array<string>>} A map from Character ID to mod IDs
    * @param modChangeThreshold {Number} An improvement threshold, as integer percent over 100, that a new mod set needs
    *                                    to hit before it will be suggested as better by the optimizer
+   * @param previousSettings {Object} An object that holds the previous values for characters, mods, selectedCharacters,
+   *                                  and modChangeThreshold. If none of these have changed, then modAssignments
+   *                                  shouldn't change on a reoptimization.
    */
-  constructor(characters = {}, mods = [], selectedCharacters = [], modAssignments = {}, modChangeThreshold = 0) {
+  constructor(characters = {},
+              mods = [],
+              selectedCharacters = [],
+              modAssignments = {},
+              modChangeThreshold = 0,
+              previousSettings = {}
+  ) {
     this.characters = characters;
     this.mods = mods;
     this.selectedCharacters = selectedCharacters;
     this.modAssignments = modAssignments;
     this.modChangeThreshold = modChangeThreshold;
+    this.previousSettings = previousSettings;
   }
 
   withCharacters(characters) {
@@ -35,7 +46,8 @@ export default class PlayerProfile {
         this.mods,
         this.selectedCharacters,
         this.modAssignments,
-        this.modChangeThreshold
+        this.modChangeThreshold,
+        this.previousSettings
       );
     } else {
       return this;
@@ -49,7 +61,8 @@ export default class PlayerProfile {
         mods,
         this.selectedCharacters,
         this.modAssignments,
-        this.modChangeThreshold
+        this.modChangeThreshold,
+        this.previousSettings
       );
     } else {
       return this;
@@ -63,7 +76,8 @@ export default class PlayerProfile {
         this.mods,
         selectedCharacters,
         this.modAssignments,
-        this.modChangeThreshold
+        this.modChangeThreshold,
+        this.previousSettings
       );
     } else {
       return this;
@@ -77,7 +91,8 @@ export default class PlayerProfile {
         this.mods,
         this.selectedCharacters,
         modAssignments,
-        this.modChangeThreshold
+        this.modChangeThreshold,
+        this.previousSettings
       );
     } else {
       return this;
@@ -91,7 +106,23 @@ export default class PlayerProfile {
         this.mods,
         this.selectedCharacters,
         this.modAssignments,
-        modChangeThreshold
+        modChangeThreshold,
+        this.previousSettings
+      );
+    } else {
+      return this;
+    }
+  }
+
+  withPreviousSettings(previousSettings) {
+    if (null !== previousSettings) {
+      return new PlayerProfile(
+        this.characters,
+        this.mods,
+        this.selectedCharacters,
+        this.modAssignments,
+        this.modChangeThreshold,
+        previousSettings
       );
     } else {
       return this;
@@ -104,7 +135,8 @@ export default class PlayerProfile {
       mods: this.mods.map(mod => mod.serialize()),
       selectedCharacters: this.selectedCharacters,
       modAssignments: this.modAssignments,
-      modChangeThreshold: this.modChangeThreshold
+      modChangeThreshold: this.modChangeThreshold,
+      previousSettings: this.previousSettings
     };
   }
 
@@ -115,7 +147,8 @@ export default class PlayerProfile {
         profileJson.mods.map(Mod.deserialize),
         profileJson.selectedCharacters,
         profileJson.modAssignments,
-        profileJson.modChangeThreshold || 0
+        profileJson.modChangeThreshold || 0,
+        profileJson.previousSettings || {}
       )
     } else {
       return null;

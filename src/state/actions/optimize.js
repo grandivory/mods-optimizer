@@ -15,10 +15,12 @@ export function startModOptimization() {
   };
 }
 
-export function finishModOptimization(result) {
+export function finishModOptimization(result, order, settings) {
   return {
     type: FINISH_OPTIMIZE_MODS,
-    result: result
+    result: result,
+    order: order,
+    settings: settings
   };
 }
 
@@ -45,8 +47,10 @@ let optimizationWorker = null;
  * @param characters {Character.baseID => Character}
  * @param order Array[Character.baseID]
  * @param threshold {Number}
+ * @param previousSettings {Object} The settings from the last time the optimizer was run, used to limit
+ *                                  expensive recalculations for optimizing mods
  */
-export function optimizeMods(mods, characters, order, threshold) {
+export function optimizeMods(mods, characters, order, threshold, previousSettings) {
   return function(dispatch) {
     // If any of the characters being optimized don't have stats, then show an error message
     if (Object.values(characters)
@@ -69,7 +73,19 @@ export function optimizeMods(mods, characters, order, threshold) {
             optimizerProgressModal(null, 'Rendering your results', 100, dispatch)
           ));
           // Set a timeout so the modal has time to display
-          setTimeout(() => dispatch(finishModOptimization(message.data.result)), 0);
+          setTimeout(() =>
+            dispatch(finishModOptimization(
+              message.data.result,
+              order,
+              {
+                mods: mods,
+                characters: characters,
+                order: order,
+                threshold: threshold
+              }
+            )),
+           0
+          );
           break;
         case 'Progress':
           dispatch(showModal(
@@ -93,7 +109,8 @@ export function optimizeMods(mods, characters, order, threshold) {
       mods: mods,
       characters: characters,
       order: order,
-      threshold: threshold
+      threshold: threshold,
+      previousRun: previousSettings
     });
   };
 }
