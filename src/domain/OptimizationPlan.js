@@ -234,7 +234,7 @@ OptimizationPlan.statWeight = {
   'health': 2000,
   'protection': 4000,
   'speed': 20,
-  'critDmg': 40,
+  'critDmg': 30,
   'potency': 15,
   'tenacity': 15,
   'physDmg': 225,
