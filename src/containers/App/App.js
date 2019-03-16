@@ -276,7 +276,8 @@ class App extends PureComponent {
         </li>
         <li>
           Because optimization can sometimes take a very long time now, a button has been added to the character
-          selection screen to review previous recommendations.
+          selection screen to review previous recommendations. Additionally, re-running the optimizer will cause it to
+          try to skip as many characters as possible if their settings haven't changed.
         </li>
       </ul>
       <h3>Happy Modding!</h3>
