@@ -127,7 +127,7 @@ export function receiveProfile(state, action) {
     finalMods = Object.values(newMods);
   }
 
-  const newProfile = profile.withCharacters(newCharacters).withMods(finalMods);
+  const newProfile = profile.withCharacters(newCharacters).withMods(finalMods).resetPreviousSettings();
   const lastUpdate = new Date(action.profile.updated);
   const nextUpdate = new Date(lastUpdate.getTime() + 60 * 60 * 1000); // plus one hour
 

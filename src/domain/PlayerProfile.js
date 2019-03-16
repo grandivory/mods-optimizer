@@ -129,6 +129,20 @@ export default class PlayerProfile {
     }
   }
 
+  /**
+   * Create a new PlayerProfile with empty previous settings
+   */
+  resetPreviousSettings() {
+    return new PlayerProfile(
+      this.characters,
+      this.mods,
+      this.selectedCharacters,
+      this.modAssignments,
+      this.modChangeThreshold,
+      {}
+    );
+  }
+
   serialize() {
     return {
       characters: mapObject(this.characters, character => character.serialize()),
