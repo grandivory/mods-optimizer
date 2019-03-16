@@ -827,7 +827,7 @@ Object.freeze(chooseTwoOptions);
  *                             recalculations for optimizing mods
  * @return {Object<String, ModSet>} An optimized set of mods, keyed by character base ID
  */
-function optimizeMods(modsList, characters, order, changeThreshold, previousRun) {
+function optimizeMods(modsList, characters, order, changeThreshold, previousRun = {}) {
   const assignedSets = {};
   const messages = {};
   const availableMods = modsList.filter(mod =>
