@@ -16,18 +16,19 @@ export default class Character {
 
   /**
    * @param baseID String
-   * @param defaultSettings CharacterSettings The unchangeable default settings for a character, including its
-   *                                          damage type, default targets, and extra searchable tags
-   * @param gameSettings GameSettings The unchangeable settings for a character from in-game, including tags, name, etc.
-   * @param playerValues PlayerValues The player-specific character values from the game, like level, stars, etc.
-   * @param optimizerSettings OptimizerSettings Settings specific to the optimizer,
+   * @param defaultSettings {CharacterSettings} Deprecated. The unchangeable default settings for a character, including
+   *                                            its damage type, default targets, and extra searchable tags
+   * @param gameSettings {GameSettings} Deprecated. The unchangeable settings for a character from in-game, including
+   *                                    tags, name, etc.
+   * @param playerValues {PlayerValues} The player-specific character values from the game, like level, stars, etc.
+   * @param optimizerSettings {OptimizerSettings} Settings specific to the optimizer,
    *                                            such as what target to use, and whether to lock mods
    */
   constructor(baseID,
-    defaultSettings,
-    gameSettings = null,
-    playerValues = null,
-    optimizerSettings = null,
+              defaultSettings = null,
+              gameSettings = null,
+              playerValues = null,
+              optimizerSettings = null,
   ) {
     this.baseID = baseID;
     this.defaultSettings = defaultSettings;
@@ -36,17 +37,6 @@ export default class Character {
     this.optimizerSettings = optimizerSettings;
 
     Object.freeze(this);
-  }
-
-  /**
-   * Create a new character using only the static default settings
-   * @param baseID
-   */
-  static default(baseID) {
-    return new Character(
-      baseID,
-      characterSettings[baseID] || new CharacterSettings()
-    ).withGameSettings(new GameSettings(baseID));
   }
 
   /**
@@ -198,7 +188,7 @@ export default class Character {
    * Get a set of all targets that can be set for this character
    */
   targets() {
-    const defaultTargets = groupByKey(this.defaultSettings.targets, target => target.name);
+    const defaultTargets = groupByKey(characterSettings[this.baseID].targets, target => target.name);
     const playerTargets = groupByKey(this.optimizerSettings.targets, target => target.name);
 
     return Object.values(Object.assign({}, defaultTargets, playerTargets, {
@@ -213,29 +203,21 @@ export default class Character {
    */
   compareGP(that) {
     if (that.playerValues.galacticPower === this.playerValues.galacticPower) {
-      return this.gameSettings.name.localeCompare(that.gameSettings.name);
+      return this.baseID.localeCompare(that.baseID);
     }
     return that.playerValues.galacticPower - this.playerValues.galacticPower;
-  }
-
-  /**
-   * Checks whether this character matches a given filter string in name or tags
-   * @param filterString string The string to filter by
-   * @returns boolean
-   */
-  matchesFilter(filterString) {
-    return this.gameSettings.name.toLowerCase().includes(filterString) ||
-      (this.gameSettings.tags || []).concat(this.defaultSettings.extraTags || []).some(
-        tag => tag.toLowerCase().includes(filterString)
-      )
   }
 
   serialize() {
     let characterObject = {};
 
     characterObject.baseID = this.baseID;
-    characterObject.defaultSettings = this.defaultSettings.serialize();
-    characterObject.gameSettings = this.gameSettings ? this.gameSettings.serialize() : null;
+    if (this.defaultSettings) {
+      characterObject.defaultSettings = this.defaultSettings.serialize();
+    }
+    if (this.gameSettings) {
+      characterObject.gameSettings = this.gameSettings ? this.gameSettings.serialize() : null;
+    }
     characterObject.playerValues = this.playerValues ? this.playerValues.serialize() : null;
     characterObject.optimizerSettings = this.optimizerSettings ? this.optimizerSettings.serialize() : null;
 
@@ -245,8 +227,10 @@ export default class Character {
   static deserialize(characterJson) {
     return new Character(
       characterJson.baseID,
-      CharacterSettings.deserialize(characterJson.defaultSettings),
-      GameSettings.deserialize(characterJson.gameSettings),
+      characterJson.defaultSettings ? CharacterSettings.deserialize(characterJson.defaultSettings) : null,
+      characterJson.gameSettings ?
+        GameSettings.deserialize(Object.assign(characterJson.gameSettings, {baseID: characterJson.baseID})) :
+        null,
       PlayerValues.deserialize(characterJson.playerValues),
       OptimizerSettings.deserialize(characterJson.optimizerSettings)
     );

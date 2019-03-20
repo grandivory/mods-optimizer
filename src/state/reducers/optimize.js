@@ -32,7 +32,7 @@ export function finishOptimizeMods(state, action) {
             <tbody>
             {Object.values(mapObjectByKeyAndValue(action.result.messages, (characterID, messages) => {
               const character = state.profiles[state.allyCode].characters[characterID] ||
-                Character.default(characterID);
+                new Character(characterID);
               return <tr key={characterID}>
                 <td><CharacterAvatar character={character}/><br />{character.gameSettings.name}</td>
                 <td>
@@ -61,6 +61,7 @@ export function finishOptimizeMods(state, action) {
           newAssignments[character] = profile.modAssignments[character];
         }
       }
+      //TODO: Update this to store the last run in the database
       return profile.withModAssignments(newAssignments).withPreviousSettings(action.settings);
     },
     auxiliaryChanges

@@ -121,7 +121,7 @@ const getFilteredMods = memoize(
 );
 
 const mapStateToProps = (state) => {
-  const profile = state.profiles[state.allyCode];
+  const profile = state.profile;
   const mods = getFilteredMods(profile.mods, state.modsFilter, profile.characters);
 
   return {

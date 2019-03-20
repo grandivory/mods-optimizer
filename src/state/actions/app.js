@@ -1,4 +1,7 @@
 // @flow
+import {loadFromDb, loadProfile, populateDatabase, saveGameSettings, saveLastRuns, saveProfiles} from "./storage";
+import {deserializeState} from "../storage";
+
 export const CHANGE_SECTION = 'CHANGE_SECTION';
 export const SHOW_MODAL = 'SHOW_MODAL';
 export const HIDE_MODAL = 'HIDE_MODAL';
@@ -11,6 +14,7 @@ export const RESTORE_PROGRESS = 'RESTORE_PROGRESS';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const SWITCH_PROFILE = 'SWITCH_PROFILE';
 export const DELETE_PROFILE = 'DELETE_PROFILE';
+export const SET_STATE = 'SET_STATE';
 
 export function changeSection(newSection) {
   return {
@@ -68,10 +72,24 @@ export function reset() {
 }
 
 export function restoreProgress(progressData) {
-  return {
-    type: RESTORE_PROGRESS,
-    progressData: progressData
-  };
+  return function(dispatch) {
+    const stateObj = JSON.parse(progressData);
+    if (stateObj.version > '1.4') {
+      dispatch(saveGameSettings(stateObj.gameSettings));
+      dispatch(saveProfiles(stateObj.profiles));
+      dispatch(saveLastRuns(stateObj.lastRuns));
+      dispatch(switchProfile(stateObj.allyCode));
+    } else {
+      // Update the state to match the old file
+      dispatch(setState(deserializeState(stateObj)));
+      // Populate the database from the state by using the populateDatabase action
+      dispatch(populateDatabase());
+      // Reload the state from the database
+      dispatch(loadFromDb());
+      // Load up the current profile
+      dispatch(loadProfile());
+    }
+  }
 }
 
 export function toggleSidebar() {
@@ -91,5 +109,12 @@ export function deleteProfile(allyCode) {
   return {
     type: DELETE_PROFILE,
     allyCode: allyCode
+  };
+}
+
+export function setState(state) {
+  return {
+    type: SET_STATE,
+    state: state
   };
 }

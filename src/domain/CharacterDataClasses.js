@@ -51,12 +51,19 @@ class CharacterSettings {
  * Class to hold Character information that doesn't change, except with a game update.
  */
 class GameSettings {
+  baseID;
   name;
   avatarUrl;
   tags;
   description;
 
-  constructor(name, avatarUrl = '//swgoh.gg/static/img/assets/blank-character.png', tags = [], description = '') {
+  constructor(baseID,
+              name,
+              avatarUrl = '//swgoh.gg/static/img/assets/blank-character.png',
+              tags = [],
+              description = ''
+  ) {
+    this.baseID = baseID;
     this.name = name;
     this.avatarUrl = avatarUrl;
     this.tags = tags;
@@ -71,6 +78,7 @@ class GameSettings {
   static deserialize(settingsJson) {
     if (settingsJson) {
       return new GameSettings(
+        settingsJson.baseID,
         settingsJson.name,
         settingsJson.avatarUrl,
         settingsJson.tags,

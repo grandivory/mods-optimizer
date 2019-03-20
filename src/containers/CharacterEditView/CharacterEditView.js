@@ -21,6 +21,7 @@ import {optimizeMods} from "../../state/actions/optimize";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import {changeOptimizerView} from "../../state/actions/review";
+import characterSettings from "../../constants/characterSettings";
 
 class CharacterEditView extends PureComponent {
   dragStart(character) {
@@ -174,7 +175,7 @@ class CharacterEditView extends PureComponent {
            onDoubleClick={() => this.props.selectCharacter(character.baseID)}>
         <CharacterAvatar character={character}/>
       </div>
-      <div className={'character-name'}>{character.gameSettings.name}</div>
+      <div className={'character-name'}>{this.props.gameSettings[character.baseID].name || ''}</div>
     </div>;
   }
 
@@ -263,19 +264,30 @@ class CharacterEditView extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  const profile = state.profiles[state.allyCode];
+  const profile = state.profile;
   const availableCharacters = Object.values(profile.characters)
     .filter(character => !profile.selectedCharacters.includes(character.baseID))
     .sort((left, right) => left.compareGP(right));
 
+  /**
+   * Checks whether a character matches the filter string in name or tags
+   * @param character {Character} The character to check
+   * @returns boolean
+   */
   const characterFilter = character =>
-    '' === state.characterFilter || character.matchesFilter(state.characterFilter);
+    '' === state.characterFilter ||
+    state.gameSettings[character.baseID].name.toLowerCase().includes(state.characterFilter) ||
+    (state.gameSettings[character.baseID].tags || [])
+      .concat(characterSettings[character.baseID] ? characterSettings[character.baseID].extraTags : []).some(
+      tag => tag.toLowerCase().includes(state.characterFilter)
+    );
 
   return {
     allCharacters: profile.characters,
     mods: profile.mods,
     modChangeThreshold: profile.modChangeThreshold,
     characterFilter: state.characterFilter,
+    gameSettings: state.gameSettings,
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
     selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id]),

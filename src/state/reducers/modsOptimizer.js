@@ -8,6 +8,7 @@ import {
   HIDE_MODAL,
   RESET,
   RESTORE_PROGRESS,
+  SET_STATE,
   SHOW_ERROR,
   SHOW_FLASH,
   SHOW_MODAL,
@@ -43,7 +44,6 @@ import {
   REQUEST_CHARACTERS,
   REQUEST_PROFILE,
   REQUEST_STATS,
-  SET_MODS,
   TOGGLE_KEEP_OLD_MODS
 } from "../actions/data";
 import {CHANGE_MODS_FILTER} from "../actions/explore";
@@ -70,7 +70,7 @@ import {
   hideFlash,
   hideModal,
   reset,
-  restoreProgress,
+  restoreProgress, setState,
   showError,
   showFlash,
   showModal,
@@ -121,6 +121,32 @@ import {
   unequipMod,
   unequipMods
 } from "./review";
+import {
+  LOAD_FROM_DB,
+  LOAD_PROFILE,
+  POPULATE_DATABASE,
+  SAVE_DATABSE,
+  SAVE_GAME_SETTINGS,
+  SAVE_LAST_RUNS,
+  SAVE_PROFILES,
+  SET_DATABASE,
+  SET_GAME_SETTINGS,
+  SET_PROFILE,
+  SET_PROFILES
+} from "../actions/storage";
+import {
+  loadFromDb,
+  loadProfile,
+  populateDatabase,
+  saveDatabase,
+  saveGameSettings,
+  saveLastRuns,
+  saveProfiles,
+  setDatabase,
+  setGameSettings,
+  setProfile,
+  setProfiles
+} from "./storage";
 
 /**
  * Update the currently-selected character profile by calling an update function on the existing profile. Optionally
@@ -145,7 +171,34 @@ export default function modsOptimizer(state, action) {
     return saveState(restoreState());
   }
 
+  console.log(action);
+
+  // TODO: Make sure that all state modifiers use the proper state format and the database where needed
   switch (action.type) {
+    case LOAD_PROFILE:
+      return loadProfile(state, action);
+    case LOAD_FROM_DB:
+      return loadFromDb(state, action);
+    case POPULATE_DATABASE:
+      return saveState(populateDatabase(state, action));
+    case SAVE_DATABSE:
+      return saveDatabase(state, action);
+    case SAVE_GAME_SETTINGS:
+      return saveGameSettings(state, action);
+    case SAVE_PROFILES:
+      return saveProfiles(state, action);
+    case SAVE_LAST_RUNS:
+      return saveLastRuns(state, action);
+    case SET_DATABASE:
+      return setDatabase(state, action);
+    case SET_GAME_SETTINGS:
+      return setGameSettings(state, action);
+    case SET_PROFILE:
+      return saveState(setProfile(state, action));
+    case SET_PROFILES:
+      return setProfiles(state, action);
+
+
     case CHANGE_SECTION:
       return saveState(changeSection(state, action));
     case SHOW_MODAL:
@@ -170,6 +223,8 @@ export default function modsOptimizer(state, action) {
       return saveState(switchProfile(state, action));
     case DELETE_PROFILE:
       return saveState(deleteProfile(state, action));
+    case SET_STATE:
+      return saveState(setState(state, action));
 
     case SELECT_CHARACTER:
       return saveState(selectCharacter(state, action));
@@ -226,8 +281,6 @@ export default function modsOptimizer(state, action) {
       return saveState(receiveStats(state, action));
     case TOGGLE_KEEP_OLD_MODS:
       return saveState(toggleKeepOldMods(state, action));
-    case SET_MODS:
-      return saveState(setMods(state, action));
 
     case CHANGE_MODS_FILTER:
       return saveState(changeModsFilter(state, action));

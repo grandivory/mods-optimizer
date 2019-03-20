@@ -2,6 +2,7 @@
 
 import React from 'react';
 import './CharacterAvatar.css';
+import {connect} from "react-redux";
 
 class CharacterAvatar extends React.PureComponent {
   render() {
@@ -29,13 +30,11 @@ class CharacterAvatar extends React.PureComponent {
       <div
         className={className}
         id={id}>
-        {displayStars &&
-        [1, 2, 3, 4, 5, 6, 7].map(star)
-        }
+        {displayStars && [1, 2, 3, 4, 5, 6, 7].map(star)}
         <img
-          src={character.gameSettings.avatarUrl}
-          alt={character.gameSettings.name}
-          title={character.gameSettings.name}
+          src={this.props.gameSettings[character.baseID].avatarUrl}
+          alt={this.props.gameSettings[character.baseID].name}
+          title={this.props.gameSettings[character.baseID].name}
           draggable={false}/>
         {displayLevel && <div className={'character-level'}>{character.playerValues.level || '??'}</div>}
       </div>
@@ -47,4 +46,8 @@ class CharacterAvatar extends React.PureComponent {
   }
 }
 
-export default CharacterAvatar;
+const mapStateToProps = state => ({
+  gameSettings: state.gameSettings
+});
+
+export default connect(mapStateToProps, () => ({}))(CharacterAvatar);

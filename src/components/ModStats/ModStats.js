@@ -50,7 +50,7 @@ class ModStats extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-  characters: state.profiles[state.allyCode].characters
+  characters: state.profile.characters
 });
 
 const mapDispatchToProps = () => ({});

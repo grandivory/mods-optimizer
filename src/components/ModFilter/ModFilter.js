@@ -507,7 +507,7 @@ class ModFilter extends React.PureComponent {
 
 const mapStateToProps = (state) => ({
   filter: state.modsFilter,
-  mods: state.profiles[state.allyCode].mods
+  mods: state.profile.mods
 });
 
 const mapDispatchToProps = (dispatch) => ({

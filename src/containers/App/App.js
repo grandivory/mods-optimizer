@@ -11,7 +11,6 @@ import Spinner from "../../components/Spinner/Spinner";
 import {connect} from "react-redux";
 import formatAllyCode from "../../utils/formatAllyCode";
 import ErrorModal from "../ErrorModal/ErrorModal";
-import {serializeState} from "../../state/storage";
 import {
   changeSection,
   deleteProfile,
@@ -22,9 +21,10 @@ import {
   showModal,
   switchProfile
 } from "../../state/actions/app";
-import {refreshPlayerData, setMods, toggleKeepOldMods} from "../../state/actions/data";
+import {refreshPlayerData, toggleKeepOldMods} from "../../state/actions/data";
 import FlashMessage from "../../components/Modal/FlashMessage";
 import {saveAs} from 'file-saver';
+import {saveDatabase} from "../../state/actions/storage";
 
 class App extends PureComponent {
 
@@ -124,7 +124,7 @@ class App extends PureComponent {
       </nav>
       }
       <div className={'actions'}>
-        <label htmlFor={'ally-code'}>Ally code:</label>
+        <label htmlFor={'ally-code'}>{this.props.allyCode ? 'Player' : 'Ally code'}:</label>
         {/* If there is no active ally code, then show the regular input field */}
         {!this.props.allyCode &&
         <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodyInput = input}
@@ -159,8 +159,8 @@ class App extends PureComponent {
                 this.props.switchProfile(e.target.value);
               }
             }}>
-            {this.props.allyCodes.map(allyCode =>
-              <option key={allyCode} value={allyCode}>{formatAllyCode(allyCode)}</option>
+            {Object.entries(this.props.playerProfiles).map(([allyCode, playerName]) =>
+              <option key={allyCode} value={allyCode}>{playerName}</option>
             )}
             <option key={'new'} value={''}>New Code...</option>
           </select>
@@ -190,8 +190,13 @@ class App extends PureComponent {
         <FileInput label={'Restore my progress'} handler={(file) => this.readFile(file, this.props.restoreProgress)}/>
         {showActions &&
         <button type={'button'} onClick={() => {
-          const userData = new Blob([this.props.progressData], {type: 'application/json;charset=utf-8'});
-          saveAs(userData, `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}`);
+          this.props.saveDatabase(progressData => {
+            progressData.version = this.props.version;
+            progressData.allyCode = this.props.allyCode;
+            const progressDataSerialized = JSON.stringify(progressData);
+            const userData = new Blob([progressDataSerialized], {type: 'application/json;charset=utf-8'});
+            saveAs(userData, `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`);
+          });
         }}>
           Save my progress
         </button>
@@ -369,10 +374,11 @@ class App extends PureComponent {
   }
 }
 
+//TODO: Look over every mapStateToProps and mapDispatchToProps to make sure only the current state format is used
+
 const mapStateToProps = (state) => {
   const appProps = {
     allyCode: state.allyCode,
-    allyCodes: Object.keys(state.profiles),
     error: state.error,
     isBusy: state.isBusy,
     keepOldMods: state.keepOldMods,
@@ -380,14 +386,14 @@ const mapStateToProps = (state) => {
     modalClass: state.modal ? state.modal.class : '',
     modalContent: state.modal ? state.modal.content : '',
     isModalCancelable: state.modal && state.modal.cancelable,
+    playerProfiles: state.playerProfiles,
     previousVersion: state.previousVersion,
-    progressData: JSON.stringify(serializeState(state)),
     section: state.section,
     version: state.version
   };
 
-  if (state.allyCode) {
-    appProps.profile = state.profiles[state.allyCode]
+  if (state.profile) {
+    appProps.profile = state.profile;
   }
 
   return appProps;
@@ -402,9 +408,9 @@ const mapDispatchToProps = dispatch => ({
   toggleKeepOldMods: () => dispatch(toggleKeepOldMods()),
   reset: () => dispatch(reset()),
   restoreProgress: (progressData) => dispatch(restoreProgress(progressData)),
-  setMods: (modsData) => dispatch(setMods(modsData)),
   switchProfile: (allyCode) => dispatch(switchProfile(allyCode)),
-  deleteProfile: (allyCode) => dispatch(deleteProfile(allyCode))
+  deleteProfile: (allyCode) => dispatch(deleteProfile(allyCode)),
+  saveDatabase: (callback) => dispatch(saveDatabase(callback))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

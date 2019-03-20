@@ -7,6 +7,7 @@ import {applyMiddleware, createStore} from "redux";
 import thunkMiddleware from "redux-thunk";
 import {Provider} from "react-redux";
 import modsOptimizer from "./state/reducers/modsOptimizer";
+import Database from "./state/storage/Database";
 
 const store = createStore(
   modsOptimizer,
@@ -14,6 +15,9 @@ const store = createStore(
     thunkMiddleware
   )
 );
+
+// Instantiate the database
+new Database(store.dispatch);
 
 ReactDOM.render(
   <Provider store={store}>

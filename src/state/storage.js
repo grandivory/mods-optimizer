@@ -2,13 +2,13 @@
  * Save the state of the application to localStorage
  * @param state Object
  */
-import {mapObject, mapObjectByKey, mapObjectByKeyAndValue} from "../utils/mapObject";
+import {mapObject, mapObjectByKeyAndValue} from "../utils/mapObject";
 import Character from "../domain/Character";
-import characterSettings from "../constants/characterSettings";
 import PlayerProfile from "../domain/PlayerProfile";
 import groupByKey from "../utils/groupByKey";
 import Mod from "../domain/Mod";
 import cleanAllyCode from "../utils/cleanAllyCode";
+import formatAllyCode from "../utils/formatAllyCode";
 
 /**
  * Save the state of the application to localStorage, then return it so it can be chained
@@ -16,7 +16,26 @@ import cleanAllyCode from "../utils/cleanAllyCode";
  * @returns {*}
  */
 export function saveState(state) {
-  const storedState = serializeState(state);
+  const savedKeys = [
+    'allyCode',
+    'characterFilter',
+    'characterEditMode',
+    'keepOldMods',
+    'modsFilter',
+    'modSetsFilter',
+    'modListFilter',
+    'optimizerView',
+    'section',
+    'showSidebar',
+    'version'
+  ];
+  const reducedState = Object.assign({}, state);
+  for (let key of Object.keys(state)) {
+    if (!savedKeys.includes(key)) {
+      delete reducedState[key];
+    }
+  }
+  const storedState = serializeState(reducedState);
   window.localStorage.setItem('optimizer.state', JSON.stringify(storedState));
   return state;
 }
@@ -24,10 +43,11 @@ export function saveState(state) {
 export const defaultState = {
   allyCode: '',
   characterFilter: '',
-  characters: mapObjectByKey(characterSettings, baseID => Character.default(baseID)),
   characterEditMode: 'basic',
+  db: null,
   error: null,
   flashMessage: null,
+  gameSettings: {},
   isBusy: false,
   keepOldMods: true,
   modal: null,
@@ -49,8 +69,9 @@ export const defaultState = {
     tag: null
   },
   optimizerView: 'edit',
+  playerProfiles: {}, // A simple map from ally codes to player names for all available profiles
   previousVersion: process.env.REACT_APP_VERSION || 'local',
-  profiles: {},
+  profile: null, // All the data about the current character
   section: 'optimize',
   showSidebar: true,
   version: process.env.REACT_APP_VERSION || 'local'
@@ -91,8 +112,6 @@ export function restoreState() {
   }
 }
 
-const ignoredStateKeys = ['error', 'flashMessage', 'isBusy', 'modal', 'optimizerProgres', 'previousVersion'];
-
 /**
  * Convert the state from an in-memory representation to a serialized representation
  * @param state {object}
@@ -105,9 +124,9 @@ export function serializeState(state) {
   } else if (state instanceof Array) {
     return state.map(item => serializeState(item));
   } else if (state instanceof Object) {
-    return mapObjectByKeyAndValue(
+    return mapObject(
       state,
-      (key, value) => !ignoredStateKeys.includes(key) ? serializeState(value) : null
+      stateValue => serializeState(stateValue)
     );
   } else {
     return state;
@@ -122,21 +141,34 @@ export function deserializeState(state) {
   const version = process.env.REACT_APP_VERSION || 'local';
 
   return Object.assign({}, defaultState, {
-    allyCode: state.allyCode,
-    characterEditMode: state.characterEditMode || defaultState.characterEditMode,
-    characterFilter: state.characterFilter || defaultState.characterFilter,
-    characters: mapObject(state.characters, (character) => Character.deserialize(character, version)),
-    keepOldMods: state.keepOldMods,
-    modsFilter: Object.assign({}, defaultState.modsFilter, state.modsFilter),
-    modListFilter: state.modListFilter || defaultState.modListFilter,
-    modSetsFilter: state.modSetsFilter || defaultState.modSetsFilter,
-    optimizerView: state.optimizerView || defaultState.optimizerView,
-    previousVersion: state.version,
-    profiles: mapObject(state.profiles, PlayerProfile.deserialize),
-    section: state.section,
-    showSidebar: 'undefined' !== typeof state.showSidebar ? state.showSidebar : defaultState.showSidebar,
-    version: version
-  });
+      allyCode: state.allyCode,
+      characterEditMode: state.characterEditMode || defaultState.characterEditMode,
+      characterFilter: state.characterFilter || defaultState.characterFilter,
+      keepOldMods: state.keepOldMods,
+      modsFilter: Object.assign({}, defaultState.modsFilter, state.modsFilter),
+      modListFilter: state.modListFilter || defaultState.modListFilter,
+      modSetsFilter: state.modSetsFilter || defaultState.modSetsFilter,
+      optimizerView: state.optimizerView || defaultState.optimizerView,
+      previousVersion: state.version,
+      section: state.section,
+      showSidebar: 'undefined' !== typeof state.showSidebar ? state.showSidebar : defaultState.showSidebar,
+      version: version
+    },
+    state.profiles ?
+      {
+        profiles: mapObjectByKeyAndValue(state.profiles, (allyCode, profile) => {
+          profile.allyCode = allyCode;
+          profile.playerName = formatAllyCode(allyCode);
+          return PlayerProfile.deserialize(profile);
+        })
+      } :
+      null,
+    state.characters ?
+      {
+        characters: mapObject(state.characters, (character) => Character.deserialize(character, version))
+      } :
+      null
+  );
 }
 
 /**
@@ -161,10 +193,14 @@ export function deserializeStateVersionOneTwo(allyCode, availableCharacters, sel
 
   return Object.assign({}, defaultState, {
     allyCode: playerAllyCode,
-    characters: mapObject(playerCharacters, char => new Character(char.baseID, char.defaultSettings, char.gameSettings)),
+    characters: mapObject(
+      playerCharacters,
+      char => new Character(char.baseID, char.defaultSettings, char.gameSettings)
+    ),
     previousVersion: '1.2',
     profiles: {
-      [playerAllyCode]: new PlayerProfile(playerCharacters, playerMods, playerSelectedCharacters)
+      [playerAllyCode]:
+        new PlayerProfile(playerAllyCode, playerAllyCode, playerCharacters, playerMods, playerSelectedCharacters)
     },
     version: version
   });

@@ -1,14 +1,12 @@
 // @flow
 
-import {mapObject, mapObjectByKeyAndValue} from "../../utils/mapObject";
+import {mapObjectByKeyAndValue} from "../../utils/mapObject";
 import characterSettings from "../../constants/characterSettings";
 import {GameSettings, OptimizerSettings} from "../../domain/CharacterDataClasses";
 import Character from "../../domain/Character";
 import groupByKey from "../../utils/groupByKey";
 import PlayerProfile from "../../domain/PlayerProfile";
 import CharacterStats, {NullCharacterStats} from "../../domain/CharacterStats";
-import Mod from "../../domain/Mod";
-import {updateCurrentProfile} from "./modsOptimizer";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import React from "react";
 
@@ -19,16 +17,8 @@ export function toggleKeepOldMods(state, action) {
 }
 
 export function requestCharacters(state, action) {
-  // First, update all existing characters with their current default settings
-  // Then, set the app to busy so that it can fetch the new character data
-  return Object.assign({}, state, {
-      characters: mapObject(
-        state.characters,
-        character => character.withDefaultSettings(characterSettings[character.baseID])
-      )
-    },
-    {isBusy: true}
-  );
+  // Set the app to busy so that it can fetch the new character data
+  return Object.assign({}, state, {isBusy: true});
 }
 
 /**
@@ -44,10 +34,9 @@ export function receiveCharacters(state, action) {
     });
   }
 
-  let newCharacters = {};
-
-  action.characters.forEach(character => {
-    const gameSettings = new GameSettings(
+  const gameSettings = action.characters.map(character => {
+    return new GameSettings(
+      character.base_id,
       character.name,
       character.image,
       character.categories
@@ -55,18 +44,11 @@ export function receiveCharacters(state, action) {
         .concat(null !== character.ship_slot ? ['Crew Member'] : []),
       character.description
     );
-
-    if (state.characters.hasOwnProperty(character.base_id)) {
-      newCharacters[character.base_id] = state.characters[character.base_id].withGameSettings(gameSettings);
-    } else {
-      newCharacters[character.base_id] = Character.default(character.base_id).withGameSettings(gameSettings);
-    }
   });
 
-  return Object.assign({}, state, {
-    isBusy: false,
-    characters: newCharacters
-  })
+  state.db.saveGameSettings(gameSettings);
+
+  return state;
 }
 
 export function requestProfile(state, action) {
@@ -87,76 +69,85 @@ export function receiveProfile(state, action) {
     });
   }
 
-  const profile = state.profiles[action.allyCode] || new PlayerProfile();
+  state.db.getProfile(action.allyCode, dbProfile => {
+    const oldProfile = dbProfile ?
+      dbProfile.withPlayerName(action.profile.name) :
+      new PlayerProfile(action.allyCode, action.profile.name);
+    // Collect the new character objects by combining the default characters with the player values from the action
+    // and the optimizer settings from the current profile.
+    const newCharacters = mapObjectByKeyAndValue(action.profile.characters, (id, playerValues) => {
+      if (oldProfile.characters.hasOwnProperty(id)) {
+        return oldProfile.characters[id]
+          .withPlayerValues(playerValues)
+          .withOptimizerSettings(oldProfile.characters[id].optimizerSettings);
+      } else {
+        return (new Character(id))
+          .withPlayerValues(playerValues)
+          .withOptimizerSettings(new OptimizerSettings(
+            characterSettings[id] ? characterSettings[id].targets[0] : new OptimizationPlan(),
+            [],
+            state.gameSettings[id] && state.gameSettings[id].tags.includes('Crew Member') ? 5 : 1,
+            false,
+            false
+          ));
+      }
+    });
 
-  // Collect the new character objects by combining the default characters with the player values from the action
-  // and the optimizer settings from the current profile.
-  const newCharacters = mapObjectByKeyAndValue(action.profile.characters, (id, playerValues) => {
-    const character = state.characters.hasOwnProperty(id) ?
-      state.characters[id].withPlayerValues(playerValues) :
-      Character.default(id).withPlayerValues(playerValues);
+    // Then, update the mods by deserializing each one
+    const newMods = groupByKey(action.profile.mods, mod => mod.id);
 
-    if (profile.characters.hasOwnProperty(id)) {
-      return character.withOptimizerSettings(profile.characters[id].optimizerSettings);
+    // If "Remember Existing Mods" is selected, then only overwrite the mods we see in this profile
+    let finalMods;
+
+    if (state.keepOldMods) {
+      const oldMods = oldProfile.mods.reduce((mods, mod) => {
+        mods[mod.id] = mod.unequip();
+        return mods;
+      }, {});
+
+      finalMods = Object.values(Object.assign({}, oldMods, newMods));
     } else {
-      // If there are no optimizer settings for this character yet, then set reasonable defaults
-      return character.withOptimizerSettings(new OptimizerSettings(
-        character.defaultSettings.targets[0] || new OptimizationPlan(),
-        [],
-        character.gameSettings.tags.includes('Crew Member') ? 5 : 1,
-        false,
-        false
-      ));
+      finalMods = Object.values(newMods);
     }
+
+    const newProfile = oldProfile.withCharacters(newCharacters).withMods(finalMods);
+    state.db.saveProfile(newProfile);
+    state.db.deleteLastRun(newProfile.allyCode);
   });
 
-  // Then, update the mods by deserializing each one
-  const newMods = groupByKey(action.profile.mods, mod => mod.id);
-
-  // If "Remember Existing Mods" is selected, then only overwrite the mods we see in this profile
-  let finalMods;
-
-  if (state.keepOldMods) {
-    const oldMods = profile.mods.reduce((mods, mod) => {
-      mods[mod.id] = mod.unequip();
-      return mods;
-    }, {});
-
-    finalMods = Object.values(Object.assign({}, oldMods, newMods));
-  } else {
-    finalMods = Object.values(newMods);
-  }
-
-  const newProfile = profile.withCharacters(newCharacters).withMods(finalMods).resetPreviousSettings();
   const lastUpdate = new Date(action.profile.updated);
   const nextUpdate = new Date(lastUpdate.getTime() + 60 * 60 * 1000); // plus one hour
 
   return Object.assign({}, state, {
-    isBusy: false,
+    // isBusy: false,
     allyCode: action.allyCode,
-    profiles: Object.assign({}, state.profiles, {
-      [action.allyCode]: newProfile
-    }),
     optimizerView: 'edit',
     flashMessage: {
-      heading: 'Success!',
-      content: [
-        <p key={0}>
-          Successfully pulled data for <span className={'gold'}>{Object.keys(action.profile.characters).length}
+      heading: action.messages.length ? 'API Errors' : 'Success!',
+      content:
+        (action.messages.length ? [
+          <div className={'errors'} key={0}>
+            {action.messages.map((message, index) => <p key={index}>{message}</p>)}
+          </div>
+        ] : []).concat([
+          <p key={100}>
+            Successfully pulled data for <span className={'gold'}>{Object.keys(action.profile.characters).length}
           </span> characters and <span className={'gold'}>{action.profile.mods.length}</span> mods.</p>,
-        <p key={1}>Your data was last updated as of <span className={'gold'}>{lastUpdate.toLocaleString()}</span>.</p>,
-        <p key={2}>You should be able to fetch fresh data any time after <span className={'gold'}>
+          <p key={101}>Your data was last updated as of <span className={'gold'}>{lastUpdate.toLocaleString()}</span>.
+          </p>,
+          <p key={102}>You should be able to fetch fresh data any time after <span className={'gold'}>
           {nextUpdate.toLocaleString()}</span>
-        </p>,
-        <hr key={3} />,
-        <h3 key={4}><strong>
-          Remember: The optimizer can only pull data for mods that you currently have equipped!
-        </strong></h3>,
-        <p key={5}>
-          If it looks like you're missing mods, try equipping them on your characters and fetching data again after the
-          time listed above.
-        </p>,
-        ]
+          </p>,
+          <hr key={103}/>,
+          <h3 key={104}><strong>
+            Remember: The optimizer can only pull data for mods that you currently have equipped!
+          </strong></h3>,
+          <p key={105}>
+            If it looks like you're missing mods, try equipping them on your characters and fetching data again after
+            the
+            time listed above.
+          </p>,
+        ])
     }
   });
 }
@@ -179,58 +170,59 @@ export function receiveStats(state, action) {
     });
   }
 
-  const profile = state.profiles[action.allyCode];
+  state.db.getProfile(action.allyCode, oldProfile => {
+    const newProfile = oldProfile.withCharacters(
+      action.stats.reduce((characters, statObject) => {
+        const character = oldProfile.characters[statObject.unit.defId];
 
-  const newProfile = profile.withCharacters(
-    action.stats.reduce((characters, statObject) => {
-      const character = profile.characters[statObject.unit.defId];
+        const baseStats = statObject.stats.base ?
+          new CharacterStats(
+            statObject.stats.base['Health'] || 0,
+            statObject.stats.base['Protection'] || 0,
+            statObject.stats.base['Speed'] || 0,
+            statObject.stats.base['Potency'] || 0,
+            statObject.stats.base['Tenacity'] || 0,
+            statObject.stats.base['Physical Damage'] || 0,
+            statObject.stats.base['Physical Critical Rating'] || 0,
+            statObject.stats.base['Armor'] || 0,
+            statObject.stats.base['Special Damage'] || 0,
+            statObject.stats.base['Special Critical Rating'] || 0,
+            statObject.stats.base['Resistance'] || 0
+          ) :
+          NullCharacterStats;
 
-      const baseStats = statObject.stats.base ?
-        new CharacterStats(
-          statObject.stats.base['Health'] || 0,
-          statObject.stats.base['Protection'] || 0,
-          statObject.stats.base['Speed'] || 0,
-          statObject.stats.base['Potency'] || 0,
-          statObject.stats.base['Tenacity'] || 0,
-          statObject.stats.base['Physical Damage'] || 0,
-          statObject.stats.base['Physical Critical Rating'] || 0,
-          statObject.stats.base['Armor'] || 0,
-          statObject.stats.base['Special Damage'] || 0,
-          statObject.stats.base['Special Critical Rating'] || 0,
-          statObject.stats.base['Resistance'] || 0
-        ) :
-        NullCharacterStats;
+        let equippedStats = NullCharacterStats;
 
-      let equippedStats = NullCharacterStats;
+        if (statObject.stats.gear) {
+          const gearStats = new CharacterStats(
+            statObject.stats.gear['Health'] || 0,
+            statObject.stats.gear['Protection'] || 0,
+            statObject.stats.gear['Speed'] || 0,
+            statObject.stats.gear['Potency'] || 0,
+            statObject.stats.gear['Tenacity'] || 0,
+            statObject.stats.gear['Physical Damage'] || 0,
+            statObject.stats.gear['Physical Critical Rating'] || 0,
+            statObject.stats.gear['Armor'] || 0,
+            statObject.stats.gear['Special Damage'] || 0,
+            statObject.stats.gear['Special Critical Rating'] || 0,
+            statObject.stats.gear['Resistance'] || 0
+          );
+          equippedStats = baseStats.plus(gearStats);
+        }
 
-      if (statObject.stats.gear) {
-        const gearStats = new CharacterStats(
-          statObject.stats.gear['Health'] || 0,
-          statObject.stats.gear['Protection'] || 0,
-          statObject.stats.gear['Speed'] || 0,
-          statObject.stats.gear['Potency'] || 0,
-          statObject.stats.gear['Tenacity'] || 0,
-          statObject.stats.gear['Physical Damage'] || 0,
-          statObject.stats.gear['Physical Critical Rating'] || 0,
-          statObject.stats.gear['Armor'] || 0,
-          statObject.stats.gear['Special Damage'] || 0,
-          statObject.stats.gear['Special Critical Rating'] || 0,
-          statObject.stats.gear['Resistance'] || 0
-        );
-        equippedStats = baseStats.plus(gearStats);
-      }
+        characters[statObject.unit.defId] =
+          character.withPlayerValues(character.playerValues.withBaseStats(baseStats).withEquippedStats(equippedStats));
 
-      characters[statObject.unit.defId] =
-        character.withPlayerValues(character.playerValues.withBaseStats(baseStats).withEquippedStats(equippedStats));
+        return characters;
+      }, {})
+    );
 
-      return characters;
-    }, {})
-  );
+    state.db.saveProfile(newProfile);
+  });
 
-  const errorCharacters = Object.keys(profile.characters).filter(charID =>
-    !Object.keys(newProfile.characters).includes(charID) ||
-    newProfile.characters[charID].playerValues.baseStats === NullCharacterStats
-  ).map(charID => state.characters[charID].gameSettings.name);
+  const errorCharacters = action.requestedCharacters.filter(charID =>
+    !action.stats.map(stats => stats.unit.defId).includes(charID)
+  ).map(charID => state.gameSettings[charID].name);
 
   const errorMessage = errorCharacters.length > 0 ?
     'Missing stats for characters: ' + errorCharacters.join(', ') +
@@ -240,46 +232,5 @@ export function receiveStats(state, action) {
   return Object.assign({}, state, {
     allyCode: action.allyCode,
     error: errorMessage,
-    isBusy: false,
-    profiles: Object.assign({}, state.profiles, {
-      [action.allyCode]: newProfile
-    })
   });
-}
-
-export function setMods(state, action) {
-  try {
-    if (!state.allyCode) {
-      return Object.assign({}, state, {
-        error: 'You must fetch your data before overriding your mods.'
-      });
-    }
-
-    const modsData = JSON.parse(action.modsData);
-    return updateCurrentProfile(state, profile => {
-      const newMods = groupByKey(
-        modsData.map(mod => Mod.deserializeVersionOneTwo(mod, profile.characters)),
-        mod => mod.id
-      );
-
-      let finalMods;
-
-      if (state.keepOldMods) {
-        const oldMods = profile.mods.reduce((mods, mod) => {
-          mods[mod.id] = mod.unequip();
-          return mods;
-        }, {});
-
-        finalMods = Object.values(Object.assign({}, oldMods, newMods));
-      } else {
-        finalMods = Object.values(newMods);
-      }
-
-      return Object.assign({}, profile, {mods: finalMods});
-    });
-  } catch (e) {
-    return Object.assign({}, state, {
-      error: 'Unable to set your mods from the provided file. Please make sure that you uploaded the correct file.'
-    })
-  }
 }

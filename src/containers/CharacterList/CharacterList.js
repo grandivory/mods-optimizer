@@ -14,6 +14,7 @@ import {
   selectCharacter,
   unselectCharacter
 } from "../../state/actions/characterEdit";
+import characterSettings from "../../constants/characterSettings";
 
 class CharacterList extends PureComponent {
   characterBlockDragStart(characterID) {
@@ -69,7 +70,7 @@ class CharacterList extends PureComponent {
   }
 
   renderCharacterBlock(character) {
-    const defaultTargets = groupByKey(character.defaultSettings.targets, target => target.name);
+    const defaultTargets = groupByKey(characterSettings[character.baseID].targets, target => target.name);
     const draggable = this.props.draggable;
 
     const selectedPlan = character.optimizerSettings.isLocked ? 'lock' : character.optimizerSettings.target.name;
@@ -119,7 +120,7 @@ class CharacterList extends PureComponent {
                 onDrop={this.characterBlockDrop(character.baseID)}
                 onDoubleClick={() => this.props.unselectCharacter(character.baseID)}>
       <CharacterAvatar character={character}/>
-      <div className={'character-name'}>{character.gameSettings.name}</div>
+      <div className={'character-name'}>{this.props.gameSettings[character.baseID].name || ''}</div>
       <div className={'target'}>
         <label>Target:</label>
         <div className={'dropdown'}>
@@ -172,10 +173,9 @@ class CharacterList extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  const profile = state.profiles[state.allyCode];
-
   return {
-    characters: profile.selectedCharacters.map(characterID => profile.characters[characterID])
+    characters: state.profile.selectedCharacters.map(characterID => state.profile.characters[characterID]),
+    gameSettings: state.gameSettings
   };
 };
 

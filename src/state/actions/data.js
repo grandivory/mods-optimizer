@@ -12,7 +12,6 @@ export const REQUEST_PROFILE = 'REQUEST_PROFILE';
 export const RECEIVE_PROFILE = 'RECEIVE_PROFILE';
 export const REQUEST_STATS = 'REQUEST_STATS';
 export const RECEIVE_STATS = 'RECEIVE_STATS';
-export const SET_MODS = 'SET_MODS';
 
 export function toggleKeepOldMods() {
   return {
@@ -40,11 +39,12 @@ export function requestProfile(allyCode) {
   };
 }
 
-export function receiveProfile(allyCode, profile) {
+export function receiveProfile(allyCode, profile, messages) {
   return {
     type: RECEIVE_PROFILE,
     allyCode: allyCode,
-    profile: profile
+    profile: profile,
+    messages: messages
   };
 }
 
@@ -61,21 +61,16 @@ export function requestStats() {
 /**
  * Handle the receipt of base and equipped stats for a list of characters
  * @param allyCode String
+ * @param requestedCharacters {Array<string>} The baseIDs of all characters that were requested
  * @param characterStats Object{Character.baseID: {baseStats: CharacterStats, equippedStats: CharacterStats}}
  * @returns {{type: string, allyCode: string, stats: *}}
  */
-export function receiveStats(allyCode, characterStats) {
+export function receiveStats(allyCode, requestedCharacters, characterStats) {
   return {
     type: RECEIVE_STATS,
     allyCode: allyCode,
-    stats: characterStats
-  };
-}
-
-export function setMods(modsData) {
-  return {
-    type: SET_MODS,
-    modsData: modsData
+    stats: characterStats,
+    requestedCharacters: requestedCharacters
   };
 }
 
@@ -103,14 +98,18 @@ function dispatchFetchCharacters(dispatch) {
   dispatch(requestCharacters());
   return fetch('https://api.mods-optimizer.swgoh.grandivory.com/characters/')
     .then(response => response.json())
-    .catch(() => {throw new Error('Error when fetching character definitions from swgoh.gg. Please try again.')})
     .then(characters => {
       dispatch(receiveCharacters(characters));
-      return characters;
+      return [];
+    }, () => {
+      return [
+        'Error when fetching character definitions from swgoh.gg. ' +
+        'Some characters may not optimize properly until you fetch again.'
+      ];
     });
 }
 
-function dispatchFetchProfile(dispatch, allyCode) {
+function dispatchFetchProfile(dispatch, allyCode, messages) {
   dispatch(requestProfile(allyCode));
   return post(
     'https://api.mods-optimizer.swgoh.grandivory.com/playerprofile/',
@@ -131,6 +130,7 @@ function dispatchFetchProfile(dispatch, allyCode) {
         }, {});
 
         return {
+          name: playerProfile.name,
           mods: profileMods,
           characters: profileCharacters,
           updated: playerProfile.updated
@@ -147,7 +147,7 @@ function dispatchFetchProfile(dispatch, allyCode) {
       }
     })
     .then(profile => {
-      dispatch(receiveProfile(allyCode, profile));
+      dispatch(receiveProfile(allyCode, profile, messages));
       return profile;
     });
 }
@@ -168,7 +168,7 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
     )
       .catch(() => {throw new Error('Error fetching your character\'s stats. Please try again.')})
       .then(statsResponse => {
-        dispatch(receiveStats(allyCode, statsResponse));
+        dispatch(receiveStats(allyCode, Object.keys(characters), statsResponse));
         return statsResponse;
       });
   } else {
@@ -179,11 +179,15 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
 
 export function refreshPlayerData(allyCode) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
+  const messages = [];
 
   return function(dispatch) {
     return dispatchFetchCharacters(dispatch, cleanedAllyCode)
     // Only continue to fetch the player's profile if the character fetch was successful
-      .then((characters) => characters && dispatchFetchProfile(dispatch, cleanedAllyCode))
+      .then((characterMessages) => {
+        messages.push(...characterMessages);
+        return dispatchFetchProfile(dispatch, cleanedAllyCode, messages);
+      })
       .then(profile => dispatchFetchCharacterStats(dispatch, cleanedAllyCode, profile ? profile.characters : null))
       .catch(error => {
         dispatch(hideFlash());
@@ -201,8 +205,7 @@ export function fetchCharacters(allyCode) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
 
   return function(dispatch) {
-    return dispatchFetchCharacters(dispatch, cleanedAllyCode)
-      .catch(error => dispatch(showError(error.message)));
+    return dispatchFetchCharacters(dispatch, cleanedAllyCode);
   }
 }
 

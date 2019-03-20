@@ -58,27 +58,19 @@ export function hideFlash(state, action) {
 }
 
 export function reset(state, action) {
-  return Object.assign({}, defaultState);
+  state.db.clear();
+  return Object.assign({}, defaultState, {
+    db: state.db
+  });
 }
 
 export function restoreProgress(state, action) {
   try {
-    const stateObj = JSON.parse(action.progressData);
-    return deserializeState(stateObj);
   } catch (e) {
-    try {
-      const stateObj = JSON.parse(action.progressData);
-      const allyCode = stateObj.state.allyCode;
-      const availableCharacters = JSON.parse(stateObj.state.availableCharacters);
-      const selectedCharacters = JSON.parse(stateObj.state.selectedCharacters);
-      const mods = JSON.parse(stateObj.state.mods);
-      return deserializeStateVersionOneTwo(allyCode, availableCharacters, selectedCharacters, mods);
-    } catch (e) {
-      return Object.assign({}, state, {
-        error:
-          'Unable to restore your progress from the provided file. Please make sure that you uploaded the correct file.'
-      });
-    }
+    return Object.assign({}, state, {
+      error:
+        'Unable to restore your progress from the provided file. Please make sure that you uploaded the correct file.'
+    });
   }
 }
 
@@ -89,28 +81,18 @@ export function toggleSidebar(state, action) {
 }
 
 export function switchProfile(state, action) {
-  if (!state.profiles.hasOwnProperty(action.allyCode)) {
-    return state;
-  } else {
-    return Object.assign({}, state, {
-      allyCode: action.allyCode
-    });
-  }
+  state.db.getProfile(action.allyCode);
+  return state;
 }
 
 export function deleteProfile(state, action) {
-  if (!state.profiles.hasOwnProperty(action.allyCode)) {
-    return state;
-  }
+  const nextProfile = Object.keys(state.playerProfiles).find(key => key !== action.allyCode);
 
-  const newProfiles = Object.assign({}, state.profiles);
-  delete newProfiles[action.allyCode];
+  state.db.deleteProfile(action.allyCode, () => state.db.getProfile(nextProfile));
 
-  const allyCodes = Object.keys(newProfiles);
-  const newAllyCode = allyCodes.length ? allyCodes[0] : '';
+  return state;
+}
 
-  return Object.assign({}, state, {
-    allyCode: newAllyCode,
-    profiles: newProfiles
-  });
+export function setState(state, action) {
+  return Object.assign({}, action.state, {db: state.db});
 }
