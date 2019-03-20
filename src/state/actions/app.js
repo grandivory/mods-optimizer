@@ -12,7 +12,6 @@ export const HIDE_FLASH = 'HIDE_FLASH';
 export const RESET = 'RESET';
 export const RESTORE_PROGRESS = 'RESTORE_PROGRESS';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
-export const SWITCH_PROFILE = 'SWITCH_PROFILE';
 export const DELETE_PROFILE = 'DELETE_PROFILE';
 export const SET_STATE = 'SET_STATE';
 
@@ -76,18 +75,17 @@ export function restoreProgress(progressData) {
     const stateObj = JSON.parse(progressData);
     if (stateObj.version > '1.4') {
       dispatch(saveGameSettings(stateObj.gameSettings));
-      dispatch(saveProfiles(stateObj.profiles));
+      dispatch(saveProfiles(stateObj.profiles, stateObj.allyCode));
       dispatch(saveLastRuns(stateObj.lastRuns));
-      dispatch(switchProfile(stateObj.allyCode));
+      dispatch(loadProfile(stateObj.allyCode));
     } else {
+      const newState = deserializeState(stateObj);
       // Update the state to match the old file
-      dispatch(setState(deserializeState(stateObj)));
+      dispatch(setState(newState));
       // Populate the database from the state by using the populateDatabase action
-      dispatch(populateDatabase());
+      dispatch(populateDatabase(newState));
       // Reload the state from the database
-      dispatch(loadFromDb());
-      // Load up the current profile
-      dispatch(loadProfile());
+      dispatch(loadFromDb(stateObj.allyCode));
     }
   }
 }
@@ -95,13 +93,6 @@ export function restoreProgress(progressData) {
 export function toggleSidebar() {
   return {
     type: TOGGLE_SIDEBAR
-  };
-}
-
-export function switchProfile(allyCode) {
-  return {
-    type: SWITCH_PROFILE,
-    allyCode: allyCode
   };
 }
 

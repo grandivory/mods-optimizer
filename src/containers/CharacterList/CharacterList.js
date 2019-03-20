@@ -120,7 +120,9 @@ class CharacterList extends PureComponent {
                 onDrop={this.characterBlockDrop(character.baseID)}
                 onDoubleClick={() => this.props.unselectCharacter(character.baseID)}>
       <CharacterAvatar character={character}/>
-      <div className={'character-name'}>{this.props.gameSettings[character.baseID].name || ''}</div>
+      <div className={'character-name'}>
+        {this.props.gameSettings[character.baseID] ? this.props.gameSettings[character.baseID].name : character.baseID}
+      </div>
       <div className={'target'}>
         <label>Target:</label>
         <div className={'dropdown'}>

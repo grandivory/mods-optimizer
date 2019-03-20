@@ -1,39 +1,39 @@
-import {showError, showFlash} from "../actions/app";
-import {databaseReady, setGameSettings, setProfile, setProfiles} from "../actions/storage";
 import PlayerProfile from "../../domain/PlayerProfile";
+import nothing from "../../utils/nothing";
+import {GameSettings} from "../../domain/CharacterDataClasses";
 
-export default class Database {
+class Database {
   database;
-  dispatch;
 
   /**
    * Generate a new Database instance
-   * @param dispatch {Function} The Redux dispatch function, used to send state events as the database completes calls
+   * @param onsuccess {function(Database)}
+   * @param onerror {function(error)}
    */
-  constructor(dispatch) {
+  constructor(onsuccess = nothing, onerror = nothing) {
     const self = this;
     const openDbRequest = indexedDB.open('ModsOptimizer', 1);
 
-    this.dispatch = dispatch;
-
     openDbRequest.onerror = function(event) {
-      dispatch(showError(
-        'Unable to load database: ' +
-        event.target.error.message +
-        ' Please fix the problem and try again, or ask for help in the discord server below.'
-      ));
+      onerror(event.target.error);
+      // dispatch(showError(
+      //   'Unable to load database: ' +
+      //   event.target.error.message +
+      //   ' Please fix the problem and try again, or ask for help in the discord server below.'
+      // ));
     };
 
     openDbRequest.onsuccess = function(event) {
       self.database = event.target.result;
+      onsuccess(self);
       // Dispatch an event to say that the database is ready
-      dispatch(databaseReady(self));
+      // dispatch(databaseReady(self));
     };
 
     openDbRequest.onupgradeneeded = function(event) {
       const db = event.target.result;
 
-      // Create two object stores: One to hold game data about each character, and one to hold player profiles
+      // Create object stores for: game data about each character, player profiles, and the last run done by each player
       db.createObjectStore('gameSettings', {keyPath: 'baseID'});
       db.createObjectStore('profiles', {keyPath: 'allyCode'});
       db.createObjectStore('lastRuns', {keyPath: 'allyCode'});
@@ -42,57 +42,54 @@ export default class Database {
 
   /**
    * Export all the data from the database, calling the callback with the result
-   * @param callback
+   * @param onsuccess {function(Object)}
+   * @param onerror {function(error)}
    */
-  export(callback) {
-    const self = this;
+  export(onsuccess = nothing, onerror = nothing) {
     const getDataRequest = this.database.transaction(['gameSettings', 'profiles', 'lastRuns']);
     const userData = {};
-    let outstandingRequests = 3;
 
     getDataRequest.onerror = function(event) {
-      self.dispatch(showError('Error fetching data from the database: ' + event.target.error.message));
+      onerror(event.target.error);
     };
 
-    function tryComplete() {
-      if (0 === outstandingRequests) {
-        callback(userData);
-      }
-    }
+    getDataRequest.oncomplete = function() {
+      onsuccess(userData);
+    };
 
     const profilesRequest = getDataRequest.objectStore('profiles').getAll();
     profilesRequest.onsuccess = function(event) {
-      outstandingRequests--;
       userData.profiles = event.target.result;
-      tryComplete();
     };
 
     const gameSettingsRequest = getDataRequest.objectStore('gameSettings').getAll();
     gameSettingsRequest.onsuccess = function(event) {
-      outstandingRequests--;
       userData.gameSettings = event.target.result;
-      tryComplete();
     };
 
     const lastRunsRequest = getDataRequest.objectStore('lastRuns').getAll();
     lastRunsRequest.onsuccess = function(event) {
-      outstandingRequests--;
       userData.lastRuns = event.target.result;
-      tryComplete();
     }
   }
 
   /**
-   *  Delete everything from the database
+   * Delete everything from the database
+   * @param onsuccess {function()}
+   * @param onerror {function(error)}
    */
-  clear() {
-    const self = this;
+  clear(onsuccess = nothing, onerror = nothing) {
     const deleteDataRequest = this.database.transaction(['gameSettings', 'profiles', 'lastRuns'], 'readwrite');
 
     deleteDataRequest.onerror = function(event) {
-      self.dispatch(showError('Error clearing out data from the database: ' +
-        event.target.error.message +
-        ' You may need to manually delete the database to clear it'));
+      onerror(event.target.error);
+      // self.dispatch(showError('Error clearing out data from the database: ' +
+      //   event.target.error.message +
+      //   ' You may need to manually delete the database to clear it'));
+    };
+
+    deleteDataRequest.onsuccess = function(event) {
+      onsuccess();
     };
 
     deleteDataRequest.objectStore('gameSettings').clear();
@@ -103,9 +100,10 @@ export default class Database {
   /**
    * Delete a profile from the database
    * @param allyCode {string}
-   * @param callback {function()}
+   * @param onsuccess {function()}
+   * @param onerror {function(error)}
    */
-  deleteProfile(allyCode, callback) {
+  deleteProfile(allyCode, onsuccess = nothing, onerror = nothing) {
     const self = this;
     const deleteProfileRequest = this.database
       .transaction('profiles', 'readwrite')
@@ -113,75 +111,76 @@ export default class Database {
       .delete(allyCode);
 
     deleteProfileRequest.onerror = function(event) {
-      self.dispatch(showFlash(
-        'Storage Error',
-        'Error deleting your profile: ' +
-        event.target.error.message
-      ));
+      onerror(event.target.error);
+      // self.dispatch(showFlash(
+      //   'Storage Error',
+      //   'Error deleting your profile: ' +
+      //   event.target.error.message
+      // ));
     };
 
     deleteProfileRequest.onsuccess = function() {
       self.deleteLastRun(allyCode);
-      self.getProfiles();
-      callback();
+      // self.getProfiles();
+      onsuccess();
     };
   }
 
-  deleteLastRun(allyCode) {
-    const self = this;
+  /**
+   * Delete an Optimizer Run from the database
+   * @param allyCode {string}
+   * @param onsuccess {function()}
+   * @param onerror {function(error)}
+   */
+  deleteLastRun(allyCode, onsuccess = nothing, onerror = nothing) {
     const deleteLastRunRequest = this.database
       .transaction('lastRuns', 'readwrite')
       .objectStore('lastRuns')
       .delete(allyCode);
 
     deleteLastRunRequest.onerror = function(event) {
-      self.dispatch(showFlash(
-        'Storage Error',
-        'Error clearing a previous run. ' +
-        event.target.error.message +
-        ' The optimizer may not recalculate correctly.'
-      ))
+      onerror(event.target.error);
+      // self.dispatch(showFlash(
+      //   'Storage Error',
+      //   'Error clearing a previous run. ' +
+      //   event.target.error.message +
+      //   ' The optimizer may not recalculate correctly.'
+      // ))
+    };
+
+    deleteLastRunRequest.onsuccess = function(event) {
+      onsuccess();
     };
   }
 
   /**
    * Get all of the gameSettings from the database and return them as an object
+   * @param onsuccess {function(Array<GameSettings>)}
+   * @param onerror {function(error)}
    */
-  getGameSettings() {
-    const self = this;
+  getGameSettings(onsuccess = nothing, onerror = nothing) {
     const getGameSettingsRequest =
       this.database.transaction('gameSettings', 'readwrite').objectStore('gameSettings').getAll();
 
     getGameSettingsRequest.onerror = function(event) {
-      self.dispatch(showFlash(
-        'Storage Error',
-        'Error reading basic character settings: ' +
-        event.target.error.message +
-        ' The settings will be restored when you next fetch data'
-      ));
+      onerror(event.target.error);
     };
 
     getGameSettingsRequest.onsuccess = function(event) {
-      const gameSettings = {};
-      event.target.result.forEach(gameSetting => gameSettings[gameSetting.baseID] = gameSetting);
-      self.dispatch(setGameSettings(gameSettings));
+      const gameSettings = event.target.result.map(gameSetting => GameSettings.deserialize(gameSetting));
+      onsuccess(gameSettings);
     };
   }
 
   /**
    * Get a single profile
    * @param allyCode {string}
-   * @param callback {function(profile)} A callback function to process the profile. If none is given,
-   *                                     a setProfile action will be dispatched instead.
+   * @param onsuccess {function(PlayerProfile)}
+   * @param onerror {function(error)}
    */
-  getProfile(allyCode, callback) {
-    const self = this;
+  getProfile(allyCode, onsuccess = nothing, onerror = nothing) {
     if (!allyCode) {
-      if (callback) {
-        return callback(null);
-      } else {
-        return self.dispatch(setProfile(null));
-      }
+      return onsuccess(null);
     }
 
     const getProfileRequest =
@@ -190,66 +189,55 @@ export default class Database {
 
     getProfileRequest.onsuccess = function(event) {
       const profile = PlayerProfile.deserialize(event.target.result);
-      if (callback) {
-        callback(profile);
-      } else {
-        self.dispatch(setProfile(profile));
-      }
+      onsuccess(profile);
     };
 
     getProfileRequest.onerror = function(event) {
-      self.dispatch(showError('Error loading your profile from the database: ' + event.target.error.message));
+      onerror(event.target.error);
     };
   }
 
   /**
    * Get all of the profiles from the database, where each entry is [baseID, playerName]
-   * @returns {*}
+   * @param onsuccess {function(Array<PlayerProfile>)}
+   * @param onerror {function(error)}
    */
-  getProfiles() {
-    const self = this;
-    const profiles = {};
-    const profilesCursor =
+  getProfiles(onsuccess = nothing, onerror = nothing) {
+    const profilesRequest =
     // Using a read/write transaction forces the database to finish loading profiles before reading from here
-      this.database.transaction('profiles', 'readwrite').objectStore('profiles').openCursor();
+      this.database.transaction('profiles', 'readwrite').objectStore('profiles').getAll();
 
-    profilesCursor.onsuccess = function(event) {
-      const cursor = event.target.result;
-      if (!cursor) {
-        self.dispatch(setProfiles(profiles));
-        return;
-      }
-
-      profiles[cursor.key] = cursor.value.playerName;
-      cursor.continue();
+    profilesRequest.onsuccess = function(event) {
+      const profiles = event.target.result.map(profile => PlayerProfile.deserialize(profile));
+      onsuccess(profiles);
     };
 
-    profilesCursor.onerror = function(event) {
-      self.dispatch(showFlash(
-        'Storage Error',
-        'Error retrieving profiles: ' + event.target.error.message
-      ));
+    profilesRequest.onerror = function(event) {
+      onerror(event.target.error);
     }
   }
 
   /**
    * Add or update a single profile in the database, then dispatch an action to load that profile into the state
    * @param profile {PlayerProfile}
+   * @param onsuccess {function(string)}
+   * @param onerror {function(error)}
    */
-  saveProfile(profile) {
-    const self = this;
+  saveProfile(profile, onsuccess = nothing, onerror = nothing) {
     const saveProfileRequest = this.database.transaction(['profiles'], 'readwrite');
 
     saveProfileRequest.onerror = function(event) {
-      self.dispatch(showFlash(
-        'Storage Error',
-        'Error saving your profile: ' + event.target.error.message + ' Your progress is not saved.'
-      ));
+      onerror(event.target.error);
+      // self.dispatch(showFlash(
+      //   'Storage Error',
+      //   'Error saving your profile: ' + event.target.error.message + ' Your progress is not saved.'
+      // ));
     };
 
-    saveProfileRequest.oncomplete = function(event) {
-      self.getProfiles();
-      self.getProfile(profile.allyCode);
+    saveProfileRequest.onsuccess = function(event) {
+      onsuccess(event.target.result);
+      // self.getProfiles();
+      // self.getProfile(profile.allyCode);
     };
 
     saveProfileRequest.objectStore('profiles')
@@ -259,74 +247,102 @@ export default class Database {
   /**
    * Add new profiles to the database, or update existing ones
    * @param profiles {Array<PlayerProfile>}
+   * @param onsuccess {function(Array<string>)}
+   * @param onerror {function(error)}
    */
-  saveProfiles(profiles) {
-    const self = this;
+  saveProfiles(profiles, onsuccess = nothing, onerror = nothing) {
     const saveProfileRequest = this.database.transaction(['profiles'], 'readwrite');
+    const keys = [];
 
     saveProfileRequest.onerror = function(event) {
-      self.dispatch(showFlash(
-        'Storage Error',
-        'Error saving your profile: ' + event.target.error.message + ' Your progress is not saved.'
-      ));
+      onerror(event.target.error);
     };
 
     saveProfileRequest.oncomplete = function(event) {
+      console.log(event.target.result);
+      onsuccess(keys);
       // Reset the profiles available in the state
-      self.getProfiles();
+      // self.getProfiles();
     };
 
-    profiles.forEach(profile => saveProfileRequest.objectStore('profiles').put(
-      'function' === typeof profile.serialize ? profile.serialize() : profile
-    ));
+    profiles.forEach(profile => {
+      const profileRequest = saveProfileRequest.objectStore('profiles').put(
+        'function' === typeof profile.serialize ? profile.serialize() : profile
+      );
+
+      profileRequest.onsuccess = function(event) {
+        keys.push(event.target.result);
+      };
+    });
   }
 
   /**
    * Add new gameSettings to the database, or update existing ones
    * @param gameSettings {Array<GameSettings>}
+   * @param onsuccess {function(Array<string>)}
+   * @param onerror {function(error)}
    */
-  saveGameSettings(gameSettings) {
-    const self = this;
+  saveGameSettings(gameSettings, onsuccess = nothing, onerror = nothing) {
     const saveGameSettingsRequest = this.database.transaction(['gameSettings'], 'readwrite');
+    const keys = [];
 
     saveGameSettingsRequest.onerror = function(event) {
-      self.dispatch(showFlash(
-        'Storage Error',
-        'Error saving base character settings: ' +
-        event.target.error.message +
-        ' The optimizer may not function properly for all characters'
-      ));
+      onerror(event.target.error);
     };
 
     saveGameSettingsRequest.oncomplete = function(event) {
-      // Set the game settings back to the app state
-      self.getGameSettings();
+      onsuccess(keys);
     };
 
-    gameSettings.forEach(gameSetting =>
-      saveGameSettingsRequest.objectStore('gameSettings').put(
+    gameSettings.forEach(gameSetting => {
+      const singleRequest = saveGameSettingsRequest.objectStore('gameSettings').put(
         'function' === typeof gameSetting.serialize ? gameSetting.serialize() : gameSetting
-      )
-    );
+      );
+
+      singleRequest.onsuccess = function(event) {
+        keys.push(event.target.result);
+      };
+    });
   }
 
-  saveLastRuns(lastRuns) {
-    const self = this;
+  /**
+   * Save a group of last runs
+   * @param lastRuns {Array<OptimizerRun>}
+   * @param onsuccess {function(Array<string>)}
+   * @param onerror {function(error)}
+   */
+  saveLastRuns(lastRuns, onsuccess = nothing, onerror = nothing) {
     const saveLastRunsRequest = this.database.transaction(['lastRuns'], 'readwrite');
+    const keys = [];
 
     saveLastRunsRequest.onerror = function(event) {
-      self.dispatch(showFlash(
-        'Storage Error',
-        'Error saving previous runs: ' +
-        event.target.error.message +
-        ' The optimizer will need to recalculate optimized values on the next run.'
-      ));
+      onerror(event.target.error);
+    };
+
+    saveLastRunsRequest.oncomplete = function(event) {
+      onsuccess(keys);
     };
 
     lastRuns.forEach(lastRun => {
-      saveLastRunsRequest.objectStore('lastRuns').put(
+      const singleRequest = saveLastRunsRequest.objectStore('lastRuns').put(
         'function' === typeof lastRun.serialize ? lastRun.serialize() : lastRun
-      )
+      );
+
+      singleRequest.onsuccess = function(event) {
+        keys.push(event.target.result);
+      };
     });
   }
 }
+
+let instance = null;
+
+export default function getDatabase(onsuccess = nothing, onerror = nothing) {
+  if (instance) {
+    onsuccess(instance);
+    return instance;
+  }
+
+  instance = new Database(onsuccess, onerror);
+  return instance;
+};

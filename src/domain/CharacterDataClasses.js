@@ -90,6 +90,8 @@ class GameSettings {
   }
 }
 
+GameSettings.defaultAvatarUrl = '//swgoh.gg/static/img/assets/blank-character.png';
+
 const DamageType = {
   'physical': 1,
   'special': 0,

@@ -3,10 +3,12 @@
 import React from 'react';
 import './CharacterAvatar.css';
 import {connect} from "react-redux";
+import {GameSettings} from "../../domain/CharacterDataClasses";
 
 class CharacterAvatar extends React.PureComponent {
   render() {
     const character = this.props.character;
+    const gameSettings = this.props.gameSettings[character.baseID];
 
     if (!character) {
       return null;
@@ -32,9 +34,9 @@ class CharacterAvatar extends React.PureComponent {
         id={id}>
         {displayStars && [1, 2, 3, 4, 5, 6, 7].map(star)}
         <img
-          src={this.props.gameSettings[character.baseID].avatarUrl}
-          alt={this.props.gameSettings[character.baseID].name}
-          title={this.props.gameSettings[character.baseID].name}
+          src={gameSettings ? gameSettings.avatarUrl : GameSettings.defaultAvatarUrl}
+          alt={gameSettings ? gameSettings.name : character.baseID}
+          title={gameSettings ? gameSettings.name : character.baseID}
           draggable={false}/>
         {displayLevel && <div className={'character-level'}>{character.playerValues.level || '??'}</div>}
       </div>

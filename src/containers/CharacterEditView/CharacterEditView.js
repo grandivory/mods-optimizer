@@ -175,7 +175,9 @@ class CharacterEditView extends PureComponent {
            onDoubleClick={() => this.props.selectCharacter(character.baseID)}>
         <CharacterAvatar character={character}/>
       </div>
-      <div className={'character-name'}>{this.props.gameSettings[character.baseID].name || ''}</div>
+      <div className={'character-name'}>
+        {this.props.gameSettings[character.baseID] ? this.props.gameSettings[character.baseID].name : character.baseID}
+      </div>
     </div>;
   }
 

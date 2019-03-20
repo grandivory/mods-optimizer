@@ -1,6 +1,6 @@
 // @flow
 
-import {defaultState, deserializeState, deserializeStateVersionOneTwo} from "../storage";
+import {defaultState} from "../storage";
 
 export function changeSection(state, action) {
   return Object.assign({}, state, {

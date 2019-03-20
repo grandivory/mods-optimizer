@@ -18,13 +18,12 @@ import {
   reset,
   restoreProgress,
   showError,
-  showModal,
-  switchProfile
+  showModal
 } from "../../state/actions/app";
 import {refreshPlayerData, toggleKeepOldMods} from "../../state/actions/data";
 import FlashMessage from "../../components/Modal/FlashMessage";
 import {saveAs} from 'file-saver';
-import {saveDatabase} from "../../state/actions/storage";
+import {loadProfile, exportDatabase} from "../../state/actions/storage";
 
 class App extends PureComponent {
 
@@ -190,7 +189,7 @@ class App extends PureComponent {
         <FileInput label={'Restore my progress'} handler={(file) => this.readFile(file, this.props.restoreProgress)}/>
         {showActions &&
         <button type={'button'} onClick={() => {
-          this.props.saveDatabase(progressData => {
+          this.props.exportDatabase(progressData => {
             progressData.version = this.props.version;
             progressData.allyCode = this.props.allyCode;
             const progressDataSerialized = JSON.stringify(progressData);
@@ -408,9 +407,9 @@ const mapDispatchToProps = dispatch => ({
   toggleKeepOldMods: () => dispatch(toggleKeepOldMods()),
   reset: () => dispatch(reset()),
   restoreProgress: (progressData) => dispatch(restoreProgress(progressData)),
-  switchProfile: (allyCode) => dispatch(switchProfile(allyCode)),
+  switchProfile: (allyCode) => dispatch(loadProfile(allyCode)),
   deleteProfile: (allyCode) => dispatch(deleteProfile(allyCode)),
-  saveDatabase: (callback) => dispatch(saveDatabase(callback))
+  exportDatabase: (callback) => dispatch(exportDatabase(callback))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
