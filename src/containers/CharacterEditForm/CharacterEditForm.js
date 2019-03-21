@@ -11,7 +11,7 @@ import {
   changeSliceMods,
   deleteTarget,
   finishEditCharacterTarget,
-  populateSetRestrictions,
+  changeSetRestrictions,
   removeSetBonus,
   resetCharacterTargetToDefault,
   selectSetBonus,
@@ -21,6 +21,7 @@ import {
 import "./CharacterEditForm.css";
 import setBonuses from "../../constants/setbonuses";
 import TargetStat from "../../domain/TargetStat";
+import characterSettings from "../../constants/characterSettings";
 
 class CharacterEditForm extends PureComponent {
   constructor(props) {
@@ -38,7 +39,9 @@ class CharacterEditForm extends PureComponent {
       return null;
     }
 
-    const defaultTarget = character.defaultSettings.targets.find(defaultTarget => defaultTarget.name === target.name);
+    const defaultTarget = characterSettings[character.baseID] ?
+      characterSettings[character.baseID].targets.find(defaultTarget => defaultTarget.name === target.name) :
+      null;
 
     // Determine whether the current optimization plan is a default (same name exists), user-defined (same name doesn't
     // exist), or custom (name is 'custom') This determines whether to display a "Reset target to default" button, a
@@ -74,7 +77,9 @@ class CharacterEditForm extends PureComponent {
       ref={form => this.form = form}>
       <div className={'character-view column'}>
         <CharacterAvatar character={character}/>
-        <h2 className={'character-name'}>{character.gameSettings.name}</h2>
+        <h2 className={'character-name'}>
+          {characterSettings[character.baseID] ? characterSettings[character.baseID].name : character.baseID}
+        </h2>
       </div>
       <div id={'character-level-options'}>
         <h3>Character-level options</h3>
@@ -619,7 +624,7 @@ class CharacterEditForm extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  const mods = state.profiles[state.allyCode].mods;
+  const mods = state.profile.mods;
 
   return {
     editMode: state.characterEditMode,
@@ -643,7 +648,7 @@ const mapDispatchToProps = (dispatch) => ({
   resetCharacterTargetToDefault: (characterID) => dispatch(resetCharacterTargetToDefault(characterID)),
   deleteTarget: (characterID) => dispatch(deleteTarget(characterID)),
   changeCharacterEditMode: (mode) => dispatch(changeCharacterEditMode(mode)),
-  populateSetRestrictions: (setRestrictions) => dispatch(populateSetRestrictions(setRestrictions)),
+  populateSetRestrictions: (setRestrictions) => dispatch(changeSetRestrictions(setRestrictions)),
   selectSetBonus: (setBonus) => dispatch(selectSetBonus(setBonus)),
   removeSetBonus: (setBonus) => dispatch(removeSetBonus(setBonus))
 });

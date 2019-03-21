@@ -134,7 +134,9 @@ export default class Character {
       this.gameSettings,
       this.playerValues,
       this.optimizerSettings.withTarget(
-        this.defaultSettings.targets.find(target => target.name === this.optimizerSettings.target.name)
+        characterSettings[this.baseID] ?
+          characterSettings[this.baseID].targets.find(target => target.name === this.optimizerSettings.target.name) :
+          null
       )
     );
   }
@@ -151,7 +153,9 @@ export default class Character {
       this.defaultSettings,
       this.gameSettings,
       this.playerValues,
-      this.optimizerSettings.withTargetOverrides(this.defaultSettings.targets)
+      this.optimizerSettings.withTargetOverrides(
+        characterSettings[this.baseID] ? characterSettings[this.baseID].targets : []
+      )
     );
 
     return new Character(
@@ -188,7 +192,10 @@ export default class Character {
    * Get a set of all targets that can be set for this character
    */
   targets() {
-    const defaultTargets = groupByKey(characterSettings[this.baseID].targets, target => target.name);
+    const defaultTargets = groupByKey(
+      characterSettings[this.baseID] ? characterSettings[this.baseID].targets : [],
+      target => target.name
+    );
     const playerTargets = groupByKey(this.optimizerSettings.targets, target => target.name);
 
     return Object.values(Object.assign({}, defaultTargets, playerTargets, {

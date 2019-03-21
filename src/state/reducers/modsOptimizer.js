@@ -16,31 +16,11 @@ import {
 import {
   CHANGE_CHARACTER_EDIT_MODE,
   CHANGE_CHARACTER_FILTER,
-  CHANGE_CHARACTER_TARGET,
-  CHANGE_MINIMUM_MOD_DOTS,
-  CHANGE_SLICE_MODS,
-  DELETE_TARGET,
-  FINISH_EDIT_CHARACTER_TARGET,
-  LOCK_ALL_SELECTED_CHARACTERS,
-  LOCK_CHARACTER,
-  POPULATE_SET_RESTRICTIONS,
+  CHANGE_SET_RESTRICTIONS,
   REMOVE_SET_BONUS,
-  RESET_ALL_CHARACTER_TARGETS,
-  RESET_CHARACTER_TARGET_TO_DEFAULT,
-  SELECT_CHARACTER,
   SELECT_SET_BONUS,
-  UNLOCK_ALL_SELECTED_CHARACTERS,
-  UNLOCK_CHARACTER,
-  UNSELECT_ALL_CHARACTERS,
-  UNSELECT_CHARACTER,
-  UPDATE_MOD_CHANGE_THRESHOLD
 } from "../actions/characterEdit";
-import {
-  REQUEST_CHARACTERS,
-  REQUEST_PROFILE,
-  REQUEST_STATS,
-  TOGGLE_KEEP_OLD_MODS
-} from "../actions/data";
+import {REQUEST_CHARACTERS, REQUEST_PROFILE, REQUEST_STATS, TOGGLE_KEEP_OLD_MODS} from "../actions/data";
 import {CHANGE_MODS_FILTER} from "../actions/explore";
 import {
   CANCEL_OPTIMIZE_MODS,
@@ -74,31 +54,11 @@ import {
 import {
   changeCharacterEditMode,
   changeCharacterFilter,
-  changeCharacterTarget,
-  changeMinimumModDots,
-  changeSliceMods,
-  deleteTarget,
-  finishEditCharacterTarget,
-  lockAllSelectedCharacters,
-  lockCharacter,
-  populateSetRestrictions,
+  changeSetRestrictions,
   removeSetBonus,
-  resetAllCharacterTargets,
-  resetCharacterTargetToDefault,
-  selectCharacter,
   selectSetBonus,
-  unlockAllSelectedCharacters,
-  unlockCharacter,
-  unselectAllCharacters,
-  unselectCharacter,
-  updateModChangeThreshold
 } from "./characterEdit";
-import {
-  requestCharacters,
-  requestProfile,
-  requestStats,
-  toggleKeepOldMods
-} from "./data";
+import {requestCharacters, requestProfile, requestStats, toggleKeepOldMods} from "./data";
 import {changeModsFilter} from "./explore";
 import {cancelOptimizeMods, finishOptimizeMods, optimizeMods, updateOptimizerProgress} from "./optimize";
 import {
@@ -114,24 +74,7 @@ import {
 import {ADD_PLAYER_PROFILE, CLEAN_STATE, SET_GAME_SETTINGS, SET_PLAYER_PROFILES, SET_PROFILE} from "../actions/storage";
 import {addPlayerProfile, cleanState, setGameSettings, setPlayerProfiles, setProfile} from "./storage";
 
-/**
- * Update the currently-selected character profile by calling an update function on the existing profile. Optionally
- * update the base state with other auxiliary changes as well.
- * @param state {object}
- * @param updateFunc {function(PlayerProfile): PlayerProfile}
- * @param auxiliaryChanges {object} An object used to add additional changes to the state at a level above the profile
- * @returns {*}
- */
-export function updateCurrentProfile(state, updateFunc, auxiliaryChanges = {}) {
-  const profile = state.profiles[state.allyCode];
-
-  return Object.assign({}, state, auxiliaryChanges, {
-    profiles: Object.assign({}, state.profiles, {
-      [state.allyCode]: updateFunc(profile)
-    })
-  });
-}
-
+export function updateCurrentProfile() {}
 export default function modsOptimizer(state, action) {
   if (!state) {
     return saveState(restoreState());
@@ -176,42 +119,12 @@ export default function modsOptimizer(state, action) {
     case SET_IS_BUSY:
       return setIsBusy(state, action);
 
-    case SELECT_CHARACTER:
-      return saveState(selectCharacter(state, action));
-    case UNSELECT_CHARACTER:
-      return saveState(unselectCharacter(state, action));
-    case UNSELECT_ALL_CHARACTERS:
-      return saveState(unselectAllCharacters(state, action));
-    case LOCK_ALL_SELECTED_CHARACTERS:
-      return saveState(lockAllSelectedCharacters(state, action));
-    case UNLOCK_ALL_SELECTED_CHARACTERS:
-      return saveState(unlockAllSelectedCharacters(state, action));
-    case LOCK_CHARACTER:
-      return saveState(lockCharacter(state, action));
-    case UNLOCK_CHARACTER:
-      return saveState(unlockCharacter(state, action));
-    case CHANGE_CHARACTER_TARGET:
-      return saveState(changeCharacterTarget(state, action));
     case CHANGE_CHARACTER_EDIT_MODE:
       return saveState(changeCharacterEditMode(state, action));
-    case FINISH_EDIT_CHARACTER_TARGET:
-      return saveState(finishEditCharacterTarget(state, action));
-    case RESET_CHARACTER_TARGET_TO_DEFAULT:
-      return saveState(resetCharacterTargetToDefault(state, action));
-    case RESET_ALL_CHARACTER_TARGETS:
-      return saveState(resetAllCharacterTargets(state, action));
-    case DELETE_TARGET:
-      return saveState(deleteTarget(state, action));
-    case CHANGE_MINIMUM_MOD_DOTS:
-      return saveState(changeMinimumModDots(state, action));
-    case CHANGE_SLICE_MODS:
-      return saveState(changeSliceMods(state, action));
     case CHANGE_CHARACTER_FILTER:
       return saveState(changeCharacterFilter(state, action));
-    case UPDATE_MOD_CHANGE_THRESHOLD:
-      return saveState(updateModChangeThreshold(state, action));
-    case POPULATE_SET_RESTRICTIONS:
-      return populateSetRestrictions(state, action);
+    case CHANGE_SET_RESTRICTIONS:
+      return changeSetRestrictions(state, action);
     case SELECT_SET_BONUS:
       return selectSetBonus(state, action);
     case REMOVE_SET_BONUS:

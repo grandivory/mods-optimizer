@@ -68,7 +68,7 @@ export function toggleSidebar(state, action) {
 }
 
 export function setState(state, action) {
-  return Object.assign({}, action.state, {db: state.db});
+  return Object.assign({}, action.state);
 }
 
 export function setIsBusy(state, action) {

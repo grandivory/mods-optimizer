@@ -7,10 +7,12 @@ import {
   populateDatabase,
   saveGameSettings,
   saveLastRuns,
-  saveProfiles
+  saveProfiles,
+  setProfile
 } from "./storage";
 import {deserializeState} from "../storage";
 import getDatabase from "../storage/Database";
+import nothing from "../../utils/nothing";
 
 export const CHANGE_SECTION = 'CHANGE_SECTION';
 export const SHOW_MODAL = 'SHOW_MODAL';
@@ -146,5 +148,31 @@ export function setIsBusy(isBusy) {
   return {
     type: SET_IS_BUSY,
     isBusy: isBusy
+  };
+}
+
+/**
+ * Update the currently-selected character profile by calling an update function on the existing profile. Optionally
+ * update the base state with other auxiliary changes as well.
+ * @param updateFunc {function(PlayerProfile): PlayerProfile}
+ * @param auxiliaryChanges {function(dispatch)} Any additional changes that need to be made in addition to the profile
+ * @returns {Function}
+ */
+export function updateProfile(updateFunc, auxiliaryChanges = nothing) {
+  return function(dispatch, getState) {
+    const state = getState();
+    const db = getDatabase();
+    const newProfile = updateFunc(state.profile);
+
+    db.saveProfile(
+      newProfile,
+      nothing,
+      error => dispatch(showFlash(
+        'Storage Error',
+        'Error saving your progress: ' + error.message + ' Your progress may be lost on page refresh.'
+      ))
+    );
+    dispatch(setProfile(newProfile));
+    auxiliaryChanges(dispatch);
   };
 }
