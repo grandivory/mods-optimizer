@@ -265,12 +265,14 @@ class ReviewSets extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  const profile = state.profiles[state.allyCode];
+  const profile = state.profile;
   const modsByID = groupByKey(profile.mods, mod => mod.id);
 
   const modAssignments = mapObject(
     profile.modAssignments,
-    modIDs => modIDs.filter(modID => modsByID.hasOwnProperty(modID)).map(modID => modsByID[modID])
+    modIDs => modIDs ?
+      modIDs.filter(modID => modsByID.hasOwnProperty(modID)).map(modID => modsByID[modID]) :
+      []
   );
 
   const displayedModAssignments = 'all' === state.modSetsFilter ?

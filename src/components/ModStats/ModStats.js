@@ -29,7 +29,9 @@ class ModStats extends React.PureComponent {
         <div className={'assigned-character'}>
           <h4>Assigned To</h4>
           <CharacterAvatar character={character}/>
-          <span className="avatar-name">{character.gameSettings.name}</span>
+          <span className="avatar-name">
+            {this.props.gameSettings[character.baseID] ? this.props.gameSettings[character.baseID].name : character.baseID}
+          </span>
         </div>
         }
       </div>
@@ -50,7 +52,8 @@ class ModStats extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-  characters: state.profile.characters
+  characters: state.profile.characters,
+  gameSettings: state.gameSettings
 });
 
 const mapDispatchToProps = () => ({});

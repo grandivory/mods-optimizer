@@ -155,7 +155,8 @@ export function setIsBusy(isBusy) {
  * Update the currently-selected character profile by calling an update function on the existing profile. Optionally
  * update the base state with other auxiliary changes as well.
  * @param updateFunc {function(PlayerProfile): PlayerProfile}
- * @param auxiliaryChanges {function(dispatch)} Any additional changes that need to be made in addition to the profile
+ * @param auxiliaryChanges {function(dispatch, getState, newProfile)} Any additional changes that need to be made in
+ * addition to the profile
  * @returns {Function}
  */
 export function updateProfile(updateFunc, auxiliaryChanges = nothing) {
@@ -173,6 +174,6 @@ export function updateProfile(updateFunc, auxiliaryChanges = nothing) {
       ))
     );
     dispatch(setProfile(newProfile));
-    auxiliaryChanges(dispatch);
+    auxiliaryChanges(dispatch, getState, newProfile);
   };
 }

@@ -4,6 +4,7 @@
 import Character from "./Character";
 import Mod from "./Mod";
 import {mapObject} from "../utils/mapObject";
+import OptimizerRun from "./OptimizerRun";
 
 export default class PlayerProfile {
   allyCode;
@@ -180,6 +181,20 @@ export default class PlayerProfile {
       this.modAssignments,
       this.modChangeThreshold,
       {}
+    );
+  }
+
+  /**
+   * Convert this full PlayerProfile into only what is needed to store the values form an optimizer run
+   * @returns OptimizerRun
+   */
+  toOptimizerRun() {
+    return new OptimizerRun(
+      this.allyCode,
+      mapObject(this.characters, character => character.serialize()),
+      this.mods.map(mod => mod.serialize()),
+      this.selectedCharacters,
+      this.modChangeThreshold
     );
   }
 

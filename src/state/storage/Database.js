@@ -303,6 +303,26 @@ class Database {
   }
 
   /**
+   * Save an optimizer run to the database, or update an existing one
+   * @param lastRun {OptimizerRun}
+   * @param onsuccess {function(string)}
+   * @param onerror {function(error)}
+   */
+  saveLastRun(lastRun, onsuccess = nothing, onerror = nothing) {
+    const saveLastRunRequest = this.database.transaction(['lastRuns'], 'readwrite')
+      .objectStore('lastRuns')
+      .put('function' === typeof lastRun.serialize ? lastRun.serialize() : lastRun);
+
+    saveLastRunRequest.onerror = function(event) {
+      onerror(event.target.error);
+    };
+
+    saveLastRunRequest.onsuccess = function(event) {
+      onsuccess(event.target.result);
+    }
+  }
+
+  /**
    * Save a group of last runs
    * @param lastRuns {Array<OptimizerRun>}
    * @param onsuccess {function(Array<string>)}

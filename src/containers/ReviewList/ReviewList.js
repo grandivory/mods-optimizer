@@ -254,10 +254,9 @@ class ReviewList extends React.PureComponent {
     return Object.values(mapObjectByKeyAndValue(this.props.movingModAssignments, (assignedCharacterID, mods) => {
       const assignedCharacter = this.props.characters[assignedCharacterID];
 
-      return [assignedCharacter.gameSettings.name].concat(
+      return [this.props.gameSettings[assignedCharacter.baseID].name].concat(
         mods.map(mod => {
-          const currentCharacter = mod.characterID ? this.props.characters[mod.characterID] : null;
-          const moveFrom = currentCharacter ? currentCharacter.gameSettings.name : 'your unassigned mods';
+          const moveFrom = mod.characterID ? this.props.gameSettings[mod.characterID].name : 'your unassigned mods';
           return `Move ${capitalize(mod.set.name)}(${mod.primaryStat.type}) ${capitalize(mod.slot)} from ${moveFrom}.`;
         })
       ).join('\r\n');
@@ -266,12 +265,13 @@ class ReviewList extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  const profile = state.profiles[state.allyCode];
+  const profile = state.profile;
   const modsById = groupByKey(profile.mods, mod => mod.id);
   const movingModsByAssignedCharacter = mapObjectByKeyAndValue(
     profile.modAssignments,
-    (characterID, modIDs) => modIDs.map(modID => modsById[modID])
-      .filter(mod => mod && mod.characterID !== characterID)
+    (characterID, modIDs) => modIDs ?
+      modIDs.map(modID => modsById[modID]).filter(mod => mod && mod.characterID !== characterID) :
+      []
   );
   const characterModPairs = Object.entries(movingModsByAssignedCharacter)
     .map(([characterID, mods]) => mods.map(mod => [characterID, mod]))
@@ -281,10 +281,15 @@ const mapStateToProps = (state) => {
       profile.characters[characterID] :
       profile.characters[mod.characterID];
 
-    return !state.modListFilter.tag || (character && character.gameSettings.tags.includes(state.modListFilter.tag));
+    return !state.modListFilter.tag || (character &&
+      (state.gameSettings[character.baseID] ? state.gameSettings[character.baseID].tags : [])
+        .includes(state.modListFilter.tag)
+    );
   });
   const tags = Array.from(new Set(flatten(
-    characterModPairs.map(([characterID, _]) => profile.characters[characterID].gameSettings.tags)
+    characterModPairs.map(([characterID]) =>
+      state.gameSettings[characterID] ? state.gameSettings[characterID].tags : []
+    )
   ))).sort();
 
   switch (state.modListFilter.sort) {
@@ -318,6 +323,7 @@ const mapStateToProps = (state) => {
    */
   return {
     characters: profile.characters,
+    gameSettings: state.gameSettings,
     displayedMods: displayedMods,
     movingModAssignments: movingModsByAssignedCharacter,
     numMovingMods: characterModPairs.length,

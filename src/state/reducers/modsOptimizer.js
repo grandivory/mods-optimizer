@@ -22,12 +22,7 @@ import {
 } from "../actions/characterEdit";
 import {REQUEST_CHARACTERS, REQUEST_PROFILE, REQUEST_STATS, TOGGLE_KEEP_OLD_MODS} from "../actions/data";
 import {CHANGE_MODS_FILTER} from "../actions/explore";
-import {
-  CANCEL_OPTIMIZE_MODS,
-  FINISH_OPTIMIZE_MODS,
-  OPTIMIZE_MODS,
-  UPDATE_OPTIMIZER_PROGRESS
-} from "../actions/optimize";
+import {CANCEL_OPTIMIZE_MODS, OPTIMIZE_MODS} from "../actions/optimize";
 import {
   CHANGE_MOD_SET_FILTER,
   CHANGE_MODLIST_FILTER,
@@ -60,7 +55,7 @@ import {
 } from "./characterEdit";
 import {requestCharacters, requestProfile, requestStats, toggleKeepOldMods} from "./data";
 import {changeModsFilter} from "./explore";
-import {cancelOptimizeMods, finishOptimizeMods, optimizeMods, updateOptimizerProgress} from "./optimize";
+import {cancelOptimizeMods, optimizeMods} from "./optimize";
 import {
   changeModListFilter,
   changeModSetFilter,
@@ -79,8 +74,6 @@ export default function modsOptimizer(state, action) {
   if (!state) {
     return saveState(restoreState());
   }
-
-  console.log(action);
 
   // TODO: Make sure that all state modifiers use the proper state format and the database where needed
   switch (action.type) {
@@ -143,13 +136,9 @@ export default function modsOptimizer(state, action) {
       return saveState(changeModsFilter(state, action));
 
     case OPTIMIZE_MODS:
-      return optimizeMods(state, action);
-    case FINISH_OPTIMIZE_MODS:
-      return saveState(finishOptimizeMods(state, action));
+      return optimizeMods(state);
     case CANCEL_OPTIMIZE_MODS:
       return saveState(cancelOptimizeMods(state, action));
-    case UPDATE_OPTIMIZER_PROGRESS:
-      return updateOptimizerProgress(state, action);
 
     case CHANGE_OPTIMIZER_VIEW:
       return saveState(changeOptimizerView(state, action));

@@ -133,13 +133,7 @@ class CharacterEditView extends PureComponent {
       <h3>Actions</h3>
       <button
         type={'button'}
-        onClick={() => this.props.optimizeMods(
-          this.props.mods,
-          this.props.allCharacters,
-          this.props.selectedCharacters.map(c => c.baseID),
-          this.props.modChangeThreshold,
-          this.props.previousSettings
-        )}
+        onClick={() => this.props.optimizeMods(this.props.allyCode)}
         disabled={!this.props.selectedCharacters.length}
       >
         Optimize my mods!
@@ -285,7 +279,6 @@ const mapStateToProps = (state) => {
     );
 
   return {
-    allCharacters: profile.characters,
     mods: profile.mods,
     modChangeThreshold: profile.modChangeThreshold,
     characterFilter: state.characterFilter,
@@ -294,7 +287,6 @@ const mapStateToProps = (state) => {
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
     selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id]),
     showReviewButton: profile.modAssignments && Object.keys(profile.modAssignments).length,
-    previousSettings: profile.previousSettings
   };
 };
 
@@ -310,8 +302,7 @@ const mapDispatchToProps = dispatch => ({
   unlockSelectedCharacters: () => dispatch(unlockSelectedCharacters()),
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
-  optimizeMods: (mods, characters, order, threshold, previousRun) =>
-    dispatch(optimizeMods(mods, characters, order, threshold, previousRun)),
+  optimizeMods: () => dispatch(optimizeMods()),
   updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold))
 });
 

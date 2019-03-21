@@ -1,18 +1,88 @@
 // @flow
+
+/*********************************************************************************************************************
+ * Messaging                                                                                                         *
+ ********************************************************************************************************************/
 self.onmessage = function(message) {
+  const openDbRequest = indexedDB.open('ModsOptimizer', 1);
+  openDbRequest.onerror = function(event) {
+    throw event.target.error;
+  };
 
-  clearCache();
-  const optimizedModsByCharacter = optimizeMods(
-    message.data.mods,
-    message.data.characters,
-    message.data.order,
-    message.data.threshold,
-    message.data.previousRun
-  );
+  openDbRequest.onsuccess = function(event) {
+    const db = event.target.result;
+    let profile, lastRun;
 
-  optimizationSuccessMessage(optimizedModsByCharacter);
-  self.close();
+    // Get the data needed to optimize from the profile and last runs
+    const getDataTransaction = db.transaction(['profiles', 'lastRuns']);
+
+    getDataTransaction.onerror = function(event) {
+      throw event.target.error;
+    };
+
+    getDataTransaction.oncomplete = function() {
+      const mods = profile.mods.map(deserializeMod);
+      const characters = {};
+      lastRunCharacters = {};
+
+      for (let character of Object.values(profile.characters)) {
+        character.optimizerSettings.target = deserializeTarget(character.optimizerSettings.target);
+        characters[character.baseID] = character;
+      }
+
+      for (let character of Object.values(lastRun.characters)) {
+        character.optimizerSettings.target = deserializeTarget(character.optimizerSettings.target);
+        lastRunCharacters[character.baseID] = character;
+      }
+
+      lastRun.characters = lastRunCharacters;
+
+      const optimizedModsByCharacter = optimizeMods(
+        mods,
+        characters,
+        profile.selectedCharacters,
+        profile.modChangeThreshold,
+        lastRun
+      );
+
+      optimizationSuccessMessage(optimizedModsByCharacter.assignedSets, optimizedModsByCharacter.messages);
+      self.close();
+    };
+
+    const profileRequest = getDataTransaction.objectStore('profiles').get(message.data);
+    profileRequest.onsuccess = function(event) {
+      profile = event.target.result;
+    };
+
+    const lastRunRequest = getDataTransaction.objectStore('lastRuns').get(message.data);
+    lastRunRequest.onsuccess = function(event) {
+      lastRun = event.target.result ? event.target.result : {};
+    };
+  };
 };
+
+function optimizationSuccessMessage(modsByCharacter, messages) {
+  postMessage({
+    type: 'OptimizationSuccess',
+    result: {
+      assignedSets: modsByCharacter,
+      messages: messages
+    }
+  });
+}
+
+function progressMessage(character, step, progress = 100) {
+  postMessage({
+    type: 'Progress',
+    character: character,
+    step: step,
+    progress: progress
+  });
+}
+
+/*********************************************************************************************************************
+ * End of messaging section                                                                                          *
+ ********************************************************************************************************************/
 
 /*********************************************************************************************************************
  * This is a really shitty section of code where I need to copy stuff from all the other files I've already written. *
@@ -215,7 +285,7 @@ const maxStatPrimaries = {
   }
 };
 
-statSlicingUpgradeFactors = {
+const statSlicingUpgradeFactors = {
   'Offense %': 3.02,
   'Defense %': 2.34,
   'Health %': 1.86,
@@ -227,6 +297,23 @@ statSlicingUpgradeFactors = {
   'Protection': 1.11,
   'Offense': 1.10,
   'Critical Chance': 1.04
+};
+
+const statWeights = {
+  health: 2000,
+  protection: 4000,
+  speed: 20,
+  critDmg: 30,
+  potency: 15,
+  tenacity: 15,
+  physDmg: 225,
+  specDmg: 450,
+  offense: 225,
+  critChance: 10,
+  armor: 33,
+  resistance: 33,
+  accuracy: 10,
+  critAvoid: 10
 };
 
 /**
@@ -284,7 +371,65 @@ function areObjectsEquivalent(left, right) {
       return left[propName] === right[propName];
     }
   });
-};
+}
+
+function deserializeStat(type, value) {
+  const displayType = type.endsWith('%') ? type.substr(0, type.length - 1).trim() : type;
+  const rawValue = value.replace(/[+%]/g, '');
+  const realValue = +rawValue;
+  const isPercent = (type.endsWith('%') || value.endsWith('%')) && wholeStatTypes.includes(displayType);
+
+  return {
+    type: type,
+    displayType: displayType,
+    value: realValue,
+    isPercent: isPercent
+  };
+}
+
+function deserializeMod(mod) {
+  const primaryStat = deserializeStat(mod.primaryBonusType, mod.primaryBonusValue);
+  let secondaryStats = [];
+
+  if ('None' !== mod.secondaryType_1 && '' !== mod.secondaryValue_1) {
+    secondaryStats.push(deserializeStat(mod.secondaryType_1, mod.secondaryValue_1));
+  }
+  if ('None' !== mod.secondaryType_2 && '' !== mod.secondaryValue_2) {
+    secondaryStats.push(deserializeStat(mod.secondaryType_2, mod.secondaryValue_2));
+  }
+  if ('None' !== mod.secondaryType_3 && '' !== mod.secondaryValue_3) {
+    secondaryStats.push(deserializeStat(mod.secondaryType_3, mod.secondaryValue_3));
+  }
+  if ('None' !== mod.secondaryType_4 && '' !== mod.secondaryValue_4) {
+    secondaryStats.push(deserializeStat(mod.secondaryType_4, mod.secondaryValue_4));
+  }
+
+  const setBonus = setBonuses[mod.set.toLowerCase().replace(' ', '')];
+
+  return {
+    id: mod.mod_uid,
+    slot: mod.slot.toLowerCase(),
+    set: setBonus,
+    level: mod.level,
+    pips: mod.pips,
+    primaryStat: primaryStat,
+    secondaryStats: secondaryStats,
+    characterID: mod.characterID,
+    tier: mod.tier
+  };
+}
+
+function deserializeTarget(target) {
+  const updatedTarget = Object.assign({}, target);
+
+  for (let stat of Object.keys(updatedTarget)) {
+    if (Object.keys(statWeights).includes(stat)) {
+      updatedTarget[stat] = updatedTarget[stat] / statWeights[stat];
+    }
+  }
+
+  return updatedTarget;
+}
 
 /*********************************************************************************************************************
  * End of shitty code section                                                                                        *
@@ -311,22 +456,6 @@ function clearCache() {
 /*********************************************************************************************************************
  * Utility functions                                                                                                 *
  ********************************************************************************************************************/
-
-function optimizationSuccessMessage(modsByCharacter) {
-  postMessage({
-    type: 'OptimizationSuccess',
-    result: modsByCharacter
-  });
-}
-
-function progressMessage(character, step, progress = 100) {
-  postMessage({
-    type: 'Progress',
-    character: character,
-    step: step,
-    progress: progress
-  });
-}
 
 /**
  * Convert a set of mods into an array of absolute stat values that the set provides to a character
@@ -825,7 +954,7 @@ Object.freeze(chooseTwoOptions);
  *                                 before the optimizer will suggest changing it
  * @param previousRun {Object} The settings from the last time the optimizer was run, used to limit expensive
  *                             recalculations for optimizing mods
- * @return {Object<String, ModSet>} An optimized set of mods, keyed by character base ID
+ * @return {Object} An object with `assignedSets` and `messages` to display
  */
 function optimizeMods(modsList, characters, order, changeThreshold, previousRun = {}) {
   const assignedSets = {};
@@ -841,12 +970,11 @@ function optimizeMods(modsList, characters, order, changeThreshold, previousRun 
     const character = characters[characterID];
     const previousCharacter = previousRun.characters ? previousRun.characters[characterID] : null;
     // For each character, check if the settings for the previous run were the same, and skip the character if so
-    // TODO: Check if new mods exist as well
     if (
       !optimizationChanged &&
-      changeThreshold === previousRun.threshold &&
-      previousRun.order &&
-      characterID === previousRun.order[index] &&
+      changeThreshold === previousRun.modChangeThreshold &&
+      previousRun.selectedCharacters &&
+      characterID === previousRun.selectedCharacters[index] &&
       previousCharacter &&
       previousCharacter.playerValues &&
       areObjectsEquivalent(character.playerValues, previousCharacter.playerValues) &&
@@ -1019,8 +1147,6 @@ function findBestModSetForCharacter(mods, character) {
  *   that fulfills the target stat as [mods, setRestriction]
  */
 function* getPotentialModsToSatisfyTargetStat(usableMods, character) {
-  //TODO: Send progressMessages as we go from here, because we can no longer count the total number of combinations
-  // to check completeness
   const setRestrictions = character.optimizerSettings.target.setRestrictions;
   const targetStat = character.optimizerSettings.target.targetStat;
   // A map from mod ID to the absolute value that mod provides for the target stat
