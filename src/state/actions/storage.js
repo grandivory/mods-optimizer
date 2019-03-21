@@ -8,6 +8,7 @@ import groupByKey from "../../utils/groupByKey";
 export const CLEAN_STATE = 'CLEAN_STATE';
 export const SET_GAME_SETTINGS = 'SET_GAME_SETTINGS';
 export const SET_PROFILE = 'SET_PROFILE';
+export const ADD_PLAYER_PROFILE = 'ADD_PLAYER_PROFILE';
 export const SET_PLAYER_PROFILES = 'SET_PLAYER_PROFILES';
 
 /**
@@ -273,6 +274,17 @@ export function setGameSettings(gameSettings) {
 export function setProfile(profile) {
   return {
     type: SET_PROFILE,
+    profile: profile
+  };
+}
+
+/**
+ * Add a profile to the state's list of player profiles
+ * @param profile {PlayerProfile}
+ */
+export function addPlayerProfile(profile) {
+  return {
+    type: ADD_PLAYER_PROFILE,
     profile: profile
   };
 }

@@ -24,6 +24,7 @@ export const RESTORE_PROGRESS = 'RESTORE_PROGRESS';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const DELETE_PROFILE = 'DELETE_PROFILE';
 export const SET_STATE = 'SET_STATE';
+export const SET_IS_BUSY = 'SET_IS_BUSY';
 
 export function changeSection(newSection) {
   return {
@@ -138,5 +139,12 @@ export function setState(state) {
   return {
     type: SET_STATE,
     state: state
+  };
+}
+
+export function setIsBusy(isBusy) {
+  return {
+    type: SET_IS_BUSY,
+    isBusy: isBusy
   };
 }

@@ -2,12 +2,11 @@
 import {restoreState, saveState} from "../storage";
 import {
   CHANGE_SECTION,
-  DELETE_PROFILE,
   HIDE_ERROR,
   HIDE_FLASH,
   HIDE_MODAL,
   RESET_STATE,
-  RESTORE_PROGRESS,
+  SET_IS_BUSY,
   SET_STATE,
   SHOW_ERROR,
   SHOW_FLASH,
@@ -37,9 +36,6 @@ import {
   UPDATE_MOD_CHANGE_THRESHOLD
 } from "../actions/characterEdit";
 import {
-  RECEIVE_CHARACTERS,
-  RECEIVE_PROFILE,
-  RECEIVE_STATS,
   REQUEST_CHARACTERS,
   REQUEST_PROFILE,
   REQUEST_STATS,
@@ -64,12 +60,11 @@ import {
 } from "../actions/review";
 import {
   changeSection,
-  deleteProfile,
   hideError,
   hideFlash,
   hideModal,
-  reset, resetState,
-  restoreProgress,
+  resetState,
+  setIsBusy,
   setState,
   showError,
   showFlash,
@@ -99,9 +94,6 @@ import {
   updateModChangeThreshold
 } from "./characterEdit";
 import {
-  receiveCharacters,
-  receiveProfile,
-  receiveStats,
   requestCharacters,
   requestProfile,
   requestStats,
@@ -119,18 +111,8 @@ import {
   unequipMod,
   unequipMods
 } from "./review";
-import {
-  CLEAN_STATE,
-  SET_GAME_SETTINGS,
-  SET_PLAYER_PROFILES,
-  SET_PROFILE
-} from "../actions/storage";
-import {
-  cleanState,
-  setGameSettings,
-  setPlayerProfiles,
-  setProfile
-} from "./storage";
+import {ADD_PLAYER_PROFILE, CLEAN_STATE, SET_GAME_SETTINGS, SET_PLAYER_PROFILES, SET_PROFILE} from "../actions/storage";
+import {addPlayerProfile, cleanState, setGameSettings, setPlayerProfiles, setProfile} from "./storage";
 
 /**
  * Update the currently-selected character profile by calling an update function on the existing profile. Optionally
@@ -165,6 +147,8 @@ export default function modsOptimizer(state, action) {
       return setGameSettings(state, action);
     case SET_PROFILE:
       return saveState(setProfile(state, action));
+    case ADD_PLAYER_PROFILE:
+      return addPlayerProfile(state, action);
     case SET_PLAYER_PROFILES:
       return setPlayerProfiles(state, action);
 
@@ -189,6 +173,8 @@ export default function modsOptimizer(state, action) {
       return saveState(toggleSidebar(state, action));
     case SET_STATE:
       return saveState(setState(state, action));
+    case SET_IS_BUSY:
+      return setIsBusy(state, action);
 
     case SELECT_CHARACTER:
       return saveState(selectCharacter(state, action));
@@ -232,19 +218,13 @@ export default function modsOptimizer(state, action) {
       return removeSetBonus(state, action);
 
     case REQUEST_CHARACTERS:
-      return requestCharacters(state, action);
-    case RECEIVE_CHARACTERS:
-      return saveState(receiveCharacters(state, action));
+      return requestCharacters(state);
     case REQUEST_PROFILE:
-      return requestProfile(state, action);
-    case RECEIVE_PROFILE:
-      return saveState(receiveProfile(state, action));
+      return requestProfile(state);
     case REQUEST_STATS:
-      return requestStats(state, action);
-    case RECEIVE_STATS:
-      return saveState(receiveStats(state, action));
+      return requestStats(state);
     case TOGGLE_KEEP_OLD_MODS:
-      return saveState(toggleKeepOldMods(state, action));
+      return saveState(toggleKeepOldMods(state));
 
     case CHANGE_MODS_FILTER:
       return saveState(changeModsFilter(state, action));

@@ -34,7 +34,7 @@ class App extends PureComponent {
     const queryParams = new URLSearchParams(document.location.search);
 
     if (queryParams.has('allyCode')) {
-      props.refreshPlayerData(queryParams.get('allyCode'));
+      props.refreshPlayerData(queryParams.get('allyCode'), true);
     }
 
     // Remove the query string after reading anything we needed from it.
@@ -129,7 +129,7 @@ class App extends PureComponent {
         <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodyInput = input}
                onKeyUp={(e) => {
                  if (e.key === 'Enter') {
-                   this.props.refreshPlayerData(e.target.value);
+                   this.props.refreshPlayerData(e.target.value, this.props.keepOldMods);
                  }
                  // Don't change the input if the user is trying to select something
                  if (window.getSelection().toString() !== '') {
@@ -174,7 +174,9 @@ class App extends PureComponent {
           </button>
         }
         <button type={'button'}
-                onClick={() => {this.props.refreshPlayerData(this.props.allyCode || allyCodyInput.value);}}>
+                onClick={() => {
+                  this.props.refreshPlayerData(this.props.allyCode || allyCodyInput.value, this.props.keepOldMods);
+                }}>
           Fetch my data!
         </button>
         <input id={'keep-old-mods'}
@@ -323,7 +325,7 @@ class App extends PureComponent {
              onKeyUp={(e) => {
                if (e.key === 'Enter') {
                  this.props.hideModal();
-                 this.props.refreshPlayerData(e.target.value);
+                 this.props.refreshPlayerData(e.target.value, false);
                }
                // Don't change the input if the user is trying to select something
                if (window.getSelection().toString() !== '') {
@@ -342,7 +344,7 @@ class App extends PureComponent {
         <button type={'button'}
                 onClick={() => {
                   this.props.hideModal();
-                  this.props.refreshPlayerData(allyCodeInput.value);
+                  this.props.refreshPlayerData(allyCodeInput.value, false);
                 }}>
           Fetch my data!
         </button>
@@ -400,7 +402,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   changeSection: newSection => dispatch(changeSection(newSection)),
-  refreshPlayerData: allyCode => dispatch(refreshPlayerData(allyCode)),
+  refreshPlayerData: (allyCode, keepOldMods) => dispatch(refreshPlayerData(allyCode, keepOldMods)),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),
   showError: (message) => dispatch(showError(message)),

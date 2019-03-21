@@ -14,8 +14,15 @@ export function setGameSettings(state, action) {
 export function setProfile(state, action) {
   return Object.assign({}, state, {
     allyCode: action.profile ? action.profile.allyCode : '',
-    isBusy: false,
     profile: action.profile
+  });
+}
+
+export function addPlayerProfile(state, action) {
+  return Object.assign({}, state, {
+    playerProfiles: Object.assign({}, state.playerProfiles, {
+      [action.profile.allyCode]: action.profile.playerName
+    })
   });
 }
 

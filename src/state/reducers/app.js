@@ -70,3 +70,9 @@ export function toggleSidebar(state, action) {
 export function setState(state, action) {
   return Object.assign({}, action.state, {db: state.db});
 }
+
+export function setIsBusy(state, action) {
+  return Object.assign({}, state, {
+    isBusy: action.isBusy
+  });
+}
