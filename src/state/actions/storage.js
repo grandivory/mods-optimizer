@@ -134,14 +134,16 @@ function loadGameSettings() {
  * @param allyCode
  * @returns {Function}
  */
-function loadProfiles(allyCode) {
+export function loadProfiles(allyCode) {
   return function(dispatch) {
     const db = getDatabase();
 
     db.getProfiles(
       profiles => {
         // Set the active profile
-        const profile = allyCode ? profiles.find(profile => profile.allyCode === allyCode) : null;
+        const profile = allyCode ?
+          profiles.find(profile => profile.allyCode === allyCode) :
+          profiles.find((profile, index) => index === 0);
         dispatch(setProfile(profile));
 
         // Set up the playerProfiles object used to switch between available profiles

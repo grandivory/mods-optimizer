@@ -1,6 +1,16 @@
 // @flow
-import {loadFromDb, loadProfile, populateDatabase, saveGameSettings, saveLastRuns, saveProfiles} from "./storage";
+import {
+  cleanState,
+  loadFromDb,
+  loadProfile,
+  loadProfiles,
+  populateDatabase,
+  saveGameSettings,
+  saveLastRuns,
+  saveProfiles
+} from "./storage";
 import {deserializeState} from "../storage";
+import getDatabase from "../storage/Database";
 
 export const CHANGE_SECTION = 'CHANGE_SECTION';
 export const SHOW_MODAL = 'SHOW_MODAL';
@@ -9,7 +19,7 @@ export const SHOW_ERROR = 'SHOW_ERROR';
 export const HIDE_ERROR = 'HIDE_ERROR';
 export const SHOW_FLASH = 'SHOW_FLASH';
 export const HIDE_FLASH = 'HIDE_FLASH';
-export const RESET = 'RESET';
+export const RESET_STATE = 'RESET_STATE';
 export const RESTORE_PROGRESS = 'RESTORE_PROGRESS';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const DELETE_PROFILE = 'DELETE_PROFILE';
@@ -65,8 +75,20 @@ export function hideFlash() {
 }
 
 export function reset() {
+  return function(dispatch) {
+    const db = getDatabase();
+    db.clear(
+      () => dispatch(resetState()),
+      error => dispatch(showError(
+        'Error clearing the database: ' + error.message + '. Try clearing it manually and refreshing.'
+      ))
+    );
+  };
+}
+
+export function resetState() {
   return {
-    type: RESET
+    type: RESET_STATE
   };
 }
 
@@ -86,6 +108,8 @@ export function restoreProgress(progressData) {
       dispatch(populateDatabase(newState));
       // Reload the state from the database
       dispatch(loadFromDb(stateObj.allyCode));
+      // Clean up any excess entries in the state
+      dispatch(cleanState());
     }
   }
 }
@@ -97,9 +121,16 @@ export function toggleSidebar() {
 }
 
 export function deleteProfile(allyCode) {
-  return {
-    type: DELETE_PROFILE,
-    allyCode: allyCode
+  return function(dispatch) {
+    const db = getDatabase();
+    db.deleteProfile(
+      allyCode,
+      () => dispatch(loadProfiles(null)),
+      error => dispatch(showFlash(
+        'Storage Error',
+        'Error deleting your profile: ' + error.message
+      ))
+    );
   };
 }
 

@@ -16,18 +16,11 @@ class Database {
 
     openDbRequest.onerror = function(event) {
       onerror(event.target.error);
-      // dispatch(showError(
-      //   'Unable to load database: ' +
-      //   event.target.error.message +
-      //   ' Please fix the problem and try again, or ask for help in the discord server below.'
-      // ));
     };
 
     openDbRequest.onsuccess = function(event) {
       self.database = event.target.result;
       onsuccess(self);
-      // Dispatch an event to say that the database is ready
-      // dispatch(databaseReady(self));
     };
 
     openDbRequest.onupgradeneeded = function(event) {
@@ -83,12 +76,9 @@ class Database {
 
     deleteDataRequest.onerror = function(event) {
       onerror(event.target.error);
-      // self.dispatch(showError('Error clearing out data from the database: ' +
-      //   event.target.error.message +
-      //   ' You may need to manually delete the database to clear it'));
     };
 
-    deleteDataRequest.onsuccess = function(event) {
+    deleteDataRequest.oncomplete = function() {
       onsuccess();
     };
 
@@ -112,16 +102,10 @@ class Database {
 
     deleteProfileRequest.onerror = function(event) {
       onerror(event.target.error);
-      // self.dispatch(showFlash(
-      //   'Storage Error',
-      //   'Error deleting your profile: ' +
-      //   event.target.error.message
-      // ));
     };
 
     deleteProfileRequest.onsuccess = function() {
       self.deleteLastRun(allyCode);
-      // self.getProfiles();
       onsuccess();
     };
   }
@@ -173,28 +157,44 @@ class Database {
   }
 
   /**
-   * Get a single profile
+   * Get a single profile. If no allyCode is given, the first profile in the database will be returned.
    * @param allyCode {string}
    * @param onsuccess {function(PlayerProfile)}
    * @param onerror {function(error)}
    */
   getProfile(allyCode, onsuccess = nothing, onerror = nothing) {
-    if (!allyCode) {
-      return onsuccess(null);
+    if (allyCode) {
+      const getProfileRequest =
+        // Using a read/write transaction forces the database to finish loading profiles before reading from here
+        this.database.transaction('profiles', 'readwrite').objectStore('profiles').get(allyCode);
+
+      getProfileRequest.onsuccess = function(event) {
+        const profile = PlayerProfile.deserialize(event.target.result);
+        onsuccess(profile);
+      };
+
+      getProfileRequest.onerror = function(event) {
+        onerror(event.target.error);
+      };
+    } else {
+      const getProfileRequest =
+        this.database.transaction('profiles', 'readwrite').objectStore('profiles').openCursor();
+
+      getProfileRequest.onsuccess = function(event) {
+        const cursor = event.target.result;
+
+        if (cursor) {
+          const profile = PlayerProfile.deserialize(cursor.value);
+          onsuccess(profile);
+        } else {
+          onsuccess(null);
+        }
+      };
+
+      getProfileRequest.onerror = function(event) {
+        onerror(event.target.error);
+      };
     }
-
-    const getProfileRequest =
-      // Using a read/write transaction forces the database to finish loading profiles before reading from here
-      this.database.transaction('profiles', 'readwrite').objectStore('profiles').get(allyCode);
-
-    getProfileRequest.onsuccess = function(event) {
-      const profile = PlayerProfile.deserialize(event.target.result);
-      onsuccess(profile);
-    };
-
-    getProfileRequest.onerror = function(event) {
-      onerror(event.target.error);
-    };
   }
 
   /**
@@ -259,10 +259,7 @@ class Database {
     };
 
     saveProfileRequest.oncomplete = function(event) {
-      console.log(event.target.result);
       onsuccess(keys);
-      // Reset the profiles available in the state
-      // self.getProfiles();
     };
 
     profiles.forEach(profile => {

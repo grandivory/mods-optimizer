@@ -18,7 +18,7 @@ export function showModal(state, action) {
   });
 }
 
-export function hideModal(state, action) {
+export function hideModal(state) {
   return Object.assign({}, state, {
     isBusy: false,
     setRestrictions: null,
@@ -33,7 +33,7 @@ export function showError(state, action) {
   });
 }
 
-export function hideError(state, action) {
+export function hideError(state) {
   return Object.assign({}, state, {
     isBusy: false,
     error: null
@@ -50,47 +50,21 @@ export function showFlash(state, action) {
   });
 }
 
-export function hideFlash(state, action) {
+export function hideFlash(state) {
   return Object.assign({}, state, {
     isBusy: false,
     flashMessage: null
   });
 }
 
-export function reset(state, action) {
-  state.db.clear();
-  return Object.assign({}, defaultState, {
-    db: state.db
-  });
-}
-
-export function restoreProgress(state, action) {
-  try {
-  } catch (e) {
-    return Object.assign({}, state, {
-      error:
-        'Unable to restore your progress from the provided file. Please make sure that you uploaded the correct file.'
-    });
-  }
+export function resetState() {
+  return Object.assign({}, defaultState);
 }
 
 export function toggleSidebar(state, action) {
   return Object.assign({}, state, {
     showSidebar: !state.showSidebar
   });
-}
-
-export function switchProfile(state, action) {
-  state.db.getProfile(action.allyCode);
-  return state;
-}
-
-export function deleteProfile(state, action) {
-  const nextProfile = Object.keys(state.playerProfiles).find(key => key !== action.allyCode);
-
-  state.db.deleteProfile(action.allyCode, () => state.db.getProfile(nextProfile));
-
-  return state;
 }
 
 export function setState(state, action) {

@@ -6,7 +6,7 @@ import {
   HIDE_ERROR,
   HIDE_FLASH,
   HIDE_MODAL,
-  RESET,
+  RESET_STATE,
   RESTORE_PROGRESS,
   SET_STATE,
   SHOW_ERROR,
@@ -68,7 +68,7 @@ import {
   hideError,
   hideFlash,
   hideModal,
-  reset,
+  reset, resetState,
   restoreProgress,
   setState,
   showError,
@@ -174,23 +174,19 @@ export default function modsOptimizer(state, action) {
     case SHOW_MODAL:
       return showModal(state, action);
     case HIDE_MODAL:
-      return hideModal(state, action);
+      return hideModal(state);
     case SHOW_ERROR:
       return showError(state, action);
     case HIDE_ERROR:
-      return hideError(state, action);
+      return hideError(state);
     case SHOW_FLASH:
       return showFlash(state, action);
     case HIDE_FLASH:
-      return hideFlash(state, action);
-    case RESET:
-      return saveState(reset(state, action));
-    case RESTORE_PROGRESS:
-      return saveState(restoreProgress(state, action));
+      return hideFlash(state);
+    case RESET_STATE:
+      return saveState(resetState(action));
     case TOGGLE_SIDEBAR:
       return saveState(toggleSidebar(state, action));
-    case DELETE_PROFILE:
-      return saveState(deleteProfile(state, action));
     case SET_STATE:
       return saveState(setState(state, action));
 
