@@ -8,7 +8,9 @@ import {GameSettings} from "../../domain/CharacterDataClasses";
 class CharacterAvatar extends React.PureComponent {
   render() {
     const character = this.props.character;
-    const gameSettings = this.props.gameSettings[character.baseID];
+    const gameSettings = this.props.gameSettings[character.baseID] ?
+      this.props.gameSettings[character.baseID] :
+      new GameSettings(character.baseID, character.baseID);
 
     if (!character) {
       return null;
@@ -34,9 +36,9 @@ class CharacterAvatar extends React.PureComponent {
         id={id}>
         {displayStars && [1, 2, 3, 4, 5, 6, 7].map(star)}
         <img
-          src={gameSettings ? gameSettings.avatarUrl : GameSettings.defaultAvatarUrl}
-          alt={gameSettings ? gameSettings.name : character.baseID}
-          title={gameSettings ? gameSettings.name : character.baseID}
+          src={gameSettings.avatarUrl}
+          alt={gameSettings.name}
+          title={gameSettings.name}
           draggable={false}/>
         {displayLevel && <div className={'character-level'}>{character.playerValues.level || '??'}</div>}
       </div>

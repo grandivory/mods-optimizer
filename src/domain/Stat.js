@@ -122,7 +122,7 @@ class Stat {
       } else if (!this.isPercent) {
         return new Stat(statType, this.rawValue);
       } else {
-        throw new Error(`Stat is given as a percentage, but ${character.gameSettings.name} has no base stats`);
+        throw new Error(`Stat is given as a percentage, but ${character.baseID} has no base stats`);
       }
     });
   }

@@ -22,6 +22,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import {changeOptimizerView} from "../../state/actions/review";
 import characterSettings from "../../constants/characterSettings";
+import {GameSettings} from "../../domain/CharacterDataClasses";
 
 class CharacterEditView extends PureComponent {
   dragStart(character) {
@@ -270,13 +271,17 @@ const mapStateToProps = (state) => {
    * @param character {Character} The character to check
    * @returns boolean
    */
-  const characterFilter = character =>
-    '' === state.characterFilter ||
-    state.gameSettings[character.baseID].name.toLowerCase().includes(state.characterFilter) ||
-    (state.gameSettings[character.baseID].tags || [])
-      .concat(characterSettings[character.baseID] ? characterSettings[character.baseID].extraTags : []).some(
-      tag => tag.toLowerCase().includes(state.characterFilter)
-    );
+  const characterFilter = character => {
+    const gameSettings = state.gameSettings[character.baseID] ?
+      state.gameSettings[character.baseID] :
+      new GameSettings(character.baseID, character.baseID);
+
+    return '' === state.characterFilter ||
+    gameSettings.name.toLowerCase().includes(state.characterFilter) ||
+    gameSettings.tags
+      .concat(characterSettings[character.baseID] ? characterSettings[character.baseID].extraTags : [])
+      .some(tag => tag.toLowerCase().includes(state.characterFilter))
+  };
 
   return {
     mods: profile.mods,

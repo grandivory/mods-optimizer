@@ -254,7 +254,11 @@ class ReviewList extends React.PureComponent {
     return Object.values(mapObjectByKeyAndValue(this.props.movingModAssignments, (assignedCharacterID, mods) => {
       const assignedCharacter = this.props.characters[assignedCharacterID];
 
-      return [this.props.gameSettings[assignedCharacter.baseID].name].concat(
+      return [
+        this.props.gameSettings[assignedCharacter.baseID] ?
+          this.props.gameSettings[assignedCharacter.baseID].name :
+          assignedCharacter.baseID
+      ].concat(
         mods.map(mod => {
           const moveFrom = mod.characterID ? this.props.gameSettings[mod.characterID].name : 'your unassigned mods';
           return `Move ${capitalize(mod.set.name)}(${mod.primaryStat.type}) ${capitalize(mod.slot)} from ${moveFrom}.`;
