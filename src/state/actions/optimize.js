@@ -57,7 +57,7 @@ export function finishModOptimization(result, settings) {
       dispatch(setIsBusy(false));
       dispatch(changeOptimizerView('sets'));
       dispatch(hideModal());
-      if (result.messages.length) {
+      if (Object.keys(result.messages).length) {
         const state = getState();
         dispatch(showFlash(
           '',

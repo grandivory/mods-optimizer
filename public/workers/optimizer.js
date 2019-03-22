@@ -1125,7 +1125,7 @@ function findBestModSetForCharacter(mods, character) {
       }
     }
 
-    if (!bestModSetAndMessages.modSet) {
+    if (!bestModSetAndMessages || !bestModSetAndMessages.modSet) {
       const {modSet: fallbackSet, messages: fallbackMessages} =
         findBestModSetByLooseningSetRestrictions(usableMods, character, setRestrictions);
       return {
@@ -1606,27 +1606,51 @@ function* getCandidateSetsGenerator(potentialUsedSets, baseSets, setlessMods, se
    * @param firstSet {Object<String, Mod>}
    * @param secondSet {Object<String, Mod>}
    * @param thirdSet {Object<String, Mod>}
+   * @param allowFirstSetNulls {boolean} Whether to allow null values in the first set
+   * @param allowSecondSetNulls {boolean} Whether to allow null values in the second set
    */
-  function* combineSetsGenerator(firstSet, secondSet, thirdSet) {
-    if ('undefined' === typeof thirdSet) {
-      for (let [firstSetSlots, secondSetSlots] of chooseFourOptions) {
-        for (let slot of firstSetSlots) {
-          setObject[slot] = firstSet[slot];
+  function* combineSetsGenerator(firstSet,
+                                 secondSet,
+                                 thirdSet,
+                                 allowFirstSetNulls = false,
+                                 allowSecondSetNulls = false
+  ) {
+    if (!thirdSet) {
+      generateSets:
+        for (let [firstSetSlots, secondSetSlots] of chooseFourOptions) {
+          for (let slot of firstSetSlots) {
+            if (!allowFirstSetNulls && null === firstSet[slot]) {
+              continue generateSets;
+            }
+            setObject[slot] = firstSet[slot];
+          }
+          for (let slot of secondSetSlots) {
+            if (!allowSecondSetNulls && null === secondSet[slot]) {
+              continue generateSets;
+            }
+            setObject[slot] = secondSet[slot];
+          }
+          yield setObjectToArray();
         }
-        for (let slot of secondSetSlots) {
-          setObject[slot] = secondSet[slot];
-        }
-        yield setObjectToArray();
-      }
     } else {
+      generateSets:
       for (let [firstSetSlots, secondSetSlots, thirdSetSlots] of chooseTwoOptions) {
         for (let slot of firstSetSlots) {
+          if (!allowFirstSetNulls && null === firstSet[slot]) {
+            continue generateSets;
+          }
           setObject[slot] = firstSet[slot];
         }
         for (let slot of secondSetSlots) {
+          if (!allowSecondSetNulls && null === secondSet[slot]) {
+            continue generateSets;
+          }
           setObject[slot] = secondSet[slot];
         }
         for (let slot of thirdSetSlots) {
+          if (null === thirdSet[slot]) {
+            continue generateSets;
+          }
           setObject[slot] = thirdSet[slot];
         }
         yield setObjectToArray();
@@ -1647,7 +1671,7 @@ function* getCandidateSetsGenerator(potentialUsedSets, baseSets, setlessMods, se
     } else {
       // The sets aren't completely deterministic. We need to check...
       // The four-mod set plus setless mods
-      yield* combineSetsGenerator(firstSet, setlessMods);
+      yield* combineSetsGenerator(firstSet, setlessMods, null, false, true);
 
       // The four-mod set plus any two-mod sets with value
       for (let secondSetType of twoModSets) {
@@ -1660,14 +1684,14 @@ function* getCandidateSetsGenerator(potentialUsedSets, baseSets, setlessMods, se
     firstSet = baseSets[forcedSets[2][0]];
 
     // The two-mod set plus setless mods
-    yield* combineSetsGenerator(setlessMods, firstSet);
+    yield* combineSetsGenerator(setlessMods, firstSet, null, true);
 
     // The two-mod set plus any two two-mod sets with value
     for (let i = 0; i < twoModSets.length; i++) {
       secondSet = baseSets[twoModSets[i]];
 
       // The forced set plus the second set plus setless mods
-      yield* combineSetsGenerator(setlessMods, firstSet, secondSet);
+      yield* combineSetsGenerator(setlessMods, firstSet, secondSet, true);
 
       for (let j = i; j < twoModSets.length; j++) {
         thirdSet = baseSets[twoModSets[j]];
@@ -1682,7 +1706,7 @@ function* getCandidateSetsGenerator(potentialUsedSets, baseSets, setlessMods, se
     secondSet = baseSets[forcedSets[2][1]];
 
     // The two sets plus setless mods
-    yield* combineSetsGenerator(firstSet, secondSet, setlessMods);
+    yield* combineSetsGenerator(setlessMods, firstSet, secondSet, true);
 
     // The two sets plus any two-mod sets with value
     for (let thirdSetType of twoModSets) {
@@ -1707,7 +1731,7 @@ function* getCandidateSetsGenerator(potentialUsedSets, baseSets, setlessMods, se
       let firstSet = baseSets[firstSetType];
 
       // the whole set plus setless mods
-      yield* combineSetsGenerator(firstSet, setlessMods);
+      yield* combineSetsGenerator(firstSet, setlessMods, null, false, true);
 
       // the whole set plus any 2-mod set
       for (let secondSetType of twoModSets) {
@@ -1720,14 +1744,14 @@ function* getCandidateSetsGenerator(potentialUsedSets, baseSets, setlessMods, se
       let firstSet = baseSets[twoModSets[i]];
 
       // the whole set plus setless mods
-      yield* combineSetsGenerator(setlessMods, firstSet);
+      yield* combineSetsGenerator(setlessMods, firstSet, null, true);
 
       // the whole set plus a set of 4 from any 2-mod sets and the base set
       for (let j = i; j < twoModSets.length; j++) {
         let secondSet = baseSets[twoModSets[j]];
 
         // the first set plus the second set plus setless mods
-        yield* combineSetsGenerator(setlessMods, firstSet, secondSet);
+        yield* combineSetsGenerator(setlessMods, firstSet, secondSet, true);
 
         // the first set plus the second set plus another set
         for (let k = j; k < twoModSets.length; k++) {
