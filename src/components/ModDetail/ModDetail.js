@@ -48,7 +48,7 @@ class ModDetail extends React.PureComponent {
   }
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch) => ({
   showModal: (content) => dispatch(showModal('', content)),

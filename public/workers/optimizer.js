@@ -21,21 +21,26 @@ self.onmessage = function(message) {
     };
 
     getDataTransaction.oncomplete = function() {
+      if (!profile) {
+        throw new Error('Unable to read your profile for optimization. Please clear your cache and try again.');
+      }
       const mods = profile.mods.map(deserializeMod);
       const characters = {};
-      lastRunCharacters = {};
+      const lastRunCharacters = {};
 
       for (let character of Object.values(profile.characters)) {
         character.optimizerSettings.target = deserializeTarget(character.optimizerSettings.target);
         characters[character.baseID] = character;
       }
 
-      for (let character of Object.values(lastRun.characters)) {
-        character.optimizerSettings.target = deserializeTarget(character.optimizerSettings.target);
-        lastRunCharacters[character.baseID] = character;
-      }
+      if (lastRun.characters) {
+        for (let character of Object.values(lastRun.characters)) {
+          character.optimizerSettings.target = deserializeTarget(character.optimizerSettings.target);
+          lastRunCharacters[character.baseID] = character;
+        }
 
-      lastRun.characters = lastRunCharacters;
+        lastRun.characters = lastRunCharacters;
+      }
 
       const optimizedModsByCharacter = optimizeMods(
         mods,

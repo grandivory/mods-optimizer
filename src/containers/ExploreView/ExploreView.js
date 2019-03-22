@@ -20,7 +20,7 @@ class ExploreView extends React.PureComponent {
 
     return (
       [
-        <Sidebar key={'sidebar'} content={this.sidebar()} />,
+        <Sidebar key={'sidebar'} content={ExploreView.sidebar()} />,
         <div className='mods' key={'mods'}>
           <h3>Showing {this.props.displayedMods.length} out of {this.props.modCount} mods.</h3>
           {modElements}
@@ -33,7 +33,7 @@ class ExploreView extends React.PureComponent {
    * Render the sidebar content
    * @returns {*}
    */
-  sidebar() {
+  static sidebar() {
     return <div className={'filters'} key={'filters'}>
       <ModFilter/>
     </div>;
@@ -131,6 +131,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = () => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExploreView);

@@ -8,7 +8,7 @@ import {connect} from "react-redux";
 
 class FlashMessage extends React.PureComponent {
   render() {
-    if (!this.props.content) {
+    if (!this.props.flash) {
       return null;
     }
 
@@ -16,8 +16,8 @@ class FlashMessage extends React.PureComponent {
 
     return <div className={'overlay'}>
       <div className={className}>
-        <h2>{this.props.content.heading}</h2>
-        <div className={'content'}>{this.props.content.content}</div>
+        <h2>{this.props.flash.heading}</h2>
+        <div className={'content'}>{this.props.flash.content}</div>
         <div className={'actions'}>
           <button type={'button'} onClick={this.props.hideFlash}>OK</button>
         </div>
@@ -27,7 +27,7 @@ class FlashMessage extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-  content: state.flashMessage
+  flash: state.flashMessage
 });
 
 const mapDispatchToProps = (dispatch) => ({
