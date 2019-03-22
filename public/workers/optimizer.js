@@ -718,9 +718,9 @@ function restrictMods(allMods, setRestriction) {
  * @returns {Boolean}
  */
 function areSetsComplete(setDefinition) {
-  return 6 === Object.entries(setDefinition).reduce((filledSlots, [setName, setCount]) => {
-    return filledSlots + setBonuses[setName].numberOfModsRequired * setCount;
-  }, 0);
+  return 6 === Object.entries(setDefinition)
+    .filter(([setName, setCount]) => -1 !== setCount)
+    .reduce((filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0);
 }
 
 /**
@@ -1195,7 +1195,7 @@ function* getPotentialModsToSatisfyTargetStat(usableMods, character) {
   });
 
   // Also check to see if any mod set a) provides a value for the stat and b) can be added to the set restrictions
-  const modSlotsOpen = 6 - Object.entries(setRestrictions).reduce(
+  const modSlotsOpen = 6 - Object.entries(setRestrictions).filter(([setName, setCount]) => -1 !== setCount).reduce(
     (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
   );
   for (let setBonus of Object.values(setBonuses)) {
@@ -1453,7 +1453,7 @@ function findBestModSetWithoutChangingRestrictions(usableMods, character, setsTo
   const usedSets = Object.entries(setsToUse)
     .filter(([setName, count]) => count > 0).map(([setName]) => setName);
 
-  const modSlotsOpen = 6 - Object.entries(setsToUse).reduce(
+  const modSlotsOpen = 6 - Object.entries(setsToUse).filter(([setName, setCount]) => -1 !== setCount).reduce(
     (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
   );
 
