@@ -1,12 +1,10 @@
 // @flow
 
+import {updateProfile} from "./app";
+import groupByKey from "../../utils/groupByKey";
+
 export const CHANGE_OPTIMIZER_VIEW = 'CHANGE_OPTIMIZER_VIEW';
 export const CHANGE_MOD_SET_FILTER = 'CHANGE_MOD_SET_FILTER';
-export const UNEQUIP_MOD = 'UNEQUIP_MOD';
-export const REASSIGN_MOD = 'REASSIGN_MOD';
-export const UNEQUIP_MODS = 'UNEQUIP_MODS';
-export const REASSIGN_MODS = 'REASSIGN_MODS';
-export const DELETE_MOD = 'DELETE_MOD';
 export const CHANGE_MODLIST_FILTER = 'CHANGE_MODLIST_FILTER';
 
 export function changeOptimizerView(newView) {
@@ -31,65 +29,94 @@ export function changeModSetFilter(newFilter) {
 /**
  * Unassign a mod
  * @param modID {string}
- * @returns {{type: string, mod: *}}
+ * @returns {Function}
  */
 export function unequipMod(modID) {
-  return {
-    type: UNEQUIP_MOD,
-    mod: modID
-  };
+  return updateProfile(profile => {
+    const mods = groupByKey(profile.mods, mod => mod.id);
+    const oldMod = mods[modID];
+    const newMod = oldMod ? oldMod.unequip() : null;
+
+    return newMod ?
+      profile.withMods(Object.values(Object.assign({}, mods, {
+        [modID]: newMod
+      }))) :
+      profile;
+  });
 }
 
 /**
  * Move a mod from its current character to a different character
  * @param modID {string}
  * @param characterID {string}
- * @returns {{type: string, mod: *, character: *}}
+ * @returns {Function}
  */
 export function reassignMod(modID, characterID) {
-  return {
-    type: REASSIGN_MOD,
-    mod: modID,
-    character: characterID
-  };
+  return updateProfile(profile => {
+    const modsById = groupByKey(profile.mods, mod => mod.id);
+    const oldMod = modsById[modID];
+    const currentlyEquippedMod =
+      profile.mods.find(mod => mod.slot === oldMod.slot && mod.characterID === characterID);
+
+    const newMods = Object.values(Object.assign(
+      {},
+      modsById,
+      oldMod ? {[oldMod.id]: oldMod.equip(characterID)} : {},
+      currentlyEquippedMod ? {[currentlyEquippedMod.id]: currentlyEquippedMod.unequip()} : {}
+    ));
+
+    return profile.withMods(newMods);
+  });
 }
 
 /**
  * Remove a set of mods from their assigned character
  * @param modIDS {Array<string>}
- * @returns {{type: string, mods: *}}
+ * @returns {Function}
  */
 export function unequipMods(modIDs) {
-  return {
-    type: UNEQUIP_MODS,
-    mods: modIDs
-  };
+  return updateProfile(profile => {
+    const modsById = groupByKey(profile.mods, mod => mod.id);
+    const modsUpdate = groupByKey(modIDs.map(modID => modsById[modID].unequip()), mod => mod.id);
+
+    return profile.withMods(Object.values(Object.assign({}, modsById, modsUpdate)));
+  });
 }
 
 /**
  * Reassign a set of mods to a new character
  * @param modIDs {Array<string>}
  * @param characterID {string}
- * @returns {{type: string, mods: *, character: *}}
+ * @returns {Function}
  */
 export function reassignMods(modIDs, characterID) {
-  return {
-    type: REASSIGN_MODS,
-    mods: modIDs,
-    character: characterID
-  };
+  return updateProfile(profile => {
+    const modsById = groupByKey(profile.mods, mod => mod.id);
+    const oldMods = modIDs.map(modID => modsById[modID]);
+    const currentlyEquippedMods =
+      oldMods.map(oldMod => profile.mods.find(mod => mod.slot === oldMod.slot && mod.characterID === characterID))
+        .filter(mod => mod);
+
+    const modsUpdate = groupByKey(
+      oldMods.map(mod => mod.equip(characterID)).concat(currentlyEquippedMods.map(mod => mod.unequip())),
+      mod => mod.id
+    );
+
+    return profile.withMods(Object.values(Object.assign({}, modsById, modsUpdate)));
+  });
 }
 
 /**
  * Remove a mod from a player's profile
  * @param mod {Mod}
- * @returns {{type: string, mod: Mod}}
+ * @returns {Function}
  */
 export function deleteMod(mod) {
-  return {
-    type: DELETE_MOD,
-    mod: mod
-  };
+  return updateProfile(profile => {
+    const oldMods = profile.mods;
+
+    return profile.withMods(oldMods.filter(oldMod => oldMod !== mod));
+  });
 }
 
 /**

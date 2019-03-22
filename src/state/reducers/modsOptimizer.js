@@ -23,16 +23,7 @@ import {
 import {REQUEST_CHARACTERS, REQUEST_PROFILE, REQUEST_STATS, TOGGLE_KEEP_OLD_MODS} from "../actions/data";
 import {CHANGE_MODS_FILTER} from "../actions/explore";
 import {CANCEL_OPTIMIZE_MODS, OPTIMIZE_MODS} from "../actions/optimize";
-import {
-  CHANGE_MOD_SET_FILTER,
-  CHANGE_MODLIST_FILTER,
-  CHANGE_OPTIMIZER_VIEW,
-  DELETE_MOD,
-  REASSIGN_MOD,
-  REASSIGN_MODS,
-  UNEQUIP_MOD,
-  UNEQUIP_MODS
-} from "../actions/review";
+import {CHANGE_MOD_SET_FILTER, CHANGE_MODLIST_FILTER, CHANGE_OPTIMIZER_VIEW,} from "../actions/review";
 import {
   changeSection,
   hideError,
@@ -56,16 +47,7 @@ import {
 import {requestCharacters, requestProfile, requestStats, toggleKeepOldMods} from "./data";
 import {changeModsFilter} from "./explore";
 import {cancelOptimizeMods, optimizeMods} from "./optimize";
-import {
-  changeModListFilter,
-  changeModSetFilter,
-  changeOptimizerView,
-  deleteMod,
-  reassignMod,
-  reassignMods,
-  unequipMod,
-  unequipMods
-} from "./review";
+import {changeModListFilter, changeModSetFilter, changeOptimizerView,} from "./review";
 import {ADD_PLAYER_PROFILE, CLEAN_STATE, SET_GAME_SETTINGS, SET_PLAYER_PROFILES, SET_PROFILE} from "../actions/storage";
 import {addPlayerProfile, cleanState, setGameSettings, setPlayerProfiles, setProfile} from "./storage";
 
@@ -75,7 +57,6 @@ export default function modsOptimizer(state, action) {
     return saveState(restoreState());
   }
 
-  // TODO: Make sure that all state modifiers use the proper state format and the database where needed
   switch (action.type) {
     case CLEAN_STATE:
       return saveState(cleanState(state));
@@ -146,16 +127,6 @@ export default function modsOptimizer(state, action) {
       return saveState(changeModSetFilter(state, action));
     case CHANGE_MODLIST_FILTER:
       return saveState(changeModListFilter(state, action));
-    case UNEQUIP_MOD:
-      return saveState(unequipMod(state, action));
-    case REASSIGN_MOD:
-      return saveState(reassignMod(state, action));
-    case UNEQUIP_MODS:
-      return saveState(unequipMods(state, action));
-    case DELETE_MOD:
-      return saveState(deleteMod(state, action));
-    case REASSIGN_MODS:
-      return saveState(reassignMods(state, action));
 
     default:
       return state;
