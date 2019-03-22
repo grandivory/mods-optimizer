@@ -98,7 +98,7 @@ export function resetState() {
 export function restoreProgress(progressData) {
   return function(dispatch) {
     const stateObj = JSON.parse(progressData);
-    if (stateObj.version > '1.4') {
+    if (stateObj.version > '1.4' && stateObj.version !== 'develop') {
       dispatch(saveGameSettings(stateObj.gameSettings));
       dispatch(saveProfiles(stateObj.profiles, stateObj.allyCode));
       dispatch(saveLastRuns(stateObj.lastRuns));
