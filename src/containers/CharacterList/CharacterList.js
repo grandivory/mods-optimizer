@@ -70,7 +70,9 @@ class CharacterList extends PureComponent {
   }
 
   renderCharacterBlock(character) {
-    const defaultTargets = groupByKey(characterSettings[character.baseID].targets, target => target.name);
+    const defaultTargets = characterSettings[character.baseID] ?
+      groupByKey(characterSettings[character.baseID].targets, target => target.name) :
+      {};
     const draggable = this.props.draggable;
 
     const selectedPlan = character.optimizerSettings.isLocked ? 'lock' : character.optimizerSettings.target.name;

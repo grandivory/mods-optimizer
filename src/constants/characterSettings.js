@@ -275,6 +275,9 @@ const characterSettings = {
     ['Imperial Grancor Maneuver'],
     DamageType.special
   ),
+  'DROIDEKA': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 5, 50, 0, 0, 10, 100, 0, 25, 20, 20, 0, 0, true)]
+  ),
   'EETHKOTH': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
     [],
@@ -395,7 +398,9 @@ const characterSettings = {
     ]
   ),
   'GRIEVOUS': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
+    [
+      new OptimizationPlan('PvP', 100, 0, 80, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
+    ],
     ['GG']
   ),
   'HANSOLO': new CharacterSettings(
