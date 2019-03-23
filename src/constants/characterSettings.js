@@ -497,7 +497,10 @@ const characterSettings = {
     DamageType.special
   ),
   'JOLEEBINDO': new CharacterSettings(
-    [new OptimizationPlan('Healer', 30, 0, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('Health and Speed', 100, 0, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Healer', 30, 0, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'JUHANI': new CharacterSettings(
     [new OptimizationPlan('Tank', 50, 25, 100, 0, 25, 0, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
