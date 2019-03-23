@@ -42,6 +42,8 @@ self.onmessage = function(message) {
         lastRun.characters = lastRunCharacters;
       }
 
+      lastRun.modAssignments = profile.modAssignments;
+
       const optimizedModsByCharacter = optimizeMods(
         mods,
         characters,
@@ -992,6 +994,13 @@ function optimizeMods(modsList, characters, order, changeThreshold, previousRun 
       character.optimizerSettings.sliceMods === previousCharacter.optimizerSettings.sliceMods &&
       character.optimizerSettings.isLocked === previousCharacter.optimizerSettings.isLocked
     ) {
+      const assignedMods = previousRun.modAssignments[characterID] || [];
+      // Remove any assigned mods from the available pool
+      for (let i = availableMods.length - 1; i >= 0; i--) {
+        if (assignedMods.includes(availableMods[i].id)) {
+          availableMods.splice(i, 1);
+        }
+      }
       return;
     } else {
       optimizationChanged = true;
