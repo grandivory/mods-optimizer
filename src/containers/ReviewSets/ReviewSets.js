@@ -156,21 +156,20 @@ class ReviewSets extends React.PureComponent {
       return (
         <div className={'set-row'} key={characterID}>
           <ModSetDetail
-            changeClass={'remove'}
             set={currentSet}
-            diffset={newSet}
-            showStatDiff={false}
             showAvatars={false}
-            character={character}/>
+            character={character}
+            useUpgrades={false}
+          />
           <CharacterAvatar character={character}/>
           <Arrow/>
           <ModSetDetail
-            changeClass={'add'}
             set={newSet}
             diffset={currentSet}
-            showStatDiff={true}
             showAvatars={true}
-            character={character}/>
+            character={character}
+            useUpgrades={true}
+          />
         </div>
       );
     }));

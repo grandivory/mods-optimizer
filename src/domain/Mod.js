@@ -96,11 +96,10 @@ class Mod {
   /**
    * Get a summary of how this mod affects a character's stats
    * @param character {Character}
-   * @param forDisplay {Boolean} Whether the stat summary is intended for display to the end user (so that things like
-   *                             physical and special crit chance are separated) or not
+   * @param withUpgrades {boolean} Whether to level and slice the mod, if they've been selected for the character
    * @returns {Object<String, Number>} A map from stat name to value
    */
-  getStatSummaryForCharacter(character) {
+  getStatSummaryForCharacter(character, withUpgrades = true) {
     let workingMod = this;
 
     const summary = {
@@ -120,12 +119,14 @@ class Mod {
       'Critical Avoidance': new Stat('Critical Avoidance %', '0')
     };
 
-    // Upgrade or slice each mod as necessary based on the optimizer settings and level of the mod
-    if (15 > workingMod.level && character.optimizerSettings.target.upgradeMods) {
-      workingMod = workingMod.levelUp();
-    }
-    if (15 === workingMod.level && 5 === workingMod.pips && character.optimizerSettings.sliceMods) {
-      workingMod = workingMod.slice();
+    if (withUpgrades) {
+      // Upgrade or slice each mod as necessary based on the optimizer settings and level of the mod
+      if (15 > workingMod.level && character.optimizerSettings.target.upgradeMods) {
+        workingMod = workingMod.levelUp();
+      }
+      if (15 === workingMod.level && 5 === workingMod.pips && character.optimizerSettings.sliceMods) {
+        workingMod = workingMod.slice();
+      }
     }
 
     for (let modStat of [workingMod.primaryStat].concat(workingMod.secondaryStats)) {

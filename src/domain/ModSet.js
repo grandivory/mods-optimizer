@@ -166,13 +166,11 @@ class ModSet {
    * Give a summary of the absolute stat increase given by this mod set for a given character
    *
    * @param character Character
-   * @param forDisplay Boolean Set to true if this is meant to be displayed to the user (rather than used to calculate
-   *                           the set score). This will then break out things like Critical Chance into physical and
-   *                           special
+   * @param withUpgrades {boolean} Whether to level and slice mods, if they've been selected for the character
    *
    * @return Object An object keyed on each stat in the mod set
    */
-  getSummary(character, forDisplay = false) {
+  getSummary(character, withUpgrades) {
     let summary = {};
 
     // Holds the number of mods in each set
@@ -187,7 +185,7 @@ class ModSet {
       }
       const set = mod.set;
 
-      const modStats = mod.getStatSummaryForCharacter(character, forDisplay);
+      const modStats = mod.getStatSummaryForCharacter(character, withUpgrades);
       for (let stat in modStats) {
         summary[stat] = summary[stat] ? summary[stat].plus(modStats[stat]) : modStats[stat];
       }
@@ -197,7 +195,7 @@ class ModSet {
       const currentMaxCount = maxSetCounts.get(set) || 0;
       if (set) {
         smallSetCounts.set(set, currentSmallCount + 1);
-        if (character.optimizerSettings.target.upgradeMods || 15 === mod.level) {
+        if ((withUpgrades && character.optimizerSettings.target.upgradeMods) || 15 === mod.level) {
           maxSetCounts.set(set, currentMaxCount + 1);
         }
       }

@@ -9,14 +9,11 @@ import "./ModSetView.css";
 class ModSetView extends React.PureComponent {
   render() {
     const set = this.props.modSet;
-    const diffSet = this.props.diffSet;
-    const changeClass = this.props.changeClass;
     const showAvatars = 'undefined' !== typeof this.props.showAvatars ? this.props.showAvatars : false;
 
     const modDetails = Object.keys(set).filter(slot => null !== set[slot]).map(slot =>
       <div className={'mod ' + slot} key={set[slot].id}>
         <ModImage
-          className={diffSet[slot] !== set[slot] ? changeClass : ''}
           mod={set[slot]}
           showAvatar={showAvatars}
         />

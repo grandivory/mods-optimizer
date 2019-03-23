@@ -12,12 +12,11 @@ class ModSetDetail extends React.PureComponent {
     const modSet = this.props.set;
     const diffSet = this.props.diffset;
     const character = this.props.character;
-    const changeClass = this.props.changeClass || '';
-    const showStatDiff = this.props.showStatDiff;
     const showAvatars = 'undefined' !== typeof this.props.showAvatars ? this.props.showAvatars : false;
+    const useUpgrades = this.props.useUpgrades;
 
-    const statSummary = modSet.getSummary(character, true);
-    const diffSummary = (diffSet && showStatDiff) ? diffSet.getSummary(character, true) : null;
+    const statSummary = modSet.getSummary(character, useUpgrades);
+    const diffSummary = diffSet ? diffSet.getSummary(character, false) : null;
 
     const statsDisplay = Object.values(statSummary).map((stat, index) => {
       const diffStat = diffSummary && diffSummary[stat.displayType] ? stat.minus(diffSummary[stat.displayType]) : null;
@@ -66,12 +65,12 @@ class ModSetDetail extends React.PureComponent {
 
     return (
       <div className={'mod-set-detail'}>
-        <ModSetView modSet={modSet} diffSet={diffSet} changeClass={changeClass} showAvatars={showAvatars} />
+        <ModSetView modSet={modSet} showAvatars={showAvatars} />
         <div className={'summary'}>
           <table>
             <thead>
             <tr>
-              <th colSpan={diffSet && showStatDiff ? 3 : 2}>Stats Summary</th>
+              <th colSpan={diffSet ? 3 : 2}>Stats Summary</th>
             </tr>
             </thead>
             <tbody>
