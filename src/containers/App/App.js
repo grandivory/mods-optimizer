@@ -273,7 +273,8 @@ class App extends PureComponent {
         </li>
         <li>
           Some new targets have been made for Death Trooper, Han Solo, and Greedo for hSTR Phase 3 that utilize target
-          stats. You'll see these appear after fetching your data.
+          stats. You'll see these appear after fetching your data. There are also a number of new and udpated targets
+          based on recent character reworks and new characters.
         </li>
         <li>
           The optimization itself now runs on a separate thread so it won't freeze the browser while running all of its
@@ -284,6 +285,10 @@ class App extends PureComponent {
           Because optimization can sometimes take a very long time now, a button has been added to the character
           selection screen to review previous recommendations. Additionally, re-running the optimizer will cause it to
           try to skip as many characters as possible if their settings haven't changed.
+        </li>
+        <li>
+          You now have the ability to lock all unselected characters when running the optimizer. This is in order to be
+          able to quickly remod characters that would normally be low on your list without affecting everyone else.
         </li>
       </ul>
       <h3>Happy Modding!</h3>
@@ -374,8 +379,6 @@ class App extends PureComponent {
     </div>;
   }
 }
-
-//TODO: Look over every mapStateToProps and mapDispatchToProps to make sure only the current state format is used
 
 const mapStateToProps = (state) => {
   const appProps = {

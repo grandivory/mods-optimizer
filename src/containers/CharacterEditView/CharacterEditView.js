@@ -109,8 +109,6 @@ class CharacterEditView extends PureComponent {
    * @returns JSX Element
    */
   globalSettings() {
-    //TODO: Add a checkbox to lock all unselected characters
-
     return <div className={'global-settings'} key={'global-settings'}>
       <h3>Global Settings</h3>
       <div className={'form-row'}>
