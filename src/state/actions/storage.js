@@ -42,7 +42,7 @@ export function populateDatabase(state) {
     if (state.profiles) {
       const profiles = Object.values(state.profiles).map(profile => {
         const characters = mapObject(profile.characters, character => {
-          const storedCharacter = Object.assign({}, character);
+          const storedCharacter = Object.assign({}, character.serialize());
           delete storedCharacter.gameSettings;
           delete storedCharacter.defaultSettings;
 
