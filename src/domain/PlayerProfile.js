@@ -13,9 +13,14 @@ export default class PlayerProfile {
   mods;
   selectedCharacters;
   modAssignments;
-  modChangeThreshold;
+  globalSettings;
   // Deprecated
   previousSettings;
+
+  defaultGlobalSettings = {
+    modChangeThreshold: 0,
+    lockUnselectedCharacters: false
+  };
 
   /**
    * @param allyCode {string} The ally code for the player whose data this is
@@ -24,8 +29,8 @@ export default class PlayerProfile {
    * @param mods {Array<Mod>} An array of Mods
    * @param selectedCharacters {Array<string>} An array of Character IDs
    * @param modAssignments {Object<string, Array<string>>} A map from Character ID to mod IDs
-   * @param modChangeThreshold {Number} An improvement threshold, as integer percent over 100, that a new mod set needs
-   *                                    to hit before it will be suggested as better by the optimizer
+   * @param globalSettings {Object} An object containing settings that apply in the context of a player, rather than a
+   *                                character
    * @param previousSettings {Object} Deprecated - An object that holds the previous values for characters, mods,
    *                                  selectedCharacters, and modChangeThreshold. If none of these have changed, then
    *                                  modAssignments shouldn't change on a reoptimization.
@@ -36,7 +41,7 @@ export default class PlayerProfile {
               mods = [],
               selectedCharacters = [],
               modAssignments = {},
-              modChangeThreshold = 0,
+              globalSettings = this.defaultGlobalSettings,
               previousSettings = {}
   ) {
     this.allyCode = allyCode;
@@ -45,7 +50,7 @@ export default class PlayerProfile {
     this.mods = mods;
     this.selectedCharacters = selectedCharacters;
     this.modAssignments = modAssignments;
-    this.modChangeThreshold = modChangeThreshold;
+    this.globalSettings = globalSettings;
     this.previousSettings = previousSettings;
   }
 
@@ -58,7 +63,7 @@ export default class PlayerProfile {
         this.mods,
         this.selectedCharacters,
         this.modAssignments,
-        this.modChangeThreshold,
+        this.globalSettings,
         this.previousSettings
       )
     } else {
@@ -75,7 +80,7 @@ export default class PlayerProfile {
         this.mods,
         this.selectedCharacters,
         this.modAssignments,
-        this.modChangeThreshold,
+        this.globalSettings,
         this.previousSettings
       );
     } else {
@@ -92,7 +97,7 @@ export default class PlayerProfile {
         mods,
         this.selectedCharacters,
         this.modAssignments,
-        this.modChangeThreshold,
+        this.globalSettings,
         this.previousSettings
       );
     } else {
@@ -109,7 +114,7 @@ export default class PlayerProfile {
         this.mods,
         selectedCharacters,
         this.modAssignments,
-        this.modChangeThreshold,
+        this.globalSettings,
         this.previousSettings
       );
     } else {
@@ -126,7 +131,7 @@ export default class PlayerProfile {
         this.mods,
         this.selectedCharacters,
         modAssignments,
-        this.modChangeThreshold,
+        this.globalSettings,
         this.previousSettings
       );
     } else {
@@ -134,21 +139,17 @@ export default class PlayerProfile {
     }
   }
 
-  withModChangeThreshold(modChangeThreshold) {
-    if (null !== modChangeThreshold) {
-      return new PlayerProfile(
-        this.allyCode,
-        this.playerName,
-        this.characters,
-        this.mods,
-        this.selectedCharacters,
-        this.modAssignments,
-        modChangeThreshold,
-        this.previousSettings
-      );
-    } else {
-      return this;
-    }
+  withGlobalSettings(globalSettings) {
+    return new PlayerProfile(
+      this.allyCode,
+      this.playerName,
+      this.characters,
+      this.mods,
+      this.selectedCharacters,
+      this.modAssignments,
+      globalSettings,
+      this.previousSettings
+    );
   }
 
   withPreviousSettings(previousSettings) {
@@ -160,7 +161,7 @@ export default class PlayerProfile {
         this.mods,
         this.selectedCharacters,
         this.modAssignments,
-        this.modChangeThreshold,
+        this.globalSettings,
         previousSettings
       );
     } else {
@@ -179,7 +180,7 @@ export default class PlayerProfile {
       this.mods,
       this.selectedCharacters,
       this.modAssignments,
-      this.modChangeThreshold,
+      this.globalSettings,
       {}
     );
   }
@@ -194,7 +195,8 @@ export default class PlayerProfile {
       mapObject(this.characters, character => character.serialize()),
       this.mods.map(mod => mod.serialize()),
       this.selectedCharacters,
-      this.modChangeThreshold
+      this.globalSettings.modChangeThreshold,
+      this.globalSettings.lockUnselectedCharacters
     );
   }
 
@@ -208,13 +210,20 @@ export default class PlayerProfile {
       mods: this.mods.map(mod => mod.serialize()),
       selectedCharacters: this.selectedCharacters,
       modAssignments: this.modAssignments,
-      modChangeThreshold: this.modChangeThreshold,
+      globalSettings: this.globalSettings,
       previousSettings: this.previousSettings
     };
   }
 
   static deserialize(profileJson) {
     if (profileJson) {
+      const globalSettings = profileJson.globalSettings ?
+        profileJson.globalSettings :
+        {
+          modChangeThreshold: profileJson.modChangeThreshold || 0,
+          lockUnselectedCharacters: false
+        };
+
       return new PlayerProfile(
         profileJson.allyCode,
         profileJson.playerName,
@@ -222,7 +231,7 @@ export default class PlayerProfile {
         profileJson.mods.map(Mod.deserialize),
         profileJson.selectedCharacters,
         profileJson.modAssignments,
-        profileJson.modChangeThreshold || 0,
+        globalSettings,
         profileJson.previousSettings || {}
       )
     } else {

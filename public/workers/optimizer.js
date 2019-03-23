@@ -24,7 +24,16 @@ self.onmessage = function(message) {
       if (!profile) {
         throw new Error('Unable to read your profile for optimization. Please clear your cache and try again.');
       }
-      const mods = profile.mods.map(deserializeMod);
+      const allMods = profile.mods.map(deserializeMod);
+
+      // Filter out any mods that are on locked characters, including if all unselected characters are locked
+      let usableMods = allMods.filter(mod =>
+        !mod.characterID || !profile.characters[mod.characterID].optimizerSettings.isLocked);
+
+      if (profile.globalSettings.lockUnselectedCharacters) {
+        usableMods = allMods.filter(mod => !mod.characterID || profile.selectedCharacters.includes(mod.characterID))
+      }
+
       const characters = {};
       const lastRunCharacters = {};
 
@@ -45,10 +54,11 @@ self.onmessage = function(message) {
       lastRun.modAssignments = profile.modAssignments;
 
       const optimizedModsByCharacter = optimizeMods(
-        mods,
+        usableMods,
         characters,
         profile.selectedCharacters,
-        profile.modChangeThreshold,
+        profile.globalSettings.modChangeThreshold,
+        profile.globalSettings.lockUnselectedCharacters,
         lastRun
       );
 
@@ -954,22 +964,20 @@ Object.freeze(chooseTwoOptions);
  * Find the optimum configuration for mods for a list of characters by optimizing mods for the first character,
  * optimizing mods for the second character after removing those used for the first, etc.
  *
- * @param modsList Array[Mod] An array of mods that could potentially be assign to each character
+ * @param availableMods Array[Mod] An array of mods that could potentially be assign to each character
  * @param characters {Object<String, Character>} A set of characters keyed by base ID that might be optimized
  * @param order Array[Character.baseID] The characters to optimize, in order
  * @param changeThreshold {Number} The % value that a new mod set has to improve upon the existing equipped mods
  *                                 before the optimizer will suggest changing it
+ * @param lockUnselectedCharacters {boolean} Whether the available mods for this run exclude those from outside the
+ *                                           selected Characters
  * @param previousRun {Object} The settings from the last time the optimizer was run, used to limit expensive
  *                             recalculations for optimizing mods
  * @return {Object} An object with `assignedSets` and `messages` to display
  */
-function optimizeMods(modsList, characters, order, changeThreshold, previousRun = {}) {
+function optimizeMods(availableMods, characters, order, changeThreshold, lockUnselectedCharacters, previousRun = {}) {
   const assignedSets = {};
   const messages = {};
-  const availableMods = modsList.filter(mod =>
-    // Use any mod that isn't assigned or that is assigned to a character that isn't locked
-    !mod.characterID || !characters[mod.characterID].optimizerSettings.isLocked
-  );
   let optimizationChanged = false;
 
   // For each not-locked character in the list, find the best mod set for that character
@@ -980,6 +988,7 @@ function optimizeMods(modsList, characters, order, changeThreshold, previousRun 
     if (
       !optimizationChanged &&
       changeThreshold === previousRun.modChangeThreshold &&
+      lockUnselectedCharacters === previousRun.lockUnselectedCharacters &&
       previousRun.selectedCharacters &&
       characterID === previousRun.selectedCharacters[index] &&
       previousCharacter &&

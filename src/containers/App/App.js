@@ -23,7 +23,7 @@ import {
 import {refreshPlayerData, toggleKeepOldMods} from "../../state/actions/data";
 import FlashMessage from "../../components/Modal/FlashMessage";
 import {saveAs} from 'file-saver';
-import {loadProfile, exportDatabase} from "../../state/actions/storage";
+import {exportDatabase, loadProfile} from "../../state/actions/storage";
 
 class App extends PureComponent {
 

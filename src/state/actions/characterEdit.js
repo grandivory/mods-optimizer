@@ -291,7 +291,24 @@ export function changeCharacterFilter(newFilter) {
  * @returns {Function}
  */
 export function updateModChangeThreshold(threshold) {
-  return updateProfile(profile => profile.withModChangeThreshold(threshold));
+  return updateProfile(profile =>
+    profile.withGlobalSettings(
+      Object.assign({}, profile.globalSettings, {modChangeThreshold: threshold})
+    )
+  );
+}
+
+/**
+ * Update whether to keep all unselected characters locked.
+ * @param lock {boolean}
+ * @returns {Function}
+ */
+export function updateLockUnselectedCharacters(lock) {
+  return updateProfile(profile =>
+    profile.withGlobalSettings(
+      Object.assign({}, profile.globalSettings, {lockUnselectedCharacters: lock})
+    )
+  );
 }
 
 /**

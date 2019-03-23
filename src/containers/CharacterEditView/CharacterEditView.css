@@ -45,6 +45,11 @@
   vertical-align: middle;
 }
 
+.global-settings .form-row {
+  padding: .5em 0;
+  border-bottom: 1px solid white;
+}
+
 .modal.instructions {
   height: auto;
   width: 50em;

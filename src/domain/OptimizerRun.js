@@ -6,6 +6,7 @@ export default class OptimizerRun {
   mods;
   selectedCharacters;
   modChangeThreshold;
+  lockUnselectedCharacters;
 
   /**
    * Note that all of the parameters for an OptimizerRun are pure Objects - no classes with extra methods built-in
@@ -15,8 +16,9 @@ export default class OptimizerRun {
    * @param mods {Array<Object>}
    * @param selectedCharacters {Array<string>}
    * @param modChangeThreshold {number}
+   * @param lockUnselectedCharacters {boolean}
    */
-  constructor(allyCode, characters, mods, selectedCharacters, modChangeThreshold) {
+  constructor(allyCode, characters, mods, selectedCharacters, modChangeThreshold, lockUnselectedCharacters) {
     this.allyCode = allyCode;
     // We care about everything stored for the character except the default settings
     mapObject(characters, character => {
@@ -27,6 +29,7 @@ export default class OptimizerRun {
     this.mods = mods;
     this.selectedCharacters = selectedCharacters;
     this.modChangeThreshold = modChangeThreshold;
+    this.lockUnselectedCharacters = lockUnselectedCharacters;
   }
 
   serialize() {
@@ -39,7 +42,8 @@ export default class OptimizerRun {
       runJson.characters,
       runJson.mods,
       runJson.selectedCharacters,
-      runJson.modChangeThreshold
+      runJson.modChangeThreshold,
+      runJson.lockUnselectedCharacters || false
     );
   }
 }

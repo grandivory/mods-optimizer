@@ -4,9 +4,9 @@ import React, {PureComponent} from "react";
 
 import "./CharacterEditView.css";
 import CharacterList from "../CharacterList/CharacterList";
-import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
-import {connect} from "react-redux";
 import {hideModal, showModal} from "../../state/actions/app";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import RangeInput from "../../components/RangeInput/RangeInput";
 import {
   changeCharacterFilter,
   changeCharacterTarget,
@@ -15,14 +15,16 @@ import {
   selectCharacter,
   unlockSelectedCharacters,
   unselectAllCharacters,
-  unselectCharacter, updateModChangeThreshold
+  unselectCharacter,
+  updateLockUnselectedCharacters,
+  updateModChangeThreshold
 } from "../../state/actions/characterEdit";
-import {optimizeMods} from "../../state/actions/optimize";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import RangeInput from "../../components/RangeInput/RangeInput";
 import {changeOptimizerView} from "../../state/actions/review";
+import {optimizeMods} from "../../state/actions/optimize";
 import characterSettings from "../../constants/characterSettings";
+import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import {GameSettings} from "../../domain/CharacterDataClasses";
+import {connect} from "react-redux";
 
 class CharacterEditView extends PureComponent {
   dragStart(character) {
@@ -107,6 +109,8 @@ class CharacterEditView extends PureComponent {
    * @returns JSX Element
    */
   globalSettings() {
+    //TODO: Add a checkbox to lock all unselected characters
+
     return <div className={'global-settings'} key={'global-settings'}>
       <h3>Global Settings</h3>
       <div className={'form-row'}>
@@ -120,6 +124,12 @@ class CharacterEditView extends PureComponent {
           defaultValue={this.props.modChangeThreshold}
           onChange={(threshold) => this.props.updateModChangeThreshold(threshold)}
         />
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor={'lock-unselected'}>Lock all unselected characters:</label>
+        <input type={'checkbox'}
+               defaultChecked={this.props.lockUnselectedCharacters}
+               onChange={(event) => this.props.updateLockUnselectedCharacters(event.target.checked)}/>
       </div>
     </div>;
   }
@@ -278,7 +288,7 @@ class CharacterEditView extends PureComponent {
         rapidly drain your battery if you are on a laptop or mobile device. If you want the optimization to go faster,
         there are a few things you can do:
       </p>
-      <hr />
+      <hr/>
       <ul>
         <li>
           Set very narrow targets for your stats. The narrower the target, the faster the optimizer can rule sets out.
@@ -296,7 +306,7 @@ class CharacterEditView extends PureComponent {
           leave the previous recommendation in place.
         </li>
       </ul>
-      <hr />
+      <hr/>
       <p>Do you want to continue?</p>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
@@ -323,15 +333,16 @@ const mapStateToProps = (state) => {
       new GameSettings(character.baseID, character.baseID);
 
     return '' === state.characterFilter ||
-    gameSettings.name.toLowerCase().includes(state.characterFilter) ||
-    gameSettings.tags
-      .concat(characterSettings[character.baseID] ? characterSettings[character.baseID].extraTags : [])
-      .some(tag => tag.toLowerCase().includes(state.characterFilter))
+      gameSettings.name.toLowerCase().includes(state.characterFilter) ||
+      gameSettings.tags
+        .concat(characterSettings[character.baseID] ? characterSettings[character.baseID].extraTags : [])
+        .some(tag => tag.toLowerCase().includes(state.characterFilter))
   };
 
   return {
     mods: profile.mods,
-    modChangeThreshold: profile.modChangeThreshold,
+    modChangeThreshold: profile.globalSettings.modChangeThreshold,
+    lockUnselectedCharacters: profile.globalSettings.lockUnselectedCharacters,
     characterFilter: state.characterFilter,
     gameSettings: state.gameSettings,
     highlightedCharacters: availableCharacters.filter(characterFilter),
@@ -351,6 +362,7 @@ const mapDispatchToProps = dispatch => ({
   clearSelectedCharacters: () => dispatch(unselectAllCharacters()),
   lockSelectedCharacters: () => dispatch(lockSelectedCharacters()),
   unlockSelectedCharacters: () => dispatch(unlockSelectedCharacters()),
+  updateLockUnselectedCharacters: (lock) => dispatch(updateLockUnselectedCharacters(lock)),
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
   optimizeMods: () => dispatch(optimizeMods()),

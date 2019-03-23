@@ -8,10 +8,10 @@ import {hideModal} from "../../state/actions/app";
 import {
   changeCharacterEditMode,
   changeMinimumModDots,
+  changeSetRestrictions,
   changeSliceMods,
   deleteTarget,
   finishEditCharacterTarget,
-  changeSetRestrictions,
   removeSetBonus,
   resetCharacterTargetToDefault,
   selectSetBonus,
