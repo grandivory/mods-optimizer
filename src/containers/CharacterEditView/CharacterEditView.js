@@ -134,7 +134,14 @@ class CharacterEditView extends PureComponent {
       <h3>Actions</h3>
       <button
         type={'button'}
-        onClick={() => this.props.optimizeMods(this.props.allyCode)}
+        onClick={() => {
+          const selectedTargets = this.props.selectedCharacters.map(character => character.optimizerSettings.target);
+          if (selectedTargets.some(target => null !== target.targetStat)) {
+            this.props.showModal('notice', this.optimizeWithTargetsModal());
+          } else {
+            this.props.optimizeMods();
+          }
+        }}
         disabled={!this.props.selectedCharacters.length}
       >
         Optimize my mods!
@@ -257,6 +264,45 @@ class CharacterEditView extends PureComponent {
         <button type={'button'} className={'red'} onClick={() => this.props.resetAllCharacterTargets()}>Reset</button>
       </div>
     </div>
+  }
+
+  /**
+   * Render the modal content to show a notice before optimizing a list that includes target stats
+   * @returns {*}
+   */
+  optimizeWithTargetsModal() {
+    return <div>
+      <h2>You have selected characters with target stats</h2>
+      <p>
+        Using a target stat can be very slow - <strong>up to multiple hours for a single character</strong> - and can
+        rapidly drain your battery if you are on a laptop or mobile device. If you want the optimization to go faster,
+        there are a few things you can do:
+      </p>
+      <hr />
+      <ul>
+        <li>
+          Set very narrow targets for your stats. The narrower the target, the faster the optimizer can rule sets out.
+        </li>
+        <li>
+          Add additional restrictions, like specific sets or primary stats.
+        </li>
+        <li>
+          Set targets that are hard to hit. If only a few sets can even manage to hit a target, the optimizer only needs
+          to check those sets.
+        </li>
+        <li>
+          If you've already completed a run for the character with a target stat, don't change their settings or those
+          of any characters above them. If the optimizer doesn't think it needs to recalculate the best mod set, it will
+          leave the previous recommendation in place.
+        </li>
+      </ul>
+      <hr />
+      <p>Do you want to continue?</p>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button type={'button'} onClick={() => this.props.optimizeMods()}>Optimize!</button>
+      </div>
+    </div>;
   }
 }
 

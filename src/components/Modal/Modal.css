@@ -38,3 +38,11 @@
   color: orangered;
   border-bottom: 1px solid white;
 }
+
+.modal.notice {
+  max-width: 40em;
+}
+
+.modal.notice h2 {
+  color: #eeca44;
+}
