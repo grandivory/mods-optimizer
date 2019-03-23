@@ -74,8 +74,8 @@ const characterSettings = {
   ),
   'BASTILASHANDARK': new CharacterSettings(
     [
-      new OptimizationPlan('Low Star', 10, 20, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('7-star', 0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('Low Star', 10, 20, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('7-star', 0, 0, 100, 0, 10, 0, 0, 5, 0, 0, 0, 0, 0, true)
     ],
     [],
     DamageType.special
@@ -422,7 +422,9 @@ const characterSettings = {
     DamageType.mixed
   ),
   'HK47': new CharacterSettings(
-    [new OptimizationPlan('Leader', 0, 0, 100, 50, 50, 0, 25, 0, 100, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 25, 0, 0, 75, 0, 25, 0, 0, 0, 0, true)
+    ]
   ),
   'HOTHHAN': new CharacterSettings(
     [new OptimizationPlan('PvP', 20, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
