@@ -851,7 +851,7 @@ const characterSettings = {
     ['solo']
   ),
   'ZAALBAR': new CharacterSettings(
-    [new OptimizationPlan('PvP', 25, 25, 100, 0, 25, 0, 10, 0, 20, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 50, 50, 25, 0, 25, 50, 0, 0, 0, 0, 0, 0, 50, true)]
   ),
   'ZAMWESELL': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 40, 50, 0, 25, 0, 40, 0, 0, 0, 0, true)]
