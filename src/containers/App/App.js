@@ -40,10 +40,6 @@ class App extends PureComponent {
     // Remove the query string after reading anything we needed from it.
     window.history.replaceState({}, document.title, document.location.href.split('?')[0]);
 
-    if ((props.previousVersion < '1.4.0') && props.profile) {
-      this.props.showModal('changelog-modal', this.changeLogModal());
-    }
-
     this.escapeListener = (e) => {
       if (e.key === 'Escape' && this.props.isModalCancelable) {
 
@@ -58,6 +54,13 @@ class App extends PureComponent {
 
   componentWillUnmount() {
     document.removeEventListener('keyup', this.escapeListener);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // Once we get a profile, check to see if the previous version is such that we should show the change log
+    if ((this.props.previousVersion < '1.4.1') && (!prevProps.profile && this.props.profile)) {
+      this.props.showModal('changelog-modal', this.changeLogModal());
+    }
   }
 
   /**
