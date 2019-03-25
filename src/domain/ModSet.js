@@ -173,6 +173,25 @@ class ModSet {
   getSummary(character, withUpgrades) {
     let summary = {};
 
+    if (!character.playerValues.baseStats) {
+      return {
+        'Health': null,
+        'Protection': null,
+        'Speed': null,
+        'Critical Damage': null,
+        'Potency': null,
+        'Tenacity': null,
+        'Physical Damage': null,
+        'Physical Critical Chance': null,
+        'Armor': null,
+        'Special Damage': null,
+        'Special Critical Chance': null,
+        'Resistance': null,
+        'Accuracy': null,
+        'Critical Avoidance': null
+      };
+    }
+
     // Holds the number of mods in each set
     let smallSetCounts = new WeakMap();
     // Hold the number of mods in each set that have been or will be leveled fully (thus providing the max set bonus)

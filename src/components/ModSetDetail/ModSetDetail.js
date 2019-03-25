@@ -21,7 +21,7 @@ class ModSetDetail extends React.PureComponent {
     const statsDisplay = Object.values(statSummary).map((stat, index) => {
       const diffStat = diffSummary && diffSummary[stat.displayType] ? stat.minus(diffSummary[stat.displayType]) : null;
 
-      if (!character.playerValues.equippedStats) {
+      if (!character.playerValues.equippedStats || !stat) {
         return <tr key={index}>
           <td className={'stat-type'}>{stat.displayType}</td>
           <td className={'stat-value'}>???(???)</td>
