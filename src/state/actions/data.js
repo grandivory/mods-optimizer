@@ -495,7 +495,7 @@ export function receiveStats(allyCode, requestedCharacters, characterStats) {
     );
 
     const errorCharacters = requestedCharacters.filter(charID =>
-      !characterStats.map(stats => stats.unit.defId).includes(charID)
+      !characterStats.find(stats => stats.unit.defId === charID && !stats.stats.error)
     );
 
     const errorMessage = errorCharacters.length > 0 ?
