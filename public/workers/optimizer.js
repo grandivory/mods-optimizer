@@ -984,6 +984,12 @@ function optimizeMods(availableMods, characters, order, changeThreshold, lockUns
   order.forEach((characterID, index) => {
     const character = characters[characterID];
     const previousCharacter = previousRun.characters ? previousRun.characters[characterID] : null;
+
+    // If the character is locked, skip it
+    if (character.optimizerSettings.isLocked) {
+      return;
+    }
+
     // For each character, check if the settings for the previous run were the same, and skip the character if so
     if (
       !optimizationChanged &&
@@ -1013,10 +1019,6 @@ function optimizeMods(availableMods, characters, order, changeThreshold, lockUns
       return;
     } else {
       optimizationChanged = true;
-    }
-
-    if (character.optimizerSettings.isLocked) {
-      return;
     }
 
     const {modSet: newModSetForCharacter, messages: characterMessages} =

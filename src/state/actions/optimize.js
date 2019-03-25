@@ -31,11 +31,11 @@ export function finishModOptimization(result, settings) {
       const newAssignments = {};
       // Go through the previous mod assignments until one is found in the new result.
       // Anything above that won't have changed
-      for (let character of settings.selectedCharacters) {
-        if (result.assignedSets[character]) {
-          newAssignments[character] = result.assignedSets[character];
-        } else {
-          newAssignments[character] = profile.modAssignments[character];
+      for (let characterID of settings.selectedCharacters) {
+        if (result.assignedSets[characterID]) {
+          newAssignments[characterID] = result.assignedSets[characterID];
+        } else if (!profile.characters[characterID].optimizerSettings.isLocked) {
+          newAssignments[characterID] = profile.modAssignments[characterID];
         }
       }
 
