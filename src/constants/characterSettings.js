@@ -428,7 +428,7 @@ const characterSettings = {
   ),
   'HK47': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('PvP', 0, 0, 100, 75, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
     ]
   ),
   'HOTHHAN': new CharacterSettings(
