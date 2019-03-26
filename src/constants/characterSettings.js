@@ -75,7 +75,7 @@ const characterSettings = {
   'BASTILASHANDARK': new CharacterSettings(
     [
       new OptimizationPlan('Low Star', 10, 20, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('7-star', 0, 0, 100, 0, 10, 0, 0, 5, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('7-star', 0, 0, 100, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, true)
     ],
     [],
     DamageType.special
@@ -232,6 +232,11 @@ const characterSettings = {
   'DARTHNIHILUS': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['Nightmare'],
+    DamageType.special
+  ),
+  'DARTHREVAN': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 10, 0, 0, 15, 10, 0, 0, 0, 0, true)],
+    [],
     DamageType.special
   ),
   'DARTHSIDIOUS': new CharacterSettings(
