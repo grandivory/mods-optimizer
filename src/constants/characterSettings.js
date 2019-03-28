@@ -324,7 +324,10 @@ const characterSettings = {
     ]
   ),
   'FINN': new CharacterSettings(
-    [optimizationStrategy["Slow Crit, Physical Damage, Potency"].rename('PvP')],
+    [
+      optimizationStrategy["Slow Crit, Physical Damage, Potency"].rename('PvP'),
+      new OptimizationPlan('hSTR Phase 1', 0, -5, 80, 100, 0, 0, 50, 0, 75, 0, 0, 0, 0, true)
+    ],
     ['Zinn']
   ),
   'FIRSTORDEREXECUTIONER': new CharacterSettings(
