@@ -313,7 +313,10 @@ const characterSettings = {
     ['EE', 'Murderbears']
   ),
   'EWOKSCOUT': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
+    [
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
+      new OptimizationPlan('hSTR Phase 2', 0, 0, 50, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
+    ],
     ['Murderbears']
   ),
   'EZRABRIDGERS3': new CharacterSettings(
@@ -547,7 +550,10 @@ const characterSettings = {
     [new OptimizationPlan('PvE', 0, 0, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
   ),
   'LOGRAY': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('hSTR Phase 2', 5, 5, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, true)
+    ],
     ['Murderbears']
   ),
   'LUKESKYWALKER': new CharacterSettings(
@@ -843,7 +849,10 @@ const characterSettings = {
     ['Wiggs', 'chiggs', 'SuperStar2D2']
   ),
   'WICKET': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
+    [
+      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('hSTR Phase 2', 0, 0, 80, 50, 0, 0, 100, 0, 10, 0, 0, 0, 0, true)
+    ],
     ['Murderbears']
   ),
   'YOUNGCHEWBACCA': new CharacterSettings(
