@@ -21,11 +21,22 @@ const store = createStore(
 // Instantiate the database
 getDatabase(
   () => store.dispatch(databaseReady(store.getState())),
-  (error) => store.dispatch(showError(
-    'Unable to load database: ' +
-    error.message +
-    ' Please fix the problem and try again, or ask for help in the discord server below.'
-  ))
+  (error) => {
+    if (error instanceof DOMException) {
+      store.dispatch(showError(
+        [<p key={1}>Unable to load database. This may be caused by a bug in Firefox in Private Browsing mode or
+        with history turned off. If using Firefox, please switch to normal browsing mode. If you are still having
+        issues, please ask for help in the discord server below.</p>,
+          <p key={2}>Error Message: {error.message}</p>]
+      ));
+    } else {
+      store.dispatch(showError(
+        'Unable to load database: ' +
+        error.message +
+        ' Please fix the problem and try again, or ask for help in the discord server below.'
+      ));
+    }
+  }
 );
 
 ReactDOM.render(
