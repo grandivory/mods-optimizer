@@ -112,42 +112,46 @@ class CharacterList extends PureComponent {
 
     const baseClass = `character-block ${character.baseID}`;
 
-    return <div className={character.optimizerSettings.isLocked ? `${baseClass} locked` : baseClass}
+    return <div className={'character-block-wrapper'}
                 key={character.baseID}
-                draggable={draggable}
-                onDragStart={this.characterBlockDragStart(character.baseID)}
                 onDragEnter={this.characterBlockDragEnter()}
                 onDragOver={this.characterBlockDragOver()}
                 onDragLeave={this.characterBlockDragLeave()}
                 onDrop={this.characterBlockDrop(character.baseID)}
                 onDoubleClick={() => this.props.unselectCharacter(character.baseID)}>
-      <CharacterAvatar character={character}/>
-      <div className={'character-name'}>
-        {this.props.gameSettings[character.baseID] ? this.props.gameSettings[character.baseID].name : character.baseID}
-      </div>
-      <div className={'target'}>
-        <label>Target:</label>
-        <div className={'dropdown'}>
-          <select value={selectedPlan} onChange={onSelect.bind(this)}>
-            {options}
-            <option value={'custom'}>Custom</option>
-            <option value={'lock'}>Lock</option>
-          </select>
+      <div className={character.optimizerSettings.isLocked ? `${baseClass} locked` : baseClass}
+           draggable={draggable}
+           onDragStart={this.characterBlockDragStart(character.baseID)}>
+        <CharacterAvatar character={character}/>
+        <div className={'character-name'}>
+          {this.props.gameSettings[character.baseID] ?
+            this.props.gameSettings[character.baseID].name :
+            character.baseID}
         </div>
-        <button
-          type={'button'}
-          onClick={() => this.props.showModal(
-            '',
-            <CharacterEditForm
-              character={character}
-              target={selectedPlan !== 'lock' ?
-                character.optimizerSettings.target :
-                character.optimizerSettings.target.rename('custom')
-              }
-            />
-          )}>
-          Edit
-        </button>
+        <div className={'target'}>
+          <label>Target:</label>
+          <div className={'dropdown'}>
+            <select value={selectedPlan} onChange={onSelect.bind(this)}>
+              {options}
+              <option value={'custom'}>Custom</option>
+              <option value={'lock'}>Lock</option>
+            </select>
+          </div>
+          <button
+            type={'button'}
+            onClick={() => this.props.showModal(
+              '',
+              <CharacterEditForm
+                character={character}
+                target={selectedPlan !== 'lock' ?
+                  character.optimizerSettings.target :
+                  character.optimizerSettings.target.rename('custom')
+                }
+              />
+            )}>
+            Edit
+          </button>
+        </div>
       </div>
     </div>;
   }
@@ -158,7 +162,16 @@ class CharacterList extends PureComponent {
            onDragEnter={this.characterBlockDragEnter()}
            onDragOver={this.characterBlockDragOver()}
            onDragLeave={this.characterBlockDragLeave()}
-           onDrop={this.characterBlockDrop('')}>
+           onDrop={this.characterBlockDrop(this.props.lastCharacterID)}>
+        {0 < this.props.characters.length &&
+        // Add a block to allow characters to be dragged to the top of the list
+        <div className={'top-block'}
+             onDragEnd={this.characterBlockDragEnter()}
+             onDragOver={this.characterBlockDragOver()}
+             onDragLeave={this.characterBlockDragLeave()}
+             onDrop={this.characterBlockDrop(null)}
+        />
+        }
         {0 < this.props.characters.length && this.props.characters.map(character =>
           this.renderCharacterBlock(character)
         )}
@@ -179,7 +192,8 @@ class CharacterList extends PureComponent {
 const mapStateToProps = (state) => {
   return {
     characters: state.profile.selectedCharacters.map(characterID => state.profile.characters[characterID]),
-    gameSettings: state.gameSettings
+    gameSettings: state.gameSettings,
+    lastCharacterID: state.profile.selectedCharacters[state.profile.selectedCharacters.length - 1]
   };
 };
 

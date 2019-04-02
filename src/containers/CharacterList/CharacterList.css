@@ -1,3 +1,22 @@
+.top-block {
+  height: 1.83em;
+  margin: 0;
+  padding: 0;
+}
+
+.top-block.drop-character {
+  box-shadow: 0 2px 3px 0 darkred;
+}
+
+.character-block-wrapper {
+  padding: .25em 0;
+  margin: 0;
+}
+
+.character-block-wrapper.drop-character * {
+  pointer-events: none;
+}
+
 .character-block {
   display: grid;
   grid-template-rows: auto auto;
@@ -8,23 +27,18 @@
   border: 1px solid dodgerblue;
   background-color: rgba(0, 0, 96, .5);
   padding: .25em;
-  margin: .5em 0;
   text-align: left;
   max-width: 100%;
 }
 
-.character-block.drop-character,
-.character-list.drop-character .character-block:last-child {
+.character-block-wrapper.drop-character .character-block,
+.character-list.drop-character .character-block-wrapper:last-child .character-block {
   box-shadow: 0 2px 3px 0 darkred;
 }
 
 .character-block.locked {
   border-color: darkred;
   opacity: .75;
-}
-
-.character-block.drop-character * {
-  pointer-events: none;
 }
 
 .character-block .avatar {

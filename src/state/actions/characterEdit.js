@@ -27,7 +27,9 @@ export function selectCharacter(characterID, prevCharacterID = null) {
       }
     }
 
-    if (!prevCharacterID || !profile.selectedCharacters.includes(prevCharacterID)) {
+    if (!prevCharacterID) {
+      return profile.withSelectedCharacters([characterID].concat(oldSelectedCharacters));
+    } else if (!profile.selectedCharacters.includes(prevCharacterID)) {
       return profile.withSelectedCharacters(oldSelectedCharacters.concat([characterID]));
     } else {
       const newSelectedCharacters = oldSelectedCharacters.slice();

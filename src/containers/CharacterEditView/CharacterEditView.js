@@ -182,7 +182,7 @@ class CharacterEditView extends PureComponent {
       key={character.baseID}
     >
       <div draggable={true} onDragStart={this.dragStart(character)}
-           onDoubleClick={() => this.props.selectCharacter(character.baseID)}>
+           onDoubleClick={() => this.props.selectCharacter(character.baseID, this.props.lastSelectedCharacter)}>
         <CharacterAvatar character={character}/>
       </div>
       <div className={'character-name'}>
@@ -346,6 +346,7 @@ const mapStateToProps = (state) => {
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
     selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id]),
+    lastSelectedCharacter: profile.selectedCharacters[profile.selectedCharacters.length - 1],
     showReviewButton: profile.modAssignments && Object.keys(profile.modAssignments).length,
   };
 };

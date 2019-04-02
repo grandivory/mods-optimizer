@@ -37,6 +37,10 @@
   overflow-x: hidden;
 }
 
+.character-edit .selected-characters h4 {
+  margin-bottom: 0;
+}
+
 .character-edit .selected-characters .character-list {
   padding-right: 1em;
 }
