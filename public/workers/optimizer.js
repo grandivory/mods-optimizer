@@ -978,7 +978,25 @@ Object.freeze(chooseTwoOptions);
 function optimizeMods(availableMods, characters, order, changeThreshold, lockUnselectedCharacters, previousRun = {}) {
   const assignedSets = {};
   const messages = {};
-  let optimizationChanged = false;
+
+  // We only want to recalculate mods if settings have changed between runs. If global settings or locked
+  // characters have changed, recalculate all characters
+  let recalculateMods = changeThreshold !== previousRun.modChangeThreshold ||
+    lockUnselectedCharacters !== previousRun.lockUnselectedCharacters ||
+    characters.length !== previousRun.characters.length;
+
+  if (!recalculateMods) {
+    for (let charID in characters) {
+      if (!characters.hasOwnProperty(charID)) {
+        continue;
+      }
+      if (!previousRun.characters[charID] ||
+        previousRun.characters[charID].optimizerSettings.isLocked !== characters[charID].optimizerSettings.isLocked) {
+        recalculateMods = true;
+        break;
+      }
+    }
+  }
 
   // For each not-locked character in the list, find the best mod set for that character
   order.forEach((characterID, index) => {
@@ -992,9 +1010,7 @@ function optimizeMods(availableMods, characters, order, changeThreshold, lockUns
 
     // For each character, check if the settings for the previous run were the same, and skip the character if so
     if (
-      !optimizationChanged &&
-      changeThreshold === previousRun.modChangeThreshold &&
-      lockUnselectedCharacters === previousRun.lockUnselectedCharacters &&
+      !recalculateMods &&
       previousRun.selectedCharacters &&
       characterID === previousRun.selectedCharacters[index] &&
       previousCharacter &&
@@ -1018,7 +1034,7 @@ function optimizeMods(availableMods, characters, order, changeThreshold, lockUns
       }
       return;
     } else {
-      optimizationChanged = true;
+      recalculateMods = true;
     }
 
     const {modSet: newModSetForCharacter, messages: characterMessages} =
@@ -1654,27 +1670,27 @@ function* getCandidateSetsGenerator(potentialUsedSets, baseSets, setlessMods, se
         }
     } else {
       generateSets:
-      for (let [firstSetSlots, secondSetSlots, thirdSetSlots] of chooseTwoOptions) {
-        for (let slot of firstSetSlots) {
-          if (!allowFirstSetNulls && null === firstSet[slot]) {
-            continue generateSets;
+        for (let [firstSetSlots, secondSetSlots, thirdSetSlots] of chooseTwoOptions) {
+          for (let slot of firstSetSlots) {
+            if (!allowFirstSetNulls && null === firstSet[slot]) {
+              continue generateSets;
+            }
+            setObject[slot] = firstSet[slot];
           }
-          setObject[slot] = firstSet[slot];
-        }
-        for (let slot of secondSetSlots) {
-          if (!allowSecondSetNulls && null === secondSet[slot]) {
-            continue generateSets;
+          for (let slot of secondSetSlots) {
+            if (!allowSecondSetNulls && null === secondSet[slot]) {
+              continue generateSets;
+            }
+            setObject[slot] = secondSet[slot];
           }
-          setObject[slot] = secondSet[slot];
-        }
-        for (let slot of thirdSetSlots) {
-          if (null === thirdSet[slot]) {
-            continue generateSets;
+          for (let slot of thirdSetSlots) {
+            if (null === thirdSet[slot]) {
+              continue generateSets;
+            }
+            setObject[slot] = thirdSet[slot];
           }
-          setObject[slot] = thirdSet[slot];
+          yield setObjectToArray();
         }
-        yield setObjectToArray();
-      }
     }
   }
 
