@@ -229,6 +229,9 @@ const characterSettings = {
     ],
     ['NS', 'hSTR NS']
   ),
+  'DARTHMALAK': new CharacterSettings(
+    [new OptimizationPlan('PvP', 15, 25, 100, 10, 10, 0, 10, 0, 10, 0, 0, 0, 0, true)]
+  ),
   'DARTHNIHILUS': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['Nightmare'],
