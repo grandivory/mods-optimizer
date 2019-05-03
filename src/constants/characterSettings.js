@@ -757,7 +757,10 @@ const characterSettings = {
     ['SM']
   ),
   'SITHTROOPER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 25, 25, 50, 0, 0, 15, 0, 0, 0, 25, 25, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 25, 25, 50, 0, 0, 15, 0, 0, 0, 25, 25, 0, 0, true),
+      new OptimizationPlan('DR Lead', 25, 50, 15, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, true)
+    ],
     ['SiT', 'Nightmare']
   ),
   'SMUGGLERCHEWBACCA': new CharacterSettings(
