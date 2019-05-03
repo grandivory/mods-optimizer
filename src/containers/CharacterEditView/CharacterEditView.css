@@ -32,7 +32,7 @@
 }
 
 .character-edit .character-list {
-  height: calc(100% - 4em);
+  height: calc(100% - 3em);
   overflow-y: auto;
   overflow-x: hidden;
 }
