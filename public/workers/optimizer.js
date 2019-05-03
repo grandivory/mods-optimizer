@@ -1106,7 +1106,12 @@ function optimizeMods(availableMods, characters, order, changeThreshold, lockUns
  * @returns {{messages: Array<String>, modSet: Array<Mod>}}
  */
 function findBestModSetForCharacter(mods, character) {
-  const usableMods = character.playerValues.gearLevel < 12 ? mods.filter(mod => 6 > mod.pips) : mods;
+  const modsToCache = character.playerValues.gearLevel < 12 ?
+    mods.filter(mod => 6 > mod.pips || mod.characterID === character.baseID) :
+    mods;
+  const usableMods = character.playerValues.gearLevel < 12 ?
+    mods.filter(mod => 6 > mod.pips || mod.characterID === character.baseID) :
+    mods;
   const setRestrictions = character.optimizerSettings.target.setRestrictions;
   const targetStat = character.optimizerSettings.target.targetStat;
   // Clear the cache at the start of each character
@@ -1114,7 +1119,7 @@ function findBestModSetForCharacter(mods, character) {
 
   // Get the flattened stats and score every mod for this character. From that point on, only look at the cache
   // for the rest of the time processing mods for this character.
-  usableMods.forEach(mod => {
+  modsToCache.forEach(mod => {
     getFlatStatsFromMod(mod, character);
     scoreMod(mod, character);
   });
