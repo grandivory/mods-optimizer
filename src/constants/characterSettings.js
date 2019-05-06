@@ -67,6 +67,7 @@ const characterSettings = {
     [
       new OptimizationPlan('Leader', 10, 0, 100, 0, 50, 0, 0, 25, 0, 0, 0, 0, 0, true),
       optimizationStrategy["Special Damage with Potency"].rename('Non-leader'),
+      optimizationStrategy["Special Damage"].rename('JKR Lead'),
       new OptimizationPlan('hSTR P2 Jedi', 0, 0, 100, 50, 0, 0, 0, 25, 50, 0, 0, 0, 0, true)
     ],
     [],
@@ -373,6 +374,7 @@ const characterSettings = {
       new OptimizationPlan('Speedy Tank', 25, 50, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
       new OptimizationPlan('Balanced', 50, 100, 50, 0, 0, 50, 0, 0, 0, 25, 25, 0, 0, true),
       new OptimizationPlan('Slow Tank', 50, 100, 0, 0, 0, 50, 0, 0, 0, 25, 25, 0, 0, true),
+      new OptimizationPlan('Padme Lead', 100, 0, 50, 0, 0, 50, 0, 0, 0, 25, 25, 0, 0, true),
       new OptimizationPlan('hSTR P2 Jedi', 0, 100, 50, 0, 0, 0, 10, 0, 25, 100, 0, 0, 0, true)
     ],
     ['GK', 'Titans']
@@ -634,6 +636,10 @@ const characterSettings = {
   'OLDBENKENOBI': new CharacterSettings(
     [new OptimizationPlan('Speed', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['OB']
+  ),
+  'PADMEAMIDALA': new CharacterSettings(
+    [new OptimizationPlan('PvP', 35, 0, 100, 25, 15, 0, 10, 0, 10, 0, 0, 0, 0, true)],
+    ['Padme']
   ),
   'PAO': new CharacterSettings(
     [
