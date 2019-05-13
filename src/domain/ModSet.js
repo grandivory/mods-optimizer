@@ -287,9 +287,10 @@ class ModSet {
    * Get the value of this full mod set for optimization
    *
    * @param character
+   * @param withUpgrades {Boolean} Whether to upgrade mods while calculating the value of the set
    */
-  getOptimizationValue(character) {
-    return Object.values(this.getSummary(character))
+  getOptimizationValue(character, withUpgrades = false) {
+    return Object.values(this.getSummary(character, withUpgrades))
       .reduce((setValue, stat) => setValue + stat.getOptimizationValue(character), 0);
   }
 

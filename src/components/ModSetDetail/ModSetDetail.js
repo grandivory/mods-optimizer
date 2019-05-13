@@ -79,7 +79,7 @@ class ModSetDetail extends React.PureComponent {
           </table>
         </div>
         <div className={'set-value'}>
-          Total Value of Set: {modSet.getOptimizationValue(character).toFixed(2)}
+          Total Value of Set: {modSet.getOptimizationValue(character, useUpgrades).toFixed(2)}
         </div>
       </div>
     );
