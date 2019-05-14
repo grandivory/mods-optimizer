@@ -78,7 +78,7 @@ class CharacterEditForm extends PureComponent {
       <div className={'character-view column'}>
         <CharacterAvatar character={character}/>
         <h2 className={'character-name'}>
-          {characterSettings[character.baseID] ? characterSettings[character.baseID].name : character.baseID}
+          {this.props.gameSettings[character.baseID] ? this.props.gameSettings[character.baseID].name : character.baseID}
         </h2>
       </div>
       <div id={'character-level-options'}>
@@ -628,6 +628,7 @@ const mapStateToProps = (state) => {
 
   return {
     editMode: state.characterEditMode,
+    gameSettings: state.gameSettings,
     setRestrictions: state.setRestrictions,
     arrowPrimaries: Array.from(new Set(mods.filter(mod => mod.slot === 'arrow').map(mod => mod.primaryStat.type))),
     trianglePrimaries:
