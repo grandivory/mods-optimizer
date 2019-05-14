@@ -98,7 +98,10 @@ class App extends PureComponent {
         }
         <FlashMessage/>
         <ErrorModal/>
-        <Modal show={this.props.displayModal} className={this.props.modalClass} content={this.props.modalContent}/>
+        <Modal show={this.props.displayModal}
+               className={this.props.modalClass}
+               content={this.props.modalContent}
+               cancelable={this.props.isModalCancelable} />
         <Spinner show={this.props.isBusy}/>
       </div>
       {this.footer()}
@@ -169,12 +172,12 @@ class App extends PureComponent {
         </div>
         }
         {this.props.allyCode &&
-          <button type={'button'}
-                  className={'red'}
-                  onClick={() => this.props.showModal('', this.deleteAllyCodeModal())}
-                  >
-            X
-          </button>
+        <button type={'button'}
+                className={'red'}
+                onClick={() => this.props.showModal('', this.deleteAllyCodeModal())}
+        >
+          X
+        </button>
         }
         <button type={'button'}
                 onClick={() => {

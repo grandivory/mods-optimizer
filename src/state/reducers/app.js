@@ -13,7 +13,8 @@ export function showModal(state, action) {
     isBusy: false,
     modal: {
       class: action.class,
-      content: action.content
+      content: action.content,
+      cancelable: action.cancelable
     }
   });
 }
