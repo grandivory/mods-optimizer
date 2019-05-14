@@ -161,8 +161,15 @@ class ReviewSets extends React.PureComponent {
             character={character}
             useUpgrades={false}
           />
-          <CharacterAvatar character={character}/>
-          <Arrow/>
+          <div className={'character-id'}>
+            <CharacterAvatar character={character}/>
+            <Arrow/>
+            <h3>
+              {this.props.gameSettings[character.baseID] ?
+                this.props.gameSettings[character.baseID].name :
+                character.baseID}
+            </h3>
+          </div>
           <ModSetDetail
             set={newSet}
             diffset={currentSet}
@@ -283,6 +290,7 @@ const mapStateToProps = (state) => {
 
   return {
     characters: profile.characters,
+    gameSettings: state.gameSettings,
     mods: profile.mods,
     modSetsFilter: state.modSetsFilter,
     modAssignments: displayedModAssignments,

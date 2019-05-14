@@ -29,7 +29,12 @@
   vertical-align: middle;
 }
 
-.review-sets .set-row > .avatar {
+.review-sets .set-row div.character-id {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.review-sets .set-row div.character-id > .avatar {
   display: inline-block;
   margin: 1em;
   font-size: 1.7em;
