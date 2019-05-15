@@ -90,12 +90,20 @@ class ReviewList extends React.PureComponent {
    */
   listView(displayedMods) {
     return displayedMods.map(([characterID, mod]) => {
+      const character = this.props.characters[characterID];
       const modCharacter = mod.characterID ? this.props.characters[mod.characterID] : null;
 
       return <div className={'mod-row individual'} key={mod.id}>
         <ModDetail mod={mod} character={modCharacter}/>
-        <Arrow/>
-        <CharacterAvatar character={this.props.characters[characterID]}/>
+        <div className={'character-id'}>
+          <Arrow/>
+          <CharacterAvatar character={character} />
+          <h3>
+            {this.props.gameSettings[character.baseID] ?
+              this.props.gameSettings[character.baseID].name :
+              character.baseID}
+          </h3>
+        </div>
         <div className={'actions'}>
           <button onClick={this.props.unequipMod.bind(this, mod.id)}>I removed this mod</button>
           <button onClick={this.props.reassignMod.bind(this, mod.id, characterID)}>I reassigned this mod</button>
@@ -130,8 +138,15 @@ class ReviewList extends React.PureComponent {
       }
 
       return <div className={'mod-row set'} key={character.baseID}>
-        <CharacterAvatar character={character}/>
-        <Arrow/>
+        <div className={'character-id'}>
+          <CharacterAvatar character={character}/>
+          <Arrow/>
+          <h3>
+            {this.props.gameSettings[character.baseID] ?
+              this.props.gameSettings[character.baseID].name :
+              character.baseID}
+          </h3>
+        </div>
         <div className={'mod-set-block'}>
           <ModSetView modSet={new ModSet(mods)}
                       showAvatars={sortOptions.currentCharacter === this.props.filter.sort ? false : true}

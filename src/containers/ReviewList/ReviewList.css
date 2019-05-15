@@ -41,7 +41,12 @@
   background-color: rgba(0, 0, 96, .5);
 }
 
-.mod-row > .avatar {
+.mod-row div.character-id {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.mod-row div.character-id > .avatar {
   display: inline-block;
   margin: 0 30px;
 }
