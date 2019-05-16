@@ -631,7 +631,10 @@ const characterSettings = {
     ['NS', 'hSTR NS']
   ),
   'NUTEGUNRAY': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('Damage')]
+    [
+      optimizationStrategy["Speed with survivability"].rename('PvP'),
+      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('Damage')
+    ]
   ),
   'OLDBENKENOBI': new CharacterSettings(
     [new OptimizationPlan('Speed', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
