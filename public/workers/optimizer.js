@@ -648,8 +648,28 @@ function modSetSatisfiesCharacterRestrictions(modSet, character) {
       (modSetSlots.circle && modSetSlots.circle.primaryStat.type === target.primaryStatRestrictions.circle)) &&
     (!target.primaryStatRestrictions.cross ||
       (modSetSlots.cross && modSetSlots.cross.primaryStat.type === target.primaryStatRestrictions.cross)) &&
+    (!target.useOnlyFullSets || modSetFulfillsFullSetRestriction(modSet)) &&
     modSetFulfillsSetRestriction(modSet, target.setRestrictions) &&
     modSetFulfillsTargetStatRestriction(modSet, character);
+}
+
+/**
+ * Checks to see if this mod set is made up of only full sets
+ *
+ * @param modSet {Array<Mod>}
+ * @returns {Boolean}
+ */
+function modSetFulfillsFullSetRestriction(modSet) {
+  // Count how many mods exist in each set
+  const setCounts = modSet.reduce((acc, mod) => {
+    return Object.assign({}, acc, {
+      [mod.set.name]: (acc[mod.set.name] || 0) + 1
+    })
+  }, {});
+
+  return Object.entries(setCounts).every(
+    ([setName, count]) => 0 === count % setBonuses[setName].numberOfModsRequired
+  );
 }
 
 /**
@@ -1490,7 +1510,6 @@ function findBestModSetWithoutChangingRestrictions(usableMods, character, setsTo
     }
   };
 
-  // If sets are 100% deterministic, make potentialUsedSets only them
   const usedSets = Object.entries(setsToUse)
     .filter(([setName, count]) => count > 0).map(([setName]) => setName);
 
@@ -1499,7 +1518,15 @@ function findBestModSetWithoutChangingRestrictions(usableMods, character, setsTo
   );
 
   if (0 === modSlotsOpen) {
+    // If sets are 100% deterministic, make potentialUsedSets only them
     for (let setName of usedSets) {
+      const setBonus = setBonuses[setName];
+      potentialUsedSets.add(setBonus);
+    }
+    setlessMods = null;
+  } else if (character.optimizerSettings.target.useOnlyFullSets) {
+    // If we're only allowed to use full sets, then add every set to potentialUsedSets, but leave setlessMods null
+    for (let setName in setBonuses) {
       const setBonus = setBonuses[setName];
       potentialUsedSets.add(setBonus);
     }
@@ -1656,6 +1683,9 @@ function* getCandidateSetsGenerator(potentialUsedSets, baseSets, setlessMods, se
                                  allowFirstSetNulls = false,
                                  allowSecondSetNulls = false
   ) {
+    if (!firstSet || !secondSet) {
+      return;
+    }
     if (!thirdSet) {
       generateSets:
         for (let [firstSetSlots, secondSetSlots] of chooseFourOptions) {
@@ -1763,10 +1793,12 @@ function* getCandidateSetsGenerator(potentialUsedSets, baseSets, setlessMods, se
   } else {
     // If no sets are forced, we can check every possible combination
     // The base set
-    for (let slot of modSlots) {
-      setObject[slot] = setlessMods[slot];
+    if (setlessMods) {
+      for (let slot of modSlots) {
+        setObject[slot] = setlessMods[slot];
+      }
+      yield setObjectToArray();
     }
-    yield setObjectToArray();
 
     for (let firstSetType of fourModSets) {
       let firstSet = baseSets[firstSetType];

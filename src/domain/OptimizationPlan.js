@@ -26,6 +26,7 @@ class OptimizationPlan {
   primaryStatRestrictions;
   setRestrictions;
   targetStat;
+  useOnlyFullSets;
 
   constructor(name,
               health,
@@ -44,7 +45,8 @@ class OptimizationPlan {
               upgradeMods = true,
               primaryStatRestrictions = {},
               setRestrictions = {},
-              targetStat = null
+              targetStat = null,
+              useOnlyFullSets = false
   ) {
     this.name = name;
 
@@ -83,6 +85,7 @@ class OptimizationPlan {
     this.primaryStatRestrictions = primaryStatRestrictions;
     this.setRestrictions = setRestrictions;
     this.targetStat = targetStat;
+    this.useOnlyFullSets = useOnlyFullSets;
   }
 
   /**
@@ -109,7 +112,8 @@ class OptimizationPlan {
       this.upgradeMods,
       this.primaryStatRestrictions,
       this.setRestrictions,
-      this.targetStat
+      this.targetStat,
+      this.useOnlyFullSets
     );
   }
 
@@ -136,7 +140,8 @@ class OptimizationPlan {
       this.upgradeMods === that.upgradeMods &&
       areObjectsEquivalent(this.primaryStatRestrictions, that.primaryStatRestrictions) &&
       areObjectsEquivalent(this.setRestrictions, that.setRestrictions) &&
-      areObjectsEquivalent(this.targetStat, that.targetStat)
+      areObjectsEquivalent(this.targetStat, that.targetStat) &&
+      this.useOnlyFullSets === that.useOnlyFullSets
   }
 
   /**
@@ -190,6 +195,7 @@ class OptimizationPlan {
     planObject.primaryStatRestrictions = this.primaryStatRestrictions;
     planObject.setRestrictions = this.setRestrictions;
     planObject.targetStat = this.targetStat;
+    planObject.useOnlyFullSets = this.useOnlyFullSets;
 
     return planObject;
   }
@@ -222,7 +228,8 @@ class OptimizationPlan {
         planJson.setRestrictions || {},
         planJson.targetStat ?
           new TargetStat(planJson.targetStat.stat, planJson.targetStat.minimum, planJson.targetStat.maximum) :
-          null
+          null,
+        planJson.useOnlyFullSets || false
       );
     } else {
       return null;

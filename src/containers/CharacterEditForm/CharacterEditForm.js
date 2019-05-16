@@ -133,7 +133,12 @@ class CharacterEditForm extends PureComponent {
           </div>
           <div className={'header-row group'}>
             <h4>Restrict Set Bonuses:</h4>
-            {this.setRestrictionsForm(this.props.setRestrictions || character.optimizerSettings.target.setRestrictions)}
+            {
+              this.setRestrictionsForm(
+                this.props.setRestrictions || character.optimizerSettings.target.setRestrictions,
+                character.optimizerSettings.target.useOnlyFullSets
+              )
+            }
           </div>
           <div className={'header-row group'}>
             {this.targetStatForm(character.optimizerSettings.target.targetStat)}
@@ -173,9 +178,10 @@ class CharacterEditForm extends PureComponent {
    * Renders a form element for managing set restrictions
    *
    * @param setRestrictions {Object<String, Number>}
+   * @param useFullSets {Boolean}
    * @returns {JSX Element}
    */
-  setRestrictionsForm(setRestrictions) {
+  setRestrictionsForm(setRestrictions, useFullSets) {
     let selectedSets = [];
     Object.entries(setRestrictions).forEach(([setName, count]) => {
       for (let i = 0; i < count; i++) {
@@ -185,6 +191,10 @@ class CharacterEditForm extends PureComponent {
     const emptySlots = 3 - selectedSets.reduce((acc, setName) => acc + setBonuses[setName].numberOfModsRequired / 2, 0);
 
     return <div className={'mod-sets'}>
+      <div className={'form-row center'}>
+        <label htmlFor={'use-full-sets'}>Don't break mod sets</label>
+        <input type={'checkbox'} name={'use-full-sets'} id={'use-full-sets'} defaultChecked={useFullSets} />
+      </div>
       <p className={'instructions'}>
         Click on a set bonus to add it to or remove it from the selected sets.
       </p>
@@ -588,7 +598,8 @@ class CharacterEditForm extends PureComponent {
         this.form['upgrade-mods'].checked || null !== targetStat,
         primaryStatRestrictions,
         this.props.setRestrictions,
-        targetStat
+        targetStat,
+        this.form['use-full-sets'].checked
       );
     } else {
       // Basic form
@@ -610,7 +621,8 @@ class CharacterEditForm extends PureComponent {
         this.form['upgrade-mods'].checked || null !== targetStat,
         primaryStatRestrictions,
         this.props.setRestrictions,
-        targetStat
+        targetStat,
+        this.form['use-full-sets'].checked
       );
     }
 
