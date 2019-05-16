@@ -117,7 +117,7 @@ class App extends PureComponent {
     let allyCodyInput;
 
     return <header className={'App-header'}>
-      <h1 className={'App-title'}>Grandivory's Mod Optimizer for Star Wars: Galaxy of Heroes™</h1>
+      <h1 className={'App-title'}>Grandivory's Mods Optimizer for Star Wars: Galaxy of Heroes™</h1>
       {showActions &&
       <nav>
         <button className={'explore' === this.props.section ? 'active' : ''}
