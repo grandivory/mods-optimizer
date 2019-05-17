@@ -20,7 +20,10 @@ const characterSettings = {
     ['AA', 'Snackbar', 'ABC']
   ),
   'AHSOKATANO': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
+    [
+      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('Padme Lead', 10, 0, 100, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
+    ],
     ['Snips']
   ),
   'AMILYNHOLDO': new CharacterSettings(
@@ -31,6 +34,7 @@ const characterSettings = {
   'ANAKINKNIGHT': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 75, 25, 0, 25, 0, 80, 0, 0, 0, 0, true),
+      new OptimizationPlan('Padme Lead', 10, 0, 80, 100, 25, 0, 25, 0, 40, 0, 0, 0, 0, true),
       new OptimizationPlan('Chex Mix', 0, 0, 50, 0, 0, 0, 100, 0, 25, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P1 Jedi', 0, -5, 20, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true)
     ],
