@@ -44,30 +44,78 @@ const getFilteredMods = memoize(
   (mods, filter, characters) => {
     let filteredMods = mods.slice();
 
-    if (filter.slot && 0 < filter.slot.length) {
-      filteredMods = filteredMods.filter(mod => filter.slot.includes(mod.slot));
+    const selectedOptions = {};
+    const unselectedOptions = {};
+
+    Object.entries(filter).filter(([type]) => 'sort' !== type).forEach(([type, values]) => {
+      selectedOptions[type] = Object.entries(values).filter(([option, value]) => 1 === value).map(([option]) => option);
+      unselectedOptions[type] = Object.entries(values).filter(([option, value]) => -1 === value).map(([option]) => option);
+    });
+
+    if (selectedOptions.slot.length) {
+      filteredMods = filteredMods.filter(mod => selectedOptions.slot.includes(mod.slot));
     }
-    if (filter.set && 0 < filter.set.length) {
-      filteredMods = filteredMods.filter(mod => filter.set.includes(mod.set.name));
+    if (unselectedOptions.slot.length) {
+      filteredMods = filteredMods.filter(mod => !unselectedOptions.slot.includes(mod.slot));
     }
-    if (filter.rarity && 0 < filter.rarity.length) {
-      filteredMods = filteredMods.filter(mod => filter.rarity.includes(mod.pips));
+    if (selectedOptions.set.length) {
+      filteredMods = filteredMods.filter(mod => selectedOptions.set.includes(mod.set.name));
     }
-    if (filter.tier && 0 < filter.tier.length) {
-      filteredMods = filteredMods.filter(mod => filter.tier.includes(mod.tier));
+    if (unselectedOptions.set.length) {
+      filteredMods = filteredMods.filter(mod => !unselectedOptions.set.includes(mod.set.name));
     }
-    if (filter.level && 0 < filter.level.length) {
-      filteredMods = filteredMods.filter(mod => filter.level.includes(mod.level));
+    if (selectedOptions.rarity.length) {
+      filteredMods = filteredMods.filter(mod => selectedOptions.rarity.includes(mod.pips));
     }
-    if (filter.equipped && 0 < filter.equipped.length) {
-      filteredMods = filteredMods.filter(mod => filter.equipped.includes(!!mod.characterID))
+    if (unselectedOptions.rarity.length) {
+      filteredMods = filteredMods.filter(mod => !unselectedOptions.rarity.includes(mod.pips));
     }
-    if (filter.primary && 0 < filter.primary.length) {
-      filteredMods = filteredMods.filter(mod => filter.primary.includes(mod.primaryStat.type));
+    if (selectedOptions.tier.length) {
+      filteredMods = filteredMods.filter(mod => selectedOptions.tier.includes(mod.tier));
     }
-    if (filter.secondary && 0 < filter.secondary.length) {
+    if (unselectedOptions.tier.length) {
+      filteredMods = filteredMods.filter(mod => !unselectedOptions.tier.includes(mod.tier));
+    }
+    if (selectedOptions.level.length) {
+      filteredMods = filteredMods.filter(mod => selectedOptions.level.includes(mod.level));
+    }
+    if (unselectedOptions.level.length) {
+      filteredMods = filteredMods.filter(mod => !unselectedOptions.level.includes(mod.level));
+    }
+    if (1 === selectedOptions.equipped.length) {
+      switch (selectedOptions.equipped[0]) {
+        case 'equipped':
+          filteredMods = filteredMods.filter(mod => !!mod.characterID);
+          break;
+        case 'unequipped':
+          filteredMods = filteredMods.filter(mod => !mod.characterID);
+          break;
+      }
+    }
+    if (1 === unselectedOptions.equipped.length) {
+      switch (unselectedOptions.equipped[0]) {
+        case 'equipped':
+          filteredMods = filteredMods.filter(mod => !mod.characterID);
+          break;
+        case 'unequipped':
+          filteredMods = filteredMods.filter(mod => !!mod.characterID);
+      }
+    }
+    if (selectedOptions.primary.length) {
+      filteredMods = filteredMods.filter(mod => selectedOptions.primary.includes(mod.primaryStat.type));
+    }
+    if (unselectedOptions.primary.length) {
+      filteredMods = filteredMods.filter(mod => !unselectedOptions.primary.includes(mod.primaryStat.type));
+    }
+    if (selectedOptions.secondary.length) {
       filteredMods = filteredMods.filter(
-        mod => mod.secondaryStats.some(stat => filter.secondary.includes(stat.type)));
+        mod => mod.secondaryStats.some(stat => selectedOptions.secondary.includes(stat.type))
+      );
+    }
+    if (unselectedOptions.secondary.length) {
+      filteredMods = filteredMods.filter(
+        mod => mod.secondaryStats.every(stat => !unselectedOptions.secondary.includes(stat.type))
+      );
     }
 
     switch (filter.sort) {

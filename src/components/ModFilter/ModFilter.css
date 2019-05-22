@@ -1,3 +1,4 @@
+.mod-filters input[type=number],
 .mod-filters input[type=checkbox] {
   display: none;
 }
@@ -20,6 +21,11 @@
   font-size: 0.9em;
 }
 
+.mod-filters .slots,
+.mod-filters .sets {
+  line-height: 0;
+}
+
 .mod-filters span.option.pips-button {
   display: block;
   width: 4em;
@@ -33,19 +39,94 @@
   margin: .25em auto;
 }
 
-.mod-filters img {
+.mod-filters .option-image {
+  display: inline-block;
+  width: 2.5em;
   height: 2.5em;
   padding: .2em;
   opacity: 0.5;
+  background-origin: content-box;
+  background-clip: content-box;
+  line-height: 0;
 }
 
-.mod-filters input:checked + span.option {
+.mod-filters .option-image.shape {
+  background-image: url('/img/empty-mod-shapes.png');
+  background-size: 15em 5em;
+}
+
+.mod-filters .option-image.arrow {
+  background-position-x: -2.5em;
+}
+
+.mod-filters .option-image.diamond {
+  background-position-x: -5em;
+}
+
+.mod-filters .option-image.triangle {
+  background-position-x: -7.5em;
+}
+
+.mod-filters .option-image.circle {
+  background-position-x: -10em;
+}
+
+.mod-filters .option-image.cross {
+  background-position-x: -12.5em;
+}
+
+.mod-filters .option-image.set {
+  background-image: url('/img/icon-buffs.png');
+  background-size: 20em 5em;
+}
+
+.mod-filters .option-image.offense {
+  background-position-x: -2.5em;
+}
+
+.mod-filters .option-image.defense {
+  background-position-x: -5em;
+}
+
+.mod-filters .option-image.speed {
+  background-position-x: -7.5em;
+}
+
+.mod-filters .option-image.critchance {
+  background-position-x: -10em;
+}
+
+.mod-filters .option-image.critdamage {
+  background-position-x: -12.5em;
+}
+
+.mod-filters .option-image.potency {
+  background-position-x: -15em;
+}
+
+.mod-filters .option-image.tenacity {
+  background-position-x: -17.5em;
+}
+
+.mod-filters input.select + .option-image {
+  opacity: 1;
+}
+
+.mod-filters input.unselect + .option-image {
+  opacity: 1;
+  background-position-y: -2.5em;
+}
+
+.mod-filters input.select + span.option {
   border-style: inset;
   background-color: rgb(0, 0, 64);
   opacity: 1;
 }
 
-.mod-filters input:checked + img {
+.mod-filters input.unselect + span.option {
+  border-style: inset;
+  background-color: rgb(64, 0, 0);
+  border-color: rgb(128, 0, 0);
   opacity: 1;
 }
 

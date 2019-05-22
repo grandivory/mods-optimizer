@@ -9,15 +9,38 @@ import {connect} from "react-redux";
 import {changeModsFilter} from "../../state/actions/explore";
 import Pips from "../Pips/Pips";
 
-function importImages(context) {
-  let images = {};
-  context.keys().forEach((item) => {
-    images[item.replace('./', '')] = context(item)
-  });
-  return images;
+function cycleState(e) {
+  e.target.value = e.target.valueAsNumber + 1;
+  if (e.target.value > 1) {
+    e.target.value = -1;
+  }
+  e.target.classList.remove('select', 'unselect');
+  if (1 === e.target.valueAsNumber ) {
+    e.target.classList.add('select');
+  }
+  if (-1 === e.target.valueAsNumber) {
+    e.target.classList.add('unselect');
+  }
 }
 
-const images = importImages(require.context('./images', false, /\.png/));
+function selectElement(element) {
+  element.value = 1;
+  element.classList.remove('unselect');
+  element.classList.add('select');
+}
+
+function unselectElement(element) {
+  element.value = 0;
+  element.classList.remove('select', 'unselect');
+}
+
+function classForValue(value) {
+  switch(value) {
+    case 1: return 'select';
+    case -1: return 'unselect';
+    default: return '';
+  }
+}
 
 /**
  * --------------------
@@ -43,23 +66,26 @@ class ModFilter extends React.PureComponent {
   slotFilter() {
     const selectAll = (e) => {
       e.preventDefault();
-      ModSet.slots.forEach(slot => document.getElementById(`slot-filter-${slot}`).checked = true);
+      ModSet.slots.forEach(slot => selectElement(document.getElementById(`slot-filter-${slot}`)));
     };
     const selectNone = (e) => {
       e.preventDefault();
-      ModSet.slots.forEach(slot => document.getElementById(`slot-filter-${slot}`).checked = false);
+      ModSet.slots.forEach(slot => unselectElement(document.getElementById(`slot-filter-${slot}`)));
     };
 
     const slots = ModSet.slots.map(slot => {
       const inputName = `slot-filter-${slot}`;
+      const value = this.props.filter.slot[slot] || 0;
 
       return <label htmlFor={inputName} key={slot}>
-        <input type={'checkbox'}
+        <input type={'number'}
                id={inputName}
                name={inputName}
-               value={slot}
-               defaultChecked={this.props.filter.slot.includes(slot)}/>
-        <img src={images[`empty_${slot}.png`]} alt={slot}/>
+               defaultValue={value}
+               className={classForValue(value)}
+               onClick={cycleState}
+        />
+        <span className={'option-image shape ' + slot} />
       </label>
     });
 
@@ -83,24 +109,27 @@ class ModFilter extends React.PureComponent {
     const selectAll = (e) => {
       e.preventDefault();
       Object.keys(setBonuses)
-        .forEach(set => document.getElementById(`set-filter-${set}`).checked = true);
+        .forEach(set => selectElement(document.getElementById(`set-filter-${set}`)));
     };
     const selectNone = (e) => {
       e.preventDefault();
       Object.keys(setBonuses)
-        .forEach(set => document.getElementById(`set-filter-${set}`).checked = false);
+        .forEach(set => unselectElement(document.getElementById(`set-filter-${set}`)));
     };
 
     const sets = Object.keys(setBonuses).map(set => {
       const inputName = `set-filter-${set}`;
+      const value = this.props.filter.set[set] || 0;
 
       return <label htmlFor={inputName} key={set}>
-        <input type={'checkbox'}
+        <input type={'number'}
                id={inputName}
                name={inputName}
-               value={set}
-               defaultChecked={this.props.filter.set.includes(set)}/>
-        <img src={`/img/icon_buff_${set}.png`} alt={set}/>
+               defaultValue={value}
+               className={classForValue(value)}
+               onClick={cycleState}
+        />
+        <span className={'option-image set ' + set} />
       </label>
     });
 
@@ -124,23 +153,26 @@ class ModFilter extends React.PureComponent {
     const selectAll = (e) => {
       e.preventDefault();
       [1, 2, 3, 4, 5, 6]
-        .forEach(rarity => document.getElementById(`pips-filter-${rarity}`).checked = true);
+        .forEach(rarity => selectElement(document.getElementById(`pips-filter-${rarity}`)));
     };
     const selectNone = (e) => {
       e.preventDefault();
       [1, 2, 3, 4, 5, 6]
-        .forEach(rarity => document.getElementById(`pips-filter-${rarity}`).checked = false);
+        .forEach(rarity => unselectElement(document.getElementById(`pips-filter-${rarity}`)));
     };
 
     const pips = [6, 5, 4, 3, 2, 1].map(rarity => {
-      const inputName = `pips-filter-${rarity}`;
+      const inputName = `rarity-filter-${rarity}`;
+      const value = this.props.filter.rarity[rarity] || 0;
 
       return <label htmlFor={inputName} key={inputName}>
-        <input type={'checkbox'}
+        <input type={'number'}
                id={inputName}
                name={inputName}
-               value={rarity}
-               defaultChecked={this.props.filter.rarity.includes(rarity)}/>
+               defaultValue={value}
+               className={classForValue(value)}
+               onClick={cycleState}
+               />
         <span className={'option pips-button'}>
           <Pips pips={rarity}/>
         </span>
@@ -175,23 +207,25 @@ class ModFilter extends React.PureComponent {
     const selectAll = (e) => {
       e.preventDefault();
       Object.keys(tiers)
-        .forEach(rarity => document.getElementById(`tier-filter-${rarity}`).checked = true);
+        .forEach(rarity => selectElement(document.getElementById(`tier-filter-${rarity}`)));
     };
     const selectNone = (e) => {
       e.preventDefault();
       Object.keys(tiers)
-        .forEach(rarity => document.getElementById(`tier-filter-${rarity}`).checked = false);
+        .forEach(rarity => unselectElement(document.getElementById(`tier-filter-${rarity}`)));
     };
 
     const tierButtons = Object.keys(tiers).sort().reverse().map(tier => {
       const inputName = `tier-filter-${tier}`;
+      const value = this.props.filter.tier[tier] || 0;
 
       return <label htmlFor={inputName} key={inputName}>
-        <input type={'checkbox'}
+        <input type={'number'}
                id={inputName}
                name={inputName}
-               value={tier}
-               defaultChecked={this.props.filter.tier.includes(tier)}/>
+               defaultValue={value}
+               className={classForValue(value)}
+               onClick={cycleState}/>
         <span className={`option tier ${tiers[tier]}`}>
           {tiers[tier][0].toUpperCase() + tiers[tier].substr(1)}
         </span>
@@ -218,23 +252,25 @@ class ModFilter extends React.PureComponent {
     const selectAll = (e) => {
       e.preventDefault();
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-        .forEach(rarity => document.getElementById(`level-filter-${rarity}`).checked = true);
+        .forEach(rarity => selectElement(document.getElementById(`level-filter-${rarity}`)));
     };
     const selectNone = (e) => {
       e.preventDefault();
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-        .forEach(rarity => document.getElementById(`level-filter-${rarity}`).checked = false);
+        .forEach(rarity => unselectElement(document.getElementById(`level-filter-${rarity}`)));
     };
 
     const levelButtons = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(level => {
       const inputName = `level-filter-${level}`;
+      const value = this.props.filter.level[level] || 0;
 
       return <label htmlFor={inputName} key={inputName}>
-        <input type={'checkbox'}
+        <input type={'number'}
                id={inputName}
                name={inputName}
-               value={level}
-               defaultChecked={this.props.filter.level.includes(level)}/>
+               defaultValue={value}
+               className={classForValue(value)}
+               onClick={cycleState}/>
         <span className={'option'}>
           {level}
         </span>
@@ -256,26 +292,31 @@ class ModFilter extends React.PureComponent {
   equippedFilter() {
     const selectAll = (e) => {
       e.preventDefault();
-      document.getElementById('equipped-filter-equipped').checked = true;
-      document.getElementById('equipped-filter-unequipped').checked = true;
+      ['equipped', 'unequipped'].forEach(equipState =>
+        selectElement(document.getElementById(`equipped-filter-${equipState}`))
+      );
+
     };
     const selectNone = (e) => {
       e.preventDefault();
-      document.getElementById('equipped-filter-equipped').checked = false;
-      document.getElementById('equipped-filter-unequipped').checked = false;
+      ['equipped', 'unequipped'].forEach(equipState =>
+        unselectElement(document.getElementById(`equipped-filter-${equipState}`))
+      );
     };
 
-    const equippedButtons = ['equipped', 'unequipped'].map(equippedState => {
-      const inputName = `equipped-filter-${equippedState}`;
+    const equippedButtons = ['equipped', 'unequipped'].map(equipState => {
+      const inputName = `equipped-filter-${equipState}`;
+      const value = this.props.filter.equipped[equipState] || 0;
 
       return <label htmlFor={inputName} key={inputName}>
-        <input type={'checkbox'}
+        <input type={'number'}
                id={inputName}
                name={inputName}
-               value={'equipped' === equippedState}
-               defaultChecked={this.props.filter.equipped.includes(equippedState)}/>
+               defaultValue={value}
+               className={classForValue(value)}
+               onClick={cycleState}/>
         <span className={'option'}>
-          {equippedState[0].toUpperCase() + equippedState.substr(1)}
+          {equipState[0].toUpperCase() + equipState.substr(1)}
         </span>
       </label>
     });
@@ -304,22 +345,24 @@ class ModFilter extends React.PureComponent {
 
     const selectAll = (e) => {
       e.preventDefault();
-      primaryStats.forEach(stat => document.getElementById(`primary-filter-${stat}`).checked = true);
+      primaryStats.forEach(stat => selectElement(document.getElementById(`primary-filter-${stat}`)));
     };
     const selectNone = (e) => {
       e.preventDefault();
-      primaryStats.forEach(stat => document.getElementById(`primary-filter-${stat}`).checked = false);
+      primaryStats.forEach(stat => unselectElement(document.getElementById(`primary-filter-${stat}`)));
     };
 
     const primaries = primaryStats.map(stat => {
       const inputName = `primary-filter-${stat}`;
+      const value = this.props.filter.primary[stat] || 0;
 
       return <label htmlFor={inputName} key={stat}>
-        <input type={'checkbox'}
+        <input type={'number'}
                id={inputName}
                name={inputName}
-               value={stat}
-               defaultChecked={this.props.filter.primary.includes(stat)}/>
+               defaultValue={value}
+               className={classForValue(value)}
+               onClick={cycleState}/>
         <span className={'option'}>{stat}</span>
       </label>
     });
@@ -350,22 +393,24 @@ class ModFilter extends React.PureComponent {
 
     const selectAll = (e) => {
       e.preventDefault();
-      secondaryStats.forEach(stat => document.getElementById(`secondary-filter-${stat}`).checked = true);
+      secondaryStats.forEach(stat => selectElement(document.getElementById(`secondary-filter-${stat}`)));
     };
     const selectNone = (e) => {
       e.preventDefault();
-      secondaryStats.forEach(stat => document.getElementById(`secondary-filter-${stat}`).checked = false);
+      secondaryStats.forEach(stat => unselectElement(document.getElementById(`secondary-filter-${stat}`)));
     };
 
     const secondaries = secondaryStats.map(stat => {
       const inputName = `secondary-filter-${stat}`;
+      const value = this.props.filter.secondary[stat] || 0;
 
       return <label htmlFor={inputName} key={stat}>
-        <input type={'checkbox'}
+        <input type={'number'}
                id={inputName}
                name={inputName}
-               value={stat}
-               defaultChecked={this.props.filter.secondary.includes(stat)}/>
+               defaultValue={value}
+               className={classForValue(value)}
+               onClick={cycleState}/>
         <span className={'option'}>{stat}</span>
       </label>
     });
@@ -416,11 +461,8 @@ class ModFilter extends React.PureComponent {
    * Reset all filters so that all values are selected
    */
   resetFilters() {
-    [...document.getElementById('mod-filters').getElementsByTagName('input')].forEach(element => {
-      if ('checkbox' === element.type) {
-        element.checked = false;
-      }
-    });
+    [...document.getElementById('mod-filters').getElementsByTagName('input')]
+      .forEach(element => unselectElement(element));
     [...document.getElementById('mod-filters').getElementsByTagName('select')].forEach(element => {
       element.value = '';
     });
@@ -431,49 +473,19 @@ class ModFilter extends React.PureComponent {
    *                 array of selected values, plus 'sort', containing the value to sort by
    */
   collectFilters(form) {
-    const slot = [...form.elements]
-      .filter(element => element.id.includes('slot-filter') && element.checked)
-      .map(element => element.value);
+    const filters = {};
 
-    const set = [...form.elements]
-      .filter(element => element.id.includes('set-filter') && element.checked)
-      .map(element => element.value);
+    [...form.elements].filter(element => element.name.includes('-filter-')).forEach(element => {
+      const [filterType, filterKey] = element.name.split('-filter-');
+      if (!filters[filterType]) {
+        filters[filterType] = {};
+      }
+      filters[filterType][filterKey] = element.valueAsNumber;
+    });
 
-    const rarity = [...form.elements]
-      .filter(element => element.id.includes('pips-filter') && element.checked)
-      .map(element => +element.value);
+    filters.sort = form['sort-option'].value;
 
-    const tier = [...form.elements]
-      .filter(element => element.id.includes('tier-filter') && element.checked)
-      .map(element => +element.value);
-
-    const level = [...form.elements]
-      .filter(element => element.id.includes('level-filter') && element.checked)
-      .map(element => +element.value);
-
-    const equipped = [...form.elements]
-      .filter(element => element.id.includes('equipped-filter') && element.checked)
-      .map(element => 'true' === element.value);
-
-    const primary = [...form.elements]
-      .filter(element => element.id.includes('primary-filter') && element.checked)
-      .map(element => element.value);
-
-    const secondary = [...form.elements]
-      .filter(element => element.id.includes('secondary-filter') && element.checked)
-      .map(element => element.value);
-
-    return {
-      'slot': slot,
-      'set': set,
-      'rarity': rarity,
-      'tier': tier,
-      'level': level,
-      'equipped': equipped,
-      'primary': primary,
-      'secondary': secondary,
-      'sort': form['sort-option'].value
-    }
+    return filters;
   }
 
   render() {
