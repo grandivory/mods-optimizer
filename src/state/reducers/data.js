@@ -1,7 +1,5 @@
 // @flow
 
-import React from "react";
-
 export function toggleKeepOldMods(state) {
   return Object.assign({}, state, {
     keepOldMods: !state.keepOldMods

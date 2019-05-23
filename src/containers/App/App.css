@@ -250,6 +250,17 @@ button:hover, button:focus,
   opacity: 1;
 }
 
+button.link {
+  text-decoration: underline;
+  background-color: transparent;
+  border: none;
+  color: #d3d3d3;
+  font-size: 1em;
+  margin: .1em;
+  padding: 0;
+  font-weight: 400;
+}
+
 nav button.active {
   border-bottom: none;
   color: white;

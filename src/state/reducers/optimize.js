@@ -1,7 +1,5 @@
 // @flow
 
-import React from "react";
-
 export function optimizeMods(state) {
   return Object.assign({}, state, {
     isBusy: true

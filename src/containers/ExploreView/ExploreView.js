@@ -90,6 +90,8 @@ const getFilteredMods = memoize(
         case 'unequipped':
           filteredMods = filteredMods.filter(mod => !mod.characterID);
           break;
+        default:
+          // Do nothing
       }
     }
     if (1 === unselectedOptions.equipped.length) {
@@ -99,6 +101,9 @@ const getFilteredMods = memoize(
           break;
         case 'unequipped':
           filteredMods = filteredMods.filter(mod => !!mod.characterID);
+          break;
+        default:
+          // Do nothing
       }
     }
     if (selectedOptions.primary.length) {

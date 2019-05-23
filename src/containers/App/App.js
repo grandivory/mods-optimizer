@@ -234,9 +234,9 @@ class App extends PureComponent {
       &nbsp;or&nbsp;
       <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'} className={'gold'}>Patreon</a>
       <div className={'version'}>
-        <a onClick={() => this.props.showModal('changelog-modal', this.changeLogModal())}>
+        <button className={'link'} onClick={() => this.props.showModal('changelog-modal', this.changeLogModal())}>
           version {this.props.version}
-        </a>
+        </button>
       </div>
     </footer>;
   }
