@@ -6,6 +6,11 @@ import Mod from "./Mod";
 import {mapObject} from "../utils/mapObject";
 import OptimizerRun from "./OptimizerRun";
 
+const defaultGlobalSettings = {
+  modChangeThreshold: 0,
+  lockUnselectedCharacters: false
+};
+
 export default class PlayerProfile {
   allyCode;
   playerName;
@@ -16,11 +21,6 @@ export default class PlayerProfile {
   globalSettings;
   // Deprecated
   previousSettings;
-
-  defaultGlobalSettings = {
-    modChangeThreshold: 0,
-    lockUnselectedCharacters: false
-  };
 
   /**
    * @param allyCode {string} The ally code for the player whose data this is
@@ -41,7 +41,7 @@ export default class PlayerProfile {
               mods = [],
               selectedCharacters = [],
               modAssignments = {},
-              globalSettings = this.defaultGlobalSettings,
+              globalSettings = defaultGlobalSettings,
               previousSettings = {}
   ) {
     this.allyCode = allyCode;
