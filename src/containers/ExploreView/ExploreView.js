@@ -48,8 +48,10 @@ const getFilteredMods = memoize(
     const unselectedOptions = {};
 
     Object.entries(filter).filter(([type]) => 'sort' !== type).forEach(([type, values]) => {
-      selectedOptions[type] = Object.entries(values).filter(([option, value]) => 1 === value).map(([option]) => option);
-      unselectedOptions[type] = Object.entries(values).filter(([option, value]) => -1 === value).map(([option]) => option);
+      selectedOptions[type] = Object.entries(values).filter(([option, value]) => 1 === value)
+        .map(([option]) => isNaN(option) ? option : +option);
+      unselectedOptions[type] = Object.entries(values).filter(([option, value]) => -1 === value)
+        .map(([option]) => isNaN(option) ? option : +option);
     });
 
     if (selectedOptions.slot.length) {

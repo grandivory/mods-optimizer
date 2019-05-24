@@ -153,12 +153,12 @@ class ModFilter extends React.PureComponent {
     const selectAll = (e) => {
       e.preventDefault();
       [1, 2, 3, 4, 5, 6]
-        .forEach(rarity => selectElement(document.getElementById(`pips-filter-${rarity}`)));
+        .forEach(rarity => selectElement(document.getElementById(`rarity-filter-${rarity}`)));
     };
     const selectNone = (e) => {
       e.preventDefault();
       [1, 2, 3, 4, 5, 6]
-        .forEach(rarity => unselectElement(document.getElementById(`pips-filter-${rarity}`)));
+        .forEach(rarity => unselectElement(document.getElementById(`rarity-filter-${rarity}`)));
     };
 
     const pips = [6, 5, 4, 3, 2, 1].map(rarity => {
