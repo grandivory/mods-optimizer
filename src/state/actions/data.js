@@ -13,7 +13,7 @@ import Character from "../../domain/Character";
 import characterSettings from "../../constants/characterSettings";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import groupByKey from "../../utils/groupByKey";
-import {addPlayerProfile, setProfile} from "./storage";
+import {addPlayerProfile, setGameSettings, setProfile} from "./storage";
 import {changeOptimizerView} from "./review";
 import CharacterStats, {NullCharacterStats} from "../../domain/CharacterStats";
 
@@ -148,15 +148,13 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
   if (null !== characters) {
     return post(
       'https://crinolo-swgoh.glitch.me/statCalc/api/characters',
-      Object.keys(characters).map(charID => {
-        return {
+      Object.keys(characters).map(charID => ({
           'defId': charID,
           'rarity': characters[charID].stars,
           'level': characters[charID].level,
           'gear': characters[charID].gearLevel,
           'equipped': characters[charID].gearPieces
-        };
-      })
+        }))
     )
       .catch(() => {
         throw new Error('Error fetching your character\'s stats. Please try again.')
@@ -261,6 +259,8 @@ export function receiveCharacters(characters, lastStep) {
         character.description
       );
     });
+
+    dispatch(setGameSettings(groupByKey(gameSettings, gs => gs.baseID)));
 
     db.saveGameSettings(
       gameSettings,
