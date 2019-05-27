@@ -122,8 +122,8 @@ const characterSettings = {
   ),
   'BOSSK': new CharacterSettings(
     [
-      new OptimizationPlan('Leader', 20, 20, 100, 25, 25, 0, 25, 0, 25, 0, 0, 0, 0, true),
-      new OptimizationPlan('Non-leader', 20, 0, 100, 25, 25, 0, 25, 0, 25, 0, 0, 0, 0, true)
+      new OptimizationPlan('Leader', 10, 10, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Non-leader', 10, 0, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
   'C3POLEGENDARY': new CharacterSettings(
