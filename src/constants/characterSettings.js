@@ -613,7 +613,7 @@ const characterSettings = {
   'NIGHTSISTERINITIATE': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE'),
-      new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 0, 0, 0, 50, 0, 100, 0, 0, 0, 0, true)
+      new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, true)
     ],
     ['NI', 'NS']
   ),
