@@ -1,6 +1,8 @@
 // @flow
 import {hideModal, updateProfile} from "./app";
 import {mapObject} from "../../utils/mapObject";
+import groupByKey from "../../utils/groupByKey";
+import OptimizationPlan from "../../domain/OptimizationPlan";
 
 export const CHANGE_CHARACTER_EDIT_MODE = 'CHANGE_CHARACTER_EDIT_MODE';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
@@ -10,30 +12,28 @@ export const REMOVE_SET_BONUS = 'REMOVE_SET_BONUS';
 
 /**
  * Action to move a character from the "available characters" pool to the "selected characters" pool, moving the
- * character in order just underneath prevCharacter, if it's supplied
- * @param characterID string The character ID of the character being selected
- * @param prevCharacterID string The character ID of the character just above this one in the list
+ * character in order just underneath prevIndex, if it's supplied
+ * @param characterID {String} The character ID of the character being selected
+ * @param target {OptimizationPlan} The target to attach to the newly-selected character
+ * @param prevIndex {Number} Where in the selected characters list to place the new character
  * @returns {Function}
  */
-export function selectCharacter(characterID, prevCharacterID = null) {
+export function selectCharacter(characterID, target, prevIndex = null) {
+  const selectedCharacter = {id: characterID, target: target};
+
   return updateProfile(profile => {
     const oldSelectedCharacters = profile.selectedCharacters;
-    if (oldSelectedCharacters.includes(characterID)) {
-      // If the character is already in the list, remove it unless the prevCharacterID matches itself (it wasn't moved)
-      if (prevCharacterID === characterID) {
-        return profile;
-      } else {
-        oldSelectedCharacters.splice(oldSelectedCharacters.indexOf(characterID), 1);
-      }
-    }
 
-    if (!prevCharacterID) {
-      return profile.withSelectedCharacters([characterID].concat(oldSelectedCharacters));
-    } else if (!profile.selectedCharacters.includes(prevCharacterID)) {
-      return profile.withSelectedCharacters(oldSelectedCharacters.concat([characterID]));
+    if (null === prevIndex) {
+      // If there's no previous index, put the new character at the top of the list
+      return profile.withSelectedCharacters([selectedCharacter].concat(oldSelectedCharacters));
     } else {
       const newSelectedCharacters = oldSelectedCharacters.slice();
-      newSelectedCharacters.splice(newSelectedCharacters.indexOf(prevCharacterID) + 1, 0, characterID);
+      newSelectedCharacters.splice(
+        prevIndex + 1,
+        0,
+        selectedCharacter
+      );
 
       return profile.withSelectedCharacters(newSelectedCharacters);
     }
@@ -41,24 +41,51 @@ export function selectCharacter(characterID, prevCharacterID = null) {
 }
 
 /**
- * Action to move a character from the "selected characters" pool to the "available characters" pool.
- * @param characterID string the Character ID of the character being moved
+ * Move an already-selected character to a new position in the selected list
+ * @param fromIndex {Number}
+ * @param toIndex {Number}
  * @returns {Function}
  */
-export function unselectCharacter(characterID) {
+export function moveSelectedCharacter(fromIndex, toIndex) {
+  return updateProfile(profile => {
+    if (fromIndex === toIndex) {
+      return profile;
+    } else {
+      const newSelectedCharacters = profile.selectedCharacters.slice();
+      const [oldValue] = newSelectedCharacters.splice(fromIndex, 1);
+      if (null === toIndex) {
+        return profile.withSelectedCharacters([oldValue].concat(newSelectedCharacters));
+      } else if (fromIndex < toIndex) {
+        newSelectedCharacters.splice(toIndex, 0, oldValue);
+        return profile.withSelectedCharacters(newSelectedCharacters);
+      } else {
+        newSelectedCharacters.splice(toIndex + 1, 0, oldValue);
+        return profile.withSelectedCharacters(newSelectedCharacters);
+      }
+    }
+  });
+}
+
+/**
+ * Move a character from the "selected characters" pool to the "available characters" pool.
+ * @param characterIndex {Number} The location of the character being unselected from the list
+ * @returns {Function}
+ */
+export function unselectCharacter(characterIndex) {
   return updateProfile(profile => {
     const newSelectedCharacters = profile.selectedCharacters.slice();
-    const oldCharacter = profile.characters[characterID];
 
-    if (newSelectedCharacters.includes(characterID)) {
-      newSelectedCharacters.splice(newSelectedCharacters.indexOf(characterID), 1);
+    if (newSelectedCharacters.length > characterIndex) {
+      const [oldValue] = newSelectedCharacters.splice(characterIndex, 1);
+      const oldCharacter = profile.characters[oldValue.id];
+      return profile.withSelectedCharacters(newSelectedCharacters)
+      // If we unselect a character, we also need to unlock it
+        .withCharacters(Object.assign({}, profile.characters, {
+          [oldValue.id]: oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.unlock())
+        }));
+    } else {
+      return profile;
     }
-
-    return profile.withSelectedCharacters(newSelectedCharacters)
-    // If we unselect a character, we also need to unlock it
-      .withCharacters(Object.assign({}, profile.characters, {
-        [characterID]: oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.unlock())
-      }));
   });
 }
 
@@ -81,15 +108,18 @@ export function unselectAllCharacters() {
  * @returns {Function}
  */
 export function lockSelectedCharacters() {
-  return updateProfile(profile =>
-    profile.withCharacters(
+  return updateProfile(profile => {
+    const selectedCharacterIDs = Object.keys(groupByKey(profile.selectedCharacters, ({id}) => id));
+
+    return profile.withCharacters(
       mapObject(
         profile.characters,
-        character => profile.selectedCharacters.includes(character.baseID) ?
+        character => selectedCharacterIDs.includes(character.baseID) ?
           character.withOptimizerSettings(character.optimizerSettings.lock()) :
           character
       )
-    ));
+    );
+  });
 }
 
 /**
@@ -97,16 +127,18 @@ export function lockSelectedCharacters() {
  * @returns {Function}
  */
 export function unlockSelectedCharacters() {
-  return updateProfile(profile =>
-    profile.withCharacters(
+  return updateProfile(profile => {
+    const selectedCharacterIDs = Object.keys(groupByKey(profile.selectedCharacters, ({id}) => id));
+
+    return profile.withCharacters(
       mapObject(
         profile.characters,
-        character => profile.selectedCharacters.includes(character.baseID) ?
+        character => selectedCharacterIDs.includes(character.baseID) ?
           character.withOptimizerSettings(character.optimizerSettings.unlock()) :
           character
       )
-    )
-  );
+    );
+  });
 }
 
 /**
@@ -116,7 +148,7 @@ export function unlockSelectedCharacters() {
  */
 export function lockCharacter(characterID) {
   return updateProfile(profile => {
-    const oldCharacter = profile.characters[characterID]
+    const oldCharacter = profile.characters[characterID];
     const newCharacters = Object.assign({}, profile.characters, {
       [characterID]: oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.lock())
     });
@@ -132,7 +164,7 @@ export function lockCharacter(characterID) {
  */
 export function unlockCharacter(characterID) {
   return updateProfile(profile => {
-    const oldCharacter = profile.characters[characterID]
+    const oldCharacter = profile.characters[characterID];
     const newCharacters = Object.assign({}, profile.characters, {
       [characterID]: oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.unlock())
     });
@@ -143,18 +175,22 @@ export function unlockCharacter(characterID) {
 
 /**
  * Action to change the selected target for a character
- * @param characterID string the character ID of the character being updated
- * @param target OptimizationPlan The new target to use
+ * @param characterIndex {Number} The index of the selected character whose target is being updated
+ * @param target {OptimizationPlan} The new target to use
  * @returns {Function}
  */
-export function changeCharacterTarget(characterID, target) {
+export function changeCharacterTarget(characterIndex, target) {
   return updateProfile(profile => {
-    const oldCharacter = profile.characters[characterID];
+    const newSelectedCharacters = profile.selectedCharacters.slice();
+    if (characterIndex >= newSelectedCharacters.length) {
+      return profile;
+    }
 
-    return profile.withCharacters(Object.assign({}, profile.characters, {
-      [characterID]:
-        oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.unlock().withTarget(target))
-    }));
+    const [oldValue] = newSelectedCharacters.splice(characterIndex, 1);
+    const newValue = Object.assign({}, oldValue, {target: target});
+    newSelectedCharacters.splice(characterIndex, 0, newValue);
+
+    return profile.withSelectedCharacters(newSelectedCharacters);
   });
 }
 
@@ -172,19 +208,26 @@ export function changeCharacterEditMode(mode) {
 
 /**
  * Action to complete the editing of a character target, applying the new target values to the character
- * @param characterID string The character ID of the character being updated
+ * @param characterIndex {Number} The index in the selected characters list of the character being updated
  * @param newTarget OptimizationPlan The new target to use for the character
  * @returns {Function}
  */
-export function finishEditCharacterTarget(characterID, newTarget) {
+export function finishEditCharacterTarget(characterIndex, newTarget) {
   return updateProfile(
     profile => {
+      if (characterIndex >= profile.selectedCharacters.length) {
+        return profile;
+      }
+      const newSelectedCharacters = profile.selectedCharacters.slice();
+      const [{id: characterID}] = newSelectedCharacters.splice(characterIndex, 1);
+      newSelectedCharacters.splice(characterIndex, 0, {id: characterID, target: newTarget});
+
       const oldCharacter = profile.characters[characterID];
       const newCharacter = oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withTarget(newTarget));
 
       return profile.withCharacters(Object.assign({}, profile.characters, {
         [newCharacter.baseID]: newCharacter
-      }));
+      })).withSelectedCharacters(newSelectedCharacters);
     },
     dispatch => {
       dispatch(hideModal());
@@ -194,15 +237,26 @@ export function finishEditCharacterTarget(characterID, newTarget) {
 }
 
 /**
- * Reset the current-selected target for a character to its default values
- * @param characterID string The character ID of the character being reset
+ * Reset a given target for a character to its default values
+ * @param characterID {String} The character ID of the character being reset
+ * @param targetName {String} The name of the target to reset
  * @returns {Function}
  */
-export function resetCharacterTargetToDefault(characterID) {
+export function resetCharacterTargetToDefault(characterID, targetName) {
   return updateProfile(
-    profile => profile.withCharacters(Object.assign({}, profile.characters, {
-      [characterID]: profile.characters[characterID].withResetTarget()
-    })),
+    profile => {
+      const newCharacter = profile.characters[characterID].withResetTarget(targetName);
+      const resetTarget = newCharacter.optimizerSettings.targets.find(target => target.name === targetName) ||
+        new OptimizationPlan('unnamed');
+
+      const newSelectedCharacters = profile.selectedCharacters.map(({id, target}) =>
+        id === characterID && target.name === targetName ? {id: id, target: resetTarget} : {id: id, target: target}
+      );
+
+      return profile.withCharacters(Object.assign({}, profile.characters, {
+        [characterID]: newCharacter
+      })).withSelectedCharacters(newSelectedCharacters);
+    },
     dispatch => {
       dispatch(hideModal());
       dispatch(changeSetRestrictions(null));
@@ -216,24 +270,45 @@ export function resetCharacterTargetToDefault(characterID) {
  */
 export function resetAllCharacterTargets() {
   return updateProfile(
-    profile => profile.withCharacters(mapObject(profile.characters, character => character.withResetTargets())),
+    profile => {
+      const newCharacters = mapObject(profile.characters, character => character.withResetTargets());
+      const newSelectedCharacters = profile.selectedCharacters.map(({id, target: oldTarget}) => {
+        const resetTarget = newCharacters[id].optimizerSettings.targets.find(target => target.name === oldTarget.name);
+
+        return resetTarget ? {id: id, target: resetTarget} : {id: id, target: oldTarget};
+      });
+
+      return profile.withCharacters(newCharacters).withSelectedCharacters(newSelectedCharacters);
+    },
     dispatch => dispatch(hideModal())
   );
 }
 
 /**
  * Delete the currently selected target for a given character
- * @param characterID string The character ID of the character being reset
+ * @param characterID {String} The character ID of the character being reset
+ * @param targetName {String} The name of the target to delete
  * @returns {Function}
  */
-export function deleteTarget(characterID) {
+export function deleteTarget(characterID, targetName) {
   return updateProfile(
     profile => {
       const oldCharacter = profile.characters[characterID];
+      const newCharacters = Object.assign({}, profile.characters, {
+        [characterID]: oldCharacter.withDeletedTarget(targetName)
+      });
 
-      return profile.withCharacters(Object.assign({}, profile.characters, {
-        [characterID]: oldCharacter.withDeletedTarget()
-      }));
+      const newSelectedCharacters = profile.selectedCharacters.map(({id, target: oldTarget}) => {
+        if (id === characterID && oldTarget.name === targetName) {
+          const newTarget = newCharacters[characterID].targets()[0] || new OptimizationPlan('unnamed');
+
+          return {id: id, target: newTarget};
+        } else {
+          return {id: id, target: oldTarget};
+        }
+      });
+
+      return profile.withCharacters(newCharacters).withSelectedCharacters(newSelectedCharacters);
     },
     dispatch => {
       dispatch(hideModal());

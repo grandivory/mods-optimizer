@@ -9,7 +9,6 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import {
   changeCharacterFilter,
-  changeCharacterTarget,
   lockSelectedCharacters,
   resetAllCharacterTargets,
   selectCharacter,
@@ -29,14 +28,14 @@ import {connect} from "react-redux";
 class CharacterEditView extends PureComponent {
   dragStart(character) {
     return function(event) {
-      event.dataTransfer.dropEffect = 'move';
+      event.dataTransfer.dropEffect = 'copy';
+      event.dataTransfer.effectAllowed = 'copy';
       event.dataTransfer.setData('text/plain', character.baseID);
     }
   }
 
   static dragOver(event) {
     event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
   }
 
   static dragLeave(event) {
@@ -46,13 +45,19 @@ class CharacterEditView extends PureComponent {
 
   static availableCharactersDragEnter(event) {
     event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
   }
 
   availableCharactersDrop(event) {
     event.preventDefault();
-    const movingCharacterID = event.dataTransfer.getData('text/plain');
-    this.props.unselectCharacter(movingCharacterID);
+    switch (event.dataTransfer.effectAllowed) {
+      case 'move':
+        // This is coming from the selected characters - remove the character from the list
+        const characterIndex = +event.dataTransfer.getData('text/plain');
+        this.props.unselectCharacter(characterIndex);
+        break;
+      default:
+        // Do nothing
+    }
   }
 
   render() {
@@ -143,7 +148,7 @@ class CharacterEditView extends PureComponent {
       <button
         type={'button'}
         onClick={() => {
-          const selectedTargets = this.props.selectedCharacters.map(character => character.optimizerSettings.target);
+          const selectedTargets = this.props.selectedCharacters.map(({target}) => target);
           if (selectedTargets.some(target => null !== target.targetStat)) {
             this.props.showModal('notice', this.optimizeWithTargetsModal());
           } else {
@@ -182,7 +187,11 @@ class CharacterEditView extends PureComponent {
       key={character.baseID}
     >
       <div draggable={true} onDragStart={this.dragStart(character)}
-           onDoubleClick={() => this.props.selectCharacter(character.baseID, this.props.lastSelectedCharacter)}>
+           onDoubleClick={() => this.props.selectCharacter(
+             character.baseID,
+             character.defaultTarget(),
+             this.props.lastSelectedCharacter
+           )}>
         <CharacterAvatar character={character}/>
       </div>
       <div className={'character-name'}>
@@ -317,7 +326,6 @@ class CharacterEditView extends PureComponent {
 const mapStateToProps = (state) => {
   const profile = state.profile;
   const availableCharacters = Object.values(profile.characters)
-    .filter(character => !profile.selectedCharacters.includes(character.baseID))
     .sort((left, right) => left.compareGP(right));
 
   /**
@@ -345,8 +353,8 @@ const mapStateToProps = (state) => {
     gameSettings: state.gameSettings,
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
-    selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id]),
-    lastSelectedCharacter: profile.selectedCharacters[profile.selectedCharacters.length - 1],
+    selectedCharacters: profile.selectedCharacters,
+    lastSelectedCharacter: profile.selectedCharacters.length - 1,
     showReviewButton: profile.modAssignments && Object.keys(profile.modAssignments).length,
   };
 };
@@ -356,13 +364,12 @@ const mapDispatchToProps = dispatch => ({
   hideModal: () => dispatch(hideModal()),
   changeCharacterFilter: (filter) => dispatch(changeCharacterFilter(filter)),
   reviewOldAssignments: () => dispatch(changeOptimizerView('sets')),
-  selectCharacter: (characterID, prevCharacterID) => dispatch(selectCharacter(characterID, prevCharacterID)),
+  selectCharacter: (characterID, target, prevIndex) => dispatch(selectCharacter(characterID, target, prevIndex)),
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),
   clearSelectedCharacters: () => dispatch(unselectAllCharacters()),
   lockSelectedCharacters: () => dispatch(lockSelectedCharacters()),
   unlockSelectedCharacters: () => dispatch(unlockSelectedCharacters()),
   updateLockUnselectedCharacters: (lock) => dispatch(updateLockUnselectedCharacters(lock)),
-  changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
   optimizeMods: () => dispatch(optimizeMods()),
   updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold))

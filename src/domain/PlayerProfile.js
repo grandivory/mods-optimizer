@@ -5,6 +5,7 @@ import Character from "./Character";
 import Mod from "./Mod";
 import {mapObject} from "../utils/mapObject";
 import OptimizerRun from "./OptimizerRun";
+import OptimizationPlan from "./OptimizationPlan";
 
 const defaultGlobalSettings = {
   modChangeThreshold: 0,
@@ -28,7 +29,7 @@ export default class PlayerProfile {
    * @param characters {Object<string, Character>} A map from character IDs to character objects
    * @param mods {Array<Mod>} An array of Mods
    * @param selectedCharacters {Array<string>} An array of Character IDs
-   * @param modAssignments {Object<string, Array<string>>} A map from Character ID to mod IDs
+   * @param modAssignments {Array<Object>} An array of character definitions and assigned mods
    * @param globalSettings {Object} An object containing settings that apply in the context of a player, rather than a
    *                                character
    * @param previousSettings {Object} Deprecated - An object that holds the previous values for characters, mods,
@@ -217,25 +218,54 @@ export default class PlayerProfile {
 
   static deserialize(profileJson) {
     if (profileJson) {
-      const globalSettings = profileJson.globalSettings ?
-        profileJson.globalSettings :
-        {
-          modChangeThreshold: profileJson.modChangeThreshold || 0,
-          lockUnselectedCharacters: false
-        };
+      if (profileJson.selectedCharacters.length && 'string' === typeof profileJson.selectedCharacters[0]) {
+        // This is an older-style profile. Use the older deserializer
+        return this.deserializeVersionOneFour(profileJson);
+      }
 
       return new PlayerProfile(
         profileJson.allyCode,
         profileJson.playerName,
         mapObject(profileJson.characters, Character.deserialize),
         profileJson.mods.map(Mod.deserialize),
-        profileJson.selectedCharacters,
+        profileJson.selectedCharacters.map(({id, target}) => ({id: id, target: OptimizationPlan.deserialize(target)})),
         profileJson.modAssignments,
-        globalSettings,
+        profileJson.globalSettings,
         profileJson.previousSettings || {}
       )
     } else {
       return null;
     }
+  }
+
+  static deserializeVersionOneFour(profileJson) {
+    const globalSettings = profileJson.globalSettings ?
+      profileJson.globalSettings :
+      {
+        modChangeThreshold: profileJson.modChangeThreshold || 0,
+        lockUnselectedCharacters: false
+      };
+
+    const characters = mapObject(profileJson.characters, Character.deserialize);
+    const selectedCharacters = profileJson.selectedCharacters.map(characterID => ({
+      id: characterID,
+      target: characters[characterID].optimizerSettings.target
+    }));
+    const modAssignments = profileJson.selectedCharacters.map(characterID => ({
+      id: characterID,
+      target: characters[characterID].optimizerSettings.target,
+      assignedMods: profileJson.modAssignments[characterID]
+    }));
+
+    return new PlayerProfile(
+      profileJson.allyCode,
+      profileJson.playerName,
+      characters,
+      profileJson.mods.map(Mod.deserialize),
+      selectedCharacters,
+      modAssignments,
+      globalSettings,
+      profileJson.previousSettings || {}
+    );
   }
 }
