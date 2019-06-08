@@ -59,13 +59,17 @@ class GameSettings {
 
   constructor(baseID,
               name,
-              avatarUrl = '//swgoh.gg/static/img/assets/blank-character.png',
+              avatarUrl = 'https://swgoh.gg/static/img/assets/blank-character.png',
               tags = [],
               description = ''
   ) {
     this.baseID = baseID;
     this.name = name;
-    this.avatarUrl = avatarUrl;
+    if (avatarUrl.startsWith('/')) {
+      this.avatarUrl = `https://swgoh.gg${avatarUrl}`;
+    } else {
+      this.avatarUrl = avatarUrl;
+    }
     this.tags = tags;
     this.description = description;
     Object.freeze(this);
