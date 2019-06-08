@@ -16,7 +16,10 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 25, 0, 75, 0, 0, 0, 0, true)]
   ),
   'ADMIRALACKBAR': new CharacterSettings(
-    [new OptimizationPlan('Survivability', 20, 20, 100, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('Survivability', 20, 20, 100, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, true),
+      optimizationStrategy.Speed
+    ],
     ['AA', 'Snackbar', 'ABC']
   ),
   'AHSOKATANO': new CharacterSettings(
@@ -95,7 +98,8 @@ const characterSettings = {
   'BB8': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 5, 5, 100, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('hSTR Phase 1', 10, -5, 100, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('hSTR Phase 1', 10, -5, 100, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, true),
+      optimizationStrategy.Speed
     ],
     ['bb8', 'Wampanader', 'ABC']
   ),
@@ -437,7 +441,7 @@ const characterSettings = {
     [optimizationStrategy["Speedy debuffer"].rename('Speed')]
   ),
   'HERMITYODA': new CharacterSettings(
-    [optimizationStrategy.Speed.rename('Speed')],
+    [optimizationStrategy.Speed],
     ['Hyoda', 'Hoboda', 'Hobo', 'HY'],
     DamageType.mixed
   ),
@@ -757,6 +761,9 @@ const characterSettings = {
     ],
     ['Rogue 1', 'SRP']
   ),
+  'SHAAKTI': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'SHORETROOPER': new CharacterSettings(
     [new OptimizationPlan('Speedy Tank', 50, 50, 100, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, true)],
     ['ShT', 'Troopers', 'Imperial Grancor Maneuver']
@@ -879,7 +886,10 @@ const characterSettings = {
     ['Dwight', 'solo']
   ),
   'YOUNGHAN': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
+    [
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
+      new OptimizationPlan('HAAT', 0, 0, 80, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
+    ],
     ['YOLO', 'solo', 'Jim']
   ),
   'YOUNGLANDO': new CharacterSettings(
