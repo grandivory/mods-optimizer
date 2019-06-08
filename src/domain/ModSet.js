@@ -82,7 +82,7 @@ class ModSet {
       (!target.primaryStatRestrictions.cross ||
         (this.cross && this.cross.primaryStat.type === target.primaryStatRestrictions.cross)) &&
       this.fulfillsSetRestriction(target.setRestrictions) &&
-      this.fulfillsTargetStatRestriction(target.targetStat, character);
+      this.fulfillsTargetStatRestriction(character, target);
   }
 
   /**
@@ -110,11 +110,12 @@ class ModSet {
   /**
    * Checks to see if this mod set meets the target stat
    *
-   * @param targetStat {TargetStat}
    * @param character {Character}
+   * @param target {OptimizationPlan}
    * @returns {boolean}
    */
-  fulfillsTargetStatRestriction(targetStat, character) {
+  fulfillsTargetStatRestriction(character, target) {
+    const targetStat = target.targetStat;
     if (!targetStat) {
       return true;
     }
@@ -125,7 +126,7 @@ class ModSet {
     }
     const statProperty = statTypeMap[targetStat.stat][0];
 
-    const setValue = this.getSummary(character)[targetStat.stat];
+    const setValue = this.getSummary(character, target)[targetStat.stat];
     const baseValue = character.playerValues.equippedStats[statProperty];
     const totalValue = baseValue + setValue;
 
@@ -165,12 +166,13 @@ class ModSet {
   /**
    * Give a summary of the absolute stat increase given by this mod set for a given character
    *
-   * @param character Character
+   * @param character {Character}
+   * @param target {OptimizationPlan}
    * @param withUpgrades {boolean} Whether to level and slice mods, if they've been selected for the character
    *
    * @return Object An object keyed on each stat in the mod set
    */
-  getSummary(character, withUpgrades) {
+  getSummary(character, target, withUpgrades) {
     let summary = {};
 
     if (!character.playerValues.baseStats) {
@@ -204,7 +206,7 @@ class ModSet {
       }
       const set = mod.set;
 
-      const modStats = mod.getStatSummaryForCharacter(character, withUpgrades);
+      const modStats = mod.getStatSummaryForCharacter(character, target, withUpgrades);
       for (let stat in modStats) {
         summary[stat] = summary[stat] ? summary[stat].plus(modStats[stat]) : modStats[stat];
       }
@@ -214,7 +216,7 @@ class ModSet {
       const currentMaxCount = maxSetCounts.get(set) || 0;
       if (set) {
         smallSetCounts.set(set, currentSmallCount + 1);
-        if ((withUpgrades && character.optimizerSettings.target.upgradeMods) || 15 === mod.level) {
+        if ((withUpgrades && target.upgradeMods) || 15 === mod.level) {
           maxSetCounts.set(set, currentMaxCount + 1);
         }
       }
@@ -286,12 +288,13 @@ class ModSet {
   /**
    * Get the value of this full mod set for optimization
    *
-   * @param character
+   * @param character {Character}
+   * @param target {OptimizationPlan}
    * @param withUpgrades {Boolean} Whether to upgrade mods while calculating the value of the set
    */
-  getOptimizationValue(character, withUpgrades = false) {
-    return Object.values(this.getSummary(character, withUpgrades))
-      .reduce((setValue, stat) => setValue + stat.getOptimizationValue(character), 0);
+  getOptimizationValue(character, target, withUpgrades = false) {
+    return Object.values(this.getSummary(character, target, withUpgrades))
+      .reduce((setValue, stat) => setValue + stat.getOptimizationValue(character, target), 0);
   }
 
   serialize() {
@@ -300,6 +303,13 @@ class ModSet {
 
   static deserialize(modSetJson) {
     return new ModSet(modSetJson.map(Mod.deserialize));
+  }
+
+  static slotSort(leftMod, rightMod) {
+    const leftIndex = ModSet.slots.indexOf(leftMod.slot);
+    const rightIndex = ModSet.slots.indexOf(rightMod.slot);
+
+    return leftIndex - rightIndex;
   }
 }
 

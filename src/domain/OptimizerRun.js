@@ -14,7 +14,7 @@ export default class OptimizerRun {
    * @param allyCode {string}
    * @param characters {Object<String, Object>}
    * @param mods {Array<Object>}
-   * @param selectedCharacters {Array<string>}
+   * @param selectedCharacters {Array<Object>}
    * @param modChangeThreshold {number}
    * @param lockUnselectedCharacters {boolean}
    */

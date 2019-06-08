@@ -156,9 +156,10 @@ class Stat {
   /**
    * Get the value of this stat for optimization
    *
-   * @param character
+   * @param character {Character}
+   * @param target {OptimizationPlan}
    */
-  getOptimizationValue(character) {
+  getOptimizationValue(character, target) {
     // Optimization Plans don't have separate physical and special critical chances, since both are always affected
     // equally. If this is a physical crit chance stat, then use 'critChance' as the stat type. If it's special crit
     // chance, ignore it altogether.
@@ -170,12 +171,12 @@ class Stat {
 
     if (this.isPercent) {
       return statTypes.map(statType =>
-        character.optimizerSettings.target[statType] *
+        target[statType] *
         Math.floor(character.playerValues.baseStats[statType] * this.value / 100)
       ).reduce((a, b) => a + b, 0);
     } else {
       return statTypes.map(statType =>
-        character.optimizerSettings.target[statType] * this.value
+        target[statType] * this.value
       ).reduce((a, b) => a + b, 0);
     }
   }

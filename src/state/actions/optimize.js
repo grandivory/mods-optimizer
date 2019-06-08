@@ -27,20 +27,7 @@ export function startModOptimization() {
  */
 export function finishModOptimization(result, settings) {
   return updateProfile(
-    profile => {
-      const newAssignments = {};
-      // Go through the previous mod assignments until one is found in the new result.
-      // Anything above that won't have changed
-      for (let characterID of settings.selectedCharacters) {
-        if (result.assignedSets[characterID]) {
-          newAssignments[characterID] = result.assignedSets[characterID];
-        } else if (!profile.characters[characterID].optimizerSettings.isLocked) {
-          newAssignments[characterID] = profile.modAssignments[characterID];
-        }
-      }
-
-      return profile.withModAssignments(newAssignments);
-    },
+    profile => profile.withModAssignments(result),
     (dispatch, getState, newProfile) => {
       const db = getDatabase();
       db.saveLastRun(
@@ -55,10 +42,16 @@ export function finishModOptimization(result, settings) {
       );
 
       dispatch(setIsBusy(false));
-      dispatch(changeOptimizerView('sets'));
+      dispatch(changeOptimizerView('review'));
       dispatch(hideModal());
-      if (Object.keys(result.messages).length) {
+
+      // Create the content of the pop-up for any post-optimization messages
+
+      const resultsWithMessages = result.filter(x => null !== x).filter(({messages}) => 0 < messages.length);
+
+      if (resultsWithMessages.length) {
         const state = getState();
+
         dispatch(showFlash(
           '',
           <div className={'optimizer-messages'}>
@@ -71,23 +64,24 @@ export function finishModOptimization(result, settings) {
               </tr>
               </thead>
               <tbody>
-              {Object.values(mapObjectByKeyAndValue(result.messages, (characterID, messages) => {
-                const character = newProfile.characters[characterID] || new Character(characterID);
-                return <tr key={characterID}>
+              {resultsWithMessages.map(({id, target, messages}, index) => {
+                const character = newProfile.characters[id] || new Character(id);
+                return <tr key={index}>
                   <td><CharacterAvatar character={character}/><br />
-                    {state.gameSettings[character.baseID] ? state.gameSettings[character.baseID].name : character.baseID}
+                    {state.gameSettings[id] ? state.gameSettings[id].name : id}
                   </td>
                   <td>
+                    <h4>{target.name}:</h4>
                     <ul>
                       {messages.map((message, index) => <li key={index}>{message}</li>)}
                     </ul>
                   </td>
                 </tr>;
-              }))}
+              })}
               </tbody>
             </table>
           </div>
-        ))
+        ));
       }
     }
   );

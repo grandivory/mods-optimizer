@@ -96,10 +96,11 @@ class Mod {
   /**
    * Get a summary of how this mod affects a character's stats
    * @param character {Character}
+   * @param target {OptimizationPlan}
    * @param withUpgrades {boolean} Whether to level and slice the mod, if they've been selected for the character
    * @returns {Object<String, Number>} A map from stat name to value
    */
-  getStatSummaryForCharacter(character, withUpgrades = true) {
+  getStatSummaryForCharacter(character, target, withUpgrades = true) {
     let workingMod = this;
 
     const summary = {
@@ -121,7 +122,7 @@ class Mod {
 
     if (withUpgrades) {
       // Upgrade or slice each mod as necessary based on the optimizer settings and level of the mod
-      if (15 > workingMod.level && character.optimizerSettings.target.upgradeMods) {
+      if (15 > workingMod.level && target.upgradeMods) {
         workingMod = workingMod.levelUp();
       }
       if (15 === workingMod.level && 5 === workingMod.pips && character.optimizerSettings.sliceMods) {

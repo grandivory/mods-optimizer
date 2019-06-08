@@ -143,6 +143,8 @@ class CharacterEditView extends PureComponent {
    * @returns JSX Element
    */
   sidebarActions() {
+    // TODO: Change review button
+    // TODO: Make sure that review doesn't break with old assignments
     return <div className={'sidebar-actions'} key={'sidebar-actions'}>
       <h3>Actions</h3>
       <button

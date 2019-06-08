@@ -1,7 +1,7 @@
 // @flow
 
 import React, {PureComponent} from "react";
-import ReviewList from "../ReviewList/ReviewList";
+import Review from "../Review/Review";
 import ReviewSets from "../ReviewSets/ReviewSets";
 import CharacterEditView from "../CharacterEditView/CharacterEditView";
 
@@ -20,8 +20,8 @@ class OptimizerView extends PureComponent {
         {'sets' === this.props.view &&
         <ReviewSets/>
         }
-        {'mods' === this.props.view &&
-        <ReviewList/>
+        {'review' === this.props.view &&
+        <Review/>
         }
       </div>
     );

@@ -126,8 +126,8 @@ class ReviewSets extends React.PureComponent {
       )
     ).reduce((allMods, characterMods) => allMods.concat(characterMods), []);
 
-    const modsBeingRemoved = this.props.mods.filter(mod => // The mod is currently equipped
-      mod.characterID &&
+    const modsBeingRemoved = this.props.mods.filter(mod =>
+      mod.characterID && // The mod is currently equipped
       (
         // The mod is being equipped on another character
         movingMods.includes(mod) ||
@@ -198,7 +198,7 @@ class ReviewSets extends React.PureComponent {
         </h3> :
         <h3>
           Your mods will cost {formatNumber(modRemovalCost)} <Credits/> to move
-        </h3>
+        </h3>;
 
       return [
         <Sidebar key={'sidebar'} content={this.sidebar()}/>,

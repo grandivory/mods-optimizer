@@ -43,7 +43,7 @@ be referenced by multiple parts. This includes the list of characters, what each
 ### Containers
 The `containers` directory holds objects for each "page" of the app. There is `App` itself, which is the outer shell
 in which everything else is rendered, then containers for each view - `Explore` and `Optimizer`, which
-is further subdivided into `CharacterEdit`, `ReviewList`, and `ReviewSets`
+is further subdivided into `CharacterEdit` and `Review`
 
 ### Domain
 The `domain` directory holds objects that are used to represent the data that the app needs to work on. These objects
