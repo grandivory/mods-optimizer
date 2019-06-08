@@ -31,7 +31,7 @@ self.onmessage = function(message) {
         !mod.characterID || !profile.characters[mod.characterID].optimizerSettings.isLocked);
 
       if (profile.globalSettings.lockUnselectedCharacters) {
-        usableMods = allMods.filter(mod => !mod.characterID || profile.selectedCharacters.includes(mod.characterID))
+        usableMods = usableMods.filter(mod => !mod.characterID || profile.selectedCharacters.includes(mod.characterID))
       }
 
       const characters = {};
