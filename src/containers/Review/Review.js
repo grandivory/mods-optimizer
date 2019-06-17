@@ -259,15 +259,10 @@ class Review extends React.PureComponent {
    * @returns JSX Element
    */
   sidebarActions() {
-    // TODO: Remove "sets" button
     return <div className={'sidebar-actions'} key={'sidebar-actions'}>
       <h3>I don't like these results...</h3>
       <button type={'button'} onClick={this.props.edit}>
         Change my selection
-      </button>
-      <h3>I want to review changes again</h3>
-      <button type={'button'} onClick={this.props.back}>
-        Show me the mod sets
       </button>
     </div>
   }
@@ -451,7 +446,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   edit: () => dispatch(changeOptimizerView('edit')),
-  back: () => dispatch(changeOptimizerView('sets')),
   changeFilter: (filter) => dispatch(changeModListFilter(filter)),
   unequipMod: (modID) => dispatch(unequipMod(modID)),
   reassignMod: (modID, characterID) => dispatch(reassignMod(modID, characterID)),
