@@ -433,44 +433,47 @@ export function receiveStats(allyCode, requestedCharacters, characterStats) {
       oldProfile => {
         const newProfile = oldProfile.withCharacters(
           characterStats.reduce((characters, statObject) => {
-            const character = oldProfile.characters[statObject.unit.defId];
+            const unit = statObject.unit ? statObject.unit : statObject;
+            const stats = statObject.stats;
 
-            const baseStats = statObject.stats.base ?
+            const character = oldProfile.characters[unit.defId];
+
+            const baseStats = stats.base ?
               new CharacterStats(
-                statObject.stats.base['Health'] || 0,
-                statObject.stats.base['Protection'] || 0,
-                statObject.stats.base['Speed'] || 0,
-                statObject.stats.base['Potency'] || 0,
-                statObject.stats.base['Tenacity'] || 0,
-                statObject.stats.base['Physical Damage'] || 0,
-                statObject.stats.base['Physical Critical Rating'] || 0,
-                statObject.stats.base['Armor'] || 0,
-                statObject.stats.base['Special Damage'] || 0,
-                statObject.stats.base['Special Critical Rating'] || 0,
-                statObject.stats.base['Resistance'] || 0
+                stats.base['Health'] || 0,
+                stats.base['Protection'] || 0,
+                stats.base['Speed'] || 0,
+                stats.base['Potency'] || 0,
+                stats.base['Tenacity'] || 0,
+                stats.base['Physical Damage'] || 0,
+                stats.base['Physical Critical Rating'] || 0,
+                stats.base['Armor'] || 0,
+                stats.base['Special Damage'] || 0,
+                stats.base['Special Critical Rating'] || 0,
+                stats.base['Resistance'] || 0
               ) :
               NullCharacterStats;
 
             let equippedStats = NullCharacterStats;
 
-            if (statObject.stats.gear) {
+            if (stats.gear) {
               const gearStats = new CharacterStats(
-                statObject.stats.gear['Health'] || 0,
-                statObject.stats.gear['Protection'] || 0,
-                statObject.stats.gear['Speed'] || 0,
-                statObject.stats.gear['Potency'] || 0,
-                statObject.stats.gear['Tenacity'] || 0,
-                statObject.stats.gear['Physical Damage'] || 0,
-                statObject.stats.gear['Physical Critical Rating'] || 0,
-                statObject.stats.gear['Armor'] || 0,
-                statObject.stats.gear['Special Damage'] || 0,
-                statObject.stats.gear['Special Critical Rating'] || 0,
-                statObject.stats.gear['Resistance'] || 0
+                stats.gear['Health'] || 0,
+                stats.gear['Protection'] || 0,
+                stats.gear['Speed'] || 0,
+                stats.gear['Potency'] || 0,
+                stats.gear['Tenacity'] || 0,
+                stats.gear['Physical Damage'] || 0,
+                stats.gear['Physical Critical Rating'] || 0,
+                stats.gear['Armor'] || 0,
+                stats.gear['Special Damage'] || 0,
+                stats.gear['Special Critical Rating'] || 0,
+                stats.gear['Resistance'] || 0
               );
               equippedStats = baseStats.plus(gearStats);
             }
 
-            characters[statObject.unit.defId] =
+            characters[unit.defId] =
               character.withPlayerValues(character.playerValues.withBaseStats(baseStats)
                 .withEquippedStats(equippedStats));
 
@@ -495,7 +498,10 @@ export function receiveStats(allyCode, requestedCharacters, characterStats) {
     );
 
     const errorCharacters = requestedCharacters.filter(charID =>
-      !characterStats.find(stats => stats.unit.defId === charID && !stats.stats.error)
+      !characterStats.find(stats => {
+        const unit = stats.unit ? stats.unit : stats;
+        return unit.defId === charID && !stats.stats.error;
+      })
     );
 
     const errorMessage = errorCharacters.length > 0 ?
