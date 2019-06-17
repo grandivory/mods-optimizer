@@ -55,10 +55,14 @@ self.onmessage = function(message) {
 
       lastRun.modAssignments = profile.modAssignments;
 
+      const selectedCharacters = profile.selectedCharacters.map(({id, target}) =>
+        ({id: id, target: deserializeTarget(target)})
+      );
+
       const optimizerResults = optimizeMods(
         usableMods,
         characters,
-        profile.selectedCharacters,
+        selectedCharacters,
         profile.globalSettings.modChangeThreshold,
         profile.globalSettings.lockUnselectedCharacters,
         lastRun

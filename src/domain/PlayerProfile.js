@@ -209,7 +209,7 @@ export default class PlayerProfile {
         'function' === typeof character.serialize ? character.serialize() : character
       ),
       mods: this.mods.map(mod => mod.serialize()),
-      selectedCharacters: this.selectedCharacters,
+      selectedCharacters: this.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()})),
       modAssignments: this.modAssignments,
       globalSettings: this.globalSettings,
       previousSettings: this.previousSettings

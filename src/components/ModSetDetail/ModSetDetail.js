@@ -38,7 +38,7 @@ class ModSetDetail extends React.PureComponent {
       let statValue = character.playerValues.equippedStats[statProperty] + stat.value;
 
       let originalStat = diffSummary[stat.displayType];
-      let originalStatValue = diffStat ? character.playerValues.equippedStats[statProperty] + diffStat.value : null;
+      let originalStatValue = diffStat ? character.playerValues.equippedStats[statProperty] + originalStat.value : null;
 
       if (['armor', 'resistance'].includes(statProperty)) {
         // Convert armor and resistance to percent stats
