@@ -92,7 +92,7 @@ class Review extends React.PureComponent {
    * @returns {Array<*>}
    */
   listView(displayedMods) {
-    const individualMods = flatten(displayedMods.map(({id, target, assignedMods}) =>
+    let individualMods = flatten(displayedMods.map(({id, target, assignedMods}) =>
       assignedMods.map(mod => ({id: id, target: target, mod: mod}))
     ));
 
@@ -109,7 +109,20 @@ class Review extends React.PureComponent {
           return leftCharacter.compareGP(rightCharacter) || ModSet.slotSort(leftMod, rightMod);
         }
       });
+
+      if (this.props.filter.tag) {
+        individualMods = individualMods.filter(({mod}) => {
+          const tags = this.props.gameSettings[mod.characterID] ? this.props.gameSettings[mod.characterID].tags : [];
+          return tags.includes(this.props.filter.tag);
+        });
+      }
+    } else if (this.props.filter.tag) {
+      individualMods = individualMods.filter(({id, mod}) => {
+        const tags = this.props.gameSettings[id] ? this.props.gameSettings[id].tags : [];
+        return tags.includes(this.props.filter.tag);
+      });
     }
+
 
     return individualMods.map(({id: characterID, target, mod}) => {
       const character = this.props.characters[characterID];
@@ -141,25 +154,8 @@ class Review extends React.PureComponent {
    * @returns array[JSX Element]
    */
   setsView(modAssignments) {
-    // Group the displayed mods by character, based on the current sort options
-    // const modsByCharacter = sortOptions.assignedCharacter === this.props.filter.sort ?
-    //   mapObject(
-    //     collectByKey(this.props.displayedMods, ([characterID, mod]) => characterID),
-    //     assignedModPair => assignedModPair.map(([characterID, mod]) => mod)
-    //   ) :
-    //   mapObject(
-    //     collectByKey(this.props.displayedMods, ([characterID, mod]) => mod.characterID),
-    //     assignedModPair => assignedModPair.map(([characterID, mod]) => mod)
-    //   );
-
-    const filter = this.props.filter;
-
-    const assignments = showOptions.change === filter.show && sortOptions.assignedCharacter === filter.sort ?
-      modAssignments.filter(({id, assignedMods}) => assignedMods.some(mod => mod.characterID !== id)) :
-      modAssignments;
-
     // Iterate over each character to render a full mod set
-    return assignments.map(({id: characterID, target, assignedMods: mods}, index) => {
+    return modAssignments.map(({id: characterID, target, assignedMods: mods}, index) => {
       const character = this.props.characters[characterID];
 
       if (!character) {
@@ -211,7 +207,7 @@ class Review extends React.PureComponent {
    */
   filterForm() {
     const filter = this.props.filter;
-    const tagOptions = [];//this.props.tags.map(tag => <option value={tag} key={tag}>{tag}</option>);
+    const tagOptions = this.props.tags.map(tag => <option value={tag} key={tag}>{tag}</option>);
 
     return <div className={'filter-form'}>
       <Toggle inputLabel={'Organize mods by:'}
@@ -348,7 +344,7 @@ const mapStateToProps = (state) => {
   );
 
   let displayedMods;
-  // TODO: Handle sorting by assigned character
+  let tags;
   switch (filter.view) {
     case viewOptions.list:
       // If we're displaying mods as a list, then only show mods that aren't already assigned to that character
@@ -357,6 +353,19 @@ const mapStateToProps = (state) => {
         target: target,
         assignedMods: assignedMods.filter(mod => mod.characterID !== id).sort(ModSet.slotSort)
       }));
+      if (sortOptions.currentCharacter === filter.sort) {
+        const removedMods = collectByKey(
+          flatten(displayedMods.map(({id, assignedMods}) => assignedMods.filter(mod => mod.characterID !== id))),
+          mod => mod.characterID
+        );
+        tags = Array.from(new Set(flatten(
+          Object.keys(removedMods).map(id => state.gameSettings[id] ? state.gameSettings[id].tags : [])
+        )));
+      } else {
+        tags = Array.from(new Set(flatten(
+          displayedMods.map(({id}) => state.gameSettings[id] ? state.gameSettings[id].tags : [])
+        )));
+      }
       break;
     default:
       // If we're displaying as sets, but sorting by current character, we need to rework the modAssignments
@@ -373,63 +382,30 @@ const mapStateToProps = (state) => {
           currentMods,
           (id, mods) => ({id: id, assignedMods: mods})
         ));
+      } else if (showOptions.change === filter.show) {
+        displayedMods = modAssignments.filter(({id, assignedMods}) => assignedMods.some(mod => mod.characterID !== id));
       } else {
         displayedMods = modAssignments;
       }
+
+      // Set up the available tags for the sidebar
+      tags = Array.from(new Set(flatten(
+        displayedMods.map(({id}) => state.gameSettings[id] ? state.gameSettings[id].tags : [])
+      )));
+
+      // Filter out any characters that we're not going to display based on the selected tag
+      if (filter.tag) {
+        displayedMods = displayedMods.filter(({id}) => {
+          const tags = state.gameSettings[id] ? state.gameSettings[id].tags : [];
+          return tags.includes(filter.tag);
+        });
+      }
   }
+  tags.sort();
 
   const movingModsByAssignedCharacter = modAssignments.map(({id, target, assignedMods}) =>
     ({id: id, target: target, assignedMods: assignedMods.filter(mod => mod.characterID !== id)})
   ).filter(({assignedMods}) => assignedMods.length);
-
-  //   mapObjectByKeyAndValue(
-  //   profile.modAssignments,
-  //   (characterID, modIDs) => modIDs ?
-  //     modIDs.map(modID => modsById[modID]).filter(mod => mod && mod.characterID !== characterID) :
-  //     []
-  // );
-  // const characterModPairs = Object.entries(movingModsByAssignedCharacter)
-  //   .map(([characterID, mods]) => mods.map(mod => [characterID, mod]))
-  //   .reduce((mods, chunk) => mods.concat(chunk), []);
-  // const displayedMods = characterModPairs.slice().filter(([characterID, mod]) => {
-  //   const character = state.modListFilter.sort === sortOptions.assignedCharacter ?
-  //     profile.characters[characterID] :
-  //     profile.characters[mod.characterID];
-  //
-  //   return !state.modListFilter.tag || (character &&
-  //     (state.gameSettings[character.baseID] ? state.gameSettings[character.baseID].tags : [])
-  //       .includes(state.modListFilter.tag)
-  //   );
-  // });
-  // const tags = Array.from(new Set(flatten(
-  //   characterModPairs.map(([characterID]) =>
-  //     state.gameSettings[characterID] ? state.gameSettings[characterID].tags : []
-  //   )
-  // ))).sort();
-
-  // switch (state.modListFilter.sort) {
-  //   case sortOptions.assignedCharacter:
-  //     // If we're sorting by assigned character, then sort in the order that the characters were selected
-  //     // (meaning we don't actually have to change the order at all!)
-  //     break;
-  //   default:
-  //     // Sort by current character if anything else is selected as the sort option
-  //     // When sorting by current character, have unassigned mods show up first, then order the characters by GP
-  //     displayedMods.sort((left, right) => {
-  //       const leftMod = left[1];
-  //       const rightMod = right[1];
-  //       const leftCharacter = leftMod.characterID ? profile.characters[leftMod.characterID] : null;
-  //       const rightCharacter = rightMod.characterID ? profile.characters[rightMod.characterID] : null;
-  //
-  //       if (!leftCharacter) {
-  //         return -1;
-  //       } else if (!rightCharacter) {
-  //         return 1;
-  //       } else {
-  //         return leftCharacter.compareGP(rightCharacter);
-  //       }
-  //     });
-  // }
 
   /**
    * {{
@@ -443,9 +419,8 @@ const mapStateToProps = (state) => {
     displayedMods: displayedMods,
     movingModAssignments: movingModsByAssignedCharacter,
     numMovingMods: numMovingMods,
-    filter: state.modListFilter
-    // TODO: Fix tags and tag filters
-    // tags: tags
+    filter: state.modListFilter,
+    tags: tags
   };
 };
 
