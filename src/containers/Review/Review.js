@@ -37,6 +37,11 @@ const viewOptions = {
   'sets': 'sets'
 };
 
+const showOptions = {
+  'change': 'change',
+  'all': 'all'
+};
+
 class Review extends React.PureComponent {
   render() {
     let modRows;
@@ -147,8 +152,14 @@ class Review extends React.PureComponent {
     //     assignedModPair => assignedModPair.map(([characterID, mod]) => mod)
     //   );
 
+    const filter = this.props.filter;
+
+    const assignments = showOptions.change === filter.show && sortOptions.assignedCharacter === filter.sort ?
+      modAssignments.filter(({id, assignedMods}) => assignedMods.some(mod => mod.characterID !== id)):
+      modAssignments;
+
     // Iterate over each character to render a full mod set
-    return modAssignments.map(({id: characterID, target, assignedMods: mods}, index) => {
+    return assignments.map(({id: characterID, target, assignedMods: mods}, index) => {
       const character = this.props.characters[characterID];
 
       if (!character) {
@@ -202,7 +213,6 @@ class Review extends React.PureComponent {
     const filter = this.props.filter;
     const tagOptions = [];//this.props.tags.map(tag => <option value={tag} key={tag}>{tag}</option>);
 
-    // TODO: Add ability to filter out non-changing sets when assignedCharacter is selected
     return <div className={'filter-form'}>
       <Toggle inputLabel={'Organize mods by:'}
               leftLabel={'Currently Equipped'}
@@ -220,6 +230,16 @@ class Review extends React.PureComponent {
               value={filter.view}
               onChange={viewAs => this.props.changeFilter(Object.assign({}, filter, {view: viewAs}))}
       />
+      {sortOptions.assignedCharacter === filter.sort && viewOptions.sets === filter.view &&
+      <Toggle inputLabel={'Show me:'}
+              leftLabel={'Changing sets'}
+              leftValue={showOptions.change}
+              rightLabel={'All sets'}
+              rightValue={showOptions.all}
+              value={filter.show}
+              onChange={show => this.props.changeFilter(Object.assign({}, filter, {show: show}))}
+      />
+      }
       <label htmlFor={'tag'}>Show characters by tag:</label>
       <div className={'dropdown'}>
         <select id={'tag'}
