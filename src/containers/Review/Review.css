@@ -4,11 +4,15 @@
 
 .review-list h2 {
   text-align: center;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: .5em;
 }
 
 .review-list h3 {
   text-align: center;
   margin-bottom: 0;
+  margin-top: 0;
 }
 
 .review-list h4 {

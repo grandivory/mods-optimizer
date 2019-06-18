@@ -47,11 +47,19 @@
 
 .mod-set-detail .summary table td.stat-type {
   text-align: left;
-  max-width: 9em;
 }
 
 .mod-set-detail .summary table td.stat-value {
   text-align: right;
+  width: 9em;
+}
+
+.mod-set-detail .summary table td.stat-diff {
+  width: 4em;
+}
+
+.mod-set-detail .summary table td.optimizer-value {
+  width: 3.2em;
 }
 
 .mod-set-detail .summary table td.stat-diff.increase::before {

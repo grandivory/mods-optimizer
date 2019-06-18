@@ -2,7 +2,6 @@
 
 import React, {PureComponent} from "react";
 import Review from "../Review/Review";
-import ReviewSets from "../ReviewSets/ReviewSets";
 import CharacterEditView from "../CharacterEditView/CharacterEditView";
 
 import "./OptimizerView.css";
@@ -14,15 +13,8 @@ class OptimizerView extends PureComponent {
   render() {
     return (
       <div className={'optimizer-view'}>
-        {'edit' === this.props.view &&
-        <CharacterEditView/>
-        }
-        {'sets' === this.props.view &&
-        <ReviewSets/>
-        }
-        {'review' === this.props.view &&
-        <Review/>
-        }
+        {'edit' === this.props.view && <CharacterEditView/>}
+        {'review' === this.props.view && <Review/>}
       </div>
     );
   }

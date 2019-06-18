@@ -26,6 +26,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import ModSetDetail from "../../components/ModSetDetail/ModSetDetail";
 import flatten from "../../utils/flatten";
 import {connect} from "react-redux";
+import Credits from "../../components/Credits/Credits";
 
 const sortOptions = {
   'currentCharacter': 'currentCharacter',
@@ -40,6 +41,105 @@ const viewOptions = {
 const showOptions = {
   'change': 'change',
   'all': 'all'
+};
+
+// A map from number of pips that a mod has to the cost to remove it
+const modRemovalCosts = {
+  1: 550,
+  2: 1050,
+  3: 1900,
+  4: 3000,
+  5: 4750,
+  6: 8000
+};
+
+// A map from number of pips to a map from current mod level to the total cost to upgrade the mod to level 15
+const modUpgradeCosts = {
+  5: {
+    1: 248400,
+    2: 244950,
+    3: 241500,
+    4: 238050,
+    5: 234600,
+    6: 229950,
+    7: 224300,
+    8: 218500,
+    9: 210500,
+    10: 200150,
+    11: 189800,
+    12: 162200,
+    13: 126550,
+    14: 90900,
+    15: 0
+  },
+  4: {
+    1: 128700,
+    2: 126900,
+    3: 124200,
+    4: 121500,
+    5: 118800,
+    6: 116100,
+    7: 113400,
+    8: 110700,
+    9: 106200,
+    10: 100800,
+    11: 95400,
+    12: 81000,
+    13: 64800,
+    14: 46800,
+    15: 0
+  },
+  3: {
+    1: 73200,
+    2: 72000,
+    3: 70800,
+    4: 69600,
+    5: 67800,
+    6: 66000,
+    7: 64200,
+    8: 62400,
+    9: 60000,
+    10: 57000,
+    11: 54000,
+    12: 45600,
+    13: 35400,
+    14: 24000,
+    15: 0
+  },
+  2: {
+    1: 28800,
+    2: 28050,
+    3: 27300,
+    4: 26550,
+    5: 25800,
+    6: 24675,
+    7: 23550,
+    8: 22425,
+    9: 21300,
+    10: 19800,
+    11: 18300,
+    12: 16500,
+    13: 12700,
+    14: 8200,
+    15: 0
+  },
+  1: {
+    1: 13400,
+    2: 13050,
+    3: 12700,
+    4: 12350,
+    5: 12000,
+    6: 11475,
+    7: 10950,
+    8: 10425,
+    9: 9900,
+    10: 9200,
+    11: 8500,
+    12: 7625,
+    13: 5875,
+    14: 3775,
+    15: 0
+  }
 };
 
 class Review extends React.PureComponent {
@@ -60,7 +160,16 @@ class Review extends React.PureComponent {
         modRows = this.setsView(this.props.displayedMods);
     }
 
-    // TODO: Add data from the ReviewSets container to this one
+    const formatNumber = number => number.toLocaleString(navigator.language, {'useGrouping': true});
+
+    const subheading = 0 < this.props.modUpgradeCost ?
+      <h3>
+        Your mods will cost {formatNumber(this.props.modRemovalCost)} <Credits/> to move,
+        and an additional {formatNumber(this.props.modUpgradeCost)} <Credits/> to level up to 15.
+      </h3> :
+      <h3>
+        Your mods will cost {formatNumber(this.props.modRemovalCost)} <Credits/> to move
+      </h3>;
 
     if (0 === this.props.numMovingMods) {
       return <div className={'review-list'}>
@@ -73,6 +182,7 @@ class Review extends React.PureComponent {
         <div className={'review-list'}>
           <Sidebar content={this.fullSidebar()}/>
           <h2>Reassigning {this.props.numMovingMods} mods {summaryButton}</h2>
+          {subheading}
           {(0 < this.props.displayedMods.length) &&
           <div className={'mods-list'}>
             {modRows}
@@ -172,6 +282,14 @@ class Review extends React.PureComponent {
           {target &&
           <h4>{target.name}</h4>
           }
+          <div className={'actions'}>
+            {sortOptions.currentCharacter === this.props.filter.sort &&
+            <button onClick={this.props.unequipMods.bind(this, mods.map(mod => mod.id))}>I removed these mods</button>}
+            {sortOptions.assignedCharacter === this.props.filter.sort &&
+            <button onClick={this.props.reassignMods.bind(this, mods.map(mod => mod.id), characterID)}>
+              I reassigned these mods
+            </button>}
+          </div>
         </div>
         {sortOptions.assignedCharacter === this.props.filter.sort &&
         <ModSetDetail
@@ -189,14 +307,6 @@ class Review extends React.PureComponent {
           />
         </div>
         }
-        <div className={'actions'}>
-          {sortOptions.currentCharacter === this.props.filter.sort &&
-          <button onClick={this.props.unequipMods.bind(this, mods.map(mod => mod.id))}>I removed these mods</button>}
-          {sortOptions.assignedCharacter === this.props.filter.sort &&
-          <button onClick={this.props.reassignMods.bind(this, mods.map(mod => mod.id), characterID)}>
-            I reassigned these mods
-          </button>}
-        </div>
       </div>;
     });
   }
@@ -328,7 +438,6 @@ class Review extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  // TODO: Add cost of moving mods
   const profile = state.profile;
   const filter = state.modListFilter;
   const modsById = groupByKey(profile.mods, mod => mod.id);
@@ -407,6 +516,17 @@ const mapStateToProps = (state) => {
     ({id: id, target: target, assignedMods: assignedMods.filter(mod => mod.characterID !== id)})
   ).filter(({assignedMods}) => assignedMods.length);
 
+  const movingMods = flatten(movingModsByAssignedCharacter.map(({assignedMods}) => assignedMods));
+
+  // Get a count of how much it will cost to move the mods. It only costs money to remove mods
+  const modRemovalCost = movingMods.reduce((cost, mod) => cost + modRemovalCosts[mod.pips], 0);
+
+  const modsBeingUpgraded = modAssignments.filter(({target}) => target.upgradeMods)
+    .map(({id, assignedMods}) => assignedMods.filter(mod => 15 !== mod.level && 5 <= mod.pips))
+    .reduce((allMods, characterMods) => allMods.concat(characterMods), []);
+
+  const modUpgradeCost = modsBeingUpgraded.reduce((cost, mod) => cost + modUpgradeCosts[mod.pips][mod.level], 0);
+
   /**
    * {{
    *   displayedMods: [[CharacterID, Mod]]
@@ -418,6 +538,8 @@ const mapStateToProps = (state) => {
     currentModsByCharacter: currentModsByCharacter,
     displayedMods: displayedMods,
     movingModAssignments: movingModsByAssignedCharacter,
+    modRemovalCost: modRemovalCost,
+    modUpgradeCost: modUpgradeCost,
     numMovingMods: numMovingMods,
     filter: state.modListFilter,
     tags: tags

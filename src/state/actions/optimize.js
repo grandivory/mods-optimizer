@@ -5,7 +5,6 @@ import React from "react";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import getDatabase from "../storage/Database";
 import {changeOptimizerView} from "./review";
-import {mapObjectByKeyAndValue} from "../../utils/mapObject";
 import Character from "../../domain/Character";
 import nothing from "../../utils/nothing";
 

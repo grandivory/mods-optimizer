@@ -100,7 +100,7 @@ export function reassignMods(modIDs, characterID) {
         .filter(mod => mod);
 
     const modsUpdate = groupByKey(
-      oldMods.map(mod => mod.equip(characterID)).concat(currentlyEquippedMods.map(mod => mod.unequip())),
+      currentlyEquippedMods.map(mod => mod.unequip()).concat(oldMods.map(mod => mod.equip(characterID))),
       mod => mod.id
     );
 
