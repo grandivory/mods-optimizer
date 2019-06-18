@@ -793,11 +793,18 @@ function filterMods(baseMods, slot, minDots, primaryStat) {
   }
 
   const slotFilteredMods = baseMods.filter(mod => mod.slot === slot);
-  return {
-    mods: slotFilteredMods,
-    messages: primaryStat ?
-      [`No ${primaryStat} or ${minDots}-dot ${slot} mods were available, so both restrictions were dropped.`] :
-      [`No ${minDots}-dot ${slot} mods were available, so the dots restriction was dropped.`]
+  if (slotFilteredMods.length > 0) {
+    return {
+      mods: slotFilteredMods,
+      messages: primaryStat ?
+        [`No ${primaryStat} or ${minDots}-dot ${slot} mods were available, so both restrictions were dropped.`] :
+        [`No ${minDots}-dot ${slot} mods were available, so the dots restriction was dropped.`]
+    }
+  } else {
+    return {
+      mods: [],
+      messages: [`No ${slot} mods were available to use.`]
+    }
   }
 }
 
