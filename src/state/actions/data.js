@@ -149,12 +149,12 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
     return post(
       'https://crinolo-swgoh.glitch.me/statCalc/api/characters',
       Object.keys(characters).map(charID => ({
-          'defId': charID,
-          'rarity': characters[charID].stars,
-          'level': characters[charID].level,
-          'gear': characters[charID].gearLevel,
-          'equipped': characters[charID].gearPieces
-        }))
+        'defId': charID,
+        'rarity': characters[charID].stars,
+        'level': characters[charID].level,
+        'gear': characters[charID].gearLevel,
+        'equipped': characters[charID].gearPieces
+      }))
     )
       .catch(() => {
         throw new Error('Error fetching your character\'s stats. Please try again.')
@@ -373,7 +373,13 @@ export function receiveProfile(allyCode, profile, messages, keepOldMods, lastSte
         );
       },
       error => {
-        dispatch(showError('Database error: ' + error.message + ' Please try again.'));
+        dispatch(showError([
+          <p key={1}>Database error: {error.message}</p>,
+          <p key={2}>Grandivory's mods optimizer is is tested to work in <strong>Firefox, Chrome, and Safari on desktop
+            only</strong>! Other browsers may work, but they are not officially supported. If you're having trouble, try
+            using one of the supported browsers before asking for help.</p>,
+          <p key={3}>If you're still having trouble, try asking for help in the discord server below.</p>
+        ]));
         if (lastStep) {
           dispatch(setIsBusy(false));
         }
