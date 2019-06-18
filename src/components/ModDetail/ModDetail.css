@@ -39,6 +39,7 @@
   grid-column: 1 / span 2;
   margin: 0;
   text-align: left;
+  font-weight: normal;
 }
 
 .mod-detail .mod-stats,
