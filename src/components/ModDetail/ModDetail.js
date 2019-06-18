@@ -18,6 +18,11 @@ class ModDetail extends React.PureComponent {
       <div className='mod-detail'>
         <ModImage mod={mod}/>
         {character && <CharacterAvatar character={character}/>}
+        {character &&
+          <h4 className={'character-name'}>{
+          this.props.gameSettings[character.baseID] ? this.props.gameSettings[character.baseID].name : character.baseID
+          }</h4>
+        }
         <ModStats mod={mod}/>
         <button className={'delete-button red small'} onClick={() => this.props.showModal(this.deleteModal())}>
           Sell Mod
@@ -35,6 +40,13 @@ class ModDetail extends React.PureComponent {
       <div className={'delete-mod-display'}>
         <ModImage mod={this.props.mod}/>
         {this.props.character && <CharacterAvatar character={this.props.character}/>}
+        {this.props.character &&
+        <h4 className={'character-name'}>{
+          this.props.gameSettings[this.props.character.baseID] ?
+            this.props.gameSettings[this.props.character.baseID].name :
+            this.props.character.baseID
+        }</h4>
+        }
         <ModStats mod={this.props.mod}/>
       </div>
       <p>Are you sure you want to delete this mod from the mods optimizer?</p>
@@ -48,7 +60,9 @@ class ModDetail extends React.PureComponent {
   }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => ({
+  gameSettings: state.gameSettings
+});
 
 const mapDispatchToProps = (dispatch) => ({
   showModal: (content) => dispatch(showModal('', content)),
