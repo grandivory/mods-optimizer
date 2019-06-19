@@ -4,6 +4,7 @@ import React from 'react';
 import './ModStats.css';
 import CharacterAvatar from "../CharacterAvatar/CharacterAvatar";
 import {connect} from "react-redux";
+import SellModButton from "../SellModButton/SellModButton";
 
 class ModStats extends React.PureComponent {
   render() {
@@ -34,6 +35,7 @@ class ModStats extends React.PureComponent {
           </span>
         </div>
         }
+        {showAvatar && <SellModButton mod={mod} />}
       </div>
     );
   }

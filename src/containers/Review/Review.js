@@ -239,7 +239,7 @@ class Review extends React.PureComponent {
       const modCharacter = mod.characterID ? this.props.characters[mod.characterID] : null;
 
       return <div className={'mod-row individual'} key={mod.id}>
-        <ModDetail mod={mod} character={modCharacter}/>
+        <ModDetail mod={mod} />
         <div className={'character-id'}>
           <Arrow/>
           <CharacterAvatar character={character}/>
@@ -444,7 +444,7 @@ const mapStateToProps = (state) => {
   const modAssignments = profile.modAssignments.filter(x => null !== x).map(({id, target, assignedMods}) => ({
     id: id,
     target: target,
-    assignedMods: assignedMods.map(id => modsById[id])
+    assignedMods: assignedMods.map(id => modsById[id]).filter(mod => !!mod)
   }));
   const currentModsByCharacter = collectByKey(profile.mods, mod => mod.characterID);
   const numMovingMods = modAssignments.reduce((count, {id, assignedMods}) =>
