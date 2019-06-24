@@ -130,6 +130,7 @@ class CharacterList extends PureComponent {
       <div className={character.optimizerSettings.isLocked ? `${baseClass} locked` : baseClass}
            draggable={draggable}
            onDragStart={this.characterBlockDragStart(index)}>
+        {this.renderCharacterIcons(character, target)}
         <CharacterAvatar character={character}/>
         <div className={'character-name'}>
           {this.props.gameSettings[character.baseID] ?
@@ -162,6 +163,69 @@ class CharacterList extends PureComponent {
           </button>
         </div>
       </div>
+    </div>;
+  }
+
+  /**
+   * Renders the set of 10 icons that show the state of a selected character
+   * @param character {Character}
+   * @param target {OptimizationPlan}
+   */
+  renderCharacterIcons(character, target) {
+    const defaultTargets = characterSettings[character.baseID] ?
+      groupByKey(characterSettings[character.baseID].targets, target => target.name) :
+      {};
+
+    const levelActive = target.upgradeMods ? 'active' : '';
+    const sliceActive = character.optimizerSettings.sliceMods ? 'active' : '';
+    const restrictionsActive = target.hasRestrictions() ? 'active' : '';
+    const targetStatActive = !!target.targetStat ? 'active' : '';
+    const duplicateActive = this.props.selectedCharacters
+      .filter(({character: sc}) => sc.baseID === character.baseID).length > 1 ? 'active' : '';
+    const negativeWeightsActive = target.hasNegativeWeights() ? 'active' : '';
+    const minimumDots = character.optimizerSettings.minimumModDots;
+    const changedTargetActive = Object.keys(defaultTargets).includes(target.name) &&
+      !defaultTargets[target.name].equals(target) ? 'active' : '';
+    const blankTargetActive = target.isBlank() ? 'active' : '';
+    const lockedActive = character.optimizerSettings.isLocked ? 'active' : '';
+
+    return <div className={'character-icons'}>
+      <span className={`icon minimum-dots ${1 < minimumDots ? 'green active' : 'gray'}`}
+            title={`This character will only use mods with at least ${minimumDots} ${1 === minimumDots ? 'dot' : 'dots'}`} >
+        {minimumDots}
+      </span>
+      <span className={`icon level ${levelActive}`}
+            title={levelActive ? 'Level this charcter\'s mods to 15' : 'Do not level this character\'s mods to 15'}/>
+      <span className={`icon slice ${sliceActive}`}
+            title={sliceActive ? 'Slice this character\'s mods to 6E' : 'Do not slice this character\'s mods to 6E'}/>
+      <span className={`icon restrictions ${restrictionsActive}`}
+            title={restrictionsActive ?
+              'This character has restrictions active' :
+              'This character has no restrictions active'} />
+      <span className={`icon target ${targetStatActive}`}
+            title={targetStatActive ?
+              'This character has a target stat selected' :
+              'This character has no target stat selected'} />
+      <span className={`icon duplicate ${duplicateActive}`}
+            title={duplicateActive ?
+              'This character is in the list more than once' :
+              'This character is only in the list once'} />
+      <span className={`icon negative ${negativeWeightsActive}`}
+            title={negativeWeightsActive ?
+              'This character\'s target has negative stat weights' :
+              'This character\'s target has no negative stat weights'} />
+      <span className={`icon changed-target ${changedTargetActive}`}
+            title={changedTargetActive ?
+              'This character\'s target has been modified from the default' :
+              'This character\'s target matches the default'} />
+      <span className={`icon blank-target ${blankTargetActive}`}
+            title={blankTargetActive ?
+              'This character\'s target has no assigned stat weights' :
+              'This character\'s target has at least one stat given a value'} />
+      <span className={`icon locked ${lockedActive}`}
+            title={lockedActive ?
+              'This character is locked. Its mods will not be assigned to other characters' :
+              'This character is not locked'} />
     </div>;
   }
 
