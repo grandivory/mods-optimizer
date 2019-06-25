@@ -11,7 +11,7 @@ import {showModal} from "../../state/actions/app";
 import {
   changeCharacterTarget,
   lockCharacter, moveSelectedCharacter,
-  selectCharacter,
+  selectCharacter, toggleCharacterLock,
   unselectCharacter
 } from "../../state/actions/characterEdit";
 import characterSettings from "../../constants/characterSettings";
@@ -83,7 +83,7 @@ class CharacterList extends PureComponent {
       {};
     const draggable = this.props.draggable;
 
-    const selectedPlan = character.optimizerSettings.isLocked ? 'lock' : target.name;
+    const selectedPlan = target.name;
     const options = character.targets()
       .map(characterTarget => characterTarget.name)
       .filter(targetName => 'custom' !== targetName)
@@ -143,7 +143,6 @@ class CharacterList extends PureComponent {
             <select value={selectedPlan} onChange={onSelect.bind(this)}>
               {options}
               <option value={'custom'}>Custom</option>
-              <option value={'lock'}>Lock</option>
             </select>
           </div>
           <button
@@ -153,10 +152,7 @@ class CharacterList extends PureComponent {
               <CharacterEditForm
                 character={character}
                 characterIndex={index}
-                target={selectedPlan !== 'lock' ?
-                  target :
-                  target.rename('custom')
-                }
+                target={target}
               />
             )}>
             Edit
@@ -223,6 +219,7 @@ class CharacterList extends PureComponent {
               'This character\'s target has no assigned stat weights' :
               'This character\'s target has at least one stat given a value'} />
       <span className={`icon locked ${lockedActive}`}
+            onClick={() => this.props.toggleCharacterLock(character.baseID)}
             title={lockedActive ?
               'This character is locked. Its mods will not be assigned to other characters' :
               'This character is not locked'} />
@@ -279,7 +276,8 @@ const mapDispatchToProps = (dispatch) => ({
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),
   moveCharacter: (fromIndex, toIndex) => dispatch(moveSelectedCharacter(fromIndex, toIndex)),
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
-  lockCharacter: (characterID) => dispatch(lockCharacter(characterID))
+  lockCharacter: (characterID) => dispatch(lockCharacter(characterID)),
+  toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterList);

@@ -21,6 +21,35 @@
   vertical-align: top;
   margin: .5em 1em;
   width: 8em;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.character-edit .available-characters .character.locked {
+  border-color: darkred;
+  opacity: .75;
+}
+
+.character-edit .available-characters .character .icon.locked {
+  position: absolute;
+  top: .2em;
+  right: .2em;
+  cursor: pointer;
+  font-size: .8em;
+  background-image: url('/img/character_icons.png');
+  background-size: 15em 3em;
+  background-position-x: -12em;
+  background-position-y: -1.5em;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.character-edit .available-characters .character .icon.active {
+  background-position-y: 0;
 }
 
 .character-edit .available-characters .character .avatar {

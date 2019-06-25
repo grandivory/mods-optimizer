@@ -76,13 +76,8 @@ export function unselectCharacter(characterIndex) {
     const newSelectedCharacters = profile.selectedCharacters.slice();
 
     if (newSelectedCharacters.length > characterIndex) {
-      const [oldValue] = newSelectedCharacters.splice(characterIndex, 1);
-      const oldCharacter = profile.characters[oldValue.id];
-      return profile.withSelectedCharacters(newSelectedCharacters)
-      // If we unselect a character, we also need to unlock it
-        .withCharacters(Object.assign({}, profile.characters, {
-          [oldValue.id]: oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.unlock())
-        }));
+      newSelectedCharacters.splice(characterIndex, 1);
+      return profile.withSelectedCharacters(newSelectedCharacters);
     } else {
       return profile;
     }
@@ -95,12 +90,7 @@ export function unselectCharacter(characterIndex) {
  */
 export function unselectAllCharacters() {
   return updateProfile(profile =>
-    profile.withCharacters(
-      mapObject(
-        profile.characters,
-        character => character.withOptimizerSettings(character.optimizerSettings.unlock())
-      )
-    ).withSelectedCharacters([]));
+    profile.withSelectedCharacters([]));
 }
 
 /**
@@ -141,6 +131,22 @@ export function unlockSelectedCharacters() {
   });
 }
 
+export function lockAllCharacters() {
+  return updateProfile(profile =>
+    profile.withCharacters(mapObject(profile.characters, character =>
+      character.withOptimizerSettings(character.optimizerSettings.lock())
+    ))
+  );
+}
+
+export function unlockAllCharacters() {
+  return updateProfile(profile =>
+    profile.withCharacters(mapObject(profile.characters, character =>
+      character.withOptimizerSettings(character.optimizerSettings.unlock())
+    ))
+  );
+}
+
 /**
  * Lock a character so that their mods won't be assigned to other characters
  * @param characterID string the Character ID of the character being locked
@@ -167,6 +173,21 @@ export function unlockCharacter(characterID) {
     const oldCharacter = profile.characters[characterID];
     const newCharacters = Object.assign({}, profile.characters, {
       [characterID]: oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.unlock())
+    });
+
+    return profile.withCharacters(newCharacters);
+  });
+}
+
+export function toggleCharacterLock(characterID) {
+  return updateProfile(profile => {
+    const oldCharacter = profile.characters[characterID];
+    const newCharacters = Object.assign({}, profile.characters, {
+      [characterID]: oldCharacter.withOptimizerSettings(
+        oldCharacter.optimizerSettings.isLocked ?
+          oldCharacter.optimizerSettings.unlock() :
+          oldCharacter.optimizerSettings.lock()
+      )
     });
 
     return profile.withCharacters(newCharacters);

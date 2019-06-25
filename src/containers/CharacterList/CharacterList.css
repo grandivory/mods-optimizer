@@ -90,6 +90,7 @@
 
 .icon.locked {
   background-position-x: -12em;
+  cursor: pointer;
 }
 
 .icon.minimum-dots {

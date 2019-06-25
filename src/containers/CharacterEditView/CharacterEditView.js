@@ -9,9 +9,12 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import {
   changeCharacterFilter,
+  lockAllCharacters,
   lockSelectedCharacters,
   resetAllCharacterTargets,
   selectCharacter,
+  toggleCharacterLock,
+  unlockAllCharacters,
   unlockSelectedCharacters,
   unselectAllCharacters,
   unselectCharacter,
@@ -167,6 +170,12 @@ class CharacterEditView extends PureComponent {
         </button> :
         null
       }
+      <button type={'button'} className={'blue'} onClick={this.props.lockAllCharacters}>
+        Lock all characters
+      </button>
+      <button type={'button'} className={'blue'} onClick={this.props.unlockAllCharacters}>
+        Unlock all characters
+      </button>
       <button
         type={'button'}
         className={'blue'}
@@ -184,10 +193,15 @@ class CharacterEditView extends PureComponent {
    * @param className String A class to apply to each character block
    */
   characterBlock(character, className) {
+    const isLocked = character.optimizerSettings.isLocked;
+    const classAttr = `${isLocked ? 'locked' : ''} ${className} character`;
+
     return <div
-      className={className ? 'character ' + className : 'character'}
+      className={classAttr}
       key={character.baseID}
     >
+      <span className={`icon locked ${isLocked ? 'active' : ''}`}
+            onClick={() => this.props.toggleCharacterLock(character.baseID)} />
       <div draggable={true} onDragStart={this.dragStart(character)}
            onDoubleClick={() => this.props.selectCharacter(
              character.baseID,
@@ -342,9 +356,11 @@ const mapStateToProps = (state) => {
 
     return '' === state.characterFilter ||
       gameSettings.name.toLowerCase().includes(state.characterFilter) ||
+      ['lock', 'locked'].includes(state.characterFilter) && character.optimizerSettings.isLocked ||
+      ['unlock', 'unlocked'].includes(state.characterFilter) && !character.optimizerSettings.isLocked ||
       gameSettings.tags
         .concat(characterSettings[character.baseID] ? characterSettings[character.baseID].extraTags : [])
-        .some(tag => tag.toLowerCase().includes(state.characterFilter))
+        .some(tag => tag.toLowerCase().includes(state.characterFilter));
   };
 
   return {
@@ -371,6 +387,9 @@ const mapDispatchToProps = dispatch => ({
   clearSelectedCharacters: () => dispatch(unselectAllCharacters()),
   lockSelectedCharacters: () => dispatch(lockSelectedCharacters()),
   unlockSelectedCharacters: () => dispatch(unlockSelectedCharacters()),
+  lockAllCharacters: () => dispatch(lockAllCharacters()),
+  unlockAllCharacters: () => dispatch(unlockAllCharacters()),
+  toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID)),
   updateLockUnselectedCharacters: (lock) => dispatch(updateLockUnselectedCharacters(lock)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
   optimizeMods: () => dispatch(optimizeMods()),
