@@ -420,12 +420,23 @@ class CharacterEditView extends PureComponent {
 
   appendTemplateModal() {
     let templateSelection;
-    const templateOptions = this.props.characterTemplates.map(name => <option value={name}>{name}</option>);
+    const userTemplateNames = this.userTemplates();
+    const defaultTemplateNames = defaultTemplates.map(({name}) => name);
+
+    userTemplateNames.sort();
+    defaultTemplateNames.sort();
+
+    const userTemplateOptions = userTemplateNames
+      .map((name, index) => <option key={`user-${index}`} value={name}>{name}</option>);
+    const defaultTemplateOptions = defaultTemplateNames
+      .map((name, index) => <option key={`default-${index}`} value={name}>{name}</option>);
 
     return <div>
       <h3>Select a character template to add to your selected characters</h3>
       <select ref={select => templateSelection = select}>
-        {templateOptions}
+        {userTemplateOptions}
+        <option disabled={true} value={''}>------------------------------------------------</option>
+        {defaultTemplateOptions}
       </select>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
@@ -436,12 +447,23 @@ class CharacterEditView extends PureComponent {
 
   replaceTemplateModal() {
     let templateSelection;
-    const templateOptions = this.props.characterTemplates.map(name => <option value={name}>{name}</option>);
+    const userTemplateNames = this.userTemplates();
+    const defaultTemplateNames = defaultTemplates.map(({name}) => name);
+
+    userTemplateNames.sort();
+    defaultTemplateNames.sort();
+
+    const userTemplateOptions = userTemplateNames
+      .map((name, index) => <option key={`user-${index}`} value={name}>{name}</option>);
+    const defaultTemplateOptions = defaultTemplateNames
+      .map((name, index) => <option key={`default-${index}`} value={name}>{name}</option>);
 
     return <div>
       <h3>Select a character template to replace your selected characters</h3>
       <select ref={select => templateSelection = select}>
-        {templateOptions}
+        {userTemplateOptions}
+        <option disabled={true} value={''}>------------------------------------------------</option>
+        {defaultTemplateOptions}
       </select>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
