@@ -61,13 +61,26 @@
 }
 
 .character-edit .character-list {
-  height: calc(100% - 3em);
+  height: calc(100% - 5.6em);
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 .character-edit .selected-characters h4 {
   margin-bottom: 0;
+}
+
+.character-edit .selected-characters h5 {
+  margin: .25em 0 0;
+}
+
+.character-edit .selected-characters h5 button,
+.character-edit .selected-characters h5 .button {
+  margin: .2em;
+}
+
+.character-edit .selected-characters h5 form.file-input {
+  display: inline-block;
 }
 
 .character-edit .selected-characters .character-list {
@@ -97,6 +110,24 @@
 
 .modal.instructions .actions {
   text-align: right;
+}
+
+.modal.save-template input {
+  font-size: 1.5em;
+}
+
+.modal p.error {
+  color: #dd1111;
+  visibility: hidden;
+  margin: 0 0 .5em;
+}
+
+.modal select {
+  margin-bottom: 1em;
+}
+
+.modal input.invalid + p.error {
+  visibility: visible;
 }
 
 .modal.optimizer-progress h3 {

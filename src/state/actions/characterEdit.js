@@ -1,8 +1,10 @@
 // @flow
-import {hideModal, updateProfile} from "./app";
+import {hideModal, showFlash, updateProfile} from "./app";
 import {mapObject} from "../../utils/mapObject";
 import groupByKey from "../../utils/groupByKey";
 import OptimizationPlan from "../../domain/OptimizationPlan";
+import getDatabase from "../storage/Database";
+import {loadCharacterTemplates} from "./storage";
 
 export const CHANGE_CHARACTER_EDIT_MODE = 'CHANGE_CHARACTER_EDIT_MODE';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
@@ -445,4 +447,92 @@ export function removeSetBonus(setBonus) {
     type: REMOVE_SET_BONUS,
     setBonus: setBonus
   };
+}
+
+export function saveTemplate(name) {
+  const db = getDatabase();
+
+  return function(dispatch, getState) {
+    const state = getState();
+    const selectedCharacters = state.profile.selectedCharacters;
+
+    db.saveCharacterTemplate(name, selectedCharacters,
+      () => {
+        dispatch(loadCharacterTemplates());
+        dispatch(hideModal());
+      },
+      error => dispatch(showFlash(
+        'Storage Error',
+        'Error saving the character template: ' + error.message + '. Please try again.'
+      ))
+    );
+  };
+}
+
+export function saveTemplates(templates) {
+  const db = getDatabase();
+
+  return function(dispatch) {
+    db.saveCharacterTemplates(
+      templates,
+      () => {
+        dispatch(loadCharacterTemplates());
+        dispatch(hideModal());
+      },
+      error => dispatch(showFlash(
+        'Storage Error',
+        'Error saving the character templates: ' + error.message + '.'
+      ))
+    );
+  };
+}
+
+export function appendTemplate(name) {
+  const db = getDatabase();
+
+  return function(dispatch, getState) {
+    db.getCharacterTemplate(name,
+      template => updateProfile(profile =>
+        profile.withSelectedCharacters(profile.selectedCharacters.concat(template.selectedCharacters))
+      )(dispatch, getState),
+      error => dispatch(showFlash(
+        'Storage Error',
+        `Error retrieving your template from the database: ${error.message}.`
+      ))
+    );
+  }
+}
+
+export function replaceTemplate(name) {
+  const db = getDatabase();
+
+  return function(dispatch, getState) {
+    db.getCharacterTemplate(name,
+      template => updateProfile(profile =>
+        profile.withSelectedCharacters(template.selectedCharacters)
+      )(dispatch, getState),
+      error => dispatch(showFlash(
+        'Storage Error',
+        `Error retrieving your template from the database: ${error.message}.`
+      ))
+    );
+  }
+}
+
+export function deleteTemplate(name) {
+  const db = getDatabase();
+
+  return function(dispatch) {
+    db.deleteCharacterTemplate(
+      name,
+      () => {
+        dispatch(loadCharacterTemplates());
+        dispatch(hideModal());
+      },
+      error => dispatch(showFlash(
+        'Storage Error',
+        `Error deleting the character template '${name}'. Error message: ${error.message}`
+      ))
+    );
+  }
 }

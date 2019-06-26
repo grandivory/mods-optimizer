@@ -29,3 +29,7 @@ export function addPlayerProfile(state, action) {
 export function setPlayerProfiles(state, action) {
   return Object.assign({}, state, {playerProfiles: action.profiles});
 }
+
+export function setCharacterTemplates(state, action) {
+  return Object.assign({}, state, {characterTemplates: action.templates});
+}
