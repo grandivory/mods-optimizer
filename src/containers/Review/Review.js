@@ -236,7 +236,6 @@ class Review extends React.PureComponent {
 
     return individualMods.map(({id: characterID, target, mod}) => {
       const character = this.props.characters[characterID];
-      const modCharacter = mod.characterID ? this.props.characters[mod.characterID] : null;
 
       return <div className={'mod-row individual'} key={mod.id}>
         <ModDetail mod={mod} />

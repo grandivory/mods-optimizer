@@ -14,7 +14,6 @@ import offenseScore from "../../utils/subjectiveScoring";
 class ExploreView extends React.PureComponent {
   render() {
     const modElements = this.props.displayedMods.map(mod => {
-      const character = mod.characterID ? this.props.characters[mod.characterID] : null;
       return <ModDetail key={mod.id} mod={mod} />;
     });
 
