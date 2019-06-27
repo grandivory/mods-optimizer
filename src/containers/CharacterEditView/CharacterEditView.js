@@ -309,8 +309,8 @@ class CharacterEditView extends PureComponent {
       </p>
       <h3>Selecting characters to optimize</h3>
       <p>
-        The mods optimizer will start out by considering all mods equipped on any character other than those that have
-        had "Lock" selected as a target. Then, it will go down the list of selected characters, one by one, choosing the
+        The mods optimizer will start out by considering all mods equipped on any character other than those that are
+        "Locked". Then, it will go down the list of selected characters, one by one, choosing the
         best mods it can find for each character, based on the selected target. As it finishes each character, it
         removes those mods from its consideration set. Therefore, the character that you want to have your absolute best
         mods should always be first among your selected characters. Usually, this means that you want the character who
@@ -332,8 +332,11 @@ class CharacterEditView extends PureComponent {
         you want to employ.
       </p>
       <p>
-        As a starting point, choose a target for each character that matches what you'd like to optimize for. If no
-        such target exists, you can select "Custom", or simply hit the "Edit" button to bring up the character edit
+        The easiest way to get started with the optimizer is to choose from the pre-programmed character
+        templates. These are set up with sets of characters and targets that should fit various game modes. If
+        there's no template to fit your exact needs, you can use one as a starting point or create one from
+        scratch. For each individual character, if no target exists that matches what you want,
+        you can select "Custom", or simply hit the "Edit" button to bring up the character edit
         modal. Most characters will have the "basic" mode selected by default. In basic mode, you select a value for all
         stats that is between -100 and 100. These values are weights that are assigned to each stat to determine its
         value for that character. Setting two values as equal means that those stats are about equally important for
