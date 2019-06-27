@@ -98,6 +98,10 @@
   background-image: url('/img/g12-overlay.png');
 }
 
+.avatar.gear-13::after {
+  background-image: url('/img/g13-overlay.png');
+}
+
 .avatar .star {
   background: url('/img/star-passive.png') no-repeat;
   background-size: contain;
