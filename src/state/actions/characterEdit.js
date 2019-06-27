@@ -6,6 +6,8 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 import getDatabase from "../storage/Database";
 import {loadCharacterTemplates} from "./storage";
 
+const defaultTemplates = groupByKey(require('../../constants/characterTemplates.json'), ({name}) => name);
+
 export const CHANGE_CHARACTER_EDIT_MODE = 'CHANGE_CHARACTER_EDIT_MODE';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
 export const CHANGE_SET_RESTRICTIONS = 'CHANGE_SET_RESTRICTIONS';
@@ -491,15 +493,28 @@ export function appendTemplate(name) {
   const db = getDatabase();
 
   return function(dispatch, getState) {
-    db.getCharacterTemplate(name,
-      template => updateProfile(profile =>
+    if (Object.keys(defaultTemplates).includes(name)) {
+      const template = {
+        name: defaultTemplates[name],
+        selectedCharacters: defaultTemplates[name].selectedCharacters.map(
+          ({id, target}) => ({id: id, target: OptimizationPlan.deserialize(target)})
+        )
+      };
+      updateProfile(profile =>
         profile.withSelectedCharacters(profile.selectedCharacters.concat(template.selectedCharacters))
-      )(dispatch, getState),
-      error => dispatch(showFlash(
-        'Storage Error',
-        `Error retrieving your template from the database: ${error.message}.`
-      ))
-    );
+      )(dispatch, getState);
+    } else {
+      db.getCharacterTemplate(
+        name,
+        template => updateProfile(profile =>
+          profile.withSelectedCharacters(profile.selectedCharacters.concat(template.selectedCharacters))
+        )(dispatch, getState),
+        error => dispatch(showFlash(
+          'Storage Error',
+          `Error retrieving your template from the database: ${error.message}.`
+        ))
+      );
+    }
   }
 }
 
@@ -507,15 +522,28 @@ export function replaceTemplate(name) {
   const db = getDatabase();
 
   return function(dispatch, getState) {
-    db.getCharacterTemplate(name,
-      template => updateProfile(profile =>
+    if (Object.keys(defaultTemplates).includes(name)) {
+      const template = {
+        name: defaultTemplates[name],
+        selectedCharacters: defaultTemplates[name].selectedCharacters.map(
+          ({id, target}) => ({id: id, target: OptimizationPlan.deserialize(target)})
+        )
+      };
+      updateProfile(profile =>
         profile.withSelectedCharacters(template.selectedCharacters)
-      )(dispatch, getState),
-      error => dispatch(showFlash(
-        'Storage Error',
-        `Error retrieving your template from the database: ${error.message}.`
-      ))
-    );
+      )(dispatch, getState);
+    } else {
+      db.getCharacterTemplate(
+        name,
+        template => updateProfile(profile =>
+          profile.withSelectedCharacters(template.selectedCharacters)
+        )(dispatch, getState),
+        error => dispatch(showFlash(
+          'Storage Error',
+          `Error retrieving your template from the database: ${error.message}.`
+        ))
+      );
+    }
   }
 }
 

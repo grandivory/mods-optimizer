@@ -435,7 +435,8 @@ class CharacterEditView extends PureComponent {
       <h3>Select a character template to add to your selected characters</h3>
       <select ref={select => templateSelection = select}>
         {userTemplateOptions}
-        <option disabled={true} value={''}>------------------------------------------------</option>
+        {userTemplateOptions.length &&
+        <option disabled={true} value={''}>------------------------------------------------</option>}
         {defaultTemplateOptions}
       </select>
       <div className={'actions'}>
@@ -462,7 +463,8 @@ class CharacterEditView extends PureComponent {
       <h3>Select a character template to replace your selected characters</h3>
       <select ref={select => templateSelection = select}>
         {userTemplateOptions}
-        <option disabled={true} value={''}>------------------------------------------------</option>
+        {userTemplateOptions.length &&
+        <option disabled={true} value={''}>------------------------------------------------</option>}
         {defaultTemplateOptions}
       </select>
       <div className={'actions'}>
