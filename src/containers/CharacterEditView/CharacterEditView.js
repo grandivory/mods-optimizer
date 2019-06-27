@@ -636,7 +636,7 @@ const mapDispatchToProps = dispatch => ({
   hideModal: () => dispatch(hideModal()),
   showError: (error) => dispatch(showError(error)),
   changeCharacterFilter: (filter) => dispatch(changeCharacterFilter(filter)),
-  reviewOldAssignments: () => dispatch(changeOptimizerView('sets')),
+  reviewOldAssignments: () => dispatch(changeOptimizerView('review')),
   selectCharacter: (characterID, target, prevIndex) => dispatch(selectCharacter(characterID, target, prevIndex)),
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),
   clearSelectedCharacters: () => dispatch(unselectAllCharacters()),

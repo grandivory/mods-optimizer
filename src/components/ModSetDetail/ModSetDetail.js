@@ -98,11 +98,12 @@ class ModSetDetail extends React.PureComponent {
 
     const diffSetValue = diffSet ? diffSet.getOptimizationValue(character, target, false) : null;
     const setValue = modSet.getOptimizationValue(character, target, useUpgrades);
-    const valueChange = ((100 * setValue/diffSetValue) - 100).toFixed(2);
+    const valueChange = ((100 * setValue / diffSetValue) - 100).toFixed(2);
 
     return (
       <div className={'mod-set-detail'}>
-        <ModSetView modSet={modSet} showAvatars={showAvatars}/>
+        <ModSetView modSet={modSet} showAvatars={showAvatars} assignedCharacter={this.props.assignedCharacter}
+                    assignedTarget={this.props.assignedTarget}/>
         <div className={'summary'}>
           <table>
             <thead>

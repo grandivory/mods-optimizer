@@ -4,6 +4,7 @@ import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
 import groupByKey from "../utils/groupByKey";
 import {modSets, modSlots} from "../constants/enums";
+import OptimizationPlan from "./OptimizationPlan";
 
 class Mod {
   id;
@@ -91,6 +92,15 @@ class Mod {
       this.characterID,
       1
     );
+  }
+
+  shouldLevel(target) {
+    return OptimizationPlan.shouldUpgradeMods(target) && this.level < 15;
+  }
+
+  shouldSlice(character, target) {
+    return character.optimizerSettings.sliceMods && this.pips < 6 &&
+      (this.level === 15 || this.shouldLevel(target))
   }
 
   /**

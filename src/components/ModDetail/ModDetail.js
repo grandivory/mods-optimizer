@@ -12,6 +12,8 @@ class ModDetail extends React.PureComponent {
   render() {
     const mod = this.props.mod;
     const character = mod.characterID ? this.props.characters[mod.characterID] : null;
+    const assignedCharacter = this.props.assignedCharacter;
+    const assignedTarget = this.props.assignedTarget;
 
     return (
       <div className='mod-detail'>
@@ -22,7 +24,7 @@ class ModDetail extends React.PureComponent {
           this.props.gameSettings[character.baseID] ? this.props.gameSettings[character.baseID].name : character.baseID
           }</h4>
         }
-        <ModStats mod={mod}/>
+        <ModStats mod={mod} assignedCharacter={assignedCharacter} assignedTarget={assignedTarget} />
         <SellModButton mod={mod} />
       </div>
     );

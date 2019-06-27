@@ -16,6 +16,9 @@ class ModStats extends React.PureComponent {
         (stat, index) => ModStats.showStatElement(stat, index)
       ) : [<li key={0}>None</li>];
 
+    const assignedCharacter = this.props.assignedCharacter;
+    const assignedTarget = this.props.assignedTarget;
+
     return (
       <div className='mod-stats'>
         <h4>Primary Stat</h4>
@@ -36,6 +39,12 @@ class ModStats extends React.PureComponent {
         </div>
         }
         {showAvatar && <SellModButton mod={mod} />}
+        {assignedCharacter && assignedTarget && mod.shouldLevel(assignedTarget) &&
+        <h4 className={'gold'}>Level mod to 15!</h4>
+        }
+        {assignedCharacter && assignedTarget && mod.shouldSlice(assignedCharacter, assignedTarget) &&
+        <h4 className={'gold'}>Slice mod to 6E!</h4>
+        }
       </div>
     );
   }

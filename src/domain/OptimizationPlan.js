@@ -226,6 +226,10 @@ class OptimizationPlan {
     return val >= -100 && val <= 100 && Number.isInteger(val);
   }
 
+  static shouldUpgradeMods(target) {
+    return target.upgradeMods || target.targetStat;
+  }
+
   serialize() {
     let planObject = {};
 

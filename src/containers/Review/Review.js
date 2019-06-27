@@ -27,6 +27,7 @@ import ModSetDetail from "../../components/ModSetDetail/ModSetDetail";
 import flatten from "../../utils/flatten";
 import {connect} from "react-redux";
 import Credits from "../../components/Credits/Credits";
+import OptimizationPlan from "../../domain/OptimizationPlan";
 
 const sortOptions = {
   'currentCharacter': 'currentCharacter',
@@ -238,7 +239,7 @@ class Review extends React.PureComponent {
       const character = this.props.characters[characterID];
 
       return <div className={'mod-row individual'} key={mod.id}>
-        <ModDetail mod={mod} />
+        <ModDetail mod={mod} assignedCharacter={character} assignedTarget={target} />
         <div className={'character-id'}>
           <Arrow/>
           <CharacterAvatar character={character}/>
@@ -298,6 +299,8 @@ class Review extends React.PureComponent {
           character={character}
           target={target}
           useUpgrades={true}
+          assignedCharacter={character}
+          assignedTarget={target}
         />}
         {sortOptions.currentCharacter === this.props.filter.sort &&
         <div className={'mod-set-block'}>
@@ -520,8 +523,8 @@ const mapStateToProps = (state) => {
   // Get a count of how much it will cost to move the mods. It only costs money to remove mods
   const modRemovalCost = movingMods.reduce((cost, mod) => cost + modRemovalCosts[mod.pips], 0);
 
-  const modsBeingUpgraded = modAssignments.filter(({target}) => target.upgradeMods)
-    .map(({id, assignedMods}) => assignedMods.filter(mod => 15 !== mod.level && 5 <= mod.pips))
+  const modsBeingUpgraded = modAssignments.filter(({target}) => OptimizationPlan.shouldUpgradeMods(target))
+    .map(({id, assignedMods}) => assignedMods.filter(mod => 15 !== mod.level))
     .reduce((allMods, characterMods) => allMods.concat(characterMods), []);
 
   const modUpgradeCost = modsBeingUpgraded.reduce((cost, mod) => cost + modUpgradeCosts[mod.pips][mod.level], 0);
