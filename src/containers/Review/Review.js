@@ -444,10 +444,11 @@ const mapStateToProps = (state) => {
   const filter = state.modListFilter;
   const modsById = groupByKey(profile.mods, mod => mod.id);
   const modAssignments = profile.modAssignments.filter(x => null !== x).map(({id, target, assignedMods}) => ({
-    id: id,
-    target: target,
-    assignedMods: assignedMods.map(id => modsById[id]).filter(mod => !!mod)
-  }));
+      id: id,
+      target: target,
+      assignedMods: assignedMods ? assignedMods.map(id => modsById[id]).filter(mod => !!mod) : []
+    }));
+
   const currentModsByCharacter = collectByKey(profile.mods, mod => mod.characterID);
   const numMovingMods = modAssignments.reduce((count, {id, assignedMods}) =>
     assignedMods.filter(mod => mod.characterID !== id).length + count
