@@ -20,7 +20,6 @@ export function saveState(state) {
     'allyCode',
     'characterFilter',
     'characterEditMode',
-    'characterTemplates',
     'keepOldMods',
     'modsFilter',
     'modSetsFilter',

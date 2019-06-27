@@ -3,7 +3,7 @@
  * Messaging                                                                                                         *
  ********************************************************************************************************************/
 self.onmessage = function(message) {
-  const openDbRequest = indexedDB.open('ModsOptimizer', 1);
+  const openDbRequest = indexedDB.open('ModsOptimizer', 2);
   openDbRequest.onerror = function(event) {
     throw event.target.error;
   };
