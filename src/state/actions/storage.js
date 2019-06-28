@@ -10,6 +10,7 @@ export const SET_GAME_SETTINGS = 'SET_GAME_SETTINGS';
 export const SET_PROFILE = 'SET_PROFILE';
 export const ADD_PLAYER_PROFILE = 'ADD_PLAYER_PROFILE';
 export const SET_PLAYER_PROFILES = 'SET_PLAYER_PROFILES';
+export const SET_CHARACTER_TEMPLATES = 'SET_CHARACTER_TEMPLATES';
 
 /**
  * Handle setting up everything once the database is ready to use.
@@ -102,6 +103,7 @@ export function loadFromDb(allyCode) {
   return function(dispatch) {
     dispatch(loadGameSettings());
     dispatch(loadProfiles(allyCode));
+    dispatch(loadCharacterTemplates());
   };
 }
 
@@ -161,6 +163,26 @@ export function loadProfiles(allyCode) {
   };
 }
 
+export function loadCharacterTemplates() {
+  return function(dispatch) {
+    const db = getDatabase();
+
+    db.getCharacterTemplates(
+      characterTemplates => {
+        const templatesObject = mapObject(
+          groupByKey(characterTemplates, template => template.name),
+          ({selectedCharacters}) => selectedCharacters
+          );
+        dispatch(setCharacterTemplates(templatesObject));
+      },
+      error => dispatch(showFlash(
+        'Storage Error',
+        'Error loading character templates: ' + error.message + '.'
+      ))
+    );
+  }
+}
+
 /**
  * Remove any of the old keys from the state that are no longer needed with the database
  * @returns {{type: string}}
@@ -204,6 +226,26 @@ export function exportDatabase(callback) {
       error => dispatch(showError('Error fetching data from the database: ' + error.message))
     );
   };
+}
+
+export function exportCharacterTemplate(name, callback) {
+  return function(dispatch) {
+    const db = getDatabase();
+    db.getCharacterTemplate(name,
+      callback,
+      error => dispatch(showError('Error fetching data from the database: ' + error.message))
+    );
+  }
+}
+
+export function exportCharacterTemplates(callback) {
+  return function(dispatch) {
+    const db = getDatabase();
+    db.getCharacterTemplates(
+      callback,
+      error => dispatch(showError('Error fetching data from the database: ' + error.message))
+    );
+  }
 }
 
 /**
@@ -275,6 +317,13 @@ export function setProfile(profile) {
   return {
     type: SET_PROFILE,
     profile: profile
+  };
+}
+
+export function setCharacterTemplates(templates) {
+  return {
+    type: SET_CHARACTER_TEMPLATES,
+    templates: templates
   };
 }
 

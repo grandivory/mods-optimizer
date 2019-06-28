@@ -44,6 +44,7 @@ export const defaultState = {
   allyCode: '',
   characterFilter: '',
   characterEditMode: 'basic',
+  characterTemplates: {},
   error: null,
   flashMessage: null,
   gameSettings: {},

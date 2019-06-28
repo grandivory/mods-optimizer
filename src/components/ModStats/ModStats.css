@@ -1,6 +1,7 @@
 .mod-stats {
   text-align: left;
   width: 13em;
+  position: relative;
 }
 
 .mod-stats h4 {
@@ -59,4 +60,10 @@
 .mod-stats .avatar-name {
   vertical-align: middle;
   margin-left: .5em;
+}
+
+.mod-stats button.delete-button {
+  position: absolute;
+  top: 0;
+  right: 0;
 }

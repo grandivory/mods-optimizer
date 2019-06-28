@@ -4,6 +4,7 @@ import React from 'react';
 import './ModStats.css';
 import CharacterAvatar from "../CharacterAvatar/CharacterAvatar";
 import {connect} from "react-redux";
+import SellModButton from "../SellModButton/SellModButton";
 
 class ModStats extends React.PureComponent {
   render() {
@@ -14,6 +15,9 @@ class ModStats extends React.PureComponent {
       mod.secondaryStats.map(
         (stat, index) => ModStats.showStatElement(stat, index)
       ) : [<li key={0}>None</li>];
+
+    const assignedCharacter = this.props.assignedCharacter;
+    const assignedTarget = this.props.assignedTarget;
 
     return (
       <div className='mod-stats'>
@@ -33,6 +37,13 @@ class ModStats extends React.PureComponent {
             {this.props.gameSettings[character.baseID] ? this.props.gameSettings[character.baseID].name : character.baseID}
           </span>
         </div>
+        }
+        {showAvatar && <SellModButton mod={mod} />}
+        {assignedCharacter && assignedTarget && mod.shouldLevel(assignedTarget) &&
+        <h4 className={'gold'}>Level mod to 15!</h4>
+        }
+        {assignedCharacter && assignedTarget && mod.shouldSlice(assignedCharacter, assignedTarget) &&
+        <h4 className={'gold'}>Slice mod to 6E!</h4>
         }
       </div>
     );

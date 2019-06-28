@@ -4,7 +4,8 @@
   display: inline-grid;
   grid-template-columns: 5em 1fr;
   grid-template-rows: 1fr fit-content();
-  grid-gap: 1em;
+  grid-column-gap: 1em;
+  grid-row-gap: 0;
   align-items: start;
   border: 1px solid dodgerblue;
   background-color: rgba(0, 0, 96, .5);
@@ -29,6 +30,16 @@
   grid-column: 1;
   text-align: center;
   font-size: .8em;
+  margin-top: 1.75em;
+}
+
+.mod-detail .character-name,
+.delete-mod-display .character-name {
+  grid-row: 3;
+  grid-column: 1 / span 2;
+  margin: 0;
+  text-align: left;
+  font-weight: normal;
 }
 
 .mod-detail .mod-stats,

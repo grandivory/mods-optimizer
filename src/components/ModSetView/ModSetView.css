@@ -11,6 +11,21 @@
   position: absolute;
 }
 
+.mod-set-view .mod .icon {
+  display: block;
+  position: absolute;
+  width: 1.5em;
+  height: 1.5em;
+  background-image: url('/img/character_icons.png');
+  background-size: 15em 3em;
+  font-size: .9em;
+  z-index: 101;
+}
+
+.mod-set-view .mod .icon.slice {
+  background-position-x: -1.5em;
+}
+
 .mod-set-view .mod .mod-level {
   background: none;
 }
@@ -50,6 +65,16 @@
   top: 1.83em;
 }
 
+.mod-set-view .mod.square .icon.level {
+  right: -1.7em;
+  top: 1.6em;
+}
+
+.mod-set-view .mod.square .icon.slice {
+  right: -1.7em;
+  top: 3.3em;
+}
+
 .mod-set-view .mod.arrow {
   right: 1.09em;
   top: -.08em;
@@ -63,6 +88,16 @@
 .mod-set-view .mod.arrow .mod-level {
   bottom: -.95em;
   right: 1.7em;
+}
+
+.mod-set-view .mod.arrow .icon.level {
+  right: -.5em;
+  top: 1.6em;
+}
+
+.mod-set-view .mod.arrow .icon.slice {
+  right: -.5em;
+  top: 3.3em;
 }
 
 .mod-set-view .mod.diamond {
@@ -80,6 +115,16 @@
   right: .4em;
 }
 
+.mod-set-view .mod.diamond .icon.level {
+  left: .3em;
+  top: 1.6em;
+}
+
+.mod-set-view .mod.diamond .icon.slice {
+  top: 1.6em;
+  right: .3em;
+}
+
 .mod-set-view .mod.triangle {
   right: 1.7em;
   top: 7.17em;
@@ -93,6 +138,16 @@
 .mod-set-view .mod.triangle .mod-level {
   right: -1.25em;
   bottom: 1em;
+}
+
+.mod-set-view .mod.triangle .icon.level {
+  left: .3em;
+  top: 1.6em;
+}
+
+.mod-set-view .mod.triangle .icon.slice {
+  top: 1.6em;
+  right: .3em;
 }
 
 .mod-set-view .mod.circle {
@@ -110,6 +165,16 @@
   top: 1.9em;
 }
 
+.mod-set-view .mod.circle .icon.level {
+  right: -1.1em;
+  top: 1.6em;
+}
+
+.mod-set-view .mod.circle .icon.slice {
+  right: -1.1em;
+  top: 3.3em;
+}
+
 .mod-set-view .mod.cross {
   right: 1.12em;
   bottom: 1.9em;
@@ -123,4 +188,14 @@
 .mod-set-view .mod.cross .mod-level {
   left: -.35em;
   bottom: -.5em;
+}
+
+.mod-set-view .mod.cross .icon.level {
+  left: .5em;
+  top: 1.5em;
+}
+
+.mod-set-view .mod.cross .icon.slice {
+  right: 0;
+  top: 1.5em;
 }

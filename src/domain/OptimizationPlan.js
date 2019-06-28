@@ -145,6 +145,58 @@ class OptimizationPlan {
   }
 
   /**
+   * Returns true if any stat weight is negative
+   *
+   * @returns {boolean}
+   */
+  hasNegativeWeights() {
+    return this.health < 0 ||
+      this.protection < 0 ||
+      this.speed < 0 ||
+      this.critDmg < 0 ||
+      this.potency < 0 ||
+      this.tenacity < 0 ||
+      this.physDmg < 0 ||
+      this.specDmg < 0 ||
+      this.critChance < 0 ||
+      this.armor < 0 ||
+      this.resistance < 0 ||
+      this.accuracy < 0 ||
+      this.critAvoid < 0;
+  }
+
+  /**
+   * Returns true if every stat has a weight of 0
+   *
+   * @returns {boolean}
+   */
+  isBlank() {
+    return this.health === 0 &&
+      this.protection === 0 &&
+      this.speed === 0 &&
+      this.critDmg === 0 &&
+      this.potency === 0 &&
+      this.tenacity === 0 &&
+      this.physDmg === 0 &&
+      this.specDmg === 0 &&
+      this.critChance === 0 &&
+      this.armor === 0 &&
+      this.resistance === 0 &&
+      this.accuracy === 0 &&
+      this.critAvoid === 0;
+  }
+
+  /**
+   * Returns true if this plan includes either primary stat or set restrictions
+   *
+   * @returns {boolean}
+   */
+  hasRestrictions() {
+    return Object.values(this.primaryStatRestrictions).filter(primary => !!primary).length ||
+      !areObjectsEquivalent({}, this.setRestrictions);
+  }
+
+  /**
    * Returns true if every raw value in this plan is an integer between -100 and 100. Otherwise, returns false
    *
    * @returns boolean
@@ -172,6 +224,10 @@ class OptimizationPlan {
    */
   static valueIsBasic(val) {
     return val >= -100 && val <= 100 && Number.isInteger(val);
+  }
+
+  static shouldUpgradeMods(target) {
+    return target.upgradeMods || target.targetStat;
   }
 
   serialize() {

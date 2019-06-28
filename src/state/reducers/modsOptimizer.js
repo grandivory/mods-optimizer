@@ -48,10 +48,23 @@ import {requestCharacters, requestProfile, requestStats, toggleKeepOldMods} from
 import {changeModsFilter} from "./explore";
 import {cancelOptimizeMods, optimizeMods} from "./optimize";
 import {changeModListFilter, changeModSetFilter, changeOptimizerView,} from "./review";
-import {ADD_PLAYER_PROFILE, CLEAN_STATE, SET_GAME_SETTINGS, SET_PLAYER_PROFILES, SET_PROFILE} from "../actions/storage";
-import {addPlayerProfile, cleanState, setGameSettings, setPlayerProfiles, setProfile} from "./storage";
+import {
+  ADD_PLAYER_PROFILE,
+  CLEAN_STATE,
+  SET_GAME_SETTINGS,
+  SET_PLAYER_PROFILES,
+  SET_PROFILE,
+  SET_CHARACTER_TEMPLATES
+} from "../actions/storage";
+import {
+  addPlayerProfile,
+  cleanState,
+  setCharacterTemplates,
+  setGameSettings,
+  setPlayerProfiles,
+  setProfile
+} from "./storage";
 
-export function updateCurrentProfile() {}
 export default function modsOptimizer(state, action) {
   if (!state) {
     return saveState(restoreState());
@@ -64,6 +77,8 @@ export default function modsOptimizer(state, action) {
       return setGameSettings(state, action);
     case SET_PROFILE:
       return saveState(setProfile(state, action));
+    case SET_CHARACTER_TEMPLATES:
+      return saveState(setCharacterTemplates(state, action));
     case ADD_PLAYER_PROFILE:
       return addPlayerProfile(state, action);
     case SET_PLAYER_PROFILES:

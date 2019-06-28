@@ -213,6 +213,7 @@ class PlayerValues {
 }
 
 class OptimizerSettings {
+  // TODO: Deprecate target - it will now be part of selected characters
   target;
   targets;
   minimumModDots;
@@ -251,7 +252,7 @@ class OptimizerSettings {
       Object.assign({}, targetsObject, {[target.name]: target});
 
     return new OptimizerSettings(
-      target,
+      null,
       Object.values(newTargetsObject),
       this.minimumModDots,
       this.sliceMods,
@@ -267,12 +268,9 @@ class OptimizerSettings {
   withTargetOverrides(targets) {
     const oldTargetsObject = groupByKey(this.targets, target => target.name);
     const newTargetsObject = groupByKey(targets, target => target.name);
-    const newTarget = newTargetsObject.hasOwnProperty(this.target.name) ?
-      newTargetsObject[this.target.name] :
-      this.target;
 
     return new OptimizerSettings(
-      newTarget,
+      null,
       Object.values(Object.assign({}, oldTargetsObject, newTargetsObject)),
       this.minimumModDots,
       this.sliceMods,
@@ -281,12 +279,13 @@ class OptimizerSettings {
   }
 
   /**
-   * Return a new OptimizerSettings object that matches this one, but with the current target deleted, and the next
-   * target in the set of targets selected
+   * Return a new OptimizerSettings object that matches this one, but with the given target deleted
+   *
+   * @param targetName {String} The name of the target to delete
    */
-  withDeletedTarget() {
+  withDeletedTarget(targetName) {
     const newTargets = this.targets.slice();
-    const targetIndex = newTargets.findIndex(target => target.name === this.target.name);
+    const targetIndex = newTargets.findIndex(target => target.name === targetName);
     if (-1 !== targetIndex) {
       newTargets.splice(targetIndex, 1);
     }
@@ -342,7 +341,6 @@ class OptimizerSettings {
 
   serialize() {
     return {
-      target: this.target.serialize(),
       targets: this.targets.map(target => target.serialize()),
       minimumModDots: this.minimumModDots,
       sliceMods: this.sliceMods,
@@ -363,7 +361,7 @@ class OptimizerSettings {
       }
 
       return new OptimizerSettings(
-        OptimizationPlan.deserialize(settingsJson.target),
+        settingsJson.target ? OptimizationPlan.deserialize(settingsJson.target) : null,
         settingsJson.targets.map(OptimizationPlan.deserialize),
         minimumModDots,
         settingsJson.sliceMods || false,

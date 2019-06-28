@@ -19,7 +19,7 @@
 
 .character-block {
   display: grid;
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto auto;
   grid-template-columns: fit-content(1em) auto;
   grid-column-gap: .5em;
   width: 19em;
@@ -36,13 +36,74 @@
   box-shadow: 0 2px 3px 0 darkred;
 }
 
+.character-block .character-icons {
+  grid-row: 2;
+  grid-column: 2;
+}
+
+.character-block .character-icons .icon {
+  font-size: .75em;
+  background-image: url('/img/character_icons.png');
+  background-size: 15em 3em;
+  background-position-y: -1.5em;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0 .2em;
+  padding: 0;
+}
+
+.character-block .character-icons .icon.active {
+  background-position-y: 0;
+}
+
+.icon.slice {
+  background-position-x: -1.5em;
+}
+
+.icon.restrictions {
+  background-position-x: -3em;
+}
+
+.icon.target {
+  background-position-x: -4.5em;
+}
+
+.icon.duplicate {
+  background-position-x: -6em;
+}
+
+.icon.negative {
+  background-position-x: -7.5em;
+}
+
+.icon.changed-target {
+  background-position-x: -9em;
+}
+
+.icon.blank-target {
+  background-position-x: -10.5em;
+}
+
+.icon.locked {
+  background-position-x: -12em;
+  cursor: pointer;
+}
+
+.icon.minimum-dots {
+  background-position-x: -13.5em;
+}
+
 .character-block.locked {
   border-color: darkred;
   opacity: .75;
 }
 
 .character-block .avatar {
-  grid-row: 1 / span 2;
+  grid-row: 1 / span 3;
   grid-column: 1;
   font-size: .8em;
 }
@@ -56,7 +117,7 @@
 }
 
 .character-block .target {
-  grid-row: 2;
+  grid-row: 3;
   grid-column: 2;
 }
 

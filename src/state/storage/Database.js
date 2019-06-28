@@ -1,6 +1,7 @@
 import PlayerProfile from "../../domain/PlayerProfile";
 import nothing from "../../utils/nothing";
 import {GameSettings} from "../../domain/CharacterDataClasses";
+import OptimizationPlan from "../../domain/OptimizationPlan";
 
 class Database {
   database;
@@ -12,7 +13,7 @@ class Database {
    */
   constructor(onsuccess = nothing, onerror = nothing) {
     const self = this;
-    const openDbRequest = indexedDB.open('ModsOptimizer', 1);
+    const openDbRequest = indexedDB.open('ModsOptimizer', 2);
 
     openDbRequest.onerror = function(event) {
       onerror(event.target.error);
@@ -26,10 +27,16 @@ class Database {
     openDbRequest.onupgradeneeded = function(event) {
       const db = event.target.result;
 
-      // Create object stores for: game data about each character, player profiles, and the last run done by each player
-      db.createObjectStore('gameSettings', {keyPath: 'baseID'});
-      db.createObjectStore('profiles', {keyPath: 'allyCode'});
-      db.createObjectStore('lastRuns', {keyPath: 'allyCode'});
+      if (event.oldVersion < 1) {
+        // Create object stores for: game data about each character, player profiles, and the last run done by each
+        // player
+        db.createObjectStore('gameSettings', {keyPath: 'baseID'});
+        db.createObjectStore('profiles', {keyPath: 'allyCode'});
+        db.createObjectStore('lastRuns', {keyPath: 'allyCode'});
+      }
+      if (event.oldVersion < 2) {
+        db.createObjectStore('characterTemplates', {keyPath: 'name'});
+      }
     };
   }
 
@@ -39,7 +46,7 @@ class Database {
    * @param onerror {function(error)}
    */
   export(onsuccess = nothing, onerror = nothing) {
-    const getDataRequest = this.database.transaction(['gameSettings', 'profiles', 'lastRuns']);
+    const getDataRequest = this.database.transaction(['gameSettings', 'profiles', 'lastRuns', 'characterTemplates']);
     const userData = {};
 
     getDataRequest.onerror = function(event) {
@@ -63,7 +70,12 @@ class Database {
     const lastRunsRequest = getDataRequest.objectStore('lastRuns').getAll();
     lastRunsRequest.onsuccess = function(event) {
       userData.lastRuns = event.target.result;
-    }
+    };
+
+    const characterTemplatesRequest = getDataRequest.objectStore('characterTemplates').getAll();
+    characterTemplatesRequest.onsuccess = function(event) {
+      userData.characterTemplates = event.target.result;
+    };
   }
 
   /**
@@ -72,7 +84,8 @@ class Database {
    * @param onerror {function(error)}
    */
   clear(onsuccess = nothing, onerror = nothing) {
-    const deleteDataRequest = this.database.transaction(['gameSettings', 'profiles', 'lastRuns'], 'readwrite');
+    const deleteDataRequest =
+      this.database.transaction(['gameSettings', 'profiles', 'lastRuns', 'characterTemplates'], 'readwrite');
 
     deleteDataRequest.onerror = function(event) {
       onerror(event.target.error);
@@ -85,6 +98,7 @@ class Database {
     deleteDataRequest.objectStore('gameSettings').clear();
     deleteDataRequest.objectStore('profiles').clear();
     deleteDataRequest.objectStore('lastRuns').clear();
+    deleteDataRequest.objectStore('characterTemplates').clear();
   }
 
   /**
@@ -124,15 +138,24 @@ class Database {
 
     deleteLastRunRequest.onerror = function(event) {
       onerror(event.target.error);
-      // self.dispatch(showFlash(
-      //   'Storage Error',
-      //   'Error clearing a previous run. ' +
-      //   event.target.error.message +
-      //   ' The optimizer may not recalculate correctly.'
-      // ))
     };
 
     deleteLastRunRequest.onsuccess = function(event) {
+      onsuccess();
+    };
+  }
+
+  deleteCharacterTemplate(name, onsuccess = nothing, onerror = nothing) {
+    const deleteTemplateRequest = this.database
+      .transaction('characterTemplates', 'readwrite')
+      .objectStore('characterTemplates')
+      .delete(name);
+
+    deleteTemplateRequest.onerror = function(event) {
+      onerror(event.target.error);
+    };
+
+    deleteTemplateRequest.onsuccess = function(event) {
       onsuccess();
     };
   }
@@ -204,7 +227,7 @@ class Database {
    */
   getProfiles(onsuccess = nothing, onerror = nothing) {
     const profilesRequest =
-    // Using a read/write transaction forces the database to finish loading profiles before reading from here
+      // Using a read/write transaction forces the database to finish loading profiles before reading from here
       this.database.transaction('profiles', 'readwrite').objectStore('profiles').getAll();
 
     profilesRequest.onsuccess = function(event) {
@@ -213,6 +236,56 @@ class Database {
     };
 
     profilesRequest.onerror = function(event) {
+      onerror(event.target.error);
+    }
+  }
+
+  /**
+   * Retrieve a character template from the database by name
+   * @param name {string}
+   * @param onsuccess {function(Object)}
+   * @param onerror {function(error)}
+   */
+  getCharacterTemplate(name, onsuccess = nothing, onerror = nothing) {
+    const templateRequest = this.database.transaction('characterTemplates', 'readwrite')
+      .objectStore('characterTemplates').get(name);
+
+    templateRequest.onsuccess = function(event) {
+      const template = event.target.result;
+      onsuccess({
+        name: template.name,
+        selectedCharacters: template.selectedCharacters.map(({id, target}) =>
+          ({id: id, target: OptimizationPlan.deserialize(target)})
+        )
+      });
+    };
+
+    templateRequest.onerror = function(event) {
+      onerror(event.target.error);
+    };
+
+  }
+
+  /**
+   * Get all of the saved character templates from the database
+   * @param onsuccess {function(Array<Object>)}
+   * @param onerror {function(error)}
+   */
+  getCharacterTemplates(onsuccess = nothing, onerror = nothing) {
+    const templatesRequest =
+      this.database.transaction('characterTemplates', 'readwrite').objectStore('characterTemplates').getAll();
+
+    templatesRequest.onsuccess = function(event) {
+      const templates = event.target.result.map(template => ({
+        name: template.name,
+        selectedCharacters: template.selectedCharacters.map(({id, target}) =>
+          ({id: id, target: OptimizationPlan.deserialize(target)})
+        )
+      }));
+      onsuccess(templates);
+    };
+
+    templatesRequest.onerror = function(event) {
       onerror(event.target.error);
     }
   }
@@ -228,16 +301,10 @@ class Database {
 
     saveProfileRequest.onerror = function(event) {
       onerror(event.target.error);
-      // self.dispatch(showFlash(
-      //   'Storage Error',
-      //   'Error saving your profile: ' + event.target.error.message + ' Your progress is not saved.'
-      // ));
     };
 
     saveProfileRequest.onsuccess = function(event) {
       onsuccess(event.target.result);
-      // self.getProfiles();
-      // self.getProfile(profile.allyCode);
     };
 
     saveProfileRequest.objectStore('profiles')
@@ -344,6 +411,52 @@ class Database {
       const singleRequest = saveLastRunsRequest.objectStore('lastRuns').put(
         'function' === typeof lastRun.serialize ? lastRun.serialize() : lastRun
       );
+
+      singleRequest.onsuccess = function(event) {
+        keys.push(event.target.result);
+      };
+    });
+  }
+
+  saveCharacterTemplate(name, selectedCharacters, onsuccess = nothing, onerror = nothing) {
+    const templateObject = {
+      name: name,
+      selectedCharacters: selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()}))
+    };
+
+    const saveTemplateRequest = this.database.transaction(['characterTemplates'], 'readwrite')
+      .objectStore('characterTemplates')
+      .put(templateObject);
+
+    saveTemplateRequest.onerror = function(event) {
+      onerror(event.target.error);
+    };
+
+    saveTemplateRequest.onsuccess = function(event) {
+      onsuccess(event.target.result);
+    }
+  }
+
+  saveCharacterTemplates(templates, onsuccess = nothing, onerror = nothing) {
+    const saveTemplatesRequest = this.database.transaction(['characterTemplates'], 'readwrite');
+    const keys = [];
+
+    saveTemplatesRequest.onerror = function(event) {
+      onerror(event.target.error);
+    };
+
+    saveTemplatesRequest.oncomplete = function(event) {
+      onsuccess(keys);
+    };
+
+    templates.forEach(template => {
+      const templateObject = {
+        name: template.name,
+        selectedCharacters:
+          template.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()}))
+      };
+
+      const singleRequest = saveTemplatesRequest.objectStore('characterTemplates').put(templateObject);
 
       singleRequest.onsuccess = function(event) {
         keys.push(event.target.result);

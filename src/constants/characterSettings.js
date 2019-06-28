@@ -25,7 +25,8 @@ const characterSettings = {
   'AHSOKATANO': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
-      new OptimizationPlan('Padme Lead', 10, 0, 100, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
+      new OptimizationPlan('Padme Lead', 10, 0, 100, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('Slow Damage', 25, 0, 0, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
     ],
     ['Snips']
   ),
@@ -39,7 +40,8 @@ const characterSettings = {
       new OptimizationPlan('PvP', 0, 0, 100, 75, 25, 0, 25, 0, 80, 0, 0, 0, 0, true),
       new OptimizationPlan('Padme Lead', 10, 0, 80, 100, 25, 0, 25, 0, 40, 0, 0, 0, 0, true),
       new OptimizationPlan('Chex Mix', 0, 0, 50, 0, 0, 0, 100, 0, 25, 0, 0, 0, 0, true),
-      new OptimizationPlan('hSTR P1 Jedi', 0, -5, 20, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true)
+      new OptimizationPlan('hSTR P1 Jedi', 0, -5, 20, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('Slow Damage', 25, 0, 0, 100, 25, 0, 25, 0, 40, 0, 0, 0, 0, true)
     ],
     ['JKA']
   ),
@@ -82,8 +84,8 @@ const characterSettings = {
   ),
   'BASTILASHANDARK': new CharacterSettings(
     [
-      new OptimizationPlan('Low Star', 10, 20, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('7-star', 0, 0, 100, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('7-star', 0, 0, 100, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Low Star', 10, 20, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     [],
     DamageType.special
@@ -126,15 +128,16 @@ const characterSettings = {
   ),
   'BOSSK': new CharacterSettings(
     [
-      new OptimizationPlan('Leader', 20, 20, 100, 25, 25, 0, 25, 0, 25, 0, 0, 0, 0, true),
-      new OptimizationPlan('Non-leader', 20, 0, 100, 25, 25, 0, 25, 0, 25, 0, 0, 0, 0, true)
+      new OptimizationPlan('Leader', 10, 10, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Non-leader', 10, 0, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
   'C3POLEGENDARY': new CharacterSettings(
     [
       optimizationStrategy["Speedy debuffer"],
       optimizationStrategy.Speed,
-      new OptimizationPlan('hSTR Phase 1', 0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('hSTR Phase 1', 0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Anti-Malak', 10, 0, 25, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
   'CADBANE': new CharacterSettings(
@@ -617,7 +620,7 @@ const characterSettings = {
   'NIGHTSISTERINITIATE': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE'),
-      new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 0, 0, 0, 50, 0, 100, 0, 0, 0, 0, true)
+      new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, true)
     ],
     ['NI', 'NS']
   ),
@@ -649,7 +652,10 @@ const characterSettings = {
     ['OB']
   ),
   'PADMEAMIDALA': new CharacterSettings(
-    [new OptimizationPlan('PvP', 35, 0, 100, 25, 15, 0, 10, 0, 10, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 35, 0, 100, 25, 15, 0, 10, 0, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('Slow', 50, 0, 0, 25, 15, 0, 10, 0, 10, 0, 0, 0, 0, true)
+    ],
     ['Padme']
   ),
   'PAO': new CharacterSettings(

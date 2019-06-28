@@ -33,8 +33,8 @@
   position: relative;
   background-image: url('/img/mod-shape-atlas.png');
   background-size: 48em 20em;
-  width: 4em;
-  height: 4em;
+  width: 3.99em;
+  height: 3.99em;
 }
 
 .mod-image.arrow .mod-slot-image {

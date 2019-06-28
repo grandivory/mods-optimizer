@@ -10,17 +10,18 @@ import CharacterEditForm from "../../containers/CharacterEditForm/CharacterEditF
 import {showModal} from "../../state/actions/app";
 import {
   changeCharacterTarget,
-  lockCharacter,
-  selectCharacter,
+  lockCharacter, moveSelectedCharacter,
+  selectCharacter, toggleCharacterLock,
   unselectCharacter
 } from "../../state/actions/characterEdit";
 import characterSettings from "../../constants/characterSettings";
 
 class CharacterList extends PureComponent {
-  characterBlockDragStart(characterID) {
+  characterBlockDragStart(index) {
     return function(event) {
       event.dataTransfer.dropEffect = 'move';
-      event.dataTransfer.setData('text/plain', characterID);
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', index);
     };
   }
 
@@ -28,7 +29,6 @@ class CharacterList extends PureComponent {
     return function(event) {
       event.preventDefault();
 
-      event.dataTransfer.dropEffect = 'move';
       event.target.classList.add('drop-character');
     }
   }
@@ -36,7 +36,6 @@ class CharacterList extends PureComponent {
   characterBlockDragOver() {
     return function(event) {
       event.preventDefault();
-      event.dataTransfer.dropEffect = 'move';
     }
   }
 
@@ -48,36 +47,45 @@ class CharacterList extends PureComponent {
   }
 
   /**
-   * @param dropCharacterID string The ID of the character on which the drop is occurring
+   * @param dropCharacterIndex string The index of the character on which the drop is occurring
    * @returns {Function}
    */
-  characterBlockDrop(dropCharacterID) {
-    const characters = this.props.characters;
-    const selfDrop = this.props.selfDrop;
+  characterBlockDrop(dropCharacterIndex) {
     const selectCharacter = this.props.selectCharacter;
+    const moveCharacter = this.props.moveCharacter;
+    const characters = this.props.characters;
 
     return function(event) {
       event.preventDefault();
       event.stopPropagation();
-      let movingCharacterID = event.dataTransfer.getData('text/plain');
 
-      // Only allow drops if the character isn't already in this list, or self-drops are allowed
-      if (selfDrop || !characters.some(character => character.name === movingCharacterID)) {
-        selectCharacter(movingCharacterID, dropCharacterID);
+      switch (event.dataTransfer.effectAllowed) {
+        case 'copy':
+          const movingCharacterID = event.dataTransfer.getData('text/plain');
+          const movingCharacter = characters[movingCharacterID];
+          selectCharacter(movingCharacterID, movingCharacter.defaultTarget(), dropCharacterIndex);
+          break;
+        case 'move':
+          const movingCharacterIndex = +event.dataTransfer.getData('text/plain');
+          moveCharacter(movingCharacterIndex, dropCharacterIndex);
+          break;
+        default:
+          // Do nothing
       }
+
       event.target.classList.remove('drop-character');
     }
   }
 
-  renderCharacterBlock(character) {
+  renderCharacterBlock(character, target, index) {
     const defaultTargets = characterSettings[character.baseID] ?
       groupByKey(characterSettings[character.baseID].targets, target => target.name) :
       {};
     const draggable = this.props.draggable;
 
-    const selectedPlan = character.optimizerSettings.isLocked ? 'lock' : character.optimizerSettings.target.name;
+    const selectedPlan = target.name;
     const options = character.targets()
-      .map(target => target.name)
+      .map(characterTarget => characterTarget.name)
       .filter(targetName => 'custom' !== targetName)
       .map(targetName => {
         const changeIndicator = Object.keys(defaultTargets).includes(targetName) &&
@@ -93,18 +101,18 @@ class CharacterList extends PureComponent {
       const optimizationTarget = e.target.value;
 
       // Don't change the select value unless we explicitly do so through a state change
-      e.target.value = character.optimizerSettings.target.name;
+      e.target.value = target.name;
 
       if ('custom' === optimizationTarget) {
         this.props.showModal(
           '',
-          <CharacterEditForm character={character} target={character.optimizerSettings.target.rename('custom')}/>
+          <CharacterEditForm character={character} characterIndex={index} target={target.rename('custom')}/>
         );
       } else if ('lock' === optimizationTarget) {
         this.props.lockCharacter(character.baseID);
       } else {
         this.props.changeCharacterTarget(
-          character.baseID,
+          index,
           character.targets().find(target => target.name === optimizationTarget)
         );
       }
@@ -113,15 +121,16 @@ class CharacterList extends PureComponent {
     const baseClass = `character-block ${character.baseID}`;
 
     return <div className={'character-block-wrapper'}
-                key={character.baseID}
+                key={index}
                 onDragEnter={this.characterBlockDragEnter()}
                 onDragOver={this.characterBlockDragOver()}
                 onDragLeave={this.characterBlockDragLeave()}
-                onDrop={this.characterBlockDrop(character.baseID)}
+                onDrop={this.characterBlockDrop(index)}
                 onDoubleClick={() => this.props.unselectCharacter(character.baseID)}>
       <div className={character.optimizerSettings.isLocked ? `${baseClass} locked` : baseClass}
            draggable={draggable}
-           onDragStart={this.characterBlockDragStart(character.baseID)}>
+           onDragStart={this.characterBlockDragStart(index)}>
+        {this.renderCharacterIcons(character, target)}
         <CharacterAvatar character={character}/>
         <div className={'character-name'}>
           {this.props.gameSettings[character.baseID] ?
@@ -134,7 +143,6 @@ class CharacterList extends PureComponent {
             <select value={selectedPlan} onChange={onSelect.bind(this)}>
               {options}
               <option value={'custom'}>Custom</option>
-              <option value={'lock'}>Lock</option>
             </select>
           </div>
           <button
@@ -143,16 +151,78 @@ class CharacterList extends PureComponent {
               '',
               <CharacterEditForm
                 character={character}
-                target={selectedPlan !== 'lock' ?
-                  character.optimizerSettings.target :
-                  character.optimizerSettings.target.rename('custom')
-                }
+                characterIndex={index}
+                target={target}
               />
             )}>
             Edit
           </button>
         </div>
       </div>
+    </div>;
+  }
+
+  /**
+   * Renders the set of 10 icons that show the state of a selected character
+   * @param character {Character}
+   * @param target {OptimizationPlan}
+   */
+  renderCharacterIcons(character, target) {
+    const defaultTargets = characterSettings[character.baseID] ?
+      groupByKey(characterSettings[character.baseID].targets, target => target.name) :
+      {};
+
+    const levelActive = target.upgradeMods ? 'active' : '';
+    const sliceActive = character.optimizerSettings.sliceMods ? 'active' : '';
+    const restrictionsActive = target.hasRestrictions() ? 'active' : '';
+    const targetStatActive = !!target.targetStat ? 'active' : '';
+    const duplicateActive = this.props.selectedCharacters
+      .filter(({character: sc}) => sc.baseID === character.baseID).length > 1 ? 'active' : '';
+    const negativeWeightsActive = target.hasNegativeWeights() ? 'active' : '';
+    const minimumDots = character.optimizerSettings.minimumModDots;
+    const changedTargetActive = Object.keys(defaultTargets).includes(target.name) &&
+      !defaultTargets[target.name].equals(target) ? 'active' : '';
+    const blankTargetActive = target.isBlank() ? 'active' : '';
+    const lockedActive = character.optimizerSettings.isLocked ? 'active' : '';
+
+    return <div className={'character-icons'}>
+      <span className={`icon minimum-dots ${1 < minimumDots ? 'green active' : 'gray'}`}
+            title={`This character will only use mods with at least ${minimumDots} ${1 === minimumDots ? 'dot' : 'dots'}`} >
+        {minimumDots}
+      </span>
+      <span className={`icon level ${levelActive}`}
+            title={levelActive ? 'Level this charcter\'s mods to 15' : 'Do not level this character\'s mods to 15'}/>
+      <span className={`icon slice ${sliceActive}`}
+            title={sliceActive ? 'Slice this character\'s mods to 6E' : 'Do not slice this character\'s mods to 6E'}/>
+      <span className={`icon restrictions ${restrictionsActive}`}
+            title={restrictionsActive ?
+              'This character has restrictions active' :
+              'This character has no restrictions active'} />
+      <span className={`icon target ${targetStatActive}`}
+            title={targetStatActive ?
+              'This character has a target stat selected' :
+              'This character has no target stat selected'} />
+      <span className={`icon duplicate ${duplicateActive}`}
+            title={duplicateActive ?
+              'This character is in the list more than once' :
+              'This character is only in the list once'} />
+      <span className={`icon negative ${negativeWeightsActive}`}
+            title={negativeWeightsActive ?
+              'This character\'s target has negative stat weights' :
+              'This character\'s target has no negative stat weights'} />
+      <span className={`icon changed-target ${changedTargetActive}`}
+            title={changedTargetActive ?
+              'This character\'s target has been modified from the default' :
+              'This character\'s target matches the default'} />
+      <span className={`icon blank-target ${blankTargetActive}`}
+            title={blankTargetActive ?
+              'This character\'s target has no assigned stat weights' :
+              'This character\'s target has at least one stat given a value'} />
+      <span className={`icon locked ${lockedActive}`}
+            onClick={() => this.props.toggleCharacterLock(character.baseID)}
+            title={lockedActive ?
+              'This character is locked. Its mods will not be assigned to other characters' :
+              'This character is not locked'} />
     </div>;
   }
 
@@ -163,7 +233,7 @@ class CharacterList extends PureComponent {
            onDragOver={this.characterBlockDragOver()}
            onDragLeave={this.characterBlockDragLeave()}
            onDrop={this.characterBlockDrop(this.props.lastCharacterID)}>
-        {0 < this.props.characters.length &&
+        {0 < this.props.selectedCharacters.length &&
         // Add a block to allow characters to be dragged to the top of the list
         <div className={'top-block'}
              onDragEnd={this.characterBlockDragEnter()}
@@ -172,11 +242,11 @@ class CharacterList extends PureComponent {
              onDrop={this.characterBlockDrop(null)}
         />
         }
-        {0 < this.props.characters.length && this.props.characters.map(character =>
-          this.renderCharacterBlock(character)
+        {0 < this.props.selectedCharacters.length && this.props.selectedCharacters.map(({character, target}, index) =>
+          this.renderCharacterBlock(character, target, index)
         )}
 
-        {0 === this.props.characters.length &&
+        {0 === this.props.selectedCharacters.length &&
         <div
           className={'character-block'}
           onDragEnter={this.characterBlockDragEnter()}
@@ -191,18 +261,23 @@ class CharacterList extends PureComponent {
 
 const mapStateToProps = (state) => {
   return {
-    characters: state.profile.selectedCharacters.map(characterID => state.profile.characters[characterID]),
+    characters: state.profile.characters,
     gameSettings: state.gameSettings,
-    lastCharacterID: state.profile.selectedCharacters[state.profile.selectedCharacters.length - 1]
+    lastCharacterID: state.profile.selectedCharacters[state.profile.selectedCharacters.length - 1],
+    selectedCharacters: state.profile.selectedCharacters.map(
+      ({id: characterID, target}) => ({character: state.profile.characters[characterID], target: target})
+    )
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
-  selectCharacter: (characterID, prevCharacterID) => dispatch(selectCharacter(characterID, prevCharacterID)),
+  selectCharacter: (characterID, target, prevIndex) => dispatch(selectCharacter(characterID, target, prevIndex)),
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),
+  moveCharacter: (fromIndex, toIndex) => dispatch(moveSelectedCharacter(fromIndex, toIndex)),
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
-  lockCharacter: (characterID) => dispatch(lockCharacter(characterID))
+  lockCharacter: (characterID) => dispatch(lockCharacter(characterID)),
+  toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterList);

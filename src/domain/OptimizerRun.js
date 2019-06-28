@@ -14,7 +14,7 @@ export default class OptimizerRun {
    * @param allyCode {string}
    * @param characters {Object<String, Object>}
    * @param mods {Array<Object>}
-   * @param selectedCharacters {Array<string>}
+   * @param selectedCharacters {Array<Object>}
    * @param modChangeThreshold {number}
    * @param lockUnselectedCharacters {boolean}
    */
@@ -33,7 +33,14 @@ export default class OptimizerRun {
   }
 
   serialize() {
-    return this;
+    return {
+      allyCode: this.allyCode,
+      characters: this.characters,
+      mods: this.mods,
+      selectedCharacters: this.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()})),
+      modChangeThreshold: this.modChangeThreshold,
+      lockUnselectedCharacters: this.lockUnselectedCharacters
+    };
   }
 
   deserialize(runJson) {

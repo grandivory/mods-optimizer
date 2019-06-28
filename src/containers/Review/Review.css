@@ -4,10 +4,20 @@
 
 .review-list h2 {
   text-align: center;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: .5em;
 }
 
 .review-list h3 {
   text-align: center;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.review-list h4 {
+  text-align: center;
+  margin-top: 0;
 }
 
 .sort-options {
@@ -39,6 +49,12 @@
   padding: 1em;
   border: 1px solid dodgerblue;
   background-color: rgba(0, 0, 96, .5);
+}
+
+.mod-row .mod-set-detail {
+  display: inline-block;
+  margin: 0 1em;
+  vertical-align: middle;
 }
 
 .mod-row div.character-id {

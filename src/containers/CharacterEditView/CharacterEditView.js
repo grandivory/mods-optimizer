@@ -4,15 +4,22 @@ import React, {PureComponent} from "react";
 
 import "./CharacterEditView.css";
 import CharacterList from "../CharacterList/CharacterList";
-import {hideModal, showModal} from "../../state/actions/app";
+import {hideModal, showError, showModal} from "../../state/actions/app";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import {
+  appendTemplate,
   changeCharacterFilter,
-  changeCharacterTarget,
+  deleteTemplate,
+  lockAllCharacters,
   lockSelectedCharacters,
+  replaceTemplate,
   resetAllCharacterTargets,
+  saveTemplate,
+  saveTemplates,
   selectCharacter,
+  toggleCharacterLock,
+  unlockAllCharacters,
   unlockSelectedCharacters,
   unselectAllCharacters,
   unselectCharacter,
@@ -25,18 +32,24 @@ import characterSettings from "../../constants/characterSettings";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import {GameSettings} from "../../domain/CharacterDataClasses";
 import {connect} from "react-redux";
+import {exportCharacterTemplate, exportCharacterTemplates} from "../../state/actions/storage";
+import {saveAs} from "file-saver";
+import FileInput from "../../components/FileInput/FileInput";
+import OptimizationPlan from "../../domain/OptimizationPlan";
+
+const defaultTemplates = require('../../constants/characterTemplates.json');
 
 class CharacterEditView extends PureComponent {
   dragStart(character) {
     return function(event) {
-      event.dataTransfer.dropEffect = 'move';
+      event.dataTransfer.dropEffect = 'copy';
+      event.dataTransfer.effectAllowed = 'copy';
       event.dataTransfer.setData('text/plain', character.baseID);
     }
   }
 
   static dragOver(event) {
     event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
   }
 
   static dragLeave(event) {
@@ -46,13 +59,39 @@ class CharacterEditView extends PureComponent {
 
   static availableCharactersDragEnter(event) {
     event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
   }
 
   availableCharactersDrop(event) {
     event.preventDefault();
-    const movingCharacterID = event.dataTransfer.getData('text/plain');
-    this.props.unselectCharacter(movingCharacterID);
+    switch (event.dataTransfer.effectAllowed) {
+      case 'move':
+        // This is coming from the selected characters - remove the character from the list
+        const characterIndex = +event.dataTransfer.getData('text/plain');
+        this.props.unselectCharacter(characterIndex);
+        break;
+      default:
+      // Do nothing
+    }
+  }
+
+  /**
+   * Read a file as input and pass its contents to another function for processing
+   * @param fileInput The uploaded file
+   * @param handleResult {Function}
+   */
+  readFile(fileInput, handleResult) {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      try {
+        const fileData = event.target.result;
+        handleResult(fileData);
+      } catch (e) {
+        this.props.showError(e.message);
+      }
+    };
+
+    reader.readAsText(fileInput);
   }
 
   render() {
@@ -65,6 +104,51 @@ class CharacterEditView extends PureComponent {
           <button className={'small'} onClick={this.props.lockSelectedCharacters}>Lock All</button>
           <button className={'small'} onClick={this.props.unlockSelectedCharacters}>Unlock All</button>
         </h4>
+        <h5>
+          Character Templates
+          <div className={'template-buttons'}>
+            <button className={'small'}
+                    disabled={!this.props.selectedCharacters.length}
+                    onClick={() => this.props.showModal('save-template', this.saveTemplateModal())}>
+              Save
+            </button>
+            <button className={'small'}
+                    onClick={() => this.props.showModal('append-template', this.appendTemplateModal())}>
+              Append
+            </button>
+            <button className={'small'}
+                    onClick={() => this.props.showModal('replace-template', this.replaceTemplateModal())}>
+              Replace
+            </button>
+            <button className={'small'}
+                    disabled={!this.userTemplates().length}
+                    onClick={() => this.props.showModal('export-template', this.exportTemplateModal())}>
+              Export
+            </button>
+            <FileInput label={'Load'}
+                       className={'small'}
+                       handler={(file) => this.readFile(
+                         file,
+                         (templates) => {
+                           const templatesObject = JSON.parse(templates);
+                           const templatesDeserialized = templatesObject.map(t => ({
+                             name: t.name,
+                             selectedCharacters: t.selectedCharacters.map(({id, target}) => ({
+                               id: id,
+                               target: OptimizationPlan.deserialize(target)
+                             }))
+                           }));
+                           this.props.saveTemplates(templatesDeserialized);
+                         }
+                       )}
+            />
+            <button className={'small red'}
+                    disabled={!this.userTemplates().length}
+                    onClick={() => this.props.showModal('delete-template', this.deleteTemplateModal())}>
+              Delete
+            </button>
+          </div>
+        </h5>
         <CharacterList selfDrop={true} draggable={true}/>
       </div>
       <div className={'available-characters'}
@@ -84,7 +168,8 @@ class CharacterEditView extends PureComponent {
         {this.props.highlightedCharacters.map(character => this.characterBlock(character, 'active'))}
         {this.props.availableCharacters.map(character => this.characterBlock(character, 'inactive'))}
       </div>
-    </div>;
+    </div>
+      ;
   }
 
   /**
@@ -143,7 +228,7 @@ class CharacterEditView extends PureComponent {
       <button
         type={'button'}
         onClick={() => {
-          const selectedTargets = this.props.selectedCharacters.map(character => character.optimizerSettings.target);
+          const selectedTargets = this.props.selectedCharacters.map(({target}) => target);
           if (selectedTargets.some(target => null !== target.targetStat)) {
             this.props.showModal('notice', this.optimizeWithTargetsModal());
           } else {
@@ -160,6 +245,12 @@ class CharacterEditView extends PureComponent {
         </button> :
         null
       }
+      <button type={'button'} className={'blue'} onClick={this.props.lockAllCharacters}>
+        Lock all characters
+      </button>
+      <button type={'button'} className={'blue'} onClick={this.props.unlockAllCharacters}>
+        Unlock all characters
+      </button>
       <button
         type={'button'}
         className={'blue'}
@@ -177,12 +268,21 @@ class CharacterEditView extends PureComponent {
    * @param className String A class to apply to each character block
    */
   characterBlock(character, className) {
+    const isLocked = character.optimizerSettings.isLocked;
+    const classAttr = `${isLocked ? 'locked' : ''} ${className} character`;
+
     return <div
-      className={className ? 'character ' + className : 'character'}
+      className={classAttr}
       key={character.baseID}
     >
+    <span className={`icon locked ${isLocked ? 'active' : ''}`}
+          onClick={() => this.props.toggleCharacterLock(character.baseID)}/>
       <div draggable={true} onDragStart={this.dragStart(character)}
-           onDoubleClick={() => this.props.selectCharacter(character.baseID, this.props.lastSelectedCharacter)}>
+           onDoubleClick={() => this.props.selectCharacter(
+             character.baseID,
+             character.defaultTarget(),
+             this.props.lastSelectedCharacter
+           )}>
         <CharacterAvatar character={character}/>
       </div>
       <div className={'character-name'}>
@@ -207,8 +307,8 @@ class CharacterEditView extends PureComponent {
       </p>
       <h3>Selecting characters to optimize</h3>
       <p>
-        The mods optimizer will start out by considering all mods equipped on any character other than those that have
-        had "Lock" selected as a target. Then, it will go down the list of selected characters, one by one, choosing the
+        The mods optimizer will start out by considering all mods equipped on any character other than those that are
+        "Locked". Then, it will go down the list of selected characters, one by one, choosing the
         best mods it can find for each character, based on the selected target. As it finishes each character, it
         removes those mods from its consideration set. Therefore, the character that you want to have your absolute best
         mods should always be first among your selected characters. Usually, this means that you want the character who
@@ -230,8 +330,11 @@ class CharacterEditView extends PureComponent {
         you want to employ.
       </p>
       <p>
-        As a starting point, choose a target for each character that matches what you'd like to optimize for. If no
-        such target exists, you can select "Custom", or simply hit the "Edit" button to bring up the character edit
+        The easiest way to get started with the optimizer is to choose from the pre-programmed character
+        templates. These are set up with sets of characters and targets that should fit various game modes. If
+        there's no template to fit your exact needs, you can use one as a starting point or create one from
+        scratch. For each individual character, if no target exists that matches what you want,
+        you can select "Custom", or simply hit the "Edit" button to bring up the character edit
         modal. Most characters will have the "basic" mode selected by default. In basic mode, you select a value for all
         stats that is between -100 and 100. These values are weights that are assigned to each stat to determine its
         value for that character. Setting two values as equal means that those stats are about equally important for
@@ -271,7 +374,179 @@ class CharacterEditView extends PureComponent {
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'} className={'red'} onClick={() => this.props.resetAllCharacterTargets()}>Reset</button>
       </div>
-    </div>
+    </div>;
+  }
+
+  saveTemplateModal() {
+    const isNameUnique = (name) => !this.props.characterTemplates.includes(name);
+    let nameInput, saveButton;
+
+    return <div>
+      <h3>Please enter a name for this character template</h3>
+      <input type={'text'} id={'template-name'} name={'template-name'} ref={input => nameInput = input} autoFocus
+             onKeyUp={(e) => {
+               if (e.key === 'Enter' && isNameUnique(nameInput.value)) {
+                 this.props.saveTemplate(nameInput.value);
+               }
+               // Don't change the input if the user is trying to select something
+               if (window.getSelection().toString() !== '') {
+                 return;
+               }
+               // Don't change the input if the user is hitting the arrow keys
+               if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+                 return;
+               }
+
+               if (!isNameUnique(nameInput.value)) {
+                 nameInput.classList.add('invalid');
+                 saveButton.disabled = true;
+               } else {
+                 nameInput.classList.remove('invalid');
+                 saveButton.disabled = false;
+               }
+             }}
+      />
+      <p className={'error'}>
+        That name has already been taken. Please use a different name.
+      </p>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button type={'button'} ref={button => saveButton = button}
+                onClick={() => this.props.saveTemplate(nameInput.value)}>
+          Save
+        </button>
+      </div>
+    </div>;
+  }
+
+  appendTemplateModal() {
+    let templateSelection;
+    const userTemplateNames = this.userTemplates();
+    const defaultTemplateNames = defaultTemplates.map(({name}) => name);
+
+    userTemplateNames.sort();
+    defaultTemplateNames.sort();
+
+    const userTemplateOptions = userTemplateNames
+      .map((name, index) => <option key={`user-${index}`} value={name}>{name}</option>);
+    const defaultTemplateOptions = defaultTemplateNames
+      .map((name, index) => <option key={`default-${index}`} value={name}>{name}</option>);
+
+    return <div>
+      <h3>Select a character template to add to your selected characters</h3>
+      <select ref={select => templateSelection = select}>
+        {userTemplateOptions}
+        {userTemplateOptions.length &&
+        <option disabled={true} value={''}>------------------------------------------------</option>}
+        {defaultTemplateOptions}
+      </select>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button type={'button'} onClick={() => this.props.appendTemplate(templateSelection.value)}>Append</button>
+      </div>
+    </div>;
+  }
+
+  replaceTemplateModal() {
+    let templateSelection;
+    const userTemplateNames = this.userTemplates();
+    const defaultTemplateNames = defaultTemplates.map(({name}) => name);
+
+    userTemplateNames.sort();
+    defaultTemplateNames.sort();
+
+    const userTemplateOptions = userTemplateNames
+      .map((name, index) => <option key={`user-${index}`} value={name}>{name}</option>);
+    const defaultTemplateOptions = defaultTemplateNames
+      .map((name, index) => <option key={`default-${index}`} value={name}>{name}</option>);
+
+    return <div>
+      <h3>Select a character template to replace your selected characters</h3>
+      <select ref={select => templateSelection = select}>
+        {userTemplateOptions}
+        {userTemplateOptions.length &&
+        <option disabled={true} value={''}>------------------------------------------------</option>}
+        {defaultTemplateOptions}
+      </select>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button type={'button'} onClick={() => this.props.replaceTemplate(templateSelection.value)}>Replace</button>
+      </div>
+    </div>;
+  }
+
+  userTemplates() {
+    return this.props.characterTemplates.filter(
+      templateName => !defaultTemplates.map(({name}) => name).includes(templateName)
+    );
+  }
+
+  exportTemplateModal() {
+    let templateNameInput;
+
+    const templateOptions = this.userTemplates().map(name => <option value={name}>{name}</option>);
+
+    return <div>
+      <h3>Please select a character template to export</h3>
+      <select ref={select => templateNameInput = select}>
+        {templateOptions}
+      </select>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button type={'button'}
+                onClick={() =>
+                  this.props.exportTemplate(
+                    templateNameInput.value,
+                    template => {
+                      const templateSaveObject = {
+                        name: template.name,
+                        selectedCharacters: template.selectedCharacters.map(({id, target}) => ({
+                          id: id,
+                          target: target.serialize()
+                        }))
+                      };
+                      const templateSerialized = JSON.stringify([templateSaveObject]);
+                      const userData = new Blob([templateSerialized], {type: 'application/json;charset=utf-8'});
+                      saveAs(userData, `modsOptimizerTemplate-${template.name}.json`);
+                    }
+                  )
+                }>
+          Export
+        </button>
+        <button type={'button'}
+                onClick={() => this.props.exportAllTemplates(templates => {
+                  const templatesSaveObject = templates.map(({name, selectedCharacters}) => ({
+                    name: name,
+                    selectedCharacters: selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()}))
+                  }));
+                  const templatesSerialized = JSON.stringify(templatesSaveObject);
+                  const userData = new Blob([templatesSerialized], {type: 'application/json;charset=utf-8'});
+                  saveAs(userData, `modsOptimizerTemplates-${(new Date()).toISOString().slice(0, 10)}.json`);
+                })}>
+          Export All
+        </button>
+      </div>
+    </div>;
+  }
+
+  deleteTemplateModal() {
+    let templateNameInput;
+
+    const templateOptions = this.userTemplates().map(name => <option value={name}>{name}</option>);
+
+    return <div>
+      <h3>Please select a character template to delete</h3>
+      <select ref={select => templateNameInput = select}>
+        {templateOptions}
+      </select>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button type={'button'} className={'red'}
+                onClick={() => this.props.deleteTemplate(templateNameInput.value)}>
+          Delete
+        </button>
+      </div>
+    </div>;
   }
 
   /**
@@ -317,7 +592,6 @@ class CharacterEditView extends PureComponent {
 const mapStateToProps = (state) => {
   const profile = state.profile;
   const availableCharacters = Object.values(profile.characters)
-    .filter(character => !profile.selectedCharacters.includes(character.baseID))
     .sort((left, right) => left.compareGP(right));
 
   /**
@@ -332,9 +606,12 @@ const mapStateToProps = (state) => {
 
     return '' === state.characterFilter ||
       gameSettings.name.toLowerCase().includes(state.characterFilter) ||
+      (['lock', 'locked'].includes(state.characterFilter) && character.optimizerSettings.isLocked) ||
+      (['unlock', 'unlocked'].includes(state.characterFilter) && !character.optimizerSettings.isLocked) ||
+      (['unlock', 'unlocked'].includes(state.characterFilter) && !character.optimizerSettings.isLocked) ||
       gameSettings.tags
         .concat(characterSettings[character.baseID] ? characterSettings[character.baseID].extraTags : [])
-        .some(tag => tag.toLowerCase().includes(state.characterFilter))
+        .some(tag => tag.toLowerCase().includes(state.characterFilter));
   };
 
   return {
@@ -345,27 +622,50 @@ const mapStateToProps = (state) => {
     gameSettings: state.gameSettings,
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
-    selectedCharacters: profile.selectedCharacters.map(id => profile.characters[id]),
-    lastSelectedCharacter: profile.selectedCharacters[profile.selectedCharacters.length - 1],
+    selectedCharacters: profile.selectedCharacters,
+    lastSelectedCharacter: profile.selectedCharacters.length - 1,
     showReviewButton: profile.modAssignments && Object.keys(profile.modAssignments).length,
+    characterTemplates: Object.keys(state.characterTemplates)
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),
+  showError: (error) => dispatch(showError(error)),
   changeCharacterFilter: (filter) => dispatch(changeCharacterFilter(filter)),
-  reviewOldAssignments: () => dispatch(changeOptimizerView('sets')),
-  selectCharacter: (characterID, prevCharacterID) => dispatch(selectCharacter(characterID, prevCharacterID)),
+  reviewOldAssignments: () => dispatch(changeOptimizerView('review')),
+  selectCharacter: (characterID, target, prevIndex) => dispatch(selectCharacter(characterID, target, prevIndex)),
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),
   clearSelectedCharacters: () => dispatch(unselectAllCharacters()),
   lockSelectedCharacters: () => dispatch(lockSelectedCharacters()),
   unlockSelectedCharacters: () => dispatch(unlockSelectedCharacters()),
+  lockAllCharacters: () => dispatch(lockAllCharacters()),
+  unlockAllCharacters: () => dispatch(unlockAllCharacters()),
+  toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID)),
   updateLockUnselectedCharacters: (lock) => dispatch(updateLockUnselectedCharacters(lock)),
-  changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
   optimizeMods: () => dispatch(optimizeMods()),
-  updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold))
+  updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold)),
+  saveTemplate: (name) => dispatch(saveTemplate(name)),
+  saveTemplates: (templates) => dispatch(saveTemplates(templates)),
+  appendTemplate: (templateName) => {
+    dispatch(appendTemplate(templateName));
+    dispatch(hideModal());
+  },
+  replaceTemplate: (templateName) => {
+    dispatch(replaceTemplate(templateName));
+    dispatch(hideModal());
+  },
+  exportTemplate: (name, callback) => {
+    dispatch(exportCharacterTemplate(name, callback));
+    dispatch(hideModal());
+  },
+  exportAllTemplates: (callback) => {
+    dispatch(exportCharacterTemplates(callback));
+    dispatch(hideModal());
+  },
+  deleteTemplate: (name) => dispatch(deleteTemplate(name))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterEditView);

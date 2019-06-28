@@ -27,7 +27,7 @@ class CharacterEditForm extends PureComponent {
   constructor(props) {
     super(props);
     if (!props.setRestrictions) {
-      props.populateSetRestrictions(props.character.optimizerSettings.target.setRestrictions);
+      props.populateSetRestrictions(props.target.setRestrictions);
     }
   }
 
@@ -54,7 +54,7 @@ class CharacterEditForm extends PureComponent {
                             id={'reset-button'}
                             disabled={defaultTarget.equals(target)}
                             onClick={() => {
-                              this.props.resetCharacterTargetToDefault(character.baseID);
+                              this.props.resetCharacterTargetToDefault(character.baseID, target.name);
                             }}>
         Reset target to default
       </button>
@@ -62,7 +62,7 @@ class CharacterEditForm extends PureComponent {
       resetButton = <button type={'button'}
                             id={'delete-button'}
                             className={'red'}
-                            onClick={() => this.props.deleteTarget(character.baseID)}>
+                            onClick={() => this.props.deleteTarget(character.baseID, target.name)}>
         Delete target
       </button>
     }
@@ -112,7 +112,7 @@ class CharacterEditForm extends PureComponent {
             <div className={'form-row center'}>
               <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
               <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
-                     defaultChecked={character.optimizerSettings.target.upgradeMods}/>
+                     defaultChecked={this.props.target.upgradeMods}/>
             </div>
           </div>
           <div className={'header-row group'}>
@@ -121,7 +121,7 @@ class CharacterEditForm extends PureComponent {
               {['arrow', 'triangle', 'circle', 'cross'].map(slot =>
                 <div key={`mod-block-${slot}`} className={'mod-block'}>
                   <select name={`${slot}-primary`} id={`${slot}-primary`}
-                          defaultValue={character.optimizerSettings.target.primaryStatRestrictions[slot]}>
+                          defaultValue={this.props.target.primaryStatRestrictions[slot]}>
                     <option value={''}>Any</option>
                     {this.props[`${slot}Primaries`].map(
                       primary => <option key={primary} value={primary}>{primary}</option>)}
@@ -135,13 +135,13 @@ class CharacterEditForm extends PureComponent {
             <h4>Restrict Set Bonuses:</h4>
             {
               this.setRestrictionsForm(
-                this.props.setRestrictions || character.optimizerSettings.target.setRestrictions,
-                character.optimizerSettings.target.useOnlyFullSets
+                this.props.setRestrictions || this.props.target.setRestrictions,
+                this.props.target.useOnlyFullSets
               )
             }
           </div>
           <div className={'header-row group'}>
-            {this.targetStatForm(character.optimizerSettings.target.targetStat)}
+            {this.targetStatForm(this.props.target.targetStat)}
           </div>
         </div>
         <div className={'column'}>
@@ -628,6 +628,7 @@ class CharacterEditForm extends PureComponent {
 
     this.props.submitForm(
       this.props.character.baseID,
+      this.props.characterIndex,
       newTarget,
       +this.form['mod-dots'].value,
       this.form['slice-mods'].checked
@@ -652,14 +653,15 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   hideModal: () => dispatch(hideModal()),
-  submitForm: (characterID, target, minimumModDots, sliceMods) => {
+  submitForm: (characterID, characterIndex, target, minimumModDots, sliceMods) => {
     dispatch(changeMinimumModDots(characterID, minimumModDots));
     dispatch(changeSliceMods(characterID, sliceMods));
     dispatch(unlockCharacter(characterID));
-    dispatch(finishEditCharacterTarget(characterID, target));
+    dispatch(finishEditCharacterTarget(characterIndex, target));
   },
-  resetCharacterTargetToDefault: (characterID) => dispatch(resetCharacterTargetToDefault(characterID)),
-  deleteTarget: (characterID) => dispatch(deleteTarget(characterID)),
+  resetCharacterTargetToDefault: (characterID, targetName) =>
+    dispatch(resetCharacterTargetToDefault(characterID, targetName)),
+  deleteTarget: (characterID, targetName) => dispatch(deleteTarget(characterID, targetName)),
   changeCharacterEditMode: (mode) => dispatch(changeCharacterEditMode(mode)),
   populateSetRestrictions: (setRestrictions) => dispatch(changeSetRestrictions(setRestrictions)),
   selectSetBonus: (setBonus) => dispatch(selectSetBonus(setBonus)),
