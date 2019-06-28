@@ -55,6 +55,10 @@ self.onmessage = function(message) {
 
       lastRun.modAssignments = profile.modAssignments;
 
+      lastRun.selectedCharacters = lastRun.selectedCharacters instanceof Array ?
+        lastRun.selectedCharacters.map(({id, target}) => ({id: id, target: deserializeTarget(target)})) :
+        lastRun.selectedCharacters;
+
       const selectedCharacters = profile.selectedCharacters.map(({id, target}) =>
         ({id: id, target: deserializeTarget(target)})
       );
@@ -1050,11 +1054,11 @@ function optimizeMods(availableMods, characters, order, changeThreshold, lockUns
       previousCharacter &&
       previousCharacter.playerValues &&
       areObjectsEquivalent(character.playerValues, previousCharacter.playerValues) &&
-      previousCharacter.optimizerSettings &&
       areObjectsEquivalent(
         target,
         previousRun.selectedCharacters[index].target
       ) &&
+      previousCharacter.optimizerSettings &&
       character.optimizerSettings.minimumModDots === previousCharacter.optimizerSettings.minimumModDots &&
       character.optimizerSettings.sliceMods === previousCharacter.optimizerSettings.sliceMods &&
       character.optimizerSettings.isLocked === previousCharacter.optimizerSettings.isLocked
