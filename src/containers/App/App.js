@@ -58,7 +58,7 @@ class App extends PureComponent {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     // Once we get a profile, check to see if the previous version is such that we should show the change log
-    if ((this.props.previousVersion < '1.4.1') && (!prevProps.profile && this.props.profile)) {
+    if ((this.props.previousVersion < '1.5') && (!prevProps.profile && this.props.profile)) {
       this.props.showModal('changelog-modal', this.changeLogModal());
     }
   }
@@ -267,34 +267,38 @@ class App extends PureComponent {
    */
   changeLogModal() {
     return <div>
-      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.4!</h2>
+      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.5!</h2>
       <h3>Here's a short summary of the changes included in this version:</h3>
       <ul>
         <li>
-          The optimizer now supports target stats! Please note that setting a target stat makes the optimizer
-          take <strong>A LOT LONGER</strong> (potentially over an hour for some characters). Things that will help keep
-          this time low include setting very narrow target windows or setting targets that are hard to hit. For example,
-          if you set a speed target of 170-174 for Han (thinking about hSTR phase 3), that's better than 170-179, but
-          not nearly as good as 270-274 in terms of how long they'll all take.
+          The character selection interface has been updated so that it's now possible to add a character to the
+          selected list multiple times. When this happens, the character will be optimized using the mods available at
+          each part. This should allow you to create mod sets that can be swapped on a character without having to pull
+          mods from any other character.
         </li>
         <li>
-          Some new targets have been made for Death Trooper, Han Solo, and Greedo for hSTR Phase 3 that utilize target
-          stats. You'll see these appear after fetching your data. There are also a number of new and udpated targets
-          based on recent character reworks and new characters.
+          A lot of functionality has been added around character templates - pre-selected sets of selected characters
+          and their targets. These new lists can be exported from the tool to be shared amongst friends or guilds, and
+          any template can be either appended to the selected characters list or used to replace the full list.
         </li>
         <li>
-          The optimization itself now runs on a separate thread so it won't freeze the browser while running all of its
-          calculations. You'll notice a progress window while running optimizations now, with a button to be able to
-          cancel at any time.
+          The character selection view has been updated to show a lot more information at a glance. It's now possible to
+          see, for each character, what the minimum dots are for suggested mods, whether their mods will be leveled to
+          15, whether their mods will be sliced to 6E, whether any restrictions have been applied, whether a target stat
+          is selected, if the character is in the list multiple times, if any stat weights are negative, if the selected
+          target has been changed from the default, if all stat weights are 0, and whether the character is locked.
         </li>
         <li>
-          Because optimization can sometimes take a very long time now, a button has been added to the character
-          selection screen to review previous recommendations. Additionally, re-running the optimizer will cause it to
-          try to skip as many characters as possible if their settings haven't changed.
+          Character locking has been changed again. Characters can now be locked by clicking on the "lock" icon next to
+          each character portrait or at the right of the icon list in the selected characters. With this change,
+          character locking is now completely independent of whether a character is selected or what target is chosen
+          for them.
         </li>
         <li>
-          You now have the ability to lock all unselected characters when running the optimizer. This is in order to be
-          able to quickly remod characters that would normally be low on your list without affecting everyone else.
+          The view to see the suggested mod sets and to show a list of mods to move have been combined into a single
+          view. You can now select how to view the results using the form controls in the sidebar. When viewing the sets
+          assigned to each character, some extra information will be shown, including current character stats, final
+          character stats, and overall value of each stat.
         </li>
       </ul>
       <h3>Happy Modding!</h3>
