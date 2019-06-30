@@ -19,6 +19,7 @@ import {
   saveTemplates,
   selectCharacter,
   toggleCharacterLock,
+  toggleHideSelectedCharacters,
   unlockAllCharacters,
   unlockSelectedCharacters,
   unselectAllCharacters,
@@ -36,6 +37,7 @@ import {exportCharacterTemplate, exportCharacterTemplates} from "../../state/act
 import {saveAs} from "file-saver";
 import FileInput from "../../components/FileInput/FileInput";
 import OptimizationPlan from "../../domain/OptimizationPlan";
+import Toggle from "../../components/Toggle/Toggle";
 
 const defaultTemplates = require('../../constants/characterTemplates.json');
 
@@ -45,6 +47,12 @@ class CharacterEditView extends PureComponent {
       event.dataTransfer.dropEffect = 'copy';
       event.dataTransfer.effectAllowed = 'copy';
       event.dataTransfer.setData('text/plain', character.baseID);
+      // We shouldn't have to do this, but Safari is ignoring both 'dropEffect' and 'effectAllowed' on drop
+      const options = {
+        'effect': 'add'
+      };
+      event.dataTransfer.setData('application/json', JSON.stringify(options));
+
     }
   }
 
@@ -63,7 +71,9 @@ class CharacterEditView extends PureComponent {
 
   availableCharactersDrop(event) {
     event.preventDefault();
-    switch (event.dataTransfer.effectAllowed) {
+    const options = JSON.parse(event.dataTransfer.getData('application/json'));
+
+    switch (options.effect) {
       case 'move':
         // This is coming from the selected characters - remove the character from the list
         const characterIndex = +event.dataTransfer.getData('text/plain');
@@ -181,8 +191,17 @@ class CharacterEditView extends PureComponent {
     return <div className={'filters'} key={'filterForm'}>
       <div className={'filter-form'}>
         <label htmlFor={'character-filter'}>Search by character name, tag, or common abbreviation:</label>
-        <input autoFocus={true} id='character-filter' type='text' defaultValue={this.props.characterFilter}
+        <input autoFocus={true} id={'character-filter'} type={'text'} defaultValue={this.props.characterFilter}
                onChange={(e) => this.props.changeCharacterFilter(e.target.value.toLowerCase())}
+        />
+        <Toggle
+          inputLabel={'Available Characters Display'}
+          leftLabel={'Hide Selected'}
+          rightLabel={'Show All'}
+          leftValue={'hide'}
+          rightValue={'show'}
+          value={this.props.hideSelectedCharacters ? 'hide' : 'show'}
+          onChange={() => this.props.toggleHideSelectedCharacters()}
         />
       </div>
     </div>;
@@ -592,6 +611,9 @@ class CharacterEditView extends PureComponent {
 const mapStateToProps = (state) => {
   const profile = state.profile;
   const availableCharacters = Object.values(profile.characters)
+    .filter(character => !state.hideSelectedCharacters ||
+      !profile.selectedCharacters.map(({id}) => id).includes(character.baseID)
+    )
     .sort((left, right) => left.compareGP(right));
 
   /**
@@ -619,6 +641,7 @@ const mapStateToProps = (state) => {
     modChangeThreshold: profile.globalSettings.modChangeThreshold,
     lockUnselectedCharacters: profile.globalSettings.lockUnselectedCharacters,
     characterFilter: state.characterFilter,
+    hideSelectedCharacters: state.hideSelectedCharacters,
     gameSettings: state.gameSettings,
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
@@ -634,6 +657,7 @@ const mapDispatchToProps = dispatch => ({
   hideModal: () => dispatch(hideModal()),
   showError: (error) => dispatch(showError(error)),
   changeCharacterFilter: (filter) => dispatch(changeCharacterFilter(filter)),
+  toggleHideSelectedCharacters: () => dispatch(toggleHideSelectedCharacters()),
   reviewOldAssignments: () => dispatch(changeOptimizerView('review')),
   selectCharacter: (characterID, target, prevIndex) => dispatch(selectCharacter(characterID, target, prevIndex)),
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),

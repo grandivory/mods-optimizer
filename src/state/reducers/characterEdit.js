@@ -13,6 +13,12 @@ export function changeCharacterFilter(state, action) {
   });
 }
 
+export function toggleHideSelectedCharacters(state, action) {
+  return Object.assign({}, state, {
+    hideSelectedCharacters: !state.hideSelectedCharacters
+  });
+}
+
 export function changeSetRestrictions(state, action) {
   return Object.assign({}, state, {
     setRestrictions: action.setRestrictions

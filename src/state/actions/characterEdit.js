@@ -10,6 +10,7 @@ const defaultTemplates = groupByKey(require('../../constants/characterTemplates.
 
 export const CHANGE_CHARACTER_EDIT_MODE = 'CHANGE_CHARACTER_EDIT_MODE';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
+export const TOGGLE_HIDE_SELECTED_CHARACTERS = 'TOGGLE_HIDE_SELECTED_CHARACTERS';
 export const CHANGE_SET_RESTRICTIONS = 'CHANGE_SET_RESTRICTIONS';
 export const SELECT_SET_BONUS = 'SELECT_SET_BONUS';
 export const REMOVE_SET_BONUS = 'REMOVE_SET_BONUS';
@@ -387,6 +388,12 @@ export function changeCharacterFilter(newFilter) {
   };
 }
 
+export function toggleHideSelectedCharacters() {
+  return {
+    type: TOGGLE_HIDE_SELECTED_CHARACTERS
+  };
+}
+
 /**
  * Update the threshold before the optimizer will suggest changing mods on a character
  * @param threshold
@@ -492,6 +499,29 @@ export function saveTemplates(templates) {
 export function appendTemplate(name) {
   const db = getDatabase();
 
+  function updateFunction(template) {
+    return updateProfile(
+      profile => {
+        const availableCharacters = template.selectedCharacters.filter(({id}) => Object.keys(profile.characters)
+          .includes(id));
+
+        return profile.withSelectedCharacters(profile.selectedCharacters.concat(availableCharacters));
+      },
+      (dispatch, getState, newProfile) => {
+        const state = getState();
+        const missingCharacters =
+          template.selectedCharacters.filter(({id}) => !Object.keys(newProfile.characters).includes(id))
+            .map(({id}) => state.gameSettings[id] ? state.gameSettings[id].name : id);
+        if (missingCharacters.length) {
+          dispatch(showFlash(
+            'Missing Characters',
+            'Missing the following characters from the selected template: ' + missingCharacters.join(', ')
+          ));
+        }
+      }
+    )
+  }
+
   return function(dispatch, getState) {
     if (Object.keys(defaultTemplates).includes(name)) {
       const template = {
@@ -500,15 +530,11 @@ export function appendTemplate(name) {
           ({id, target}) => ({id: id, target: OptimizationPlan.deserialize(target)})
         )
       };
-      updateProfile(profile =>
-        profile.withSelectedCharacters(profile.selectedCharacters.concat(template.selectedCharacters))
-      )(dispatch, getState);
+      updateFunction(template)(dispatch, getState);
     } else {
       db.getCharacterTemplate(
         name,
-        template => updateProfile(profile =>
-          profile.withSelectedCharacters(profile.selectedCharacters.concat(template.selectedCharacters))
-        )(dispatch, getState),
+        template => updateFunction(template)(dispatch, getState),
         error => dispatch(showFlash(
           'Storage Error',
           `Error retrieving your template from the database: ${error.message}.`
@@ -521,6 +547,29 @@ export function appendTemplate(name) {
 export function replaceTemplate(name) {
   const db = getDatabase();
 
+  function updateFunction(template) {
+    return updateProfile(
+      profile => {
+        const availableCharacters = template.selectedCharacters.filter(({id}) => Object.keys(profile.characters)
+          .includes(id));
+
+        return profile.withSelectedCharacters(availableCharacters);
+      },
+      (dispatch, getState, newProfile) => {
+        const state = getState();
+        const missingCharacters =
+          template.selectedCharacters.filter(({id}) => !Object.keys(newProfile.characters).includes(id))
+            .map(({id}) => state.gameSettings[id] ? state.gameSettings[id].name : id);
+        if (missingCharacters.length) {
+          dispatch(showFlash(
+            'Missing Characters',
+            'Missing the following characters from the selected template: ' + missingCharacters.join(', ')
+          ));
+        }
+      }
+    );
+  }
+
   return function(dispatch, getState) {
     if (Object.keys(defaultTemplates).includes(name)) {
       const template = {
@@ -529,15 +578,11 @@ export function replaceTemplate(name) {
           ({id, target}) => ({id: id, target: OptimizationPlan.deserialize(target)})
         )
       };
-      updateProfile(profile =>
-        profile.withSelectedCharacters(template.selectedCharacters)
-      )(dispatch, getState);
+      updateFunction(template)(dispatch, getState);
     } else {
       db.getCharacterTemplate(
         name,
-        template => updateProfile(profile =>
-          profile.withSelectedCharacters(template.selectedCharacters)
-        )(dispatch, getState),
+        template => updateFunction(template)(dispatch, getState),
         error => dispatch(showFlash(
           'Storage Error',
           `Error retrieving your template from the database: ${error.message}.`
