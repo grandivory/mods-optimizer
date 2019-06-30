@@ -158,7 +158,7 @@ export function loadProfiles(allyCode) {
 
         // Set up the playerProfiles object used to switch between available profiles
         const playerProfiles = {};
-        cleanedProfiles.forEach(profile => playerProfiles[profile.allyCode] = cleanedProfiles.playerName);
+        cleanedProfiles.forEach(profile => playerProfiles[profile.allyCode] = profile.playerName);
         dispatch(setPlayerProfiles(playerProfiles));
       },
       error =>
