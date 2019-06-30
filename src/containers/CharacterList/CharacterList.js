@@ -22,6 +22,11 @@ class CharacterList extends PureComponent {
       event.dataTransfer.dropEffect = 'move';
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('text/plain', index);
+      // We shouldn't have to do this, but Safari is ignoring both 'dropEffect' and 'effectAllowed' on drop
+      const options = {
+        'effect': 'move'
+      };
+      event.dataTransfer.setData('application/json', JSON.stringify(options));
     };
   }
 
@@ -58,9 +63,10 @@ class CharacterList extends PureComponent {
     return function(event) {
       event.preventDefault();
       event.stopPropagation();
+      const options = JSON.parse(event.dataTransfer.getData('application/json'));
 
-      switch (event.dataTransfer.effectAllowed) {
-        case 'copy':
+      switch (options.effect) {
+        case 'add':
           const movingCharacterID = event.dataTransfer.getData('text/plain');
           const movingCharacter = characters[movingCharacterID];
           selectCharacter(movingCharacterID, movingCharacter.defaultTarget(), dropCharacterIndex);

@@ -45,6 +45,12 @@ class CharacterEditView extends PureComponent {
       event.dataTransfer.dropEffect = 'copy';
       event.dataTransfer.effectAllowed = 'copy';
       event.dataTransfer.setData('text/plain', character.baseID);
+      // We shouldn't have to do this, but Safari is ignoring both 'dropEffect' and 'effectAllowed' on drop
+      const options = {
+        'effect': 'add'
+      };
+      event.dataTransfer.setData('application/json', JSON.stringify(options));
+
     }
   }
 
@@ -63,7 +69,9 @@ class CharacterEditView extends PureComponent {
 
   availableCharactersDrop(event) {
     event.preventDefault();
-    switch (event.dataTransfer.effectAllowed) {
+    const options = JSON.parse(event.dataTransfer.getData('application/json'));
+
+    switch (options.effect) {
       case 'move':
         // This is coming from the selected characters - remove the character from the list
         const characterIndex = +event.dataTransfer.getData('text/plain');
