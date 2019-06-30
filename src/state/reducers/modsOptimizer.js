@@ -19,6 +19,7 @@ import {
   CHANGE_SET_RESTRICTIONS,
   REMOVE_SET_BONUS,
   SELECT_SET_BONUS,
+  TOGGLE_HIDE_SELECTED_CHARACTERS,
 } from "../actions/characterEdit";
 import {REQUEST_CHARACTERS, REQUEST_PROFILE, REQUEST_STATS, TOGGLE_KEEP_OLD_MODS} from "../actions/data";
 import {CHANGE_MODS_FILTER} from "../actions/explore";
@@ -43,6 +44,7 @@ import {
   changeSetRestrictions,
   removeSetBonus,
   selectSetBonus,
+  toggleHideSelectedCharacters,
 } from "./characterEdit";
 import {requestCharacters, requestProfile, requestStats, toggleKeepOldMods} from "./data";
 import {changeModsFilter} from "./explore";
@@ -51,10 +53,10 @@ import {changeModListFilter, changeModSetFilter, changeOptimizerView,} from "./r
 import {
   ADD_PLAYER_PROFILE,
   CLEAN_STATE,
+  SET_CHARACTER_TEMPLATES,
   SET_GAME_SETTINGS,
   SET_PLAYER_PROFILES,
-  SET_PROFILE,
-  SET_CHARACTER_TEMPLATES
+  SET_PROFILE
 } from "../actions/storage";
 import {
   addPlayerProfile,
@@ -112,6 +114,8 @@ export default function modsOptimizer(state, action) {
       return saveState(changeCharacterEditMode(state, action));
     case CHANGE_CHARACTER_FILTER:
       return saveState(changeCharacterFilter(state, action));
+    case TOGGLE_HIDE_SELECTED_CHARACTERS:
+      return saveState(toggleHideSelectedCharacters(state, action));
     case CHANGE_SET_RESTRICTIONS:
       return changeSetRestrictions(state, action);
     case SELECT_SET_BONUS:

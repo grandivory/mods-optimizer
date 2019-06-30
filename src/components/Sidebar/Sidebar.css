@@ -88,6 +88,7 @@
 }
 
 .filter-form label,
+.filter-form .toggle-label,
 .sidebar > div h3 {
   display: block;
   border-bottom: 1px solid white;
