@@ -22,7 +22,7 @@
   grid-template-rows: auto auto auto;
   grid-template-columns: fit-content(1em) auto;
   grid-column-gap: .5em;
-  width: 19em;
+  width: 19.5em;
   min-height: 4em;
   border: 1px solid dodgerblue;
   background-color: rgba(0, 0, 96, .5);
