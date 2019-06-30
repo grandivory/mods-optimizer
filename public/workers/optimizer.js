@@ -1050,6 +1050,7 @@ function optimizeMods(availableMods, characters, order, changeThreshold, lockUns
     if (
       !recalculateMods &&
       previousRun.selectedCharacters &&
+      previousRun.selectedCharacters[index] && 
       characterID === previousRun.selectedCharacters[index].id &&
       previousCharacter &&
       previousCharacter.playerValues &&
