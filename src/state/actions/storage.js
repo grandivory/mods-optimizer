@@ -143,15 +143,22 @@ export function loadProfiles(allyCode) {
 
     db.getProfiles(
       profiles => {
+        // Clean up profiles to make sure that every selected character actually exists in the profile
+        const cleanedProfiles = profiles.map(profile => {
+          const cleanedSelectedCharacters =
+            profile.selectedCharacters.filter(({id}) => Object.keys(profile.characters).includes(id));
+          return profile.withSelectedCharacters(cleanedSelectedCharacters);
+        });
+
         // Set the active profile
         const profile = allyCode ?
-          profiles.find(profile => profile.allyCode === allyCode) :
-          profiles.find((profile, index) => index === 0);
+          cleanedProfiles.find(profile => profile.allyCode === allyCode) :
+          cleanedProfiles.find((profile, index) => index === 0);
         dispatch(setProfile(profile));
 
         // Set up the playerProfiles object used to switch between available profiles
         const playerProfiles = {};
-        profiles.forEach(profile => playerProfiles[profile.allyCode] = profile.playerName);
+        cleanedProfiles.forEach(profile => playerProfiles[profile.allyCode] = cleanedProfiles.playerName);
         dispatch(setPlayerProfiles(playerProfiles));
       },
       error =>
@@ -207,7 +214,13 @@ export function loadProfile(allyCode) {
     const db = getDatabase();
     db.getProfile(
       allyCode,
-      profile => dispatch(setProfile(profile)),
+      profile => {
+        const cleanedSelectedCharacters =
+          profile.selectedCharacters.filter(({id}) => Object.keys(profile.characters).includes(id));
+        const cleanedProfile = profile.withSelectedCharacters(cleanedSelectedCharacters);
+
+        dispatch(setProfile(cleanedProfile));
+      },
       error => dispatch(showError('Error loading your profile from the database: ' + error.message))
     );
   };
