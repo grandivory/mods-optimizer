@@ -27,7 +27,7 @@ import {
   updateLockUnselectedCharacters,
   updateModChangeThreshold
 } from "../../state/actions/characterEdit";
-import {changeOptimizerView} from "../../state/actions/review";
+import {changeModListFilter, changeOptimizerView} from "../../state/actions/review";
 import {optimizeMods} from "../../state/actions/optimize";
 import characterSettings from "../../constants/characterSettings";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
@@ -658,7 +658,14 @@ const mapDispatchToProps = dispatch => ({
   showError: (error) => dispatch(showError(error)),
   changeCharacterFilter: (filter) => dispatch(changeCharacterFilter(filter)),
   toggleHideSelectedCharacters: () => dispatch(toggleHideSelectedCharacters()),
-  reviewOldAssignments: () => dispatch(changeOptimizerView('review')),
+  reviewOldAssignments: () => {
+    dispatch(changeModListFilter({
+      view: 'sets',
+      sort: 'assignedCharacter',
+      tag: null
+    }));
+    dispatch(changeOptimizerView('review'));
+  },
   selectCharacter: (characterID, target, prevIndex) => dispatch(selectCharacter(characterID, target, prevIndex)),
   unselectCharacter: (characterID) => dispatch(unselectCharacter(characterID)),
   clearSelectedCharacters: () => dispatch(unselectAllCharacters()),

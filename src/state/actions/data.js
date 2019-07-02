@@ -438,9 +438,8 @@ export function receiveStats(allyCode, requestedCharacters, characterStats) {
       allyCode,
       oldProfile => {
         const newProfile = oldProfile.withCharacters(
-          characterStats.reduce((characters, statObject) => {
-            const unit = statObject.unit ? statObject.unit : statObject;
-            const stats = statObject.stats;
+          characterStats.reduce((characters, unit) => {
+            const stats = unit.stats;
 
             const character = oldProfile.characters[unit.defId];
 
@@ -452,10 +451,10 @@ export function receiveStats(allyCode, requestedCharacters, characterStats) {
                 stats.base['Potency'] || 0,
                 stats.base['Tenacity'] || 0,
                 stats.base['Physical Damage'] || 0,
-                stats.base['Physical Critical Rating'] || 0,
+                stats.base['Physical Critical Chance'] || 0,
                 stats.base['Armor'] || 0,
                 stats.base['Special Damage'] || 0,
-                stats.base['Special Critical Rating'] || 0,
+                stats.base['Special Critical Chance'] || 0,
                 stats.base['Resistance'] || 0
               ) :
               NullCharacterStats;
@@ -470,10 +469,10 @@ export function receiveStats(allyCode, requestedCharacters, characterStats) {
                 stats.gear['Potency'] || 0,
                 stats.gear['Tenacity'] || 0,
                 stats.gear['Physical Damage'] || 0,
-                stats.gear['Physical Critical Rating'] || 0,
+                stats.gear['Physical Critical Chance'] || 0,
                 stats.gear['Armor'] || 0,
                 stats.gear['Special Damage'] || 0,
-                stats.gear['Special Critical Rating'] || 0,
+                stats.gear['Special Critical Chance'] || 0,
                 stats.gear['Resistance'] || 0
               );
               equippedStats = baseStats.plus(gearStats);
