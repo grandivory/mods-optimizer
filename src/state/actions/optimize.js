@@ -4,7 +4,7 @@ import {hideModal, setIsBusy, showError, showFlash, showModal, updateProfile} fr
 import React from "react";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import getDatabase from "../storage/Database";
-import {changeOptimizerView} from "./review";
+import {changeModListFilter, changeOptimizerView} from "./review";
 import Character from "../../domain/Character";
 import nothing from "../../utils/nothing";
 
@@ -41,6 +41,11 @@ export function finishModOptimization(result, settings) {
       );
 
       dispatch(setIsBusy(false));
+      dispatch(changeModListFilter({
+        view: 'sets',
+        sort: 'assignedCharacter',
+        tag: null
+      }));
       dispatch(changeOptimizerView('review'));
       dispatch(hideModal());
 
@@ -66,7 +71,7 @@ export function finishModOptimization(result, settings) {
               {resultsWithMessages.map(({id, target, messages}, index) => {
                 const character = newProfile.characters[id] || new Character(id);
                 return <tr key={index}>
-                  <td><CharacterAvatar character={character}/><br />
+                  <td><CharacterAvatar character={character}/><br/>
                     {state.gameSettings[id] ? state.gameSettings[id].name : id}
                   </td>
                   <td>

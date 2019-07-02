@@ -65,7 +65,7 @@ export const defaultState = {
   },
   modSetsFilter: 'all',
   modListFilter: {
-    view: 'list',
+    view: 'sets',
     sort: 'assignedCharacter',
     tag: null
   },
