@@ -8,6 +8,21 @@ self.onmessage = function(message) {
     throw event.target.error;
   };
 
+  openDbRequest.onupgradeneeded = function(event) {
+    const db = event.target.result;
+
+    if (event.oldVersion < 1) {
+      // Create object stores for: game data about each character, player profiles, and the last run done by each player
+      db.createObjectStore('gameSettings', {keyPath: 'baseID'});
+      db.createObjectStore('profiles', {keyPath: 'allyCode'});
+      db.createObjectStore('lastRuns', {keyPath: 'allyCode'});
+    }
+    if (event.oldVersion < 2) {
+      db.createObjectStore('characterTemplates', {keyPath: 'name'});
+    }
+  };
+
+
   openDbRequest.onsuccess = function(event) {
     const db = event.target.result;
     let profile, lastRun;
