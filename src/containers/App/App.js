@@ -20,7 +20,7 @@ import {
   showError,
   showModal
 } from "../../state/actions/app";
-import {refreshPlayerData, toggleKeepOldMods} from "../../state/actions/data";
+import {checkVersion, refreshPlayerData, toggleKeepOldMods} from "../../state/actions/data";
 import FlashMessage from "../../components/Modal/FlashMessage";
 import {saveAs} from 'file-saver';
 import {exportDatabase, loadProfile} from "../../state/actions/storage";
@@ -40,11 +40,13 @@ class App extends PureComponent {
     // Remove the query string after reading anything we needed from it.
     window.history.replaceState({}, document.title, document.location.href.split('?')[0]);
 
-    this.escapeListener = (e) => {
-      if (e.key === 'Escape' && this.props.isModalCancelable) {
+    // Check the current version of the app against the API
+    props.checkVersion();
+  }
 
-        this.props.hideModal();
-      }
+  escapeListener(e) {
+    if (e.key === 'Escape' && this.props.isModalCancelable) {
+      this.props.hideModal();
     }
   }
 
@@ -416,6 +418,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   changeSection: newSection => dispatch(changeSection(newSection)),
   refreshPlayerData: (allyCode, keepOldMods) => dispatch(refreshPlayerData(allyCode, keepOldMods)),
+  checkVersion: () => dispatch(checkVersion()),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),
   showError: (message) => dispatch(showError(message)),

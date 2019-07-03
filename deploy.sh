@@ -78,3 +78,25 @@ then
   git stash pop
 fi
 git checkout ${current_version}
+
+# Deploy the lambda function that returns the current version
+
+if [[ "$2" == "prod" ]]
+then
+# Copy the version API file to a new file, replacing REACT_APP_VERSION with the current version
+sed "s/REACT_APP_VERSION/${REACT_APP_VERSION}/" version.py > versionAPI.py
+
+# Zip up the file into a lambda package
+zip versionAPI versionAPI.py
+
+# Deploy the new package
+aws lambda update-function-code \
+--profile grandivory \
+--function-name versionAPI \
+--zip-file fileb://versionAPI.zip
+
+# Clean up the copied file and the zip file
+rm versionAPI.zip
+rm versionAPI.py
+
+fi

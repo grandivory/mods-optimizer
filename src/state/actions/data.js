@@ -41,6 +41,16 @@ export function requestProfile(allyCode) {
   };
 }
 
+export function checkVersion() {
+  return function(dispatch) {
+    return dispatchFetchVersion(dispatch)
+      .catch(error => {
+        dispatch(hideFlash());
+        dispatch(showError(error.message));
+      });
+  }
+}
+
 /**
  * Request the base and equipped stats for a list of characters
  * @returns {{type: string}}
@@ -106,42 +116,38 @@ function dispatchFetchProfile(dispatch, allyCode, messages, keepOldMods, lastSte
   return post(
     'https://api.mods-optimizer.swgoh.grandivory.com/playerprofile/',
     {'ally-code': allyCode}
-  )
-    .then(
-      playerProfile => {
-        const roster = playerProfile.roster.filter(entry => entry.combatType === 'CHARACTER');
+  ).then(playerProfile => {
+      const roster = playerProfile.roster.filter(entry => entry.combatType === 'CHARACTER');
 
-        // Convert mods to the serialized format recognized by the optimizer
-        const profileMods = roster.map(character => character.mods.map(mod => Mod.fromSwgohHelp(mod, character.defId)))
-          .reduce((allMods, charMods) => allMods.concat(charMods), []);
+      // Convert mods to the serialized format recognized by the optimizer
+      const profileMods = roster.map(character => character.mods.map(mod => Mod.fromSwgohHelp(mod, character.defId)))
+        .reduce((allMods, charMods) => allMods.concat(charMods), []);
 
-        // Convert each character to a PlayerValues object
-        const profileCharacters = roster.reduce((characters, character) => {
-          characters[character.defId] = PlayerValues.fromSwgohHelp(character);
-          return characters;
-        }, {});
+      // Convert each character to a PlayerValues object
+      const profileCharacters = roster.reduce((characters, character) => {
+        characters[character.defId] = PlayerValues.fromSwgohHelp(character);
+        return characters;
+      }, {});
 
-        return {
-          name: playerProfile.name,
-          mods: profileMods,
-          characters: profileCharacters,
-          updated: playerProfile.updated
-        };
-      },
-    )
-    .catch(error => {
-      if (error instanceof TypeError) {
-        throw new Error(
-          'Your character and mod data is taking a long time to update. Please wait a few minutes and try again.'
-        );
-      } else {
-        throw error;
-      }
-    })
-    .then(profile => {
-      dispatch(receiveProfile(allyCode, profile, messages, keepOldMods, lastStep));
-      return profile;
-    });
+      return {
+        name: playerProfile.name,
+        mods: profileMods,
+        characters: profileCharacters,
+        updated: playerProfile.updated
+      };
+    },
+  ).catch(error => {
+    if (error instanceof TypeError) {
+      throw new Error(
+        'Your character and mod data is taking a long time to update. Please wait a few minutes and try again.'
+      );
+    } else {
+      throw error;
+    }
+  }).then(profile => {
+    dispatch(receiveProfile(allyCode, profile, messages, keepOldMods, lastStep));
+    return profile;
+  });
 }
 
 function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
@@ -167,6 +173,23 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
     return Promise.resolve()
       .then(() => dispatch(receiveStats(allyCode, null)));
   }
+}
+
+function dispatchFetchVersion(dispatch) {
+  return fetch(
+    'https://api.mods-optimizer.swgoh.grandivory.com/versionapi',
+    {method: 'POST', body: {}, mode: 'cors'}
+  )
+    .then(response => response.text())
+    .then(version => {
+      dispatch(receiveVersion(version));
+      return version;
+    }).catch(error => {
+      console.log(error);
+      throw new Error(
+        'Error fetching the current version. Please check to make sure that you are on the latest version'
+      );
+    });
 }
 
 /**
@@ -520,3 +543,21 @@ export function receiveStats(allyCode, requestedCharacters, characterStats) {
   };
 }
 
+export function receiveVersion(version) {
+  return function(dispatch, getState) {
+    const state = getState();
+
+    if (state.version < version) {
+      dispatch(showFlash(
+        'Version out-of-date!',
+        [
+          <p key={1}>
+            The mods optimizer has been updated to version <strong>{version}</strong>.
+            You're currently running version <strong>{state.version}</strong>
+          </p>,
+          <p key={2}>Please clear your cache and refresh to get the latest version.</p>
+        ]
+      ));
+    }
+  }
+}
