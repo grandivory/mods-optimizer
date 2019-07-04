@@ -6,6 +6,8 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 class Database {
   database;
 
+  dbName = 'ModsOptimizer';
+
   /**
    * Generate a new Database instance
    * @param onsuccess {function(Database)}
@@ -13,7 +15,7 @@ class Database {
    */
   constructor(onsuccess = nothing, onerror = nothing) {
     const self = this;
-    const openDbRequest = indexedDB.open('ModsOptimizer', 2);
+    const openDbRequest = indexedDB.open(this.dbName, 2);
 
     openDbRequest.onerror = function(event) {
       onerror(event.target.error);
@@ -21,6 +23,13 @@ class Database {
 
     openDbRequest.onsuccess = function(event) {
       self.database = event.target.result;
+
+      self.database.onversionchange = function(event) {
+        if (!event.newVersion) {
+          self.database.close();
+        }
+      };
+
       onsuccess(self);
     };
 
@@ -79,26 +88,20 @@ class Database {
   }
 
   /**
-   * Delete everything from the database
+   * Delete everything from the database, and the database itself
    * @param onsuccess {function()}
    * @param onerror {function(error)}
    */
-  clear(onsuccess = nothing, onerror = nothing) {
-    const deleteDataRequest =
-      this.database.transaction(['gameSettings', 'profiles', 'lastRuns', 'characterTemplates'], 'readwrite');
+  delete(onsuccess = nothing, onerror = nothing) {
+    const deleteDataRequest = indexedDB.deleteDatabase(this.dbName);
 
     deleteDataRequest.onerror = function(event) {
       onerror(event.target.error);
     };
 
-    deleteDataRequest.oncomplete = function() {
+    deleteDataRequest.onsuccess = function() {
       onsuccess();
     };
-
-    deleteDataRequest.objectStore('gameSettings').clear();
-    deleteDataRequest.objectStore('profiles').clear();
-    deleteDataRequest.objectStore('lastRuns').clear();
-    deleteDataRequest.objectStore('characterTemplates').clear();
   }
 
   /**

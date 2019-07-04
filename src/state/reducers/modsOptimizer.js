@@ -102,7 +102,8 @@ export default function modsOptimizer(state, action) {
     case HIDE_FLASH:
       return hideFlash(state);
     case RESET_STATE:
-      return saveState(resetState(action));
+      saveState(resetState(action));
+      return window.location.reload();
     case TOGGLE_SIDEBAR:
       return saveState(toggleSidebar(state, action));
     case SET_STATE:

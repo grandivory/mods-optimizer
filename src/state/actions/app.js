@@ -80,10 +80,10 @@ export function hideFlash() {
 export function reset() {
   return function(dispatch) {
     const db = getDatabase();
-    db.clear(
+    db.delete(
       () => dispatch(resetState()),
       error => dispatch(showError(
-        'Error clearing the database: ' + error.message + '. Try clearing it manually and refreshing.'
+        'Error deleting the database: ' + error.message + '. Try clearing it manually and refreshing.'
       ))
     );
   };

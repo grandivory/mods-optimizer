@@ -25,6 +25,12 @@ self.onmessage = function(message) {
 
   openDbRequest.onsuccess = function(event) {
     const db = event.target.result;
+    db.onversionchange = function(event) {
+      if (!event.newVersion) {
+        db.close();
+      }
+    };
+
     let profile, lastRun;
 
     // Get the data needed to optimize from the profile and last runs
