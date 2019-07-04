@@ -149,3 +149,18 @@ export function changeModListFilter(newFilter) {
     filter: newFilter
   };
 }
+
+/**
+ * Replace parts of the mod list filter, leaving the rest as-is
+ * @param newFilter {Object}
+ * @returns {Function}
+ */
+export function updateModListFilter(newFilter) {
+  return function(dispatch, getState) {
+    const state = getState();
+
+    dispatch(changeModListFilter(
+      Object.assign({}, state.modListFilter, newFilter)
+    ));
+  }
+}

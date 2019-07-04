@@ -4,7 +4,7 @@ import {hideModal, setIsBusy, showError, showFlash, showModal, updateProfile} fr
 import React from "react";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import getDatabase from "../storage/Database";
-import {changeModListFilter, changeOptimizerView} from "./review";
+import {changeOptimizerView, updateModListFilter} from "./review";
 import Character from "../../domain/Character";
 import nothing from "../../utils/nothing";
 
@@ -41,10 +41,9 @@ export function finishModOptimization(result, settings) {
       );
 
       dispatch(setIsBusy(false));
-      dispatch(changeModListFilter({
+      dispatch(updateModListFilter({
         view: 'sets',
-        sort: 'assignedCharacter',
-        tag: null
+        sort: 'assignedCharacter'
       }));
       dispatch(changeOptimizerView('review'));
       dispatch(hideModal());
