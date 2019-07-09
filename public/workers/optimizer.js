@@ -145,7 +145,7 @@ const statTypeMap = Object.freeze({
   'Physical Damage': ['physDmg'],
   'Special Damage': ['specDmg'],
   'Critical Chance': ['physCritChance', 'specCritChance'],
-  'Physical Critical Chance': ['critChance'], // read critChance from OptimizationPlan - this is used for scoring
+  'Physical Critical Chance': ['physCritChance'],
   'Special Critical Chance': ['specCritChance'],
   'Defense': ['armor', 'resistance'],
   'Armor': ['armor'],
@@ -863,7 +863,7 @@ function modSort(character) {
 function scoreStat(stat, target) {
   // Because Optimization Plans treat all critical chance the same, we can't break it into physical and special crit
   // chance for scoring. Catch this edge case so that we can properly value crit chance
-  const targetProperties = 'Critical Chance' === stat.displayType ? ['critChance'] : statTypeMap[stat.displayType];
+  const targetProperties = ['Critical Chance', 'Physical Critical Chance'].includes(stat.displayType) ? ['critChance'] : statTypeMap[stat.displayType];
   return targetProperties.reduce((acc, targetProperty) =>
       target[targetProperty] ? acc + target[targetProperty] * stat.value : acc
     , 0);
