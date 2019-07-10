@@ -74,6 +74,7 @@ fabric.properties
 #Visual Studio files
 /.vs
 /.vscode
+*.code-workspace
 
 # User-added files
 /.idea/sbt.xml
