@@ -71,10 +71,12 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-# User-added files
-/.idea/sbt.xml
-/.idea/codeStyles/*.xml
-
 #Visual Studio files
 /.vs
 /.vscode
+
+# User-added files
+/.idea/sbt.xml
+/.idea/codeStyles/*.xml
+.webhook
+deploy.sh
