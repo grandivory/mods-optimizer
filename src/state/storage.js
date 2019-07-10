@@ -147,6 +147,7 @@ export function deserializeState(state) {
       allyCode: state.allyCode,
       characterEditMode: state.characterEditMode || defaultState.characterEditMode,
       characterFilter: state.characterFilter || defaultState.characterFilter,
+      hideSelectedCharacters: state.hideSelectedCharacters || defaultState.hideSelectedCharacters,
       keepOldMods: state.keepOldMods,
       modsFilter: Object.assign({}, defaultState.modsFilter, state.modsFilter),
       modListFilter: state.modListFilter || defaultState.modListFilter,
