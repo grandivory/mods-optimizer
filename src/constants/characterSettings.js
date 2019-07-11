@@ -390,6 +390,12 @@ const characterSettings = {
     ],
     ['GK', 'Titans']
   ),
+  'GEONOSIANBROODALPHA': new CharacterSettings(
+    [
+      new OptimizationPlan('Tanky', 20, 20, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Offense', 0, 0, 100, 50, 0, 10, 20, 0, 20, 0, 0, 0, 0, true)
+    ]
+  ),
   'GEONOSIANSOLDIER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
   ),
