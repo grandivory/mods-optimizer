@@ -34,7 +34,6 @@
   position: absolute;
   top: .2em;
   right: .2em;
-  cursor: pointer;
   background-image: url('/img/character_icons.png');
   background-size: 12em 2.4em;
   background-position-x: -9.6em;

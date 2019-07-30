@@ -268,6 +268,20 @@ nav button.active {
   position: relative;
 }
 
+.icon {
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  margin: 0 .25em;
+  vertical-align: middle;
+}
+
+.icon.help {
+  background-image: url('/img/help.png');
+  background-size: 1em 1em;
+  cursor: pointer;
+}
+
 .welcome {
   text-align: center;
   margin: 0 auto;
@@ -298,6 +312,10 @@ nav button.active {
 
 .modal.changelog-modal {
   max-width: 45em;
+}
+
+.modal .help {
+  max-width: 30em;
 }
 
 strong {
@@ -374,4 +392,8 @@ li {
 
 a {
   cursor: pointer;
+}
+
+img.fit {
+  width: 100%;
 }
