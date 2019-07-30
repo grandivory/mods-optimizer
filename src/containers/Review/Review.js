@@ -576,7 +576,7 @@ const mapStateToProps = (state) => {
    * }}
    */
   return {
-    allycode: state.allyCode,
+    allyCode: state.allyCode,
     assignedMods: profile.modAssignments,
     characters: profile.characters,
     gameSettings: state.gameSettings,
