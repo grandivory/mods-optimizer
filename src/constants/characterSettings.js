@@ -558,7 +558,10 @@ const characterSettings = {
     ['Old Kylo', 'zylo', 'FO']
   ),
   'KYLORENUNMASKED': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
+    [
+      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('Tanky', 100, 100, 50, 0, 0, 75, 0, 0, 0, 37.5, 37.5, 0, 0, true)
+    ],
     ['kru', 'matt', 'Snape', 'FO']
   ),
   'L3_37': new CharacterSettings(
@@ -881,6 +884,12 @@ const characterSettings = {
       new OptimizationPlan('Raids', 10, 0, 80, 100, 10, 0, 50, 0, 0, 0, 0, 0, 0, true)
     ],
     ['beast', 'Wampanader']
+  ),
+  'WATTAMBOR': new CharacterSettings(
+    [
+      new OptimizationPlan('Leader', 50, 0, 100, 0, 25, 10, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Non-leader', 0, 0, 100, 0, 25, 10, 0, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'WEDGEANTILLES': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
