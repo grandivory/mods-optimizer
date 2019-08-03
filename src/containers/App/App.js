@@ -227,10 +227,11 @@ class App extends PureComponent {
   footer() {
     return <footer className={'App-footer'}>
       Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.<br/>
-      <a href={'mailto:grandivory+swgoh@gmail.com'} target={'_blank'} rel={'noopener'}>Send Feedback</a>&nbsp;|&nbsp;
       <a href={'https://github.com/grandivory/mods-optimizer'} target={'_blank'} rel={'noopener'}>Contribute</a>
       &nbsp;|&nbsp;
-      <a href={'https://discord.gg/WFKycSm'} target={'_blank'} rel={'noopener'}>Discord</a>
+      Ask for help or give feedback on <a href={'https://discord.gg/WFKycSm'} target={'_blank'} rel={'noopener'}>
+        Discord
+      </a>
       &nbsp;| Like the tool? Consider donating to support the developer!&nbsp;
       <a href={'https://paypal.me/grandivory'} target={'_blank'} rel={'noopener'} className={'gold'}>Paypal</a>
       &nbsp;or&nbsp;
