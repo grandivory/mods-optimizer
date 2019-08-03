@@ -1,3 +1,4 @@
+import React from 'react';
 import getDatabase from "../storage/Database";
 import { mapObject } from "../../utils/mapObject";
 import OptimizerRun from "../../domain/OptimizerRun";
