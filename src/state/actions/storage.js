@@ -1,8 +1,8 @@
 import getDatabase from "../storage/Database";
-import {mapObject} from "../../utils/mapObject";
+import { mapObject } from "../../utils/mapObject";
 import OptimizerRun from "../../domain/OptimizerRun";
 import nothing from "../../utils/nothing";
-import {showError, showFlash} from "./app";
+import { showError, showFlash } from "./app";
 import groupByKey from "../../utils/groupByKey";
 
 export const CLEAN_STATE = 'CLEAN_STATE';
@@ -18,7 +18,7 @@ export const SET_CHARACTER_TEMPLATES = 'SET_CHARACTER_TEMPLATES';
  * @returns {Function}
  */
 export function databaseReady(state) {
-  return function(dispatch) {
+  return function (dispatch) {
     // Save the state into the database
     dispatch(populateDatabase(state));
 
@@ -36,7 +36,7 @@ export function databaseReady(state) {
  * @param state {Object}
  */
 export function populateDatabase(state) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
 
     // First, check to see if there's anything in the state that we need to load into the database
@@ -100,7 +100,7 @@ export function populateDatabase(state) {
  * @returns {Function}
  */
 export function loadFromDb(allyCode) {
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(loadGameSettings());
     dispatch(loadProfiles(allyCode));
     dispatch(loadCharacterTemplates());
@@ -112,22 +112,36 @@ export function loadFromDb(allyCode) {
  * @returns {Function}
  */
 function loadGameSettings() {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
 
-    db.getGameSettings(
-      gameSettings => {
-        const gameSettingsObject = groupByKey(gameSettings, gameSettings => gameSettings.baseID);
-        dispatch(setGameSettings(gameSettingsObject));
-      },
-      error =>
-        dispatch(showFlash(
-          'Storage Error',
-          'Error reading basic character settings: ' +
-          error.message +
-          ' The settings will be restored when you next fetch data.'
-        ))
-    );
+    try {
+      db.getGameSettings(
+        gameSettings => {
+          const gameSettingsObject = groupByKey(gameSettings, gameSettings => gameSettings.baseID);
+          dispatch(setGameSettings(gameSettingsObject));
+        },
+        error =>
+          dispatch(showFlash(
+            'Storage Error',
+            'Error reading basic character settings: ' +
+            error.message +
+            ' The settings will be restored when you next fetch data.'
+          ))
+      );
+    } catch (e) {
+      dispatch(showError(
+        [
+          <p key={1}>
+            Unable to load database: {e.message} Please fix the problem and try again, or ask for help in the
+            discord server below.
+          </p>,
+          <p key={2}>Grandivory's mods optimizer is is tested to work in <strong>Firefox, Chrome, and Safari on desktop
+            only</strong>! Other browsers may work, but they are not officially supported. If you're having trouble, try
+            using one of the supported browsers before asking for help.</p>
+        ]
+      ));
+    }
   }
 }
 
@@ -138,55 +152,83 @@ function loadGameSettings() {
  * @returns {Function}
  */
 export function loadProfiles(allyCode) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
 
-    db.getProfiles(
-      profiles => {
-        // Clean up profiles to make sure that every selected character actually exists in the profile
-        const cleanedProfiles = profiles.map(profile => {
-          const cleanedSelectedCharacters =
-            profile.selectedCharacters.filter(({id}) => Object.keys(profile.characters).includes(id));
-          return profile.withSelectedCharacters(cleanedSelectedCharacters);
-        });
+    try {
+      db.getProfiles(
+        profiles => {
+          // Clean up profiles to make sure that every selected character actually exists in the profile
+          const cleanedProfiles = profiles.map(profile => {
+            const cleanedSelectedCharacters =
+              profile.selectedCharacters.filter(({ id }) => Object.keys(profile.characters).includes(id));
+            return profile.withSelectedCharacters(cleanedSelectedCharacters);
+          });
 
-        // Set the active profile
-        const profile = allyCode ?
-          cleanedProfiles.find(profile => profile.allyCode === allyCode) :
-          cleanedProfiles.find((profile, index) => index === 0);
-        dispatch(setProfile(profile));
+          // Set the active profile
+          const profile = allyCode ?
+            cleanedProfiles.find(profile => profile.allyCode === allyCode) :
+            cleanedProfiles.find((profile, index) => index === 0);
+          dispatch(setProfile(profile));
 
-        // Set up the playerProfiles object used to switch between available profiles
-        const playerProfiles = {};
-        cleanedProfiles.forEach(profile => playerProfiles[profile.allyCode] = profile.playerName);
-        dispatch(setPlayerProfiles(playerProfiles));
-      },
-      error =>
-        dispatch(showFlash(
-          'Storage Error',
-          'Error retrieving profiles: ' + error.message
-        ))
-    );
+          // Set up the playerProfiles object used to switch between available profiles
+          const playerProfiles = {};
+          cleanedProfiles.forEach(profile => playerProfiles[profile.allyCode] = profile.playerName);
+          dispatch(setPlayerProfiles(playerProfiles));
+        },
+        error =>
+          dispatch(showFlash(
+            'Storage Error',
+            'Error retrieving profiles: ' + error.message
+          ))
+      );
+    } catch (e) {
+      dispatch(showError(
+        [
+          <p key={1}>
+            Unable to load database: {e.message} Please fix the problem and try again, or ask for help in the
+            discord server below.
+          </p>,
+          <p key={2}>Grandivory's mods optimizer is is tested to work in <strong>Firefox, Chrome, and Safari on desktop
+            only</strong>! Other browsers may work, but they are not officially supported. If you're having trouble, try
+            using one of the supported browsers before asking for help.</p>
+        ]
+      ));
+    }
   };
 }
 
 export function loadCharacterTemplates() {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
 
-    db.getCharacterTemplates(
-      characterTemplates => {
-        const templatesObject = mapObject(
-          groupByKey(characterTemplates, template => template.name),
-          ({selectedCharacters}) => selectedCharacters
+    try {
+      db.getCharacterTemplates(
+        characterTemplates => {
+          const templatesObject = mapObject(
+            groupByKey(characterTemplates, template => template.name),
+            ({ selectedCharacters }) => selectedCharacters
           );
-        dispatch(setCharacterTemplates(templatesObject));
-      },
-      error => dispatch(showFlash(
-        'Storage Error',
-        'Error loading character templates: ' + error.message + '.'
-      ))
-    );
+          dispatch(setCharacterTemplates(templatesObject));
+        },
+        error => dispatch(showFlash(
+          'Storage Error',
+          'Error loading character templates: ' + error.message + '.'
+        ))
+      );
+    } catch (e) {
+      dispatch(showError(
+        [
+          <p key={1}>
+            Unable to load database: {e.message} Please fix the problem and try again, or ask for help in the
+            discord server below.
+          </p>,
+          <p key={2}>Grandivory's mods optimizer is is tested to work in <strong>Firefox, Chrome, and Safari on desktop
+            only</strong>! Other browsers may work, but they are not officially supported. If you're having trouble, try
+            using one of the supported browsers before asking for help.</p>
+        ]
+      ));
+    }
   }
 }
 
@@ -210,13 +252,13 @@ export function loadProfile(allyCode) {
     return nothing;
   }
 
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     db.getProfile(
       allyCode,
       profile => {
         const cleanedSelectedCharacters =
-          profile.selectedCharacters.filter(({id}) => Object.keys(profile.characters).includes(id));
+          profile.selectedCharacters.filter(({ id }) => Object.keys(profile.characters).includes(id));
         const cleanedProfile = profile.withSelectedCharacters(cleanedSelectedCharacters);
 
         dispatch(setProfile(cleanedProfile));
@@ -232,7 +274,7 @@ export function loadProfile(allyCode) {
  * @returns {Function}
  */
 export function exportDatabase(callback) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     db.export(
       callback,
@@ -242,7 +284,7 @@ export function exportDatabase(callback) {
 }
 
 export function exportCharacterTemplate(name, callback) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     db.getCharacterTemplate(name,
       callback,
@@ -252,7 +294,7 @@ export function exportCharacterTemplate(name, callback) {
 }
 
 export function exportCharacterTemplates(callback) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     db.getCharacterTemplates(
       callback,
@@ -266,7 +308,7 @@ export function exportCharacterTemplates(callback) {
  * @param gameSettings {Array<GameSettings>}
  */
 export function saveGameSettings(gameSettings) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     db.saveGameSettings(
       gameSettings,
@@ -288,7 +330,7 @@ export function saveGameSettings(gameSettings) {
  * @returns {Function}
  */
 export function saveProfiles(profiles, allyCode) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     db.saveProfiles(
       profiles,
@@ -306,7 +348,7 @@ export function saveProfiles(profiles, allyCode) {
  * @returns {Function}
  */
 export function saveLastRuns(lastRuns) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     db.saveLastRuns(
       lastRuns,
