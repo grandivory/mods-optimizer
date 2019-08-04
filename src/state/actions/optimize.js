@@ -121,6 +121,7 @@ export function optimizeMods() {
     optimizationWorker.onmessage = function(message) {
       switch (message.data.type) {
         case 'OptimizationSuccess':
+          dispatch(setIsBusy(false));
           dispatch(showModal(
             'optimizer-progress',
             optimizerProgressModal(null, 'Rendering your results', 100, dispatch)
@@ -136,7 +137,8 @@ export function optimizeMods() {
           );
           break;
         case 'Progress':
-          dispatch(showModal(
+            dispatch(setIsBusy(false));
+            dispatch(showModal(
             'optimizer-progress',
             optimizerProgressModal(message.data.character, message.data.step, message.data.progress, dispatch),
             false

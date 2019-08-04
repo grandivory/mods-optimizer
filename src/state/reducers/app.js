@@ -10,7 +10,6 @@ export function changeSection(state, action) {
 
 export function showModal(state, action) {
   return Object.assign({}, state, {
-    isBusy: false,
     modal: {
       class: action.class,
       content: action.content,
@@ -21,7 +20,6 @@ export function showModal(state, action) {
 
 export function hideModal(state) {
   return Object.assign({}, state, {
-    isBusy: false,
     setRestrictions: null,
     modal: null
   });
@@ -29,14 +27,12 @@ export function hideModal(state) {
 
 export function showError(state, action) {
   return Object.assign({}, state, {
-    isBusy: false,
     error: action.content
   });
 }
 
 export function hideError(state) {
   return Object.assign({}, state, {
-    isBusy: false,
     error: null
   });
 }
@@ -46,14 +42,12 @@ export function showFlash(state, action) {
     flashMessage: {
       heading: action.heading,
       content: action.content
-    },
-    isBusy: false
+    }
   });
 }
 
 export function hideFlash(state) {
   return Object.assign({}, state, {
-    isBusy: false,
     flashMessage: null
   });
 }
