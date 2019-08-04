@@ -25,6 +25,7 @@ class ModSetView extends React.PureComponent {
         <ModImage
           mod={set[slot]}
           showAvatar={showAvatars}
+          className={assignedCharacter && set[slot].characterID === assignedCharacter.baseID ? 'no-move' : ''}
         />
         <ModStats mod={set[slot]} showAvatar assignedCharacter={assignedCharacter}
                   assignedTarget={assignedTarget}/>

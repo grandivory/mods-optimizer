@@ -11,6 +11,10 @@
   position: absolute;
 }
 
+.mod-set-view .mod .no-move {
+  filter: brightness(.4);
+}
+
 .mod-set-view .mod .icon {
   display: block;
   position: absolute;
