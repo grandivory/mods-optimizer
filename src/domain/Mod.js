@@ -6,6 +6,26 @@ import groupByKey from "../utils/groupByKey";
 import {modSets, modSlots} from "../constants/enums";
 import OptimizationPlan from "./OptimizationPlan";
 
+const hotUtilsSlotMap = {
+  'Data-Bus': 'circle',
+  'Holo-Array': 'triangle',
+  'Multiplexer': 'cross',
+  'Processor': 'diamond',
+  'Receiver': 'arrow',
+  'Transmitter': 'square'
+};
+
+const hotUtilsSetMap = {
+  'Crit Chance': 'critchance',
+  'Crit Damage': 'critdamage',
+  'Defense': 'defense',
+  'Health': 'health',
+  'Offense': 'offense',
+  'Potency': 'potency',
+  'Resistance': 'tenacity',
+  'Speedpercentadditive': 'speed'
+};
+
 class Mod {
   id;
   slot;
@@ -197,6 +217,32 @@ class Mod {
       Stat.fromSwgohHelp(modJson.primaryStat),
       modJson.secondaryStat.map(Stat.fromSwgohHelp),
       characterID,
+      modJson.tier
+    );
+  }
+
+  static fromHotUtils(modJson) {
+    const secondaryStats = [1, 2, 3, 4].map(slot => {
+      if (!modJson.hasOwnProperty(`secondaryType_${slot}`) || !modJson[`secondaryType_${slot}`]) {
+        return null;
+      }
+
+      return Stat.fromHotUtils(
+        modJson[`secondaryType_${slot}`],
+        modJson[`secondaryValue_${slot}`],
+        modJson[`secondaryRoll_${slot}`]
+      );
+    }).filter(x => null !== x);    
+
+    return new Mod(
+      modJson.mod_uid,
+      hotUtilsSlotMap[modJson.slot],
+      setBonuses[hotUtilsSetMap[modJson.set]],
+      modJson.level,
+      modJson.pips,
+      Stat.fromHotUtils(modJson.primaryBonusType, modJson.primaryBonusValue),
+      secondaryStats,
+      'null' === modJson.characterID ? null : modJson.characterID,
       modJson.tier
     );
   }

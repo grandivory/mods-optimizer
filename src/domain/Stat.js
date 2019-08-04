@@ -3,6 +3,24 @@
 import statTypeMap from "../constants/statTypeMap";
 import {modStats} from "../constants/enums";
 
+const hotUtilsTypeMap = {
+  'Accuracy %': 'Accuracy %',
+  'Crit Avoidance %': 'Critical Avoidance %',
+  'Crit Chance %': 'Critical Chance %',
+  'Crit Damage %': 'Critical Damage %',
+  'Defense': 'Defense',
+  'Defense %': 'Defense %',
+  'Health': 'Health',
+  'Health %': 'Health %',
+  'Offense': 'Offense',
+  'Offense %': 'Offense %',
+  'Potency %': 'Potency %',
+  'Protection': 'Protection',
+  'Protection %': 'Protection %',
+  'Resistance %': 'Tenacity %',
+  'Speed': 'Speed'
+};
+
 class Stat {
   displayModifier;
   type;
@@ -198,6 +216,16 @@ class Stat {
    */
   static fromSwgohHelp(statJson) {
     return new Stat(modStats[statJson.unitStat], `${statJson.value}`, statJson.roll);
+  }
+
+  /**
+   * Deserialize a stat from a HotUtils export
+   * @param type {string}
+   * @param value {string}
+   * @param rolls {string}
+   */
+  static fromHotUtils(type, value, rolls = '1') {
+    return new Stat(hotUtilsTypeMap[type], `${value}`, +rolls);
   }
 }
 
