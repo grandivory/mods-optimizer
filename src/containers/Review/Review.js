@@ -473,8 +473,8 @@ class Review extends React.PureComponent {
         Galaxy of Heroes. You assume all risk in using this tool. Grandivory's Mods Optimizer is not associated with
         HotUtils.
       </p>
-      <p><a href="https://www.hotutils.app/" target="_blank">https://www.hotutils.app/</a></p>
-      <p><img className={'fit'} src="/img/hotsauce512.png" /></p>
+      <p><a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener'}>https://www.hotutils.app/</a></p>
+      <p><img className={'fit'} src={'/img/hotsauce512.png'} alt={'hotsauce'} /></p>
     </div>;
   }
 }
