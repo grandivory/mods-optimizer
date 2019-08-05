@@ -10,7 +10,7 @@ import Toggle from "../../components/Toggle/Toggle";
 import ModSet from "../../domain/ModSet";
 import ModSetView from "../../components/ModSetView/ModSetView";
 import copyToClipboard from "../../utils/clipboard"
-import {mapObjectByKeyAndValue} from "../../utils/mapObject";
+import { mapObjectByKeyAndValue } from "../../utils/mapObject";
 import groupByKey from "../../utils/groupByKey";
 import collectByKey from "../../utils/collectByKey";
 import {
@@ -21,13 +21,14 @@ import {
   unequipMod,
   unequipMods
 } from "../../state/actions/review";
-import {hideModal, showModal} from "../../state/actions/app";
+import { hideModal, showModal, showFlash } from "../../state/actions/app";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ModSetDetail from "../../components/ModSetDetail/ModSetDetail";
 import flatten from "../../utils/flatten";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import Credits from "../../components/Credits/Credits";
 import OptimizationPlan from "../../domain/OptimizationPlan";
+import { saveAs } from 'file-saver';
 
 const sortOptions = {
   'currentCharacter': 'currentCharacter',
@@ -161,36 +162,36 @@ class Review extends React.PureComponent {
         modRows = this.setsView(this.props.displayedMods);
     }
 
-    const formatNumber = number => number.toLocaleString(navigator.language, {'useGrouping': true});
+    const formatNumber = number => number.toLocaleString(navigator.language, { 'useGrouping': true });
 
     const subheading = 0 < this.props.modUpgradeCost ?
       <h3>
-        Your mods will cost {formatNumber(this.props.modRemovalCost)} <Credits/> to move,
-        and an additional {formatNumber(this.props.modUpgradeCost)} <Credits/> to level up to 15.
+        Your mods will cost {formatNumber(this.props.modRemovalCost)} <Credits /> to move,
+        and an additional {formatNumber(this.props.modUpgradeCost)} <Credits /> to level up to 15.
       </h3> :
       <h3>
-        Your mods will cost {formatNumber(this.props.modRemovalCost)} <Credits/> to move
+        Your mods will cost {formatNumber(this.props.modRemovalCost)} <Credits /> to move
       </h3>;
 
     if (0 === this.props.numMovingMods) {
       return <div className={'review-list'}>
-        <Sidebar content={this.sidebarActions()}/>
+        <Sidebar content={this.sidebarActions()} />
         <h2>You don't have any mods left to move! Great job!</h2>
         <h3>Don't forget to assign mods to all your pilots!</h3>
       </div>;
     } else {
       return (
         <div className={'review-list'}>
-          <Sidebar content={this.fullSidebar()}/>
+          <Sidebar content={this.fullSidebar()} />
           <h2>Reassigning {this.props.numMovingMods} mods {summaryButton}</h2>
           {subheading}
           {(0 < this.props.displayedMods.length) &&
-          <div className={'mods-list'}>
-            {modRows}
-          </div>
+            <div className={'mods-list'}>
+              {modRows}
+            </div>
           }
           {(0 === this.props.displayedMods.length) &&
-          <h3>No more mods to move under that filter. Try a different filter now!</h3>
+            <h3>No more mods to move under that filter. Try a different filter now!</h3>
           }
         </div>
       );
@@ -203,12 +204,12 @@ class Review extends React.PureComponent {
    * @returns {Array<*>}
    */
   listView(displayedMods) {
-    let individualMods = flatten(displayedMods.map(({id, target, assignedMods}) =>
-      assignedMods.map(mod => ({id: id, target: target, mod: mod}))
+    let individualMods = flatten(displayedMods.map(({ id, target, assignedMods }) =>
+      assignedMods.map(mod => ({ id: id, target: target, mod: mod }))
     ));
 
     if (sortOptions.currentCharacter === this.props.filter.sort) {
-      individualMods.sort(({mod: leftMod}, {mod: rightMod}) => {
+      individualMods.sort(({ mod: leftMod }, { mod: rightMod }) => {
         const leftCharacter = leftMod.characterID ? this.props.characters[leftMod.characterID] : null;
         const rightCharacter = rightMod.characterID ? this.props.characters[rightMod.characterID] : null;
 
@@ -222,27 +223,27 @@ class Review extends React.PureComponent {
       });
 
       if (this.props.filter.tag) {
-        individualMods = individualMods.filter(({mod}) => {
+        individualMods = individualMods.filter(({ mod }) => {
           const tags = this.props.gameSettings[mod.characterID] ? this.props.gameSettings[mod.characterID].tags : [];
           return tags.includes(this.props.filter.tag);
         });
       }
     } else if (this.props.filter.tag) {
-      individualMods = individualMods.filter(({id, mod}) => {
+      individualMods = individualMods.filter(({ id, mod }) => {
         const tags = this.props.gameSettings[id] ? this.props.gameSettings[id].tags : [];
         return tags.includes(this.props.filter.tag);
       });
     }
 
 
-    return individualMods.map(({id: characterID, target, mod}) => {
+    return individualMods.map(({ id: characterID, target, mod }) => {
       const character = this.props.characters[characterID];
 
       return <div className={'mod-row individual'} key={mod.id}>
         <ModDetail mod={mod} assignedCharacter={character} assignedTarget={target} />
         <div className={'character-id'}>
-          <Arrow/>
-          <CharacterAvatar character={character}/>
+          <Arrow />
+          <CharacterAvatar character={character} />
           <h3>
             {this.props.gameSettings[character.baseID] ?
               this.props.gameSettings[character.baseID].name :
@@ -265,7 +266,7 @@ class Review extends React.PureComponent {
    */
   setsView(modAssignments) {
     // Iterate over each character to render a full mod set
-    return modAssignments.map(({id: characterID, target, assignedMods: mods}, index) => {
+    return modAssignments.map(({ id: characterID, target, assignedMods: mods }, index) => {
       const character = this.props.characters[characterID];
 
       if (!character) {
@@ -274,40 +275,40 @@ class Review extends React.PureComponent {
 
       return <div className={'mod-row set'} key={index}>
         <div className={'character-id'}>
-          <CharacterAvatar character={character}/>
-          <Arrow/>
+          <CharacterAvatar character={character} />
+          <Arrow />
           <h3>
             {this.props.gameSettings[characterID] ? this.props.gameSettings[characterID].name : characterID}
           </h3>
           {target &&
-          <h4>{target.name}</h4>
+            <h4>{target.name}</h4>
           }
           <div className={'actions'}>
             {sortOptions.currentCharacter === this.props.filter.sort &&
-            <button onClick={this.props.unequipMods.bind(this, mods.map(mod => mod.id))}>I removed these mods</button>}
+              <button onClick={this.props.unequipMods.bind(this, mods.map(mod => mod.id))}>I removed these mods</button>}
             {sortOptions.assignedCharacter === this.props.filter.sort &&
-            <button onClick={this.props.reassignMods.bind(this, mods.map(mod => mod.id), characterID)}>
-              I reassigned these mods
+              <button onClick={this.props.reassignMods.bind(this, mods.map(mod => mod.id), characterID)}>
+                I reassigned these mods
             </button>}
           </div>
         </div>
         {sortOptions.assignedCharacter === this.props.filter.sort &&
-        <ModSetDetail
-          set={new ModSet(mods)}
-          diffset={new ModSet(this.props.currentModsByCharacter[characterID] || [])}
-          showAvatars={sortOptions.currentCharacter !== this.props.filter.sort}
-          character={character}
-          target={target}
-          useUpgrades={true}
-          assignedCharacter={character}
-          assignedTarget={target}
-        />}
+          <ModSetDetail
+            set={new ModSet(mods)}
+            diffset={new ModSet(this.props.currentModsByCharacter[characterID] || [])}
+            showAvatars={sortOptions.currentCharacter !== this.props.filter.sort}
+            character={character}
+            target={target}
+            useUpgrades={true}
+            assignedCharacter={character}
+            assignedTarget={target}
+          />}
         {sortOptions.currentCharacter === this.props.filter.sort &&
-        <div className={'mod-set-block'}>
-          <ModSetView modSet={new ModSet(mods)}
-                      showAvatars={sortOptions.currentCharacter !== this.props.filter.sort}
-          />
-        </div>
+          <div className={'mod-set-block'}>
+            <ModSetView modSet={new ModSet(mods)}
+              showAvatars={sortOptions.currentCharacter !== this.props.filter.sort}
+            />
+          </div>
         }
       </div>;
     });
@@ -323,36 +324,36 @@ class Review extends React.PureComponent {
 
     return <div className={'filter-form'}>
       <Toggle inputLabel={'Organize mods by:'}
-              leftLabel={'Currently Equipped'}
-              leftValue={sortOptions.currentCharacter}
-              rightLabel={'Assigned Character'}
-              rightValue={sortOptions.assignedCharacter}
-              value={filter.sort}
-              onChange={sortBy => this.props.changeFilter(Object.assign({}, filter, {sort: sortBy}))}
+        leftLabel={'Currently Equipped'}
+        leftValue={sortOptions.currentCharacter}
+        rightLabel={'Assigned Character'}
+        rightValue={sortOptions.assignedCharacter}
+        value={filter.sort}
+        onChange={sortBy => this.props.changeFilter(Object.assign({}, filter, { sort: sortBy }))}
       />
       <Toggle inputLabel={'Show mods as:'}
-              leftLabel={'Sets'}
-              leftValue={viewOptions.sets}
-              rightLabel={'Individual mods'}
-              rightValue={viewOptions.list}
-              value={filter.view}
-              onChange={viewAs => this.props.changeFilter(Object.assign({}, filter, {view: viewAs}))}
+        leftLabel={'Sets'}
+        leftValue={viewOptions.sets}
+        rightLabel={'Individual mods'}
+        rightValue={viewOptions.list}
+        value={filter.view}
+        onChange={viewAs => this.props.changeFilter(Object.assign({}, filter, { view: viewAs }))}
       />
       {sortOptions.assignedCharacter === filter.sort && viewOptions.sets === filter.view &&
-      <Toggle inputLabel={'Show me:'}
-              leftLabel={'Changing sets'}
-              leftValue={showOptions.change}
-              rightLabel={'All sets'}
-              rightValue={showOptions.all}
-              value={filter.show}
-              onChange={show => this.props.changeFilter(Object.assign({}, filter, {show: show}))}
-      />
+        <Toggle inputLabel={'Show me:'}
+          leftLabel={'Changing sets'}
+          leftValue={showOptions.change}
+          rightLabel={'All sets'}
+          rightValue={showOptions.all}
+          value={filter.show}
+          onChange={show => this.props.changeFilter(Object.assign({}, filter, { show: show }))}
+        />
       }
       <label htmlFor={'tag'}>Show characters by tag:</label>
       <div className={'dropdown'}>
         <select id={'tag'}
-                value={filter.tag || ''}
-                onChange={e => this.props.changeFilter(Object.assign({}, filter, {tag: e.target.value}))}
+          value={filter.tag || ''}
+          onChange={e => this.props.changeFilter(Object.assign({}, filter, { tag: e.target.value }))}
         >
           <option value={''}>All</option>
           {tagOptions}
@@ -372,6 +373,28 @@ class Review extends React.PureComponent {
       <button type={'button'} onClick={this.props.edit}>
         Change my selection
       </button>
+      <hr />
+      <button type={'button'} onClick={() => {
+        // Save the results to a file
+        const exportObject = {
+          'allyCode': this.props.allyCode,
+          'modAssignments': this.props.assignedMods.filter(x => null !== x).map(({ id, assignedMods, target }) => ({
+            id: id,
+            assignedMods: assignedMods,
+            target: target.name
+          }))
+        };
+        const serializedExport = JSON.stringify(exportObject);
+        const exportBlob = new Blob([serializedExport], { type: 'application/json;charset=utf-8' });
+        saveAs(exportBlob, `hotUtils-${(new Date()).toISOString().slice(0, 10)}.json`);
+      }}>
+        Export for HotUtils
+      </button>
+      <span className={'icon help'}
+        onClick={() =>
+          this.props.showFlash('What is HotUtils?', this.hotUtilsHelp())
+        }
+      />
     </div>
   }
 
@@ -416,11 +439,11 @@ class Review extends React.PureComponent {
   ;
 
   summaryListContent() {
-    const capitalize = function(str) {
+    const capitalize = function (str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     };
 
-    return this.props.movingModAssignments.map(({id, target, assignedMods: mods}) => {
+    return this.props.movingModAssignments.map(({ id, target, assignedMods: mods }) => {
       const assignedCharacter = this.props.characters[id];
       const characterName = this.props.gameSettings[assignedCharacter.baseID] ?
         this.props.gameSettings[assignedCharacter.baseID].name :
@@ -437,20 +460,37 @@ class Review extends React.PureComponent {
       ).join('\r\n');
     }).join('\r\n\r\n');
   }
+
+  hotUtilsHelp() {
+    return <div className={'help'}>
+      <p>
+        HotUtils is another tool for SWGOH that allows you to directly modify your game account. By importing the
+        recommendation from Grandivory's Mods Optimizer, you can instantly rearrange mods in-game and create profiles
+        that you can switch back-and-forth between quickly.
+      </p>
+      <p>
+        <strong>Use at your own risk!</strong> HotUtils functionality breaks the terms of service for Star Wars:
+        Galaxy of Heroes. You assume all risk in using this tool. Grandivory's Mods Optimizer is not associated with
+        HotUtils.
+      </p>
+      <p><a href="https://www.hotutils.app/" target="_blank">https://www.hotutils.app/</a></p>
+      <p><img className={'fit'} src="/img/hotsauce512.png" /></p>
+    </div>;
+  }
 }
 
 const mapStateToProps = (state) => {
   const profile = state.profile;
   const filter = state.modListFilter;
   const modsById = groupByKey(profile.mods, mod => mod.id);
-  const modAssignments = profile.modAssignments.filter(x => null !== x).map(({id, target, assignedMods}) => ({
-      id: id,
-      target: target,
-      assignedMods: assignedMods ? assignedMods.map(id => modsById[id]).filter(mod => !!mod) : []
-    }));
+  const modAssignments = profile.modAssignments.filter(x => null !== x).map(({ id, target, assignedMods }) => ({
+    id: id,
+    target: target,
+    assignedMods: assignedMods ? assignedMods.map(id => modsById[id]).filter(mod => !!mod) : []
+  }));
 
   const currentModsByCharacter = collectByKey(profile.mods, mod => mod.characterID);
-  const numMovingMods = modAssignments.reduce((count, {id, assignedMods}) =>
+  const numMovingMods = modAssignments.reduce((count, { id, assignedMods }) =>
     assignedMods.filter(mod => mod.characterID !== id).length + count
     , 0
   );
@@ -460,14 +500,14 @@ const mapStateToProps = (state) => {
   switch (filter.view) {
     case viewOptions.list:
       // If we're displaying mods as a list, then only show mods that aren't already assigned to that character
-      displayedMods = modAssignments.map(({id, target, assignedMods}) => ({
+      displayedMods = modAssignments.map(({ id, target, assignedMods }) => ({
         id: id,
         target: target,
         assignedMods: assignedMods.filter(mod => mod.characterID !== id).sort(ModSet.slotSort)
       }));
       if (sortOptions.currentCharacter === filter.sort) {
         const removedMods = collectByKey(
-          flatten(displayedMods.map(({id, assignedMods}) => assignedMods.filter(mod => mod.characterID !== id))),
+          flatten(displayedMods.map(({ id, assignedMods }) => assignedMods.filter(mod => mod.characterID !== id))),
           mod => mod.characterID
         );
         tags = Array.from(new Set(flatten(
@@ -475,7 +515,7 @@ const mapStateToProps = (state) => {
         )));
       } else {
         tags = Array.from(new Set(flatten(
-          displayedMods.map(({id}) => state.gameSettings[id] ? state.gameSettings[id].tags : [])
+          displayedMods.map(({ id }) => state.gameSettings[id] ? state.gameSettings[id].tags : [])
         )));
       }
       break;
@@ -485,29 +525,29 @@ const mapStateToProps = (state) => {
       if (sortOptions.currentCharacter === filter.sort) {
         // First, collect mods by current character ID. Filter out any mods that aren't moving
         let currentMods = collectByKey(
-          flatten(modAssignments.map(({id, assignedMods}) => assignedMods.filter(mod => mod.characterID !== id))),
+          flatten(modAssignments.map(({ id, assignedMods }) => assignedMods.filter(mod => mod.characterID !== id))),
           mod => mod.characterID
         );
 
         // Then, turn that into the same format as modAssignments - an array of {id, assignedMods}
         displayedMods = Object.values(mapObjectByKeyAndValue(
           currentMods,
-          (id, mods) => ({id: id, assignedMods: mods})
+          (id, mods) => ({ id: id, assignedMods: mods })
         ));
       } else if (showOptions.change === filter.show) {
-        displayedMods = modAssignments.filter(({id, assignedMods}) => assignedMods.some(mod => mod.characterID !== id));
+        displayedMods = modAssignments.filter(({ id, assignedMods }) => assignedMods.some(mod => mod.characterID !== id));
       } else {
         displayedMods = modAssignments;
       }
 
       // Set up the available tags for the sidebar
       tags = Array.from(new Set(flatten(
-        displayedMods.map(({id}) => state.gameSettings[id] ? state.gameSettings[id].tags : [])
+        displayedMods.map(({ id }) => state.gameSettings[id] ? state.gameSettings[id].tags : [])
       )));
 
       // Filter out any characters that we're not going to display based on the selected tag
       if (filter.tag) {
-        displayedMods = displayedMods.filter(({id}) => {
+        displayedMods = displayedMods.filter(({ id }) => {
           const tags = state.gameSettings[id] ? state.gameSettings[id].tags : [];
           return tags.includes(filter.tag);
         });
@@ -515,17 +555,17 @@ const mapStateToProps = (state) => {
   }
   tags.sort();
 
-  const movingModsByAssignedCharacter = modAssignments.map(({id, target, assignedMods}) =>
-    ({id: id, target: target, assignedMods: assignedMods.filter(mod => mod.characterID !== id)})
-  ).filter(({assignedMods}) => assignedMods.length);
+  const movingModsByAssignedCharacter = modAssignments.map(({ id, target, assignedMods }) =>
+    ({ id: id, target: target, assignedMods: assignedMods.filter(mod => mod.characterID !== id) })
+  ).filter(({ assignedMods }) => assignedMods.length);
 
-  const movingMods = flatten(movingModsByAssignedCharacter.map(({assignedMods}) => assignedMods));
+  const movingMods = flatten(movingModsByAssignedCharacter.map(({ assignedMods }) => assignedMods));
 
   // Get a count of how much it will cost to move the mods. It only costs money to remove mods
   const modRemovalCost = movingMods.reduce((cost, mod) => cost + modRemovalCosts[mod.pips], 0);
 
-  const modsBeingUpgraded = modAssignments.filter(({target}) => OptimizationPlan.shouldUpgradeMods(target))
-    .map(({id, assignedMods}) => assignedMods.filter(mod => 15 !== mod.level))
+  const modsBeingUpgraded = modAssignments.filter(({ target }) => OptimizationPlan.shouldUpgradeMods(target))
+    .map(({ id, assignedMods }) => assignedMods.filter(mod => 15 !== mod.level))
     .reduce((allMods, characterMods) => allMods.concat(characterMods), []);
 
   const modUpgradeCost = modsBeingUpgraded.reduce((cost, mod) => cost + modUpgradeCosts[mod.pips][mod.level], 0);
@@ -536,6 +576,8 @@ const mapStateToProps = (state) => {
    * }}
    */
   return {
+    allyCode: state.allyCode,
+    assignedMods: profile.modAssignments,
     characters: profile.characters,
     gameSettings: state.gameSettings,
     currentModsByCharacter: currentModsByCharacter,
@@ -557,7 +599,8 @@ const mapDispatchToProps = (dispatch) => ({
   unequipMods: (modIDs) => dispatch(unequipMods(modIDs)),
   reassignMods: (modIDs, characterID) => dispatch(reassignMods(modIDs, characterID)),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
-  hideModal: () => dispatch(hideModal())
+  hideModal: () => dispatch(hideModal()),
+  showFlash: (heading, content) => dispatch(showFlash(heading, content))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Review);
