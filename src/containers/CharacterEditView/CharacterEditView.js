@@ -1,10 +1,10 @@
 // @flow
 
-import React, {PureComponent} from "react";
+import React, { PureComponent } from "react";
 
 import "./CharacterEditView.css";
 import CharacterList from "../CharacterList/CharacterList";
-import {hideModal, showError, showModal} from "../../state/actions/app";
+import { hideModal, showError, showModal } from "../../state/actions/app";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import RangeInput from "../../components/RangeInput/RangeInput";
 import {
@@ -26,16 +26,17 @@ import {
   unselectCharacter,
   updateLockUnselectedCharacters,
   updateModChangeThreshold,
-  updateForceCompleteModSets
+  updateForceCompleteModSets,
+  applyTemplateTargets
 } from "../../state/actions/characterEdit";
-import {changeOptimizerView, updateModListFilter} from "../../state/actions/review";
-import {optimizeMods} from "../../state/actions/optimize";
+import { changeOptimizerView, updateModListFilter } from "../../state/actions/review";
+import { optimizeMods } from "../../state/actions/optimize";
 import characterSettings from "../../constants/characterSettings";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
-import {GameSettings} from "../../domain/CharacterDataClasses";
-import {connect} from "react-redux";
-import {exportCharacterTemplate, exportCharacterTemplates} from "../../state/actions/storage";
-import {saveAs} from "file-saver";
+import { GameSettings } from "../../domain/CharacterDataClasses";
+import { connect } from "react-redux";
+import { exportCharacterTemplate, exportCharacterTemplates } from "../../state/actions/storage";
+import { saveAs } from "file-saver";
 import FileInput from "../../components/FileInput/FileInput";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import Toggle from "../../components/Toggle/Toggle";
@@ -44,7 +45,7 @@ const defaultTemplates = require('../../constants/characterTemplates.json');
 
 class CharacterEditView extends PureComponent {
   dragStart(character) {
-    return function(event) {
+    return function (event) {
       event.dataTransfer.dropEffect = 'copy';
       event.dataTransfer.effectAllowed = 'copy';
       event.dataTransfer.setData('text/plain', character.baseID);
@@ -107,7 +108,7 @@ class CharacterEditView extends PureComponent {
 
   render() {
     return <div className={'character-edit'}>
-      <Sidebar content={[this.filterForm(), this.globalSettings(), this.sidebarActions()]}/>
+      <Sidebar content={[this.filterForm(), this.globalSettings(), this.sidebarActions()]} />
       <div className={'selected-characters'}>
         <h4>
           Selected Characters
@@ -118,61 +119,71 @@ class CharacterEditView extends PureComponent {
         <h5>
           Character Templates
           <div className={'template-buttons'}>
-            <button className={'small'}
-                    disabled={!this.props.selectedCharacters.length}
-                    onClick={() => this.props.showModal('save-template', this.saveTemplateModal())}>
-              Save
-            </button>
-            <button className={'small'}
-                    onClick={() => this.props.showModal('append-template', this.appendTemplateModal())}>
-              Append
-            </button>
-            <button className={'small'}
-                    onClick={() => this.props.showModal('replace-template', this.replaceTemplateModal())}>
-              Replace
-            </button>
-            <button className={'small'}
-                    disabled={!this.userTemplates().length}
-                    onClick={() => this.props.showModal('export-template', this.exportTemplateModal())}>
-              Export
-            </button>
-            <FileInput label={'Load'}
-                       className={'small'}
-                       handler={(file) => this.readFile(
-                         file,
-                         (templates) => {
-                           const templatesObject = JSON.parse(templates);
-                           const templatesDeserialized = templatesObject.map(t => ({
-                             name: t.name,
-                             selectedCharacters: t.selectedCharacters.map(({id, target}) => ({
-                               id: id,
-                               target: OptimizationPlan.deserialize(target)
-                             }))
-                           }));
-                           this.props.saveTemplates(templatesDeserialized);
-                         }
-                       )}
-            />
-            <button className={'small red'}
-                    disabled={!this.userTemplates().length}
-                    onClick={() => this.props.showModal('delete-template', this.deleteTemplateModal())}>
-              Delete
-            </button>
+            <div className={'row'}>
+              Manage:
+              <button className={'small'}
+                disabled={!this.props.selectedCharacters.length}
+                onClick={() => this.props.showModal('save-template', this.saveTemplateModal())}>
+                Save
+              </button>
+              <button className={'small'}
+                disabled={!this.userTemplates().length}
+                onClick={() => this.props.showModal('export-template', this.exportTemplateModal())}>
+                Export
+              </button>
+              <FileInput label={'Load'}
+                className={'small'}
+                handler={(file) => this.readFile(
+                  file,
+                  (templates) => {
+                    const templatesObject = JSON.parse(templates);
+                    const templatesDeserialized = templatesObject.map(t => ({
+                      name: t.name,
+                      selectedCharacters: t.selectedCharacters.map(({ id, target }) => ({
+                        id: id,
+                        target: OptimizationPlan.deserialize(target)
+                      }))
+                    }));
+                    this.props.saveTemplates(templatesDeserialized);
+                  }
+                )}
+              />
+              <button className={'small red'}
+                disabled={!this.userTemplates().length}
+                onClick={() => this.props.showModal('delete-template', this.deleteTemplateModal())}>
+                Delete
+              </button>
+            </div>
+            <div className={'row'}>
+              Apply:
+              <button className={'small'}
+                onClick={() => this.props.showModal('append-template', this.appendTemplateModal())}>
+                Append
+              </button>
+              <button className={'small'}
+                onClick={() => this.props.showModal('replace-template', this.replaceTemplateModal())}>
+                Replace
+              </button>
+              <button className={'small'}
+                onClick={() => this.props.showModal('template-targets', this.templateTargetsModal())}>
+                Apply targets only
+              </button>
+            </div>
           </div>
         </h5>
-        <CharacterList selfDrop={true} draggable={true}/>
+        <CharacterList selfDrop={true} draggable={true} />
       </div>
       <div className={'available-characters'}
-           onDragEnter={CharacterEditView.availableCharactersDragEnter}
-           onDragOver={CharacterEditView.dragOver}
-           onDragLeave={CharacterEditView.dragLeave}
-           onDrop={this.availableCharactersDrop.bind(this)}
+        onDragEnter={CharacterEditView.availableCharactersDragEnter}
+        onDragOver={CharacterEditView.dragOver}
+        onDragLeave={CharacterEditView.dragLeave}
+        onDrop={this.availableCharactersDrop.bind(this)}
       >
         <h3 className={'instructions'}>
           Double-click or drag characters to the selected column to pick who to optimize mods for.
           <button type={'button'}
-                  className={'small'}
-                  onClick={() => this.props.showModal('instructions', this.instructionsModal())}>
+            className={'small'}
+            onClick={() => this.props.showModal('instructions', this.instructionsModal())}>
             Show full instructions
           </button>
         </h3>
@@ -193,7 +204,7 @@ class CharacterEditView extends PureComponent {
       <div className={'filter-form'}>
         <label htmlFor={'character-filter'}>Search by character name, tag, or common abbreviation:</label>
         <input autoFocus={true} id={'character-filter'} type={'text'} defaultValue={this.props.characterFilter}
-               onChange={(e) => this.props.changeCharacterFilter(e.target.value.toLowerCase())}
+          onChange={(e) => this.props.changeCharacterFilter(e.target.value.toLowerCase())}
         />
         <Toggle
           inputLabel={'Available Characters Display'}
@@ -217,7 +228,7 @@ class CharacterEditView extends PureComponent {
     return <div className={'global-settings'} key={'global-settings'}>
       <h3>Global Settings</h3>
       <div className={'form-row'}>
-        <label>Threshold to Change Mods:</label><br/>
+        <label>Threshold to Change Mods:</label><br />
         <RangeInput
           min={0}
           max={100}
@@ -231,14 +242,14 @@ class CharacterEditView extends PureComponent {
       <div className={'form-row'}>
         <label htmlFor={'lock-unselected'}>Lock all unselected characters:</label>
         <input type={'checkbox'}
-               defaultChecked={this.props.globalSettings.lockUnselectedCharacters}
-               onChange={(event) => this.props.updateLockUnselectedCharacters(event.target.checked)}/>
+          defaultChecked={this.props.globalSettings.lockUnselectedCharacters}
+          onChange={(event) => this.props.updateLockUnselectedCharacters(event.target.checked)} />
       </div>
       <div className={'form-row'}>
         <label htmlFor={'force-complete-sets'}>Don't break mod sets:</label>
         <input type={'checkbox'}
-               defaultChecked={this.props.globalSettings.forceCompleteSets}
-               onChange={(event) => this.props.updateForceCompleteModSets(event.target.checked)}/>
+          defaultChecked={this.props.globalSettings.forceCompleteSets}
+          onChange={(event) => this.props.updateForceCompleteModSets(event.target.checked)} />
       </div>
     </div>;
   }
@@ -254,7 +265,7 @@ class CharacterEditView extends PureComponent {
       <button
         type={'button'}
         onClick={() => {
-          const selectedTargets = this.props.selectedCharacters.map(({target}) => target);
+          const selectedTargets = this.props.selectedCharacters.map(({ target }) => target);
           if (selectedTargets.some(target => null !== target.targetStat)) {
             this.props.showModal('notice', this.optimizeWithTargetsModal());
           } else {
@@ -301,15 +312,15 @@ class CharacterEditView extends PureComponent {
       className={classAttr}
       key={character.baseID}
     >
-    <span className={`icon locked ${isLocked ? 'active' : ''}`}
-          onClick={() => this.props.toggleCharacterLock(character.baseID)}/>
+      <span className={`icon locked ${isLocked ? 'active' : ''}`}
+        onClick={() => this.props.toggleCharacterLock(character.baseID)} />
       <div draggable={true} onDragStart={this.dragStart(character)}
-           onDoubleClick={() => this.props.selectCharacter(
-             character.baseID,
-             character.defaultTarget(),
-             this.props.lastSelectedCharacter
-           )}>
-        <CharacterAvatar character={character}/>
+        onDoubleClick={() => this.props.selectCharacter(
+          character.baseID,
+          character.defaultTarget(),
+          this.props.lastSelectedCharacter
+        )}>
+        <CharacterAvatar character={character} />
       </div>
       <div className={'character-name'}>
         {this.props.gameSettings[character.baseID] ? this.props.gameSettings[character.baseID].name : character.baseID}
@@ -410,27 +421,27 @@ class CharacterEditView extends PureComponent {
     return <div>
       <h3>Please enter a name for this character template</h3>
       <input type={'text'} id={'template-name'} name={'template-name'} ref={input => nameInput = input} autoFocus
-             onKeyUp={(e) => {
-               if (e.key === 'Enter' && isNameUnique(nameInput.value)) {
-                 this.props.saveTemplate(nameInput.value);
-               }
-               // Don't change the input if the user is trying to select something
-               if (window.getSelection().toString() !== '') {
-                 return;
-               }
-               // Don't change the input if the user is hitting the arrow keys
-               if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
-                 return;
-               }
+        onKeyUp={(e) => {
+          if (e.key === 'Enter' && isNameUnique(nameInput.value)) {
+            this.props.saveTemplate(nameInput.value);
+          }
+          // Don't change the input if the user is trying to select something
+          if (window.getSelection().toString() !== '') {
+            return;
+          }
+          // Don't change the input if the user is hitting the arrow keys
+          if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+            return;
+          }
 
-               if (!isNameUnique(nameInput.value)) {
-                 nameInput.classList.add('invalid');
-                 saveButton.disabled = true;
-               } else {
-                 nameInput.classList.remove('invalid');
-                 saveButton.disabled = false;
-               }
-             }}
+          if (!isNameUnique(nameInput.value)) {
+            nameInput.classList.add('invalid');
+            saveButton.disabled = true;
+          } else {
+            nameInput.classList.remove('invalid');
+            saveButton.disabled = false;
+          }
+        }}
       />
       <p className={'error'}>
         That name has already been taken. Please use a different name.
@@ -438,7 +449,7 @@ class CharacterEditView extends PureComponent {
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'} ref={button => saveButton = button}
-                onClick={() => this.props.saveTemplate(nameInput.value)}>
+          onClick={() => this.props.saveTemplate(nameInput.value)}>
           Save
         </button>
       </div>
@@ -447,25 +458,9 @@ class CharacterEditView extends PureComponent {
 
   appendTemplateModal() {
     let templateSelection;
-    const userTemplateNames = this.userTemplates();
-    const defaultTemplateNames = defaultTemplates.map(({name}) => name);
-
-    userTemplateNames.sort();
-    defaultTemplateNames.sort();
-
-    const userTemplateOptions = userTemplateNames
-      .map((name, index) => <option key={`user-${index}`} value={name}>{name}</option>);
-    const defaultTemplateOptions = defaultTemplateNames
-      .map((name, index) => <option key={`default-${index}`} value={name}>{name}</option>);
-
     return <div>
       <h3>Select a character template to add to your selected characters</h3>
-      <select ref={select => templateSelection = select}>
-        {userTemplateOptions}
-        {userTemplateOptions.length &&
-        <option disabled={true} value={''}>------------------------------------------------</option>}
-        {defaultTemplateOptions}
-      </select>
+      {this.templateSelectElement(select => templateSelection = select)}
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'} onClick={() => this.props.appendTemplate(templateSelection.value)}>Append</button>
@@ -475,8 +470,48 @@ class CharacterEditView extends PureComponent {
 
   replaceTemplateModal() {
     let templateSelection;
+    return <div>
+      <h3>Select a character template to replace your selected characters</h3>
+      {this.templateSelectElement(select => templateSelection = select)}
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button type={'button'} onClick={() => this.props.replaceTemplate(templateSelection.value)}>Replace</button>
+      </div>
+    </div>;
+  }
+
+  templateTargetsModal() {
+    let templateSelection;
+    return <div>
+      <h3>
+        Select a character template. The targets used in this template will be
+        applied to any charcters you already have in your selected list.
+      </h3>
+      {this.templateSelectElement(select => templateSelection = select)}
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button type={'button'} onClick={() => this.props.applyTemplateTargets(templateSelection.value)}>
+          Apply Targets
+        </button>
+      </div>
+    </div>;
+  }
+
+  userTemplates() {
+    return this.props.characterTemplates.filter(
+      templateName => !defaultTemplates.map(({ name }) => name).includes(templateName)
+    );
+  }
+
+  /**
+   * Create a select element for a character template, with user templates at the
+   * top, followed by a dashed line, followed by default templates, all sorted by name
+   *
+   * @param refFunction {Function} A function to get the reference for the select element
+   */
+  templateSelectElement(refFunction) {
     const userTemplateNames = this.userTemplates();
-    const defaultTemplateNames = defaultTemplates.map(({name}) => name);
+    const defaultTemplateNames = defaultTemplates.map(({ name }) => name);
 
     userTemplateNames.sort();
     defaultTemplateNames.sort();
@@ -486,25 +521,12 @@ class CharacterEditView extends PureComponent {
     const defaultTemplateOptions = defaultTemplateNames
       .map((name, index) => <option key={`default-${index}`} value={name}>{name}</option>);
 
-    return <div>
-      <h3>Select a character template to replace your selected characters</h3>
-      <select ref={select => templateSelection = select}>
-        {userTemplateOptions}
-        {userTemplateOptions.length &&
+    return <select ref={refFunction}>
+      {userTemplateOptions}
+      {userTemplateOptions.length &&
         <option disabled={true} value={''}>------------------------------------------------</option>}
-        {defaultTemplateOptions}
-      </select>
-      <div className={'actions'}>
-        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
-        <button type={'button'} onClick={() => this.props.replaceTemplate(templateSelection.value)}>Replace</button>
-      </div>
-    </div>;
-  }
-
-  userTemplates() {
-    return this.props.characterTemplates.filter(
-      templateName => !defaultTemplates.map(({name}) => name).includes(templateName)
-    );
+      {defaultTemplateOptions}
+    </select>;
   }
 
   exportTemplateModal() {
@@ -520,35 +542,35 @@ class CharacterEditView extends PureComponent {
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'}
-                onClick={() =>
-                  this.props.exportTemplate(
-                    templateNameInput.value,
-                    template => {
-                      const templateSaveObject = {
-                        name: template.name,
-                        selectedCharacters: template.selectedCharacters.map(({id, target}) => ({
-                          id: id,
-                          target: target.serialize()
-                        }))
-                      };
-                      const templateSerialized = JSON.stringify([templateSaveObject]);
-                      const userData = new Blob([templateSerialized], {type: 'application/json;charset=utf-8'});
-                      saveAs(userData, `modsOptimizerTemplate-${template.name}.json`);
-                    }
-                  )
-                }>
+          onClick={() =>
+            this.props.exportTemplate(
+              templateNameInput.value,
+              template => {
+                const templateSaveObject = {
+                  name: template.name,
+                  selectedCharacters: template.selectedCharacters.map(({ id, target }) => ({
+                    id: id,
+                    target: target.serialize()
+                  }))
+                };
+                const templateSerialized = JSON.stringify([templateSaveObject]);
+                const userData = new Blob([templateSerialized], { type: 'application/json;charset=utf-8' });
+                saveAs(userData, `modsOptimizerTemplate-${template.name}.json`);
+              }
+            )
+          }>
           Export
         </button>
         <button type={'button'}
-                onClick={() => this.props.exportAllTemplates(templates => {
-                  const templatesSaveObject = templates.map(({name, selectedCharacters}) => ({
-                    name: name,
-                    selectedCharacters: selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()}))
-                  }));
-                  const templatesSerialized = JSON.stringify(templatesSaveObject);
-                  const userData = new Blob([templatesSerialized], {type: 'application/json;charset=utf-8'});
-                  saveAs(userData, `modsOptimizerTemplates-${(new Date()).toISOString().slice(0, 10)}.json`);
-                })}>
+          onClick={() => this.props.exportAllTemplates(templates => {
+            const templatesSaveObject = templates.map(({ name, selectedCharacters }) => ({
+              name: name,
+              selectedCharacters: selectedCharacters.map(({ id, target }) => ({ id: id, target: target.serialize() }))
+            }));
+            const templatesSerialized = JSON.stringify(templatesSaveObject);
+            const userData = new Blob([templatesSerialized], { type: 'application/json;charset=utf-8' });
+            saveAs(userData, `modsOptimizerTemplates-${(new Date()).toISOString().slice(0, 10)}.json`);
+          })}>
           Export All
         </button>
       </div>
@@ -568,7 +590,7 @@ class CharacterEditView extends PureComponent {
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'} className={'red'}
-                onClick={() => this.props.deleteTemplate(templateNameInput.value)}>
+          onClick={() => this.props.deleteTemplate(templateNameInput.value)}>
           Delete
         </button>
       </div>
@@ -587,7 +609,7 @@ class CharacterEditView extends PureComponent {
         rapidly drain your battery if you are on a laptop or mobile device. If you want the optimization to go faster,
         there are a few things you can do:
       </p>
-      <hr/>
+      <hr />
       <ul>
         <li>
           Set very narrow targets for your stats. The narrower the target, the faster the optimizer can rule sets out.
@@ -605,7 +627,7 @@ class CharacterEditView extends PureComponent {
           leave the previous recommendation in place.
         </li>
       </ul>
-      <hr/>
+      <hr />
       <p>Do you want to continue?</p>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
@@ -619,7 +641,7 @@ const mapStateToProps = (state) => {
   const profile = state.profile;
   const availableCharacters = Object.values(profile.characters)
     .filter(character => !state.hideSelectedCharacters ||
-      !profile.selectedCharacters.map(({id}) => id).includes(character.baseID)
+      !profile.selectedCharacters.map(({ id }) => id).includes(character.baseID)
     )
     .sort((left, right) => left.compareGP(right));
 
@@ -692,6 +714,10 @@ const mapDispatchToProps = dispatch => ({
   },
   replaceTemplate: (templateName) => {
     dispatch(replaceTemplate(templateName));
+    dispatch(hideModal());
+  },
+  applyTemplateTargets: (templateName) => {
+    dispatch(applyTemplateTargets(templateName));
     dispatch(hideModal());
   },
   exportTemplate: (name, callback) => {

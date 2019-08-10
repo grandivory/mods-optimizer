@@ -1,12 +1,12 @@
 // @flow
-import {hideModal, showFlash, updateProfile} from "./app";
-import {mapObject} from "../../utils/mapObject";
+import { hideModal, showFlash, updateProfile } from "./app";
+import { mapObject } from "../../utils/mapObject";
 import groupByKey from "../../utils/groupByKey";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import getDatabase from "../storage/Database";
-import {loadCharacterTemplates} from "./storage";
+import { loadCharacterTemplates } from "./storage";
 
-const defaultTemplates = groupByKey(require('../../constants/characterTemplates.json'), ({name}) => name);
+const defaultTemplates = groupByKey(require('../../constants/characterTemplates.json'), ({ name }) => name);
 
 export const CHANGE_CHARACTER_EDIT_MODE = 'CHANGE_CHARACTER_EDIT_MODE';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
@@ -24,7 +24,7 @@ export const REMOVE_SET_BONUS = 'REMOVE_SET_BONUS';
  * @returns {Function}
  */
 export function selectCharacter(characterID, target, prevIndex = null) {
-  const selectedCharacter = {id: characterID, target: target};
+  const selectedCharacter = { id: characterID, target: target };
 
   return updateProfile(profile => {
     const oldSelectedCharacters = profile.selectedCharacters;
@@ -104,7 +104,7 @@ export function unselectAllCharacters() {
  */
 export function lockSelectedCharacters() {
   return updateProfile(profile => {
-    const selectedCharacterIDs = Object.keys(groupByKey(profile.selectedCharacters, ({id}) => id));
+    const selectedCharacterIDs = Object.keys(groupByKey(profile.selectedCharacters, ({ id }) => id));
 
     return profile.withCharacters(
       mapObject(
@@ -123,7 +123,7 @@ export function lockSelectedCharacters() {
  */
 export function unlockSelectedCharacters() {
   return updateProfile(profile => {
-    const selectedCharacterIDs = Object.keys(groupByKey(profile.selectedCharacters, ({id}) => id));
+    const selectedCharacterIDs = Object.keys(groupByKey(profile.selectedCharacters, ({ id }) => id));
 
     return profile.withCharacters(
       mapObject(
@@ -213,7 +213,7 @@ export function changeCharacterTarget(characterIndex, target) {
     }
 
     const [oldValue] = newSelectedCharacters.splice(characterIndex, 1);
-    const newValue = Object.assign({}, oldValue, {target: target});
+    const newValue = Object.assign({}, oldValue, { target: target });
     newSelectedCharacters.splice(characterIndex, 0, newValue);
 
     return profile.withSelectedCharacters(newSelectedCharacters);
@@ -245,8 +245,8 @@ export function finishEditCharacterTarget(characterIndex, newTarget) {
         return profile;
       }
       const newSelectedCharacters = profile.selectedCharacters.slice();
-      const [{id: characterID}] = newSelectedCharacters.splice(characterIndex, 1);
-      newSelectedCharacters.splice(characterIndex, 0, {id: characterID, target: newTarget});
+      const [{ id: characterID }] = newSelectedCharacters.splice(characterIndex, 1);
+      newSelectedCharacters.splice(characterIndex, 0, { id: characterID, target: newTarget });
 
       const oldCharacter = profile.characters[characterID];
       const newCharacter = oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withTarget(newTarget));
@@ -275,8 +275,8 @@ export function resetCharacterTargetToDefault(characterID, targetName) {
       const resetTarget = newCharacter.optimizerSettings.targets.find(target => target.name === targetName) ||
         new OptimizationPlan('unnamed');
 
-      const newSelectedCharacters = profile.selectedCharacters.map(({id, target}) =>
-        id === characterID && target.name === targetName ? {id: id, target: resetTarget} : {id: id, target: target}
+      const newSelectedCharacters = profile.selectedCharacters.map(({ id, target }) =>
+        id === characterID && target.name === targetName ? { id: id, target: resetTarget } : { id: id, target: target }
       );
 
       return profile.withCharacters(Object.assign({}, profile.characters, {
@@ -298,10 +298,10 @@ export function resetAllCharacterTargets() {
   return updateProfile(
     profile => {
       const newCharacters = mapObject(profile.characters, character => character.withResetTargets());
-      const newSelectedCharacters = profile.selectedCharacters.map(({id, target: oldTarget}) => {
+      const newSelectedCharacters = profile.selectedCharacters.map(({ id, target: oldTarget }) => {
         const resetTarget = newCharacters[id].optimizerSettings.targets.find(target => target.name === oldTarget.name);
 
-        return resetTarget ? {id: id, target: resetTarget} : {id: id, target: oldTarget};
+        return resetTarget ? { id: id, target: resetTarget } : { id: id, target: oldTarget };
       });
 
       return profile.withCharacters(newCharacters).withSelectedCharacters(newSelectedCharacters);
@@ -324,13 +324,13 @@ export function deleteTarget(characterID, targetName) {
         [characterID]: oldCharacter.withDeletedTarget(targetName)
       });
 
-      const newSelectedCharacters = profile.selectedCharacters.map(({id, target: oldTarget}) => {
+      const newSelectedCharacters = profile.selectedCharacters.map(({ id, target: oldTarget }) => {
         if (id === characterID && oldTarget.name === targetName) {
           const newTarget = newCharacters[characterID].targets()[0] || new OptimizationPlan('unnamed');
 
-          return {id: id, target: newTarget};
+          return { id: id, target: newTarget };
         } else {
-          return {id: id, target: oldTarget};
+          return { id: id, target: oldTarget };
         }
       });
 
@@ -402,7 +402,7 @@ export function toggleHideSelectedCharacters() {
 export function updateModChangeThreshold(threshold) {
   return updateProfile(profile =>
     profile.withGlobalSettings(
-      Object.assign({}, profile.globalSettings, {modChangeThreshold: threshold})
+      Object.assign({}, profile.globalSettings, { modChangeThreshold: threshold })
     )
   );
 }
@@ -415,15 +415,15 @@ export function updateModChangeThreshold(threshold) {
 export function updateLockUnselectedCharacters(lock) {
   return updateProfile(profile =>
     profile.withGlobalSettings(
-      Object.assign({}, profile.globalSettings, {lockUnselectedCharacters: lock})
+      Object.assign({}, profile.globalSettings, { lockUnselectedCharacters: lock })
     )
   );
 }
 
 export function updateForceCompleteModSets(forceCompleteModSets) {
-  return updateProfile(profile => 
+  return updateProfile(profile =>
     profile.withGlobalSettings(
-      Object.assign({}, profile.globalSettings, {forceCompleteSets: forceCompleteModSets})
+      Object.assign({}, profile.globalSettings, { forceCompleteSets: forceCompleteModSets })
     )
   );
 }
@@ -469,7 +469,7 @@ export function removeSetBonus(setBonus) {
 export function saveTemplate(name) {
   const db = getDatabase();
 
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const state = getState();
     const selectedCharacters = state.profile.selectedCharacters;
 
@@ -489,7 +489,7 @@ export function saveTemplate(name) {
 export function saveTemplates(templates) {
   const db = getDatabase();
 
-  return function(dispatch) {
+  return function (dispatch) {
     db.saveCharacterTemplates(
       templates,
       () => {
@@ -510,7 +510,7 @@ export function appendTemplate(name) {
   function updateFunction(template) {
     return updateProfile(
       profile => {
-        const availableCharacters = template.selectedCharacters.filter(({id}) => Object.keys(profile.characters)
+        const availableCharacters = template.selectedCharacters.filter(({ id }) => Object.keys(profile.characters)
           .includes(id));
 
         return profile.withSelectedCharacters(profile.selectedCharacters.concat(availableCharacters));
@@ -518,8 +518,8 @@ export function appendTemplate(name) {
       (dispatch, getState, newProfile) => {
         const state = getState();
         const missingCharacters =
-          template.selectedCharacters.filter(({id}) => !Object.keys(newProfile.characters).includes(id))
-            .map(({id}) => state.gameSettings[id] ? state.gameSettings[id].name : id);
+          template.selectedCharacters.filter(({ id }) => !Object.keys(newProfile.characters).includes(id))
+            .map(({ id }) => state.gameSettings[id] ? state.gameSettings[id].name : id);
         if (missingCharacters.length) {
           dispatch(showFlash(
             'Missing Characters',
@@ -530,12 +530,12 @@ export function appendTemplate(name) {
     )
   }
 
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     if (Object.keys(defaultTemplates).includes(name)) {
       const template = {
         name: defaultTemplates[name],
         selectedCharacters: defaultTemplates[name].selectedCharacters.map(
-          ({id, target}) => ({id: id, target: OptimizationPlan.deserialize(target)})
+          ({ id, target }) => ({ id: id, target: OptimizationPlan.deserialize(target) })
         )
       };
       updateFunction(template)(dispatch, getState);
@@ -558,7 +558,7 @@ export function replaceTemplate(name) {
   function updateFunction(template) {
     return updateProfile(
       profile => {
-        const availableCharacters = template.selectedCharacters.filter(({id}) => Object.keys(profile.characters)
+        const availableCharacters = template.selectedCharacters.filter(({ id }) => Object.keys(profile.characters)
           .includes(id));
 
         return profile.withSelectedCharacters(availableCharacters);
@@ -566,8 +566,8 @@ export function replaceTemplate(name) {
       (dispatch, getState, newProfile) => {
         const state = getState();
         const missingCharacters =
-          template.selectedCharacters.filter(({id}) => !Object.keys(newProfile.characters).includes(id))
-            .map(({id}) => state.gameSettings[id] ? state.gameSettings[id].name : id);
+          template.selectedCharacters.filter(({ id }) => !Object.keys(newProfile.characters).includes(id))
+            .map(({ id }) => state.gameSettings[id] ? state.gameSettings[id].name : id);
         if (missingCharacters.length) {
           dispatch(showFlash(
             'Missing Characters',
@@ -578,12 +578,12 @@ export function replaceTemplate(name) {
     );
   }
 
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     if (Object.keys(defaultTemplates).includes(name)) {
       const template = {
         name: defaultTemplates[name],
         selectedCharacters: defaultTemplates[name].selectedCharacters.map(
-          ({id, target}) => ({id: id, target: OptimizationPlan.deserialize(target)})
+          ({ id, target }) => ({ id: id, target: OptimizationPlan.deserialize(target) })
         )
       };
       updateFunction(template)(dispatch, getState);
@@ -600,10 +600,66 @@ export function replaceTemplate(name) {
   }
 }
 
+export function applyTemplateTargets(name) {
+  const db = getDatabase();
+
+  function updateFunction(template) {
+    return updateProfile(
+      profile => {
+        const newSelectedCharacters = profile.selectedCharacters.slice(0);
+        template.selectedCharacters.forEach(({ id: templateCharId, target: templateTarget }) => {
+          for (let selectedCharacter of newSelectedCharacters) {
+            if (selectedCharacter.id === templateCharId) {
+              selectedCharacter.target = templateTarget;
+            }
+          }
+        });
+
+        return profile.withSelectedCharacters(newSelectedCharacters);
+      },
+      (dispatch, getState, newProfile) => {
+        const state = getState();
+        const missingCharacters = template.selectedCharacters.filter(({ id: templateCharId }) =>
+          !newProfile.selectedCharacters.map(({ id }) => id).includes(templateCharId)
+        ).map(({ id }) => state.gameSettings[id] ? state.gameSettings[id].name : id);
+
+        if (missingCharacters.length) {
+          dispatch(showFlash(
+            'Missing Characters',
+            'The following characters weren\'t in your selected characters: ' + missingCharacters.join(', ')
+          ));
+        }
+      }
+    )
+  }
+
+  return function (dispatch, getState) {
+    if (Object.keys(defaultTemplates).includes(name)) {
+      const template = {
+        name: defaultTemplates[name],
+        selectedCharacters: defaultTemplates[name].selectedCharacters.map(
+          ({ id, target }) => ({ id: id, target: OptimizationPlan.deserialize(target) })
+        )
+      };
+      updateFunction(template)(dispatch, getState);
+    } else {
+      db.getCharacterTemplate(
+        name,
+        template => updateFunction(template)(dispatch, getState),
+        error => dispatch(showFlash(
+          'Storage Error',
+          `Error retrieving your template from the database: ${error.message}.`
+        ))
+      );
+    }
+  }
+
+}
+
 export function deleteTemplate(name) {
   const db = getDatabase();
 
-  return function(dispatch) {
+  return function (dispatch) {
     db.deleteCharacterTemplate(
       name,
       () => {

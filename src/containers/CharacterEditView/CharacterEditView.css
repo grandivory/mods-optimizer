@@ -59,7 +59,7 @@
 }
 
 .character-edit .character-list {
-  height: calc(100% - 5.6em);
+  height: calc(100% - 6.8em);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -126,6 +126,10 @@
 
 .modal input.invalid + p.error {
   visibility: visible;
+}
+
+.modal.template-targets {
+  max-width: 40em;
 }
 
 .modal.optimizer-progress h3 {
