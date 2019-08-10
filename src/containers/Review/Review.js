@@ -41,6 +41,7 @@ const viewOptions = {
 };
 
 const showOptions = {
+  'upgrades': 'upgrades',
   'change': 'change',
   'all': 'all'
 };
@@ -339,16 +340,17 @@ class Review extends React.PureComponent {
         value={filter.view}
         onChange={viewAs => this.props.changeFilter(Object.assign({}, filter, { view: viewAs }))}
       />
-      {sortOptions.assignedCharacter === filter.sort && viewOptions.sets === filter.view &&
-        <Toggle inputLabel={'Show me:'}
-          leftLabel={'Changing sets'}
-          leftValue={showOptions.change}
-          rightLabel={'All sets'}
-          rightValue={showOptions.all}
+      <label htmlFor={'show'}>Show me:</label>
+      <div className={'dropdown'}>
+        <select id={'show'}
           value={filter.show}
-          onChange={show => this.props.changeFilter(Object.assign({}, filter, { show: show }))}
-        />
-      }
+          onChange={e => this.props.changeFilter(Object.assign({}, filter, { show: e.target.value }))}
+        >
+          <option value={showOptions.all}>All assignments</option>
+          <option value={showOptions.change}>Changing characters</option>
+          <option value={showOptions.upgrades}>Mod Upgrades</option>
+        </select>
+      </div>
       <label htmlFor={'tag'}>Show characters by tag:</label>
       <div className={'dropdown'}>
         <select id={'tag'}
@@ -499,12 +501,24 @@ const mapStateToProps = (state) => {
   let tags;
   switch (filter.view) {
     case viewOptions.list:
-      // If we're displaying mods as a list, then only show mods that aren't already assigned to that character
-      displayedMods = modAssignments.map(({ id, target, assignedMods }) => ({
-        id: id,
-        target: target,
-        assignedMods: assignedMods.filter(mod => mod.characterID !== id).sort(ModSet.slotSort)
-      }));
+      if (showOptions.upgrades === filter.show) {
+        // If we're showing mods as a list and showing upgrades, show any upgraded mod, no matter if it's moving or not
+        displayedMods = modAssignments.map(({ id, target, assignedMods }) => ({
+          id: id,
+          target: target,
+          assignedMods:
+            assignedMods.filter(mod => mod.shouldLevel(target) || mod.shouldSlice(profile.characters[id], target))
+        })).filter(({ assignedMods }) => assignedMods.length > 0);
+
+      } else {
+        // If we're not showing upgrades, then only show mods that aren't already assigned to that character
+        displayedMods = modAssignments.map(({ id, target, assignedMods }) => ({
+          id: id,
+          target: target,
+          assignedMods: assignedMods.filter(mod => mod.characterID !== id).sort(ModSet.slotSort)
+        }));
+      }
+
       if (sortOptions.currentCharacter === filter.sort) {
         const removedMods = collectByKey(
           flatten(displayedMods.map(({ id, assignedMods }) => assignedMods.filter(mod => mod.characterID !== id))),
@@ -523,9 +537,22 @@ const mapStateToProps = (state) => {
       // If we're displaying as sets, but sorting by current character, we need to rework the modAssignments
       // so that they're organized by current character rather than assigned character
       if (sortOptions.currentCharacter === filter.sort) {
-        // First, collect mods by current character ID. Filter out any mods that aren't moving
+        let modsToShow = modAssignments;
+        // If we're only showing upgrades, then filter out any mod that isn't being upgraded
+        if (showOptions.upgrades === filter.show) {
+          modsToShow = modsToShow.map(({ id, target, assignedMods }) => ({
+            id: id,
+            target: target,
+            assignedMods:
+              assignedMods.filter(mod => mod.shouldLevel(target) || mod.shouldSlice(profile.characters[id], target))
+          }));
+        }
+        // Filter out any mods that aren't moving
+        modsToShow = modsToShow.map(({ id, assignedMods }) => assignedMods.filter(mod => mod.characterID !== id));
+
+        // Collect mods by current character ID. 
         let currentMods = collectByKey(
-          flatten(modAssignments.map(({ id, assignedMods }) => assignedMods.filter(mod => mod.characterID !== id))),
+          flatten(modsToShow),
           mod => mod.characterID
         );
 
@@ -535,7 +562,13 @@ const mapStateToProps = (state) => {
           (id, mods) => ({ id: id, assignedMods: mods })
         ));
       } else if (showOptions.change === filter.show) {
+        // If we're only showing changes, then filter out any character that isn't changing
         displayedMods = modAssignments.filter(({ id, assignedMods }) => assignedMods.some(mod => mod.characterID !== id));
+      } else if (showOptions.upgrades === filter.show) {
+        // If we're only showing upgrades, then filter out any character that doesn't have at least one upgrade
+        displayedMods = modAssignments.filter(({ id, target, assignedMods }) => assignedMods.some(mod =>
+          mod.shouldLevel(target) || mod.shouldSlice(profile.characters[id], target)
+        ));
       } else {
         displayedMods = modAssignments;
       }
