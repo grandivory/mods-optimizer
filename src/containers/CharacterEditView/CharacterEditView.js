@@ -25,7 +25,8 @@ import {
   unselectAllCharacters,
   unselectCharacter,
   updateLockUnselectedCharacters,
-  updateModChangeThreshold
+  updateModChangeThreshold,
+  updateForceCompleteModSets
 } from "../../state/actions/characterEdit";
 import {changeOptimizerView, updateModListFilter} from "../../state/actions/review";
 import {optimizeMods} from "../../state/actions/optimize";
@@ -223,15 +224,21 @@ class CharacterEditView extends PureComponent {
           step={1}
           isPercent={true}
           editable={true}
-          defaultValue={this.props.modChangeThreshold}
+          defaultValue={this.props.globalSettings.modChangeThreshold}
           onChange={(threshold) => this.props.updateModChangeThreshold(threshold)}
         />
       </div>
       <div className={'form-row'}>
         <label htmlFor={'lock-unselected'}>Lock all unselected characters:</label>
         <input type={'checkbox'}
-               defaultChecked={this.props.lockUnselectedCharacters}
+               defaultChecked={this.props.globalSettings.lockUnselectedCharacters}
                onChange={(event) => this.props.updateLockUnselectedCharacters(event.target.checked)}/>
+      </div>
+      <div className={'form-row'}>
+        <label htmlFor={'force-complete-sets'}>Don't break mod sets:</label>
+        <input type={'checkbox'}
+               defaultChecked={this.props.globalSettings.forceCompleteSets}
+               onChange={(event) => this.props.updateForceCompleteModSets(event.target.checked)}/>
       </div>
     </div>;
   }
@@ -638,8 +645,7 @@ const mapStateToProps = (state) => {
 
   return {
     mods: profile.mods,
-    modChangeThreshold: profile.globalSettings.modChangeThreshold,
-    lockUnselectedCharacters: profile.globalSettings.lockUnselectedCharacters,
+    globalSettings: profile.globalSettings,
     characterFilter: state.characterFilter,
     hideSelectedCharacters: state.hideSelectedCharacters,
     gameSettings: state.gameSettings,
@@ -677,6 +683,7 @@ const mapDispatchToProps = dispatch => ({
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
   optimizeMods: () => dispatch(optimizeMods()),
   updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold)),
+  updateForceCompleteModSets: (forceCompleteModSets) => dispatch(updateForceCompleteModSets(forceCompleteModSets)),
   saveTemplate: (name) => dispatch(saveTemplate(name)),
   saveTemplates: (templates) => dispatch(saveTemplates(templates)),
   appendTemplate: (templateName) => {

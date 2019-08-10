@@ -7,11 +7,6 @@ import {mapObject} from "../utils/mapObject";
 import OptimizerRun from "./OptimizerRun";
 import OptimizationPlan from "./OptimizationPlan";
 
-const defaultGlobalSettings = {
-  modChangeThreshold: 0,
-  lockUnselectedCharacters: false
-};
-
 export default class PlayerProfile {
   allyCode;
   playerName;
@@ -42,7 +37,7 @@ export default class PlayerProfile {
               mods = [],
               selectedCharacters = [],
               modAssignments = {},
-              globalSettings = defaultGlobalSettings,
+              globalSettings = PlayerProfile.defaultGlobalSettings,
               previousSettings = {}
   ) {
     this.allyCode = allyCode;
@@ -196,8 +191,7 @@ export default class PlayerProfile {
       mapObject(this.characters, character => character.serialize()),
       this.mods.map(mod => mod.serialize()),
       this.selectedCharacters,
-      this.globalSettings.modChangeThreshold,
-      this.globalSettings.lockUnselectedCharacters
+      this.globalSettings
     );
   }
 
@@ -230,7 +224,7 @@ export default class PlayerProfile {
         profileJson.mods.map(Mod.deserialize),
         profileJson.selectedCharacters.map(({id, target}) => ({id: id, target: OptimizationPlan.deserialize(target)})),
         profileJson.modAssignments,
-        profileJson.globalSettings,
+        Object.assign({}, PlayerProfile.defaultGlobalSettings, profileJson.globalSettings),
         profileJson.previousSettings || {}
       )
     } else {
@@ -240,11 +234,10 @@ export default class PlayerProfile {
 
   static deserializeVersionOneFour(profileJson) {
     const globalSettings = profileJson.globalSettings ?
-      profileJson.globalSettings :
-      {
-        modChangeThreshold: profileJson.modChangeThreshold || 0,
-        lockUnselectedCharacters: false
-      };
+      Object.assign({}, PlayerProfile.defaultGlobalSettings, profileJson.globalSettings) :
+      Object.assign({}, PlayerProfile.defaultGlobalSettings, {
+        modChangeThreshold: profileJson.modChangeThreshold || 0
+      });
 
     const characters = mapObject(profileJson.characters, Character.deserialize);
     const selectedCharacters = profileJson.selectedCharacters.map(characterID => ({
@@ -269,3 +262,9 @@ export default class PlayerProfile {
     );
   }
 }
+
+PlayerProfile.defaultGlobalSettings = {
+  modChangeThreshold: 0,
+  lockUnselectedCharacters: false,
+  forceCompleteSets: false
+};

@@ -152,6 +152,7 @@ export function optimizeMods() {
       console.log(error);
       optimizationWorker.terminate();
       dispatch(hideModal());
+      dispatch(setIsBusy(false));
       dispatch(showError(error.message));
     };
 

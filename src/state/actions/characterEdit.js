@@ -420,6 +420,14 @@ export function updateLockUnselectedCharacters(lock) {
   );
 }
 
+export function updateForceCompleteModSets(forceCompleteModSets) {
+  return updateProfile(profile => 
+    profile.withGlobalSettings(
+      Object.assign({}, profile.globalSettings, {forceCompleteSets: forceCompleteModSets})
+    )
+  );
+}
+
 /**
  * Fill the set restrictions to display on the character edit form
  * @param setRestrictions

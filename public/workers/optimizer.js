@@ -88,8 +88,7 @@ self.onmessage = function (message) {
         usableMods,
         characters,
         selectedCharacters,
-        profile.globalSettings.modChangeThreshold,
-        profile.globalSettings.lockUnselectedCharacters,
+        profile.globalSettings,
         lastRun
       );
 
@@ -104,7 +103,21 @@ self.onmessage = function (message) {
 
     const lastRunRequest = getDataTransaction.objectStore('lastRuns').get(message.data);
     lastRunRequest.onsuccess = function (event) {
-      lastRun = event.target.result ? event.target.result : {};
+      const result = event.target.result;
+
+      if (!result) {
+        lastRun = {};
+      } else if (result.globalSettings) {
+        lastRun = result;
+      } else {
+        lastRun = Object.assign({}, result, {
+          globalSettings: {
+            modChangeThreshold: result.modChangeThreshold,
+            lockUnselectedCharacters: result.lockUnselectedCharacters,
+            forceCompleteSets: false
+          }
+        })
+      }
     };
   };
 };
@@ -678,7 +691,7 @@ function modSetSatisfiesCharacterRestrictions(modSet, character, target) {
       (modSetSlots.circle && modSetSlots.circle.primaryStat.type === target.primaryStatRestrictions.circle)) &&
     (!target.primaryStatRestrictions.cross ||
       (modSetSlots.cross && modSetSlots.cross.primaryStat.type === target.primaryStatRestrictions.cross)) &&
-    (!target.useOnlyFullSets || modSetFulfillsFullSetRestriction(modSet)) &&
+    (!(target.useOnlyFullSets)|| modSetFulfillsFullSetRestriction(modSet)) &&
     modSetFulfillsSetRestriction(modSet, target.setRestrictions) &&
     modSetFulfillsTargetStatRestriction(modSet, character, target);
 }
@@ -1028,21 +1041,20 @@ Object.freeze(chooseTwoOptions);
  * @param availableMods {Array<Mod>} An array of mods that could potentially be assign to each character
  * @param characters {Object<String, Character>} A set of characters keyed by base ID that might be optimized
  * @param order {Array<Object>} The characters to optimize, in order, as {id, target}
- * @param changeThreshold {Number} The % value that a new mod set has to improve upon the existing equipped mods
- *                                 before the optimizer will suggest changing it
- * @param lockUnselectedCharacters {boolean} Whether the available mods for this run exclude those from outside the
- *                                           selected Characters
+ * @param globalSettings {Object} The settings to apply to every character being optimized
  * @param previousRun {Object} The settings from the last time the optimizer was run, used to limit expensive
  *                             recalculations for optimizing mods
  * @return {Object} An array with an entry for each item in `order`. Each entry will be of the form
  *                  {id, target, assignedMods, messages}
  */
-function optimizeMods(availableMods, characters, order, changeThreshold, lockUnselectedCharacters, previousRun = {}) {
+function optimizeMods(availableMods, characters, order, globalSettings, previousRun = {}) {
   // We only want to recalculate mods if settings have changed between runs. If global settings or locked
   // characters have changed, recalculate all characters
-  let recalculateMods = changeThreshold !== previousRun.modChangeThreshold ||
-    lockUnselectedCharacters !== previousRun.lockUnselectedCharacters ||
-    characters.length !== previousRun.characters.length;
+  let recalculateMods = !previousRun.modChangeThreshold ||
+    globalSettings.modChangeThreshold !== previousRun.globalSettings.modChangeThreshold ||
+    globalSettings.lockUnselectedCharacters !== previousRun.globalSettings.lockUnselectedCharacters ||
+    globalSettings.forceCompleteSets !== previousRun.globalSettings.forceCompleteSets ||
+    availableMods.length !== previousRun.mods.length;
 
   if (!recalculateMods) {
     for (let charID in characters) {
@@ -1098,6 +1110,10 @@ function optimizeMods(availableMods, characters, order, changeThreshold, lockUns
       recalculateMods = true;
     }
 
+    if (globalSettings.forceCompleteSets) {
+      target.useOnlyFullSets = true;
+    }
+
     const { modSet: newModSetForCharacter, messages: characterMessages } =
       findBestModSetForCharacter(availableMods, character, target);
 
@@ -1110,7 +1126,7 @@ function optimizeMods(availableMods, characters, order, changeThreshold, lockUns
     let assignedModSet, assignmentMessages = [];
     if (
       // Treat a threshold of 0 as "always change", so long as the new mod set is better than the old at all
-      (changeThreshold === 0 && newModSetValue >= oldModSetValue) ||
+      (globalSettings.modChangeThreshold === 0 && newModSetValue >= oldModSetValue) ||
       // If the new set is the same mods as the old set
       (newModSetForCharacter.length === oldModSetForCharacter.length &&
         oldModSetForCharacter.every(oldMod => newModSetForCharacter.find(newMod => newMod.id === oldMod.id))
@@ -1120,7 +1136,7 @@ function optimizeMods(availableMods, characters, order, changeThreshold, lockUns
         modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character, target)
       ) ||
       // If the new set is better than the old set
-      (newModSetValue / oldModSetValue) * 100 - 100 > changeThreshold ||
+      (newModSetValue / oldModSetValue) * 100 - 100 > globalSettings.modChangeThreshold ||
       // If the old set now has less than 6 mods and the new set has more mods
       (oldModSetForCharacter.length < 6 &&
         newModSetForCharacter.length > oldModSetForCharacter.length)

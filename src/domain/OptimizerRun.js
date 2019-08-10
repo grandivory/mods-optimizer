@@ -1,12 +1,12 @@
 import {mapObject} from "../utils/mapObject";
+import PlayerProfile from "./PlayerProfile";
 
 export default class OptimizerRun {
   allyCode;
   characters;
   mods;
   selectedCharacters;
-  modChangeThreshold;
-  lockUnselectedCharacters;
+  globalSettings;
 
   /**
    * Note that all of the parameters for an OptimizerRun are pure Objects - no classes with extra methods built-in
@@ -15,10 +15,11 @@ export default class OptimizerRun {
    * @param characters {Object<String, Object>}
    * @param mods {Array<Object>}
    * @param selectedCharacters {Array<Object>}
+   * @param globalSettings {Object} 
    * @param modChangeThreshold {number}
    * @param lockUnselectedCharacters {boolean}
    */
-  constructor(allyCode, characters, mods, selectedCharacters, modChangeThreshold, lockUnselectedCharacters) {
+  constructor(allyCode, characters, mods, selectedCharacters, globalSettings) {
     this.allyCode = allyCode;
     // We care about everything stored for the character except the default settings
     mapObject(characters, character => {
@@ -28,8 +29,7 @@ export default class OptimizerRun {
     this.characters = characters;
     this.mods = mods;
     this.selectedCharacters = selectedCharacters;
-    this.modChangeThreshold = modChangeThreshold;
-    this.lockUnselectedCharacters = lockUnselectedCharacters;
+    this.globalSettings = globalSettings;
   }
 
   serialize() {
@@ -38,19 +38,34 @@ export default class OptimizerRun {
       characters: this.characters,
       mods: this.mods,
       selectedCharacters: this.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()})),
-      modChangeThreshold: this.modChangeThreshold,
-      lockUnselectedCharacters: this.lockUnselectedCharacters
+      globalSettings: this.globalSettings
     };
   }
 
   deserialize(runJson) {
+    if (runJson.globalSettings) {
+      return new OptimizerRun(
+        runJson.allyCode,
+        runJson.characters,
+        runJson.mods,
+        runJson.selectedCharacters,
+        runJson.globalSettings
+      );  
+    } else {
+      return this.deserializeVersionOneFive(runJson);
+    }
+  }
+
+  deserializeVersionOneFive(runJson) {
     return new OptimizerRun(
       runJson.allyCode,
       runJson.characters,
       runJson.mods,
       runJson.selectedCharacters,
-      runJson.modChangeThreshold,
-      runJson.lockUnselectedCharacters || false
+      Object.assign({}, PlayerProfile.defaultGlobalSettings, {
+        modChangeThreshold: runJson.modChangeThreshold,
+        lockUnselectedCharacters: runJson.lockUnselectedCharacters
+      })
     );
   }
 }
