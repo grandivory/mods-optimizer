@@ -397,7 +397,7 @@ const characterSettings = {
     ]
   ),
   'GEONOSIANSOLDIER': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
+    [new OptimizationPlan('PvP', 0, 0, 80, 90, 0, 0, 50, 0, 100, 0, 0, 0, 0, true)]
   ),
   'GEONOSIANSPY': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
