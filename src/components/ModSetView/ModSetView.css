@@ -11,8 +11,17 @@
   position: absolute;
 }
 
-.mod-set-view .mod .no-move {
-  filter: brightness(.4);
+.mod-set-view .mod .no-move .mod-slot-image {
+  background-image: url('/img/mod-shape-atlas-faded.png');
+}
+
+.mod-set-view .mod .no-move .mod-slot-image::after {
+  background-image: url('/img/mod-icon-atlas-faded.png');
+}
+
+.mod-set-view .mod .no-move .avatar::after {
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 50%);
 }
 
 .mod-set-view .mod .icon {
