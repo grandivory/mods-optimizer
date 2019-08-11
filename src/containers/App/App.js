@@ -1,6 +1,6 @@
 // @flow
 
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import './boilerplate.css';
 import './App.css';
 import OptimizerView from "../OptimizerView/OptimizerView";
@@ -8,7 +8,7 @@ import ExploreView from "../ExploreView/ExploreView";
 import FileInput from "../../components/FileInput/FileInput";
 import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import formatAllyCode from "../../utils/formatAllyCode";
 import ErrorModal from "../ErrorModal/ErrorModal";
 import {
@@ -20,10 +20,10 @@ import {
   showError,
   showModal
 } from "../../state/actions/app";
-import {checkVersion, refreshPlayerData, toggleKeepOldMods} from "../../state/actions/data";
+import { checkVersion, refreshPlayerData, toggleKeepOldMods } from "../../state/actions/data";
 import FlashMessage from "../../components/Modal/FlashMessage";
-import {saveAs} from 'file-saver';
-import {exportDatabase, loadProfile} from "../../state/actions/storage";
+import { saveAs } from 'file-saver';
+import { exportDatabase, loadProfile } from "../../state/actions/storage";
 
 class App extends PureComponent {
 
@@ -60,7 +60,7 @@ class App extends PureComponent {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     // Once we get a profile, check to see if the previous version is such that we should show the change log
-    if ((this.props.previousVersion < '1.5') && (!prevProps.profile && this.props.profile)) {
+    if ((this.props.previousVersion < '1.6') && (!prevProps.profile && this.props.profile)) {
       this.props.showModal('changelog-modal', this.changeLogModal());
     }
   }
@@ -93,18 +93,18 @@ class App extends PureComponent {
       <div className={'app-body'}>
         {instructionsScreen && this.welcome()}
         {!instructionsScreen && 'explore' === this.props.section &&
-        <ExploreView/>
+          <ExploreView />
         }
         {!instructionsScreen && 'optimize' === this.props.section &&
-        <OptimizerView/>
+          <OptimizerView />
         }
-        <FlashMessage/>
-        <ErrorModal/>
+        <FlashMessage />
+        <ErrorModal />
         <Modal show={this.props.displayModal}
-               className={this.props.modalClass}
-               content={this.props.modalContent}
-               cancelable={this.props.isModalCancelable} />
-        <Spinner show={this.props.isBusy}/>
+          className={this.props.modalClass}
+          content={this.props.modalContent}
+          cancelable={this.props.isModalCancelable} />
+        <Spinner show={this.props.isBusy} />
       </div>
       {this.footer()}
     </div>;
@@ -121,99 +121,99 @@ class App extends PureComponent {
     return <header className={'App-header'}>
       <h1 className={'App-title'}>Grandivory's Mods Optimizer for Star Wars: Galaxy of Heroes™</h1>
       {showActions &&
-      <nav>
-        <button className={'explore' === this.props.section ? 'active' : ''}
-                onClick={() => this.props.changeSection('explore')}>Explore my mods
+        <nav>
+          <button className={'explore' === this.props.section ? 'active' : ''}
+            onClick={() => this.props.changeSection('explore')}>Explore my mods
         </button>
-        <button className={'optimize' === this.props.section ? 'active' : ''}
-                onClick={() => this.props.changeSection('optimize')}>Optimize my mods
+          <button className={'optimize' === this.props.section ? 'active' : ''}
+            onClick={() => this.props.changeSection('optimize')}>Optimize my mods
         </button>
-      </nav>
+        </nav>
       }
       <div className={'actions'}>
         <label htmlFor={'ally-code'}>{this.props.allyCode ? 'Player' : 'Ally code'}:</label>
         {/* If there is no active ally code, then show the regular input field */}
         {!this.props.allyCode &&
-        <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodyInput = input}
-               onKeyUp={(e) => {
-                 if (e.key === 'Enter') {
-                   this.props.refreshPlayerData(e.target.value, this.props.keepOldMods);
-                 }
-                 // Don't change the input if the user is trying to select something
-                 if (window.getSelection().toString() !== '') {
-                   return;
-                 }
-                 // Don't change the input if the user is hitting the arrow keys
-                 if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
-                   return;
-                 }
+          <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodyInput = input}
+            onKeyUp={(e) => {
+              if (e.key === 'Enter') {
+                this.props.refreshPlayerData(e.target.value, this.props.keepOldMods);
+              }
+              // Don't change the input if the user is trying to select something
+              if (window.getSelection().toString() !== '') {
+                return;
+              }
+              // Don't change the input if the user is hitting the arrow keys
+              if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+                return;
+              }
 
-                 // Format the input field
-                 e.target.value = formatAllyCode(e.target.value);
-               }}
-        />
+              // Format the input field
+              e.target.value = formatAllyCode(e.target.value);
+            }}
+          />
         }
         {/* If there is an active ally code, show a dropdown */}
         {this.props.allyCode &&
-        <div className={'dropdown'}>
-          <select
-            id={'ally-code'}
-            value={this.props.allyCode}
-            onChange={e => {
-              if ('' === e.target.value) {
-                this.props.showModal('', this.addAllyCodeModal());
-              } else {
-                this.props.switchProfile(e.target.value);
-              }
-            }}>
-            {Object.entries(this.props.playerProfiles).map(([allyCode, playerName]) =>
-              <option key={allyCode} value={allyCode}>{playerName}</option>
-            )}
-            <option key={'new'} value={''}>New Code...</option>
-          </select>
-        </div>
+          <div className={'dropdown'}>
+            <select
+              id={'ally-code'}
+              value={this.props.allyCode}
+              onChange={e => {
+                if ('' === e.target.value) {
+                  this.props.showModal('', this.addAllyCodeModal());
+                } else {
+                  this.props.switchProfile(e.target.value);
+                }
+              }}>
+              {Object.entries(this.props.playerProfiles).map(([allyCode, playerName]) =>
+                <option key={allyCode} value={allyCode}>{playerName}</option>
+              )}
+              <option key={'new'} value={''}>New Code...</option>
+            </select>
+          </div>
         }
         {this.props.allyCode &&
-        <button type={'button'}
-                className={'red'}
-                onClick={() => this.props.showModal('', this.deleteAllyCodeModal())}
-        >
-          X
+          <button type={'button'}
+            className={'red'}
+            onClick={() => this.props.showModal('', this.deleteAllyCodeModal())}
+          >
+            X
         </button>
         }
         <button type={'button'}
-                onClick={() => {
-                  this.props.refreshPlayerData(this.props.allyCode || allyCodyInput.value, this.props.keepOldMods);
-                }}>
+          onClick={() => {
+            this.props.refreshPlayerData(this.props.allyCode || allyCodyInput.value, this.props.keepOldMods);
+          }}>
           Fetch my data!
         </button>
         <input id={'keep-old-mods'}
-               name={'keep-old-mods'}
-               type={'checkbox'}
-               value={'keep-old-mods'}
-               checked={this.props.keepOldMods}
-               onChange={() => this.props.toggleKeepOldMods()}
+          name={'keep-old-mods'}
+          type={'checkbox'}
+          value={'keep-old-mods'}
+          checked={this.props.keepOldMods}
+          onChange={() => this.props.toggleKeepOldMods()}
         />
         <label htmlFor={'keep-old-mods'}>Remember existing mods</label>
-        <br/>
-        <FileInput label={'Restore my progress'} handler={(file) => this.readFile(file, this.props.restoreProgress)}/>
+        <br />
+        <FileInput label={'Restore my progress'} handler={(file) => this.readFile(file, this.props.restoreProgress)} />
         {showActions &&
-        <button type={'button'} onClick={() => {
-          this.props.exportDatabase(progressData => {
-            progressData.version = this.props.version;
-            progressData.allyCode = this.props.allyCode;
-            const progressDataSerialized = JSON.stringify(progressData);
-            const userData = new Blob([progressDataSerialized], {type: 'application/json;charset=utf-8'});
-            saveAs(userData, `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`);
-          });
-        }}>
-          Save my progress
+          <button type={'button'} onClick={() => {
+            this.props.exportDatabase(progressData => {
+              progressData.version = this.props.version;
+              progressData.allyCode = this.props.allyCode;
+              const progressDataSerialized = JSON.stringify(progressData);
+              const userData = new Blob([progressDataSerialized], { type: 'application/json;charset=utf-8' });
+              saveAs(userData, `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`);
+            });
+          }}>
+            Save my progress
         </button>
         }
         {showActions &&
-        <button type={'button'} className={'red'}
-                onClick={() => this.props.showModal('reset-modal', this.resetModal())}>
-          Reset Mods Optimizer
+          <button type={'button'} className={'red'}
+            onClick={() => this.props.showModal('reset-modal', this.resetModal())}>
+            Reset Mods Optimizer
         </button>
         }
       </div>
@@ -226,7 +226,7 @@ class App extends PureComponent {
    */
   footer() {
     return <footer className={'App-footer'}>
-      Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.<br/>
+      Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.<br />
       <a href={'https://github.com/grandivory/mods-optimizer'} target={'_blank'} rel={'noopener'}>Contribute</a>
       &nbsp;|&nbsp;
       Ask for help or give feedback on <a href={'https://discord.gg/WFKycSm'} target={'_blank'} rel={'noopener'}>
@@ -270,38 +270,24 @@ class App extends PureComponent {
    */
   changeLogModal() {
     return <div>
-      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.5!</h2>
+      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.6!</h2>
       <h3>Here's a short summary of the changes included in this version:</h3>
       <ul>
         <li>
-          The character selection interface has been updated so that it's now possible to add a character to the
-          selected list multiple times. When this happens, the character will be optimized using the mods available at
-          each part. This should allow you to create mod sets that can be swapped on a character without having to pull
-          mods from any other character.
+          Fixed some performance issues in Safari. Displaying the results of optimization should no longer freeze the
+          browser on long lists of characters.
         </li>
         <li>
-          A lot of functionality has been added around character templates - pre-selected sets of selected characters
-          and their targets. These new lists can be exported from the tool to be shared amongst friends or guilds, and
-          any template can be either appended to the selected characters list or used to replace the full list.
+          Added the ability to force the optimizer to use full sets globally. If checked, this setting will override all
+          "Don't break mod sets" checkboxes on all charcters.
         </li>
         <li>
-          The character selection view has been updated to show a lot more information at a glance. It's now possible to
-          see, for each character, what the minimum dots are for suggested mods, whether their mods will be leveled to
-          15, whether their mods will be sliced to 6E, whether any restrictions have been applied, whether a target stat
-          is selected, if the character is in the list multiple times, if any stat weights are negative, if the selected
-          target has been changed from the default, if all stat weights are 0, and whether the character is locked.
+          Added the ability to see only mods that need upgrades (leveling or slicing) when reviewing the suggestions.
         </li>
         <li>
-          Character locking has been changed again. Characters can now be locked by clicking on the "lock" icon next to
-          each character portrait or at the right of the icon list in the selected characters. With this change,
-          character locking is now completely independent of whether a character is selected or what target is chosen
-          for them.
-        </li>
-        <li>
-          The view to see the suggested mod sets and to show a list of mods to move have been combined into a single
-          view. You can now select how to view the results using the form controls in the sidebar. When viewing the sets
-          assigned to each character, some extra information will be shown, including current character stats, final
-          character stats, and overall value of each stat.
+          Added the ability to only override selected character targets when applying a character template. This will
+          not add any new characters to the selected list at all or change the order, but will update the target for any
+          selected character to match what is in the template.
         </li>
       </ul>
       <h3>Happy Modding!</h3>
@@ -340,30 +326,30 @@ class App extends PureComponent {
       <h4>Add a new Ally Code</h4>
       <label htmlFor={'new-ally-code'}>Ally code: </label>
       <input id={'new-ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodeInput = input}
-             onKeyUp={(e) => {
-               if (e.key === 'Enter') {
-                 this.props.hideModal();
-                 this.props.refreshPlayerData(e.target.value, false);
-               }
-               // Don't change the input if the user is trying to select something
-               if (window.getSelection().toString() !== '') {
-                 return;
-               }
-               // Don't change the input if the user is hitting the arrow keys
-               if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
-                 return;
-               }
+        onKeyUp={(e) => {
+          if (e.key === 'Enter') {
+            this.props.hideModal();
+            this.props.refreshPlayerData(e.target.value, false);
+          }
+          // Don't change the input if the user is trying to select something
+          if (window.getSelection().toString() !== '') {
+            return;
+          }
+          // Don't change the input if the user is hitting the arrow keys
+          if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+            return;
+          }
 
-               // Format the input field
-               e.target.value = formatAllyCode(e.target.value);
-             }}
+          // Format the input field
+          e.target.value = formatAllyCode(e.target.value);
+        }}
       />
       <div className={'actions'}>
         <button type={'button'}
-                onClick={() => {
-                  this.props.hideModal();
-                  this.props.refreshPlayerData(allyCodeInput.value, false);
-                }}>
+          onClick={() => {
+            this.props.hideModal();
+            this.props.refreshPlayerData(allyCodeInput.value, false);
+          }}>
           Fetch my data!
         </button>
       </div>
@@ -382,10 +368,10 @@ class App extends PureComponent {
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'} className={'red'}
-                onClick={() => {
-                  this.props.hideModal();
-                  this.props.deleteProfile(this.props.allyCode);
-                }}>
+          onClick={() => {
+            this.props.hideModal();
+            this.props.deleteProfile(this.props.allyCode);
+          }}>
           Delete
         </button>
       </div>
