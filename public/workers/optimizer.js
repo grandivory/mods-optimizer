@@ -691,7 +691,7 @@ function modSetSatisfiesCharacterRestrictions(modSet, character, target) {
       (modSetSlots.circle && modSetSlots.circle.primaryStat.type === target.primaryStatRestrictions.circle)) &&
     (!target.primaryStatRestrictions.cross ||
       (modSetSlots.cross && modSetSlots.cross.primaryStat.type === target.primaryStatRestrictions.cross)) &&
-    (!(target.useOnlyFullSets)|| modSetFulfillsFullSetRestriction(modSet)) &&
+    (!(target.useOnlyFullSets) || modSetFulfillsFullSetRestriction(modSet)) &&
     modSetFulfillsSetRestriction(modSet, target.setRestrictions) &&
     modSetFulfillsTargetStatRestriction(modSet, character, target);
 }
@@ -1224,7 +1224,7 @@ function findBestModSetForCharacter(mods, character, target) {
       if (setAndMessages.modSet) {
         const setScore = scoreModSet(setAndMessages.modSet, character, target);
 
-        // If this set of mods couldn't fulfill all of the character restrictions, then it can only be used if 
+        // If this set of mods couldn't fulfill all of the character restrictions, then it can only be used if
         // we don't already have a set of mods that does
         if (
           !modSetSatisfiesCharacterRestrictions(setAndMessages.modSet, character, target) &&
@@ -1234,7 +1234,12 @@ function findBestModSetForCharacter(mods, character, target) {
           continue;
         }
 
-        if (setScore > bestSetScore) {
+        if (setScore > bestSetScore ||
+          (setScore > 0 &&
+            !modSetSatisfiesCharacterRestrictions(bestModSetAndMessages.modSet, character, target) &&
+            modSetSatisfiesCharacterRestrictions(setAndMessages.modSet, character, target)
+          )
+        ) {
           updateBestSet()
           bestModSetAndMessages = setAndMessages;
           bestSetScore = setScore;
