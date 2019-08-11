@@ -124,6 +124,10 @@
   margin-bottom: 1em;
 }
 
+.modal form select {
+  margin-bottom: 0;
+}
+
 .modal input.invalid + p.error {
   visibility: visible;
 }
