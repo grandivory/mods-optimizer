@@ -1498,6 +1498,33 @@ function findBestModSetByLooseningSetRestrictions(usableMods, character, target,
       };
     }
   }
+
+  // If we haven't found a best set yet but we're forcing only full mod sets, try again without that restriction
+  const newTarget = Object.assign({}, target, {
+    useOnlyFullSets: false
+  });
+  for (let i = 0; i < possibleRestrictions.length; i++) {
+    const { restriction, messages: restrictionMessages } = possibleRestrictions[i];
+
+    // Filter the usable mods based on the given restrictions
+    const restrictedMods = restrictMods(usableMods, restriction);
+
+    // Try to optimize using this set of mods
+    let { modSet: bestModSet, messages: setMessages } =
+      findBestModSetWithoutChangingRestrictions(restrictedMods, character, newTarget, restriction);
+
+    if (bestModSet) {
+      return {
+        modSet: bestModSet,
+        messages: restrictionMessages.concat(setMessages)
+      };
+    }
+  }
+
+  return {
+    modSet: [],
+    messages: [`No mod sets could be found for ${character.baseID}`]
+  }
 }
 
 /**
