@@ -1202,88 +1202,69 @@ function findBestModSetForCharacter(mods, character, target) {
     scoreMod(mod, character, target);
   });
 
+  let modSet, messages, extraMessages = []
+  let mutableTarget = Object.assign({}, target)
+    , reducedTarget;
+
   // First, check to see if there is any target stat
-  if (targetStat) {
-    let bestModSetAndMessages = null;
-    let bestSetScore = -Infinity;
-    let bestUnmovedMods = null;
+  switch (!!targetStat) {
+    case true:
+      // If so, create an array of potential mod sets that could fill it
+      progressMessage(character, 'Calculating sets to meet target value', 0);
+      let potentialModSets = getPotentialModsToSatisfyTargetStat(usableMods, character, mutableTarget);
 
-    function updateBestSet(setAndMessages, score, unmovedMods) {
-      bestModSetAndMessages = setAndMessages;
-      bestSetScore = score;
-      bestUnmovedMods = unmovedMods;
-    }
+      ({ modSet, messages } = findBestModSetFromPotentialMods(potentialModSets, character, mutableTarget));
 
-    // If so, create an array of potential mod sets that could fill it
-    progressMessage(character, 'Calculating sets to meet target value', 0);
-    const potentialModSets = getPotentialModsToSatisfyTargetStat(usableMods, character, target);
+      // If we couldn't find a mod set that would fulfill the target stat, but we're limiting to only full sets, then
+      // try again without that limitation
+      if (modSet.length === 0 && mutableTarget.useOnlyFullSets) {
+        reducedTarget = Object.assign({}, mutableTarget, {
+          useOnlyfullSets: false
+        });
+        extraMessages.push('Could not fill the target stat with full sets, so the full sets restriction was dropped');
 
-    for (let [mods, candidateSetRestrictions] of potentialModSets) {
-      const setAndMessages =
-        findBestModSetWithoutChangingRestrictions(mods, character, target, candidateSetRestrictions);
-      if (setAndMessages.modSet) {
-        const setScore = scoreModSet(setAndMessages.modSet, character, target);
-
-        // If this set of mods couldn't fulfill all of the character restrictions, then it can only be used if
-        // we don't already have a set of mods that does
-        if (
-          !modSetSatisfiesCharacterRestrictions(setAndMessages.modSet, character, target) &&
-          bestModSetAndMessages &&
-          modSetSatisfiesCharacterRestrictions(bestModSetAndMessages.modSet, character, target)
-        ) {
-          continue;
-        }
-
-        if (setScore > bestSetScore ||
-          (setScore > 0 &&
-            !modSetSatisfiesCharacterRestrictions(bestModSetAndMessages.modSet, character, target) &&
-            modSetSatisfiesCharacterRestrictions(setAndMessages.modSet, character, target)
-          )
-        ) {
-          updateBestSet()
-          bestModSetAndMessages = setAndMessages;
-          bestSetScore = setScore;
-          bestUnmovedMods = null;
-        } else if (setScore === bestSetScore) {
-          // If both sets have the same value, choose the set that moves the fewest mods
-          const unmovedMods = setAndMessages.modSet.filter(mod => mod.characterID === character.baseID).length;
-          if (null === bestUnmovedMods) {
-            bestUnmovedMods = bestModSetAndMessages.modSet.filter(mod => mod.characterID === character.baseID).length;
-          }
-
-          if (unmovedMods > bestUnmovedMods) {
-            bestModSetAndMessages = setAndMessages;
-            bestSetScore = setScore;
-            bestUnmovedMods = unmovedMods;
-          } else if (
-            unmovedMods === bestUnmovedMods &&
-            setAndMessages.modSet.length > bestModSetAndMessages.modSet.length
-          ) {
-            // If both sets move the same number of unmoved mods, choose the set that uses the most mods overall
-            bestModSetAndMessages = setAndMessages;
-            bestSetScore = setScore;
-            bestUnmovedMods = unmovedMods;
-          }
-        }
+        potentialModSets = getPotentialModsToSatisfyTargetStat(usableMods, character, mutableTarget);
+        ({ modSet, messages } = findBestModSetFromPotentialMods(potentialModSets, character, reducedTarget));
       }
-    }
 
-    if (!bestModSetAndMessages || !bestModSetAndMessages.modSet) {
-      const { modSet: fallbackSet, messages: fallbackMessages } =
-        findBestModSetByLooseningSetRestrictions(usableMods, character, target, setRestrictions);
+      if (modSet.length === 0) {
+        ({ modSet, messages } =
+          findBestModSetByLooseningSetRestrictions(usableMods, character, reducedTarget, setRestrictions));
+
+        extraMessages.push('Could not fill the target stat as given, so the target stat restriction was dropped');
+      }
+
+      if (modSet.length) {
+        // Return the best set and set of messages
+        return {
+          modSet: modSet,
+          messages: messages.concat(extraMessages)
+        };
+      }
+
+      extraMessages = ['Could not fulfill the target stat as given, so the target stat restriction was dropped'];
+      mutableTarget.targetStat = null;
+    // Intentional fall-through
+    case false:
+      // If not, simply iterate over all levels of restrictions until a suitable set is found.
+      progressMessage(character, 'Finding the best mod set');
+      ({ modSet, messages } =
+        findBestModSetByLooseningSetRestrictions(usableMods, character, mutableTarget, setRestrictions));
+
+      if (modSet.length === 0 && mutableTarget.useOnlyFullSets) {
+        reducedTarget = Object.assign({}, mutableTarget, {
+          useOnlyFullSets: false
+        });
+        extraMessages.push('Could not find a mod set using only full sets, so the full sets restriction was dropped');
+
+        ({ modSet, messages } =
+          findBestModSetByLooseningSetRestrictions(usableMods, character, reducedTarget, setRestrictions));
+      }
+
       return {
-        modSet: fallbackSet,
-        messages: ['Could not fill the target stat as given, so the target stat restriction was dropped']
-          .concat(fallbackMessages)
+        modSet: modSet,
+        messages: messages.concat(extraMessages)
       };
-    }
-
-    // Return the best set and set of messages
-    return bestModSetAndMessages;
-  } else {
-    // If not, simply iterate over all levels of restrictions until a suitable set is found.
-    progressMessage(character, 'Finding the best mod set');
-    return findBestModSetByLooseningSetRestrictions(usableMods, character, target, setRestrictions);
   }
 }
 
@@ -1464,6 +1445,65 @@ function* findStatValuesThatMeetTarget(valuesBySlot, targetMin, targetMax, progr
   yield* slotRecursor(modSlots, {});
 }
 
+function findBestModSetFromPotentialMods(potentialModSets, character, target) {
+  let bestModSetAndMessages = { modSet: [], messages: [] }
+    , bestSetScore = -Infinity
+    , bestUnmovedMods = 0;
+
+  function updateBestSet(setAndMessages, score, unmovedMods) {
+    bestModSetAndMessages = setAndMessages;
+    bestSetScore = score;
+    bestUnmovedMods = unmovedMods;
+  }
+
+  for (let [mods, candidateSetRestrictions] of potentialModSets) {
+    const setAndMessages =
+      findBestModSetWithoutChangingRestrictions(mods, character, target, candidateSetRestrictions);
+    if (setAndMessages.modSet) {
+      const setScore = scoreModSet(setAndMessages.modSet, character, target);
+
+      // If this set of mods couldn't fulfill all of the character restrictions, then it can only be used if
+      // we don't already have a set of mods that does
+      if (
+        !modSetSatisfiesCharacterRestrictions(setAndMessages.modSet, character, target) &&
+        bestModSetAndMessages &&
+        modSetSatisfiesCharacterRestrictions(bestModSetAndMessages.modSet, character, target)
+      ) {
+        continue;
+      }
+
+      // We'll accept a new set if it is better than the existing set OR if the existing set doesn't fulfill all of the
+      // restrictions and the new set does
+      if (setScore > bestSetScore ||
+        (setScore > 0 &&
+          !modSetSatisfiesCharacterRestrictions(bestModSetAndMessages.modSet, character, target) &&
+          modSetSatisfiesCharacterRestrictions(setAndMessages.modSet, character, target)
+        )
+      ) {
+        updateBestSet(setAndMessages, setScore, null);
+      } else if (setScore === bestSetScore) {
+        // If both sets have the same value, choose the set that moves the fewest mods
+        const unmovedMods = setAndMessages.modSet.filter(mod => mod.characterID === character.baseID).length;
+        if (null === bestUnmovedMods) {
+          bestUnmovedMods = bestModSetAndMessages.modSet.filter(mod => mod.characterID === character.baseID).length;
+        }
+
+        if (unmovedMods > bestUnmovedMods) {
+          updateBestSet(setAndMessages, setScore, unmovedMods);
+        } else if (
+          unmovedMods === bestUnmovedMods &&
+          setAndMessages.modSet.length > bestModSetAndMessages.modSet.length
+        ) {
+          // If both sets move the same number of unmoved mods, choose the set that uses the most mods overall
+          updateBestSet(setAndMessages, setScore, unmovedMods);
+        }
+      }
+    }
+  }
+
+  return bestModSetAndMessages;
+}
+
 /**
  * Figure out what the best set of mods for a character are such that the values in the plan are optimized. Try to
  * satisfy the set restrictions given, but loosen them if no mod set can be found that uses them as-is.
@@ -1490,28 +1530,6 @@ function findBestModSetByLooseningSetRestrictions(usableMods, character, target,
     // Try to optimize using this set of mods
     let { modSet: bestModSet, messages: setMessages } =
       findBestModSetWithoutChangingRestrictions(restrictedMods, character, target, restriction);
-
-    if (bestModSet) {
-      return {
-        modSet: bestModSet,
-        messages: restrictionMessages.concat(setMessages)
-      };
-    }
-  }
-
-  // If we haven't found a best set yet but we're forcing only full mod sets, try again without that restriction
-  const newTarget = Object.assign({}, target, {
-    useOnlyFullSets: false
-  });
-  for (let i = 0; i < possibleRestrictions.length; i++) {
-    const { restriction, messages: restrictionMessages } = possibleRestrictions[i];
-
-    // Filter the usable mods based on the given restrictions
-    const restrictedMods = restrictMods(usableMods, restriction);
-
-    // Try to optimize using this set of mods
-    let { modSet: bestModSet, messages: setMessages } =
-      findBestModSetWithoutChangingRestrictions(restrictedMods, character, newTarget, restriction);
 
     if (bestModSet) {
       return {
