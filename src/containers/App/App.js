@@ -44,11 +44,11 @@ class App extends PureComponent {
     props.checkVersion();
   }
 
-  escapeListener(e) {
+  escapeListener = function (e) {
     if (e.key === 'Escape' && this.props.isModalCancelable) {
       this.props.hideModal();
     }
-  }
+  }.bind(this);
 
   componentDidMount() {
     document.addEventListener('keyup', this.escapeListener);
