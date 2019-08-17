@@ -276,12 +276,6 @@ nav button.active {
   vertical-align: middle;
 }
 
-.icon.help {
-  background-image: url('/img/help.png');
-  background-size: 1em 1em;
-  cursor: pointer;
-}
-
 .welcome {
   text-align: center;
   margin: 0 auto;

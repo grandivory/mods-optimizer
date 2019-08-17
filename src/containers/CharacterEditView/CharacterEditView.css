@@ -72,17 +72,25 @@
   margin: .25em 0 0;
 }
 
-.character-edit .selected-characters h5 button,
-.character-edit .selected-characters h5 .button {
+.character-edit .selected-characters .template-buttons {
+  font-size: .83em;
+}
+
+.character-edit .selected-characters .template-buttons button,
+.character-edit .selected-characters .template-buttons .button {
   margin: .2em;
 }
 
-.character-edit .selected-characters h5 form.file-input {
+.character-edit .selected-characters .template-buttons form.file-input {
   display: inline-block;
 }
 
 .character-edit .selected-characters .character-list {
   padding-right: 1em;
+}
+
+.global-settings h3 .icon {
+  font-size: .83em;
 }
 
 .global-settings input[type=range] {
@@ -134,6 +142,14 @@
 
 .modal.template-targets {
   max-width: 40em;
+}
+
+.modal .help {
+  max-width: 40em;
+}
+
+.modal .help ul li {
+  list-style: none;
 }
 
 .modal.optimizer-progress h3 {

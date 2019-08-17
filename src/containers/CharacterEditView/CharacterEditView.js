@@ -40,6 +40,7 @@ import { saveAs } from "file-saver";
 import FileInput from "../../components/FileInput/FileInput";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import Toggle from "../../components/Toggle/Toggle";
+import Help from "../../components/Help/Help"
 
 const defaultTemplates = require('../../constants/characterTemplates.json');
 
@@ -116,61 +117,59 @@ class CharacterEditView extends PureComponent {
           <button className={'small'} onClick={this.props.lockSelectedCharacters}>Lock All</button>
           <button className={'small'} onClick={this.props.unlockSelectedCharacters}>Unlock All</button>
         </h4>
-        <h5>
-          Character Templates
-          <div className={'template-buttons'}>
-            <div className={'row'}>
-              Manage:
+        <h5>Character Templates <Help header={'Character Templates'}>{this.characterTemplatesHelp()}</Help></h5>
+        <div className={'template-buttons'}>
+          <div className={'row'}>
+            Manage:
               <button className={'small'}
-                disabled={!this.props.selectedCharacters.length}
-                onClick={() => this.props.showModal('save-template', this.saveTemplateModal())}>
-                Save
+              disabled={!this.props.selectedCharacters.length}
+              onClick={() => this.props.showModal('save-template', this.saveTemplateModal())}>
+              Save
               </button>
-              <button className={'small'}
-                disabled={!this.userTemplates().length}
-                onClick={() => this.props.showModal('export-template', this.exportTemplateModal())}>
-                Export
+            <button className={'small'}
+              disabled={!this.userTemplates().length}
+              onClick={() => this.props.showModal('export-template', this.exportTemplateModal())}>
+              Export
               </button>
-              <FileInput label={'Load'}
-                className={'small'}
-                handler={(file) => this.readFile(
-                  file,
-                  (templates) => {
-                    const templatesObject = JSON.parse(templates);
-                    const templatesDeserialized = templatesObject.map(t => ({
-                      name: t.name,
-                      selectedCharacters: t.selectedCharacters.map(({ id, target }) => ({
-                        id: id,
-                        target: OptimizationPlan.deserialize(target)
-                      }))
-                    }));
-                    this.props.saveTemplates(templatesDeserialized);
-                  }
-                )}
-              />
-              <button className={'small red'}
-                disabled={!this.userTemplates().length}
-                onClick={() => this.props.showModal('delete-template', this.deleteTemplateModal())}>
-                Delete
+            <FileInput label={'Load'}
+              className={'small'}
+              handler={(file) => this.readFile(
+                file,
+                (templates) => {
+                  const templatesObject = JSON.parse(templates);
+                  const templatesDeserialized = templatesObject.map(t => ({
+                    name: t.name,
+                    selectedCharacters: t.selectedCharacters.map(({ id, target }) => ({
+                      id: id,
+                      target: OptimizationPlan.deserialize(target)
+                    }))
+                  }));
+                  this.props.saveTemplates(templatesDeserialized);
+                }
+              )}
+            />
+            <button className={'small red'}
+              disabled={!this.userTemplates().length}
+              onClick={() => this.props.showModal('delete-template', this.deleteTemplateModal())}>
+              Delete
               </button>
-            </div>
-            <div className={'row'}>
-              Apply:
-              <button className={'small'}
-                onClick={() => this.props.showModal('append-template', this.appendTemplateModal())}>
-                Append
-              </button>
-              <button className={'small'}
-                onClick={() => this.props.showModal('replace-template', this.replaceTemplateModal())}>
-                Replace
-              </button>
-              <button className={'small'}
-                onClick={() => this.props.showModal('template-targets', this.templateTargetsModal())}>
-                Apply targets only
-              </button>
-            </div>
           </div>
-        </h5>
+          <div className={'row'}>
+            Apply:
+              <button className={'small'}
+              onClick={() => this.props.showModal('append-template', this.appendTemplateModal())}>
+              Append
+              </button>
+            <button className={'small'}
+              onClick={() => this.props.showModal('replace-template', this.replaceTemplateModal())}>
+              Replace
+              </button>
+            <button className={'small'}
+              onClick={() => this.props.showModal('template-targets', this.templateTargetsModal())}>
+              Apply targets only
+              </button>
+          </div>
+        </div>
         <CharacterList selfDrop={true} draggable={true} />
       </div>
       <div className={'available-characters'}
@@ -190,8 +189,7 @@ class CharacterEditView extends PureComponent {
         {this.props.highlightedCharacters.map(character => this.characterBlock(character, 'active'))}
         {this.props.availableCharacters.map(character => this.characterBlock(character, 'inactive'))}
       </div>
-    </div>
-      ;
+    </div >;
   }
 
   /**
@@ -226,7 +224,7 @@ class CharacterEditView extends PureComponent {
    */
   globalSettings() {
     return <div className={'global-settings'} key={'global-settings'}>
-      <h3>Global Settings</h3>
+      <h3>Global Settings <Help header={'Global Settings'}>{this.globalSettingsHelp()}</Help></h3>
       <div className={'form-row'}>
         <label>Threshold to Change Mods:</label><br />
         <RangeInput
@@ -633,6 +631,72 @@ class CharacterEditView extends PureComponent {
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'} onClick={() => this.props.optimizeMods()}>Optimize!</button>
       </div>
+    </div>;
+  }
+
+  globalSettingsHelp() {
+    return <div className={'help'}>
+      <p>
+        Global settings are a quick way to make changes that apply to every character during an optimization. They
+        always override any character-specific settings that you have set.
+      </p>
+      <ul>
+        <li>
+          <strong>Threshold to change mods</strong> - As the optimizer is running, its normal behavior is to always
+          recommend the absolute best mod set it can find, based on the target you have selected. If this number is
+          above 0, then the optimizer will only recommend that you change mods on a character if the new recommended set
+          is at least this much better than what the character previously had, or if the character's mods were moved to
+          a character higher in your list and needed to be replaced.
+        </li>
+        <li>
+          <strong>Lock all unselected characters</strong> - If this box is checked, then no mods will be taken from
+          characters that aren't in your selected list. If you have a number of unassigned mods, this can be a quick way
+          to make use of them without triggering a major remod of your whole roster.
+        </li>
+        <li>
+          <strong>Don't break mod sets</strong> - If this box is checked, the optimizer will try to keep mod sets
+          together, so you always get the maximum set bonuses. Sometimes it's not possible to do so, either because
+          of other restrictions on a character's target or because you don't have enough mods left to make a full set.
+          In these cases, the optimizer will still drop this restriction to try to recommend the best set.
+        </li>
+      </ul>
+    </div>;
+  }
+
+  characterTemplatesHelp() {
+    return <div className={'help'}>
+      <p>
+        Character Templates are a way to work with groups of <strong>selected characters</strong> and
+        their <strong>targets</strong> independently of the rest of your data. They can be used to set up teams for
+        a particular use and shared with your friends, guildmates, or on the Mods Optimizer discord server to quickly
+        allow other people to copy your settings. Here is a quick description of the buttons to interact with
+        character templates:
+      </p>
+      <h5>Managing templates</h5>
+      <ul>
+        <li>
+          <strong>Save</strong> - Save your current selected characters and their targets as a new template. You'll be
+          asked to give your template a name, which you can then use to apply it or export it later.
+        </li>
+        <li><strong>Export</strong> - Export one or all of your templates to a file that can be shared with others.</li>
+        <li>
+          <strong>Load</strong> - Load templates from a file into the optimizer. This won't apply the templates, but
+          will instead add them to the list of known templates that you can work with.
+        </li>
+        <li>
+          <strong>Delete</strong> - Delete one of your templates from the optimizer. This only works on templates that
+          you have created or loaded from a file. The default templates in the optimizer can't be deleted.
+        </li>
+      </ul>
+      <h5>Applying templates</h5>
+      <ul>
+        <li><strong>Append</strong> - Add the characters from a template to the end of your selected characters.</li>
+        <li><strong>Replace</strong> - Clear your selected characters and replace them with those from a template.</li>
+        <li>
+          <strong>Apply targets only</strong> - Don't change which characters you have selected or their order, but for
+          any that are in a template, change their targets to match.
+        </li>
+      </ul>
     </div>;
   }
 }

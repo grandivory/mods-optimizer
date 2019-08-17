@@ -21,7 +21,7 @@ import {
   unequipMod,
   unequipMods
 } from "../../state/actions/review";
-import { hideModal, showModal, showFlash } from "../../state/actions/app";
+import { hideModal, showModal } from "../../state/actions/app";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ModSetDetail from "../../components/ModSetDetail/ModSetDetail";
 import flatten from "../../utils/flatten";
@@ -29,6 +29,7 @@ import { connect } from "react-redux";
 import Credits from "../../components/Credits/Credits";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import { saveAs } from 'file-saver';
+import Help from "../../components/Help/Help"
 
 const sortOptions = {
   'currentCharacter': 'currentCharacter',
@@ -392,11 +393,9 @@ class Review extends React.PureComponent {
       }}>
         Export for HotUtils
       </button>
-      <span className={'icon help'}
-        onClick={() =>
-          this.props.showFlash('What is HotUtils?', this.hotUtilsHelp())
-        }
-      />
+      <Help header={'What is HotUtils?'}>
+        {this.hotUtilsHelp()}
+      </Help>
     </div>
   }
 
@@ -550,7 +549,7 @@ const mapStateToProps = (state) => {
         // Filter out any mods that aren't moving
         modsToShow = modsToShow.map(({ id, assignedMods }) => assignedMods.filter(mod => mod.characterID !== id));
 
-        // Collect mods by current character ID. 
+        // Collect mods by current character ID.
         let currentMods = collectByKey(
           flatten(modsToShow),
           mod => mod.characterID
@@ -632,8 +631,7 @@ const mapDispatchToProps = (dispatch) => ({
   unequipMods: (modIDs) => dispatch(unequipMods(modIDs)),
   reassignMods: (modIDs, characterID) => dispatch(reassignMods(modIDs, characterID)),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
-  hideModal: () => dispatch(hideModal()),
-  showFlash: (heading, content) => dispatch(showFlash(heading, content))
+  hideModal: () => dispatch(hideModal())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Review);
