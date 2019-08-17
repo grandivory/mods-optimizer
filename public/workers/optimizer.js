@@ -22,7 +22,6 @@ self.onmessage = function (message) {
     }
   };
 
-
   openDbRequest.onsuccess = function (event) {
     const db = event.target.result;
     db.onversionchange = function (event) {
@@ -45,15 +44,6 @@ self.onmessage = function (message) {
         throw new Error('Unable to read your profile for optimization. Please clear your cache and try again.');
       }
       const allMods = profile.mods.map(deserializeMod);
-
-      // Filter out any mods that are on locked characters, including if all unselected characters are locked
-      let usableMods = allMods.filter(mod =>
-        !mod.characterID || !profile.characters[mod.characterID].optimizerSettings.isLocked);
-
-      if (profile.globalSettings.lockUnselectedCharacters) {
-        const selectedCharacterIds = profile.selectedCharacters.map(({ id }) => id);
-        usableMods = usableMods.filter(mod => !mod.characterID || selectedCharacterIds.includes(mod.characterID))
-      }
 
       const characters = {};
       const lastRunCharacters = {};
@@ -85,7 +75,7 @@ self.onmessage = function (message) {
       );
 
       const optimizerResults = optimizeMods(
-        usableMods,
+        allMods,
         characters,
         selectedCharacters,
         profile.globalSettings,
@@ -1050,7 +1040,7 @@ Object.freeze(chooseTwoOptions);
 function optimizeMods(availableMods, characters, order, globalSettings, previousRun = {}) {
   // We only want to recalculate mods if settings have changed between runs. If global settings or locked
   // characters have changed, recalculate all characters
-  let recalculateMods = !previousRun.modChangeThreshold ||
+  let recalculateMods = !previousRun.globalSettings ||
     globalSettings.modChangeThreshold !== previousRun.globalSettings.modChangeThreshold ||
     globalSettings.lockUnselectedCharacters !== previousRun.globalSettings.lockUnselectedCharacters ||
     globalSettings.forceCompleteSets !== previousRun.globalSettings.forceCompleteSets ||
@@ -1067,6 +1057,15 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
         break;
       }
     }
+  }
+
+  // Filter out any mods that are on locked characters, including if all unselected characters are locked
+  let usableMods = availableMods.filter(mod =>
+    !mod.characterID || !characters[mod.characterID].optimizerSettings.isLocked);
+
+  if (globalSettings.lockUnselectedCharacters) {
+    const selectedCharacterIds = order.map(({ id }) => id);
+    usableMods = usableMods.filter(mod => !mod.characterID || selectedCharacterIds.includes(mod.characterID))
   }
 
   // For each not-locked character in the list, find the best mod set for that character
@@ -1100,9 +1099,9 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       const assignedMods = previousRun.modAssignments[index].assignedMods;
       const messages = previousRun.modAssignments[index].messages;
       // Remove any assigned mods from the available pool
-      for (let i = availableMods.length - 1; i >= 0; i--) {
-        if (assignedMods.includes(availableMods[i].id)) {
-          availableMods.splice(i, 1);
+      for (let i = usableMods.length - 1; i >= 0; i--) {
+        if (assignedMods.includes(usableMods[i].id)) {
+          usableMods.splice(i, 1);
         }
       }
       return { id: characterID, target: target, assignedMods: assignedMods, messages: messages };
@@ -1115,9 +1114,9 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
     }
 
     const { modSet: newModSetForCharacter, messages: characterMessages } =
-      findBestModSetForCharacter(availableMods, character, target);
+      findBestModSetForCharacter(usableMods, character, target);
 
-    const oldModSetForCharacter = availableMods.filter(mod => mod.characterID === character.baseID);
+    const oldModSetForCharacter = usableMods.filter(mod => mod.characterID === character.baseID);
 
     const newModSetValue = scoreModSet(newModSetForCharacter, character, target);
     const oldModSetValue = scoreModSet(oldModSetForCharacter, character, target);
@@ -1153,9 +1152,9 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
     }
 
     // Remove any assigned mods from the available pool
-    for (let i = availableMods.length - 1; i >= 0; i--) {
-      if (assignedModSet.includes(availableMods[i])) {
-        availableMods.splice(i, 1);
+    for (let i = usableMods.length - 1; i >= 0; i--) {
+      if (assignedModSet.includes(usableMods[i])) {
+        usableMods.splice(i, 1);
       }
     }
 

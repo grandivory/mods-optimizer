@@ -11,7 +11,7 @@ import {
   addModsToProfiles,
   setProfile
 } from "./storage";
-import {deserializeState} from "../storage";
+import { deserializeState } from "../storage";
 import getDatabase from "../storage/Database";
 import nothing from "../../utils/nothing";
 
@@ -79,7 +79,7 @@ export function hideFlash() {
 }
 
 export function reset() {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     db.delete(
       () => dispatch(resetState()),
@@ -97,7 +97,7 @@ export function resetState() {
 }
 
 export function restoreProgress(progressData) {
-  return function(dispatch) {
+  return function (dispatch) {
     const stateObj = JSON.parse(progressData);
     // If the progress data has only a profiles section, then it's an export from HotUtils.
     // Add the mods to any existing profile
@@ -129,7 +129,7 @@ export function toggleSidebar() {
 }
 
 export function deleteProfile(allyCode) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     db.deleteProfile(
       allyCode,
@@ -165,7 +165,7 @@ export function setIsBusy(isBusy) {
  * @returns {Function}
  */
 export function updateProfile(updateFunc, auxiliaryChanges = nothing) {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const state = getState();
     const db = getDatabase();
     const newProfile = updateFunc(state.profile);
