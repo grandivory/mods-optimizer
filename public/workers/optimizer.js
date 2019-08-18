@@ -1216,14 +1216,19 @@ function findBestModSetForCharacter(mods, character, target) {
 
       // If we couldn't find a mod set that would fulfill the target stat, but we're limiting to only full sets, then
       // try again without that limitation
-      if (modSet.length === 0 && mutableTarget.useOnlyFullSets) {
-        reducedTarget = Object.assign({}, mutableTarget, {
-          useOnlyfullSets: false
-        });
-        extraMessages.push('Could not fill the target stat with full sets, so the full sets restriction was dropped');
+      if (modSet.length === 0) {
+        reducedTarget = mutableTarget.useOnlyFullSets ?
+          Object.assign({}, mutableTarget, {
+            useOnlyFullSets: false
+          }) :
+          mutableTarget;
 
-        potentialModSets = getPotentialModsToSatisfyTargetStat(usableMods, character, mutableTarget);
-        ({ modSet, messages } = findBestModSetFromPotentialMods(potentialModSets, character, reducedTarget));
+        if (mutableTarget.useOnlyFullSets) {
+          extraMessages.push('Could not fill the target stat with full sets, so the full sets restriction was dropped');
+
+          potentialModSets = getPotentialModsToSatisfyTargetStat(usableMods, character, mutableTarget);
+          ({ modSet, messages } = findBestModSetFromPotentialMods(potentialModSets, character, reducedTarget));
+        }
       }
 
       if (modSet.length === 0) {
