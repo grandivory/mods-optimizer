@@ -97,7 +97,11 @@ function dispatchFetchCharacters(dispatch, lastStep) {
     }, () => {
       return [
         'Error when fetching character definitions from swgoh.gg. ' +
-        'Some characters may not optimize properly until you fetch again.'
+        'Some characters may not optimize properly until you fetch again.',
+        'This is an error with an API that the optimizer uses (swgoh.gg) and NOT ' +
+        'an error in the optimizer itself. Feel free to discuss it on the ' +
+        'optimizer\'s discord server, but know that there are no changes that ' +
+        'can be made to the optimizer to fix this issue.'
       ];
     });
 }
@@ -214,7 +218,16 @@ export function refreshPlayerData(allyCode, keepOldMods) {
       .catch(error => {
         dispatch(setIsBusy(false));
         dispatch(hideFlash());
-        dispatch(showError(error.message));
+        dispatch(showError(
+          <div>
+            <p>{error.message}</p>
+            <p>
+              This is an error with an API that the optimizer uses, and not a problem with the optimizer itself. Feel
+              free to discuss this error on the optimizer discord, but know that there are no changes that can be made
+              to the optimizer to fix this issue.
+            </p>
+          </div>
+        ));
       });
   }
 }
