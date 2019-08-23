@@ -219,14 +219,14 @@ export function refreshPlayerData(allyCode, keepOldMods) {
         dispatch(setIsBusy(false));
         dispatch(hideFlash());
         dispatch(showError(
-          <div>
-            <p>{error.message}</p>
-            <p>
+          [
+            <p key={1}>{error.message}</p>,
+            <p key={2}>
               This is an error with an API that the optimizer uses, and not a problem with the optimizer itself. Feel
               free to discuss this error on the optimizer discord, but know that there are no changes that can be made
               to the optimizer to fix this issue.
             </p>
-          </div>
+          ]
         ));
       });
   }
@@ -431,32 +431,36 @@ export function receiveProfile(allyCode, profile, messages, keepOldMods, lastSte
     const lastUpdate = new Date(profile.updated);
     const nextUpdate = new Date(lastUpdate.getTime() + 60 * 60 * 1000); // plus one hour
 
+    const fetchResults = (messages.length ? [
+      <div className={'errors'} key={0}>
+        {messages.map((message, index) => <p key={index}>{message}</p>)}
+      </div>
+    ] : []).concat([
+      <p key={100}>
+        Successfully pulled data for <span className={'gold'}>{Object.keys(profile.characters).length}
+        </span> characters and <span className={'gold'}>{profile.mods.length}</span> mods.</p>,
+      <p key={101}>Your data was last updated as of <span className={'gold'}>{lastUpdate.toLocaleString()}</span>.
+      </p>,
+      <p key={102}>You should be able to fetch fresh data any time after <span className={'gold'}>
+        {nextUpdate.toLocaleString()}</span>
+      </p>,
+      <hr key={103} />,
+      <h3 key={104}><strong>
+        Remember: The optimizer can only pull data for mods that you currently have equipped!
+      </strong></h3>,
+      <p key={105}>
+        If it looks like you're missing mods, try equipping them on your characters and fetching data again after
+        the
+        time listed above.
+      </p>,
+    ]);
+
     dispatch(changeOptimizerView('edit'));
     dispatch(showFlash(
       messages.length ? 'API Errors' : 'Success!',
-      (messages.length ? [
-        <div className={'errors'} key={0}>
-          {messages.map((message, index) => <p key={index}>{message}</p>)}
-        </div>
-      ] : []).concat([
-        <p key={100}>
-          Successfully pulled data for <span className={'gold'}>{Object.keys(profile.characters).length}
-          </span> characters and <span className={'gold'}>{profile.mods.length}</span> mods.</p>,
-        <p key={101}>Your data was last updated as of <span className={'gold'}>{lastUpdate.toLocaleString()}</span>.
-        </p>,
-        <p key={102}>You should be able to fetch fresh data any time after <span className={'gold'}>
-          {nextUpdate.toLocaleString()}</span>
-        </p>,
-        <hr key={103} />,
-        <h3 key={104}><strong>
-          Remember: The optimizer can only pull data for mods that you currently have equipped!
-        </strong></h3>,
-        <p key={105}>
-          If it looks like you're missing mods, try equipping them on your characters and fetching data again after
-          the
-          time listed above.
-        </p>,
-      ])
+      <div className={'fetch-results'}>
+        {fetchResults}
+      </div>
     ));
   };
 }

@@ -312,6 +312,10 @@ nav button.active {
   max-width: 30em;
 }
 
+.modal .fetch-results {
+  max-width: 40em;
+}
+
 strong {
   font-weight: bold;
   color: #a35ef9;
