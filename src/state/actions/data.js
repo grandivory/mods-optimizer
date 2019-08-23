@@ -2,20 +2,20 @@
 
 import React from 'react';
 import Mod from "../../domain/Mod";
-import {GameSettings, OptimizerSettings, PlayerValues} from "../../domain/CharacterDataClasses";
+import { GameSettings, OptimizerSettings, PlayerValues } from "../../domain/CharacterDataClasses";
 import cleanAllyCode from "../../utils/cleanAllyCode";
-import {hideFlash, setIsBusy, showError, showFlash} from "./app";
+import { hideFlash, setIsBusy, showError, showFlash } from "./app";
 import getDatabase from "../storage/Database";
 import nothing from "../../utils/nothing";
 import PlayerProfile from "../../domain/PlayerProfile";
-import {mapObjectByKeyAndValue} from "../../utils/mapObject";
+import { mapObjectByKeyAndValue } from "../../utils/mapObject";
 import Character from "../../domain/Character";
 import characterSettings from "../../constants/characterSettings";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import groupByKey from "../../utils/groupByKey";
-import {addPlayerProfile, setGameSettings, setProfile} from "./storage";
-import {changeOptimizerView} from "./review";
-import CharacterStats, {NullCharacterStats} from "../../domain/CharacterStats";
+import { addPlayerProfile, setGameSettings, setProfile } from "./storage";
+import { changeOptimizerView } from "./review";
+import CharacterStats, { NullCharacterStats } from "../../domain/CharacterStats";
 
 export const TOGGLE_KEEP_OLD_MODS = 'TOGGLE_KEEP_OLD_MODS';
 export const REQUEST_CHARACTERS = 'REQUEST_CHARACTERS';
@@ -42,7 +42,7 @@ export function requestProfile(allyCode) {
 }
 
 export function checkVersion() {
-  return function(dispatch) {
+  return function (dispatch) {
     return dispatchFetchVersion(dispatch)
       .catch(error => {
         dispatch(hideFlash());
@@ -64,7 +64,7 @@ export function requestStats() {
 function post(url = '', data = {}, extras = {}) {
   return fetch(url, Object.assign({
     method: 'POST',
-    headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
     mode: "cors",
   }, extras))
@@ -115,27 +115,27 @@ function dispatchFetchProfile(dispatch, allyCode, messages, keepOldMods, lastSte
   dispatch(requestProfile(allyCode));
   return post(
     'https://api.mods-optimizer.swgoh.grandivory.com/playerprofile/',
-    {'ally-code': allyCode}
+    { 'ally-code': allyCode }
   ).then(playerProfile => {
-      const roster = playerProfile.roster.filter(entry => entry.combatType === 'CHARACTER');
+    const roster = playerProfile.roster.filter(entry => entry.combatType === 'CHARACTER');
 
-      // Convert mods to the serialized format recognized by the optimizer
-      const profileMods = roster.map(character => character.mods.map(mod => Mod.fromSwgohHelp(mod, character.defId)))
-        .reduce((allMods, charMods) => allMods.concat(charMods), []);
+    // Convert mods to the serialized format recognized by the optimizer
+    const profileMods = roster.map(character => character.mods.map(mod => Mod.fromSwgohHelp(mod, character.defId)))
+      .reduce((allMods, charMods) => allMods.concat(charMods), []);
 
-      // Convert each character to a PlayerValues object
-      const profileCharacters = roster.reduce((characters, character) => {
-        characters[character.defId] = PlayerValues.fromSwgohHelp(character);
-        return characters;
-      }, {});
+    // Convert each character to a PlayerValues object
+    const profileCharacters = roster.reduce((characters, character) => {
+      characters[character.defId] = PlayerValues.fromSwgohHelp(character);
+      return characters;
+    }, {});
 
-      return {
-        name: playerProfile.name,
-        mods: profileMods,
-        characters: profileCharacters,
-        updated: playerProfile.updated
-      };
-    },
+    return {
+      name: playerProfile.name,
+      mods: profileMods,
+      characters: profileCharacters,
+      updated: playerProfile.updated
+    };
+  },
   ).catch(error => {
     if (error instanceof TypeError) {
       throw new Error(
@@ -178,7 +178,7 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
 function dispatchFetchVersion(dispatch) {
   return fetch(
     'https://api.mods-optimizer.swgoh.grandivory.com/versionapi',
-    {method: 'POST', body: {}, mode: 'cors'}
+    { method: 'POST', body: {}, mode: 'cors' }
   )
     .then(response => response.text())
     .then(version => {
@@ -202,15 +202,16 @@ export function refreshPlayerData(allyCode, keepOldMods) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
   const messages = [];
 
-  return function(dispatch) {
+  return function (dispatch) {
     return dispatchFetchCharacters(dispatch, false)
-    // Only continue to fetch the player's profile if the character fetch was successful
+      // Only continue to fetch the player's profile if the character fetch was successful
       .then((characterMessages) => {
         messages.push(...characterMessages);
         return dispatchFetchProfile(dispatch, cleanedAllyCode, messages, keepOldMods, false);
       })
       .then(profile => dispatchFetchCharacterStats(dispatch, cleanedAllyCode, profile ? profile.characters : null))
       .catch(error => {
+        dispatch(setIsBusy(false));
         dispatch(hideFlash());
         dispatch(showError(error.message));
       });
@@ -225,7 +226,7 @@ export function refreshPlayerData(allyCode, keepOldMods) {
 export function fetchCharacters(allyCode) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
 
-  return function(dispatch) {
+  return function (dispatch) {
     return dispatchFetchCharacters(dispatch, cleanedAllyCode, true);
   }
 }
@@ -239,18 +240,22 @@ export function fetchCharacters(allyCode) {
 export function fetchProfile(allyCode) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
 
-  return function(dispatch) {
+  return function (dispatch) {
     return dispatchFetchProfile(dispatch, cleanedAllyCode, true)
-      .catch(error => dispatch(showError(error.message)));
+      .catch(error => {
+        dispatch(setIsBusy(false));
+        dispatch(showError(error.message));
+      })
   }
 }
 
 export function fetchCharacterStats(allyCode, characters) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
 
-  return function(dispatch) {
+  return function (dispatch) {
     return dispatchFetchCharacterStats(dispatch, cleanedAllyCode, characters)
       .catch(error => {
+        dispatch(setIsBusy(false));
         dispatch(hideFlash());
         dispatch(showError(error.message))
       });
@@ -264,7 +269,7 @@ export function fetchCharacterStats(allyCode, characters) {
  * @returns {Function}
  */
 export function receiveCharacters(characters, lastStep) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     if (!characters && lastStep) {
       dispatch(setIsBusy(false));
@@ -310,7 +315,7 @@ export function receiveCharacters(characters, lastStep) {
  * @returns {Function}
  */
 export function receiveProfile(allyCode, profile, messages, keepOldMods, lastStep) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     if ((!profile || !profile.characters) && lastStep) {
       dispatch(setIsBusy(false));
@@ -428,7 +433,7 @@ export function receiveProfile(allyCode, profile, messages, keepOldMods, lastSte
         <p key={102}>You should be able to fetch fresh data any time after <span className={'gold'}>
           {nextUpdate.toLocaleString()}</span>
         </p>,
-        <hr key={103}/>,
+        <hr key={103} />,
         <h3 key={104}><strong>
           Remember: The optimizer can only pull data for mods that you currently have equipped!
         </strong></h3>,
@@ -450,7 +455,7 @@ export function receiveProfile(allyCode, profile, messages, keepOldMods, lastSte
  * @returns {Function}
  */
 export function receiveStats(allyCode, requestedCharacters, characterStats) {
-  return function(dispatch) {
+  return function (dispatch) {
     const db = getDatabase();
     if (!characterStats) {
       dispatch(setIsBusy(false));
@@ -544,7 +549,7 @@ export function receiveStats(allyCode, requestedCharacters, characterStats) {
 }
 
 export function receiveVersion(version) {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const state = getState();
 
     if (state.version < version) {
