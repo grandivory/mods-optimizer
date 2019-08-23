@@ -157,15 +157,14 @@ function dispatchFetchProfile(dispatch, allyCode, messages, keepOldMods, lastSte
 function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
   if (null !== characters) {
     return post(
-      'https://crinolo-swgoh.glitch.me/statCalc/api/characters',
+      'https://swgoh-stat-calc.glitch.me/api/characters',
       Object.keys(characters).map(charID => ({
         'defId': charID,
         'rarity': characters[charID].stars,
         'level': characters[charID].level,
         'gear': characters[charID].gearLevel,
         'equipped': characters[charID].gearPieces
-      })),
-      { mode: 'no-cors' }
+      }))
     )
       .catch(() => {
         throw new Error('Error fetching your character\'s stats. Please try again.')
