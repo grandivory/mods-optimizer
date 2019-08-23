@@ -160,7 +160,8 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
         'level': characters[charID].level,
         'gear': characters[charID].gearLevel,
         'equipped': characters[charID].gearPieces
-      }))
+      })),
+      { mode: 'no-cors' }
     )
       .catch(() => {
         throw new Error('Error fetching your character\'s stats. Please try again.')
