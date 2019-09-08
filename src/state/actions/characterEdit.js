@@ -1,7 +1,8 @@
 // @flow
 import { hideModal, showFlash, updateProfile } from "./app";
-import { mapObject } from "../../utils/mapObject";
+import { mapObject, mapObjectByKeyAndValue } from "../../utils/mapObject";
 import groupByKey from "../../utils/groupByKey";
+import collectByKey from "../../utils/collectByKey";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import getDatabase from "../storage/Database";
 import { loadCharacterTemplates } from "./storage";
@@ -510,10 +511,25 @@ export function appendTemplate(name) {
   function updateFunction(template) {
     return updateProfile(
       profile => {
+        const templateTargetsById = mapObject(
+          collectByKey(template.selectedCharacters, ({ id }) => id),
+          entries => entries.map(({ target }) => target)
+        );
+
         const availableCharacters = template.selectedCharacters.filter(({ id }) => Object.keys(profile.characters)
           .includes(id));
 
-        return profile.withSelectedCharacters(profile.selectedCharacters.concat(availableCharacters));
+        const newProfile = profile.withCharacters(mapObject(profile.characters, character => {
+          if (template.selectedCharacters.map(({ id }) => id).includes(character.baseID)) {
+            return character.withOptimizerSettings(
+              character.optimizerSettings.withTargetOverrides(templateTargetsById[character.baseID])
+            );
+          } else {
+            return character;
+          }
+        }));
+
+        return newProfile.withSelectedCharacters(profile.selectedCharacters.concat(availableCharacters));
       },
       (dispatch, getState, newProfile) => {
         const state = getState();
@@ -558,10 +574,25 @@ export function replaceTemplate(name) {
   function updateFunction(template) {
     return updateProfile(
       profile => {
+        const templateTargetsById = mapObject(
+          collectByKey(template.selectedCharacters, ({ id }) => id),
+          entries => entries.map(({ target }) => target)
+        );
+
         const availableCharacters = template.selectedCharacters.filter(({ id }) => Object.keys(profile.characters)
           .includes(id));
 
-        return profile.withSelectedCharacters(availableCharacters);
+        const newProfile = profile.withCharacters(mapObject(profile.characters, character => {
+          if (template.selectedCharacters.map(({ id }) => id).includes(character.baseID)) {
+            return character.withOptimizerSettings(
+              character.optimizerSettings.withTargetOverrides(templateTargetsById[character.baseID])
+            );
+          } else {
+            return character;
+          }
+        }));
+
+        return newProfile.withSelectedCharacters(availableCharacters);
       },
       (dispatch, getState, newProfile) => {
         const state = getState();
@@ -606,6 +637,21 @@ export function applyTemplateTargets(name) {
   function updateFunction(template) {
     return updateProfile(
       profile => {
+        const templateTargetsById = mapObject(
+          collectByKey(template.selectedCharacters, ({ id }) => id),
+          entries => entries.map(({ target }) => target)
+        );
+
+        const newProfile = profile.withCharacters(mapObject(profile.characters, character => {
+          if (template.selectedCharacters.map(({ id }) => id).includes(character.baseID)) {
+            return character.withOptimizerSettings(
+              character.optimizerSettings.withTargetOverrides(templateTargetsById[character.baseID])
+            );
+          } else {
+            return character;
+          }
+        }));
+
         const newSelectedCharacters = profile.selectedCharacters.slice(0);
         template.selectedCharacters.forEach(({ id: templateCharId, target: templateTarget }) => {
           for (let selectedCharacter of newSelectedCharacters) {
@@ -615,7 +661,7 @@ export function applyTemplateTargets(name) {
           }
         });
 
-        return profile.withSelectedCharacters(newSelectedCharacters);
+        return newProfile.withSelectedCharacters(newSelectedCharacters);
       },
       (dispatch, getState, newProfile) => {
         const state = getState();
