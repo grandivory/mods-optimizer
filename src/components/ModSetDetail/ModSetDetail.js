@@ -27,9 +27,9 @@ class ModSetDetail extends React.PureComponent {
           <td className={'stat-type'}>{stat.displayType}</td>
           <td className={'stat-value'}>???(???)</td>
           {diffStat &&
-          <td className={'stat-diff' + (diffStat.value > 0 ? ' increase' : diffStat.value < 0 ? ' decrease' : '')}>
-            {diffStat.showValue()}
-          </td>
+            <td className={'stat-diff' + (diffStat.value > 0 ? ' increase' : diffStat.value < 0 ? ' decrease' : '')}>
+              {diffStat.showValue()}
+            </td>
           }
         </tr>;
       }
@@ -68,15 +68,15 @@ class ModSetDetail extends React.PureComponent {
       return <tr key={index}>
         <td className={'stat-type'}>{stat.displayType}</td>
         {diffStat &&
-        <td className={'stat-value'}>
-          <span className={'total-value'}>
-            {originalStatValue % 1 ?
-              originalStatValue.toFixed(2) :
-              originalStatValue}
-            {diffStat.displayModifier}{' '}
-          </span>
-          <span className={'mods-value'}>({originalStat.showValue()})</span>
-        </td>
+          <td className={'stat-value'}>
+            <span className={'total-value'}>
+              {originalStatValue % 1 ?
+                originalStatValue.toFixed(2) :
+                originalStatValue}
+              {originalStat.displayModifier}{' '}
+            </span>
+            <span className={'mods-value'}>({originalStat.showValue()})</span>
+          </td>
         }
         <td className={'stat-value'}>
           <span className={'total-value'}>
@@ -85,12 +85,12 @@ class ModSetDetail extends React.PureComponent {
           <span className={'mods-value'}>({stat.showValue()})</span>
         </td>
         {diffStat &&
-        <td className={'stat-diff' + (diffStat.value > 0 ? ' increase' : diffStat.value < 0 ? ' decrease' : '')}>
-          {diffStat.showValue()}
-        </td>
+          <td className={'stat-diff' + (diffStat.value > 0 ? ' increase' : diffStat.value < 0 ? ' decrease' : '')}>
+            {diffStat.showValue()}
+          </td>
         }
         <td className={'optimizer-value ' +
-        (optimizationValue > 0 ? 'increase' : optimizationValue < 0 ? 'decrease' : '')}>
+          (optimizationValue > 0 ? 'increase' : optimizationValue < 0 ? 'decrease' : '')}>
           {optimizationValue.toFixed(2)}
         </td>
       </tr>;
@@ -103,23 +103,23 @@ class ModSetDetail extends React.PureComponent {
     return (
       <div className={'mod-set-detail'}>
         <ModSetView modSet={modSet} showAvatars={showAvatars} assignedCharacter={this.props.assignedCharacter}
-                    assignedTarget={this.props.assignedTarget}/>
+          assignedTarget={this.props.assignedTarget} />
         <div className={'summary'}>
           <table>
             <thead>
-            <tr>
-              <th colSpan={diffSet ? 5 : 4}>Stats Summary</th>
-            </tr>
-            <tr>
-              <th></th>
-              <th>Current</th>
-              <th>Recommended</th>
-              <th>Change</th>
-              <th>Value</th>
-            </tr>
+              <tr>
+                <th colSpan={diffSet ? 5 : 4}>Stats Summary</th>
+              </tr>
+              <tr>
+                <th></th>
+                <th>Current</th>
+                <th>Recommended</th>
+                <th>Change</th>
+                <th>Value</th>
+              </tr>
             </thead>
             <tbody>
-            {statsDisplay}
+              {statsDisplay}
             </tbody>
           </table>
         </div>
@@ -129,11 +129,11 @@ class ModSetDetail extends React.PureComponent {
             Total Value of Set: {modSet.getOptimizationValue(character, target, useUpgrades).toFixed(2)}
           </div>
           {diffSet &&
-          <div>Value Change:&nbsp;
+            <div>Value Change:&nbsp;
             <span className={valueChange > 0 ? 'increase' : valueChange < 0 ? 'decrease' : ''}>
-              {valueChange}%
+                {valueChange}%
             </span>
-          </div>}
+            </div>}
         </div>
       </div>
     );
