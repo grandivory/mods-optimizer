@@ -704,6 +704,7 @@ class CharacterEditView extends PureComponent {
 const mapStateToProps = (state) => {
   const profile = state.profile;
   const availableCharacters = Object.values(profile.characters)
+    .filter(character => character.playerValues.level >= 50)
     .filter(character => !state.hideSelectedCharacters ||
       !profile.selectedCharacters.map(({ id }) => id).includes(character.baseID)
     )
