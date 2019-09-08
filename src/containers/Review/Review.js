@@ -371,26 +371,31 @@ class Review extends React.PureComponent {
    * @returns JSX Element
    */
   sidebarActions() {
+    function hotUtilsExport() {
+      // Save the results to a file
+      const exportObject = {
+        'allyCode': this.props.allyCode,
+        'modAssignments': this.props.assignedMods
+          .filter(x => null !== x)
+          .filter(({ id }) => this.props.characters[id].playerValues.level >= 50)
+          .map(({ id, assignedMods, target }) => ({
+            id: id,
+            assignedMods: assignedMods,
+            target: target.name
+          }))
+      };
+      const serializedExport = JSON.stringify(exportObject);
+      const exportBlob = new Blob([serializedExport], { type: 'application/json;charset=utf-8' });
+      saveAs(exportBlob, `hotUtils-${(new Date()).toISOString().slice(0, 10)}.json`);
+    }
+
     return <div className={'sidebar-actions'} key={'sidebar-actions'}>
       <h3>I don't like these results...</h3>
       <button type={'button'} onClick={this.props.edit}>
         Change my selection
       </button>
       <hr />
-      <button type={'button'} onClick={() => {
-        // Save the results to a file
-        const exportObject = {
-          'allyCode': this.props.allyCode,
-          'modAssignments': this.props.assignedMods.filter(x => null !== x).map(({ id, assignedMods, target }) => ({
-            id: id,
-            assignedMods: assignedMods,
-            target: target.name
-          }))
-        };
-        const serializedExport = JSON.stringify(exportObject);
-        const exportBlob = new Blob([serializedExport], { type: 'application/json;charset=utf-8' });
-        saveAs(exportBlob, `hotUtils-${(new Date()).toISOString().slice(0, 10)}.json`);
-      }}>
+      <button type={'button'} onClick={hotUtilsExport.bind(this)}>
         Export for HotUtils
       </button>
       <Help header={'What is HotUtils?'}>
@@ -437,7 +442,6 @@ class Review extends React.PureComponent {
   copySummaryToClipboard() {
     copyToClipboard(this.summaryListContent());
   }
-  ;
 
   summaryListContent() {
     const capitalize = function (str) {
@@ -602,7 +606,9 @@ const mapStateToProps = (state) => {
   const removedMods = flatten(
     movingModsByAssignedCharacter.map(({ id, assignedMods }) => {
       const changingSlots = assignedMods.map(mod => mod.slot);
-      return currentModsByCharacter[id].filter(mod => changingSlots.includes(mod.slot))
+      return currentModsByCharacter[id] ?
+        currentModsByCharacter[id].filter(mod => changingSlots.includes(mod.slot)) :
+        []
     })
   ).filter(mod => !movingMods.includes(mod));
 
