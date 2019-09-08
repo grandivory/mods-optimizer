@@ -591,10 +591,27 @@ const mapStateToProps = (state) => {
     ({ id: id, target: target, assignedMods: assignedMods.filter(mod => mod.characterID !== id) })
   ).filter(({ assignedMods }) => assignedMods.length);
 
-  const movingMods = flatten(movingModsByAssignedCharacter.map(({ assignedMods }) => assignedMods));
+  const movingMods = flatten(
+    movingModsByAssignedCharacter.map(({ assignedMods }) => assignedMods)
+  ).filter(mod => mod.characterID);
 
+  // Mod cost is the cost of all mods that are being REMOVED. Every mod
+  // being assigned to a new character (so that isn't already unassigned) is
+  // being removed from that character. Then, any mods that used to be equipped
+  // are also being removed.
+  const removedMods = flatten(
+    movingModsByAssignedCharacter.map(({ id, assignedMods }) => {
+      const changingSlots = assignedMods.map(mod => mod.slot);
+      return currentModsByCharacter[id].filter(mod => changingSlots.includes(mod.slot))
+    })
+  ).filter(mod => !movingMods.includes(mod));
+
+  const modCostBasis = movingMods.concat(removedMods);
   // Get a count of how much it will cost to move the mods. It only costs money to remove mods
-  const modRemovalCost = movingMods.reduce((cost, mod) => cost + modRemovalCosts[mod.pips], 0);
+  const modRemovalCost = modCostBasis.reduce(
+    (cost, mod) => cost + modRemovalCosts[mod.pips],
+    0
+  );
 
   const modsBeingUpgraded = modAssignments.filter(({ target }) => OptimizationPlan.shouldUpgradeMods(target))
     .map(({ id, assignedMods }) => assignedMods.filter(mod => 15 !== mod.level))
