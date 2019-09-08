@@ -1335,9 +1335,15 @@ function* getPotentialModsToSatisfyTargetStat(usableMods, character, target) {
     const valuableStat = setStats.find(stat => stat.displayType === targetStat.stat);
 
     if (valuableStat) {
+      // If the set is one that uses only whole-number values, then take the floor
+      // of the stat to get its real value
+      const workingValue = ['health', 'defense', 'offense', 'speed'].includes(setBonus.name) ?
+        Math.floor(valuableStat.value) :
+        valuableStat.value;
+
       setValue = {
         'set': setBonus,
-        'value': valuableStat.value,
+        'value': workingValue,
         'min': setRestrictions[setBonus.name] || 0,
         'max': (setRestrictions[setBonus.name] || 0) + Math.floor(modSlotsOpen / setBonus.numberOfModsRequired)
       };
