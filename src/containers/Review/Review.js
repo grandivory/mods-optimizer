@@ -372,17 +372,27 @@ class Review extends React.PureComponent {
    */
   sidebarActions() {
     function hotUtilsExport() {
+      const assignedMods = this.props.assignedMods
+        .filter(x => null !== x)
+        .filter(({ id }) => this.props.characters[id].playerValues.level >= 50)
+        .map(({ id, assignedMods, target }) => ({
+          id: id,
+          assignedMods: assignedMods,
+          target: target.name
+        }));
+
+      const lockedMods = Object.entries(this.props.currentModsByCharacter)
+        .filter(([id]) => this.props.characters[id].optimizerSettings.isLocked)
+        .map(([id, mods]) => ({
+          id: id,
+          assignedMods: mods.map(({ id }) => id),
+          target: 'locked'
+        }));
+
       // Save the results to a file
       const exportObject = {
         'allyCode': this.props.allyCode,
-        'modAssignments': this.props.assignedMods
-          .filter(x => null !== x)
-          .filter(({ id }) => this.props.characters[id].playerValues.level >= 50)
-          .map(({ id, assignedMods, target }) => ({
-            id: id,
-            assignedMods: assignedMods,
-            target: target.name
-          }))
+        'modAssignments': assignedMods.concat(lockedMods)
       };
       const serializedExport = JSON.stringify(exportObject);
       const exportBlob = new Blob([serializedExport], { type: 'application/json;charset=utf-8' });
