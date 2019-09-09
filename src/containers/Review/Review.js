@@ -534,7 +534,9 @@ const mapStateToProps = (state) => {
   );
 
   const currentSetValue = modAssignments.map(({ id, target }) =>
-    (new ModSet(currentModsByCharacter[id])).getOptimizationValue(profile.characters[id], target, false)
+    currentModsByCharacter[id] ?
+      (new ModSet(currentModsByCharacter[id])).getOptimizationValue(profile.characters[id], target, false) :
+      0
   ).reduce((a, b) => a + b, 0);
   const newSetValue = modAssignments.map(({ id, target, assignedMods }) =>
     (new ModSet(assignedMods)).getOptimizationValue(profile.characters[id], target, true)
