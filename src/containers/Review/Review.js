@@ -429,7 +429,7 @@ class Review extends React.PureComponent {
    * @returns {*[]}
    */
   fullSidebar() {
-    const valueChange = (this.props.newSetValue - this.props.currentSetValue) / this.props.currentSetValue;
+    const valueChange = 100 * (this.props.newSetValue - this.props.currentSetValue) / this.props.currentSetValue;
 
     const setValueSummary = <div key={'setValueSummary'} className='setValueSummary'>
       <h3>Set Value Summary</h3>
