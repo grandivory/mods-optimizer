@@ -1,6 +1,6 @@
 // @flow
 import { hideModal, showFlash, updateProfile } from "./app";
-import { mapObject, mapObjectByKeyAndValue } from "../../utils/mapObject";
+import { mapObject } from "../../utils/mapObject";
 import groupByKey from "../../utils/groupByKey";
 import collectByKey from "../../utils/collectByKey";
 import OptimizationPlan from "../../domain/OptimizationPlan";
