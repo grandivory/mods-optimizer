@@ -146,6 +146,10 @@ const modUpgradeCosts = {
   }
 };
 
+function formatNumber(number) {
+  return number.toLocaleString(navigator.language, { 'useGrouping': true });
+}
+
 class Review extends React.PureComponent {
   render() {
     let modRows;
@@ -164,9 +168,7 @@ class Review extends React.PureComponent {
         modRows = this.setsView(this.props.displayedMods);
     }
 
-    const formatNumber = number => number.toLocaleString(navigator.language, { 'useGrouping': true });
-
-    const subheading = 0 < this.props.modUpgradeCost ?
+    const subHeading = 0 < this.props.modUpgradeCost ?
       <h3>
         Your mods will cost {formatNumber(this.props.modRemovalCost)} <Credits /> to move,
         and an additional {formatNumber(this.props.modUpgradeCost)} <Credits /> to level up to 15.
@@ -174,7 +176,6 @@ class Review extends React.PureComponent {
       <h3>
         Your mods will cost {formatNumber(this.props.modRemovalCost)} <Credits /> to move
       </h3>;
-
 
     let reviewContent;
 
@@ -204,7 +205,7 @@ class Review extends React.PureComponent {
     return <div className={'review-list'}>
       <Sidebar content={this.fullSidebar()} />
       <h2>Reassigning {this.props.numMovingMods} mods {summaryButton}</h2>
-      {subheading}
+      {subHeading}
       {reviewContent}
     </div>;
   }
@@ -428,11 +429,24 @@ class Review extends React.PureComponent {
    * @returns {*[]}
    */
   fullSidebar() {
+    const valueChange = (this.props.newSetValue - this.props.currentSetValue) / this.props.currentSetValue;
+
+    const setValueSummary = <div key={'setValueSummary'} className='setValueSummary'>
+      <h3>Set Value Summary</h3>
+      <h4>Old set value sum: {formatNumber(this.props.currentSetValue.toFixed(2))}</h4>
+      <h4>New set value sum: {formatNumber(this.props.newSetValue.toFixed(2))}</h4>
+      <h4>Overall change: <span className={valueChange > 0 ? 'increase' : valueChange < 0 ? 'decrease' : ''}>
+        {formatNumber(valueChange.toFixed(2))}%
+        </span>
+      </h4>
+    </div>;
+
     return [
       <div className={'filters'} key={'filters'}>
         {this.filterForm()}
       </div>,
-      this.sidebarActions()
+      this.sidebarActions(),
+      setValueSummary
     ];
   }
 
@@ -518,6 +532,13 @@ const mapStateToProps = (state) => {
     assignedMods.filter(mod => mod.characterID !== id).length + count
     , 0
   );
+
+  const currentSetValue = modAssignments.map(({ id, target }) =>
+    (new ModSet(currentModsByCharacter[id])).getOptimizationValue(profile.characters[id], target, false)
+  ).reduce((a, b) => a + b, 0);
+  const newSetValue = modAssignments.map(({ id, target, assignedMods }) =>
+    (new ModSet(assignedMods)).getOptimizationValue(profile.characters[id], target, true)
+  ).reduce((a, b) => a + b, 0);
 
   let displayedMods;
   let tags;
@@ -652,6 +673,8 @@ const mapStateToProps = (state) => {
   return {
     allyCode: state.allyCode,
     assignedMods: profile.modAssignments,
+    currentSetValue: currentSetValue,
+    newSetValue: newSetValue,
     characters: profile.characters,
     gameSettings: state.gameSettings,
     currentModsByCharacter: currentModsByCharacter,

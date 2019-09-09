@@ -100,3 +100,11 @@
 .sidebar-actions h3 {
   margin-top: 0;
 }
+
+.sidebar h4 {
+  margin: 0;
+}
+
+.sidebar div > h3:first-child {
+  margin-top: 0;
+}
