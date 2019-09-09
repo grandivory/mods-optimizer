@@ -175,29 +175,38 @@ class Review extends React.PureComponent {
         Your mods will cost {formatNumber(this.props.modRemovalCost)} <Credits /> to move
       </h3>;
 
+
+    let reviewContent;
+
     if (0 === this.props.numMovingMods) {
-      return <div className={'review-list'}>
-        <Sidebar content={this.sidebarActions()} />
-        <h2>You don't have any mods left to move! Great job!</h2>
-        <h3>Don't forget to assign mods to all your pilots!</h3>
-      </div>;
+      if (0 === this.props.displayedMods.length) {
+        reviewContent = <div>
+          <h2>You don't have any mods left to move! Great job!</h2>
+          <h3>Don't forget to assign mods to all your pilots!</h3>
+        </div>;
+      } else {
+        reviewContent = <div className={'mods-list'}>
+          {modRows}
+        </div>;
+      }
     } else {
-      return (
-        <div className={'review-list'}>
-          <Sidebar content={this.fullSidebar()} />
-          <h2>Reassigning {this.props.numMovingMods} mods {summaryButton}</h2>
-          {subheading}
-          {(0 < this.props.displayedMods.length) &&
-            <div className={'mods-list'}>
-              {modRows}
-            </div>
-          }
-          {(0 === this.props.displayedMods.length) &&
-            <h3>No more mods to move under that filter. Try a different filter now!</h3>
-          }
-        </div>
-      );
+      if (0 === this.props.displayedMods.length) {
+        reviewContent = <h3>
+          No more mods to move under that filter. Try a different filter now!
+        </h3>;
+      } else {
+        reviewContent = <div className={'mods-list'}>
+          {modRows}
+        </div>;
+      }
     }
+
+    return <div className={'review-list'}>
+      <Sidebar content={this.fullSidebar()} />
+      <h2>Reassigning {this.props.numMovingMods} mods {summaryButton}</h2>
+      {subheading}
+      {reviewContent}
+    </div>;
   }
 
   /**
