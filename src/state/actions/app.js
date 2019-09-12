@@ -8,7 +8,7 @@ import {
   saveGameSettings,
   saveLastRuns,
   saveProfiles,
-  addModsToProfiles,
+  replaceModsForProfiles,
   setProfile
 } from "./storage";
 import { deserializeState } from "../storage";
@@ -102,7 +102,7 @@ export function restoreProgress(progressData) {
     // If the progress data has only a profiles section, then it's an export from HotUtils.
     // Add the mods to any existing profile
     if (!stateObj.version && stateObj.profiles && !stateObj.gameSettings) {
-      dispatch(addModsToProfiles(stateObj.profiles));
+      dispatch(replaceModsForProfiles(stateObj.profiles));
     } else if (stateObj.version > '1.4' && stateObj.version !== 'develop') {
       dispatch(saveGameSettings(stateObj.gameSettings));
       dispatch(saveProfiles(stateObj.profiles, stateObj.allyCode));

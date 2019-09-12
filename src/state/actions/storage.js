@@ -347,7 +347,7 @@ export function saveProfiles(profiles, allyCode) {
 export function addModsToProfiles(newProfiles) {
   const newProfilesObject = groupByKey(newProfiles, profile => profile.allyCode);
 
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const state = getState();
     const db = getDatabase();
     db.getProfiles(
@@ -361,6 +361,49 @@ export function addModsToProfiles(newProfiles) {
           const newProfileMods = newProfilesObject[profile.allyCode].mods.map(mod => Mod.fromHotUtils(mod));
           const newProfileModsObject = groupByKey(newProfileMods, mod => mod.id)
           return profile.withMods(Object.values(Object.assign({}, profileModsObject, newProfileModsObject)));
+        });
+
+        const totalMods = newProfiles.reduce((sum, profile) => sum + profile.mods.length, 0);
+
+        db.saveProfiles(
+          updatedProfiles,
+          () => {
+            dispatch(loadProfiles(state.allyCode));
+            dispatch(showFlash(
+              'Success!',
+              <p>
+                Successfully imported  data for <span className={'gold'}>{newProfiles.length}</span> profile(s)
+                containing <span className={'gold'}>{totalMods}</span> mods.
+              </p>,
+            ));
+          },
+          error => dispatch(showError(
+            'Error saving player profiles: ' + error.message
+          ))
+        );
+      },
+      error => dispatch(showError(
+        'Error reading profiles: ' + error.message
+      ))
+    );
+  }
+}
+
+export function replaceModsForProfiles(newProfiles) {
+  const newProfilesObject = groupByKey(newProfiles, profile => profile.allyCode);
+
+  return function (dispatch, getState) {
+    const state = getState();
+    const db = getDatabase();
+    db.getProfiles(
+      profiles => {
+        const updatedProfiles = profiles.map(profile => {
+          if (!newProfilesObject.hasOwnProperty(profile.allyCode)) {
+            return profile;
+          }
+
+          const newProfileMods = newProfilesObject[profile.allyCode].mods.map(mod => Mod.fromHotUtils(mod));
+          return profile.withMods(newProfileMods);
         });
 
         const totalMods = newProfiles.reduce((sum, profile) => sum + profile.mods.length, 0);
