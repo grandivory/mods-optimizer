@@ -102,6 +102,21 @@
   background-image: url('/img/g13-overlay.png');
 }
 
+.avatar.gear-13.align-light::after,
+.avatar.gear-13.align-dark::after {
+  width: 120%;
+  height: 120%;
+  left: -10%;
+  top: -10%;
+  background-image: url('/img/g13-frame-atlas.png');
+  background-size: 100% 300%;
+  background-position-x: center;
+}
+
+.avatar.gear-13.align-dark::after {
+  background-position-y: 50%
+}
+
 .avatar .star {
   background: url('/img/star-passive.png') no-repeat;
   background-size: contain;
@@ -111,6 +126,7 @@
   position: absolute;
   left: 41.66%;
   top: 41.66%;
+  z-index: 10000;
 }
 
 .avatar .star.active {

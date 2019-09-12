@@ -2,8 +2,8 @@
 
 import React from 'react';
 import './CharacterAvatar.css';
-import {connect} from "react-redux";
-import {GameSettings} from "../../domain/CharacterDataClasses";
+import { connect } from "react-redux";
+import { GameSettings } from "../../domain/CharacterDataClasses";
 
 class CharacterAvatar extends React.PureComponent {
   render() {
@@ -22,12 +22,12 @@ class CharacterAvatar extends React.PureComponent {
     const id = this.props.id || null;
     const className = `avatar gear-${displayGear ?
       character.playerValues.gearLevel :
-      0} star-${character.playerValues.stars}`;
+      0} star-${character.playerValues.stars} align-${gameSettings.alignment}`;
 
     const star = position => {
       const isActive = position <= character.playerValues.stars;
       const baseClass = isActive ? 'active star' : 'star';
-      return <div className={`${baseClass} star-${position}`} key={`star-${position}`}/>;
+      return <div className={`${baseClass} star-${position}`} key={`star-${position}`} />;
     };
 
     return (
@@ -39,7 +39,7 @@ class CharacterAvatar extends React.PureComponent {
           src={gameSettings.avatarUrl}
           alt={gameSettings.name}
           title={gameSettings.name}
-          draggable={false}/>
+          draggable={false} />
         {displayLevel && <div className={'character-level'}>{character.playerValues.level || '??'}</div>}
       </div>
     );

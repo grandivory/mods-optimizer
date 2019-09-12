@@ -47,6 +47,11 @@ class CharacterSettings {
   }
 }
 
+const alignments = {
+  'Light Side': 'light',
+  'Dark Side': 'dark'
+};
+
 /**
  * Class to hold Character information that doesn't change, except with a game update.
  */
@@ -56,12 +61,14 @@ class GameSettings {
   avatarUrl;
   tags;
   description;
+  alignment;
 
   constructor(baseID,
-              name,
-              avatarUrl = 'https://swgoh.gg/static/img/assets/blank-character.png',
-              tags = [],
-              description = ''
+    name,
+    avatarUrl = 'https://swgoh.gg/static/img/assets/blank-character.png',
+    tags = [],
+    description = '',
+    alignment = null
   ) {
     this.baseID = baseID;
     this.name = name;
@@ -72,6 +79,7 @@ class GameSettings {
     }
     this.tags = tags;
     this.description = description;
+    this.alignment = alignments.hasOwnProperty(alignment) ? alignments[alignment] : null;
     Object.freeze(this);
   }
 
@@ -86,7 +94,8 @@ class GameSettings {
         settingsJson.name,
         settingsJson.avatarUrl,
         settingsJson.tags,
-        settingsJson.description
+        settingsJson.description,
+        settingsJson.alignment || null
       );
     } else {
       return null;
@@ -190,7 +199,7 @@ class PlayerValues {
       valuesJson.level,
       valuesJson.rarity,
       valuesJson.gear,
-      valuesJson.equipped.map(gear => ({equipmentId: gear.equipmentId})),
+      valuesJson.equipped.map(gear => ({ equipmentId: gear.equipmentId })),
       valuesJson.gp
     );
   }
@@ -249,7 +258,7 @@ class OptimizerSettings {
     const targetsObject = groupByKey(this.targets, target => target.name);
     const newTargetsObject = ['lock', 'custom'].includes(target.name) ?
       this.targets :
-      Object.assign({}, targetsObject, {[target.name]: target});
+      Object.assign({}, targetsObject, { [target.name]: target });
 
     return new OptimizerSettings(
       null,
@@ -373,4 +382,4 @@ class OptimizerSettings {
   }
 }
 
-export {CharacterSettings, GameSettings, PlayerValues, OptimizerSettings, DamageType};
+export { CharacterSettings, GameSettings, PlayerValues, OptimizerSettings, DamageType };

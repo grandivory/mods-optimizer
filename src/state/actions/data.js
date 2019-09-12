@@ -297,7 +297,8 @@ export function receiveCharacters(characters, lastStep) {
         character.categories
           .concat([character.alignment, character.role])
           .concat(null !== character.ship_slot ? ['Crew Member'] : []),
-        character.description
+        character.description,
+        character.alignment
       );
     });
 
