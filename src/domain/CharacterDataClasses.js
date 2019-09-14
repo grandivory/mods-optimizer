@@ -121,6 +121,7 @@ class PlayerValues {
   galacticPower;
   baseStats;
   equippedStats;
+  relicTier;
 
   /**
    * @param level int
@@ -130,8 +131,18 @@ class PlayerValues {
    * @param galacticPower int
    * @param baseStats CharacterStats
    * @param equippedStats CharacterStats
+   * @param relicTier {Int}
    */
-  constructor(level, stars, gearLevel, gearPieces, galacticPower, baseStats = null, equippedStats = null) {
+  constructor(
+    level,
+    stars,
+    gearLevel,
+    gearPieces,
+    galacticPower,
+    baseStats = null,
+    equippedStats = null,
+    relicTier = 1
+  ) {
     this.level = level;
     this.stars = stars;
     this.gearLevel = gearLevel;
@@ -139,6 +150,7 @@ class PlayerValues {
     this.galacticPower = galacticPower;
     this.baseStats = baseStats;
     this.equippedStats = equippedStats;
+    this.relicTier = relicTier;
     Object.freeze(this);
   }
 
@@ -151,7 +163,8 @@ class PlayerValues {
         this.gearPieces,
         this.galacticPower,
         baseStats,
-        this.equippedStats
+        this.equippedStats,
+        this.relicTier
       );
     } else {
       return this;
@@ -167,7 +180,8 @@ class PlayerValues {
         this.gearPieces,
         this.galacticPower,
         this.baseStats,
-        equippedStats
+        equippedStats,
+        this.relicTier
       );
     } else {
       return this;
@@ -185,7 +199,8 @@ class PlayerValues {
       gearPieces: this.gearPieces,
       galacticPower: this.galacticPower,
       baseStats: baseStats,
-      equippedStats: equippedStats
+      equippedStats: equippedStats,
+      relicTier: this.relicTier
     };
   }
 
@@ -200,7 +215,10 @@ class PlayerValues {
       valuesJson.rarity,
       valuesJson.gear,
       valuesJson.equipped.map(gear => ({ equipmentId: gear.equipmentId })),
-      valuesJson.gp
+      valuesJson.gp,
+      null,
+      null,
+      valuesJson.relic.currentTier
     );
   }
 
@@ -213,7 +231,8 @@ class PlayerValues {
         valuesJson.gearPieces,
         valuesJson.galacticPower,
         CharacterStats.deserialize(valuesJson.baseStats),
-        CharacterStats.deserialize(valuesJson.equippedStats)
+        CharacterStats.deserialize(valuesJson.equippedStats),
+        valuesJson.relicTier || 1
       );
     } else {
       return null;

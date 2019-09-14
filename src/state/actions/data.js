@@ -163,7 +163,10 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
         'rarity': characters[charID].stars,
         'level': characters[charID].level,
         'gear': characters[charID].gearLevel,
-        'equipped': characters[charID].gearPieces
+        'equipped': characters[charID].gearPieces,
+        'relic': {
+          'currentTier': characters[charID].relicTier
+        }
       }))
     )
       .catch(() => {
