@@ -476,6 +476,11 @@ function deserializeTarget(target) {
     }
   }
 
+  if (!updatedTarget.targetStats) {
+    updatedTarget.targetStats = target.targetStat ? [target.targetStat] : [];
+    delete updatedTarget.targetStat;
+  }
+
   return updatedTarget;
 }
 
@@ -737,29 +742,33 @@ function modSetFulfillsSetRestriction(modSet, setDefinition) {
  * @returns {boolean}
  */
 function modSetFulfillsTargetStatRestriction(modSet, character, target) {
-  const targetStat = target.targetStat;
+  const targetStats = target.targetStats;
 
-  if (!targetStat) {
+  if (0 === targetStats.length) {
     return true;
   }
-  if (statTypeMap[targetStat.stat].length > 1) {
-    throw new Error(
-      "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
-    );
-  }
-  const statProperty = statTypeMap[targetStat.stat][0];
-  const baseValue = character.playerValues.equippedStats[statProperty];
 
-  const setStats = getFlatStatsFromModSet(modSet, character, target);
+  // Check each target stat individually
+  return targetStats.every(targetStat => {
+    if (statTypeMap[targetStat.stat].length > 1) {
+      throw new Error(
+        "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
+      );
+    }
+    const statProperty = statTypeMap[targetStat.stat][0];
+    const baseValue = character.playerValues.equippedStats[statProperty];
 
-  const setValue = setStats.reduce((setValueSum, stat) =>
-    // Check to see if the stat is the target stat. If it is, add its value to the total.
-    stat.displayType === targetStat.stat ? setValueSum + stat.value : setValueSum
-    , 0);
+    const setStats = getFlatStatsFromModSet(modSet, character, target);
 
-  const totalValue = baseValue + setValue;
+    const setValue = setStats.reduce((setValueSum, stat) =>
+      // Check to see if the stat is the target stat. If it is, add its value to the total.
+      stat.displayType === targetStat.stat ? setValueSum + stat.value : setValueSum
+      , 0);
 
-  return totalValue >= targetStat.minimum && totalValue <= targetStat.maximum;
+    const totalValue = baseValue + setValue;
+
+    return totalValue <= targetStat.maximum && totalValue >= targetStat.minimum;
+  });
 }
 
 /**
@@ -1040,7 +1049,7 @@ Object.freeze(chooseTwoOptions);
 function optimizeMods(availableMods, characters, order, globalSettings, previousRun = {}) {
   // We only want to recalculate mods if settings have changed between runs. If global settings or locked
   // characters have changed, recalculate all characters
-  let recalculateMods = !previousRun.globalSettings ||
+  let recalculateMods = true || !previousRun.globalSettings ||
     globalSettings.modChangeThreshold !== previousRun.globalSettings.modChangeThreshold ||
     globalSettings.lockUnselectedCharacters !== previousRun.globalSettings.lockUnselectedCharacters ||
     globalSettings.forceCompleteSets !== previousRun.globalSettings.forceCompleteSets ||
@@ -1190,7 +1199,7 @@ function findBestModSetForCharacter(mods, character, target) {
     mods.filter(mod => 6 > mod.pips || mod.characterID === character.baseID) :
     mods;
   const setRestrictions = target.setRestrictions;
-  const targetStat = target.targetStat;
+  const targetStats = target.targetStats;
   // Clear the cache at the start of each character
   clearCache();
 
@@ -1206,11 +1215,11 @@ function findBestModSetForCharacter(mods, character, target) {
     , reducedTarget;
 
   // First, check to see if there is any target stat
-  switch (!!targetStat) {
+  switch (0 < targetStats.length) {
     case true:
       // If so, create an array of potential mod sets that could fill it
       progressMessage(character, 'Calculating sets to meet target value', 0);
-      let potentialModSets = getPotentialModsToSatisfyTargetStat(usableMods, character, mutableTarget);
+      let potentialModSets = getPotentialModsToSatisfyTargetStats(usableMods, character, mutableTarget);
 
       ({ modSet, messages } = findBestModSetFromPotentialMods(potentialModSets, character, mutableTarget));
 
@@ -1226,7 +1235,7 @@ function findBestModSetForCharacter(mods, character, target) {
         if (mutableTarget.useOnlyFullSets) {
           extraMessages.push('Could not fill the target stat with full sets, so the full sets restriction was dropped');
 
-          potentialModSets = getPotentialModsToSatisfyTargetStat(usableMods, character, mutableTarget);
+          potentialModSets = getPotentialModsToSatisfyTargetStats(usableMods, character, mutableTarget);
           ({ modSet, messages } = findBestModSetFromPotentialMods(potentialModSets, character, reducedTarget));
         }
       }
@@ -1235,7 +1244,7 @@ function findBestModSetForCharacter(mods, character, target) {
         ({ modSet, messages } =
           findBestModSetByLooseningSetRestrictions(usableMods, character, reducedTarget, setRestrictions));
 
-        extraMessages.push('Could not fill the target stat as given, so the target stat restriction was dropped');
+        extraMessages.push('Could not fill the target stats as given, so the target stat restriction was dropped');
       }
 
       if (modSet.length) {
@@ -1280,27 +1289,253 @@ function findBestModSetForCharacter(mods, character, target) {
  * @returns {Array<Array<Mod>,Object<String, Number>>} An array of potential mods that could be used to create a set
  *   that fulfills the target stat as [mods, setRestriction]
  */
-function* getPotentialModsToSatisfyTargetStat(usableMods, character, target) {
+// TODO: Refactor this function
+// * Create a new function that will loop over each target stat
+// * At each iteration, run the equivalent of this function on every mod set from the previous iteration
+// * Then, filter out any that are empty
+function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
   const setRestrictions = target.setRestrictions;
-  const targetStat = target.targetStat;
-  // A map from mod ID to the absolute value that mod provides for the target stat
-  const modValues = {};
-  let setValue = null;
+  const targetStats = target.targetStats.slice(0);
+  const statNames = targetStats.map(targetStat => targetStat.stat);
+  // A map from the set name to the value the set provides for a target stat
+  // {statName: {set, value}}
+  const setValues = getSetBonusesThatHaveValueForStats(statNames, character, setRestrictions);
 
-  // First, get the base value of the stat on the character so it can be subtracted
+  // First, get the base values of each stat on the character so they can be subtracted
   // from what's needed for the min and max
-  const characterStatProperties = statTypeMap[targetStat.stat];
-  if (1 < characterStatProperties.length) {
-    throw new Error(
-      "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
-    );
-  }
-  const characterValue = character.playerValues.equippedStats[characterStatProperties[0]] || 0;
+  // {statName: value}
+  const characterValues = getStatValuesForCharacter(character, statNames);
 
-  // Get the raw value for the stat from each mod in the set, and collect them into slots
-  const valuesBySlot = {};
-  modSlots.forEach(slot => valuesBySlot[slot] = new Set([0]));
-  usableMods.forEach(mod => {
+  const [modValues, valuesBySlot] = collectModValuesBySlot(usableMods, statNames);
+
+  // Determine the sets of values for each target stat that will satisfy it
+  // {statName: {setCount: [{slot: slotValue}]}}
+  const modConfigurationsByStat = {};
+  const totalModSlotsOpen = 6 - Object.entries(setRestrictions).filter(([setName, setCount]) => -1 !== setCount).reduce(
+    (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
+  );
+  targetStats.forEach(targetStat => {
+    const setValue = setValues[targetStat.stat];
+
+    if (setValue) {
+      modConfigurationsByStat[targetStat.stat] = {};
+      const minSets = setRestrictions[setValue.set.name] || 0;
+      const maxSets = (setRestrictions[setValue.set.name] || 0) +
+        Math.floor(totalModSlotsOpen / setValue.set.numberOfModsRequired)
+
+      for (let numSetsUsed = minSets; numSetsUsed <= maxSets; numSetsUsed++) {
+        const nonModValue = characterValues[targetStat.stat] + setValue.value * numSetsUsed;
+
+        modConfigurationsByStat[targetStat.stat][numSetsUsed] = findStatValuesThatMeetTarget(
+          valuesBySlot[targetStat.stat],
+          targetStat.minimum - nonModValue,
+          targetStat.maximum - nonModValue
+        );
+      }
+    } else {
+      modConfigurationsByStat[targetStat.stat] = {
+        0: findStatValuesThatMeetTarget(
+          valuesBySlot[targetStat.stat],
+          targetStat.minimum - characterValues[targetStat.stat],
+          targetStat.maximum - characterValues[targetStat.stat]
+        )
+      }
+    }
+  });
+
+  /**
+   * Iterate over groups of mods, breaking them into sub-groups that satisfy the target stats
+   *
+   * @param modGroup {Array<[Mods, SetRestrictions]>} A set of mods and set restrictions that satisfy all target stats
+   *                                                  so far.
+   * @param targetStats {Array<TargetStat>} The target stats that still have to be processed
+   * @param topLevel {Boolean} An indicator if this is the first level of mod break-down (for progress reporting)
+   * @returns {Array<Array<Mod>,Object<String, Number>>} An array of potential mods that could be used to create a set
+   *                                                     that fulfills the target stat as [mods, setRestriction]
+   */
+  function* targetStatRecursor(modGroup, targetStats, topLevel) {
+    if (0 === targetStats.length) {
+      yield modGroup;
+      return;
+    } else {
+      const updatedTargetStats = targetStats.slice(0);
+      const currentTarget = updatedTargetStats.pop();
+      const [mods, setRestrictions] = modGroup;
+      const setValue = setValues[currentTarget.stat];
+
+      // TODO: Send progress messages as we iterate over the possible values
+      //   const progressPercent = progressMin + (currentIteration / totalIterations) * (progressMax - progressMin);
+      //   progressMessage(character, 'Calculating sets to meet target value', progressPercent);
+
+
+      // Find any collection of values that will sum up to the target stat
+      // If there is a setValue, repeat finding mods to fill the target for as many sets as can be used
+      if (setValue) {
+        // Also check to see if any mod set a) provides a value for the stats and b) can be added to the set restrictions
+        const modSlotsOpen = 6 - Object.entries(setRestrictions).filter(([setName, setCount]) => -1 !== setCount).reduce(
+          (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
+        );
+
+        const minSets = setRestrictions[setValue.set.name] || 0;
+        const maxSets = (setRestrictions[setValue.set.name] || 0) +
+          Math.floor(modSlotsOpen / setValue.set.numberOfModsRequired)
+
+        const numConfigurations = Object.values(modConfigurationsByStat[currentTarget.stat])
+          .reduce((totalConfigurations, configuration) => totalConfigurations + configuration.length, 0);
+        const onePercent = Math.floor(numConfigurations / 100);
+        let currentIteration = 0;
+
+        for (let numSetsUsed = minSets; numSetsUsed <= maxSets; numSetsUsed++) {
+          const updatedSetRestriction = Object.assign({}, setRestrictions, {
+            // If we want to explicitly avoid a set, use a value of -1
+            [setValue.set.name]: numSetsUsed === 0 ? -1 : numSetsUsed
+          });
+
+          const potentialModValues = modConfigurationsByStat[currentTarget.stat][numSetsUsed];
+
+          // Filter out mods into only those that have those values
+          for (let potentialModValuesObject of potentialModValues) {
+            const modsThatFitGivenValues = [];
+
+            mods.forEach(mod => {
+              if (modValues[currentTarget.stat][mod.id] === potentialModValuesObject[mod.slot]) {
+                modsThatFitGivenValues.push(mod);
+              }
+            });
+
+            // Send progress messages as we iterate over the possible values
+            if (++currentIteration % onePercent === 0) {
+              const progressPercent = (currentIteration / numConfigurations) * 100;
+              progressMessage(character, 'Calculating sets to meet target value', progressPercent);
+            }
+
+            yield* targetStatRecursor([modsThatFitGivenValues, updatedSetRestriction], updatedTargetStats, false);
+          }
+        }
+      } else {
+        const potentialModValues = modConfigurationsByStat[currentTarget.stat][0];
+        const numConfigurations = potentialModValues.length;
+        const onePercent = Math.floor(numConfigurations / 100);
+        let currentIteration = 0;
+
+        // Filter out mods into only those that have those values
+        for (let potentialModValuesObject of potentialModValues) {
+          const modsThatFitGivenValues = [];
+
+          mods.forEach(mod => {
+            if (modValues[currentTarget.stat][mod.id] === potentialModValuesObject[mod.slot]) {
+              modsThatFitGivenValues.push(mod);
+            }
+          });
+
+          // Send progress messages as we iterate over the possible values
+          if (currentIteration++ % onePercent === 0) {
+            const progressPercent = (currentIteration / numConfigurations) * 100;
+            progressMessage(character, 'Calculating sets to meet target value', progressPercent);
+          }
+
+          yield* targetStatRecursor([modsThatFitGivenValues, setRestrictions], updatedTargetStats, false);
+        }
+      }
+    }
+  }
+
+  yield* targetStatRecursor([usableMods, setRestrictions], targetStats, true);
+}
+
+/**
+ * Given a character and a list of stats, return an object with the character's value for that stat from level, stars,
+ * and gear.
+ *
+ * @param character {Character}
+ * @param stats {Array<Stat>}
+ */
+function getStatValuesForCharacter(character, stats) {
+  const characterValues = {};
+  stats.forEach(stat => {
+    const characterStatProperties = statTypeMap[stat];
+    if (1 < characterStatProperties.length) {
+      throw new Error(
+        "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
+      );
+    }
+
+    characterValues[stat] =
+      character.playerValues.equippedStats[characterStatProperties[0]] || 0;
+  })
+
+  return characterValues;
+}
+
+/**
+ * Find all the set bonuses that provide value to the given stats
+ *
+ * @param stats {Array<String>}
+ * @param character {Character}
+ * @param setRestrictions {Object<String, Integer>} An object that maps set names to how many of that set must be used.
+ *
+ * @returns {Object<String, Object>} A map from stat name to an object showing the set and its value
+ */
+function getSetBonusesThatHaveValueForStats(stats, character, setRestrictions) {
+  const setValues = {};
+
+  // Figure out any sets that are valuable towards each stat
+  for (let setBonus of Object.values(setBonuses)) {
+    // Don't use any sets that are restricted
+    if (-1 == setRestrictions[setBonus.name]) {
+      continue;
+    }
+
+    // TODO: Eventually support non-max bonuses
+    const setStats = flattenStatValues(setBonus.maxBonus, character);
+
+    stats.forEach(stat => {
+      // This works on the assumption that only one mod set could ever fill a given stat
+      const valuableStat = setStats.find(setStat => setStat.displayType === stat);
+
+      if (valuableStat) {
+        // If the set is one that uses only whole-number values, then take the floor
+        // of the stat to get its real value
+        const workingValue = ['health', 'defense', 'offense', 'speed'].includes(setBonus.name) ?
+          Math.floor(valuableStat.value) :
+          valuableStat.value;
+
+        setValues[stat] = {
+          'set': setBonus,
+          'value': workingValue
+        };
+      }
+    });
+  }
+
+  return setValues;
+}
+
+/**
+ * For a list of mods, create two objects: The first will map stat names to mod ID => value for that stat. The second
+ * will map stat names to slot => Set(values), collecting the unique values of all mods for that stat
+ *
+ * @param mods {Array<Mod>}
+ * @param stats {Array<String>}
+ *
+ * @returns {Array<Object>} [{statName: {modID => value}}, {statName: {slot => Set(values)}}]
+ */
+function collectModValuesBySlot(mods, stats) {
+  const modValues = {}
+    , valuesBySlot = {};
+
+  // Initialize the sub-objects in each of the above
+  stats.forEach(stat => {
+    const slotValuesForTarget = {};
+    modSlots.forEach(slot => {
+      slotValuesForTarget[slot] = new Set([0]);
+    });
+    valuesBySlot[stat] = slotValuesForTarget;
+    modValues[stat] = {};
+  });
+
+  // Iterate through all the mods, filling out the objects as we go
+  mods.forEach(mod => {
     const modSummary = cache.modStats[mod.id];
     const combinedModSummary = {};
     modSummary.forEach(stat => {
@@ -1316,100 +1551,16 @@ function* getPotentialModsToSatisfyTargetStat(usableMods, character, target) {
       }
     });
 
-    const statForTarget = combinedModSummary[targetStat.stat];
-    const statValue = statForTarget ? statForTarget.value : 0;
+    stats.forEach(stat => {
+      const statForTarget = combinedModSummary[stat];
+      const statValue = statForTarget ? statForTarget.value : 0;
 
-    modValues[mod.id] = statValue;
-    valuesBySlot[mod.slot].add(statValue);
+      modValues[stat][mod.id] = statValue;
+      valuesBySlot[stat][mod.slot].add(statValue);
+    });
   });
 
-  // Also check to see if any mod set a) provides a value for the stat and b) can be added to the set restrictions
-  const modSlotsOpen = 6 - Object.entries(setRestrictions).filter(([setName, setCount]) => -1 !== setCount).reduce(
-    (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
-  );
-  for (let setBonus of Object.values(setBonuses)) {
-    // TODO: Eventually support non-max bonuses
-    const setStats = flattenStatValues(setBonus.maxBonus, character);
-
-    // This works on the assumption that only one mod set could ever fill a given stat
-    const valuableStat = setStats.find(stat => stat.displayType === targetStat.stat);
-
-    if (valuableStat) {
-      // If the set is one that uses only whole-number values, then take the floor
-      // of the stat to get its real value
-      const workingValue = ['health', 'defense', 'offense', 'speed'].includes(setBonus.name) ?
-        Math.floor(valuableStat.value) :
-        valuableStat.value;
-
-      setValue = {
-        'set': setBonus,
-        'value': workingValue,
-        'min': setRestrictions[setBonus.name] || 0,
-        'max': (setRestrictions[setBonus.name] || 0) + Math.floor(modSlotsOpen / setBonus.numberOfModsRequired)
-      };
-      break;
-    }
-  }
-
-  // Find any collection of values that will sum up to the target stat
-  // If there is a setValue, repeat finding mods to fill the target for as many sets as can be used
-  if (setValue) {
-    const numIterations = setValue.max - setValue.min + 1;
-    for (let numSetsUsed = setValue.min; numSetsUsed <= setValue.max; numSetsUsed++) {
-      const iterationProgressStart = (numSetsUsed - setValue.min) * 100 / numIterations;
-      const iterationProgressEnd = (numSetsUsed + 1 - setValue.min) * 100 / numIterations;
-
-      const updatedSetRestriction = Object.assign({}, setRestrictions, {
-        // If we want to explicitly avoid a set, use a value of -1
-        [setValue.set.name]: numSetsUsed === 0 ? -1 : numSetsUsed
-      });
-
-      const nonModValue = characterValue + setValue.value * numSetsUsed;
-      const potentialModValues = findStatValuesThatMeetTarget(
-        valuesBySlot,
-        targetStat.minimum - nonModValue,
-        targetStat.maximum - nonModValue,
-        iterationProgressStart,
-        iterationProgressEnd,
-        character
-      );
-
-      // Filter out mods into only those that have those values
-      for (let potentialModValuesObject of potentialModValues) {
-        const modsThatFitGivenValues = [];
-
-        usableMods.forEach(mod => {
-          if (modValues[mod.id] === potentialModValuesObject[mod.slot]) {
-            modsThatFitGivenValues.push(mod);
-          }
-        });
-
-        yield [modsThatFitGivenValues, updatedSetRestriction];
-      }
-    }
-  } else {
-    const potentialModValues = findStatValuesThatMeetTarget(
-      valuesBySlot,
-      targetStat.minimum - characterValue,
-      targetStat.maximum - characterValue,
-      0,
-      100,
-      character
-    );
-
-    // Filter out mods into only those that have those values
-    for (let potentialModValuesObject of potentialModValues) {
-      const modsThatFitGivenValues = [];
-
-      usableMods.forEach(mod => {
-        if (modValues[mod.id] === potentialModValuesObject[mod.slot]) {
-          modsThatFitGivenValues.push(mod);
-        }
-      });
-
-      yield [modsThatFitGivenValues, setRestrictions];
-    }
-  }
+  return [modValues, valuesBySlot];
 }
 
 /**
@@ -1418,33 +1569,19 @@ function* getPotentialModsToSatisfyTargetStat(usableMods, character, target) {
  * @param valuesBySlot {Object<String, Array<Number>>}
  * @param targetMin {number}
  * @param targetMax {number}
- * @param progressMin {number} The overall progress value that this function starts at, as a whole percent
- * @param progressMax {number} The overall progress value that the optimizer will hit when this function finishes,
- *                             as a whole percent
- * @param character {character} The character for which the stat values are being calculated
  * @returns {{square: number, diamond: number, arrow: number, cross: number, circle: number, triangle: number}[]}
  */
-function* findStatValuesThatMeetTarget(valuesBySlot, targetMin, targetMax, progressMin, progressMax, character) {
-  const totalIterations = valuesBySlot.square.size * valuesBySlot.arrow.size * valuesBySlot.diamond.size *
-    valuesBySlot.triangle.size * valuesBySlot.circle.size * valuesBySlot.cross.size;
-  const onePercent = Math.floor(totalIterations / (progressMax - progressMin));
-  let currentIteration = 0;
-
+function findStatValuesThatMeetTarget(valuesBySlot, targetMin, targetMax) {
   // This is essentially a fancy nested for loop iterating over each value in each slot.
   // That means this is O(n^6) for 6 mod slots (which is terrible!).
   function* slotRecursor(slots, valuesObject) {
     if (slots.length) {
-      const slotsCopy = Array.from(slots);
+      const slotsCopy = slots.slice(0);
       const currentSlot = slotsCopy.shift();
       for (let slotValue of valuesBySlot[currentSlot]) {
         yield* slotRecursor(slotsCopy, Object.assign({}, valuesObject, { [currentSlot]: slotValue }));
       }
     } else {
-      if (currentIteration++ % onePercent === 0) {
-        const progressPercent = progressMin + (currentIteration / totalIterations) * (progressMax - progressMin);
-        progressMessage(character, 'Calculating sets to meet target value', progressPercent);
-      }
-
       const statValue = Object.values(valuesObject).reduce((acc, value) => acc + value, 0);
       if (statValue >= targetMin && statValue <= targetMax) {
         yield valuesObject;
@@ -1452,7 +1589,7 @@ function* findStatValuesThatMeetTarget(valuesBySlot, targetMin, targetMax, progr
     }
   }
 
-  yield* slotRecursor(modSlots, {});
+  return Array.from(slotRecursor(modSlots, {}));
 }
 
 function findBestModSetFromPotentialMods(potentialModSets, character, target) {

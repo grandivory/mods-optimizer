@@ -1,5 +1,6 @@
 // @flow
 import setBonuses from "../../constants/setbonuses";
+import generateKey from "../../utils/generateKey";
 
 export function changeCharacterEditMode(state, action) {
   return Object.assign({}, state, {
@@ -61,4 +62,32 @@ export function removeSetBonus(state, action) {
   }
 
   return state;
+}
+
+export function changeTargetStats(state, action) {
+  return Object.assign({}, state, {
+    targetStats: action.targetStats ? action.targetStats.map(targetStat => ({
+      key: generateKey(24),
+      target: targetStat
+    })) :
+      action.targetStats
+  });
+}
+
+export function addTargetStat(state, action) {
+  return Object.assign({}, state, {
+    targetStats: state.targetStats.concat({
+      key: generateKey(24),
+      target: action.targetStat
+    })
+  });
+}
+
+export function removeTargetStat(state, action) {
+  const newTargetStats = state.targetStats.slice(0);
+
+  newTargetStats.splice(action.index, 1);
+  return Object.assign({}, state, {
+    targetStats: newTargetStats
+  });
 }

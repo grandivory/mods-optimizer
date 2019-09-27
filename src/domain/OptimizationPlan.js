@@ -25,28 +25,28 @@ class OptimizationPlan {
   upgradeMods;
   primaryStatRestrictions;
   setRestrictions;
-  targetStat;
+  targetStats;
   useOnlyFullSets;
 
   constructor(name,
-              health,
-              protection,
-              speed,
-              critDmg,
-              potency,
-              tenacity,
-              physDmg,
-              specDmg,
-              critChance,
-              armor,
-              resistance,
-              accuracy,
-              critAvoid,
-              upgradeMods = true,
-              primaryStatRestrictions = {},
-              setRestrictions = {},
-              targetStat = null,
-              useOnlyFullSets = false
+    health,
+    protection,
+    speed,
+    critDmg,
+    potency,
+    tenacity,
+    physDmg,
+    specDmg,
+    critChance,
+    armor,
+    resistance,
+    accuracy,
+    critAvoid,
+    upgradeMods = true,
+    primaryStatRestrictions = {},
+    setRestrictions = {},
+    targetStats = [],
+    useOnlyFullSets = false
   ) {
     this.name = name;
 
@@ -84,7 +84,7 @@ class OptimizationPlan {
 
     this.primaryStatRestrictions = primaryStatRestrictions;
     this.setRestrictions = setRestrictions;
-    this.targetStat = targetStat;
+    this.targetStats = targetStats;
     this.useOnlyFullSets = useOnlyFullSets;
   }
 
@@ -112,7 +112,7 @@ class OptimizationPlan {
       this.upgradeMods,
       this.primaryStatRestrictions,
       this.setRestrictions,
-      this.targetStat,
+      this.targetStats,
       this.useOnlyFullSets
     );
   }
@@ -140,7 +140,7 @@ class OptimizationPlan {
       this.upgradeMods === that.upgradeMods &&
       areObjectsEquivalent(this.primaryStatRestrictions, that.primaryStatRestrictions) &&
       areObjectsEquivalent(this.setRestrictions, that.setRestrictions) &&
-      areObjectsEquivalent(this.targetStat, that.targetStat) &&
+      areObjectsEquivalent(this.targetStats, that.targetStats) &&
       this.useOnlyFullSets === that.useOnlyFullSets
   }
 
@@ -227,7 +227,7 @@ class OptimizationPlan {
   }
 
   static shouldUpgradeMods(target) {
-    return target.upgradeMods || target.targetStat;
+    return target.upgradeMods || target.targetStats.length > 0;
   }
 
   serialize() {
@@ -250,7 +250,7 @@ class OptimizationPlan {
     planObject.upgradeMods = this.upgradeMods;
     planObject.primaryStatRestrictions = this.primaryStatRestrictions;
     planObject.setRestrictions = this.setRestrictions;
-    planObject.targetStat = this.targetStat;
+    planObject.targetStats = this.targetStats;
     planObject.useOnlyFullSets = this.useOnlyFullSets;
 
     return planObject;
@@ -264,6 +264,30 @@ class OptimizationPlan {
    */
   static deserialize(planJson) {
     if (planJson) {
+      let targetStats;
+
+      if (planJson.targetStats) {
+        if (Array.isArray(planJson.targetStats)) {
+          targetStats = planJson.targetStats.map(targetStat =>
+            new TargetStat(targetStat.stat, targetStat.minimum, targetStat.maximum)
+          );
+        } else {
+          targetStats = [new TargetStat(
+            planJson.targetStats.stat,
+            planJson.targetStats.minimum,
+            planJson.targetStats.maximum
+          )];
+        }
+      } else if (planJson.targetStat) {
+        targetStats = [new TargetStat(
+          planJson.targetStat.stat,
+          planJson.targetStat.minimum,
+          planJson.targetStat.maximum
+        )];
+      } else {
+        targetStats = [];
+      }
+
       return new OptimizationPlan(
         planJson.name || 'unnamed',
         planJson.health,
@@ -282,9 +306,7 @@ class OptimizationPlan {
         'undefined' !== typeof planJson.upgradeMods ? planJson.upgradeMods : true,
         planJson.primaryStatRestrictions || {},
         planJson.setRestrictions || {},
-        planJson.targetStat ?
-          new TargetStat(planJson.targetStat.stat, planJson.targetStat.minimum, planJson.targetStat.maximum) :
-          null,
+        targetStats,
         planJson.useOnlyFullSets || false
       );
     } else {

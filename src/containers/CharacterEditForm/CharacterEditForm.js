@@ -1,10 +1,10 @@
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import RangeInput from "../../components/RangeInput/RangeInput";
-import React, {PureComponent} from "react";
+import React, { PureComponent } from "react";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import Toggle from "../../components/Toggle/Toggle";
 import OptimizationPlan from "../../domain/OptimizationPlan";
-import {hideModal} from "../../state/actions/app";
+import { hideModal } from "../../state/actions/app";
 import {
   changeCharacterEditMode,
   changeMinimumModDots,
@@ -15,7 +15,10 @@ import {
   removeSetBonus,
   resetCharacterTargetToDefault,
   selectSetBonus,
-  unlockCharacter
+  unlockCharacter,
+  changeTargetStats,
+  addTargetStat,
+  removeTargetStat
 } from "../../state/actions/characterEdit";
 
 import "./CharacterEditForm.css";
@@ -29,6 +32,13 @@ class CharacterEditForm extends PureComponent {
     if (!props.setRestrictions) {
       props.populateSetRestrictions(props.target.setRestrictions);
     }
+    if (!props.targetStats) {
+      props.populateTargetStats(props.target.targetStats);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.cancel();
   }
 
   render() {
@@ -51,18 +61,18 @@ class CharacterEditForm extends PureComponent {
       resetButton = null;
     } else if (defaultTarget) {
       resetButton = <button type={'button'}
-                            id={'reset-button'}
-                            disabled={defaultTarget.equals(target)}
-                            onClick={() => {
-                              this.props.resetCharacterTargetToDefault(character.baseID, target.name);
-                            }}>
+        id={'reset-button'}
+        disabled={defaultTarget.equals(target)}
+        onClick={() => {
+          this.props.resetCharacterTargetToDefault(character.baseID, target.name);
+        }}>
         Reset target to default
       </button>
     } else {
       resetButton = <button type={'button'}
-                            id={'delete-button'}
-                            className={'red'}
-                            onClick={() => this.props.deleteTarget(character.baseID, target.name)}>
+        id={'delete-button'}
+        className={'red'}
+        onClick={() => this.props.deleteTarget(character.baseID, target.name)}>
         Delete target
       </button>
     }
@@ -76,7 +86,7 @@ class CharacterEditForm extends PureComponent {
       }}
       ref={form => this.form = form}>
       <div className={'character-view column'}>
-        <CharacterAvatar character={character}/>
+        <CharacterAvatar character={character} />
         <h2 className={'character-name'}>
           {this.props.gameSettings[character.baseID] ? this.props.gameSettings[character.baseID].name : character.baseID}
         </h2>
@@ -98,7 +108,7 @@ class CharacterEditForm extends PureComponent {
             type={'checkbox'}
             id={'slice-mods'}
             name={'slice-mods'}
-            defaultChecked={character.optimizerSettings.sliceMods}/>
+            defaultChecked={character.optimizerSettings.sliceMods} />
         </div>
       </div>
       <div className={'target-level-options'}>
@@ -106,13 +116,13 @@ class CharacterEditForm extends PureComponent {
         <div className={'column'}>
           <div className={'header-row'}>
             <label htmlFor={'plan-name'}>Target Name: </label>
-            <input type={'text'} defaultValue={target.name} id={'plan-name'} name={'plan-name'}/>
+            <input type={'text'} defaultValue={target.name} id={'plan-name'} name={'plan-name'} />
           </div>
           <div className={'non-stats'}>
             <div className={'form-row center'}>
               <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
               <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
-                     defaultChecked={this.props.target.upgradeMods}/>
+                defaultChecked={this.props.target.upgradeMods} />
             </div>
           </div>
           <div className={'header-row group'}>
@@ -121,12 +131,12 @@ class CharacterEditForm extends PureComponent {
               {['arrow', 'triangle', 'circle', 'cross'].map(slot =>
                 <div key={`mod-block-${slot}`} className={'mod-block'}>
                   <select name={`${slot}-primary`} id={`${slot}-primary`}
-                          defaultValue={this.props.target.primaryStatRestrictions[slot]}>
+                    defaultValue={this.props.target.primaryStatRestrictions[slot]}>
                     <option value={''}>Any</option>
                     {this.props[`${slot}Primaries`].map(
                       primary => <option key={primary} value={primary}>{primary}</option>)}
                   </select>
-                  <div className={`mod-image mod-image-${slot}`}/>
+                  <div className={`mod-image mod-image-${slot}`} />
                 </div>
               )}
             </div>
@@ -141,7 +151,12 @@ class CharacterEditForm extends PureComponent {
             }
           </div>
           <div className={'header-row group'}>
-            {this.targetStatForm(this.props.target.targetStat)}
+            {this.targetStatForm(this.props.targetStats ||
+              this.props.target.targetStats.map((targetStat, index) => ({
+                key: index,
+                target: targetStat
+              }))
+            )}
           </div>
         </div>
         <div className={'column'}>
@@ -220,8 +235,8 @@ class CharacterEditForm extends PureComponent {
             onClick={() => this.props.removeSetBonus(setName)}
           />
         )}
-        {Array.from({length: emptySlots}, (_, index) =>
-          <span className={'empty-set'} key={index}/>
+        {Array.from({ length: emptySlots }, (_, index) =>
+          <span className={'empty-set'} key={index} />
         )}
       </div>
     </div>;
@@ -230,10 +245,10 @@ class CharacterEditForm extends PureComponent {
   /**
    * Renders a form element for managing a target stat
    *
-   * @param targetStat {TargetStat}
+   * @param targetStats {Array<TargetStat>}
    * @returns {*}
    */
-  targetStatForm(targetStat) {
+  targetStatForm(targetStats) {
     const possibleTargetStats = [
       'Health',
       'Protection',
@@ -251,14 +266,10 @@ class CharacterEditForm extends PureComponent {
       'Critical Avoidance'
     ];
 
-    return <div>
-      <h4>Set a Target Stat:</h4>
-      <p><em>Note that adding a target stats makes the optimizer take a <strong>LONG</strong> time to complete.</em></p>
-      <p>
-        Setting a Target Stat will make the optimizer assume that all mods are being leveled to 15 for this character.
-      </p>
-      <div className={'form-row center'}>
-        <select name={'target-stat-name'} defaultValue={targetStat ? targetStat.stat : ''}>
+    const targetStatRows = targetStats.map((targetStat, index) =>
+      <div className={'form-row center'} key={targetStat.key}>
+        <button type={'button'} className={'red small'} onClick={() => this.props.removeTargetStat(index)}>-</button>
+        <select name={'target-stat-name[]'} defaultValue={targetStat.target ? targetStat.target.stat : ''}>
           <option value={''}>No Target</option>
           {possibleTargetStats.map(stat => <option key={stat} value={stat}>{stat}</option>)}
         </select>
@@ -266,14 +277,32 @@ class CharacterEditForm extends PureComponent {
         <input
           type={'number'}
           step={'any'}
-          name={'target-stat-min'}
-          defaultValue={targetStat ? targetStat.minimum : ''}/>
+          name={'target-stat-min[]'}
+          defaultValue={targetStat.target ? targetStat.target.minimum : ''} />
         &nbsp;and&nbsp;
         <input
           type={'number'}
           step={'any'}
-          name={'target-stat-max'}
-          defaultValue={targetStat ? targetStat.maximum : ''}/>
+          name={'target-stat-max[]'}
+          defaultValue={targetStat.target ? targetStat.target.maximum : ''} />
+      </div>
+    );
+
+    return <div>
+      <h4>Set Target Stats:</h4>
+      <p><em>Note that adding target stats makes the optimizer take a <strong>LONG</strong> time to complete.</em></p>
+      <p>
+        Setting any Target Stat will make the optimizer assume that all mods are being leveled to 15 for this character.
+      </p>
+      {targetStatRows}
+      <div className={'form-row center'}>
+        <button
+          type={'button'}
+          className={'small new-target-stat-button'}
+          onClick={() => this.props.addTargetStat(new TargetStat())}
+        >
+          +
+        </button>
       </div>
     </div>;
   }
@@ -564,13 +593,22 @@ class CharacterEditForm extends PureComponent {
     const planName = 'lock' !== this.form['plan-name'].value ? this.form['plan-name'].value : 'custom';
     let newTarget;
     let primaryStatRestrictions = {};
-    const targetStat = this.form['target-stat-name'].value ?
-      new TargetStat(
-        this.form['target-stat-name'].value,
-        +this.form['target-stat-min'].value,
-        +this.form['target-stat-max'].value
-      ) :
-      null;
+    const targetStats = [];
+    if (this.form['target-stat-name[]']) {
+      const targetStatNames = this.form['target-stat-name[]'];
+      const targetStatMins = this.form['target-stat-min[]'];
+      const targetStatMaxes = this.form['target-stat-max[]'];
+
+      for (let i = 0; i < targetStatNames.length; i++) {
+        const name = targetStatNames[i].value;
+        const minimum = targetStatMins[i].valueAsNumber;
+        const maximum = targetStatMaxes[i].valueAsNumber;
+
+        if (name) {
+          targetStats.push(new TargetStat(name, minimum, maximum));
+        }
+      }
+    }
 
     for (let stat of ['arrow', 'triangle', 'circle', 'cross']) {
       if (this.form[`${stat}-primary`].value) {
@@ -595,10 +633,10 @@ class CharacterEditForm extends PureComponent {
         this.form['resistance-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.resistance,
         this.form['accuracy-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.accuracy,
         this.form['critAvoid-stat-advanced'].valueAsNumber * OptimizationPlan.statWeight.critAvoid,
-        this.form['upgrade-mods'].checked || null !== targetStat,
+        this.form['upgrade-mods'].checked || targetStats.length > 0,
         primaryStatRestrictions,
         this.props.setRestrictions,
-        targetStat,
+        targetStats,
         this.form['use-full-sets'].checked
       );
     } else {
@@ -618,10 +656,10 @@ class CharacterEditForm extends PureComponent {
         this.form['defense-stat'].valueAsNumber / 2,
         this.form['accuracy-stat'].valueAsNumber,
         this.form['critAvoid-stat'].valueAsNumber,
-        this.form['upgrade-mods'].checked || null !== targetStat,
+        this.form['upgrade-mods'].checked || targetStats.length > 0,
         primaryStatRestrictions,
         this.props.setRestrictions,
-        targetStat,
+        targetStats,
         this.form['use-full-sets'].checked
       );
     }
@@ -643,6 +681,7 @@ const mapStateToProps = (state) => {
     editMode: state.characterEditMode,
     gameSettings: state.gameSettings,
     setRestrictions: state.setRestrictions,
+    targetStats: state.targetStats,
     arrowPrimaries: Array.from(new Set(mods.filter(mod => mod.slot === 'arrow').map(mod => mod.primaryStat.type))),
     trianglePrimaries:
       Array.from(new Set(mods.filter(mod => mod.slot === 'triangle').map(mod => mod.primaryStat.type))),
@@ -652,6 +691,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
+  cancel: () => {
+    dispatch(changeSetRestrictions(null));
+    dispatch(changeTargetStats(null));
+  },
   hideModal: () => dispatch(hideModal()),
   submitForm: (characterID, characterIndex, target, minimumModDots, sliceMods) => {
     dispatch(changeMinimumModDots(characterID, minimumModDots));
@@ -665,7 +708,10 @@ const mapDispatchToProps = (dispatch) => ({
   changeCharacterEditMode: (mode) => dispatch(changeCharacterEditMode(mode)),
   populateSetRestrictions: (setRestrictions) => dispatch(changeSetRestrictions(setRestrictions)),
   selectSetBonus: (setBonus) => dispatch(selectSetBonus(setBonus)),
-  removeSetBonus: (setBonus) => dispatch(removeSetBonus(setBonus))
+  removeSetBonus: (setBonus) => dispatch(removeSetBonus(setBonus)),
+  populateTargetStats: (targetStats) => dispatch(changeTargetStats(targetStats)),
+  addTargetStat: (targetStat) => dispatch(addTargetStat(targetStat)),
+  removeTargetStat: (index) => dispatch(removeTargetStat(index))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterEditForm);

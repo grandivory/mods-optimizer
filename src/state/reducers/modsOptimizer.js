@@ -1,5 +1,5 @@
 // @flow
-import {restoreState, saveState} from "../storage";
+import { restoreState, saveState } from "../storage";
 import {
   CHANGE_SECTION,
   HIDE_ERROR,
@@ -20,11 +20,14 @@ import {
   REMOVE_SET_BONUS,
   SELECT_SET_BONUS,
   TOGGLE_HIDE_SELECTED_CHARACTERS,
+  ADD_TARGET_STAT,
+  REMOVE_TARGET_STAT,
+  CHANGE_TARGET_STATS,
 } from "../actions/characterEdit";
-import {REQUEST_CHARACTERS, REQUEST_PROFILE, REQUEST_STATS, TOGGLE_KEEP_OLD_MODS} from "../actions/data";
-import {CHANGE_MODS_FILTER} from "../actions/explore";
-import {CANCEL_OPTIMIZE_MODS, OPTIMIZE_MODS} from "../actions/optimize";
-import {CHANGE_MOD_SET_FILTER, CHANGE_MODLIST_FILTER, CHANGE_OPTIMIZER_VIEW,} from "../actions/review";
+import { REQUEST_CHARACTERS, REQUEST_PROFILE, REQUEST_STATS, TOGGLE_KEEP_OLD_MODS } from "../actions/data";
+import { CHANGE_MODS_FILTER } from "../actions/explore";
+import { CANCEL_OPTIMIZE_MODS, OPTIMIZE_MODS } from "../actions/optimize";
+import { CHANGE_MOD_SET_FILTER, CHANGE_MODLIST_FILTER, CHANGE_OPTIMIZER_VIEW, } from "../actions/review";
 import {
   changeSection,
   hideError,
@@ -45,11 +48,14 @@ import {
   removeSetBonus,
   selectSetBonus,
   toggleHideSelectedCharacters,
+  changeTargetStats,
+  addTargetStat,
+  removeTargetStat,
 } from "./characterEdit";
-import {requestCharacters, requestProfile, requestStats, toggleKeepOldMods} from "./data";
-import {changeModsFilter} from "./explore";
-import {cancelOptimizeMods, optimizeMods} from "./optimize";
-import {changeModListFilter, changeModSetFilter, changeOptimizerView,} from "./review";
+import { requestCharacters, requestProfile, requestStats, toggleKeepOldMods } from "./data";
+import { changeModsFilter } from "./explore";
+import { cancelOptimizeMods, optimizeMods } from "./optimize";
+import { changeModListFilter, changeModSetFilter, changeOptimizerView, } from "./review";
 import {
   ADD_PLAYER_PROFILE,
   CLEAN_STATE,
@@ -123,6 +129,12 @@ export default function modsOptimizer(state, action) {
       return selectSetBonus(state, action);
     case REMOVE_SET_BONUS:
       return removeSetBonus(state, action);
+    case ADD_TARGET_STAT:
+      return addTargetStat(state, action);
+    case CHANGE_TARGET_STATS:
+      return changeTargetStats(state, action);
+    case REMOVE_TARGET_STAT:
+      return removeTargetStat(state, action);
 
     case REQUEST_CHARACTERS:
       return requestCharacters(state);

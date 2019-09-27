@@ -15,6 +15,9 @@ export const TOGGLE_HIDE_SELECTED_CHARACTERS = 'TOGGLE_HIDE_SELECTED_CHARACTERS'
 export const CHANGE_SET_RESTRICTIONS = 'CHANGE_SET_RESTRICTIONS';
 export const SELECT_SET_BONUS = 'SELECT_SET_BONUS';
 export const REMOVE_SET_BONUS = 'REMOVE_SET_BONUS';
+export const CHANGE_TARGET_STATS = 'CHANGE_TARGET_STATS';
+export const ADD_TARGET_STAT = 'ADD_TARGET_STAT';
+export const REMOVE_TARGET_STAT = 'REMOVE_TARGET_STAT';
 
 /**
  * Action to move a character from the "available characters" pool to the "selected characters" pool, moving the
@@ -259,6 +262,7 @@ export function finishEditCharacterTarget(characterIndex, newTarget) {
     dispatch => {
       dispatch(hideModal());
       dispatch(changeSetRestrictions(null));
+      dispatch(changeTargetStats(null));
     }
   );
 }
@@ -464,6 +468,45 @@ export function removeSetBonus(setBonus) {
   return {
     type: REMOVE_SET_BONUS,
     setBonus: setBonus
+  };
+}
+
+/**
+ * Fill the target stats to display on the character edit form
+ *
+ * @param targetStats {Array<TargetStat>}
+ * @returns {{type: string, targetStats: Array<TargetStat>}}
+ */
+export function changeTargetStats(targetStats) {
+  return {
+    type: CHANGE_TARGET_STATS,
+    targetStats: targetStats
+  };
+}
+
+/**
+ * Add a target stat to the character edit form
+ *
+ * @param targetStat {TargetStat}
+ * @returns {{type: string, targetStat: TargetStat}}
+ */
+export function addTargetStat(targetStat) {
+  return {
+    type: ADD_TARGET_STAT,
+    targetStat: targetStat
+  };
+}
+
+/**
+ * Remove a target stat from the character edit form
+ *
+ * @param index {Int}
+ * @returns {{type: string, index: Int}}
+ */
+export function removeTargetStat(index) {
+  return {
+    type: REMOVE_TARGET_STAT,
+    index: index
   };
 }
 
