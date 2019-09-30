@@ -887,8 +887,7 @@ const characterSettings = {
   ),
   'WATTAMBOR': new CharacterSettings(
     [
-      new OptimizationPlan('Leader', 50, 0, 100, 0, 25, 10, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('Non-leader', 0, 0, 100, 0, 25, 10, 0, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('PvP', 30, 0, 100, 0, 25, 10, 0, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
   'WEDGEANTILLES': new CharacterSettings(
