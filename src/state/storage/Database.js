@@ -1,6 +1,6 @@
 import PlayerProfile from "../../domain/PlayerProfile";
 import nothing from "../../utils/nothing";
-import {GameSettings} from "../../domain/CharacterDataClasses";
+import { GameSettings } from "../../domain/CharacterDataClasses";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 
 class Database {
@@ -17,14 +17,14 @@ class Database {
     const self = this;
     const openDbRequest = indexedDB.open(this.dbName, 2);
 
-    openDbRequest.onerror = function(event) {
+    openDbRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    openDbRequest.onsuccess = function(event) {
+    openDbRequest.onsuccess = function (event) {
       self.database = event.target.result;
 
-      self.database.onversionchange = function(event) {
+      self.database.onversionchange = function (event) {
         if (!event.newVersion) {
           self.database.close();
         }
@@ -33,18 +33,18 @@ class Database {
       onsuccess(self);
     };
 
-    openDbRequest.onupgradeneeded = function(event) {
+    openDbRequest.onupgradeneeded = function (event) {
       const db = event.target.result;
 
       if (event.oldVersion < 1) {
         // Create object stores for: game data about each character, player profiles, and the last run done by each
         // player
-        db.createObjectStore('gameSettings', {keyPath: 'baseID'});
-        db.createObjectStore('profiles', {keyPath: 'allyCode'});
-        db.createObjectStore('lastRuns', {keyPath: 'allyCode'});
+        db.createObjectStore('gameSettings', { keyPath: 'baseID' });
+        db.createObjectStore('profiles', { keyPath: 'allyCode' });
+        db.createObjectStore('lastRuns', { keyPath: 'allyCode' });
       }
       if (event.oldVersion < 2) {
-        db.createObjectStore('characterTemplates', {keyPath: 'name'});
+        db.createObjectStore('characterTemplates', { keyPath: 'name' });
       }
     };
   }
@@ -58,31 +58,31 @@ class Database {
     const getDataRequest = this.database.transaction(['gameSettings', 'profiles', 'lastRuns', 'characterTemplates']);
     const userData = {};
 
-    getDataRequest.onerror = function(event) {
+    getDataRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    getDataRequest.oncomplete = function() {
+    getDataRequest.oncomplete = function () {
       onsuccess(userData);
     };
 
     const profilesRequest = getDataRequest.objectStore('profiles').getAll();
-    profilesRequest.onsuccess = function(event) {
+    profilesRequest.onsuccess = function (event) {
       userData.profiles = event.target.result;
     };
 
     const gameSettingsRequest = getDataRequest.objectStore('gameSettings').getAll();
-    gameSettingsRequest.onsuccess = function(event) {
+    gameSettingsRequest.onsuccess = function (event) {
       userData.gameSettings = event.target.result;
     };
 
     const lastRunsRequest = getDataRequest.objectStore('lastRuns').getAll();
-    lastRunsRequest.onsuccess = function(event) {
+    lastRunsRequest.onsuccess = function (event) {
       userData.lastRuns = event.target.result;
     };
 
     const characterTemplatesRequest = getDataRequest.objectStore('characterTemplates').getAll();
-    characterTemplatesRequest.onsuccess = function(event) {
+    characterTemplatesRequest.onsuccess = function (event) {
       userData.characterTemplates = event.target.result;
     };
   }
@@ -95,11 +95,11 @@ class Database {
   delete(onsuccess = nothing, onerror = nothing) {
     const deleteDataRequest = indexedDB.deleteDatabase(this.dbName);
 
-    deleteDataRequest.onerror = function(event) {
+    deleteDataRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    deleteDataRequest.onsuccess = function() {
+    deleteDataRequest.onsuccess = function () {
       onsuccess();
     };
   }
@@ -117,11 +117,11 @@ class Database {
       .objectStore('profiles')
       .delete(allyCode);
 
-    deleteProfileRequest.onerror = function(event) {
+    deleteProfileRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    deleteProfileRequest.onsuccess = function() {
+    deleteProfileRequest.onsuccess = function () {
       self.deleteLastRun(allyCode);
       onsuccess();
     };
@@ -139,11 +139,11 @@ class Database {
       .objectStore('lastRuns')
       .delete(allyCode);
 
-    deleteLastRunRequest.onerror = function(event) {
+    deleteLastRunRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    deleteLastRunRequest.onsuccess = function(event) {
+    deleteLastRunRequest.onsuccess = function (event) {
       onsuccess();
     };
   }
@@ -154,11 +154,11 @@ class Database {
       .objectStore('characterTemplates')
       .delete(name);
 
-    deleteTemplateRequest.onerror = function(event) {
+    deleteTemplateRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    deleteTemplateRequest.onsuccess = function(event) {
+    deleteTemplateRequest.onsuccess = function (event) {
       onsuccess();
     };
   }
@@ -172,11 +172,11 @@ class Database {
     const getGameSettingsRequest =
       this.database.transaction('gameSettings', 'readwrite').objectStore('gameSettings').getAll();
 
-    getGameSettingsRequest.onerror = function(event) {
+    getGameSettingsRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    getGameSettingsRequest.onsuccess = function(event) {
+    getGameSettingsRequest.onsuccess = function (event) {
       const gameSettings = event.target.result.map(gameSetting => GameSettings.deserialize(gameSetting));
       onsuccess(gameSettings);
     };
@@ -194,19 +194,19 @@ class Database {
         // Using a read/write transaction forces the database to finish loading profiles before reading from here
         this.database.transaction('profiles', 'readwrite').objectStore('profiles').get(allyCode);
 
-      getProfileRequest.onsuccess = function(event) {
+      getProfileRequest.onsuccess = function (event) {
         const profile = PlayerProfile.deserialize(event.target.result);
         onsuccess(profile);
       };
 
-      getProfileRequest.onerror = function(event) {
+      getProfileRequest.onerror = function (event) {
         onerror(event.target.error);
       };
     } else {
       const getProfileRequest =
         this.database.transaction('profiles', 'readwrite').objectStore('profiles').openCursor();
 
-      getProfileRequest.onsuccess = function(event) {
+      getProfileRequest.onsuccess = function (event) {
         const cursor = event.target.result;
 
         if (cursor) {
@@ -217,7 +217,7 @@ class Database {
         }
       };
 
-      getProfileRequest.onerror = function(event) {
+      getProfileRequest.onerror = function (event) {
         onerror(event.target.error);
       };
     }
@@ -233,12 +233,12 @@ class Database {
       // Using a read/write transaction forces the database to finish loading profiles before reading from here
       this.database.transaction('profiles', 'readwrite').objectStore('profiles').getAll();
 
-    profilesRequest.onsuccess = function(event) {
+    profilesRequest.onsuccess = function (event) {
       const profiles = event.target.result.map(profile => PlayerProfile.deserialize(profile));
       onsuccess(profiles);
     };
 
-    profilesRequest.onerror = function(event) {
+    profilesRequest.onerror = function (event) {
       onerror(event.target.error);
     }
   }
@@ -253,17 +253,17 @@ class Database {
     const templateRequest = this.database.transaction('characterTemplates', 'readwrite')
       .objectStore('characterTemplates').get(name);
 
-    templateRequest.onsuccess = function(event) {
+    templateRequest.onsuccess = function (event) {
       const template = event.target.result;
       onsuccess({
         name: template.name,
-        selectedCharacters: template.selectedCharacters.map(({id, target}) =>
-          ({id: id, target: OptimizationPlan.deserialize(target)})
+        selectedCharacters: template.selectedCharacters.map(({ id, target }) =>
+          ({ id: id, target: OptimizationPlan.deserialize(target) })
         )
       });
     };
 
-    templateRequest.onerror = function(event) {
+    templateRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
@@ -278,17 +278,17 @@ class Database {
     const templatesRequest =
       this.database.transaction('characterTemplates', 'readwrite').objectStore('characterTemplates').getAll();
 
-    templatesRequest.onsuccess = function(event) {
+    templatesRequest.onsuccess = function (event) {
       const templates = event.target.result.map(template => ({
         name: template.name,
-        selectedCharacters: template.selectedCharacters.map(({id, target}) =>
-          ({id: id, target: OptimizationPlan.deserialize(target)})
+        selectedCharacters: template.selectedCharacters.map(({ id, target }) =>
+          ({ id: id, target: OptimizationPlan.deserialize(target) })
         )
       }));
       onsuccess(templates);
     };
 
-    templatesRequest.onerror = function(event) {
+    templatesRequest.onerror = function (event) {
       onerror(event.target.error);
     }
   }
@@ -302,11 +302,11 @@ class Database {
   saveProfile(profile, onsuccess = nothing, onerror = nothing) {
     const saveProfileRequest = this.database.transaction(['profiles'], 'readwrite');
 
-    saveProfileRequest.onerror = function(event) {
+    saveProfileRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    saveProfileRequest.onsuccess = function(event) {
+    saveProfileRequest.onsuccess = function (event) {
       onsuccess(event.target.result);
     };
 
@@ -324,11 +324,11 @@ class Database {
     const saveProfileRequest = this.database.transaction(['profiles'], 'readwrite');
     const keys = [];
 
-    saveProfileRequest.onerror = function(event) {
+    saveProfileRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    saveProfileRequest.oncomplete = function(event) {
+    saveProfileRequest.oncomplete = function (event) {
       onsuccess(keys);
     };
 
@@ -337,7 +337,7 @@ class Database {
         'function' === typeof profile.serialize ? profile.serialize() : profile
       );
 
-      profileRequest.onsuccess = function(event) {
+      profileRequest.onsuccess = function (event) {
         keys.push(event.target.result);
       };
     });
@@ -353,11 +353,11 @@ class Database {
     const saveGameSettingsRequest = this.database.transaction(['gameSettings'], 'readwrite');
     const keys = [];
 
-    saveGameSettingsRequest.onerror = function(event) {
+    saveGameSettingsRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    saveGameSettingsRequest.oncomplete = function(event) {
+    saveGameSettingsRequest.oncomplete = function (event) {
       onsuccess(keys);
     };
 
@@ -366,7 +366,7 @@ class Database {
         'function' === typeof gameSetting.serialize ? gameSetting.serialize() : gameSetting
       );
 
-      singleRequest.onsuccess = function(event) {
+      singleRequest.onsuccess = function (event) {
         keys.push(event.target.result);
       };
     });
@@ -383,11 +383,11 @@ class Database {
       .objectStore('lastRuns')
       .put('function' === typeof lastRun.serialize ? lastRun.serialize() : lastRun);
 
-    saveLastRunRequest.onerror = function(event) {
+    saveLastRunRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    saveLastRunRequest.onsuccess = function(event) {
+    saveLastRunRequest.onsuccess = function (event) {
       onsuccess(event.target.result);
     }
   }
@@ -402,11 +402,11 @@ class Database {
     const saveLastRunsRequest = this.database.transaction(['lastRuns'], 'readwrite');
     const keys = [];
 
-    saveLastRunsRequest.onerror = function(event) {
+    saveLastRunsRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    saveLastRunsRequest.oncomplete = function(event) {
+    saveLastRunsRequest.oncomplete = function (event) {
       onsuccess(keys);
     };
 
@@ -415,7 +415,7 @@ class Database {
         'function' === typeof lastRun.serialize ? lastRun.serialize() : lastRun
       );
 
-      singleRequest.onsuccess = function(event) {
+      singleRequest.onsuccess = function (event) {
         keys.push(event.target.result);
       };
     });
@@ -424,18 +424,18 @@ class Database {
   saveCharacterTemplate(name, selectedCharacters, onsuccess = nothing, onerror = nothing) {
     const templateObject = {
       name: name,
-      selectedCharacters: selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()}))
+      selectedCharacters: selectedCharacters.map(({ id, target }) => ({ id: id, target: target.serialize() }))
     };
 
     const saveTemplateRequest = this.database.transaction(['characterTemplates'], 'readwrite')
       .objectStore('characterTemplates')
       .put(templateObject);
 
-    saveTemplateRequest.onerror = function(event) {
+    saveTemplateRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    saveTemplateRequest.onsuccess = function(event) {
+    saveTemplateRequest.onsuccess = function (event) {
       onsuccess(event.target.result);
     }
   }
@@ -444,11 +444,11 @@ class Database {
     const saveTemplatesRequest = this.database.transaction(['characterTemplates'], 'readwrite');
     const keys = [];
 
-    saveTemplatesRequest.onerror = function(event) {
+    saveTemplatesRequest.onerror = function (event) {
       onerror(event.target.error);
     };
 
-    saveTemplatesRequest.oncomplete = function(event) {
+    saveTemplatesRequest.oncomplete = function (event) {
       onsuccess(keys);
     };
 
@@ -456,12 +456,12 @@ class Database {
       const templateObject = {
         name: template.name,
         selectedCharacters:
-          template.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()}))
+          template.selectedCharacters.map(({ id, target }) => ({ id: id, target: target.serialize() }))
       };
 
       const singleRequest = saveTemplatesRequest.objectStore('characterTemplates').put(templateObject);
 
-      singleRequest.onsuccess = function(event) {
+      singleRequest.onsuccess = function (event) {
         keys.push(event.target.result);
       };
     });

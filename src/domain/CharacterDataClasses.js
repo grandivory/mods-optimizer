@@ -79,7 +79,9 @@ class GameSettings {
     }
     this.tags = tags;
     this.description = description;
-    this.alignment = alignments.hasOwnProperty(alignment) ? alignments[alignment] : null;
+    this.alignment = Object.values(alignments).includes(alignment) ? alignment :
+      Object.keys(alignments).includes(alignment) ? alignments[alignment] :
+        null;
     Object.freeze(this);
   }
 
