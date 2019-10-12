@@ -390,6 +390,13 @@ const characterSettings = {
     ],
     ['GK', 'Titans']
   ),
+  'GENERALSKYWALKER': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP - Offense', 0, 0, 100, 100, 20, 0, 20, 0, 20, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP - Defense', 10, 25, 100, 0, 20, 0, 10, 0, 10, 10, 10, 0, 0, true)
+    ],
+    ['GAS']
+  )
   'GEONOSIANBROODALPHA': new CharacterSettings(
     [
       new OptimizationPlan('Tanky', 20, 20, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true),
