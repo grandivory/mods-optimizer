@@ -1455,7 +1455,12 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
    */
   function* targetStatRecursor(modGroup, targetStats, topLevel) {
     if (0 === targetStats.length) {
-      yield modGroup;
+      if (6 > modGroup[0].length) {
+        // If we don't have enough mods to fill out a set, don't even both checking
+        yield;
+      } else {
+        yield modGroup;
+      }
       return;
     } else {
       const updatedTargetStats = targetStats.slice(0);
