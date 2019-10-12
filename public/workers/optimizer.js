@@ -1310,7 +1310,6 @@ function findBestModSetForCharacter(mods, character, target) {
   switch (0 < targetStats.length) {
     case true:
       // If so, create an array of potential mod sets that could fill it
-      progressMessage(character, 'Calculating sets to meet target value', 0);
       let potentialModSets = getPotentialModsToSatisfyTargetStats(usableMods, character, mutableTarget);
 
       ({ modSet, messages } = findBestModSetFromPotentialMods(potentialModSets, character, mutableTarget));
@@ -1407,7 +1406,6 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
     (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
   );
   targetStats.forEach(targetStat => {
-    progressMessage(character, 'Finding stat values to meet targets', 100);
     const setValue = setValues[targetStat.stat];
 
     if (setValue) {
@@ -1419,10 +1417,16 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
       for (let numSetsUsed = minSets; numSetsUsed <= maxSets; numSetsUsed++) {
         const nonModValue = characterValues[targetStat.stat] + setValue.value * numSetsUsed;
 
+        const progressMin = (numSetsUsed - minSets) / (maxSets - minSets + 1) * 100;
+        const progressMax = (numSetsUsed - minSets + 1) / (maxSets - minSets + 1) * 100;
+
         modConfigurationsByStat[targetStat.stat][numSetsUsed] = findStatValuesThatMeetTarget(
           valuesBySlot[targetStat.stat],
           targetStat.minimum - nonModValue,
-          targetStat.maximum - nonModValue
+          targetStat.maximum - nonModValue,
+          progressMin,
+          progressMax,
+          character
         );
       }
     } else {
@@ -1430,7 +1434,10 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
         0: findStatValuesThatMeetTarget(
           valuesBySlot[targetStat.stat],
           targetStat.minimum - characterValues[targetStat.stat],
-          targetStat.maximum - characterValues[targetStat.stat]
+          targetStat.maximum - characterValues[targetStat.stat],
+          0,
+          100,
+          character
         )
       }
     }
@@ -1456,7 +1463,7 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
       const [mods, setRestrictions] = modGroup;
       const setValue = setValues[currentTarget.stat];
 
-      progressMessage(character, 'Calculating mod sets to meet target value', 0);
+      progressMessage(character, 'Step 2/2: Calculating mod sets to meet target value', 0);
 
       // Find any collection of values that will sum up to the target stat
       // If there is a setValue, repeat finding mods to fill the target for as many sets as can be used
@@ -1496,7 +1503,7 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
             // Send progress messages as we iterate over the possible values
             if (++currentIteration % onePercent === 0) {
               const progressPercent = (currentIteration / numConfigurations) * 100;
-              progressMessage(character, 'Calculating mod sets to meet target value', progressPercent);
+              progressMessage(character, 'Step 2/2: Calculating mod sets to meet target value', progressPercent);
             }
 
             yield* targetStatRecursor([modsThatFitGivenValues, updatedSetRestriction], updatedTargetStats, false);
@@ -1521,7 +1528,7 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
           // Send progress messages as we iterate over the possible values
           if (currentIteration++ % onePercent === 0) {
             const progressPercent = (currentIteration / numConfigurations) * 100;
-            progressMessage(character, 'Calculating mod sets to meet target value', progressPercent);
+            progressMessage(character, 'Step 2/2: Calculating mod sets to meet target value', progressPercent);
           }
 
           yield* targetStatRecursor([modsThatFitGivenValues, setRestrictions], updatedTargetStats, false);
@@ -1656,12 +1663,27 @@ function collectModValuesBySlot(mods, stats) {
 /**
  * Given a set of potential values in each slot, find every combination of values that fits the target criteria
  *
- * @param valuesBySlot {Object<String, Array<Number>>}
+ * @param valuesBySlot {Object<String, Set<Number>>}
  * @param targetMin {number}
  * @param targetMax {number}
+ * @param progressMin {Number} How far along the overall process is before starting this funciton
+ * @param progressMax {Number} How far along the overall process will be after this function completes
+ * @param character {Character} The character the values are being calculated for
  * @returns {{square: number, diamond: number, arrow: number, cross: number, circle: number, triangle: number}[]}
  */
-function findStatValuesThatMeetTarget(valuesBySlot, targetMin, targetMax) {
+function findStatValuesThatMeetTarget(valuesBySlot, targetMin, targetMax, progressMin, progressMax, character) {
+  const onePercent = Math.floor((
+    valuesBySlot['square'].size *
+    valuesBySlot['arrow'].size *
+    valuesBySlot['diamond'].size *
+    valuesBySlot['triangle'].size *
+    valuesBySlot['circle'].size *
+    valuesBySlot['cross'].size) /
+    (progressMax - progressMin));
+  let iterations = 0;
+
+  progressMessage(character, 'Step 1/2: Finding stat values to meet targets', progressMin);
+
   // This is essentially a fancy nested for loop iterating over each value in each slot.
   // That means this is O(n^6) for 6 mod slots (which is terrible!).
   function* slotRecursor(slots, valuesObject) {
@@ -1672,6 +1694,10 @@ function findStatValuesThatMeetTarget(valuesBySlot, targetMin, targetMax) {
         yield* slotRecursor(slotsCopy, Object.assign({}, valuesObject, { [currentSlot]: slotValue }));
       }
     } else {
+      if (iterations++ % onePercent === 0) {
+        progressMessage(character, 'Step 1/2: Finding stat values to meet targets', progressMin + iterations / onePercent);
+      }
+
       const statValue = Object.values(valuesObject).reduce((acc, value) => acc + value, 0);
       if (statValue >= targetMin && statValue <= targetMax) {
         yield valuesObject;
