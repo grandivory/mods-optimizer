@@ -269,13 +269,14 @@ class OptimizationPlan {
       if (planJson.targetStats) {
         if (Array.isArray(planJson.targetStats)) {
           targetStats = planJson.targetStats.map(targetStat =>
-            new TargetStat(targetStat.stat, targetStat.minimum, targetStat.maximum)
+            new TargetStat(targetStat.stat, targetStat.minimum, targetStat.maximum, targetStat.relativeCharacterId || null)
           );
         } else {
           targetStats = [new TargetStat(
             planJson.targetStats.stat,
             planJson.targetStats.minimum,
-            planJson.targetStats.maximum
+            planJson.targetStats.maximum,
+            planJson.targetStats.relativeCharacterId || null
           )];
         }
       } else if (planJson.targetStat) {

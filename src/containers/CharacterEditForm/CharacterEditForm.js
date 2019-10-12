@@ -269,7 +269,7 @@ class CharacterEditForm extends PureComponent {
     const targetStatRows = targetStats.map((targetStat, index) =>
       <div className={'form-row center'} key={targetStat.key}>
         <button type={'button'} className={'red small'} onClick={() => this.props.removeTargetStat(index)}>-</button>
-        <select name={'target-stat-name[]'} defaultValue={targetStat.target ? targetStat.target.stat : ''}>
+        <select name={'target-stat-name[]'} defaultValue={targetStat.target.stat}>
           <option value={''}>No Target</option>
           {possibleTargetStats.map(stat => <option key={stat} value={stat}>{stat}</option>)}
         </select>
@@ -278,13 +278,21 @@ class CharacterEditForm extends PureComponent {
           type={'number'}
           step={'any'}
           name={'target-stat-min[]'}
-          defaultValue={targetStat.target ? targetStat.target.minimum : ''} />
+          defaultValue={targetStat.target.minimum} />
         &nbsp;and&nbsp;
         <input
           type={'number'}
           step={'any'}
           name={'target-stat-max[]'}
-          defaultValue={targetStat.target ? targetStat.target.maximum : ''} />
+          defaultValue={targetStat.target.maximum} />
+        <br />
+        compared to&nbsp;
+        <select name={'target-stat-relative-character[]'} defaultValue={targetStat.target.relativeCharacterId || ''}>
+          <option value={''}>No one</option>
+          {Object.values(this.props.gameSettings).map(
+            gs => <option key={gs.baseID} value={gs.baseID}>{gs.getDisplayName()}</option>
+          )}
+        </select>
       </div>
     );
 
@@ -595,17 +603,27 @@ class CharacterEditForm extends PureComponent {
     let primaryStatRestrictions = {};
     const targetStats = [];
     if (this.form['target-stat-name[]']) {
-      const targetStatNames = this.form['target-stat-name[]'];
-      const targetStatMins = this.form['target-stat-min[]'];
-      const targetStatMaxes = this.form['target-stat-max[]'];
+      const targetStatNames = Array.isArray(this.form['target-stat-name[]']) ?
+        this.form['target-stat-name[]'] :
+        [this.form['target-stat-name[]']];
+      const targetStatMins = Array.isArray(this.form['target-stat-min[]']) ?
+        this.form['target-stat-min[]'] :
+        [this.form['target-stat-min[]']];
+      const targetStatMaxes = Array.isArray(this.form['target-stat-max[]']) ?
+        this.form['target-stat-max[]'] :
+        [this.form['target-stat-max[]']];
+      const targetStatRelativeCharacters = Array.isArray(this.form['target-stat-relative-character[]']) ?
+        this.form['target-stat-relative-character[]'] :
+        [this.form['target-stat-relative-character[]']];
 
       for (let i = 0; i < targetStatNames.length; i++) {
         const name = targetStatNames[i].value;
         const minimum = targetStatMins[i].valueAsNumber;
         const maximum = targetStatMaxes[i].valueAsNumber;
+        const relativeCharacter = targetStatRelativeCharacters[i].value || null;
 
         if (name) {
-          targetStats.push(new TargetStat(name, minimum, maximum));
+          targetStats.push(new TargetStat(name, minimum, maximum, relativeCharacter));
         }
       }
     }

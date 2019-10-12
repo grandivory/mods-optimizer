@@ -83,6 +83,10 @@ class GameSettings {
     Object.freeze(this);
   }
 
+  getDisplayName() {
+    return this.name || this.baseID;
+  }
+
   serialize() {
     return this;
   }

@@ -658,7 +658,7 @@ function flattenStatValues(stat, character) {
         value: stat.value
       };
     } else {
-      throw new Error(`Stat is given as a percentage, but ${character.gameSettings.name} has no base stats`);
+      throw new Error(`Stat is given as a percentage, but ${character.baseID} has no base stats`);
     }
   });
 
@@ -750,25 +750,35 @@ function modSetFulfillsTargetStatRestriction(modSet, character, target) {
 
   // Check each target stat individually
   return targetStats.every(targetStat => {
-    if (statTypeMap[targetStat.stat].length > 1) {
-      throw new Error(
-        "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
-      );
-    }
-    const statProperty = statTypeMap[targetStat.stat][0];
-    const baseValue = character.playerValues.equippedStats[statProperty];
-
-    const setStats = getFlatStatsFromModSet(modSet, character, target);
-
-    const setValue = setStats.reduce((setValueSum, stat) =>
-      // Check to see if the stat is the target stat. If it is, add its value to the total.
-      stat.displayType === targetStat.stat ? setValueSum + stat.value : setValueSum
-      , 0);
-
-    const totalValue = baseValue + setValue;
-
+    const totalValue = getStatValueForCharacterWithMods(modSet, character, targetStat.stat, target);
     return totalValue <= targetStat.maximum && totalValue >= targetStat.minimum;
   });
+}
+
+/**
+ * Find the absolute value that a given stat has for a character, given a set of mods equipped on them
+ *
+ * @param modSet {Array<Mod>}
+ * @param character {Character}
+ * @param stat {String}
+ */
+function getStatValueForCharacterWithMods(modSet, character, stat, target) {
+  if (statTypeMap[stat].length > 1) {
+    throw new Error(
+      "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
+    );
+  }
+  const statProperty = statTypeMap[stat][0];
+  const baseValue = character.playerValues.equippedStats[statProperty];
+
+  const setStats = getFlatStatsFromModSet(modSet, character, target);
+
+  const setValue = setStats.reduce((setValueSum, setStat) =>
+    // Check to see if the stat is the target stat. If it is, add its value to the total.
+    setStat.displayType === stat ? setValueSum + setStat.value : setValueSum
+    , 0);
+
+  return baseValue + setValue;
 }
 
 /**
@@ -1077,14 +1087,21 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
     usableMods = usableMods.filter(mod => !mod.characterID || selectedCharacterIds.includes(mod.characterID))
   }
 
+  const unselectedCharacters =
+    Object.keys(characters).filter(characterID => !order.map(({ id }) => id).includes(characterID))
+
+  const lockedCharacters = Object.keys(characters)
+    .filter(id => characters[id].optimizerSettings.isLocked)
+    .concat(globalSettings.lockUnselectedCharacters ? unselectedCharacters : []);
+
   // For each not-locked character in the list, find the best mod set for that character
-  const optimizerResults = order.map(({ id: characterID, target }, index) => {
+  const optimizerResults = order.reduce((modSuggestions, { id: characterID, target }, index) => {
     const character = characters[characterID];
     const previousCharacter = previousRun.characters ? previousRun.characters[characterID] : null;
 
     // If the character is locked, skip it
     if (character.optimizerSettings.isLocked) {
-      return null;
+      return modSuggestions;
     }
 
     // For each character, check if the settings for the previous run were the same, and skip the character if so
@@ -1113,7 +1130,9 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
           usableMods.splice(i, 1);
         }
       }
-      return { id: characterID, target: target, assignedMods: assignedMods, messages: messages };
+
+      modSuggestions.push({ id: characterID, target: target, assignedMods: assignedMods, messages: messages });
+      return modSuggestions;
     } else {
       recalculateMods = true;
     }
@@ -1122,13 +1141,23 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       target.useOnlyFullSets = true;
     }
 
+    const realTarget =
+      changeRelativeTargetStatsToAbsolute(
+        modSuggestions,
+        characters,
+        lockedCharacters,
+        availableMods,
+        target,
+        character
+      );
+
     const { modSet: newModSetForCharacter, messages: characterMessages } =
-      findBestModSetForCharacter(usableMods, character, target);
+      findBestModSetForCharacter(usableMods, character, realTarget);
 
     const oldModSetForCharacter = usableMods.filter(mod => mod.characterID === character.baseID);
 
-    const newModSetValue = scoreModSet(newModSetForCharacter, character, target);
-    const oldModSetValue = scoreModSet(oldModSetForCharacter, character, target);
+    const newModSetValue = scoreModSet(newModSetForCharacter, character, realTarget);
+    const oldModSetValue = scoreModSet(oldModSetForCharacter, character, realTarget);
 
     // Assign the new mod set if any of the following are true:
     let assignedModSet, assignmentMessages = [];
@@ -1139,9 +1168,9 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       (newModSetForCharacter.length === oldModSetForCharacter.length &&
         oldModSetForCharacter.every(oldMod => newModSetForCharacter.find(newMod => newMod.id === oldMod.id))
       ) ||
-      // If the old set doesn't satisfy the character/target restrictions, but the new set does
-      (!modSetSatisfiesCharacterRestrictions(oldModSetForCharacter, character, target) &&
-        modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character, target)
+      // If the old set doesn't satisfy the character/realTarget restrictions, but the new set does
+      (!modSetSatisfiesCharacterRestrictions(oldModSetForCharacter, character, realTarget) &&
+        modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character, realTarget)
       ) ||
       // If the new set is better than the old set
       (newModSetValue / oldModSetValue) * 100 - 100 > globalSettings.modChangeThreshold ||
@@ -1153,7 +1182,7 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       assignmentMessages = characterMessages;
     } else {
       assignedModSet = oldModSetForCharacter;
-      if (!modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character, target)) {
+      if (!modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character, realTarget)) {
         assignmentMessages.push(
           'Could not find a new mod set that satisfies the given restrictions. Leaving the old mods equipped.'
         )
@@ -1167,18 +1196,81 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       }
     }
 
-    return {
+    modSuggestions.push({
       id: characterID,
       target: target,
       assignedMods: assignedModSet.map(mod => mod.id),
       messages: assignmentMessages
-    };
-  });
+    });
+
+    return modSuggestions;
+  },
+    []);
 
   // Delete any cache that we had saved
   clearCache();
 
   return optimizerResults;
+}
+
+/**
+ * Given a target for a character, update any relative target stats to asbolute
+ * target stats by adding the base values from the relative character
+ *
+ * @param modSuggestions {Array<Object>} An array of previously optimized characters
+ * @param character {Object<String, Character>} A map of character IDs to character objects
+ * @param lockedCharacters {Array<String>} An array containing all of the locked character IDs
+ * @param allMods {Array<Mod>} An array of all mods, used to find equipped mods for a character when they are locked
+ * @param target {OptimizationPlan} The target that is being changed
+ * @param character {Character} The character currently being optimized
+ */
+function changeRelativeTargetStatsToAbsolute(modSuggestions, characters, lockedCharacters, allMods, target, character) {
+  const oldTargetStats = target.targetStats;
+
+  return {
+    ...target,
+    targetStats: oldTargetStats.map(targetStat => {
+      if (!targetStat.relativeCharacterId) {
+        return targetStat;
+      }
+
+      const relativeCharacter = characters[targetStat.relativeCharacterId];
+      let characterMods;
+
+
+      if (lockedCharacters.includes(targetStat.relativeCharacterId)) {
+        // Get the character's mods from the set of all mods
+        characterMods = allMods.filter(mod => mod.characterID === targetStat.relativeCharacterId)
+      } else {
+        // Find the character by searching backwards through the modSuggestions array
+        const characterModsEntry = modSuggestions.reverse().find(({ id }) => id === targetStat.relativeCharacterId);
+        if (undefined === characterModsEntry) {
+          throw new Error(
+            `Could not find suggested mods for ${targetStat.relativeCharacterId}.  ` +
+            `Make sure they are selected above ${character.baseID}`
+          )
+        }
+
+        characterMods = characterModsEntry.assignedMods.map(modId => allMods.find(mod => mod.id === modId));
+      }
+
+      // Because we so heavily rely on the cache, we need to make sure the mod values are cached here.
+      clearCache();
+      characterMods.forEach(mod => {
+        getFlatStatsFromMod(mod, relativeCharacter, target);
+      });
+
+      const characterStatValue =
+        getStatValueForCharacterWithMods(characterMods, relativeCharacter, targetStat.stat, target);
+
+      return {
+        minimum: characterStatValue + targetStat.minimum,
+        maximum: characterStatValue + targetStat.maximum,
+        stat: targetStat.stat,
+        relativeCharacterId: null
+      };
+    })
+  };
 }
 
 /**
@@ -1315,6 +1407,7 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
     (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
   );
   targetStats.forEach(targetStat => {
+    progressMessage(character, 'Finding stat values to meet targets', 100);
     const setValue = setValues[targetStat.stat];
 
     if (setValue) {
@@ -1363,10 +1456,7 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
       const [mods, setRestrictions] = modGroup;
       const setValue = setValues[currentTarget.stat];
 
-      // TODO: Send progress messages as we iterate over the possible values
-      //   const progressPercent = progressMin + (currentIteration / totalIterations) * (progressMax - progressMin);
-      //   progressMessage(character, 'Calculating sets to meet target value', progressPercent);
-
+      progressMessage(character, 'Calculating mod sets to meet target value', 0);
 
       // Find any collection of values that will sum up to the target stat
       // If there is a setValue, repeat finding mods to fill the target for as many sets as can be used
@@ -1406,7 +1496,7 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
             // Send progress messages as we iterate over the possible values
             if (++currentIteration % onePercent === 0) {
               const progressPercent = (currentIteration / numConfigurations) * 100;
-              progressMessage(character, 'Calculating sets to meet target value', progressPercent);
+              progressMessage(character, 'Calculating mod sets to meet target value', progressPercent);
             }
 
             yield* targetStatRecursor([modsThatFitGivenValues, updatedSetRestriction], updatedTargetStats, false);
@@ -1431,7 +1521,7 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
           // Send progress messages as we iterate over the possible values
           if (currentIteration++ % onePercent === 0) {
             const progressPercent = (currentIteration / numConfigurations) * 100;
-            progressMessage(character, 'Calculating sets to meet target value', progressPercent);
+            progressMessage(character, 'Calculating mod sets to meet target value', progressPercent);
           }
 
           yield* targetStatRecursor([modsThatFitGivenValues, setRestrictions], updatedTargetStats, false);
