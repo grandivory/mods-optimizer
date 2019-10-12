@@ -5,8 +5,8 @@ import React from 'react';
 import './ModFilter.css';
 import ModSet from "../../domain/ModSet";
 import setBonuses from "../../constants/setbonuses";
-import {connect} from "react-redux";
-import {changeModsFilter} from "../../state/actions/explore";
+import { connect } from "react-redux";
+import { changeModsFilter } from "../../state/actions/explore";
 import Pips from "../Pips/Pips";
 
 function cycleState(e) {
@@ -15,7 +15,7 @@ function cycleState(e) {
     e.target.value = -1;
   }
   e.target.classList.remove('select', 'unselect');
-  if (1 === e.target.valueAsNumber ) {
+  if (1 === e.target.valueAsNumber) {
     e.target.classList.add('select');
   }
   if (-1 === e.target.valueAsNumber) {
@@ -35,7 +35,7 @@ function unselectElement(element) {
 }
 
 function classForValue(value) {
-  switch(value) {
+  switch (value) {
     case 1: return 'select';
     case -1: return 'unselect';
     default: return '';
@@ -79,11 +79,11 @@ class ModFilter extends React.PureComponent {
 
       return <label htmlFor={inputName} key={slot}>
         <input type={'number'}
-               id={inputName}
-               name={inputName}
-               defaultValue={value}
-               className={classForValue(value)}
-               onClick={cycleState}
+          id={inputName}
+          name={inputName}
+          defaultValue={value}
+          className={classForValue(value)}
+          onClick={cycleState}
         />
         <span className={'option-image shape ' + slot} />
       </label>
@@ -123,11 +123,11 @@ class ModFilter extends React.PureComponent {
 
       return <label htmlFor={inputName} key={set}>
         <input type={'number'}
-               id={inputName}
-               name={inputName}
-               defaultValue={value}
-               className={classForValue(value)}
-               onClick={cycleState}
+          id={inputName}
+          name={inputName}
+          defaultValue={value}
+          className={classForValue(value)}
+          onClick={cycleState}
         />
         <span className={'option-image set ' + set} />
       </label>
@@ -167,14 +167,14 @@ class ModFilter extends React.PureComponent {
 
       return <label htmlFor={inputName} key={inputName}>
         <input type={'number'}
-               id={inputName}
-               name={inputName}
-               defaultValue={value}
-               className={classForValue(value)}
-               onClick={cycleState}
-               />
+          id={inputName}
+          name={inputName}
+          defaultValue={value}
+          className={classForValue(value)}
+          onClick={cycleState}
+        />
         <span className={'option pips-button'}>
-          <Pips pips={rarity}/>
+          <Pips pips={rarity} />
         </span>
       </label>
     });
@@ -221,11 +221,11 @@ class ModFilter extends React.PureComponent {
 
       return <label htmlFor={inputName} key={inputName}>
         <input type={'number'}
-               id={inputName}
-               name={inputName}
-               defaultValue={value}
-               className={classForValue(value)}
-               onClick={cycleState}/>
+          id={inputName}
+          name={inputName}
+          defaultValue={value}
+          className={classForValue(value)}
+          onClick={cycleState} />
         <span className={`option tier ${tiers[tier]}`}>
           {tiers[tier][0].toUpperCase() + tiers[tier].substr(1)}
         </span>
@@ -266,11 +266,11 @@ class ModFilter extends React.PureComponent {
 
       return <label htmlFor={inputName} key={inputName}>
         <input type={'number'}
-               id={inputName}
-               name={inputName}
-               defaultValue={value}
-               className={classForValue(value)}
-               onClick={cycleState}/>
+          id={inputName}
+          name={inputName}
+          defaultValue={value}
+          className={classForValue(value)}
+          onClick={cycleState} />
         <span className={'option'}>
           {level}
         </span>
@@ -310,11 +310,11 @@ class ModFilter extends React.PureComponent {
 
       return <label htmlFor={inputName} key={inputName}>
         <input type={'number'}
-               id={inputName}
-               name={inputName}
-               defaultValue={value}
-               className={classForValue(value)}
-               onClick={cycleState}/>
+          id={inputName}
+          name={inputName}
+          defaultValue={value}
+          className={classForValue(value)}
+          onClick={cycleState} />
         <span className={'option'}>
           {equipState[0].toUpperCase() + equipState.substr(1)}
         </span>
@@ -358,11 +358,11 @@ class ModFilter extends React.PureComponent {
 
       return <label htmlFor={inputName} key={stat}>
         <input type={'number'}
-               id={inputName}
-               name={inputName}
-               defaultValue={value}
-               className={classForValue(value)}
-               onClick={cycleState}/>
+          id={inputName}
+          name={inputName}
+          defaultValue={value}
+          className={classForValue(value)}
+          onClick={cycleState} />
         <span className={'option'}>{stat}</span>
       </label>
     });
@@ -406,11 +406,11 @@ class ModFilter extends React.PureComponent {
 
       return <label htmlFor={inputName} key={stat}>
         <input type={'number'}
-               id={inputName}
-               name={inputName}
-               defaultValue={value}
-               className={classForValue(value)}
-               onClick={cycleState}/>
+          id={inputName}
+          name={inputName}
+          defaultValue={value}
+          className={classForValue(value)}
+          onClick={cycleState} />
         <span className={'option'}>{stat}</span>
       </label>
     });
@@ -419,6 +419,54 @@ class ModFilter extends React.PureComponent {
       <div className={'toggle-label'}>Secondary Stat</div>
       <div className={'secondaries'}>
         {secondaries}
+      </div>
+      <div className={'actions'}>
+        <button onClick={selectAll}>All</button>
+        <button onClick={selectNone}>None</button>
+      </div>
+    </div>;
+  }
+
+  /**
+   * Render filters that will show or hide mods based on whether the optimizer
+   * has assigned them to any characters
+   */
+  optimizerFilter() {
+    const selectAll = (e) => {
+      e.preventDefault();
+      ['assigned', 'unassigned'].forEach(assignedState =>
+        selectElement(document.getElementById(`optimizer-filter-${assignedState}`))
+      );
+
+    };
+    const selectNone = (e) => {
+      e.preventDefault();
+      ['assigned', 'unassigned'].forEach(assignedState =>
+        unselectElement(document.getElementById(`optimizer-filter-${assignedState}`))
+      );
+    };
+
+    const optimizerButtons = ['assigned', 'unassigned'].map(assignedState => {
+      const inputName = `optimizer-filter-${assignedState}`;
+      const value = this.props.filter.optimizer[assignedState] || 0;
+
+      return <label htmlFor={inputName} key={inputName}>
+        <input type={'number'}
+          id={inputName}
+          name={inputName}
+          defaultValue={value}
+          className={classForValue(value)}
+          onClick={cycleState} />
+        <span className={'option'}>
+          {assignedState[0].toUpperCase() + assignedState.substr(1)}
+        </span>
+      </label>
+    });
+
+    return <div id={'optimizer-filters'}>
+      <div className={'toggle-label'}>Optimizer Recommendations</div>
+      <div className={'level'}>
+        {optimizerButtons}
       </div>
       <div className={'actions'}>
         <button onClick={selectAll}>All</button>
@@ -508,6 +556,7 @@ class ModFilter extends React.PureComponent {
       {this.equippedFilter()}
       {this.primaryStatFilter(mods)}
       {this.secondaryStatFilter(mods)}
+      {this.optimizerFilter()}
       {this.sortOption(mods)}
       <div className={'form-actions'}>
         <button type={'button'} onClick={this.resetFilters}>Reset all filters</button>

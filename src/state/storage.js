@@ -2,7 +2,7 @@
  * Save the state of the application to localStorage
  * @param state Object
  */
-import {mapObject, mapObjectByKeyAndValue} from "../utils/mapObject";
+import { mapObject, mapObjectByKeyAndValue } from "../utils/mapObject";
 import Character from "../domain/Character";
 import PlayerProfile from "../domain/PlayerProfile";
 import groupByKey from "../utils/groupByKey";
@@ -62,6 +62,7 @@ export const defaultState = {
     equipped: {},
     primary: {},
     secondary: {},
+    optimizer: {},
     sort: ''
   },
   modSetsFilter: 'all',
@@ -144,20 +145,20 @@ export function deserializeState(state) {
   const version = process.env.REACT_APP_VERSION || 'local';
 
   return Object.assign({}, defaultState, {
-      allyCode: state.allyCode,
-      characterEditMode: state.characterEditMode || defaultState.characterEditMode,
-      characterFilter: state.characterFilter || defaultState.characterFilter,
-      hideSelectedCharacters: state.hideSelectedCharacters || defaultState.hideSelectedCharacters,
-      keepOldMods: state.keepOldMods,
-      modsFilter: Object.assign({}, defaultState.modsFilter, state.modsFilter),
-      modListFilter: state.modListFilter || defaultState.modListFilter,
-      modSetsFilter: state.modSetsFilter || defaultState.modSetsFilter,
-      optimizerView: state.optimizerView || defaultState.optimizerView,
-      previousVersion: state.version,
-      section: state.section,
-      showSidebar: 'undefined' !== typeof state.showSidebar ? state.showSidebar : defaultState.showSidebar,
-      version: version
-    },
+    allyCode: state.allyCode,
+    characterEditMode: state.characterEditMode || defaultState.characterEditMode,
+    characterFilter: state.characterFilter || defaultState.characterFilter,
+    hideSelectedCharacters: state.hideSelectedCharacters || defaultState.hideSelectedCharacters,
+    keepOldMods: state.keepOldMods,
+    modsFilter: Object.assign({}, defaultState.modsFilter, state.modsFilter),
+    modListFilter: state.modListFilter || defaultState.modListFilter,
+    modSetsFilter: state.modSetsFilter || defaultState.modSetsFilter,
+    optimizerView: state.optimizerView || defaultState.optimizerView,
+    previousVersion: state.version,
+    section: state.section,
+    showSidebar: 'undefined' !== typeof state.showSidebar ? state.showSidebar : defaultState.showSidebar,
+    version: version
+  },
     state.profiles ?
       {
         profiles: mapObjectByKeyAndValue(state.profiles, (allyCode, profile) => {

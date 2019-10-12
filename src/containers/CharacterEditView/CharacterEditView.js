@@ -728,7 +728,6 @@ const mapStateToProps = (state) => {
       gameSettings.name.toLowerCase().includes(state.characterFilter) ||
       (['lock', 'locked'].includes(state.characterFilter) && character.optimizerSettings.isLocked) ||
       (['unlock', 'unlocked'].includes(state.characterFilter) && !character.optimizerSettings.isLocked) ||
-      (['unlock', 'unlocked'].includes(state.characterFilter) && !character.optimizerSettings.isLocked) ||
       gameSettings.tags
         .concat(characterSettings[character.baseID] ? characterSettings[character.baseID].extraTags : [])
         .some(tag => tag.toLowerCase().includes(state.characterFilter));

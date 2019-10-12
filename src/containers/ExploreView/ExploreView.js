@@ -6,7 +6,7 @@ import ModDetail from '../../components/ModDetail/ModDetail';
 import ModFilter from '../../components/ModFilter/ModFilter';
 
 import './ExploreView.css';
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import Sidebar from "../../components/Sidebar/Sidebar";
 
 import offenseScore from "../../utils/subjectiveScoring";
@@ -14,7 +14,10 @@ import offenseScore from "../../utils/subjectiveScoring";
 class ExploreView extends React.PureComponent {
   render() {
     const modElements = this.props.displayedMods.map(mod => {
-      return <ModDetail key={mod.id} mod={mod} />;
+      const assignedCharacter = this.props.modAssignments[mod.id] ?
+        this.props.characters[this.props.modAssignments[mod.id]] :
+        null
+      return <ModDetail key={mod.id} mod={mod} assignedCharacter={assignedCharacter} showAssigned />;
     });
 
     return (
@@ -34,13 +37,13 @@ class ExploreView extends React.PureComponent {
    */
   static sidebar() {
     return <div className={'filters'} key={'filters'}>
-      <ModFilter/>
+      <ModFilter />
     </div>;
   }
 }
 
 const getFilteredMods = memoize(
-  (mods, filter, characters) => {
+  (mods, filter, characters, modAssignments) => {
     let filteredMods = mods.slice();
 
     const selectedOptions = {};
@@ -92,7 +95,7 @@ const getFilteredMods = memoize(
           filteredMods = filteredMods.filter(mod => !mod.characterID);
           break;
         default:
-          // Do nothing
+        // Do nothing
       }
     }
     if (1 === unselectedOptions.equipped.length) {
@@ -104,7 +107,7 @@ const getFilteredMods = memoize(
           filteredMods = filteredMods.filter(mod => !!mod.characterID);
           break;
         default:
-          // Do nothing
+        // Do nothing
       }
     }
     if (selectedOptions.primary.length) {
@@ -122,6 +125,30 @@ const getFilteredMods = memoize(
       filteredMods = filteredMods.filter(
         mod => mod.secondaryStats.every(stat => !unselectedOptions.secondary.includes(stat.type))
       );
+    }
+    if (1 === selectedOptions.optimizer.length) {
+      switch (selectedOptions.optimizer[0]) {
+        case 'assigned':
+          filteredMods = filteredMods.filter(mod => Object.keys(modAssignments).includes(mod.id));
+          break;
+        case 'unassigned':
+          filteredMods = filteredMods.filter(mod => !Object.keys(modAssignments).includes(mod.id));
+          break;
+        default:
+        // Do nothing
+      }
+    }
+    if (1 === unselectedOptions.optimizer.length) {
+      switch (unselectedOptions.optimizer[0]) {
+        case 'assigned':
+          filteredMods = filteredMods.filter(mod => !Object.keys(modAssignments).includes(mod.id));
+          break;
+        case 'unassigned':
+          filteredMods = filteredMods.filter(mod => Object.keys(modAssignments).includes(mod.id));
+          break;
+        default:
+        // Do nothing
+      }
     }
 
     switch (filter.sort) {
@@ -176,11 +203,25 @@ const getFilteredMods = memoize(
 
 const mapStateToProps = (state) => {
   const profile = state.profile;
-  const mods = getFilteredMods(profile.mods, state.modsFilter, profile.characters);
+  const modAssignments = profile.modAssignments ?
+    profile.modAssignments
+      .reduce((acc, { id: characterID, assignedMods: modIds }) => {
+        const updatedAssignments = { ...acc };
+        modIds.forEach(id => updatedAssignments[id] = characterID)
+        return updatedAssignments;
+      }, {}) :
+    {};
+  const mods = getFilteredMods(
+    profile.mods,
+    state.modsFilter,
+    profile.characters,
+    modAssignments
+  );
 
   return {
     characters: profile.characters,
     displayedMods: mods,
+    modAssignments: modAssignments,
     modCount: profile.mods.length
   };
 };

@@ -2,8 +2,8 @@
 .delete-mod-display {
   position: relative;
   display: inline-grid;
-  grid-template-columns: 5em 1fr;
-  grid-template-rows: 1fr fit-content();
+  grid-template-columns: 5em 1fr fit-content();
+  grid-template-rows: 1fr fit-content() fit-content();
   grid-column-gap: 1em;
   grid-row-gap: 0;
   align-items: start;
@@ -24,8 +24,8 @@
   width: 4em;
 }
 
-.mod-detail .avatar,
-.delete-mod-display .avatar {
+.mod-detail > .avatar,
+.delete-mod-display > .avatar {
   grid-row: 2;
   grid-column: 1;
   text-align: center;
@@ -42,10 +42,20 @@
   font-weight: normal;
 }
 
-.mod-detail .mod-stats,
-.delete-mod-display .mod-stats {
+.mod-detail > .stats,
+.delete-mod-display > .stats {
   grid-row: 1 / span 2;
-  grid-column: 2;
+  grid-column: 2 / span 2;
+}
+
+.mod-detail > .stats > .assigned {
+  float: right;
+  font-size: .6em;
+}
+
+.mod-detail > .stats > .assigned .arrow {
+  width: 4em;
+  height: 4em;
 }
 
 .mod-detail button.delete-button {
