@@ -98,26 +98,33 @@ export function resetState() {
 
 export function restoreProgress(progressData) {
   return function (dispatch) {
-    const stateObj = JSON.parse(progressData);
-    // If the progress data has only a profiles section, then it's an export from HotUtils.
-    // Add the mods to any existing profile
-    if (!stateObj.version && stateObj.profiles && !stateObj.gameSettings) {
-      dispatch(replaceModsForProfiles(stateObj.profiles));
-    } else if (stateObj.version > '1.4' && stateObj.version !== 'develop') {
-      dispatch(saveGameSettings(stateObj.gameSettings));
-      dispatch(saveProfiles(stateObj.profiles, stateObj.allyCode));
-      dispatch(saveLastRuns(stateObj.lastRuns));
-      dispatch(loadProfile(stateObj.allyCode));
-    } else {
-      const newState = deserializeState(stateObj);
-      // Update the state to match the old file
-      dispatch(setState(newState));
-      // Populate the database from the state by using the populateDatabase action
-      dispatch(populateDatabase(newState));
-      // Reload the state from the database
-      dispatch(loadFromDb(stateObj.allyCode));
-      // Clean up any excess entries in the state
-      dispatch(cleanState());
+    try {
+      const stateObj = JSON.parse(progressData);
+      // If the progress data has only a profiles section, then it's an export from HotUtils.
+      // Add the mods to any existing profile
+      if (!stateObj.version && stateObj.profiles && !stateObj.gameSettings) {
+        dispatch(replaceModsForProfiles(stateObj.profiles));
+      } else if (stateObj.version > '1.4' && stateObj.version !== 'develop') {
+        dispatch(saveGameSettings(stateObj.gameSettings));
+        dispatch(saveProfiles(stateObj.profiles, stateObj.allyCode));
+        dispatch(saveLastRuns(stateObj.lastRuns));
+        dispatch(loadProfile(stateObj.allyCode));
+      } else {
+        const newState = deserializeState(stateObj);
+        // Update the state to match the old file
+        dispatch(setState(newState));
+        // Populate the database from the state by using the populateDatabase action
+        dispatch(populateDatabase(newState));
+        // Reload the state from the database
+        dispatch(loadFromDb(stateObj.allyCode));
+        // Clean up any excess entries in the state
+        dispatch(cleanState());
+      }
+    } catch (e) {
+      throw new Error(
+        'Unable to process progress file. Is this a template file? If so, use the "load" button below. Error message: ' +
+        e.message
+      );
     }
   }
 }

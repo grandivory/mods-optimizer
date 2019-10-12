@@ -136,15 +136,19 @@ class CharacterEditView extends PureComponent {
               handler={(file) => this.readFile(
                 file,
                 (templates) => {
-                  const templatesObject = JSON.parse(templates);
-                  const templatesDeserialized = templatesObject.map(t => ({
-                    name: t.name,
-                    selectedCharacters: t.selectedCharacters.map(({ id, target }) => ({
-                      id: id,
-                      target: OptimizationPlan.deserialize(target)
-                    }))
-                  }));
-                  this.props.saveTemplates(templatesDeserialized);
+                  try {
+                    const templatesObject = JSON.parse(templates);
+                    const templatesDeserialized = templatesObject.map(t => ({
+                      name: t.name,
+                      selectedCharacters: t.selectedCharacters.map(({ id, target }) => ({
+                        id: id,
+                        target: OptimizationPlan.deserialize(target)
+                      }))
+                    }));
+                    this.props.saveTemplates(templatesDeserialized);
+                  } catch (e) {
+                    throw new Error('Unable to read templates from file. Make sure that you\'ve selected a character templates file');
+                  }
                 }
               )}
             />
