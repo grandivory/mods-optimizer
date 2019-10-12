@@ -84,7 +84,6 @@ class CharacterList extends PureComponent {
   }
 
   renderCharacterBlock(character, target, index) {
-    // debugger;
     const defaultTargets = characterSettings[character.baseID] ?
       groupByKey(characterSettings[character.baseID].targets, target => target.name) :
       {};
@@ -239,7 +238,7 @@ class CharacterList extends PureComponent {
         onDragEnter={this.characterBlockDragEnter()}
         onDragOver={this.characterBlockDragOver()}
         onDragLeave={this.characterBlockDragLeave()}
-        onDrop={this.characterBlockDrop(this.props.lastCharacterID)}>
+        onDrop={this.characterBlockDrop(this.props.selectedCharacters.length - 1)}>
         {0 < this.props.selectedCharacters.length &&
           // Add a block to allow characters to be dragged to the top of the list
           <div className={'top-block'}
@@ -270,7 +269,6 @@ const mapStateToProps = (state) => {
   return {
     characters: state.profile.characters,
     gameSettings: state.gameSettings,
-    lastCharacterID: state.profile.selectedCharacters[state.profile.selectedCharacters.length - 1],
     selectedCharacters: state.profile.selectedCharacters.map(
       ({ id: characterID, target }) => ({ character: state.profile.characters[characterID], target: target })
     )
