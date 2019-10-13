@@ -157,7 +157,7 @@ function dispatchFetchProfile(dispatch, allyCode, messages, keepOldMods, lastSte
 function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
   if (null !== characters) {
     return post(
-      'https://swgoh-stat-calc.glitch.me/api/characters',
+      'https://api.mods-optimizer.swgoh.grandivory.com/stats',
       Object.keys(characters).map(charID => ({
         'defId': charID,
         'rarity': characters[charID].stars,
