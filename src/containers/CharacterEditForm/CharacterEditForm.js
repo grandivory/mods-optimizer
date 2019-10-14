@@ -603,16 +603,16 @@ class CharacterEditForm extends PureComponent {
     let primaryStatRestrictions = {};
     const targetStats = [];
     if (this.form['target-stat-name[]']) {
-      const targetStatNames = Array.isArray(this.form['target-stat-name[]']) ?
+      const targetStatNames = this.form['target-stat-name[]'] instanceof NodeList ?
         this.form['target-stat-name[]'] :
         [this.form['target-stat-name[]']];
-      const targetStatMins = Array.isArray(this.form['target-stat-min[]']) ?
+      const targetStatMins = this.form['target-stat-min[]'] instanceof NodeList ?
         this.form['target-stat-min[]'] :
         [this.form['target-stat-min[]']];
-      const targetStatMaxes = Array.isArray(this.form['target-stat-max[]']) ?
+      const targetStatMaxes = this.form['target-stat-max[]'] instanceof NodeList ?
         this.form['target-stat-max[]'] :
         [this.form['target-stat-max[]']];
-      const targetStatRelativeCharacters = Array.isArray(this.form['target-stat-relative-character[]']) ?
+      const targetStatRelativeCharacters = this.form['target-stat-relative-character[]'] instanceof NodeList ?
         this.form['target-stat-relative-character[]'] :
         [this.form['target-stat-relative-character[]']];
 
@@ -623,7 +623,11 @@ class CharacterEditForm extends PureComponent {
         const relativeCharacter = targetStatRelativeCharacters[i].value || null;
 
         if (name) {
-          targetStats.push(new TargetStat(name, minimum, maximum, relativeCharacter));
+          if (minimum < maximum) {
+            targetStats.push(new TargetStat(name, minimum, maximum, relativeCharacter));
+          } else {
+            targetStats.push(new TargetStat(name, maximum, minimum, relativeCharacter));
+          }
         }
       }
     }
