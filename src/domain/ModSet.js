@@ -3,7 +3,6 @@
 import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
 import Mod from "./Mod";
-import statTypeMap from "../constants/statTypeMap";
 
 class ModSet {
   constructor(mods) {
