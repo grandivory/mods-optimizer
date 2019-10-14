@@ -205,6 +205,7 @@ const mapStateToProps = (state) => {
   const profile = state.profile;
   const modAssignments = profile.modAssignments ?
     profile.modAssignments
+      .filter(x => null !== x)
       .reduce((acc, { id: characterID, assignedMods: modIds }) => {
         const updatedAssignments = { ...acc };
         modIds.forEach(id => updatedAssignments[id] = characterID)
