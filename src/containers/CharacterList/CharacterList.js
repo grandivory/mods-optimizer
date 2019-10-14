@@ -181,7 +181,7 @@ class CharacterList extends PureComponent {
     const levelActive = target.upgradeMods ? 'active' : '';
     const sliceActive = character.optimizerSettings.sliceMods ? 'active' : '';
     const restrictionsActive = target.hasRestrictions() ? 'active' : '';
-    const targetStatActive = !!target.targetStat ? 'active' : '';
+    const targetStatActive = target.targetStats && target.targetStats.length ? 'active' : '';
     const duplicateActive = this.props.selectedCharacters
       .filter(({ character: sc }) => sc.baseID === character.baseID).length > 1 ? 'active' : '';
     const negativeWeightsActive = target.hasNegativeWeights() ? 'active' : '';
