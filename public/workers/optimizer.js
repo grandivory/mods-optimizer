@@ -1059,7 +1059,7 @@ Object.freeze(chooseTwoOptions);
 function optimizeMods(availableMods, characters, order, globalSettings, previousRun = {}) {
   // We only want to recalculate mods if settings have changed between runs. If global settings or locked
   // characters have changed, recalculate all characters
-  let recalculateMods = true || !previousRun.globalSettings ||
+  let recalculateMods = !previousRun.globalSettings ||
     globalSettings.modChangeThreshold !== previousRun.globalSettings.modChangeThreshold ||
     globalSettings.lockUnselectedCharacters !== previousRun.globalSettings.lockUnselectedCharacters ||
     globalSettings.forceCompleteSets !== previousRun.globalSettings.forceCompleteSets ||
@@ -1101,6 +1101,7 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
 
     // If the character is locked, skip it
     if (character.optimizerSettings.isLocked) {
+      modSuggestions.push(null);
       return modSuggestions;
     }
 
@@ -1457,11 +1458,10 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
     if (0 === targetStats.length) {
       if (6 > modGroup[0].length) {
         // If we don't have enough mods to fill out a set, don't even both checking
-        yield;
+        return;
       } else {
         yield modGroup;
       }
-      return;
     } else {
       const updatedTargetStats = targetStats.slice(0);
       const currentTarget = updatedTargetStats.pop();
