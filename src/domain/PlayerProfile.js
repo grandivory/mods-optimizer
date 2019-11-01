@@ -3,7 +3,7 @@
  */
 import Character from "./Character";
 import Mod from "./Mod";
-import {mapObject} from "../utils/mapObject";
+import { mapObject } from "../utils/mapObject";
 import OptimizerRun from "./OptimizerRun";
 import OptimizationPlan from "./OptimizationPlan";
 
@@ -32,13 +32,13 @@ export default class PlayerProfile {
    *                                  modAssignments shouldn't change on a reoptimization.
    */
   constructor(allyCode,
-              playerName,
-              characters = {},
-              mods = [],
-              selectedCharacters = [],
-              modAssignments = {},
-              globalSettings = PlayerProfile.defaultGlobalSettings,
-              previousSettings = {}
+    playerName,
+    characters = {},
+    mods = [],
+    selectedCharacters = [],
+    modAssignments = [],
+    globalSettings = PlayerProfile.defaultGlobalSettings,
+    previousSettings = {}
   ) {
     this.allyCode = allyCode;
     this.playerName = playerName;
@@ -203,7 +203,7 @@ export default class PlayerProfile {
         'function' === typeof character.serialize ? character.serialize() : character
       ),
       mods: this.mods.map(mod => mod.serialize()),
-      selectedCharacters: this.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()})),
+      selectedCharacters: this.selectedCharacters.map(({ id, target }) => ({ id: id, target: target.serialize() })),
       modAssignments: this.modAssignments,
       globalSettings: this.globalSettings,
       previousSettings: this.previousSettings
@@ -222,7 +222,7 @@ export default class PlayerProfile {
         profileJson.playerName,
         mapObject(profileJson.characters, Character.deserialize),
         profileJson.mods.map(Mod.deserialize),
-        profileJson.selectedCharacters.map(({id, target}) => ({id: id, target: OptimizationPlan.deserialize(target)})),
+        profileJson.selectedCharacters.map(({ id, target }) => ({ id: id, target: OptimizationPlan.deserialize(target) })),
         profileJson.modAssignments,
         Object.assign({}, PlayerProfile.defaultGlobalSettings, profileJson.globalSettings),
         profileJson.previousSettings || {}

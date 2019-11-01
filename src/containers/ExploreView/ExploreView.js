@@ -203,7 +203,7 @@ const getFilteredMods = memoize(
 
 const mapStateToProps = (state) => {
   const profile = state.profile;
-  const modAssignments = profile.modAssignments ?
+  const modAssignments = profile.modAssignments && profile.modAssignments.filter ?
     profile.modAssignments
       .filter(x => null !== x)
       .reduce((acc, { id: characterID, assignedMods: modIds }) => {
