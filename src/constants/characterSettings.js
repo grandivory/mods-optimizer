@@ -259,7 +259,10 @@ const characterSettings = {
     ['Auto Lightzader']
   ),
   'DARTHSION': new CharacterSettings(
-    [new OptimizationPlan('PvP', 15, 15, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 15, 15, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0, true),
+      new OptimizationPlan('Tanky', 20, 20, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)
+    ],
     ['Nightmare']
   ),
   'DARTHTRAYA': new CharacterSettings(
