@@ -139,15 +139,6 @@ function dispatchFetchProfile(dispatch, allyCode, messages, keepOldMods, lastSte
       characters: profileCharacters,
       updated: playerProfile.updated
     };
-  },
-  ).catch(error => {
-    if (error instanceof TypeError) {
-      throw new Error(
-        'Your character and mod data is taking a long time to update. Please wait a few minutes and try again.'
-      );
-    } else {
-      throw error;
-    }
   }).then(profile => {
     dispatch(receiveProfile(allyCode, profile, messages, keepOldMods, lastStep));
     return profile;
