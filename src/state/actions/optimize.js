@@ -1,10 +1,10 @@
 // @flow
 
-import {hideModal, setIsBusy, showError, showFlash, showModal, updateProfile} from "./app";
+import { hideModal, setIsBusy, showError, showFlash, showModal, updateProfile } from "./app";
 import React from "react";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import getDatabase from "../storage/Database";
-import {changeOptimizerView, updateModListFilter} from "./review";
+import { changeOptimizerView, updateModListFilter } from "./review";
 import Character from "../../domain/Character";
 import nothing from "../../utils/nothing";
 
@@ -50,7 +50,7 @@ export function finishModOptimization(result, settings) {
 
       // Create the content of the pop-up for any post-optimization messages
 
-      const resultsWithMessages = result.filter(x => null !== x).filter(({messages}) => 0 < messages.length);
+      const resultsWithMessages = result.filter(x => null !== x).filter(({ messages }) => 0 < messages.length);
 
       if (resultsWithMessages.length) {
         const state = getState();
@@ -61,26 +61,26 @@ export function finishModOptimization(result, settings) {
             <h3>Important messages regarding your selected targets</h3>
             <table>
               <thead>
-              <tr>
-                <th>Character</th>
-                <th>Messages</th>
-              </tr>
+                <tr>
+                  <th>Character</th>
+                  <th>Messages</th>
+                </tr>
               </thead>
               <tbody>
-              {resultsWithMessages.map(({id, target, messages}, index) => {
-                const character = newProfile.characters[id] || new Character(id);
-                return <tr key={index}>
-                  <td><CharacterAvatar character={character}/><br/>
-                    {state.gameSettings[id] ? state.gameSettings[id].name : id}
-                  </td>
-                  <td>
-                    <h4>{target.name}:</h4>
-                    <ul>
-                      {messages.map((message, index) => <li key={index}>{message}</li>)}
-                    </ul>
-                  </td>
-                </tr>;
-              })}
+                {resultsWithMessages.map(({ id, target, messages }, index) => {
+                  const character = newProfile.characters[id] || new Character(id);
+                  return <tr key={index}>
+                    <td><CharacterAvatar character={character} /><br />
+                      {state.gameSettings[id] ? state.gameSettings[id].name : id}
+                    </td>
+                    <td>
+                      <h4>{target.name}:</h4>
+                      <ul>
+                        {messages.map((message, index) => <li key={index}>{message}</li>)}
+                      </ul>
+                    </td>
+                  </tr>;
+                })}
               </tbody>
             </table>
           </div>
@@ -103,7 +103,7 @@ let optimizationWorker = null;
  * @param allyCode {string} The player to optimize mods for
  */
 export function optimizeMods() {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const profile = getState().profile;
     // If any of the characters being optimized don't have stats, then show an error message
     if (Object.values(profile.characters)
@@ -118,7 +118,7 @@ export function optimizeMods() {
     optimizationWorker =
       new Worker(`/workers/optimizer.js?version=${process.env.REACT_APP_VERSION || 'local'}`);
 
-    optimizationWorker.onmessage = function(message) {
+    optimizationWorker.onmessage = function (message) {
       switch (message.data.type) {
         case 'OptimizationSuccess':
           dispatch(setIsBusy(false));
@@ -137,8 +137,8 @@ export function optimizeMods() {
           );
           break;
         case 'Progress':
-            dispatch(setIsBusy(false));
-            dispatch(showModal(
+          dispatch(setIsBusy(false));
+          dispatch(showModal(
             'optimizer-progress',
             optimizerProgressModal(message.data.character, message.data.step, message.data.progress, dispatch),
             false
@@ -148,7 +148,7 @@ export function optimizeMods() {
       }
     };
 
-    optimizationWorker.onerror = function(error) {
+    optimizationWorker.onerror = function (error) {
       console.log(error);
       optimizationWorker.terminate();
       dispatch(hideModal());
@@ -173,11 +173,11 @@ function optimizerProgressModal(character, step, progress, dispatch) {
     <h3>Optimizing Your Mods...</h3>
     <div className={'progressBox'}>
       {character &&
-      <div className={'character'}><CharacterAvatar character={character}/></div>
+        <div className={'character'}><CharacterAvatar character={character} /></div>
       }
       <div className={'step'}>{step}</div>
       <div className={'progress'}>
-        <span className={'progress-bar'} id={'progress-bar'} style={{width: `${progress}%`}}/>
+        <span className={'progress-bar'} id={'progress-bar'} style={{ width: `${progress}%` }} />
       </div>
     </div>
     <div className={'actions'}>
@@ -187,7 +187,7 @@ function optimizerProgressModal(character, step, progress, dispatch) {
 }
 
 export function cancelOptimizer() {
-  return function(dispatch) {
+  return function (dispatch) {
     optimizationWorker.terminate();
     dispatch(cancelOptimizeMods());
   };

@@ -1099,12 +1099,6 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
     const character = characters[characterID];
     const previousCharacter = previousRun.characters ? previousRun.characters[characterID] : null;
 
-    // If the character is locked, skip it
-    if (character.optimizerSettings.isLocked) {
-      modSuggestions.push(null);
-      return modSuggestions;
-    }
-
     // For each character, check if the settings for the previous run were the same, and skip the character if so
     if (
       !recalculateMods &&
@@ -1136,6 +1130,12 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       return modSuggestions;
     } else {
       recalculateMods = true;
+    }
+
+    // If the character is locked, skip it
+    if (character.optimizerSettings.isLocked) {
+      modSuggestions.push(null);
+      return modSuggestions;
     }
 
     if (globalSettings.forceCompleteSets) {
@@ -1227,6 +1227,8 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
  */
 function changeRelativeTargetStatsToAbsolute(modSuggestions, characters, lockedCharacters, allMods, target, character) {
   const oldTargetStats = target.targetStats;
+  // Make a copy of mod suggestions so that we don't modify the original
+  const currentModSuggestions = modSuggestions.slice(0);
 
   return {
     ...target,
@@ -1244,7 +1246,7 @@ function changeRelativeTargetStatsToAbsolute(modSuggestions, characters, lockedC
         characterMods = allMods.filter(mod => mod.characterID === targetStat.relativeCharacterId)
       } else {
         // Find the character by searching backwards through the modSuggestions array
-        const characterModsEntry = modSuggestions.reverse().find(({ id }) => id === targetStat.relativeCharacterId);
+        const characterModsEntry = currentModSuggestions.reverse().find(({ id }) => id === targetStat.relativeCharacterId);
         if (undefined === characterModsEntry) {
           throw new Error(
             `Could not find suggested mods for ${targetStat.relativeCharacterId}.  ` +
