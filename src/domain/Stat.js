@@ -1,7 +1,7 @@
 // @flow
 
 import statTypeMap from "../constants/statTypeMap";
-import {modStats} from "../constants/enums";
+import { modStats } from "../constants/enums";
 
 const hotUtilsTypeMap = {
   'Accuracy %': 'Accuracy %',
@@ -187,6 +187,10 @@ class Stat {
 
     const statTypes = 'Physical Critical Chance' === this.displayType ? ['critChance'] : statTypeMap[this.displayType];
 
+    if (!statTypes) {
+      return 0;
+    }
+
     if (this.isPercent) {
       return statTypes.map(statType =>
         target[statType] *
@@ -204,7 +208,7 @@ class Stat {
    */
   serialize() {
     const percent = (this.isPercent || !Stat.mixedTypes.includes(this.displayType)) &&
-    !this.type.includes('%') ? '%' : '';
+      !this.type.includes('%') ? '%' : '';
 
     return [this.type, `+${this.rawValue}${percent}`, this.rolls];
   }

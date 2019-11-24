@@ -6,6 +6,7 @@ import './ModSetDetail.css';
 import ModSetView from "../ModSetView/ModSetView";
 import statTypeMap from "../../constants/statTypeMap";
 import Stat from "../../domain/Stat";
+import { mapObject } from "../../utils/mapObject";
 
 class ModSetDetail extends React.PureComponent {
   render() {
@@ -19,19 +20,16 @@ class ModSetDetail extends React.PureComponent {
     const statSummary = modSet.getSummary(character, target, useUpgrades);
     const diffSummary = diffSet ? diffSet.getSummary(character, target, false) : null;
 
-    const statsDisplay = Object.values(statSummary).map((stat, index) => {
+    // Pull all the player's stats into an object that can be displayed without further calculation.
+    const playerStats = mapObject(statSummary, stat => {
       const diffStat = diffSummary && diffSummary[stat.displayType] ? stat.minus(diffSummary[stat.displayType]) : null;
 
       if (!character.playerValues.equippedStats || !stat) {
-        return <tr key={index}>
-          <td className={'stat-type'}>{stat.displayType}</td>
-          <td className={'stat-value'}>???(???)</td>
-          {diffStat &&
-            <td className={'stat-diff' + (diffStat.value > 0 ? ' increase' : diffStat.value < 0 ? ' decrease' : '')}>
-              {diffStat.showValue()}
-            </td>
-          }
-        </tr>;
+        return {
+          name: stat.displayType,
+          recommendedValue: null,
+          diffStat: diffStat
+        };
       }
 
       const statProperty = statTypeMap[stat.displayType] ? statTypeMap[stat.displayType][0] : '';
@@ -63,30 +61,64 @@ class ModSetDetail extends React.PureComponent {
         }
       }
 
-      const optimizationValue = stat.getOptimizationValue(character, target);
+      return {
+        name: stat.displayType,
+        displayModifier: stat.displayModifier,
+        currentValue: originalStatValue,
+        currentStat: originalStat,
+        recommendedValue: statValue,
+        recommendedStat: stat,
+        diffStat: diffStat
+      };
+    });
+
+    // Add effective health and average damage to the stats display
+    this.addCalculatedStatsToPlayerValues(playerStats);
+
+    const statsDisplay = Object.values(playerStats).map((stat, index) => {
+      if (stat.recommendedValue == null) {
+        return <tr key={index}>
+          <td className={'stat-type'}>{stat.name}</td>
+          <td className={'stat-value'}>???(???)</td>
+          {stat.diffStat &&
+            <td className={'stat-diff' +
+              (stat.diffStat.value > 0 ? ' increase' : stat.diffStat.value < 0 ? ' decrease' : '')
+            }>
+              {stat.diffStat.showValue()}
+            </td>
+          }
+        </tr>;
+      }
+
+      const optimizationValue = stat.recommendedStat ? stat.recommendedStat.getOptimizationValue(character, target) : 0;
 
       return <tr key={index}>
-        <td className={'stat-type'}>{stat.displayType}</td>
-        {diffStat &&
+        <td className={'stat-type'}>{stat.name}</td>
+        {stat.diffStat &&
           <td className={'stat-value'}>
             <span className={'total-value'}>
-              {originalStatValue % 1 ?
-                originalStatValue.toFixed(2) :
-                originalStatValue}
-              {originalStat.displayModifier}{' '}
+              {stat.currentValue % 1 ? stat.currentValue.toFixed(2) : stat.currentValue}
+              {stat.displayModifier}{' '}
             </span>
-            <span className={'mods-value'}>({originalStat.showValue()})</span>
+            {stat.currentStat &&
+              <span className={'mods-value'}>({stat.currentStat.showValue()})</span>
+            }
           </td>
         }
         <td className={'stat-value'}>
           <span className={'total-value'}>
-            {statValue % 1 ? statValue.toFixed(2) : statValue}{stat.displayModifier}{' '}
+            {stat.recommendedValue % 1 ? stat.recommendedValue.toFixed(2) : stat.recommendedValue}
+            {stat.displayModifier}{' '}
           </span>
-          <span className={'mods-value'}>({stat.showValue()})</span>
+          {stat.recommendedStat &&
+            <span className={'mods-value'}>({stat.recommendedStat.showValue()})</span>
+          }
         </td>
-        {diffStat &&
-          <td className={'stat-diff' + (diffStat.value > 0 ? ' increase' : diffStat.value < 0 ? ' decrease' : '')}>
-            {diffStat.showValue()}
+        {stat.diffStat &&
+          <td className={'stat-diff' +
+            (stat.diffStat.value > 0 ? ' increase' : stat.diffStat.value < 0 ? ' decrease' : '')
+          }>
+            {stat.diffStat.showValue()}
           </td>
         }
         <td className={'optimizer-value ' +
@@ -136,6 +168,108 @@ class ModSetDetail extends React.PureComponent {
             </div>}
         </div>
       </div>
+    );
+  }
+
+  addCalculatedStatsToPlayerValues(playerValues) {
+    const currentStats = {};
+    const recommendedStats = {};
+
+    Object.values(playerValues).forEach(stat => {
+      switch (stat.name) {
+        case 'Health':
+          currentStats['health'] = stat.currentValue;
+          recommendedStats['health'] = stat.recommendedValue;
+          break;
+        case 'Protection':
+          currentStats['protection'] = stat.currentValue;
+          recommendedStats['protection'] = stat.recommendedValue;
+          break;
+        case 'Armor':
+          currentStats['armor'] = stat.currentValue;
+          recommendedStats['armor'] = stat.recommendedValue;
+          break;
+        case 'Resistance':
+          currentStats['resistance'] = stat.currentValue;
+          recommendedStats['resistance'] = stat.recommendedValue;
+          break;
+        case 'Physical Damage':
+          currentStats['physDamage'] = stat.currentValue;
+          recommendedStats['physDamage'] = stat.recommendedValue;
+          break;
+        case 'Physical Critical Chance':
+          currentStats['physCritChance'] = stat.currentValue;
+          recommendedStats['physCritChance'] = stat.recommendedValue;
+          break;
+        case 'Special Damage':
+          currentStats['specDamage'] = stat.currentValue;
+          recommendedStats['specDamage'] = stat.recommendedValue;
+          break;
+        case 'Special Critical Chance':
+          currentStats['specCritChance'] = stat.currentValue;
+          recommendedStats['specCritChance'] = stat.recommendedValue;
+          break;
+        case 'Critical Damage':
+          currentStats['critDamage'] = stat.currentValue;
+          recommendedStats['critDamage'] = stat.recommendedValue;
+          break;
+      }
+    })
+
+    const currentEffectiveHealthPhysical =
+      (currentStats.health + currentStats.protection) / (currentStats.armor / 100);
+    const recommendedEffectiveHealthPhysical =
+      (recommendedStats.health + recommendedStats.protection) / (recommendedStats.armor / 100);
+    const currentEffectiveHealthSpecial =
+      (currentStats.health + currentStats.protection) / (currentStats.resistance / 100);
+    const recommendedEffectiveHealthSpecial =
+      (recommendedStats.health + recommendedStats.protection) / (recommendedStats.resistance / 100);
+    const currentAverageDamagePhysical = currentStats.physDamage *
+      ((1 - (currentStats.physCritChance / 100)) +
+        (currentStats.critDamage / 100) * (currentStats.physCritChance / 100)
+      );
+    const recommendedAverageDamagePhysical = recommendedStats.physDamage *
+      ((1 - (recommendedStats.physCritChance / 100)) +
+        (recommendedStats.critDamage / 100) * (recommendedStats.physCritChance / 100)
+      );
+    const currentAverageDamageSpecial = currentStats.specDamage *
+      ((1 - (currentStats.specCritChance / 100)) +
+        (currentStats.critDamage / 100) * (currentStats.specCritChance / 100)
+      );
+    const recommendedAverageDamageSpecial = recommendedStats.specDamage *
+      ((1 - (recommendedStats.specCritChance / 100)) +
+        (recommendedStats.critDamage / 100) * (recommendedStats.specCritChance / 100)
+      );
+
+    const statObject = (name, currentValue, recommendedValue) => ({
+      name: name,
+      displayModifier: '',
+      currentValue: Math.floor(currentValue),
+      currentStat: null,
+      recommendedValue: Math.floor(recommendedValue),
+      recommendedStat: null,
+      diffStat: new Stat(name, `${Math.floor(recommendedValue - currentValue)}`)
+    });
+
+    playerValues['Effective Health (physical)'] = statObject(
+      'Effective Health (physical)',
+      currentEffectiveHealthPhysical,
+      recommendedEffectiveHealthPhysical
+    );
+    playerValues['Effective Health (special)'] = statObject(
+      'Effective Health (special)',
+      currentEffectiveHealthSpecial,
+      recommendedEffectiveHealthSpecial
+    );
+    playerValues['Average Damage (physical)'] = statObject(
+      'Average Damage (physical)',
+      currentAverageDamagePhysical,
+      recommendedAverageDamagePhysical
+    );
+    playerValues['Average Damage (special)'] = statObject(
+      'Average Damage (special)',
+      currentAverageDamageSpecial,
+      recommendedAverageDamageSpecial
     );
   }
 }
