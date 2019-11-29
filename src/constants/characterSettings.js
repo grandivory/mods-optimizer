@@ -45,6 +45,9 @@ const characterSettings = {
     ],
     ['JKA']
   ),
+  'ARCTROOPER501ST': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 80, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)],
+  ),
   'ASAJVENTRESS': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 10, 10, 20, 0, 0, 0, 0, true),
@@ -395,7 +398,7 @@ const characterSettings = {
   ),
   'GENERALSKYWALKER': new CharacterSettings(
     [
-      new OptimizationPlan('PvP - Defense', 10, 25, 100, 0, 20, 0, 10, 0, 10, 10, 10, 0, 0, true),
+      new OptimizationPlan('PvP - Defense', 10, 25, 100, 0, 20, 0, 10, 0, 0, 10, 10, 0, 0, true),
       new OptimizationPlan('PvP - Offense', 0, 0, 100, 100, 20, 0, 20, 0, 0, 0, 0, 0, 0, true)
     ],
     ['GAS']
@@ -558,6 +561,13 @@ const characterSettings = {
   ),
   'KANANJARRUSS3': new CharacterSettings(
     [new OptimizationPlan('Tanky', 0, 40, 100, 0, 30, 0, 0, 0, 50, 0, 0, 0, 0, true)]
+  ),
+  'KIADIMUNDI': new CharacterSettings(
+    [
+      new OptimizationPlan('Balanced', 10, 10, 100, 50, 20, 0, 50, 0, 25, 10, 10, 0, 0, true),
+      new OptimizationPlan('Offense', 0, 0, 100, 50, 20, 0, 75, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('Defense', 20, 20, 100, 0, 20, 10, 0, 0, 0, 15, 15, 0, 0, true)
+    ]
   ),
   'KITFISTO': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE')],
