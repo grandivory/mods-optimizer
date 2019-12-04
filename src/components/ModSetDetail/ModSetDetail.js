@@ -217,13 +217,13 @@ class ModSetDetail extends React.PureComponent {
     })
 
     const currentEffectiveHealthPhysical =
-      (currentStats.health + currentStats.protection) / (currentStats.armor / 100);
+      (currentStats.health + currentStats.protection) / (1 - (currentStats.armor / 100));
     const recommendedEffectiveHealthPhysical =
-      (recommendedStats.health + recommendedStats.protection) / (recommendedStats.armor / 100);
+      (recommendedStats.health + recommendedStats.protection) / (1 - (recommendedStats.armor / 100));
     const currentEffectiveHealthSpecial =
-      (currentStats.health + currentStats.protection) / (currentStats.resistance / 100);
+      (currentStats.health + currentStats.protection) / (1 - (currentStats.resistance / 100));
     const recommendedEffectiveHealthSpecial =
-      (recommendedStats.health + recommendedStats.protection) / (recommendedStats.resistance / 100);
+      (recommendedStats.health + recommendedStats.protection) / (1 - (recommendedStats.resistance / 100));
     const currentAverageDamagePhysical = currentStats.physDamage *
       ((1 - (currentStats.physCritChance / 100)) +
         (currentStats.critDamage / 100) * (currentStats.physCritChance / 100)
