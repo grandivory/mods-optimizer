@@ -329,6 +329,11 @@ const characterSettings = {
     ],
     ['Nesty', 'Baby Wampa', 'solo']
   ),
+  'EPIXFINN': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 0, 25, 0, 0, 0, 0, 0, true)],
+    [],
+    DamageType.special
+  ),
   'EWOKELDER': new CharacterSettings(
     [new OptimizationPlan('PvP', 25, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true)],
     ['EE', 'Murderbears']
@@ -375,6 +380,9 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 20, 20, 100, 50, 50, 25, 0, 0, 0, 5, 5, 0, 0, true)],
     ['FOST', 'FO']
   ),
+  'FOSITHTROOPER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 25, 100, 0, 0, 80, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'FULCRUMAHSOKA': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
     ['ATF', 'FAT']
@@ -385,6 +393,11 @@ const characterSettings = {
   ),
   'GARSAXON': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
+  ),
+  'GENERALHUX': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 10, 0, 0, 0, 0, 0, 0, 15, true)],
+    [],
+    DamageType.special
   ),
   'GENERALKENOBI': new CharacterSettings(
     [
