@@ -222,7 +222,7 @@ const characterSettings = {
     DamageType.mixed
   ),
   'CT5555': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 30, 30, 50, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, true)]
   ),
   'CT7567': new CharacterSettings(
     [
