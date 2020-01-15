@@ -114,6 +114,10 @@ class ModSetDetail extends React.PureComponent {
             <span className={'mods-value'}>({stat.recommendedStat.showValue()})</span>
           }
         </td>
+        <td className={'optimizer-value ' +
+          (optimizationValue > 0 ? 'increase' : optimizationValue < 0 ? 'decrease' : '')}>
+          {optimizationValue.toFixed(2)}
+        </td>
         {stat.diffStat &&
           <td className={'stat-diff' +
             (stat.diffStat.value > 0 ? ' increase' : stat.diffStat.value < 0 ? ' decrease' : '')
@@ -121,10 +125,6 @@ class ModSetDetail extends React.PureComponent {
             {stat.diffStat.showValue()}
           </td>
         }
-        <td className={'optimizer-value ' +
-          (optimizationValue > 0 ? 'increase' : optimizationValue < 0 ? 'decrease' : '')}>
-          {optimizationValue.toFixed(2)}
-        </td>
       </tr>;
     });
 
@@ -146,8 +146,8 @@ class ModSetDetail extends React.PureComponent {
                 <th></th>
                 <th>Current</th>
                 <th>Recommended</th>
-                <th>Change</th>
                 <th>Value</th>
+                <th>Change</th>
               </tr>
             </thead>
             <tbody>
