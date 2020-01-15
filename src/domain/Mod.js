@@ -3,7 +3,7 @@
 import setBonuses from "../constants/setbonuses";
 import Stat from "./Stat";
 import groupByKey from "../utils/groupByKey";
-import {modSets, modSlots} from "../constants/enums";
+import { modSets, modSlots } from "../constants/enums";
 import OptimizationPlan from "./OptimizationPlan";
 
 const hotUtilsSlotMap = {
@@ -119,7 +119,7 @@ class Mod {
   }
 
   shouldSlice(character, target) {
-    return character.optimizerSettings.sliceMods && this.pips < 6 &&
+    return character.optimizerSettings.sliceMods && this.pips === 5 &&
       (this.level === 15 || this.shouldLevel(target))
   }
 
@@ -232,7 +232,7 @@ class Mod {
         modJson[`secondaryValue_${slot}`],
         modJson[`secondaryRoll_${slot}`]
       );
-    }).filter(x => null !== x);    
+    }).filter(x => null !== x);
 
     return new Mod(
       modJson.mod_uid,
