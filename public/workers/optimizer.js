@@ -1246,7 +1246,11 @@ function changeRelativeTargetStatsToAbsolute(modSuggestions, characters, lockedC
         characterMods = allMods.filter(mod => mod.characterID === targetStat.relativeCharacterId)
       } else {
         // Find the character by searching backwards through the modSuggestions array
-        const characterModsEntry = currentModSuggestions.reverse().find(({ id }) => id === targetStat.relativeCharacterId);
+        const characterModsEntry =
+          currentModSuggestions
+            .filter(x => null !== x)
+            .reverse()
+            .find(({ id }) => id === targetStat.relativeCharacterId);
         if (undefined === characterModsEntry) {
           throw new Error(
             `Could not find suggested mods for ${targetStat.relativeCharacterId}.  ` +
