@@ -266,6 +266,9 @@ class CharacterEditForm extends PureComponent {
       'Critical Avoidance'
     ];
 
+    const gameSettings = Object.values(this.props.gameSettings).slice(0);
+    gameSettings.sort((a, b) => a.getDisplayName().localeCompare(b.getDisplayName()))
+
     const targetStatRows = targetStats.map((targetStat, index) =>
       <div className={'form-row center'} key={targetStat.key}>
         <button type={'button'} className={'red small'} onClick={() => this.props.removeTargetStat(index)}>-</button>
@@ -289,9 +292,14 @@ class CharacterEditForm extends PureComponent {
         compared to&nbsp;
         <select name={'target-stat-relative-character[]'} defaultValue={targetStat.target.relativeCharacterId || ''}>
           <option value={''}>No one</option>
-          {Object.values(this.props.gameSettings).map(
+          {gameSettings.map(
             gs => <option key={gs.baseID} value={gs.baseID}>{gs.getDisplayName()}</option>
           )}
+        </select>
+        &nbsp;using&nbsp;
+        <select name={'target-stat-type[]'} defaultValue={targetStat.target.type || '+'}>
+          <option value='+'>+/-</option>
+          <option value='%'>%</option>
         </select>
       </div>
     );
@@ -615,18 +623,22 @@ class CharacterEditForm extends PureComponent {
       const targetStatRelativeCharacters = this.form['target-stat-relative-character[]'] instanceof NodeList ?
         this.form['target-stat-relative-character[]'] :
         [this.form['target-stat-relative-character[]']];
+      const targetStatTypes = this.form['target-stat-type[]'] instanceof NodeList ?
+        this.form['target-stat-type[]'] :
+        [this.form['target-stat-type[]']];
 
       for (let i = 0; i < targetStatNames.length; i++) {
         const name = targetStatNames[i].value;
         const minimum = targetStatMins[i].valueAsNumber;
         const maximum = targetStatMaxes[i].valueAsNumber;
         const relativeCharacter = targetStatRelativeCharacters[i].value || null;
+        const type = targetStatTypes[i].value || null;
 
         if (name) {
           if (minimum < maximum) {
-            targetStats.push(new TargetStat(name, minimum, maximum, relativeCharacter));
+            targetStats.push(new TargetStat(name, type, minimum, maximum, relativeCharacter));
           } else {
-            targetStats.push(new TargetStat(name, maximum, minimum, relativeCharacter));
+            targetStats.push(new TargetStat(name, type, maximum, minimum, relativeCharacter));
           }
         }
       }

@@ -1270,11 +1270,22 @@ function changeRelativeTargetStatsToAbsolute(modSuggestions, characters, lockedC
       const characterStatValue =
         getStatValueForCharacterWithMods(characterMods, relativeCharacter, targetStat.stat, target);
 
+      let minimum, maximum;
+
+      if (targetStat.type === '%') {
+        minimum = characterStatValue * targetStat.minimum / 100;
+        maximum = characterStatValue * targetStat.maximum / 100;
+      } else {
+        minimum = characterStatValue + targetStat.minimum;
+        maximum = characterStatValue + targetStat.maximum;
+      }
+
       return {
-        minimum: characterStatValue + targetStat.minimum,
-        maximum: characterStatValue + targetStat.maximum,
+        minimum: minimum,
+        maximum: maximum,
         stat: targetStat.stat,
-        relativeCharacterId: null
+        relativeCharacterId: null,
+        type: null
       };
     })
   };
