@@ -24,7 +24,7 @@ import {
   REMOVE_TARGET_STAT,
   CHANGE_TARGET_STATS,
 } from "../actions/characterEdit";
-import { REQUEST_CHARACTERS, REQUEST_PROFILE, REQUEST_STATS, TOGGLE_KEEP_OLD_MODS } from "../actions/data";
+import { TOGGLE_KEEP_OLD_MODS } from "../actions/data";
 import { CHANGE_MODS_FILTER } from "../actions/explore";
 import { CANCEL_OPTIMIZE_MODS, OPTIMIZE_MODS } from "../actions/optimize";
 import { CHANGE_MOD_SET_FILTER, CHANGE_MODLIST_FILTER, CHANGE_OPTIMIZER_VIEW, } from "../actions/review";
@@ -52,7 +52,7 @@ import {
   addTargetStat,
   removeTargetStat,
 } from "./characterEdit";
-import { requestCharacters, requestProfile, requestStats, toggleKeepOldMods } from "./data";
+import { toggleKeepOldMods } from "./data";
 import { changeModsFilter } from "./explore";
 import { cancelOptimizeMods, optimizeMods } from "./optimize";
 import { changeModListFilter, changeModSetFilter, changeOptimizerView, } from "./review";
@@ -140,12 +140,6 @@ export default function modsOptimizer(state, action) {
     case REMOVE_TARGET_STAT:
       return removeTargetStat(state, action);
 
-    case REQUEST_CHARACTERS:
-      return requestCharacters(state);
-    case REQUEST_PROFILE:
-      return requestProfile(state);
-    case REQUEST_STATS:
-      return requestStats(state);
     case TOGGLE_KEEP_OLD_MODS:
       return saveState(toggleKeepOldMods(state));
 

@@ -24,6 +24,7 @@ import { checkVersion, refreshPlayerData, toggleKeepOldMods } from "../../state/
 import FlashMessage from "../../components/Modal/FlashMessage";
 import { saveAs } from 'file-saver';
 import { exportDatabase, loadProfile } from "../../state/actions/storage";
+import Help from '../../components/Help/Help';
 
 class App extends PureComponent {
 
@@ -34,7 +35,7 @@ class App extends PureComponent {
     const queryParams = new URLSearchParams(document.location.search);
 
     if (queryParams.has('allyCode')) {
-      props.refreshPlayerData(queryParams.get('allyCode'), true);
+      props.refreshPlayerData(queryParams.get('allyCode'), true, false, false);
     }
 
     // Remove the query string after reading anything we needed from it.
@@ -137,7 +138,7 @@ class App extends PureComponent {
           <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodyInput = input}
             onKeyUp={(e) => {
               if (e.key === 'Enter') {
-                this.props.refreshPlayerData(e.target.value, this.props.keepOldMods);
+                this.props.refreshPlayerData(e.target.value, this.props.keepOldMods, false, false);
               }
               // Don't change the input if the user is trying to select something
               if (window.getSelection().toString() !== '') {
@@ -183,17 +184,23 @@ class App extends PureComponent {
         }
         <button type={'button'}
           onClick={() => {
-            this.props.refreshPlayerData(this.props.allyCode || allyCodyInput.value, this.props.keepOldMods);
+            this.props.refreshPlayerData(
+              this.props.allyCode || allyCodyInput.value,
+              this.props.keepOldMods,
+              this.props.hotUtilsSubscription,
+              false
+            );
           }}>
           Fetch my data!
         </button>
-        {/* {this.props.hotUtilsSubscription &&
-          <button type={'button'}
-            onClick={() => console.log('BLAM!')}
-          >
-            Fetch with HotUtils
-          </button>
-        } */}
+        <button type={'button'} disabled={!this.props.hotUtilsSubscription} onClick={() => {
+          if (this.props.hotUtilsSubscription) {
+            this.props.showModal('pull-unequipped-modal', this.fetchUnequippedModal())
+          }
+        }}>
+          Fetch with HotUtils
+        </button>
+        <Help header={'How do I pull unequipped mods?'}>{this.unequippedModsHelp()}</Help>
         <input id={'keep-old-mods'}
           name={'keep-old-mods'}
           type={'checkbox'}
@@ -336,7 +343,7 @@ class App extends PureComponent {
         onKeyUp={(e) => {
           if (e.key === 'Enter') {
             this.props.hideModal();
-            this.props.refreshPlayerData(e.target.value, false);
+            this.props.refreshPlayerData(e.target.value, false, false, false);
           }
           // Don't change the input if the user is trying to select something
           if (window.getSelection().toString() !== '') {
@@ -355,7 +362,7 @@ class App extends PureComponent {
         <button type={'button'}
           onClick={() => {
             this.props.hideModal();
-            this.props.refreshPlayerData(allyCodeInput.value, false);
+            this.props.refreshPlayerData(allyCodeInput.value, false, false, false);
           }}>
           Fetch my data!
         </button>
@@ -382,6 +389,55 @@ class App extends PureComponent {
           Delete
         </button>
       </div>
+    </div>;
+  }
+
+  /**
+   * Renders a modal stating that pulling unequipped mods using HotUtils will log you out of the game
+   */
+  fetchUnequippedModal() {
+    return <div key={'hotutils-move-mods-modal'}>
+      <h2>Fetch your unequipped mods using HotUtils</h2>
+      <p>
+        This will fetch all of your player data, including unequipped mods by using HotUtils.
+        Please note that <strong className={'gold'}>
+          this action will log you out of Galaxy of Heroes if you are currently logged in
+        </strong>.
+      </p>
+      <p>
+        <strong>Use at your own risk!</strong> HotUtils functionality breaks the terms of service for Star Wars:
+        Galaxy of Heroes. You assume all risk in using this tool. Grandivory's Mods Optimizer is not associated with
+        HotUtils.
+      </p>
+      <div className={'actions'}>
+        <button type={'button'} className={'red'} onClick={this.props.hideModal}>Cancel</button>
+        <button type={'button'} onClick={() => {
+          this.props.hideModal();
+          this.props.refreshPlayerData(this.props.allyCode, this.props.keepOldMods, true, true);
+        }}>
+          Fetch my data
+        </button>
+      </div>
+    </div >;
+  }
+
+  /**
+   * Renders a help description for pulling unequipped mods with HotUtils
+   */
+  unequippedModsHelp() {
+    return <div className={'help'}>
+      <p>
+        HotUtils is another tool for SWGOH that allows you to directly modify your game account. One of the advantages
+        of being a subscriber to HotUtils is that it can pull all of your mod data, including unequipped mods, at any
+        time, and without any cooldown period. Normally, your player and mod data can only be updated once every hour.
+      </p>
+      <p>
+        <strong>Use at your own risk!</strong> HotUtils functionality breaks the terms of service for Star Wars:
+        Galaxy of Heroes. You assume all risk in using this tool. Grandivory's Mods Optimizer is not associated with
+        HotUtils.
+      </p>
+      <p><a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener'}>https://www.hotutils.app/</a></p>
+      <p><img className={'fit'} src={'/img/hotsauce512.png'} alt={'hotsauce'} /></p>
     </div>;
   }
 }
@@ -412,7 +468,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   changeSection: newSection => dispatch(changeSection(newSection)),
-  refreshPlayerData: (allyCode, keepOldMods) => dispatch(refreshPlayerData(allyCode, keepOldMods)),
+  refreshPlayerData: (allyCode, keepOldMods, useHotUtils, useSession) =>
+    dispatch(refreshPlayerData(allyCode, keepOldMods, useHotUtils, useSession)),
   checkVersion: () => dispatch(checkVersion()),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),

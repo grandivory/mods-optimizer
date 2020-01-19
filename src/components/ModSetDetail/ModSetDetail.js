@@ -213,6 +213,8 @@ class ModSetDetail extends React.PureComponent {
           currentStats['critDamage'] = stat.currentValue;
           recommendedStats['critDamage'] = stat.recommendedValue;
           break;
+        default:
+          break;
       }
     })
 

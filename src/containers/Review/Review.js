@@ -28,7 +28,6 @@ import flatten from "../../utils/flatten";
 import { connect } from "react-redux";
 import Credits from "../../components/Credits/Credits";
 import OptimizationPlan from "../../domain/OptimizationPlan";
-import { saveAs } from 'file-saver';
 import Help from "../../components/Help/Help"
 import { createHotUtilsProfile, moveModsWithHotUtils } from '../../state/actions/data';
 
@@ -418,19 +417,26 @@ class Review extends React.PureComponent {
    * Renders a sidebar box with actions for HotUtils
    */
   hotUtilsSidebar() {
-    function hotUtilsExport() {
-      const exportObject = this.generateHotUtilsProfile();
-      const serializedExport = JSON.stringify(exportObject);
-      const exportBlob = new Blob([serializedExport], { type: 'application/json;charset=utf-8' });
-      saveAs(exportBlob, `hotUtils-${(new Date()).toISOString().slice(0, 10)}.json`);
-    }
-
     return <div className={'sidebar-hotutils'} key={'sidebar-hotutils'}>
       <h3>HotUtils <Help header={'What is HotUtils?'}>{this.hotUtilsHelp()}</Help></h3>
-      <button type={'button'} onClick={() => this.props.showModal('hotutils-modal', this.hotUtilsCreateProfileModal())}>
+      <button
+        type={'button'}
+        disabled={!this.props.hotUtilsSubscription}
+        onClick={() => {
+          if (this.props.hotUtilsSubscription) {
+            this.props.showModal('hotutils-modal', this.hotUtilsCreateProfileModal())
+          }
+        }}>
         Create a new mod profile
       </button>
-      <button type={'button'} onClick={() => this.props.showModal('hotutils-modal', this.hotUtilsMoveModsModal())}>
+      <button
+        type={'button'}
+        disabled={!this.props.hotUtilsSubscription}
+        onClick={() => {
+          if (this.props.hotUtilsSubscription) {
+            this.props.showModal('hotutils-modal', this.hotUtilsMoveModsModal())
+          }
+        }}>
         Move mods in-game
       </button>
       <img className={'fit'} src={'/img/hotsauce512.png'} alt={'hotsauce'} />
@@ -462,9 +468,7 @@ class Review extends React.PureComponent {
       setValueSummary
     ];
 
-    if (this.props.hotUtilsSubscription) {
-      sidebarElements.push(this.hotUtilsSidebar())
-    }
+    sidebarElements.push(this.hotUtilsSidebar())
 
     return sidebarElements
   }
@@ -588,6 +592,10 @@ class Review extends React.PureComponent {
         Please note that <strong className={'gold'}>
           this action will log you out of Galaxy of Heroes if you are currently logged in
         </strong>.
+      </p>
+      <p>
+        Moving your mods can take several minutes. Please be patient and allow the process to complete before
+        refreshing or logging back into Galaxy of Heroes.
       </p>
       <p>
         <strong>Use at your own risk!</strong> HotUtils functionality breaks the terms of service for Star Wars:

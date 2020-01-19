@@ -308,6 +308,10 @@ nav button.active {
   max-width: 45em;
 }
 
+.modal.pull-unequipped-modal {
+  max-width: 40em;
+}
+
 .modal .help {
   max-width: 30em;
 }

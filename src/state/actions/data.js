@@ -18,9 +18,6 @@ import { changeOptimizerView } from "./review";
 import CharacterStats, { NullCharacterStats } from "../../domain/CharacterStats";
 
 export const TOGGLE_KEEP_OLD_MODS = 'TOGGLE_KEEP_OLD_MODS';
-export const REQUEST_CHARACTERS = 'REQUEST_CHARACTERS';
-export const REQUEST_PROFILE = 'REQUEST_PROFILE';
-export const REQUEST_STATS = 'REQUEST_STATS';
 
 export function toggleKeepOldMods() {
   return {
@@ -28,37 +25,50 @@ export function toggleKeepOldMods() {
   };
 }
 
-export function requestCharacters() {
-  return {
-    type: REQUEST_CHARACTERS
-  };
-}
-
-export function requestProfile(allyCode) {
-  return {
-    type: REQUEST_PROFILE,
-    allyCode: allyCode
-  };
-}
-
 export function checkVersion() {
   return function (dispatch) {
-    return dispatchFetchVersion(dispatch)
-      .catch(error => {
+    return fetchVersion(dispatch)
+      .then(version => {
+        dispatch(processVersion(version));
+        return version;
+      }).catch(error => {
         dispatch(hideFlash());
         dispatch(showError(error.message));
       });
   }
 }
 
-/**
- * Request the base and equipped stats for a list of characters
- * @returns {{type: string}}
- */
-export function requestStats() {
-  return {
-    type: REQUEST_STATS
-  };
+function fetchVersion() {
+  return fetch(
+    'https://api.mods-optimizer.swgoh.grandivory.com/versionapi',
+    { method: 'POST', body: {}, mode: 'cors' }
+  )
+    .then(response => response.text())
+    .catch(error => {
+      console.error(error);
+      throw new Error(
+        'Error fetching the current version. Please check to make sure that you are on the latest version'
+      );
+    });
+}
+
+function processVersion(version) {
+  return function (dispatch, getState) {
+    const state = getState();
+
+    if (state.version < version) {
+      dispatch(showFlash(
+        'Version out-of-date!',
+        [
+          <p key={1}>
+            The mods optimizer has been updated to version <strong>{version}</strong>.
+            You're currently running version <strong>{state.version}</strong>
+          </p>,
+          <p key={2}>Please clear your cache and refresh to get the latest version.</p>
+        ]
+      ));
+    }
+  }
 }
 
 function post(url = '', data = {}, extras = {}) {
@@ -80,41 +90,134 @@ function post(url = '', data = {}, extras = {}) {
 }
 
 /**
+ * Collect all the information needed for the optimizer for a player
+ * @param allyCode {string}
+ * @param keepOldMods {boolean} Whether to keep all existing mods, regardless of whether they were returned in this call
+ * @param useHotUtils {boolean} Whether to use mod data from HotUtils in place of swgoh.help
+ * @param useHotUtilsSession {boolean} Whether to use a session with HotUtils, which pulls unequipped mods but
+ *                                     will log the player out of the game
+ * @returns {function(*=): Promise<T | never | never>}
+ */
+export function refreshPlayerData(allyCode, keepOldMods, useHotUtils, useHotUtilsSession) {
+  const cleanedAllyCode = cleanAllyCode(allyCode);
+  let usedHotUtils = false;
+  const data = {};
+  const messages = [];
+
+  return function (dispatch) {
+    dispatch(setIsBusy(true));
+
+    // First, fetch character definitions from swgoh.gg
+    return fetchCharacters()
+      .catch(() => {
+        messages.push('Error when fetching character definitions from swgoh.gg. ' +
+          'Some characters may not optimize properly until you fetch again.'
+        );
+        messages.push('This is an error with an API that the optimizer uses (swgoh.gg) and NOT ' +
+          'an error in the optimizer itself. Feel free to discuss it on the ' +
+          'optimizer\'s discord server, but know that there are no changes that ' +
+          'can be made to the optimizer to fix this issue.'
+        )
+        return null;
+      })
+      .then(gameSettings => {
+        data.gameSettings = gameSettings;
+      })
+      // Then, fetch the player's data from swgoh.help
+      .then(() => fetchProfile(cleanedAllyCode))
+      .then(profile => {
+        data.profile = profile;
+        return profile.characters;
+      })
+      // Fetch stats for all of the player's characters
+      .then(profileCharacters => fetchCharacterStats(profileCharacters))
+      .then(characterStats => data.characterStats = characterStats)
+      // If the player is a HotUtils subscriber, then fetch their mods from
+      // HotUtils and overwrite the mods from swgoh.help
+      .then(() => {
+        if (useHotUtils) {
+          return getHotUtilsMods(cleanedAllyCode, useHotUtilsSession)
+            .then(mods => {
+              data.profile.mods = mods;
+              usedHotUtils = true;
+            })
+            .catch(error => messages.push('Error fetching mods from HotUtils: ' + error.message))
+        }
+      })
+      // Process all of the data that's been collected
+      .then(() => {
+        const db = getDatabase();
+
+        if (data.gameSettings) {
+          dispatch(setGameSettings(data.gameSettings));
+          db.saveGameSettings(
+            Object.values(data.gameSettings),
+            nothing,
+            error => dispatch(showFlash(
+              'Storage Error',
+              'Error saving base character settings: ' +
+              error.message +
+              ' The optimizer may not function properly for all characters'
+            ))
+          )
+        }
+
+        // If we used a HotUtils session, then the mods returned are all the mods a player has.
+        // In this case, don't keep old mods around, even if the box is checked.
+        dispatch(updatePlayerData(cleanedAllyCode, data, db, keepOldMods && !(usedHotUtils && useHotUtilsSession)))
+
+        // Show the success and/or error messages
+        dispatch(showFetchResult(data, messages, usedHotUtils));
+      })
+      .catch(error => {
+        dispatch(showError(
+          [
+            <p key={1}>{error.message}</p>,
+            <p key={2}>
+              This is an error with an API that the optimizer uses, and not a problem with the optimizer itself. Feel
+              free to discuss this error on the optimizer discord, but know that there are no changes that can be made
+              to the optimizer to fix this issue.
+            </p>
+          ]
+        ));
+      })
+      .finally(() => {
+        dispatch(setIsBusy(false));
+      });
+  }
+}
+
+/**
  * Fetch base character data from the API
- * @param dispatch {function} The Redux dispatch function
- * @param lastStep {boolean} Whether this is the last step in the API calls
  * @returns {Promise<Array | string[]>}
  */
-function dispatchFetchCharacters(dispatch, lastStep) {
-  dispatch(requestCharacters());
+function fetchCharacters() {
   return fetch('https://api.mods-optimizer.swgoh.grandivory.com/characters/')
     .then(response => response.json())
     .then(characters => {
-      dispatch(receiveCharacters(characters, lastStep));
-      return [];
-    }, () => {
-      return [
-        'Error when fetching character definitions from swgoh.gg. ' +
-        'Some characters may not optimize properly until you fetch again.',
-        'This is an error with an API that the optimizer uses (swgoh.gg) and NOT ' +
-        'an error in the optimizer itself. Feel free to discuss it on the ' +
-        'optimizer\'s discord server, but know that there are no changes that ' +
-        'can be made to the optimizer to fix this issue.'
-      ];
+      const gameSettings = characters.map(character => {
+        return new GameSettings(
+          character.base_id,
+          character.name,
+          character.image,
+          character.categories
+            .concat([character.alignment, character.role])
+            .concat(null !== character.ship_slot ? ['Crew Member'] : []),
+          character.description,
+          character.alignment
+        );
+      });
+
+      return groupByKey(gameSettings, gs => gs.baseID)
     });
 }
 
 /**
  * Fetch a player profile from the API
- * @param dispatch {function} The Redux dispatch function
  * @param allyCode {string} The ally code to request
- * @param messages {Array<string>} Any messages to post to the user after the call is complete
- * @param keepOldMods {boolean} Whether to keep all existing mods, regardless of whether they were returned in this call
- * @param lastStep {boolean} Whether this is the last step in the API calls
  * @returns {Promise<T | never>}
  */
-function dispatchFetchProfile(dispatch, allyCode, messages, keepOldMods, lastStep) {
-  dispatch(requestProfile(allyCode));
+function fetchProfile(allyCode) {
   return post(
     'https://api.mods-optimizer.swgoh.grandivory.com/playerprofile/',
     { 'ally-code': allyCode }
@@ -137,13 +240,45 @@ function dispatchFetchProfile(dispatch, allyCode, messages, keepOldMods, lastSte
       characters: profileCharacters,
       updated: playerProfile.updated
     };
-  }).then(profile => {
-    dispatch(receiveProfile(allyCode, profile, messages, keepOldMods, lastStep));
-    return profile;
-  });
+  })
 }
 
-function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
+/**
+ * Fetch mods from HotUtils, optionally using a session to get unequipped mods
+ * @param {string} allyCode The player to fetch mods for
+ * @param {boolean} useSession Whether to use a session to collect unequipped mods
+ *                             at the cost of logging the player out of the game
+ */
+function getHotUtilsMods(allyCode, useSession) {
+  return post(
+    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+    {
+      'action': 'getmods',
+      'payload': {
+        'allyCode': allyCode,
+        'useSession': useSession ? 'True' : 'False'
+      }
+    }
+  )
+    .then(response => {
+      // Parse out the HotUtils response to something the optimizer can use
+      if (response.ResponseCode !== 1) {
+        throw new Error(response.ResponseMessage);
+      }
+
+      const modsResponse = JSON.parse(response.Mods);
+
+      const rawMods = modsResponse.profiles[0].mods;
+
+      return rawMods.map(Mod.fromHotUtils)
+    })
+    .catch(error => {
+      console.error(error);
+      throw error;
+    });
+}
+
+function fetchCharacterStats(characters = null) {
   if (null !== characters) {
     return post(
       'https://api.mods-optimizer.swgoh.grandivory.com/stats',
@@ -161,474 +296,24 @@ function dispatchFetchCharacterStats(dispatch, allyCode, characters = null) {
       .catch(() => {
         throw new Error('Error fetching your character\'s stats. Please try again.')
       })
-      .then(statsResponse => {
-        dispatch(receiveStats(allyCode, Object.keys(characters), statsResponse));
-        return statsResponse;
-      });
   } else {
-    return Promise.resolve()
-      .then(() => dispatch(receiveStats(allyCode, null)));
+    return Promise.resolve(null);
   }
 }
 
-function dispatchFetchVersion(dispatch) {
-  return fetch(
-    'https://api.mods-optimizer.swgoh.grandivory.com/versionapi',
-    { method: 'POST', body: {}, mode: 'cors' }
-  )
-    .then(response => response.text())
-    .then(version => {
-      dispatch(receiveVersion(version));
-      return version;
-    }).catch(error => {
-      console.error(error);
-      throw new Error(
-        'Error fetching the current version. Please check to make sure that you are on the latest version'
-      );
-    });
-}
-
-function dispatchFetchHotUtilsStatus(dispatch, allyCode) {
-  return post(
-    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
-    {
-      'action': 'checkstatus',
-      'payload': {
-        'allyCode': allyCode
-      }
-    }
-  ).then(response => {
-    dispatch(receiveHotUtilsStatus(response));
-    return response;
-  }).catch(error => {
-    console.error(error);
-    throw error;
-  });
-}
-
-function dispatchCreateHotUtilsProfile(dispatch, profile) {
-  dispatch(setIsBusy(true));
-  return post(
-    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
-    {
-      'action': 'createprofile',
-      'payload': profile
-    }
-  ).then(response => {
-    dispatch(receiveHotUtilsCreateProfileResponse(response));
-    return response;
-  }).catch(error => {
-    console.error(error);
-    throw error;
-  });
-}
-
-function dispatchGetHotUtilsMods(dispatch, allyCode) {
-  return post(
-    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
-    {
-      'action': 'getmods',
-      'payload': {
-        'allyCode': allyCode
-      }
-    }
-  ).then(response => {
-    dispatch(receiveHotUtilsModsResponse(response));
-    return response;
-  }).catch(error => {
-    console.error(error);
-    throw error;
-  });
-}
-
-function dispatchMoveHotUtilsMods(dispatch, profile) {
-  dispatch(setIsBusy(true));
-  return fetch(
-    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
-    Object.assign({
-      method: 'POST',
-      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        'action': 'movemods',
-        'payload': profile
-      }),
-      mode: "cors",
-    })
-  ).then(
-    response => {
-      if (response.status === 504) {
-        // In this particular case, a 504 doesn't mean a failure.
-        // Start polling the status to figure out when the mod move is complete.
-        return pollForModMoveStatus(profile.allyCode);
-      } else if (response.ok) {
-        return response.json();
-      } else {
-        return response.text().then(errorText => Promise.reject(new Error(errorText)))
-      }
-    }
-  ).then(response => {
-    dispatch(receiveHotUtilsMoveModsResponse(response));
-    return response;
-  }).catch(error => {
-    throw error;
-  });
-}
-
-function pollForModMoveStatus(allyCode) {
-  return new Promise((resolve, reject) => {
-    post(
-      'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
-      {
-        'action': 'checkmovestatus',
-        'payload': {
-          'allyCode': allyCode
-        }
-      }
-    ).then(response => {
-      switch (response.ResponseCode) {
-        case 0:
-          reject(new Error(response.ResponseMessage));
-          break;
-        case 1:
-          // If the move is still ongoing, then poll again after a few seconds.
-          setTimeout(
-            () => resolve(pollForModMoveStatus(allyCode)),
-            10000
-          );
-          break;
-        case 2:
-          resolve(response)
-          break;
-      }
-    }).catch(error => reject(error))
-  });
-}
-
-/**
- * Collect all the information needed for the optimizer for a player
- * @param allyCode {string}
- * @param keepOldMods {boolean} Whether to keep all existing mods, regardless of whether they were returned in this call
- * @returns {function(*=): Promise<T | never | never>}
- */
-export function refreshPlayerData(allyCode, keepOldMods) {
-  const cleanedAllyCode = cleanAllyCode(allyCode);
-  const messages = [];
-
+function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
   return function (dispatch) {
-    return dispatchFetchCharacters(dispatch, false)
-      // Only continue to fetch the player's profile if the character fetch was successful
-      .then((characterMessages) => {
-        messages.push(...characterMessages);
-        return dispatchFetchProfile(dispatch, cleanedAllyCode, messages, keepOldMods, false);
-      })
-      .then(profile => dispatchFetchCharacterStats(dispatch, cleanedAllyCode, profile ? profile.characters : null))
-      .catch(error => {
-        dispatch(setIsBusy(false));
-        dispatch(hideFlash());
-        dispatch(showError(
-          [
-            <p key={1}>{error.message}</p>,
-            <p key={2}>
-              This is an error with an API that the optimizer uses, and not a problem with the optimizer itself. Feel
-              free to discuss this error on the optimizer discord, but know that there are no changes that can be made
-              to the optimizer to fix this issue.
-            </p>
-          ]
-        ));
-      });
-  }
-}
-
-/**
- * Asynchronously fetch the set of all characters from swgoh.gg
- *
- * @param allyCode string The ally code under which to store the character information
- */
-export function fetchCharacters(allyCode) {
-  const cleanedAllyCode = cleanAllyCode(allyCode);
-
-  return function (dispatch) {
-    return dispatchFetchCharacters(dispatch, cleanedAllyCode, true);
-  }
-}
-
-/**
- * Asynchronously fetch a player's profile, updating state before the fetch to show that the app is busy, and after
- * the fetch to fill in with the response
- *
- * @param allyCode string The ally code to fetch a profile for
- */
-export function fetchProfile(allyCode) {
-  const cleanedAllyCode = cleanAllyCode(allyCode);
-
-  return function (dispatch) {
-    return dispatchFetchProfile(dispatch, cleanedAllyCode, true)
-      .catch(error => {
-        dispatch(setIsBusy(false));
-        dispatch(showError(error.message));
-      })
-  }
-}
-
-export function fetchCharacterStats(allyCode, characters) {
-  const cleanedAllyCode = cleanAllyCode(allyCode);
-
-  return function (dispatch) {
-    return dispatchFetchCharacterStats(dispatch, cleanedAllyCode, characters)
-      .catch(error => {
-        dispatch(setIsBusy(false));
-        dispatch(hideFlash());
-        dispatch(showError(error.message))
-      });
-  }
-}
-
-export function fetchHotUtilsStatus(allyCode) {
-  const cleanedAllyCode = cleanAllyCode(allyCode);
-
-  return function (dispatch) {
-    return dispatchFetchHotUtilsStatus(dispatch, cleanedAllyCode)
-      .catch(error => {
-        dispatch(showError(error.message));
-      })
-  }
-}
-
-export function createHotUtilsProfile(profile) {
-  return function (dispatch) {
-    return dispatchCreateHotUtilsProfile(dispatch, profile)
-      .catch(error => {
-        console.error(error);
-        dispatch(setIsBusy(false));
-        dispatch(showError(error.message));
-      })
-  }
-}
-
-export function moveModsWithHotUtils(profile) {
-  return function (dispatch) {
-    return dispatchMoveHotUtilsMods(dispatch, profile)
-      .catch(error => {
-        console.error(error);
-        dispatch(setIsBusy(false));
-        dispatch(showError(error.message));
-      })
-  }
-}
-
-/**
- * Update the set of known characters in the state (independent of any one profile) with data from swgoh.gg
- * @param characters {Array<Object>} The result from the call to the API
- * @param lastStep {boolean} Whether this is the end of the API call chain
- * @returns {Function}
- */
-function receiveCharacters(characters, lastStep) {
-  return function (dispatch) {
-    const db = getDatabase();
-    if (!characters && lastStep) {
-      dispatch(setIsBusy(false));
-      return;
-    }
-
-    const gameSettings = characters.map(character => {
-      return new GameSettings(
-        character.base_id,
-        character.name,
-        character.image,
-        character.categories
-          .concat([character.alignment, character.role])
-          .concat(null !== character.ship_slot ? ['Crew Member'] : []),
-        character.description,
-        character.alignment
-      );
-    });
-
-    dispatch(setGameSettings(groupByKey(gameSettings, gs => gs.baseID)));
-
-    db.saveGameSettings(
-      gameSettings,
-      lastStep ? () => {
-        dispatch(setIsBusy(false));
-      } : nothing,
-      error => dispatch(showFlash(
-        'Storage Error',
-        'Error saving base character settings: ' +
-        error.message +
-        ' The optimizer may not function properly for all characters'
-      ))
-    );
-  };
-}
-
-/**
- * Update the profile for a particular ally code with new mod and character data
- * @param allyCode {string} the ally code that was fetched
- * @param profile {Object} The result from the API call
- * @param messages {Array<string>} Any messages to post to the user
- * @param keepOldMods {boolean} Whether to keep all existing mods, regardless of whether they were returned in this call
- * @param lastStep {boolean} Whether this is the last step in the API call chain
- * @returns {Function}
- */
-function receiveProfile(allyCode, profile, messages, keepOldMods, lastStep) {
-  return function (dispatch) {
-    const db = getDatabase();
-    if ((!profile || !profile.characters) && lastStep) {
-      dispatch(setIsBusy(false));
-      return;
-    }
-
-    db.getGameSettings(
-      gameSettings => {
-        db.getProfile(
-          allyCode,
-          dbProfile => {
-            const oldProfile = dbProfile ?
-              dbProfile.withPlayerName(profile.name) :
-              new PlayerProfile(allyCode, profile.name);
-            // Collect the new character objects by combining the default characters with the player values
-            // and the optimizer settings from the current profile.
-            const newCharacters = mapObjectByKeyAndValue(profile.characters, (id, playerValues) => {
-              if (oldProfile.characters.hasOwnProperty(id)) {
-                return oldProfile.characters[id]
-                  .withPlayerValues(playerValues)
-                  .withOptimizerSettings(oldProfile.characters[id].optimizerSettings);
-              } else {
-                return (new Character(id))
-                  .withPlayerValues(playerValues)
-                  .withOptimizerSettings(new OptimizerSettings(
-                    characterSettings[id] ? characterSettings[id].targets[0] : new OptimizationPlan(),
-                    [],
-                    gameSettings[id] && gameSettings[id].tags.includes('Crew Member') ? 5 : 1,
-                    false,
-                    false
-                  ));
-              }
-            });
-
-            // Update the mods by deserializing each one
-            const newMods = groupByKey(profile.mods, mod => mod.id);
-
-            // If "Remember Existing Mods" is selected, then only overwrite the mods we see in this profile
-            let finalMods;
-
-            if (keepOldMods) {
-              const oldMods = oldProfile.mods.reduce((mods, mod) => {
-                mods[mod.id] = mod.unequip();
-                return mods;
-              }, {});
-
-              finalMods = Object.values(Object.assign({}, oldMods, newMods));
-            } else {
-              finalMods = Object.values(newMods);
-            }
-
-            const newProfile = oldProfile.withCharacters(newCharacters).withMods(finalMods);
-            db.saveProfile(
-              newProfile,
-              nothing,
-              error => dispatch(showFlash(
-                'Storage Error',
-                'Error saving your profile: ' + error.message + ' Your data may be lost on page refresh.'
-              ))
-            );
-            db.deleteLastRun(
-              newProfile.allyCode,
-              nothing,
-              error => dispatch(showFlash(
-                'Storage Error',
-                'Error updating your data: ' +
-                error.message +
-                ' The optimizer may not recalculate correctly until you fetch again'
-              ))
-            );
-            dispatch(addPlayerProfile(newProfile));
-            dispatch(setProfile(newProfile));
-            if (lastStep) {
-              dispatch(setIsBusy(false));
-            }
-          },
-          error => {
-            dispatch(showError('Error fetching your profile: ' + error.message + ' Please try again'));
-            if (lastStep) {
-              dispatch(setIsBusy(false));
-            }
-          }
-        );
-      },
-      error => {
-        dispatch(showError([
-          <p key={1}>Database error: {error.message}</p>,
-          <p key={2}>Grandivory's mods optimizer is is tested to work in <strong>Firefox, Chrome, and Safari on desktop
-            only</strong>! Other browsers may work, but they are not officially supported. If you're having trouble, try
-            using one of the supported browsers before asking for help.</p>,
-          <p key={3}>If you're still having trouble, try asking for help in the discord server below.</p>
-        ]));
-        if (lastStep) {
-          dispatch(setIsBusy(false));
-        }
-      }
-    );
-
-    const lastUpdate = new Date(profile.updated);
-    const nextUpdate = new Date(lastUpdate.getTime() + 60 * 60 * 1000); // plus one hour
-
-    const fetchResults = (messages.length ? [
-      <div className={'errors'} key={0}>
-        {messages.map((message, index) => <p key={index}>{message}</p>)}
-      </div>
-    ] : []).concat([
-      <p key={100}>
-        Successfully pulled data for <span className={'gold'}>{Object.keys(profile.characters).length}
-        </span> characters and <span className={'gold'}>{profile.mods.length}</span> mods.</p>,
-      <p key={101}>Your data was last updated as of <span className={'gold'}>{lastUpdate.toLocaleString()}</span>.
-      </p>,
-      <p key={102}>You should be able to fetch fresh data any time after <span className={'gold'}>
-        {nextUpdate.toLocaleString()}</span>
-      </p>,
-      <hr key={103} />,
-      <h3 key={104}><strong>
-        Remember: The optimizer can only pull data for mods that you currently have equipped!
-      </strong></h3>,
-      <p key={105}>
-        If it looks like you're missing mods, try equipping them on your characters and fetching data again after
-        the
-        time listed above.
-      </p>,
-    ]);
-
-    dispatch(changeOptimizerView('edit'));
-    dispatch(showFlash(
-      messages.length ? 'API Errors' : 'Success!',
-      <div className={'fetch-results'}>
-        {fetchResults}
-      </div>
-    ));
-  };
-}
-
-/**
- * Handle the receipt of base and equipped stats for a list of characters
- * @param allyCode String
- * @param requestedCharacters {Array<string>} The baseIDs of all characters that were requested
- * @param characterStats Object{Character.baseID: {baseStats: CharacterStats, equippedStats: CharacterStats}}
- * @returns {Function}
- */
-function receiveStats(allyCode, requestedCharacters, characterStats) {
-  return function (dispatch) {
-    const db = getDatabase();
-    if (!characterStats) {
-      dispatch(setIsBusy(false));
-      return;
-    }
-
     db.getProfile(
-      allyCode,
-      oldProfile => {
-        const newProfile = oldProfile.withCharacters(
-          characterStats.reduce((characters, unit) => {
-            const stats = unit.stats;
+      fetchData.profile.allyCode,
+      dbProfile => {
+        const oldProfile = dbProfile ?
+          dbProfile.withPlayerName(fetchData.profile.name) :
+          new PlayerProfile(allyCode, fetchData.profile.name);
 
-            const character = oldProfile.characters[unit.defId];
+        // Collect character stats
+        const characterStats = fetchData.characterStats.reduce(
+          (characters, unit) => {
+            const stats = unit.stats;
 
             const baseStats = stats.base ?
               new CharacterStats(
@@ -665,109 +350,305 @@ function receiveStats(allyCode, requestedCharacters, characterStats) {
               equippedStats = baseStats.plus(gearStats);
             }
 
-            characters[unit.defId] =
-              character.withPlayerValues(character.playerValues.withBaseStats(baseStats)
-                .withEquippedStats(equippedStats));
+            return Object.assign(characters, {
+              [unit.defId]: {
+                baseStats: baseStats,
+                equippedStats: equippedStats
+              }
+            });
+          },
+          {}
+        )
 
-            return characters;
-          }, {})
-        );
+        // Collect the new character objects by combining the default characters with the player values
+        // and the optimizer settings from the current profile.
+        const newCharacters = mapObjectByKeyAndValue(fetchData.profile.characters, (id, playerValues) => {
+          const playerValuesWithStats = characterStats[id] ?
+            playerValues
+              .withBaseStats(characterStats[id].baseStats)
+              .withEquippedStats(characterStats[id].equippedStats) :
+            playerValues;
 
+          if (oldProfile.characters.hasOwnProperty(id)) {
+            return oldProfile.characters[id]
+              .withPlayerValues(playerValuesWithStats)
+              .withOptimizerSettings(oldProfile.characters[id].optimizerSettings);
+          } else {
+            return (new Character(id))
+              .withPlayerValues(playerValuesWithStats)
+              .withOptimizerSettings(new OptimizerSettings(
+                characterSettings[id] ? characterSettings[id].targets[0] : new OptimizationPlan(),
+                [],
+                fetchData.gameSettings[id] && fetchData.gameSettings[id].tags.includes('Crew Member') ? 5 : 1,
+                false,
+                false
+              ));
+          }
+        });
+
+        const newMods = groupByKey(fetchData.profile.mods, mod => mod.id);
+
+        // If "Remember Existing Mods" is selected, then only overwrite the mods we see in this profile
+        let finalMods;
+
+        if (keepOldMods) {
+          // If we're keeping the old mods, that means that any mod we don't see must be unequipped
+          const oldMods = oldProfile.mods.reduce((mods, mod) => {
+            mods[mod.id] = mod.unequip();
+            return mods;
+          }, {});
+
+          finalMods = Object.values(Object.assign({}, oldMods, newMods));
+        } else {
+          finalMods = Object.values(newMods);
+        }
+
+        const newProfile = oldProfile.withCharacters(newCharacters).withMods(finalMods);
         db.saveProfile(
           newProfile,
           nothing,
-          error => {
-            dispatch(showFlash(
-              'Storage Error',
-              'Error saving your profile: ' + error.message + ' Your data may be lost on page refresh.'
-            ));
-            dispatch(setIsBusy(false));
-          }
+          error => dispatch(showFlash(
+            'Storage Error',
+            'Error saving your profile: ' + error.message + ' Your data may be lost on page refresh.'
+          ))
         );
+        db.deleteLastRun(
+          newProfile.allyCode,
+          nothing,
+          error => dispatch(showFlash(
+            'Storage Error',
+            'Error updating your data: ' +
+            error.message +
+            ' The optimizer may not recalculate correctly until you fetch again'
+          ))
+        );
+        dispatch(addPlayerProfile(newProfile));
         dispatch(setProfile(newProfile));
-        dispatch(setIsBusy(false));
+      },
+      error => {
+        dispatch(showError('Error fetching your profile: ' + error.message + ' Please try again'));
       }
+    )
+  }
+}
+
+function showFetchResult(fetchData, errorMessages, usedHotUtils) {
+  return function (dispatch) {
+    const lastUpdate = new Date(fetchData.profile.updated);
+    const nextUpdate = new Date(lastUpdate.getTime() + 60 * 60 * 1000); // plus one hour
+
+    const fetchResults = [];
+
+    if (errorMessages.length) {
+      fetchResults.push(
+        <div className={'errors'} key={0}>
+          {errorMessages.map((message, index) => <p key={index}>{message}</p>)}
+        </div>
+      );
+    }
+
+    fetchResults.push(
+      <p key={100}>
+        Successfully pulled data for <span className={'gold'}>{Object.keys(fetchData.profile.characters).length}
+        </span> characters and <span className={'gold'}>{fetchData.profile.mods.length}</span> mods.
+      </p>
+    );
+    fetchResults.push(
+      <p key={110}>
+        Your player data was last updated as of <span className={'gold'}>{lastUpdate.toLocaleString()}</span>.
+      </p>
     );
 
-    const errorCharacters = requestedCharacters.filter(charID =>
-      !characterStats.find(stats => {
+    if (usedHotUtils) {
+      fetchResults.push(
+        <p key={111}>
+          <strong className={'gold'}>Your mod data from HotUtils is completely up-to-date!</strong>
+        </p>
+      )
+    }
+
+    fetchResults.push(
+      <p key={120}>You should be able to fetch fresh data any time after <span className={'gold'}>
+        {nextUpdate.toLocaleString()}</span>
+      </p>
+    );
+    fetchResults.push(<hr key={130} />);
+    fetchResults.push(
+      <h3 key={140}><strong>
+        Remember: The optimizer can only pull data for mods that you currently have equipped!
+      </strong></h3>
+    );
+    fetchResults.push(
+      <p key={150}>
+        If it looks like you're missing mods, try equipping them on your characters and fetching data again after
+        the
+        time listed above.
+      </p>
+    );
+
+    // Look for any characters in the profile that we didn't get stats for
+    const missingCharacters = Object.keys(fetchData.profile.characters)
+      .filter(charId => !fetchData.characterStats.find(stats => {
         const unit = stats.unit ? stats.unit : stats;
-        return unit.defId === charID && !stats.stats.error;
-      })
-    );
+        return unit.defId === charId && !stats.stats.error;
+      }))
 
-    const errorMessage = errorCharacters.length > 0 ?
-      'Missing stats for characters: ' + errorCharacters.join(', ') +
+    const statsErrorMessage = missingCharacters.length > 0 ?
+      'Missing stats for characters: ' + missingCharacters.join(', ') +
       '. These characters may not optimize properly.'
       : null;
 
-    if (errorMessage) {
-      dispatch(showError(errorMessage));
-    }
-  };
-}
-
-function receiveVersion(version) {
-  return function (dispatch, getState) {
-    const state = getState();
-
-    if (state.version < version) {
-      dispatch(showFlash(
-        'Version out-of-date!',
-        [
-          <p key={1}>
-            The mods optimizer has been updated to version <strong>{version}</strong>.
-            You're currently running version <strong>{state.version}</strong>
-          </p>,
-          <p key={2}>Please clear your cache and refresh to get the latest version.</p>
-        ]
-      ));
+    dispatch(changeOptimizerView('edit'));
+    dispatch(showFlash(
+      missingCharacters.length ? 'API Errors' : 'Success!',
+      <div className={'fetch-results'}>
+        {fetchResults}
+      </div>
+    ));
+    if (statsErrorMessage) {
+      dispatch(showError(statsErrorMessage));
     }
   }
 }
 
-function receiveHotUtilsStatus(response) {
+//***********************/
+// HotUtils Integration */
+//***********************/
+
+export function fetchHotUtilsStatus(allyCode) {
+  const cleanedAllyCode = cleanAllyCode(allyCode);
+
   return function (dispatch) {
-    dispatch(setHotUtilsSubscription(response.ResponseCode))
+    return post(
+      'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+      {
+        'action': 'checkstatus',
+        'payload': {
+          'allyCode': cleanedAllyCode
+        }
+      }
+    )
+      .then(response => dispatch(setHotUtilsSubscription(response.ResponseCode)))
+      .catch(error => {
+        dispatch(showError(error.message));
+      })
   }
 }
 
-function receiveHotUtilsCreateProfileResponse(response) {
+export function createHotUtilsProfile(profile) {
   return function (dispatch) {
-    dispatch(setIsBusy(false));
-    dispatch(hideModal());
-    switch (response.ResponseCode) {
-      case 0:
-        dispatch(showError(response.ResponseMessage));
-        break;
-      case 1:
-        dispatch(showFlash('Profile created successfully', 'Please login to HotUtils to manage your new profile'))
-        break;
-    }
+    dispatch(setIsBusy(true));
+    return post(
+      'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+      {
+        'action': 'createprofile',
+        'payload': profile
+      }
+    )
+      .then(response => {
+        switch (response.ResponseCode) {
+          case 0:
+            dispatch(showError(response.ResponseMessage));
+            break;
+          case 1:
+            dispatch(hideModal());
+            dispatch(showFlash('Profile created successfully', 'Please login to HotUtils to manage your new profile'))
+            break;
+          default:
+            dispatch(hideModal());
+            dispatch(showError('Unknown response from HotUtils'));
+            break;
+        }
+      })
+      .catch(error => {
+        dispatch(showError(error.message));
+      })
+      .finally(() => {
+        dispatch(setIsBusy(false));
+      })
   }
 }
 
-function receiveHotUtilsModsResponse(response) {
+export function moveModsWithHotUtils(profile) {
   return function (dispatch) {
-    console.log(response);
+    dispatch(setIsBusy(true));
+    return fetch(
+      'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+      {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          'action': 'movemods',
+          'payload': profile
+        }),
+        mode: "cors",
+      }
+    )
+      .then(response => {
+        if (response.status === 504) {
+          // In this particular case, a 504 doesn't mean a failure.
+          // Start polling the status to figure out when the mod move is complete.
+          return pollForModMoveStatus(profile.allyCode);
+        } else if (response.ok) {
+          return response.json();
+        } else {
+          return response.text().then(errorText => Promise.reject(new Error(errorText)))
+        }
+      }
+      )
+      .then(response => {
+        switch (response.ResponseCode) {
+          case 0:
+            dispatch(showError(response.ResponseMessage));
+            break;
+          default:
+            // This could be 1 or 2 depending on how the mod movement eventually completed.
+            dispatch(hideModal());
+            dispatch(showFlash(
+              'Mods successfully moved',
+              'Your mods have been moved. You may log into Galaxy of Heroes to see your characters.'
+            ));
+            break;
+        }
+      })
+      .catch(error => {
+        dispatch(showError(error.message));
+      })
+      .finally(() => {
+        dispatch(setIsBusy(false));
+      })
   }
 }
 
-function receiveHotUtilsMoveModsResponse(response) {
-  return function (dispatch) {
-    dispatch(setIsBusy(false));
-    dispatch(hideModal());
-    switch (response.ResponseCode) {
-      case 0:
-        dispatch(showError(response.ResponseMessage));
-        break;
-      default:
-        // This could be 1 or 2 depending on how the mod movement eventually completed.
-        dispatch(showFlash(
-          'Mods successfully moved',
-          'Your mods have been moved. You may log into Galaxy of Heroes to see your characters.'
-        ));
-        break;
-    }
-  }
+function pollForModMoveStatus(allyCode) {
+  return new Promise((resolve, reject) => {
+    post(
+      'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+      {
+        'action': 'checkmovestatus',
+        'payload': {
+          'allyCode': allyCode
+        }
+      }
+    ).then(response => {
+      switch (response.ResponseCode) {
+        case 0:
+          reject(new Error(response.ResponseMessage));
+          break;
+        case 1:
+          // If the move is still ongoing, then poll again after a few seconds.
+          setTimeout(
+            () => resolve(pollForModMoveStatus(allyCode)),
+            10000
+          );
+          break;
+        case 2:
+          resolve(response)
+          break;
+        default:
+          reject(new Error('Unknown response from HotUtils'))
+          break;
+      }
+    }).catch(error => reject(error))
+  });
 }
