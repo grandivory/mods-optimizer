@@ -4,7 +4,7 @@ import React from 'react';
 import Mod from "../../domain/Mod";
 import { GameSettings, OptimizerSettings, PlayerValues } from "../../domain/CharacterDataClasses";
 import cleanAllyCode from "../../utils/cleanAllyCode";
-import { hideFlash, setIsBusy, showError, showFlash } from "./app";
+import { hideFlash, setIsBusy, showError, showFlash, hideModal } from "./app";
 import getDatabase from "../storage/Database";
 import nothing from "../../utils/nothing";
 import PlayerProfile from "../../domain/PlayerProfile";
@@ -13,7 +13,7 @@ import Character from "../../domain/Character";
 import characterSettings from "../../constants/characterSettings";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import groupByKey from "../../utils/groupByKey";
-import { addPlayerProfile, setGameSettings, setProfile } from "./storage";
+import { addPlayerProfile, setGameSettings, setProfile, setHotUtilsSubscription } from "./storage";
 import { changeOptimizerView } from "./review";
 import CharacterStats, { NullCharacterStats } from "../../domain/CharacterStats";
 
@@ -73,9 +73,7 @@ function post(url = '', data = {}, extras = {}) {
         if (response.ok) {
           return response.json();
         } else {
-          return response.text().then(errorText => {
-            return Promise.reject(new Error(errorText));
-          });
+          return response.text().then(errorText => Promise.reject(new Error(errorText)));
         }
       }
     );
@@ -183,11 +181,127 @@ function dispatchFetchVersion(dispatch) {
       dispatch(receiveVersion(version));
       return version;
     }).catch(error => {
-      console.log(error);
+      console.error(error);
       throw new Error(
         'Error fetching the current version. Please check to make sure that you are on the latest version'
       );
     });
+}
+
+function dispatchFetchHotUtilsStatus(dispatch, allyCode) {
+  return post(
+    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+    {
+      'action': 'checkstatus',
+      'payload': {
+        'allyCode': allyCode
+      }
+    }
+  ).then(response => {
+    dispatch(receiveHotUtilsStatus(response));
+    return response;
+  }).catch(error => {
+    console.error(error);
+    throw error;
+  });
+}
+
+function dispatchCreateHotUtilsProfile(dispatch, profile) {
+  dispatch(setIsBusy(true));
+  return post(
+    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+    {
+      'action': 'createprofile',
+      'payload': profile
+    }
+  ).then(response => {
+    dispatch(receiveHotUtilsCreateProfileResponse(response));
+    return response;
+  }).catch(error => {
+    console.error(error);
+    throw error;
+  });
+}
+
+function dispatchGetHotUtilsMods(dispatch, allyCode) {
+  return post(
+    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+    {
+      'action': 'getmods',
+      'payload': {
+        'allyCode': allyCode
+      }
+    }
+  ).then(response => {
+    dispatch(receiveHotUtilsModsResponse(response));
+    return response;
+  }).catch(error => {
+    console.error(error);
+    throw error;
+  });
+}
+
+function dispatchMoveHotUtilsMods(dispatch, profile) {
+  dispatch(setIsBusy(true));
+  return fetch(
+    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+    Object.assign({
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        'action': 'movemods',
+        'payload': profile
+      }),
+      mode: "cors",
+    })
+  ).then(
+    response => {
+      if (response.status === 504) {
+        // In this particular case, a 504 doesn't mean a failure.
+        // Start polling the status to figure out when the mod move is complete.
+        return pollForModMoveStatus(profile.allyCode);
+      } else if (response.ok) {
+        return response.json();
+      } else {
+        return response.text().then(errorText => Promise.reject(new Error(errorText)))
+      }
+    }
+  ).then(response => {
+    dispatch(receiveHotUtilsMoveModsResponse(response));
+    return response;
+  }).catch(error => {
+    throw error;
+  });
+}
+
+function pollForModMoveStatus(allyCode) {
+  return new Promise((resolve, reject) => {
+    post(
+      'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+      {
+        'action': 'checkmovestatus',
+        'payload': {
+          'allyCode': allyCode
+        }
+      }
+    ).then(response => {
+      switch (response.ResponseCode) {
+        case 0:
+          reject(new Error(response.ResponseMessage));
+          break;
+        case 1:
+          // If the move is still ongoing, then poll again after a few seconds.
+          setTimeout(
+            () => resolve(pollForModMoveStatus(allyCode)),
+            10000
+          );
+          break;
+        case 2:
+          resolve(response)
+          break;
+      }
+    }).catch(error => reject(error))
+  });
 }
 
 /**
@@ -269,13 +383,46 @@ export function fetchCharacterStats(allyCode, characters) {
   }
 }
 
+export function fetchHotUtilsStatus(allyCode) {
+  const cleanedAllyCode = cleanAllyCode(allyCode);
+
+  return function (dispatch) {
+    return dispatchFetchHotUtilsStatus(dispatch, cleanedAllyCode)
+      .catch(error => {
+        dispatch(showError(error.message));
+      })
+  }
+}
+
+export function createHotUtilsProfile(profile) {
+  return function (dispatch) {
+    return dispatchCreateHotUtilsProfile(dispatch, profile)
+      .catch(error => {
+        console.error(error);
+        dispatch(setIsBusy(false));
+        dispatch(showError(error.message));
+      })
+  }
+}
+
+export function moveModsWithHotUtils(profile) {
+  return function (dispatch) {
+    return dispatchMoveHotUtilsMods(dispatch, profile)
+      .catch(error => {
+        console.error(error);
+        dispatch(setIsBusy(false));
+        dispatch(showError(error.message));
+      })
+  }
+}
+
 /**
  * Update the set of known characters in the state (independent of any one profile) with data from swgoh.gg
  * @param characters {Array<Object>} The result from the call to the API
  * @param lastStep {boolean} Whether this is the end of the API call chain
  * @returns {Function}
  */
-export function receiveCharacters(characters, lastStep) {
+function receiveCharacters(characters, lastStep) {
   return function (dispatch) {
     const db = getDatabase();
     if (!characters && lastStep) {
@@ -322,7 +469,7 @@ export function receiveCharacters(characters, lastStep) {
  * @param lastStep {boolean} Whether this is the last step in the API call chain
  * @returns {Function}
  */
-export function receiveProfile(allyCode, profile, messages, keepOldMods, lastStep) {
+function receiveProfile(allyCode, profile, messages, keepOldMods, lastStep) {
   return function (dispatch) {
     const db = getDatabase();
     if ((!profile || !profile.characters) && lastStep) {
@@ -466,7 +613,7 @@ export function receiveProfile(allyCode, profile, messages, keepOldMods, lastSte
  * @param characterStats Object{Character.baseID: {baseStats: CharacterStats, equippedStats: CharacterStats}}
  * @returns {Function}
  */
-export function receiveStats(allyCode, requestedCharacters, characterStats) {
+function receiveStats(allyCode, requestedCharacters, characterStats) {
   return function (dispatch) {
     const db = getDatabase();
     if (!characterStats) {
@@ -560,7 +707,7 @@ export function receiveStats(allyCode, requestedCharacters, characterStats) {
   };
 }
 
-export function receiveVersion(version) {
+function receiveVersion(version) {
   return function (dispatch, getState) {
     const state = getState();
 
@@ -575,6 +722,52 @@ export function receiveVersion(version) {
           <p key={2}>Please clear your cache and refresh to get the latest version.</p>
         ]
       ));
+    }
+  }
+}
+
+function receiveHotUtilsStatus(response) {
+  return function (dispatch) {
+    dispatch(setHotUtilsSubscription(response.ResponseCode))
+  }
+}
+
+function receiveHotUtilsCreateProfileResponse(response) {
+  return function (dispatch) {
+    dispatch(setIsBusy(false));
+    dispatch(hideModal());
+    switch (response.ResponseCode) {
+      case 0:
+        dispatch(showError(response.ResponseMessage));
+        break;
+      case 1:
+        dispatch(showFlash('Profile created successfully', 'Please login to HotUtils to manage your new profile'))
+        break;
+    }
+  }
+}
+
+function receiveHotUtilsModsResponse(response) {
+  return function (dispatch) {
+    console.log(response);
+  }
+}
+
+function receiveHotUtilsMoveModsResponse(response) {
+  return function (dispatch) {
+    dispatch(setIsBusy(false));
+    dispatch(hideModal());
+    switch (response.ResponseCode) {
+      case 0:
+        dispatch(showError(response.ResponseMessage));
+        break;
+      default:
+        // This could be 1 or 2 depending on how the mod movement eventually completed.
+        dispatch(showFlash(
+          'Mods successfully moved',
+          'Your mods have been moved. You may log into Galaxy of Heroes to see your characters.'
+        ));
+        break;
     }
   }
 }

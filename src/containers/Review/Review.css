@@ -109,3 +109,27 @@ pre.summary {
   max-height: calc(100vh - 27em);
   overflow-y: auto;
 }
+
+.sidebar-hotutils {
+  text-align: center;
+}
+
+.modal.hotutils-modal {
+  max-width: 40em;
+}
+
+.modal.hotutils-modal p {
+  text-align: left;
+}
+
+.modal.hotutils-modal input {
+  font-size: 1.2em;
+  width: 30em;
+  margin: 1em 0;
+}
+
+.modal.hotutils-modal p.error {
+  margin-top: -1em;
+  visibility: visible;
+  text-align: center;
+}

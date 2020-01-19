@@ -62,7 +62,8 @@ import {
   SET_CHARACTER_TEMPLATES,
   SET_GAME_SETTINGS,
   SET_PLAYER_PROFILES,
-  SET_PROFILE
+  SET_PROFILE,
+  SET_HOTUTILS_SUBSCRIPTION
 } from "../actions/storage";
 import {
   addPlayerProfile,
@@ -70,7 +71,8 @@ import {
   setCharacterTemplates,
   setGameSettings,
   setPlayerProfiles,
-  setProfile
+  setProfile,
+  setHotUtilsSubscription
 } from "./storage";
 
 export default function modsOptimizer(state, action) {
@@ -91,6 +93,8 @@ export default function modsOptimizer(state, action) {
       return addPlayerProfile(state, action);
     case SET_PLAYER_PROFILES:
       return setPlayerProfiles(state, action);
+    case SET_HOTUTILS_SUBSCRIPTION:
+      return setHotUtilsSubscription(state, action);
 
 
     case CHANGE_SECTION:

@@ -30,6 +30,7 @@ import Credits from "../../components/Credits/Credits";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import { saveAs } from 'file-saver';
 import Help from "../../components/Help/Help"
+import { createHotUtilsProfile, moveModsWithHotUtils } from '../../state/actions/data';
 
 const sortOptions = {
   'currentCharacter': 'currentCharacter',
@@ -151,6 +152,30 @@ function formatNumber(number) {
 }
 
 class Review extends React.PureComponent {
+  generateHotUtilsProfile() {
+    const assignedMods = this.props.assignedMods
+      .filter(x => null !== x)
+      .filter(({ id }) => this.props.characters[id].playerValues.level >= 50)
+      .map(({ id, assignedMods, target }) => ({
+        id: id,
+        assignedMods: assignedMods,
+        target: target.name
+      }));
+
+    const lockedMods = Object.entries(this.props.currentModsByCharacter)
+      .filter(([id]) => this.props.characters[id].optimizerSettings.isLocked)
+      .map(([id, mods]) => ({
+        id: id,
+        assignedMods: mods.map(({ id }) => id),
+        target: 'locked'
+      }));
+
+    return {
+      'allyCode': this.props.allyCode,
+      'modAssignments': assignedMods.concat(lockedMods)
+    };
+  }
+
   render() {
     let modRows;
 
@@ -381,47 +406,35 @@ class Review extends React.PureComponent {
    * @returns JSX Element
    */
   sidebarActions() {
-    function hotUtilsExport() {
-      const assignedMods = this.props.assignedMods
-        .filter(x => null !== x)
-        .filter(({ id }) => this.props.characters[id].playerValues.level >= 50)
-        .map(({ id, assignedMods, target }) => ({
-          id: id,
-          assignedMods: assignedMods,
-          target: target.name
-        }));
-
-      const lockedMods = Object.entries(this.props.currentModsByCharacter)
-        .filter(([id]) => this.props.characters[id].optimizerSettings.isLocked)
-        .map(([id, mods]) => ({
-          id: id,
-          assignedMods: mods.map(({ id }) => id),
-          target: 'locked'
-        }));
-
-      // Save the results to a file
-      const exportObject = {
-        'allyCode': this.props.allyCode,
-        'modAssignments': assignedMods.concat(lockedMods)
-      };
-      const serializedExport = JSON.stringify(exportObject);
-      const exportBlob = new Blob([serializedExport], { type: 'application/json;charset=utf-8' });
-      saveAs(exportBlob, `hotUtils-${(new Date()).toISOString().slice(0, 10)}.json`);
-    }
-
     return <div className={'sidebar-actions'} key={'sidebar-actions'}>
       <h3>I don't like these results...</h3>
       <button type={'button'} onClick={this.props.edit}>
         Change my selection
       </button>
-      <hr />
-      <button type={'button'} onClick={hotUtilsExport.bind(this)}>
-        Export for HotUtils
-      </button>
-      <Help header={'What is HotUtils?'}>
-        {this.hotUtilsHelp()}
-      </Help>
     </div>
+  }
+
+  /**
+   * Renders a sidebar box with actions for HotUtils
+   */
+  hotUtilsSidebar() {
+    function hotUtilsExport() {
+      const exportObject = this.generateHotUtilsProfile();
+      const serializedExport = JSON.stringify(exportObject);
+      const exportBlob = new Blob([serializedExport], { type: 'application/json;charset=utf-8' });
+      saveAs(exportBlob, `hotUtils-${(new Date()).toISOString().slice(0, 10)}.json`);
+    }
+
+    return <div className={'sidebar-hotutils'} key={'sidebar-hotutils'}>
+      <h3>HotUtils <Help header={'What is HotUtils?'}>{this.hotUtilsHelp()}</Help></h3>
+      <button type={'button'} onClick={() => this.props.showModal('hotutils-modal', this.hotUtilsCreateProfileModal())}>
+        Create a new mod profile
+      </button>
+      <button type={'button'} onClick={() => this.props.showModal('hotutils-modal', this.hotUtilsMoveModsModal())}>
+        Move mods in-game
+      </button>
+      <img className={'fit'} src={'/img/hotsauce512.png'} alt={'hotsauce'} />
+    </div>;
   }
 
   /**
@@ -441,13 +454,19 @@ class Review extends React.PureComponent {
       </h4>
     </div>;
 
-    return [
+    const sidebarElements = [
       <div className={'filters'} key={'filters'}>
         {this.filterForm()}
       </div>,
       this.sidebarActions(),
       setValueSummary
     ];
+
+    if (this.props.hotUtilsSubscription) {
+      sidebarElements.push(this.hotUtilsSidebar())
+    }
+
+    return sidebarElements
   }
 
   /**
@@ -514,6 +533,78 @@ class Review extends React.PureComponent {
       <p><a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener'}>https://www.hotutils.app/</a></p>
       <p><img className={'fit'} src={'/img/hotsauce512.png'} alt={'hotsauce'} /></p>
     </div>;
+  }
+
+  hotUtilsCreateProfileModal() {
+    let profileNameInput;
+    let error;
+
+    return <div key={'hotutils-create-profile-modal'}>
+      <h2>Create a new mod profile in HotUtils</h2>
+      <p>
+        This will create a new mods profile in HotUtils using the recommendations listed here. After creating your
+        profile, please log
+        into <a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener'}>HotUtils</a> to access your new
+        profile.
+      </p>
+      <p>
+        <strong>Use at your own risk!</strong> HotUtils functionality breaks the terms of service for Star Wars:
+        Galaxy of Heroes. You assume all risk in using this tool. Grandivory's Mods Optimizer is not associated with
+        HotUtils.
+      </p>
+      <hr />
+      <label htmlFor={'profileName'}>
+        Please enter a name for your new profile.
+        Please note that using the same name as an existing profile will cause it to be overwritten.
+      </label>
+      <br />
+      <input type={'text'} name={'profileName'} ref={input => profileNameInput = input} />
+      <p className={'error'} ref={field => error = field}></p>
+      <div className={'actions'}>
+        <button type={'button'} className={'red'} onClick={this.props.hideModal}>Cancel</button>
+        <button type={'button'} onClick={() => {
+          if ('' === profileNameInput.value) {
+            error.textContent = 'You must provide a name for your profile';
+          } else {
+            error.textContent = '';
+
+            const profile = this.generateHotUtilsProfile();
+            profile.profileName = profileNameInput.value;
+
+            this.props.createHotUtilsProfile(profile);
+          }
+        }}>
+          Create Profile
+        </button>
+      </div>
+    </div >;
+  }
+
+  hotUtilsMoveModsModal() {
+    return <div key={'hotutils-move-mods-modal'}>
+      <h2>Move mods in-game using HotUtils</h2>
+      <p>
+        This will move all of your mods as recommended by Grandivory's Mods Optimizer.
+        Please note that <strong className={'gold'}>
+          this action will log you out of Galaxy of Heroes if you are currently logged in
+        </strong>.
+      </p>
+      <p>
+        <strong>Use at your own risk!</strong> HotUtils functionality breaks the terms of service for Star Wars:
+        Galaxy of Heroes. You assume all risk in using this tool. Grandivory's Mods Optimizer is not associated with
+        HotUtils.
+      </p>
+      <div className={'actions'}>
+        <button type={'button'} className={'red'} onClick={this.props.hideModal}>Cancel</button>
+        <button type={'button'} onClick={() => {
+          const profile = this.generateHotUtilsProfile();
+
+          this.props.moveModsWithHotUtils(profile);
+        }}>
+          Move my mods
+      </button>
+      </div>
+    </div >;
   }
 }
 
@@ -689,7 +780,8 @@ const mapStateToProps = (state) => {
     modUpgradeCost: modUpgradeCost,
     numMovingMods: numMovingMods,
     filter: state.modListFilter,
-    tags: tags
+    tags: tags,
+    hotUtilsSubscription: state.hotUtilsSubscription
   };
 };
 
@@ -701,7 +793,9 @@ const mapDispatchToProps = (dispatch) => ({
   unequipMods: (modIDs) => dispatch(unequipMods(modIDs)),
   reassignMods: (modIDs, characterID) => dispatch(reassignMods(modIDs, characterID)),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
-  hideModal: () => dispatch(hideModal())
+  hideModal: () => dispatch(hideModal()),
+  createHotUtilsProfile: (profile) => dispatch(createHotUtilsProfile(profile)),
+  moveModsWithHotUtils: (profile) => dispatch(moveModsWithHotUtils(profile))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Review);

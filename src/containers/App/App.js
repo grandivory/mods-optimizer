@@ -187,6 +187,13 @@ class App extends PureComponent {
           }}>
           Fetch my data!
         </button>
+        {/* {this.props.hotUtilsSubscription &&
+          <button type={'button'}
+            onClick={() => console.log('BLAM!')}
+          >
+            Fetch with HotUtils
+          </button>
+        } */}
         <input id={'keep-old-mods'}
           name={'keep-old-mods'}
           type={'checkbox'}
@@ -392,7 +399,8 @@ const mapStateToProps = (state) => {
     playerProfiles: state.playerProfiles,
     previousVersion: state.previousVersion,
     section: state.section,
-    version: state.version
+    version: state.version,
+    hotUtilsSubscription: state.hotUtilsSubscription
   };
 
   if (state.profile) {

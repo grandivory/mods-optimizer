@@ -6,6 +6,7 @@ import nothing from "../../utils/nothing";
 import { showError, showFlash } from "./app";
 import groupByKey from "../../utils/groupByKey";
 import Mod from '../../domain/Mod';
+import { fetchHotUtilsStatus } from './data';
 
 export const CLEAN_STATE = 'CLEAN_STATE';
 export const SET_GAME_SETTINGS = 'SET_GAME_SETTINGS';
@@ -13,6 +14,7 @@ export const SET_PROFILE = 'SET_PROFILE';
 export const ADD_PLAYER_PROFILE = 'ADD_PLAYER_PROFILE';
 export const SET_PLAYER_PROFILES = 'SET_PLAYER_PROFILES';
 export const SET_CHARACTER_TEMPLATES = 'SET_CHARACTER_TEMPLATES';
+export const SET_HOTUTILS_SUBSCRIPTION = 'SET_HOTUTILS_SUBSCRIPTION';
 
 /**
  * Handle setting up everything once the database is ready to use.
@@ -172,6 +174,7 @@ export function loadProfiles(allyCode) {
             cleanedProfiles.find(profile => profile.allyCode === allyCode) :
             cleanedProfiles.find((profile, index) => index === 0);
           dispatch(setProfile(profile));
+          dispatch(fetchHotUtilsStatus(allyCode));
 
           // Set up the playerProfiles object used to switch between available profiles
           const playerProfiles = {};
@@ -264,6 +267,7 @@ export function loadProfile(allyCode) {
         const cleanedProfile = profile.withSelectedCharacters(cleanedSelectedCharacters);
 
         dispatch(setProfile(cleanedProfile));
+        dispatch(fetchHotUtilsStatus(allyCode));
       },
       error => dispatch(showError('Error loading your profile from the database: ' + error.message))
     );
@@ -488,4 +492,11 @@ export function setPlayerProfiles(profiles) {
     type: SET_PLAYER_PROFILES,
     profiles: profiles
   };
+}
+
+export function setHotUtilsSubscription(responseCode) {
+  return {
+    type: SET_HOTUTILS_SUBSCRIPTION,
+    subscription: !!responseCode
+  }
 }

@@ -8,7 +8,7 @@ export function cleanState(state) {
 }
 
 export function setGameSettings(state, action) {
-  return Object.assign({}, state, {gameSettings: action.gameSettings});
+  return Object.assign({}, state, { gameSettings: action.gameSettings });
 }
 
 export function setProfile(state, action) {
@@ -27,9 +27,13 @@ export function addPlayerProfile(state, action) {
 }
 
 export function setPlayerProfiles(state, action) {
-  return Object.assign({}, state, {playerProfiles: action.profiles});
+  return Object.assign({}, state, { playerProfiles: action.profiles });
 }
 
 export function setCharacterTemplates(state, action) {
-  return Object.assign({}, state, {characterTemplates: action.templates});
+  return Object.assign({}, state, { characterTemplates: action.templates });
+}
+
+export function setHotUtilsSubscription(state, action) {
+  return Object.assign({}, state, { hotUtilsSubscription: action.subscription });
 }
