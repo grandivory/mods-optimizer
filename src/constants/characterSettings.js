@@ -235,7 +235,7 @@ const characterSettings = {
   ),
   'CT210408': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('PvP', 0, 0, 50, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('Nuke', 0, 0, 50, 100, 0, 0, 75, 0, 25, 0, 0, 0, 0, true)
     ],
     [],
