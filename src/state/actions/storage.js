@@ -174,7 +174,7 @@ export function loadProfiles(allyCode) {
             cleanedProfiles.find(profile => profile.allyCode === allyCode) :
             cleanedProfiles.find((profile, index) => index === 0);
           dispatch(setProfile(profile));
-          dispatch(fetchHotUtilsStatus(allyCode));
+          dispatch(fetchHotUtilsStatus(profile.allyCode));
 
           // Set up the playerProfiles object used to switch between available profiles
           const playerProfiles = {};
