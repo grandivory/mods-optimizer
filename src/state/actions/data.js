@@ -14,7 +14,7 @@ import characterSettings from "../../constants/characterSettings";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import groupByKey from "../../utils/groupByKey";
 import { addPlayerProfile, setGameSettings, setProfile, setHotUtilsSubscription } from "./storage";
-import { changeOptimizerView } from "./review";
+import { changeOptimizerView, reassignAllMods } from "./review";
 import CharacterStats, { NullCharacterStats } from "../../domain/CharacterStats";
 
 export const TOGGLE_KEEP_OLD_MODS = 'TOGGLE_KEEP_OLD_MODS';
@@ -626,8 +626,7 @@ export function moveModsWithHotUtils(profile, sessionId) {
         } else {
           return response.text().then(errorText => Promise.reject(new Error(errorText)))
         }
-      }
-      )
+      })
       .then(response => {
         switch (response.ResponseCode) {
           case 0:
@@ -637,6 +636,7 @@ export function moveModsWithHotUtils(profile, sessionId) {
           default:
             // This could be 1 or 2 depending on how the mod movement eventually completed.
             dispatch(hideModal());
+            dispatch(reassignAllMods(profile.modAssignments));
             dispatch(showFlash(
               'Mods successfully moved',
               'Your mods have been moved. You may log into Galaxy of Heroes to see your characters.'
