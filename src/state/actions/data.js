@@ -389,7 +389,7 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
         );
         dispatch(addPlayerProfile(newProfile));
         dispatch(setProfile(newProfile));
-        dispatch(fetchHotUtilsStatus(newProfile.allyCode))
+        dispatch(fetchHotUtilsStatus(newProfile.allyCode));
       },
       error => {
         dispatch(showError('Error fetching your profile: ' + error.message + ' Please try again'));
