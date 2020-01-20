@@ -243,41 +243,6 @@ function fetchProfile(allyCode) {
   })
 }
 
-/**
- * Fetch mods from HotUtils, optionally using a session to get unequipped mods
- * @param {string} allyCode The player to fetch mods for
- * @param {boolean} useSession Whether to use a session to collect unequipped mods
- *                             at the cost of logging the player out of the game
- */
-function getHotUtilsMods(allyCode, useSession) {
-  return post(
-    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
-    {
-      'action': 'getmods',
-      'payload': {
-        'allyCode': allyCode,
-        'useSession': useSession ? 'True' : 'False'
-      }
-    }
-  )
-    .then(response => {
-      // Parse out the HotUtils response to something the optimizer can use
-      if (response.ResponseCode !== 1) {
-        throw new Error(response.ResponseMessage);
-      }
-
-      const modsResponse = JSON.parse(response.Mods);
-
-      const rawMods = modsResponse.profiles[0].mods;
-
-      return rawMods.map(Mod.fromHotUtils)
-    })
-    .catch(error => {
-      console.error(error);
-      throw error;
-    });
-}
-
 function fetchCharacterStats(characters = null) {
   if (null !== characters) {
     return post(
@@ -304,7 +269,7 @@ function fetchCharacterStats(characters = null) {
 function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
   return function (dispatch) {
     db.getProfile(
-      fetchData.profile.allyCode,
+      allyCode,
       dbProfile => {
         const oldProfile = dbProfile ?
           dbProfile.withPlayerName(fetchData.profile.name) :
@@ -514,6 +479,41 @@ function showFetchResult(fetchData, errorMessages, usedHotUtils) {
 //***********************/
 // HotUtils Integration */
 //***********************/
+
+/**
+ * Fetch mods from HotUtils, optionally using a session to get unequipped mods
+ * @param {string} allyCode The player to fetch mods for
+ * @param {boolean} useSession Whether to use a session to collect unequipped mods
+ *                             at the cost of logging the player out of the game
+ */
+function getHotUtilsMods(allyCode, useSession) {
+  return post(
+    'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
+    {
+      'action': 'getmods',
+      'payload': {
+        'allyCode': allyCode,
+        'useSession': useSession ? 'True' : 'False'
+      }
+    }
+  )
+    .then(response => {
+      // Parse out the HotUtils response to something the optimizer can use
+      if (response.ResponseCode !== 1) {
+        throw new Error(response.ResponseMessage);
+      }
+
+      const modsResponse = JSON.parse(response.Mods);
+
+      const rawMods = modsResponse.profiles[0].mods;
+
+      return rawMods.map(Mod.fromHotUtils)
+    })
+    .catch(error => {
+      console.error(error);
+      throw error;
+    });
+}
 
 export function fetchHotUtilsStatus(allyCode) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
