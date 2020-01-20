@@ -35,7 +35,11 @@ class App extends PureComponent {
     const queryParams = new URLSearchParams(document.location.search);
 
     if (queryParams.has('allyCode')) {
-      props.refreshPlayerData(queryParams.get('allyCode'), true, false, false);
+      if (queryParams.has('SessionID')) {
+        props.refreshPlayerData(queryParams.get('allyCode'), true, true, queryParams.get('SessionID'));
+      } else {
+        props.refreshplayerData(queryParams.get('allyCode'), true, false, null);
+      }
     }
 
     // Remove the query string after reading anything we needed from it.
@@ -138,7 +142,7 @@ class App extends PureComponent {
           <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodyInput = input}
             onKeyUp={(e) => {
               if (e.key === 'Enter') {
-                this.props.refreshPlayerData(e.target.value, this.props.keepOldMods, false, false);
+                this.props.refreshPlayerData(e.target.value, this.props.keepOldMods, false, null);
               }
               // Don't change the input if the user is trying to select something
               if (window.getSelection().toString() !== '') {
@@ -188,16 +192,19 @@ class App extends PureComponent {
               this.props.allyCode || allyCodyInput.value,
               this.props.keepOldMods,
               this.props.hotUtilsSubscription,
-              false
+              null
             );
           }}>
           Fetch my data!
         </button>
-        <button type={'button'} disabled={!this.props.hotUtilsSubscription} onClick={() => {
-          if (this.props.hotUtilsSubscription) {
-            this.props.showModal('pull-unequipped-modal', this.fetchUnequippedModal())
-          }
-        }}>
+        <button
+          type={'button'}
+          disabled={!(this.props.hotUtilsSubscription && this.props.profile.hotUtilsSessionId)}
+          onClick={() => {
+            if (this.props.hotUtilsSubscription && this.props.profile.hotUtilsSessionId) {
+              this.props.showModal('pull-unequipped-modal', this.fetchUnequippedModal())
+            }
+          }}>
           Fetch with HotUtils
         </button>
         <Help header={'How do I pull unequipped mods?'}>{this.unequippedModsHelp()}</Help>
@@ -343,7 +350,7 @@ class App extends PureComponent {
         onKeyUp={(e) => {
           if (e.key === 'Enter') {
             this.props.hideModal();
-            this.props.refreshPlayerData(e.target.value, false, false, false);
+            this.props.refreshPlayerData(e.target.value, false, false, null);
           }
           // Don't change the input if the user is trying to select something
           if (window.getSelection().toString() !== '') {
@@ -362,7 +369,7 @@ class App extends PureComponent {
         <button type={'button'}
           onClick={() => {
             this.props.hideModal();
-            this.props.refreshPlayerData(allyCodeInput.value, false, false, false);
+            this.props.refreshPlayerData(allyCodeInput.value, false, false, null);
           }}>
           Fetch my data!
         </button>
@@ -413,7 +420,12 @@ class App extends PureComponent {
         <button type={'button'} className={'red'} onClick={this.props.hideModal}>Cancel</button>
         <button type={'button'} onClick={() => {
           this.props.hideModal();
-          this.props.refreshPlayerData(this.props.allyCode, this.props.keepOldMods, true, true);
+          this.props.refreshPlayerData(
+            this.props.allyCode,
+            this.props.keepOldMods,
+            true,
+            this.props.profile.hotUtilsSessionId
+          );
         }}>
           Fetch my data
         </button>
@@ -468,8 +480,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   changeSection: newSection => dispatch(changeSection(newSection)),
-  refreshPlayerData: (allyCode, keepOldMods, useHotUtils, useSession) =>
-    dispatch(refreshPlayerData(allyCode, keepOldMods, useHotUtils, useSession)),
+  refreshPlayerData: (allyCode, keepOldMods, useHotUtils, sessionId) =>
+    dispatch(refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId)),
   checkVersion: () => dispatch(checkVersion()),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),

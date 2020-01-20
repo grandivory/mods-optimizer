@@ -421,9 +421,9 @@ class Review extends React.PureComponent {
       <h3>HotUtils <Help header={'What is HotUtils?'}>{this.hotUtilsHelp()}</Help></h3>
       <button
         type={'button'}
-        disabled={!this.props.hotUtilsSubscription}
+        disabled={!(this.props.hotUtilsSubscription && this.props.hotUtilsSessionId)}
         onClick={() => {
-          if (this.props.hotUtilsSubscription) {
+          if (this.props.hotUtilsSubscription && this.props.hotUtilsSessionId) {
             this.props.showModal('hotutils-modal', this.hotUtilsCreateProfileModal())
           }
         }}>
@@ -431,9 +431,9 @@ class Review extends React.PureComponent {
       </button>
       <button
         type={'button'}
-        disabled={!this.props.hotUtilsSubscription}
+        disabled={!(this.props.hotUtilsSubscription && this.props.hotUtilsSessionId)}
         onClick={() => {
-          if (this.props.hotUtilsSubscription) {
+          if (this.props.hotUtilsSubscription && this.props.hotUtilsSessionId) {
             this.props.showModal('hotutils-modal', this.hotUtilsMoveModsModal())
           }
         }}>
@@ -543,6 +543,19 @@ class Review extends React.PureComponent {
     let profileNameInput;
     let error;
 
+    const checkNameAndCreateProfile = function (name) {
+      if ('' === name) {
+        error.textContent = 'You must provide a name for your profile';
+      } else {
+        error.textContent = '';
+
+        const profile = this.generateHotUtilsProfile();
+        profile.profileName = profileNameInput.value;
+
+        this.props.createHotUtilsProfile(profile, this.props.hotUtilsSessionId);
+      }
+    }.bind(this);
+
     return <div key={'hotutils-create-profile-modal'}>
       <h2>Create a new mod profile in HotUtils</h2>
       <p>
@@ -562,22 +575,20 @@ class Review extends React.PureComponent {
         Please note that using the same name as an existing profile will cause it to be overwritten.
       </label>
       <br />
-      <input type={'text'} name={'profileName'} ref={input => profileNameInput = input} />
+      <input
+        type={'text'}
+        name={'profileName'}
+        ref={input => profileNameInput = input}
+        onKeyUp={(e) => {
+          if (e.key === 'Enter') {
+            checkNameAndCreateProfile(e.target.value);
+          }
+        }}
+      />
       <p className={'error'} ref={field => error = field}></p>
       <div className={'actions'}>
         <button type={'button'} className={'red'} onClick={this.props.hideModal}>Cancel</button>
-        <button type={'button'} onClick={() => {
-          if ('' === profileNameInput.value) {
-            error.textContent = 'You must provide a name for your profile';
-          } else {
-            error.textContent = '';
-
-            const profile = this.generateHotUtilsProfile();
-            profile.profileName = profileNameInput.value;
-
-            this.props.createHotUtilsProfile(profile);
-          }
-        }}>
+        <button type={'button'} onClick={() => checkNameAndCreateProfile(profileNameInput.value)}>
           Create Profile
         </button>
       </div>
@@ -607,7 +618,7 @@ class Review extends React.PureComponent {
         <button type={'button'} onClick={() => {
           const profile = this.generateHotUtilsProfile();
 
-          this.props.moveModsWithHotUtils(profile);
+          this.props.moveModsWithHotUtils(profile, this.props.hotUtilsSessionId);
         }}>
           Move my mods
       </button>
@@ -789,7 +800,8 @@ const mapStateToProps = (state) => {
     numMovingMods: numMovingMods,
     filter: state.modListFilter,
     tags: tags,
-    hotUtilsSubscription: state.hotUtilsSubscription
+    hotUtilsSubscription: state.hotUtilsSubscription,
+    hotUtilsSessionId: profile.hotUtilsSessionId
   };
 };
 
@@ -802,8 +814,8 @@ const mapDispatchToProps = (dispatch) => ({
   reassignMods: (modIDs, characterID) => dispatch(reassignMods(modIDs, characterID)),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),
-  createHotUtilsProfile: (profile) => dispatch(createHotUtilsProfile(profile)),
-  moveModsWithHotUtils: (profile) => dispatch(moveModsWithHotUtils(profile))
+  createHotUtilsProfile: (profile, sessionId) => dispatch(createHotUtilsProfile(profile, sessionId)),
+  moveModsWithHotUtils: (profile, sessionId) => dispatch(moveModsWithHotUtils(profile, sessionId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Review);

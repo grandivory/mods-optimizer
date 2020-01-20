@@ -94,11 +94,11 @@ function post(url = '', data = {}, extras = {}) {
  * @param allyCode {string}
  * @param keepOldMods {boolean} Whether to keep all existing mods, regardless of whether they were returned in this call
  * @param useHotUtils {boolean} Whether to use mod data from HotUtils in place of swgoh.help
- * @param useHotUtilsSession {boolean} Whether to use a session with HotUtils, which pulls unequipped mods but
+ * @param sessionId {string} A session ID to use with HotUtils, which pulls unequipped mods but
  *                                     will log the player out of the game
  * @returns {function(*=): Promise<T | never | never>}
  */
-export function refreshPlayerData(allyCode, keepOldMods, useHotUtils, useHotUtilsSession) {
+export function refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
   let usedHotUtils = false;
   const data = {};
@@ -126,6 +126,7 @@ export function refreshPlayerData(allyCode, keepOldMods, useHotUtils, useHotUtil
       // Then, fetch the player's data from swgoh.help
       .then(() => fetchProfile(cleanedAllyCode))
       .then(profile => {
+        profile.sessionId = sessionId;
         data.profile = profile;
         return profile.characters;
       })
@@ -136,7 +137,7 @@ export function refreshPlayerData(allyCode, keepOldMods, useHotUtils, useHotUtil
       // HotUtils and overwrite the mods from swgoh.help
       .then(() => {
         if (useHotUtils) {
-          return getHotUtilsMods(cleanedAllyCode, useHotUtilsSession)
+          return getHotUtilsMods(cleanedAllyCode, sessionId)
             .then(mods => {
               data.profile.mods = mods;
               usedHotUtils = true;
@@ -164,10 +165,10 @@ export function refreshPlayerData(allyCode, keepOldMods, useHotUtils, useHotUtil
 
         // If we used a HotUtils session, then the mods returned are all the mods a player has.
         // In this case, don't keep old mods around, even if the box is checked.
-        dispatch(updatePlayerData(cleanedAllyCode, data, db, keepOldMods && !(usedHotUtils && useHotUtilsSession)))
+        dispatch(updatePlayerData(cleanedAllyCode, data, db, keepOldMods && !(usedHotUtils && sessionId)))
 
         // Show the success and/or error messages
-        dispatch(showFetchResult(data, messages, usedHotUtils));
+        dispatch(showFetchResult(data, messages, usedHotUtils, !!sessionId));
       })
       .catch(error => {
         dispatch(showError(
@@ -272,8 +273,9 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
       allyCode,
       dbProfile => {
         const oldProfile = dbProfile ?
-          dbProfile.withPlayerName(fetchData.profile.name) :
-          new PlayerProfile(allyCode, fetchData.profile.name);
+          dbProfile.withPlayerName(fetchData.profile.name).withHotUtilsSessionId(fetchData.profile.sessionId || null) :
+          new PlayerProfile(allyCode, fetchData.profile.name)
+            .withHotUtilsSessionId(fetchData.profile.sessionId || null);
 
         // Collect character stats
         const characterStats = fetchData.characterStats.reduce(
@@ -398,7 +400,15 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
   }
 }
 
-function showFetchResult(fetchData, errorMessages, usedHotUtils) {
+/**
+ * Show messages related to the results of the fetch operation
+ *
+ * @param {Object} fetchData The results of the various API calls to gather player and game data
+ * @param {Array<string>} errorMessages Any errors that should be shown with the results
+ * @param {boolean} usedHotUtils Whether HotUtils' API was used to get up-to-date mods
+ * @param {boolean} usedSession Whether a HotUtils session was used to pull unequipped mods
+ */
+function showFetchResult(fetchData, errorMessages, usedHotUtils, usedSession) {
   return function (dispatch) {
     const lastUpdate = new Date(fetchData.profile.updated);
     const nextUpdate = new Date(lastUpdate.getTime() + 60 * 60 * 1000); // plus one hour
@@ -431,26 +441,41 @@ function showFetchResult(fetchData, errorMessages, usedHotUtils) {
           <strong className={'gold'}>Your mod data from HotUtils is completely up-to-date!</strong>
         </p>
       )
+      fetchResults.push(
+        <p key={120}>
+          You should be able to fetch fresh character data any time after <span className={'gold'}>
+            {nextUpdate.toLocaleString()}
+          </span>
+        </p>
+      );
+      fetchResults.push(
+        <p key={121}>
+          <strong className={'gold'}>You can fetch fresh mod data again immediately!</strong>
+        </p>
+      )
+    } else {
+      fetchResults.push(
+        <p key={120}>You should be able to fetch fresh data any time after <span className={'gold'}>
+          {nextUpdate.toLocaleString()}</span>
+        </p>
+      );
     }
 
-    fetchResults.push(
-      <p key={120}>You should be able to fetch fresh data any time after <span className={'gold'}>
-        {nextUpdate.toLocaleString()}</span>
-      </p>
-    );
-    fetchResults.push(<hr key={130} />);
-    fetchResults.push(
-      <h3 key={140}><strong>
-        Remember: The optimizer can only pull data for mods that you currently have equipped!
-      </strong></h3>
-    );
-    fetchResults.push(
-      <p key={150}>
-        If it looks like you're missing mods, try equipping them on your characters and fetching data again after
-        the
-        time listed above.
-      </p>
-    );
+    if (!(usedHotUtils && usedSession)) {
+      fetchResults.push(<hr key={130} />);
+      fetchResults.push(
+        <h3 key={140}><strong>
+          Remember: The optimizer can only pull data for mods that you currently have equipped, unless you're pulling
+          data using a HotUtils session!
+        </strong></h3>
+      );
+      fetchResults.push(
+        <p key={150}>
+          If it looks like you're missing mods, try equipping them on your characters and fetching data again after
+          the time listed above.
+        </p>
+      );
+    }
 
     // Look for any characters in the profile that we didn't get stats for
     const missingCharacters = Object.keys(fetchData.profile.characters)
@@ -484,17 +509,18 @@ function showFetchResult(fetchData, errorMessages, usedHotUtils) {
 /**
  * Fetch mods from HotUtils, optionally using a session to get unequipped mods
  * @param {string} allyCode The player to fetch mods for
- * @param {boolean} useSession Whether to use a session to collect unequipped mods
- *                             at the cost of logging the player out of the game
+ * @param {string} sessionId A session ID to use with HotUtils to collect
+ *                           unequipped mods at the cost of logging the player
+ *                           out of the game
  */
-function getHotUtilsMods(allyCode, useSession) {
+function getHotUtilsMods(allyCode, sessionId) {
   return post(
     'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
     {
       'action': 'getmods',
+      'sessionId': sessionId,
       'payload': {
-        'allyCode': allyCode,
-        'useSession': useSession ? 'True' : 'False'
+        'allyCode': allyCode
       }
     }
   )
@@ -536,13 +562,14 @@ export function fetchHotUtilsStatus(allyCode) {
   }
 }
 
-export function createHotUtilsProfile(profile) {
+export function createHotUtilsProfile(profile, sessionId) {
   return function (dispatch) {
     dispatch(setIsBusy(true));
     return post(
       'https://api.mods-optimizer.swgoh.grandivory.com/hotutils',
       {
         'action': 'createprofile',
+        'sessionId': sessionId,
         'payload': profile
       }
     )
@@ -562,6 +589,7 @@ export function createHotUtilsProfile(profile) {
         }
       })
       .catch(error => {
+        dispatch(hideModal());
         dispatch(showError(error.message));
       })
       .finally(() => {
@@ -570,7 +598,7 @@ export function createHotUtilsProfile(profile) {
   }
 }
 
-export function moveModsWithHotUtils(profile) {
+export function moveModsWithHotUtils(profile, sessionId) {
   return function (dispatch) {
     dispatch(setIsBusy(true));
     return fetch(
@@ -580,6 +608,7 @@ export function moveModsWithHotUtils(profile) {
         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
         body: JSON.stringify({
           'action': 'movemods',
+          'sessionId': sessionId,
           'payload': profile
         }),
         mode: "cors",
@@ -600,6 +629,7 @@ export function moveModsWithHotUtils(profile) {
       .then(response => {
         switch (response.ResponseCode) {
           case 0:
+            dispatch(hideModal());
             dispatch(showError(response.ResponseMessage));
             break;
           default:
@@ -613,6 +643,7 @@ export function moveModsWithHotUtils(profile) {
         }
       })
       .catch(error => {
+        dispatch(hideModal());
         dispatch(showError(error.message));
       })
       .finally(() => {
