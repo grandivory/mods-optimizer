@@ -36,7 +36,7 @@ class App extends PureComponent {
 
     if (queryParams.has('allyCode')) {
       if (queryParams.has('SessionID')) {
-        props.refreshPlayerData(queryParams.get('allyCode'), true, true, queryParams.get('SessionID'));
+        props.refreshPlayerData(queryParams.get('allyCode'), true, true, queryParams.get('SessionID'), false);
       } else {
         props.refreshplayerData(queryParams.get('allyCode'), true, false, null);
       }
@@ -480,8 +480,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   changeSection: newSection => dispatch(changeSection(newSection)),
-  refreshPlayerData: (allyCode, keepOldMods, useHotUtils, sessionId) =>
-    dispatch(refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId)),
+  refreshPlayerData: (allyCode, keepOldMods, useHotUtils, sessionId, useSession = true) =>
+    dispatch(refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId, useSession)),
   checkVersion: () => dispatch(checkVersion()),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),

@@ -95,10 +95,12 @@ function post(url = '', data = {}, extras = {}) {
  * @param keepOldMods {boolean} Whether to keep all existing mods, regardless of whether they were returned in this call
  * @param useHotUtils {boolean} Whether to use mod data from HotUtils in place of swgoh.help
  * @param sessionId {string} A session ID to use with HotUtils, which pulls unequipped mods but
- *                                     will log the player out of the game
+ *                           will log the player out of the game
+ * @param useSession {boolean} Whether to use the given sessionId, if one exists. This can be set to false to update the
+ *                             profile with the session ID but not actually use it
  * @returns {function(*=): Promise<T | never | never>}
  */
-export function refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId) {
+export function refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId, useSession = true) {
   const cleanedAllyCode = cleanAllyCode(allyCode);
   let usedHotUtils = false;
   const data = {};
@@ -137,7 +139,7 @@ export function refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId)
       // HotUtils and overwrite the mods from swgoh.help
       .then(() => {
         if (useHotUtils) {
-          return getHotUtilsMods(cleanedAllyCode, sessionId)
+          return getHotUtilsMods(cleanedAllyCode, useSession ? sessionId : null)
             .then(mods => {
               data.profile.mods = mods;
               usedHotUtils = true;
@@ -165,10 +167,10 @@ export function refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId)
 
         // If we used a HotUtils session, then the mods returned are all the mods a player has.
         // In this case, don't keep old mods around, even if the box is checked.
-        dispatch(updatePlayerData(cleanedAllyCode, data, db, keepOldMods && !(usedHotUtils && sessionId)))
+        dispatch(updatePlayerData(cleanedAllyCode, data, db, keepOldMods && !(usedHotUtils && useSession && sessionId)))
 
         // Show the success and/or error messages
-        dispatch(showFetchResult(data, messages, usedHotUtils, !!sessionId));
+        dispatch(showFetchResult(data, messages, usedHotUtils, !!sessionId && useSession));
       })
       .catch(error => {
         dispatch(showError(
