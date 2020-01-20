@@ -65,7 +65,7 @@ class App extends PureComponent {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     // Once we get a profile, check to see if the previous version is such that we should show the change log
-    if ((this.props.previousVersion < '1.6') && (!prevProps.profile && this.props.profile)) {
+    if ((this.props.previousVersion < '1.7') && (!prevProps.profile && this.props.profile)) {
       this.props.showModal('changelog-modal', this.changeLogModal());
     }
   }
@@ -291,24 +291,21 @@ class App extends PureComponent {
    */
   changeLogModal() {
     return <div>
-      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.6!</h2>
+      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.7!</h2>
       <h3>Here's a short summary of the changes included in this version:</h3>
       <ul>
         <li>
-          Fixed some performance issues in Safari. Displaying the results of optimization should no longer freeze the
-          browser on long lists of characters.
+          Added the ability to use percent-based relative target stats. Relative targets can now be set using either
+          absolute differences (+/-) or percents.
         </li>
         <li>
-          Added the ability to force the optimizer to use full sets globally. If checked, this setting will override all
-          "Don't break mod sets" checkboxes on all charcters.
+          Added several new character templates.
         </li>
         <li>
-          Added the ability to see only mods that need upgrades (leveling or slicing) when reviewing the suggestions.
-        </li>
-        <li>
-          Added the ability to only override selected character targets when applying a character template. This will
-          not add any new characters to the selected list at all or change the order, but will update the target for any
-          selected character to match what is in the template.
+          Added direct integration with HotUtils! Now, any subscriber to HotUtils will automatically get all of their
+          mods pulled up-to-date with every fetch. Anyone who gets a session link from the HotUtils bot or site can also
+          use their HotUtils session to fetch unequipped mods, create a mod profile, or even move their mods directly
+          in-game!
         </li>
       </ul>
       <h3>Happy Modding!</h3>
