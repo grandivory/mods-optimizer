@@ -274,10 +274,12 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
     db.getProfile(
       allyCode,
       dbProfile => {
-        const oldProfile = dbProfile ?
-          dbProfile.withPlayerName(fetchData.profile.name).withHotUtilsSessionId(fetchData.profile.sessionId || null) :
-          new PlayerProfile(allyCode, fetchData.profile.name)
-            .withHotUtilsSessionId(fetchData.profile.sessionId || null);
+        const baseProfile = dbProfile ?
+          dbProfile.withPlayerName(fetchData.profile.name) :
+          new PlayerProfile(allyCode, fetchData.profile.name);
+
+        const sessionId = fetchData.profile.sessionId ? fetchData.profile.sessionId : baseProfile.hotUtilsSessionId;
+        const oldProfile = baseProfile.withHotUtilsSessionId(sessionId);
 
         // Collect character stats
         const characterStats = fetchData.characterStats.reduce(
