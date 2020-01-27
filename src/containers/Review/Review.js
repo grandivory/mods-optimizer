@@ -598,6 +598,12 @@ class Review extends React.PureComponent {
   hotUtilsMoveModsModal() {
     return <div key={'hotutils-move-mods-modal'}>
       <h2>Move mods in-game using HotUtils</h2>
+      <h3>
+        Moving your mods will cost<br />
+        <span className={'box'}>
+          <strong className={'white'}>{formatNumber(this.props.modRemovalCost)}</strong> <Credits />
+        </span>
+      </h3>
       <p>
         This will move all of your mods as recommended by Grandivory's Mods Optimizer.
         Please note that <strong className={'gold'}>

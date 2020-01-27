@@ -18,6 +18,12 @@
   color: #ccfffe !important;
 }
 
+.box {
+  display: inline-block !important;
+  border: 1px solid dodgerblue !important;
+  padding: .25em !important;
+}
+
 .inset {
   z-index: 100;
   position: relative;
