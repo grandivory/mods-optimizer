@@ -199,7 +199,11 @@ class App extends PureComponent {
         </button>
         <button
           type={'button'}
-          disabled={!(this.props.hotUtilsSubscription && this.props.profile.hotUtilsSessionId)}
+          disabled={!(
+            this.props.hotUtilsSubscription &&
+            this.props.profile &&
+            this.props.profile.hotUtilsSessionId
+          )}
           onClick={() => {
             if (this.props.hotUtilsSubscription && this.props.profile.hotUtilsSessionId) {
               this.props.showModal('pull-unequipped-modal', this.fetchUnequippedModal())
