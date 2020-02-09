@@ -339,6 +339,11 @@ const characterSettings = {
     [],
     DamageType.special
   ),
+  'EPIXPOE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 0, 20, 20, 0, 0, 0, 0, true)],
+    [],
+    DamageType.special
+  ),
   'EWOKELDER': new CharacterSettings(
     [new OptimizationPlan('PvP', 25, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true)],
     ['EE', 'Murderbears']
