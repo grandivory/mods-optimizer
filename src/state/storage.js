@@ -49,7 +49,7 @@ export const defaultState = {
   error: null,
   flashMessage: null,
   gameSettings: {},
-  hideSelectedCharacters: false,
+  hideSelectedCharacters: true,
   hotUtilsSubscription: false,
   isBusy: false,
   keepOldMods: true,
