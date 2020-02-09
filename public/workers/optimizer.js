@@ -1142,7 +1142,7 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       target.useOnlyFullSets = true;
     }
 
-    const realTarget =
+    const absoluteTarget =
       changeRelativeTargetStatsToAbsolute(
         modSuggestions,
         characters,
@@ -1151,6 +1151,8 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
         target,
         character
       );
+
+    const realTarget = combineTargetStats(absoluteTarget, character);
 
     const { modSet: newModSetForCharacter, messages: characterMessages } =
       findBestModSetForCharacter(usableMods, character, realTarget);
@@ -1288,6 +1290,47 @@ function changeRelativeTargetStatsToAbsolute(modSuggestions, characters, lockedC
         type: null
       };
     })
+  };
+}
+
+/**
+ * Combine multiple iterations of a target stat into a single target by taking the intersection of the
+ * ranges. If there is no intersection, throw an error
+ *
+ * @param target {OptimizationPlan}
+ * @param character {Character}
+ */
+function combineTargetStats(target, character) {
+  const targetStatMap = {};
+
+  target.targetStats.forEach(targetStat => {
+    const statName = targetStat.stat;
+
+    if (!targetStatMap.hasOwnProperty(statName)) {
+      targetStatMap[statName] = targetStat;
+      return;
+    }
+
+    const newMinimum = Math.max(targetStatMap[statName].minimum, targetStat.minimum);
+    const newMaximum = Math.min(targetStatMap[statName].maximum, targetStat.maximum);
+
+    console.log(newMinimum, newMaximum);
+
+    if (newMinimum > newMaximum) {
+      throw new Error(`
+        The multiple ${statName} targets on ${character.baseID} don't have any solution. Please adjust the targets.
+        First Target: ${targetStatMap[statName].minimum}-${targetStatMap[statName].maximum}.
+        Second Target: ${targetStat.minimum}-${targetStat.maximum}.
+      `.trim());
+    }
+
+    targetStatMap[statName].minimum = newMinimum;
+    targetStatMap[statName].maximum = newMaximum;
+  });
+
+  return {
+    ...target,
+    targetStats: Object.values(targetStatMap)
   };
 }
 
