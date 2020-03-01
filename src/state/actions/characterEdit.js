@@ -208,9 +208,9 @@ export function toggleSliceMods(characterID) {
     const oldCharacter = profile.characters[characterID];
     const newCharacters = Object.assign({}, profile.characters, {
       [characterID]: oldCharacter.withOptimizerSettings(
-        oldCharacter.optimizerSettings.sliceMods ?
-          oldCharacter.optimizerSettings.withModSlicing(false) :
-          oldCharacter.optimizerSettings.withModSlicing(true)
+        oldCharacter.optimizerSettings.withModSlicing(
+          !oldCharacter.optimizerSettings.sliceMods
+        )
       )
     });
 
