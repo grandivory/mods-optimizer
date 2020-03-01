@@ -203,6 +203,21 @@ export function toggleCharacterLock(characterID) {
   });
 }
 
+export function toggleSliceMods(characterID) {
+  return updateProfile(profile => {
+    const oldCharacter = profile.characters[characterID];
+    const newCharacters = Object.assign({}, profile.characters, {
+      [characterID]: oldCharacter.withOptimizerSettings(
+        oldCharacter.optimizerSettings.sliceMods ?
+          oldCharacter.optimizerSettings.withModSlicing(false) :
+          oldCharacter.optimizerSettings.withModSlicing(true)
+      )
+    });
+
+    return profile.withCharacters(newCharacters);
+  });
+}
+
 /**
  * Action to change the selected target for a character
  * @param characterIndex {Number} The index of the selected character whose target is being updated

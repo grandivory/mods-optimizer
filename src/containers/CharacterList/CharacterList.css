@@ -60,6 +60,7 @@
 
 .icon.slice {
   background-position-x: -1.5em;
+  cursor: pointer;
 }
 
 .icon.restrictions {

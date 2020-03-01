@@ -12,7 +12,7 @@ import {
   changeCharacterTarget,
   lockCharacter, moveSelectedCharacter,
   selectCharacter, toggleCharacterLock,
-  unselectCharacter
+  unselectCharacter, toggleSliceMods
 } from "../../state/actions/characterEdit";
 import characterSettings from "../../constants/characterSettings";
 
@@ -199,6 +199,7 @@ class CharacterList extends PureComponent {
       <span className={`icon level ${levelActive}`}
         title={levelActive ? 'Level this charcter\'s mods to 15' : 'Do not level this character\'s mods to 15'} />
       <span className={`icon slice ${sliceActive}`}
+        onClick={() => this.props.toggleSliceMods(character.baseID)}
         title={sliceActive ? 'Slice this character\'s mods to 6E' : 'Do not slice this character\'s mods to 6E'} />
       <span className={`icon restrictions ${restrictionsActive}`}
         title={restrictionsActive ?
@@ -282,7 +283,8 @@ const mapDispatchToProps = (dispatch) => ({
   moveCharacter: (fromIndex, toIndex) => dispatch(moveSelectedCharacter(fromIndex, toIndex)),
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   lockCharacter: (characterID) => dispatch(lockCharacter(characterID)),
-  toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID))
+  toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID)),
+  toggleSliceMods: (characterID) => dispatch(toggleSliceMods(characterID))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterList);
