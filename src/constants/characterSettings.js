@@ -47,7 +47,7 @@ const characterSettings = {
     ['JKA']
   ),
   'ARCTROOPER501ST': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 80, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 0, 0, 80, 25, 0, 0, 100, 0, 10, 0, 0, 0, 0, true)],
   ),
   'ASAJVENTRESS': new CharacterSettings(
     [
