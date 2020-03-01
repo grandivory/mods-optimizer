@@ -218,6 +218,18 @@ export function toggleSliceMods(characterID) {
   });
 }
 
+export function toggleUpgradeMods(characterIndex) {
+  return updateProfile(profile => {
+    const oldCharacter = profile.selectedCharacters[characterIndex];
+    const newSelectedCharacters = profile.selectedCharacters.slice(0);
+    newSelectedCharacters.splice(characterIndex, 1, Object.assign({}, oldCharacter, {
+      target: oldCharacter.target.withUpgradeMods(!oldCharacter.target.upgradeMods)
+    }));
+
+    return profile.withSelectedCharacters(newSelectedCharacters);
+  });
+}
+
 /**
  * Action to change the selected target for a character
  * @param characterIndex {Number} The index of the selected character whose target is being updated

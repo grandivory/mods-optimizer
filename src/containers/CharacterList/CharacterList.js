@@ -12,7 +12,8 @@ import {
   changeCharacterTarget,
   lockCharacter, moveSelectedCharacter,
   selectCharacter, toggleCharacterLock,
-  unselectCharacter, toggleSliceMods
+  unselectCharacter, toggleSliceMods,
+  toggleUpgradeMods
 } from "../../state/actions/characterEdit";
 import characterSettings from "../../constants/characterSettings";
 
@@ -136,7 +137,7 @@ class CharacterList extends PureComponent {
       <div className={character.optimizerSettings.isLocked ? `${baseClass} locked` : baseClass}
         draggable={draggable}
         onDragStart={this.characterBlockDragStart(index)}>
-        {this.renderCharacterIcons(character, target)}
+        {this.renderCharacterIcons(character, target, index)}
         <CharacterAvatar character={character} />
         <div className={'character-name'}>
           {this.props.gameSettings[character.baseID] ?
@@ -173,7 +174,7 @@ class CharacterList extends PureComponent {
    * @param character {Character}
    * @param target {OptimizationPlan}
    */
-  renderCharacterIcons(character, target) {
+  renderCharacterIcons(character, target, characterIndex) {
     const defaultTargets = characterSettings[character.baseID] ?
       groupByKey(characterSettings[character.baseID].targets, target => target.name) :
       {};
@@ -197,6 +198,7 @@ class CharacterList extends PureComponent {
         {minimumDots}
       </span>
       <span className={`icon level ${levelActive}`}
+        onClick={() => this.props.toggleUpgradeMods(characterIndex)}
         title={levelActive ? 'Level this charcter\'s mods to 15' : 'Do not level this character\'s mods to 15'} />
       <span className={`icon slice ${sliceActive}`}
         onClick={() => this.props.toggleSliceMods(character.baseID)}
@@ -284,7 +286,8 @@ const mapDispatchToProps = (dispatch) => ({
   changeCharacterTarget: (characterID, target) => dispatch(changeCharacterTarget(characterID, target)),
   lockCharacter: (characterID) => dispatch(lockCharacter(characterID)),
   toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID)),
-  toggleSliceMods: (characterID) => dispatch(toggleSliceMods(characterID))
+  toggleSliceMods: (characterID) => dispatch(toggleSliceMods(characterID)),
+  toggleUpgradeMods: (characterIndex) => dispatch(toggleUpgradeMods(characterIndex))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterList);

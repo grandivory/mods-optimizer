@@ -58,6 +58,10 @@
   background-position-y: 0;
 }
 
+.icon.level {
+  cursor: pointer;
+}
+
 .icon.slice {
   background-position-x: -1.5em;
   cursor: pointer;

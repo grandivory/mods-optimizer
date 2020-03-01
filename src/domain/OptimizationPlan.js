@@ -117,6 +117,30 @@ class OptimizationPlan {
     );
   }
 
+  withUpgradeMods(upgradeMods) {
+    return new OptimizationPlan(
+      this.name,
+      this.rawHealth,
+      this.rawProtection,
+      this.rawSpeed,
+      this.rawCritDmg,
+      this.rawPotency,
+      this.rawTenacity,
+      this.rawPhysDmg,
+      this.rawSpecDmg,
+      this.rawCritChance,
+      this.rawArmor,
+      this.rawResistance,
+      this.rawAccuracy,
+      this.rawCritAvoid,
+      upgradeMods,
+      this.primaryStatRestrictions,
+      this.setRestrictions,
+      this.targetStats,
+      this.useOnlyFullSets
+    );
+  }
+
   /**
    * Checks to see if two OptimizationPlans are equivalent
    * @param that
