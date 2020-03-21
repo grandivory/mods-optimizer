@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import swgohStatCalc from 'swgoh-stat-calc'
 import Mod from "../../domain/Mod";
 import { GameSettings, OptimizerSettings, PlayerValues } from "../../domain/CharacterDataClasses";
 import cleanAllyCode from "../../utils/cleanAllyCode";
@@ -248,22 +249,24 @@ function fetchProfile(allyCode) {
 
 function fetchCharacterStats(characters = null) {
   if (null !== characters) {
-    return post(
-      'https://api.mods-optimizer.swgoh.grandivory.com/stats',
-      Object.keys(characters).map(charID => ({
-        'defId': charID,
-        'rarity': characters[charID].stars,
-        'level': characters[charID].level,
-        'gear': characters[charID].gearLevel,
-        'equipped': characters[charID].gearPieces,
-        'relic': {
-          'currentTier': characters[charID].relicTier
-        }
-      }))
-    )
-      .catch(() => {
-        throw new Error('Error fetching your character\'s stats. Please try again.')
-      })
+    const statCalculatorData = require('../../constants/statCalculatorData.json')
+    const eng_us = require('../../constants/statCalculatorEng_us.json')
+    swgohStatCalc.setGameData(statCalculatorData)
+
+    const characterData = Object.keys(characters).map(charID => ({
+      'defId': charID,
+      'rarity': characters[charID].stars,
+      'level': characters[charID].level,
+      'gear': characters[charID].gearLevel,
+      'equipped': characters[charID].gearPieces,
+      'relic': {
+        'currentTier': characters[charID].relicTier
+      }
+    }))
+
+    swgohStatCalc.calcRosterStats(characterData, { widhoutModCalc: true, language: eng_us })
+
+    return Promise.resolve(characterData)
   } else {
     return Promise.resolve(null);
   }
