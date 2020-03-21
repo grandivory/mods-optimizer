@@ -13,7 +13,7 @@ import {
   lockCharacter, moveSelectedCharacter,
   selectCharacter, toggleCharacterLock,
   unselectCharacter, toggleSliceMods,
-  toggleUpgradeMods
+  toggleUpgradeMods, changeMinimumModDots
 } from "../../state/actions/characterEdit";
 import characterSettings from "../../constants/characterSettings";
 
@@ -193,9 +193,19 @@ class CharacterList extends PureComponent {
     const lockedActive = character.optimizerSettings.isLocked ? 'active' : '';
 
     return <div className={'character-icons'}>
-      <span className={`icon minimum-dots ${1 < minimumDots ? 'green active' : 'gray'}`}
+
+      <span className={`icon minimum-dots`}
         title={`This character will only use mods with at least ${minimumDots} ${1 === minimumDots ? 'dot' : 'dots'}`} >
-        {minimumDots}
+        <select
+          value={minimumDots}
+          onChange={(event) => {
+            this.props.changeMinimumModDots(character.baseID, event.target.value)
+            document.activeElement.blur()
+          }}
+        >
+          {[1, 2, 3, 4, 5, 6].map(dots => <option key={dots} value={dots}>{dots}</option>)}
+        </select>
+        <span className={` ${1 < minimumDots ? 'green active' : 'gray'}`}>{minimumDots}</span>
       </span>
       <span className={`icon level ${levelActive}`}
         onClick={() => this.props.toggleUpgradeMods(characterIndex)}
@@ -287,7 +297,8 @@ const mapDispatchToProps = (dispatch) => ({
   lockCharacter: (characterID) => dispatch(lockCharacter(characterID)),
   toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID)),
   toggleSliceMods: (characterID) => dispatch(toggleSliceMods(characterID)),
-  toggleUpgradeMods: (characterIndex) => dispatch(toggleUpgradeMods(characterIndex))
+  toggleUpgradeMods: (characterIndex) => dispatch(toggleUpgradeMods(characterIndex)),
+  changeMinimumModDots: (characterID, newMinimum) => dispatch(changeMinimumModDots(characterID, newMinimum))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterList);

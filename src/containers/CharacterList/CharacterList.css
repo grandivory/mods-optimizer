@@ -98,6 +98,42 @@
 
 .icon.minimum-dots {
   background-position-x: -13.5em;
+  position: relative;
+}
+
+.icon.minimum-dots select {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  color: transparent;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  /* select boxes are stupid */
+  text-align-last: center;
+  margin: 0;
+}
+
+.icon.minimum-dots select:focus {
+  color: white;
+}
+
+.icon.minimum-dots span {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  text-align: center;
 }
 
 .character-block.locked {
