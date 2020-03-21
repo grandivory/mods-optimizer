@@ -8,19 +8,20 @@
     "file-saver": "^2.0.2",
     "flow-bin": "^0.80.0",
     "memoize-one": "^3.1.1",
-    "npm": "^6.9.0",
+    "npm": "^6.14.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^5.1.1",
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^3.4.1",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "swgoh-stat-calc": "^1.0.8"
   },
   "scripts": {
-    "start": "cross-env NODE_PATH=src,src/components HTTPS=true react-scripts start",
-    "build": "cross-env NODE_PATH=src,src/components react-scripts build",
-    "test": "cross-env NODE_PATH=src,src/components CI=true react-scripts test --env=jsdom --coverage",
-    "eject": "cross-env NODE_PATH=src,src/components react-scripts eject",
+    "start": "cross-env HTTPS=true react-scripts start",
+    "build": "cross-env react-scripts build",
+    "test": "cross-env CI=true react-scripts test --env=jsdom --coverage",
+    "eject": "cross-env react-scripts eject",
     "lint": "node node_modules/eslint/bin/eslint.js --config node_modules/eslint-config-react-app/index.js",
     "flow": "flow"
   },

@@ -252,15 +252,21 @@ class App extends PureComponent {
   footer() {
     return <footer className={'App-footer'}>
       Star Wars: Galaxy of Heroes™ is owned by EA and Capital Games. This site is not affiliated with them.<br />
-      <a href={'https://github.com/grandivory/mods-optimizer'} target={'_blank'} rel={'noopener'}>Contribute</a>
+      <a href={'https://github.com/grandivory/mods-optimizer'} target={'_blank'} rel={'noopener noreferrer'}>
+        Contribute
+      </a>
       &nbsp;|&nbsp;
-      Ask for help or give feedback on <a href={'https://discord.gg/WFKycSm'} target={'_blank'} rel={'noopener'}>
+      Ask for help or give feedback on <a href={'https://discord.gg/WFKycSm'} target={'_blank'} rel={'noopener noreferrer'}>
         Discord
       </a>
       &nbsp;| Like the tool? Consider donating to support the developer!&nbsp;
-      <a href={'https://paypal.me/grandivory'} target={'_blank'} rel={'noopener'} className={'gold'}>Paypal</a>
+      <a href={'https://paypal.me/grandivory'} target={'_blank'} rel={'noopener noreferrer'} className={'gold'}>
+        Paypal
+      </a>
       &nbsp;or&nbsp;
-      <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener'} className={'gold'}>Patreon</a>
+      <a href={'https://www.patreon.com/grandivory'} target={'_blank'} rel={'noopener noreferrer'} className={'gold'}>
+        Patreon
+      </a>
       <div className={'version'}>
         <button className={'link'} onClick={() => this.props.showModal('changelog-modal', this.changeLogModal())}>
           version {this.props.version}
@@ -449,7 +455,9 @@ class App extends PureComponent {
         Galaxy of Heroes. You assume all risk in using this tool. Grandivory's Mods Optimizer is not associated with
         HotUtils.
       </p>
-      <p><a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener'}>https://www.hotutils.app/</a></p>
+      <p><a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener noreferrer'}>
+        https://www.hotutils.app/
+      </a></p>
       <p><img className={'fit'} src={'/img/hotsauce512.png'} alt={'hotsauce'} /></p>
     </div>;
   }

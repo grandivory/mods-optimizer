@@ -534,7 +534,9 @@ class Review extends React.PureComponent {
         Galaxy of Heroes. You assume all risk in using this tool. Grandivory's Mods Optimizer is not associated with
         HotUtils.
       </p>
-      <p><a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener'}>https://www.hotutils.app/</a></p>
+      <p><a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener noreferrer'}>
+        https://www.hotutils.app/
+      </a></p>
       <p><img className={'fit'} src={'/img/hotsauce512.png'} alt={'hotsauce'} /></p>
     </div>;
   }
@@ -561,8 +563,8 @@ class Review extends React.PureComponent {
       <p>
         This will create a new mods profile in HotUtils using the recommendations listed here. After creating your
         profile, please log
-        into <a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener'}>HotUtils</a> to access your new
-        profile.
+        into <a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener noreferrer'}>HotUtils</a>
+        to access your new profile.
       </p>
       <p>
         <strong>Use at your own risk!</strong> HotUtils functionality breaks the terms of service for Star Wars:
