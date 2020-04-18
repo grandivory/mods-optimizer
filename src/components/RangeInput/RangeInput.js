@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+import './RangeInput.css';
+
 class RangeInput extends React.PureComponent {
   render() {
     const id = this.props.id;
@@ -12,7 +14,7 @@ class RangeInput extends React.PureComponent {
     const step = 'undefined' === typeof this.props.step ? 1 : this.props.step;
     const isPercent = this.props.isPercent || false;
     const editable = this.props.editable || false;
-    const onChange = this.props.onChange || function() {};
+    const onChange = this.props.onChange || function () { };
 
     let slider, textField, output;
 

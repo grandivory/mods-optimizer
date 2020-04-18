@@ -359,7 +359,8 @@ class Review extends React.PureComponent {
     const tagOptions = this.props.tags.map(tag => <option value={tag} key={tag}>{tag}</option>);
 
     return <div className={'filter-form'}>
-      <Toggle inputLabel={'Organize mods by:'}
+      <Toggle className={"organize-toggle"}
+        inputLabel={'Organize mods by:'}
         leftLabel={'Currently Equipped'}
         leftValue={sortOptions.currentCharacter}
         rightLabel={'Assigned Character'}

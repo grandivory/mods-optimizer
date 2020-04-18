@@ -39,8 +39,10 @@ span.toggle-switch::after {
   display: block;
   position: absolute;
   border-radius: .25em;
+  border: .2em outset #72e817;
   width: 1.2em;
   height: 1.2em;
+  box-sizing: border-box;
   top: -.1em;
   left: .9em;
   right: .9em;

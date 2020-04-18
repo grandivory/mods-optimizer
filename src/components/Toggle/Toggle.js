@@ -43,19 +43,19 @@ class Toggle extends React.PureComponent {
   }
 
   render() {
-    return <div className={'toggle-wrapper'}>
+    return <div className={`toggle-wrapper ${this.props.className}`}>
       <div className={'toggle-label'}>{this.props.inputLabel}</div>
       <label>
         <input type={'checkbox'}
-               className={'toggle'}
-               name={this.props.name}
-               id={this.props.id}
-               value={this.props.rightValue}
-               defaultChecked={this.value === this.props.rightValue}
-               onChange={this.onChange.bind(this)}
+          className={'toggle'}
+          name={this.props.name}
+          id={this.props.id}
+          value={this.props.rightValue}
+          defaultChecked={this.value === this.props.rightValue}
+          onChange={this.onChange.bind(this)}
         />
         <span className={'toggle-left-value'}>{this.props.leftLabel}</span>
-        <span className={'toggle-switch ' + (this.value === this.props.leftValue ? 'left' : 'right')}/>
+        <span className={'toggle-switch ' + (this.value === this.props.leftValue ? 'left' : 'right')} />
         <span className={'toggle-right-value'}>{this.props.rightLabel}</span>
       </label>
     </div>;

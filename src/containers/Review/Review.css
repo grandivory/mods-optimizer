@@ -125,6 +125,11 @@ pre.summary {
   overflow-y: auto;
 }
 
+.sidebar .filter-form .organize-toggle .toggle-left-value,
+.sidebar .filter-form .organize-toggle .toggle-right-value {
+  font-size: .8em;
+}
+
 .sidebar-hotutils {
   text-align: center;
 }
