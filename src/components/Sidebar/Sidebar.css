@@ -1,36 +1,29 @@
-.sidebar {
+.sidebar-wrapper {
   float: left;
   position: relative;
-  left: 0;
-  max-height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  box-sizing: border-box;
-  transition: all ease-in-out .5s;
+  height: 100%;
 }
 
-.sidebar .toggle-sidebar {
+.sidebar-wrapper .toggle-sidebar {
   display: block;
-  position: fixed;
-  top: 8em;
-  left: 14em;
+  position: absolute;
+  top: 4rem;
+  left: 17.5rem;
   width: 1em;
   height: 2em;
+  margin: 0;
   border-radius: 1em;
   border: 1px solid gray;
   background-color: #333;
   transition: all ease-in-out .5s;
 }
 
-.sidebar.hide .toggle-sidebar {
-  left: .7em;
-}
-
-.sidebar .toggle-sidebar.show {
+.sidebar-wrapper .toggle-sidebar.show {
+  left: 0;
   transform: rotate(180deg);
 }
 
-.sidebar .toggle-sidebar::before {
+.sidebar-wrapper .toggle-sidebar::before {
   content: '';
   position: absolute;
   top: calc(50% - .5em);
@@ -42,7 +35,7 @@
   border-right: .5em solid #ccc;
 }
 
-.sidebar .toggle-sidebar::after {
+.sidebar-wrapper .toggle-sidebar::after {
   content: '';
   position: absolute;
   top: calc(50% - .5em);
@@ -54,8 +47,22 @@
   border-right: .5em solid #333;
 }
 
+.sidebar {
+  position: relative;
+  left: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  transition: all ease-in-out .5s;
+}
+
+.sidebar.hide .toggle-sidebar {
+  left: .7em;
+}
+
 .sidebar.hide {
-  left: -20em;
+  left: -18em;
   margin-right: -20em;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -68,7 +75,8 @@
   border: 1px solid #888;
   border-left-width: 0;
   margin: 1em 1em 1em 0;
-  width: 20em;
+  width: 18rem;
+  box-sizing: border-box;
 }
 
 .sidebar-actions {
@@ -92,7 +100,6 @@
 .sidebar > div h3 {
   display: block;
   border-bottom: 1px solid white;
-  font-size: 1.2em;
   margin-top: .5em;
   margin-bottom: .25em;
 }

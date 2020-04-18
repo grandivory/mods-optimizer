@@ -113,9 +113,11 @@ class CharacterEditView extends PureComponent {
       <div className={'selected-characters'}>
         <h4>
           Selected Characters
-          <button className={'small'} onClick={this.props.clearSelectedCharacters}>Clear</button>
-          <button className={'small'} onClick={this.props.lockSelectedCharacters}>Lock All</button>
-          <button className={'small'} onClick={this.props.unlockSelectedCharacters}>Unlock All</button>
+          <div className="character-list-actions">
+            <button className={'small'} onClick={this.props.clearSelectedCharacters}>Clear</button>
+            <button className={'small'} onClick={this.props.lockSelectedCharacters}>Lock All</button>
+            <button className={'small'} onClick={this.props.unlockSelectedCharacters}>Unlock All</button>
+          </div>
         </h4>
         <h5>Character Templates <Help header={'Character Templates'}>{this.characterTemplatesHelp()}</Help></h5>
         <div className={'template-buttons'}>

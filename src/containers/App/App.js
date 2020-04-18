@@ -124,7 +124,9 @@ class App extends PureComponent {
     let allyCodyInput;
 
     return <header className={'App-header'}>
-      <h1 className={'App-title'}>Grandivory's Mods Optimizer</h1>
+      <h1 className={'App-title'}>
+        Grandivory's Mods Optimizer <span className="subtitle">for Star Wars: Galaxy of Heroes™</span>
+      </h1>
       {showActions &&
         <nav>
           <button className={'explore' === this.props.section ? 'active' : ''}
@@ -186,61 +188,66 @@ class App extends PureComponent {
             X
         </button>
         }
-        <button type={'button'}
-          onClick={() => {
-            this.props.refreshPlayerData(
-              this.props.allyCode || allyCodyInput.value,
-              this.props.keepOldMods,
-              this.props.hotUtilsSubscription,
-              null
-            );
-          }}>
-          Fetch my data!
+        <div className="fetch-actions">
+          <button type={'button'}
+            onClick={() => {
+              this.props.refreshPlayerData(
+                this.props.allyCode || allyCodyInput.value,
+                this.props.keepOldMods,
+                this.props.hotUtilsSubscription,
+                null
+              );
+            }}>
+            Fetch my data!
         </button>
-        <button
-          type={'button'}
-          disabled={!(
-            this.props.hotUtilsSubscription &&
-            this.props.profile &&
-            this.props.profile.hotUtilsSessionId
-          )}
-          onClick={() => {
-            if (this.props.hotUtilsSubscription && this.props.profile.hotUtilsSessionId) {
-              this.props.showModal('pull-unequipped-modal', this.fetchUnequippedModal())
-            }
-          }}>
-          Fetch with HotUtils
+          <button
+            type={'button'}
+            disabled={!(
+              this.props.hotUtilsSubscription &&
+              this.props.profile &&
+              this.props.profile.hotUtilsSessionId
+            )}
+            onClick={() => {
+              if (this.props.hotUtilsSubscription && this.props.profile.hotUtilsSessionId) {
+                this.props.showModal('pull-unequipped-modal', this.fetchUnequippedModal())
+              }
+            }}>
+            Fetch with HotUtils
         </button>
-        <Help header={'How do I pull unequipped mods?'}>{this.unequippedModsHelp()}</Help>
-        <input id={'keep-old-mods'}
-          name={'keep-old-mods'}
-          type={'checkbox'}
-          value={'keep-old-mods'}
-          checked={this.props.keepOldMods}
-          onChange={() => this.props.toggleKeepOldMods()}
-        />
-        <label htmlFor={'keep-old-mods'}>Remember existing mods</label>
-        <br />
-        <FileInput label={'Restore my progress'} handler={(file) => this.readFile(file, this.props.restoreProgress)} />
-        {showActions &&
-          <button type={'button'} onClick={() => {
-            this.props.exportDatabase(progressData => {
-              progressData.version = this.props.version;
-              progressData.allyCode = this.props.allyCode;
-              const progressDataSerialized = JSON.stringify(progressData);
-              const userData = new Blob([progressDataSerialized], { type: 'application/json;charset=utf-8' });
-              saveAs(userData, `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`);
-            });
-          }}>
-            Save my progress
+          <Help header={'How do I pull unequipped mods?'}>{this.unequippedModsHelp()}</Help>
+          <div className="form-item">
+            <input id={'keep-old-mods'}
+              name={'keep-old-mods'}
+              type={'checkbox'}
+              value={'keep-old-mods'}
+              checked={this.props.keepOldMods}
+              onChange={() => this.props.toggleKeepOldMods()}
+            />
+            <label htmlFor={'keep-old-mods'}>Remember existing mods</label>
+          </div>
+        </div>
+        <div className="state-actions">
+          <FileInput label={'Restore my progress'} handler={(file) => this.readFile(file, this.props.restoreProgress)} />
+          {showActions &&
+            <button type={'button'} onClick={() => {
+              this.props.exportDatabase(progressData => {
+                progressData.version = this.props.version;
+                progressData.allyCode = this.props.allyCode;
+                const progressDataSerialized = JSON.stringify(progressData);
+                const userData = new Blob([progressDataSerialized], { type: 'application/json;charset=utf-8' });
+                saveAs(userData, `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`);
+              });
+            }}>
+              Save my progress
         </button>
-        }
-        {showActions &&
-          <button type={'button'} className={'red'}
-            onClick={() => this.props.showModal('reset-modal', this.resetModal())}>
-            Reset Mods Optimizer
+          }
+          {showActions &&
+            <button type={'button'} className={'red'}
+              onClick={() => this.props.showModal('reset-modal', this.resetModal())}>
+              Reset Mods Optimizer
         </button>
-        }
+          }
+        </div>
       </div>
     </header>;
   }
@@ -353,7 +360,7 @@ class App extends PureComponent {
     return <div className={'add-ally-code-form'}>
       <h4>Add a new Ally Code</h4>
       <label htmlFor={'new-ally-code'}>Ally code: </label>
-      <input id={'new-ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodeInput = input}
+      <input id={'new-ally-code'} type={'text'} inputMode={'numeric'} size={13} ref={input => allyCodeInput = input}
         onKeyUp={(e) => {
           if (e.key === 'Enter') {
             this.props.hideModal();

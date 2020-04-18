@@ -2,8 +2,8 @@
 .delete-mod-display {
   position: relative;
   display: inline-grid;
-  grid-template-columns: 5em 1fr fit-content();
-  grid-template-rows: 1fr fit-content() fit-content();
+  grid-template-columns: 5em 1fr;
+  grid-template-rows: 1fr auto auto;
   grid-column-gap: 1em;
   grid-row-gap: 0;
   align-items: start;
@@ -13,7 +13,7 @@
   text-shadow: 2px 2px 1px black;
   margin: 1em;
   padding: 1em;
-  width: 19em;
+  width: 18em;
 }
 
 .mod-detail .mod-image,
@@ -40,12 +40,14 @@
   margin: 0;
   text-align: left;
   font-weight: normal;
+  font-size: .8em;
 }
 
 .mod-detail > .stats,
 .delete-mod-display > .stats {
   grid-row: 1 / span 2;
   grid-column: 2 / span 2;
+  font-size: .9em;
 }
 
 .mod-detail > .stats > .assigned {

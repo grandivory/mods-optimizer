@@ -183,7 +183,6 @@
 }
 
 .character-edit-form #plan-name {
-  font-size: 1.2em;
   width: 7em;
 }
 
@@ -195,4 +194,3 @@
 .character-edit-form #delete-button {
   float: left;
 }
-

@@ -1,3 +1,9 @@
+.filter-form.mod-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
 .mod-filters input[type=number],
 .mod-filters input[type=checkbox] {
   display: none;
@@ -173,15 +179,16 @@
 #level-filters,
 #equipped-filters {
   width: 7em;
-  margin: 0 .5em;
   vertical-align: top;
   display: inline-block;
 }
 
 #level-filters {
-  width: 10em;
+  width: 9em;
+  margin-left: 0
 }
 
 #equipped-filters {
   width: 6em;
+  margin-right: 0
 }

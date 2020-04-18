@@ -1,15 +1,17 @@
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import React from "react";
-import {toggleSidebar} from "../../state/actions/app";
+import { toggleSidebar } from "../../state/actions/app";
 
 import "./Sidebar.css";
 
 class Sidebar extends React.PureComponent {
   render() {
-    return <div className={`sidebar ${this.props.showSidebar ? 'show' : 'hide'}`} key={'sidebar'}>
-      {this.props.content}
+    return <div className="sidebar-wrapper">
+      <div className={`sidebar ${this.props.showSidebar ? 'show' : 'hide'}`} key={'sidebar'}>
+        {this.props.content}
+      </div>
       <button className={`toggle-sidebar ${this.props.showSidebar ? 'hide' : 'show'}`}
-              onClick={() => {this.props.toggleSidebar()}}>
+        onClick={() => { this.props.toggleSidebar() }}>
       </button>
     </div>;
   }
