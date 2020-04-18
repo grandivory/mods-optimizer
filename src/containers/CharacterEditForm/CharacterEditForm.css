@@ -15,7 +15,6 @@
 .character-edit-form #basic-form,
 .character-edit-form #advanced-form {
   display: inline-block;
-  margin: 0 2em;
 }
 
 .character-edit-form .character-view .avatar {
@@ -32,7 +31,7 @@
 }
 
 .character-edit-form .header-row {
-  width: 40em;
+  max-width: 40em;
   margin: 0 auto .5em;
 }
 
@@ -43,17 +42,30 @@
 .column {
   display: inline-block;
   vertical-align: top;
-  margin: 0 2em;
+  margin: 0 1em;
 }
 
 .target-level-options h3 {
   margin-top: 0;
 }
 
+.target-level-options .row {
+  display: flex;
+  justify-content: space-around;
+}
+
+.target-level-options .row .column {
+  flex: 0 1 auto;
+}
+
 .target-level-options .group {
   border: 1px solid white;
   box-sizing: border-box;
   padding: .5em;
+}
+
+.target-level-options .breakable-group {
+  display: inline-block;
 }
 
 .target-level-options .group h4 {
@@ -67,6 +79,10 @@
 .target-level-options .non-stats {
   display: inline-block;
   margin-bottom: .5em;
+}
+
+.target-level-options .target-stats input {
+  margin: .25em;
 }
 
 .character-edit-form .form-row {

@@ -77,6 +77,17 @@ class CharacterEditForm extends PureComponent {
       </button>
     }
 
+    const slotToPrimaryRestriction = slot =>
+      <div key={`mod-block-${slot}`} className={'mod-block'}>
+        <select name={`${slot}-primary`} id={`${slot}-primary`}
+          defaultValue={this.props.target.primaryStatRestrictions[slot]}>
+          <option value={''}>Any</option>
+          {this.props[`${slot}Primaries`].map(
+            primary => <option key={primary} value={primary}>{primary}</option>)}
+        </select>
+        <div className={`mod-image mod-image-${slot}`} />
+      </div>;
+
     return <form
       className={`character-edit-form`}
       noValidate={'advanced' === this.props.editMode}
@@ -113,72 +124,69 @@ class CharacterEditForm extends PureComponent {
       </div>
       <div className={'target-level-options'}>
         <h3>Target-specific Options</h3>
-        <div className={'column'}>
-          <div className={'header-row'}>
-            <label htmlFor={'plan-name'}>Target Name: </label>
-            <input type={'text'} defaultValue={target.name} id={'plan-name'} name={'plan-name'} />
-          </div>
-          <div className={'non-stats'}>
-            <div className={'form-row center'}>
-              <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
-              <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
-                defaultChecked={this.props.target.upgradeMods} />
+        <div className="row">
+          <div className={'column'}>
+            <div className={'header-row'}>
+              <label htmlFor={'plan-name'}>Target Name: </label>
+              <input type={'text'} defaultValue={target.name} id={'plan-name'} name={'plan-name'} />
             </div>
-          </div>
-          <div className={'header-row group'}>
-            <h4>Restrict Primary Stats:</h4>
-            <div className={'mod-blocks'}>
-              {['arrow', 'triangle', 'circle', 'cross'].map(slot =>
-                <div key={`mod-block-${slot}`} className={'mod-block'}>
-                  <select name={`${slot}-primary`} id={`${slot}-primary`}
-                    defaultValue={this.props.target.primaryStatRestrictions[slot]}>
-                    <option value={''}>Any</option>
-                    {this.props[`${slot}Primaries`].map(
-                      primary => <option key={primary} value={primary}>{primary}</option>)}
-                  </select>
-                  <div className={`mod-image mod-image-${slot}`} />
+            <div className={'non-stats'}>
+              <div className={'form-row center'}>
+                <label htmlFor={'upgrade-mods'}>Upgrade Mods to level 15:</label>
+                <input type={'checkbox'} name={'upgrade-mods'} id={'upgrade-mods'}
+                  defaultChecked={this.props.target.upgradeMods} />
+              </div>
+            </div>
+            <div className={'header-row group primary-stats'}>
+              <h4>Restrict Primary Stats:</h4>
+              <div className={'mod-blocks'}>
+                <div className="breakable-group">
+                  {['arrow', 'triangle'].map(slotToPrimaryRestriction)}
                 </div>
+                <div className="breakable-group">
+                  {['circle', 'cross'].map(slotToPrimaryRestriction)}
+                </div>
+              </div>
+            </div>
+            <div className={'header-row group set-bonuses'}>
+              <h4>Restrict Set Bonuses:</h4>
+              {
+                this.setRestrictionsForm(
+                  this.props.setRestrictions || this.props.target.setRestrictions,
+                  this.props.target.useOnlyFullSets
+                )
+              }
+            </div>
+            <div className={'header-row group target-stats'}>
+              {this.targetStatForm(this.props.targetStats ||
+                this.props.target.targetStats.map((targetStat, index) => ({
+                  key: index,
+                  target: targetStat
+                }))
               )}
             </div>
           </div>
-          <div className={'header-row group'}>
-            <h4>Restrict Set Bonuses:</h4>
-            {
-              this.setRestrictionsForm(
-                this.props.setRestrictions || this.props.target.setRestrictions,
-                this.props.target.useOnlyFullSets
-              )
-            }
-          </div>
-          <div className={'header-row group'}>
-            {this.targetStatForm(this.props.targetStats ||
-              this.props.target.targetStats.map((targetStat, index) => ({
-                key: index,
-                target: targetStat
-              }))
-            )}
-          </div>
-        </div>
-        <div className={'column'}>
-          <div className={'header-row stat-weights-toggle'}>
-            <Toggle
-              inputLabel={'Stat Weights'}
-              name={'mode'}
-              leftLabel={'Basic'}
-              leftValue={'basic'}
-              rightLabel={'Advanced'}
-              rightValue={'advanced'}
-              value={this.props.editMode}
-              onChange={(newValue) => this.props.changeCharacterEditMode(newValue)}
-            />
-          </div>
-          <div className={'instructions'}>
-            Give each stat type a value. These values are used as the "goodness" of each stat to calculate the optimum
+          <div className={'column'}>
+            <div className={'header-row stat-weights-toggle'}>
+              <Toggle
+                inputLabel={'Stat Weights'}
+                name={'mode'}
+                leftLabel={'Basic'}
+                leftValue={'basic'}
+                rightLabel={'Advanced'}
+                rightValue={'advanced'}
+                value={this.props.editMode}
+                onChange={(newValue) => this.props.changeCharacterEditMode(newValue)}
+              />
+            </div>
+            <div className={'instructions'}>
+              Give each stat type a value. These values are used as the "goodness" of each stat to calculate the optimum
             mods to equip. <strong>These are not the amount of each stat you want!</strong> Instead, they are multiplied
             with the amount of each stat on a mod to determine a score for each mod.
           </div>
-          {'basic' === this.props.editMode && this.basicForm(target)}
-          {'advanced' === this.props.editMode && this.advancedForm(target)}
+            {'basic' === this.props.editMode && this.basicForm(target)}
+            {'advanced' === this.props.editMode && this.advancedForm(target)}
+          </div>
         </div>
       </div>
       <div className={'actions'}>
@@ -205,6 +213,23 @@ class CharacterEditForm extends PureComponent {
     });
     const emptySlots = 3 - selectedSets.reduce((acc, setName) => acc + setBonuses[setName].numberOfModsRequired / 2, 0);
 
+    const setBonusToFormDisplay = (setBonus, index) => {
+      const className = setBonus.numberOfModsRequired > (2 * emptySlots) ? 'disabled' : ''
+      return <img
+        src={`/img/icon_buff_${setBonus.name}.png`}
+        alt={setBonus.name}
+        key={index}
+        className={className}
+        onClick={() => this.props.selectSetBonus(setBonus.name)}
+      />
+    };
+
+    const setBonusGroups = [Object.values(setBonuses).slice(0, 4), Object.values(setBonuses).slice(4)];
+    const setBonusGroupsDisplay = setBonusGroups.map(setBonuses => setBonuses.map(setBonusToFormDisplay))
+    const setBonusDisplay = setBonusGroupsDisplay.map(groupDisplay =>
+      <div className="breakable-group">{groupDisplay}</div>
+    )
+
     return <div className={'mod-sets'}>
       <div className={'form-row center'}>
         <label htmlFor={'use-full-sets'}>Don't break mod sets</label>
@@ -214,16 +239,7 @@ class CharacterEditForm extends PureComponent {
         Click on a set bonus to add it to or remove it from the selected sets.
       </p>
       <div className={'set-options'}>
-        {Object.values(setBonuses).map((setBonus, index) => {
-          const className = setBonus.numberOfModsRequired > (2 * emptySlots) ? 'disabled' : ''
-          return <img
-            src={`/img/icon_buff_${setBonus.name}.png`}
-            alt={setBonus.name}
-            key={index}
-            className={className}
-            onClick={() => this.props.selectSetBonus(setBonus.name)}
-          />
-        })}
+        {setBonusDisplay}
       </div>
       <div className={'selected-sets'}>
         <p>Selected Sets:</p>
