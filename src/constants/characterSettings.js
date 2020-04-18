@@ -438,6 +438,9 @@ const characterSettings = {
   'GEONOSIANSPY': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
   ),
+  'GLREY': new CharacterSettings(
+    [new OptimizationPlan('PvP', 50, 0, 100, 50, 0, 10, 25, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'GRANDADMIRALTHRAWN': new CharacterSettings(
     [optimizationStrategy["Speed with survivability"].rename('PvP')],
     ['GAT', 'Imperial Grancor Maneuver', 'Wampanader', 'ABC', 'Titans'],
@@ -878,6 +881,9 @@ const characterSettings = {
   ),
   'SUNFAC': new CharacterSettings(
     [new OptimizationPlan('Tanky', 40, 40, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
+  ),
+  'SUPREMELEADERKYLOREN': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 80, 100, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)]
   ),
   'T3_M4': new CharacterSettings(
     [
