@@ -2,8 +2,15 @@
   color: red;
 }
 
+.review {
+  flex-grow: 1;
+  display: flex;
+}
+
 .review-list {
-  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .review-list h2 {
@@ -47,10 +54,15 @@
 }
 
 .review-list .mods-list {
-  height: calc(100% - 5em);
   overflow-y: auto;
   box-sizing: border-box;
-  padding-bottom: 5em;
+}
+
+/* Add some extra space for hover effects */
+.review-list .mods-list::after {
+  content: '';
+  display: block;
+  height: 5em;
 }
 
 .mod-row {

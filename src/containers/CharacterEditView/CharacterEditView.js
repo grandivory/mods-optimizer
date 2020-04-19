@@ -110,6 +110,23 @@ class CharacterEditView extends PureComponent {
   render() {
     return <div className={'character-edit'}>
       <Sidebar content={[this.filterForm(), this.globalSettings(), this.sidebarActions()]} />
+      <div className={'available-characters'}
+        onDragEnter={CharacterEditView.availableCharactersDragEnter}
+        onDragOver={CharacterEditView.dragOver}
+        onDragLeave={CharacterEditView.dragLeave}
+        onDrop={this.availableCharactersDrop.bind(this)}
+      >
+        <h3 className={'instructions'}>
+          Double-click or drag characters to the selected column to pick who to optimize mods for.
+          <button type={'button'}
+            className={'small'}
+            onClick={() => this.props.showModal('instructions', this.instructionsModal())}>
+            Show full instructions
+          </button>
+        </h3>
+        {this.props.highlightedCharacters.map(character => this.characterBlock(character, 'active'))}
+        {this.props.availableCharacters.map(character => this.characterBlock(character, 'inactive'))}
+      </div>
       <div className={'selected-characters'}>
         <h4>
           Selected Characters
@@ -177,23 +194,6 @@ class CharacterEditView extends PureComponent {
           </div>
         </div>
         <CharacterList selfDrop={true} draggable={true} />
-      </div>
-      <div className={'available-characters'}
-        onDragEnter={CharacterEditView.availableCharactersDragEnter}
-        onDragOver={CharacterEditView.dragOver}
-        onDragLeave={CharacterEditView.dragLeave}
-        onDrop={this.availableCharactersDrop.bind(this)}
-      >
-        <h3 className={'instructions'}>
-          Double-click or drag characters to the selected column to pick who to optimize mods for.
-          <button type={'button'}
-            className={'small'}
-            onClick={() => this.props.showModal('instructions', this.instructionsModal())}>
-            Show full instructions
-          </button>
-        </h3>
-        {this.props.highlightedCharacters.map(character => this.characterBlock(character, 'active'))}
-        {this.props.availableCharacters.map(character => this.characterBlock(character, 'inactive'))}
       </div>
     </div >;
   }

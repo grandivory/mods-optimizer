@@ -226,11 +226,13 @@ class Review extends React.PureComponent {
       }
     }
 
-    return <div className={'review-list'}>
+    return <div className={'review'}>
       <Sidebar content={this.fullSidebar()} />
-      <h2>Reassigning {this.props.numMovingMods} mods {summaryButton}</h2>
-      {subHeading}
-      {reviewContent}
+      <div className="review-list">
+        <h2>Reassigning {this.props.numMovingMods} mods {summaryButton}</h2>
+        {subHeading}
+        {reviewContent}
+      </div>
     </div>;
   }
 

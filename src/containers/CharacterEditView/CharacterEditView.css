@@ -1,14 +1,12 @@
 .character-edit {
-  height: 100%;
+  display: flex;
   overflow: hidden;
   text-align: center;
 }
 
 .character-edit .selected-characters {
-  float: right;
   max-width: calc(33% - 7em);
   margin: 0 0 0 1em;
-  height: 100%;
 }
 
 .character-edit .selected-characters .character-list-actions {
@@ -16,8 +14,8 @@
 }
 
 .character-edit .available-characters {
-  height: 100%;
   overflow-y: auto;
+  flex-grow: 1;
 }
 
 .character-edit .available-characters .character {

@@ -192,11 +192,13 @@ html, body {
 
 .app-body {
   flex: 1 1 auto;
+  display: flex;
   background: black url('/img/cantina-background.jpg') no-repeat fixed;
   background-size: cover;
   overflow: hidden;
   color: white;
   text-shadow: 2px 2px 1px black;
+  align-items: stretch;
 }
 
 .app-body a {
