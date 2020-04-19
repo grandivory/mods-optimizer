@@ -853,11 +853,17 @@ const characterSettings = {
     ['SiT', 'Nightmare']
   ),
   'SMUGGLERCHEWBACCA': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
+    [
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
+      new OptimizationPlan('PvP', 0, 0, 100, 80, 25, 0, 60, 0, 25, 0, 0, 0, 0, true)
+    ],
     ['Vets']
   ),
   'SMUGGLERHAN': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
+    [
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
+      new OptimizationPlan('PvP', 0, 0, 100, 80, 25, 0, 60, 0, 0, 0, 0, 0, 0, true)
+    ],
     ['Vets']
   ),
   'SNOWTROOPER': new CharacterSettings(
