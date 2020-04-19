@@ -298,7 +298,8 @@ class OptimizationPlan {
               targetStat.type || '+',
               targetStat.minimum,
               targetStat.maximum,
-              targetStat.relativeCharacterId || null
+              targetStat.relativeCharacterId || null,
+              targetStat.optimizeForTarget
             )
           );
         } else {

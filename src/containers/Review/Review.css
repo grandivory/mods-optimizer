@@ -1,3 +1,7 @@
+.modal .optimizer-messages .missed-goals {
+  color: red;
+}
+
 .review-list {
   height: 100%;
 }

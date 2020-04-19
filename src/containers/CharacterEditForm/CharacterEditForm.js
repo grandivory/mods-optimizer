@@ -226,8 +226,8 @@ class CharacterEditForm extends PureComponent {
 
     const setBonusGroups = [Object.values(setBonuses).slice(0, 4), Object.values(setBonuses).slice(4)];
     const setBonusGroupsDisplay = setBonusGroups.map(setBonuses => setBonuses.map(setBonusToFormDisplay))
-    const setBonusDisplay = setBonusGroupsDisplay.map(groupDisplay =>
-      <div className="breakable-group">{groupDisplay}</div>
+    const setBonusDisplay = setBonusGroupsDisplay.map((groupDisplay, index) =>
+      <div className="breakable-group" key={index}>{groupDisplay}</div>
     )
 
     return <div className={'mod-sets'}>
@@ -287,6 +287,15 @@ class CharacterEditForm extends PureComponent {
 
     const targetStatRows = targetStats.map((targetStat, index) =>
       <div className={'form-row center'} key={targetStat.key}>
+        <Toggle
+          inputLabel={'Target Stat Type'}
+          name={'optimize-for-target[]'}
+          leftLabel={'Optimize'}
+          leftValue={true}
+          rightLabel={'Report Only'}
+          rightValue={false}
+          value={targetStat.target.optimizeForTarget}
+        />
         <button type={'button'} className={'red small'} onClick={() => this.props.removeTargetStat(index)}>-</button>
         <select name={'target-stat-name[]'} defaultValue={targetStat.target.stat}>
           <option value={''}>No Target</option>
@@ -642,19 +651,23 @@ class CharacterEditForm extends PureComponent {
       const targetStatTypes = this.form['target-stat-type[]'] instanceof NodeList ?
         this.form['target-stat-type[]'] :
         [this.form['target-stat-type[]']];
+      const targetStatsShouldOptimize = this.form['optimize-for-target[]'] instanceof NodeList ?
+        this.form['optimize-for-target[]'] :
+        [this.form['optimize-for-target[]']];
 
       for (let i = 0; i < targetStatNames.length; i++) {
         const name = targetStatNames[i].value;
-        const minimum = targetStatMins[i].valueAsNumber;
-        const maximum = targetStatMaxes[i].valueAsNumber;
+        const minimum = isNaN(targetStatMins[i].valueAsNumber) ? 0 : targetStatMins[i].valueAsNumber;
+        const maximum = isNaN(targetStatMaxes[i].valueAsNumber) ? 100000000 : targetStatMaxes[i].valueAsNumber;
         const relativeCharacter = targetStatRelativeCharacters[i].value || null;
         const type = targetStatTypes[i].value || null;
+        const shouldOptimize = targetStatsShouldOptimize[i].value == 'true';
 
         if (name) {
           if (minimum < maximum) {
-            targetStats.push(new TargetStat(name, type, minimum, maximum, relativeCharacter));
+            targetStats.push(new TargetStat(name, type, minimum, maximum, relativeCharacter, shouldOptimize));
           } else {
-            targetStats.push(new TargetStat(name, type, maximum, minimum, relativeCharacter));
+            targetStats.push(new TargetStat(name, type, maximum, minimum, relativeCharacter, shouldOptimize));
           }
         }
       }

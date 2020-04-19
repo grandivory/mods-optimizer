@@ -302,7 +302,7 @@ class Review extends React.PureComponent {
    */
   setsView(modAssignments) {
     // Iterate over each character to render a full mod set
-    return modAssignments.map(({ id: characterID, target, assignedMods: mods }, index) => {
+    return modAssignments.map(({ id: characterID, target, assignedMods: mods, missedGoals }, index) => {
       const character = this.props.characters[characterID];
 
       if (!character) {
@@ -313,11 +313,11 @@ class Review extends React.PureComponent {
         <div className={'character-id'}>
           <CharacterAvatar character={character} />
           <Arrow />
-          <h3>
+          <h3 className={missedGoals.length ? 'red-text' : ''}>
             {this.props.gameSettings[characterID] ? this.props.gameSettings[characterID].name : characterID}
           </h3>
           {target &&
-            <h4>{target.name}</h4>
+            <h4 className={missedGoals.length ? 'red-text' : ''}>{target.name}</h4>
           }
           <div className={'actions'}>
             {sortOptions.currentCharacter === this.props.filter.sort &&
@@ -338,6 +338,7 @@ class Review extends React.PureComponent {
             useUpgrades={true}
             assignedCharacter={character}
             assignedTarget={target}
+            missedGoals={missedGoals}
           />}
         {sortOptions.currentCharacter === this.props.filter.sort &&
           <div className={'mod-set-block'}>
@@ -640,11 +641,14 @@ const mapStateToProps = (state) => {
   const profile = state.profile;
   const filter = state.modListFilter;
   const modsById = groupByKey(profile.mods, mod => mod.id);
-  const modAssignments = profile.modAssignments.filter(x => null !== x).map(({ id, target, assignedMods }) => ({
-    id: id,
-    target: target,
-    assignedMods: assignedMods ? assignedMods.map(id => modsById[id]).filter(mod => !!mod) : []
-  }));
+  const modAssignments = profile.modAssignments
+    .filter(x => null !== x)
+    .map(({ id, target, assignedMods, missedGoals }) => ({
+      id: id,
+      target: target,
+      assignedMods: assignedMods ? assignedMods.map(id => modsById[id]).filter(mod => !!mod) : [],
+      missedGoals: missedGoals || []
+    }));
 
   const currentModsByCharacter = collectByKey(
     profile.mods.filter(mod => null !== mod.characterID),

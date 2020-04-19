@@ -157,7 +157,7 @@ const statTypeMap = Object.freeze({
   'Critical Avoidance': ['critAvoid']
 });
 
-const statDisplayNames = {
+const statDisplayNames = Object.freeze({
   'health': 'Health',
   'protection': 'Protection',
   'speed': 'Speed',
@@ -176,9 +176,9 @@ const statDisplayNames = {
   'critAvoid': 'Critical Avoidance',
   'physCritAvoid': 'Physical Critical Avoidance',
   'specCritAvoid': 'Special Critical Avoidance'
-};
+});
 
-const wholeStatTypes = ['Health',
+const wholeStatTypes = Object.freeze(['Health',
   'Protection',
   'Offense',
   'Physical Damage',
@@ -186,11 +186,11 @@ const wholeStatTypes = ['Health',
   'Speed',
   'Defense',
   'Armor',
-  'Resistance'];
+  'Resistance']);
 
-const modSlots = ['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross'];
+const modSlots = Object.freeze(['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross']);
 
-const setBonuses = {
+const setBonuses = Object.freeze({
   'health': {
     name: 'health',
     numberOfModsRequired: 2,
@@ -239,10 +239,10 @@ const setBonuses = {
     smallBonus: { displayType: 'Speed', value: 5, isPercent: true },
     maxBonus: { displayType: 'Speed', value: 10, isPercent: true }
   }
-};
+});
 
 // Map pips to maximum value at level 15 for each primary stat type
-const maxStatPrimaries = {
+const maxStatPrimaries = Object.freeze({
   'Offense': {
     1: 1.88,
     2: 2,
@@ -331,9 +331,9 @@ const maxStatPrimaries = {
     5: 24,
     6: 35
   }
-};
+});
 
-const statSlicingUpgradeFactors = {
+const statSlicingUpgradeFactors = Object.freeze({
   'Offense %': 3.02,
   'Defense %': 2.34,
   'Health %': 1.86,
@@ -345,9 +345,9 @@ const statSlicingUpgradeFactors = {
   'Protection': 1.11,
   'Offense': 1.10,
   'Critical Chance': 1.04
-};
+});
 
-const statWeights = {
+const statWeights = Object.freeze({
   health: 2000,
   protection: 4000,
   speed: 20,
@@ -362,7 +362,7 @@ const statWeights = {
   resistance: 33,
   accuracy: 10,
   critAvoid: 10
-};
+});
 
 /**
  * Return the first value from an array, if one exists. Otherwise, return null.
@@ -480,6 +480,16 @@ function deserializeTarget(target) {
     updatedTarget.targetStats = target.targetStat ? [target.targetStat] : [];
     delete updatedTarget.targetStat;
   }
+
+  // Fill in the `optimizeForTarget` value if it doesn't exist
+  updatedTarget.targetStats = updatedTarget.targetStats.map(targetStat =>
+    'undefined' !== targetStat.optimizeForTarget
+      ? targetStat
+      : {
+        ...targetStat,
+        optimizeForTarget: true
+      }
+  );
 
   return updatedTarget;
 }
@@ -692,6 +702,27 @@ function modSetSatisfiesCharacterRestrictions(modSet, character, target) {
 }
 
 /**
+ * Find any goal stats that weren't hit and return the target and the value.
+ * @param modSet {Array<Mod>}
+ * @param character {Character}
+ * @param goalStats {Array<TargetStat>}
+ * @param target {OptimizationPlan}
+ */
+function getMissedGoals(modSet, character, goalStats, target) {
+  const missedStats = goalStats.map(goalStat => {
+    const characterValue = getStatValueForCharacterWithMods(modSet, character, goalStat.stat, target);
+
+    if (characterValue < goalStat.minimum || characterValue > goalStat.maximum) {
+      return [goalStat, characterValue];
+    } else {
+      return null;
+    }
+  });
+
+  return missedStats.filter(x => x !== null)
+}
+
+/**
  * Checks to see if this mod set is made up of only full sets
  *
  * @param modSet {Array<Mod>}
@@ -761,6 +792,7 @@ function modSetFulfillsTargetStatRestriction(modSet, character, target) {
  * @param modSet {Array<Mod>}
  * @param character {Character}
  * @param stat {String}
+ * @param target {OptimizationPlan}
  */
 function getStatValueForCharacterWithMods(modSet, character, stat, target) {
   if (statTypeMap[stat].length > 1) {
@@ -1125,6 +1157,7 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
     ) {
       const assignedMods = previousRun.modAssignments[index].assignedMods;
       const messages = previousRun.modAssignments[index].messages;
+      const missedGoals = previousRun.modAssignments[index].missedGoals || [];
       // Remove any assigned mods from the available pool
       for (let i = usableMods.length - 1; i >= 0; i--) {
         if (assignedMods.includes(usableMods[i].id)) {
@@ -1132,7 +1165,13 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
         }
       }
 
-      modSuggestions.push({ id: characterID, target: target, assignedMods: assignedMods, messages: messages });
+      modSuggestions.push({
+        id: characterID,
+        target: target,
+        assignedMods: assignedMods,
+        messages: messages,
+        missedGoals: missedGoals
+      });
       return modSuggestions;
     } else {
       recalculateMods = true;
@@ -1152,7 +1191,14 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
         character
       );
 
-    const realTarget = combineTargetStats(absoluteTarget, character);
+    // Extract any target stats that are set as only goals
+    const goalStats = absoluteTarget.targetStats.filter(targetStat => !targetStat.optimizeForTarget)
+    const filteredAbsoluteTarget = {
+      ...absoluteTarget,
+      targetStats: absoluteTarget.targetStats.filter(targetStat => targetStat.optimizeForTarget)
+    }
+
+    const realTarget = combineTargetStats(filteredAbsoluteTarget, character);
 
     const { modSet: newModSetForCharacter, messages: characterMessages } =
       findBestModSetForCharacter(usableMods, character, realTarget);
@@ -1171,7 +1217,7 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       (newModSetForCharacter.length === oldModSetForCharacter.length &&
         oldModSetForCharacter.every(oldMod => newModSetForCharacter.find(newMod => newMod.id === oldMod.id))
       ) ||
-      // If the old set doesn't satisfy the character/realTarget restrictions, but the new set does
+      // If the old set doesn't satisfy the character/target restrictions, but the new set does
       (!modSetSatisfiesCharacterRestrictions(oldModSetForCharacter, character, realTarget) &&
         modSetSatisfiesCharacterRestrictions(newModSetForCharacter, character, realTarget)
       ) ||
@@ -1192,6 +1238,9 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       }
     }
 
+    // // Check the goal stats and add any messages related to missing goals
+    // assignmentMessages.push(...getMissingGoalStatMessages(newModSetForCharacter, character, goalStats, target));
+
     // Remove any assigned mods from the available pool
     for (let i = usableMods.length - 1; i >= 0; i--) {
       if (assignedModSet.includes(usableMods[i])) {
@@ -1203,7 +1252,8 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       id: characterID,
       target: target,
       assignedMods: assignedModSet.map(mod => mod.id),
-      messages: assignmentMessages
+      messages: assignmentMessages,
+      missedGoals: getMissedGoals(newModSetForCharacter, character, goalStats, target)
     });
 
     return modSuggestions;
@@ -1313,8 +1363,6 @@ function combineTargetStats(target, character) {
 
     const newMinimum = Math.max(targetStatMap[statName].minimum, targetStat.minimum);
     const newMaximum = Math.min(targetStatMap[statName].maximum, targetStat.maximum);
-
-    console.log(newMinimum, newMaximum);
 
     if (newMinimum > newMaximum) {
       throw new Error(`

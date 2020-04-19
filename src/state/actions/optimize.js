@@ -50,7 +50,9 @@ export function finishModOptimization(result, settings) {
 
       // Create the content of the pop-up for any post-optimization messages
 
-      const resultsWithMessages = result.filter(x => null !== x).filter(({ messages }) => 0 < messages.length);
+      const resultsWithMessages = result
+        .filter(x => null !== x)
+        .filter(({ messages, missedGoals }) => 0 < messages.length || 0 < missedGoals.length);
 
       if (resultsWithMessages.length) {
         const state = getState();
@@ -67,7 +69,7 @@ export function finishModOptimization(result, settings) {
                 </tr>
               </thead>
               <tbody>
-                {resultsWithMessages.map(({ id, target, messages }, index) => {
+                {resultsWithMessages.map(({ id, target, messages, missedGoals }, index) => {
                   const character = newProfile.characters[id] || new Character(id);
                   return <tr key={index}>
                     <td><CharacterAvatar character={character} /><br />
@@ -77,6 +79,13 @@ export function finishModOptimization(result, settings) {
                       <h4>{target.name}:</h4>
                       <ul>
                         {messages.map((message, index) => <li key={index}>{message}</li>)}
+                      </ul>
+                      <ul className={'missed-goals'}>
+                        {missedGoals.map(([missedGoal, value], index) =>
+                          <li key={index}>
+                            {`Missed goal stat for ${missedGoal.stat}. Value of ${value} was not between ${missedGoal.minimum} and ${missedGoal.maximum}.`}
+                          </li>
+                        )}
                       </ul>
                     </td>
                   </tr>;

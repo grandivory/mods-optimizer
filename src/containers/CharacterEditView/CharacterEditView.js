@@ -270,7 +270,9 @@ class CharacterEditView extends PureComponent {
         type={'button'}
         onClick={() => {
           const selectedTargets = this.props.selectedCharacters.map(({ target }) => target);
-          if (selectedTargets.some(target => target.targetStats && target.targetStats.length)) {
+          if (selectedTargets.some(target => target.targetStats &&
+            target.targetStats.filter(targetStat => targetStat.optimizeForTarget).length)
+          ) {
             this.props.showModal('notice', this.optimizeWithTargetsModal());
           } else {
             this.props.optimizeMods();

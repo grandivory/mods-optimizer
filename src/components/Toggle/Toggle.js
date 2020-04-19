@@ -8,7 +8,7 @@ class Toggle extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    if (!this.props.leftValue || !this.props.rightValue) {
+    if ('undefined' === typeof this.props.leftValue || 'undefined' === typeof this.props.rightValue) {
       throw new Error('Both a left and right value must be specified for the toggle');
     }
 

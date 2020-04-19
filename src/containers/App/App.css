@@ -18,6 +18,10 @@
   color: #ccfffe !important;
 }
 
+.red-text {
+  color: red !important;
+}
+
 .box {
   display: inline-block !important;
   border: 1px solid dodgerblue !important;

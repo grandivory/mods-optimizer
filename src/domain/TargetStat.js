@@ -5,12 +5,20 @@ export default class TargetStat {
   maximum; // {TargetValue} The maximum value for the stat
   relativeCharacterId; // {String} A character to use as a basis for this target
 
-  constructor(stat, type, minimum, maximum, relativeCharacterId = null) {
+  /**
+   * {Boolean} Whether to run the optimization against this target (true) or
+   *           only report against it in results (false)
+   */
+  optimizeForTarget;
+
+
+  constructor(stat, type, minimum, maximum, relativeCharacterId = null, optimizeForTarget = true) {
     this.stat = stat;
     this.type = type;
     this.minimum = minimum;
     this.maximum = maximum;
     this.relativeCharacterId = relativeCharacterId;
+    this.optimizeForTarget = optimizeForTarget;
 
     Object.freeze(this);
   }

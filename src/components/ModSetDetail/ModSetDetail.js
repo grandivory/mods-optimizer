@@ -16,6 +16,7 @@ class ModSetDetail extends React.PureComponent {
     const target = this.props.target;
     const showAvatars = 'undefined' !== typeof this.props.showAvatars ? this.props.showAvatars : false;
     const useUpgrades = this.props.useUpgrades;
+    const missedGoals = this.props.missedGoals;
 
     const statSummary = modSet.getSummary(character, target, useUpgrades);
     const diffSummary = diffSet ? diffSet.getSummary(character, target, false) : null;
@@ -68,7 +69,8 @@ class ModSetDetail extends React.PureComponent {
         currentStat: originalStat,
         recommendedValue: statValue,
         recommendedStat: stat,
-        diffStat: diffStat
+        diffStat: diffStat,
+        missedGoal: missedGoals.find(([goal]) => goal.stat === stat.displayType)
       };
     });
 
@@ -92,8 +94,12 @@ class ModSetDetail extends React.PureComponent {
 
       const optimizationValue = stat.recommendedStat ? stat.recommendedStat.getOptimizationValue(character, target) : 0;
 
+      const missedMessage = stat.missedGoal
+        ? `Value must be between ${stat.missedGoal[0].minimum} and ${stat.missedGoal[0].maximum}`
+        : null;
+
       return <tr key={index}>
-        <td className={'stat-type'}>{stat.name}</td>
+        <td className={`stat-type ${missedMessage ? 'red-text' : ''}`} title={missedMessage}>{stat.name}</td>
         {stat.diffStat &&
           <td className={'stat-value'}>
             <span className={'total-value'}>
@@ -106,7 +112,7 @@ class ModSetDetail extends React.PureComponent {
           </td>
         }
         <td className={'stat-value'}>
-          <span className={'total-value'}>
+          <span className={`total-value ${missedMessage ? 'red-text' : ''}`} title={missedMessage}>
             {stat.recommendedValue % 1 ? stat.recommendedValue.toFixed(2) : stat.recommendedValue}
             {stat.displayModifier}{' '}
           </span>
