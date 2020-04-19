@@ -1253,7 +1253,7 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       target: target,
       assignedMods: assignedModSet.map(mod => mod.id),
       messages: assignmentMessages,
-      missedGoals: getMissedGoals(newModSetForCharacter, character, goalStats, target)
+      missedGoals: getMissedGoals(assignedModSet, character, goalStats, target)
     });
 
     return modSuggestions;
