@@ -1,4 +1,5 @@
 .character-edit {
+  flex-grow: 1;
   display: flex;
   overflow: hidden;
   text-align: center;
