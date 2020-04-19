@@ -35,6 +35,10 @@ class CharacterEditForm extends PureComponent {
     if (!props.targetStats) {
       props.populateTargetStats(props.target.targetStats);
     }
+
+    // This is an array to hold references to the `Toggle` element in the target stats form,
+    // so that the value of the element can be accessed directly
+    this.targetStatsShouldOptimize = [];
   }
 
   componentWillUnmount() {
@@ -288,6 +292,7 @@ class CharacterEditForm extends PureComponent {
     const targetStatRows = targetStats.map((targetStat, index) =>
       <div className={'form-row center'} key={targetStat.key}>
         <Toggle
+          ref={shouldOptimizeToggle => this.targetStatsShouldOptimize[index] = shouldOptimizeToggle}
           inputLabel={'Target Stat Type'}
           name={'optimize-for-target[]'}
           leftLabel={'Optimize'}
@@ -651,9 +656,7 @@ class CharacterEditForm extends PureComponent {
       const targetStatTypes = this.form['target-stat-type[]'] instanceof NodeList ?
         this.form['target-stat-type[]'] :
         [this.form['target-stat-type[]']];
-      const targetStatsShouldOptimize = this.form['optimize-for-target[]'] instanceof NodeList ?
-        this.form['optimize-for-target[]'] :
-        [this.form['optimize-for-target[]']];
+      const targetStatsShouldOptimize = this.targetStatsShouldOptimize;
 
       for (let i = 0; i < targetStatNames.length; i++) {
         const name = targetStatNames[i].value;
@@ -661,7 +664,7 @@ class CharacterEditForm extends PureComponent {
         const maximum = isNaN(targetStatMaxes[i].valueAsNumber) ? 100000000 : targetStatMaxes[i].valueAsNumber;
         const relativeCharacter = targetStatRelativeCharacters[i].value || null;
         const type = targetStatTypes[i].value || null;
-        const shouldOptimize = targetStatsShouldOptimize[i].value == 'true';
+        const shouldOptimize = targetStatsShouldOptimize[i].value;
 
         if (name) {
           if (minimum < maximum) {
