@@ -16,7 +16,7 @@ class ModSetDetail extends React.PureComponent {
     const target = this.props.target;
     const showAvatars = 'undefined' !== typeof this.props.showAvatars ? this.props.showAvatars : false;
     const useUpgrades = this.props.useUpgrades;
-    const missedGoals = this.props.missedGoals;
+    const missedGoals = this.props.missedGoals || [];
 
     const statSummary = modSet.getSummary(character, target, useUpgrades);
     const diffSummary = diffSet ? diffSet.getSummary(character, target, false) : null;

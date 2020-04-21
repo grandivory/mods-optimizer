@@ -315,11 +315,11 @@ class Review extends React.PureComponent {
         <div className={'character-id'}>
           <CharacterAvatar character={character} />
           <Arrow />
-          <h3 className={missedGoals.length ? 'red-text' : ''}>
+          <h3 className={missedGoals && missedGoals.length ? 'red-text' : ''}>
             {this.props.gameSettings[characterID] ? this.props.gameSettings[characterID].name : characterID}
           </h3>
           {target &&
-            <h4 className={missedGoals.length ? 'red-text' : ''}>{target.name}</h4>
+            <h4 className={missedGoals && missedGoals.length ? 'red-text' : ''}>{target.name}</h4>
           }
           <div className={'actions'}>
             {sortOptions.currentCharacter === this.props.filter.sort &&
