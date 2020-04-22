@@ -1192,7 +1192,7 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       );
 
     // Extract any target stats that are set as only goals
-    const goalStats = absoluteTarget.targetStats.filter(targetStat => !targetStat.optimizeForTarget)
+    const goalStats = absoluteTarget.targetStats.filter(targetStat => !targetStat.optimizeForTarget);
     const filteredAbsoluteTarget = {
       ...absoluteTarget,
       targetStats: absoluteTarget.targetStats.filter(targetStat => targetStat.optimizeForTarget)
@@ -1337,7 +1337,8 @@ function changeRelativeTargetStatsToAbsolute(modSuggestions, characters, lockedC
         maximum: maximum,
         stat: targetStat.stat,
         relativeCharacterId: null,
-        type: null
+        type: null,
+        optimizeForTarget: targetStat.optimizeForTarget
       };
     })
   };
