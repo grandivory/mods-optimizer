@@ -151,6 +151,9 @@ const characterSettings = {
   'CANDEROUSORDO': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
   ),
+  'CARADUNE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 0, 80, 100, 20, 0, 25, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'CARTHONASI': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
@@ -468,6 +471,9 @@ const characterSettings = {
         [new TargetStat('Speed', 170, 174)]
       )
     ]
+  ),
+  'GREEFKARGA': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 0, 100, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'GRIEVOUS': new CharacterSettings(
     [
@@ -907,6 +913,12 @@ const characterSettings = {
   'TEEBO': new CharacterSettings(
     [new OptimizationPlan('PvP', 25, 25, 100, 0, 50, 25, 0, 0, 0, 0, 0, 0, 0, true)],
     ['Teebotine', 'Murderbears']
+  ),
+  'THEMANDALORIAN': new CharacterSettings(
+    [
+      new OptimizationPlan('Relic 7', 0, 0, 100, 80, 0, 0, 20, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Non-relic', 0, 0, 100, 80, 0, 0, 10, 0, 20, 0, 0, 0, 0, true)
+    ]
   ),
   'TIEFIGHTERPILOT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
