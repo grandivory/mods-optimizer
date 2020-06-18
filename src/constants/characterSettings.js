@@ -574,6 +574,13 @@ const characterSettings = {
     [new OptimizationPlan('PvE', 40, 20, 100, 0, 50, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)],
     ['JKG']
   ),
+  'JEDIKNIGHTLUKE': new CharacterSettings(
+    [
+      new OptimizationPlan('Leader', 5, 5, 0, 100, 25, 0, 50, 0, 15, 0, 0, 0, 0, true),
+      new OptimizationPlan('Non-leader', 5, 5, 25, 100, 25, 0, 50, 0, 15, 0, 0, 0, 0, true)
+    ],
+    ['JKL']
+  ),
   'JEDIKNIGHTREVAN': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 0, 10, 0, 0, 0, 0, 0, true)],
     [],
