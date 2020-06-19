@@ -567,8 +567,8 @@ class Review extends React.PureComponent {
       <p>
         This will create a new mods profile in HotUtils using the recommendations listed here. After creating your
         profile, please log
-        into <a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener noreferrer'}>HotUtils</a>
-        to access your new profile.
+        into <a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener noreferrer'}>HotUtils</a> to
+        access your new profile.
       </p>
       <p>
         <strong>Use at your own risk!</strong> HotUtils functionality breaks the terms of service for Star Wars:
