@@ -31,18 +31,6 @@
   font-size: .8em;
 }
 
-.review-list .increase {
-  color: #60bd1b;
-}
-
-.review-list .increase::before {
-  content: '+';
-}
-
-.review-list .decrease {
-  color: #e64343;
-}
-
 .review-list h4 {
   text-align: center;
   margin-top: 0;

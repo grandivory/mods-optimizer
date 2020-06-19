@@ -22,6 +22,18 @@
   color: red !important;
 }
 
+.increase {
+  color: #60bd1b;
+}
+
+.increase::before {
+  content: '+';
+}
+
+.decrease {
+  color: #e64343;
+}
+
 .box {
   display: inline-block !important;
   border: 1px solid dodgerblue !important;
