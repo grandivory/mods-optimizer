@@ -1484,7 +1484,7 @@ function findBestModSetForCharacter(mods, character, target) {
 
 /**
  * Given a set of mods and a target stat, get all of the mod and set restriction combinations that will fit that target
- * @param usableMods {Array<Mod>}
+ * @param allMods {Array<Mod>}
  * @param character {Character}
  * @param target {OptimizationPlan}
  * @returns {Array<Array<Mod>,Object<String, Number>>} An array of potential mods that could be used to create a set
@@ -1494,7 +1494,7 @@ function findBestModSetForCharacter(mods, character, target) {
 // * Create a new function that will loop over each target stat
 // * At each iteration, run the equivalent of this function on every mod set from the previous iteration
 // * Then, filter out any that are empty
-function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
+function* getPotentialModsToSatisfyTargetStats(allMods, character, target) {
   const setRestrictions = target.setRestrictions;
   const targetStats = target.targetStats.slice(0);
   const statNames = targetStats.map(targetStat => targetStat.stat);
@@ -1507,14 +1507,19 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
   // {statName: value}
   const characterValues = getStatValuesForCharacter(character, statNames);
 
-  const [modValues, valuesBySlot] = collectModValuesBySlot(usableMods, statNames);
-
   // Determine the sets of values for each target stat that will satisfy it
   // {statName: {setCount: [{slot: slotValue}]}}
   const modConfigurationsByStat = {};
   const totalModSlotsOpen = 6 - Object.entries(setRestrictions).filter(([setName, setCount]) => -1 !== setCount).reduce(
     (filledSlots, [setName, setCount]) => filledSlots + setBonuses[setName].numberOfModsRequired * setCount, 0
   );
+
+  // Filter out any mods that don't meet primary or set restrictions. This can vastly speed up this process
+  const usableMods =
+    filterOutUnusableMods(allMods, target, totalModSlotsOpen, character.optimizerSettings.minimumModDots)
+
+  const [modValues, valuesBySlot] = collectModValuesBySlot(usableMods, statNames);
+
   targetStats.forEach(targetStat => {
     const setValue = setValues[targetStat.stat];
 
@@ -1552,6 +1557,29 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
       }
     }
   });
+
+  /**
+   * Given a set of mods, return only those mods that might be used with the current target. Filter out any mods
+   * that don't have the correct primary stat, don't have enough dots, or aren't in the right sets, if all slots are
+   * taken by the pre-selected sets
+   *
+   * @param mods {Array<Mod>}
+   * @param target {OptimizationPlan}
+   * @param modSlotsOpen {Integer}
+   * @returns {Array<Mod>}
+   */
+  function filterOutUnusableMods(mods, target, modSlotsOpen, minimumDots) {
+    const modsInSets = modSlotsOpen > 0 ?
+      mods :
+      mods.filter(mod => Object.keys(target.setRestrictions).includes(mod.set.name))
+
+    const modsWithPrimaries = modsInSets.filter(mod =>
+      !target.primaryStatRestrictions[mod.slot] ||
+      mod.primaryStat.type === target.primaryStatRestrictions[mod.slot]
+    )
+
+    return modsWithPrimaries.filter(mod => mod.pips >= minimumDots)
+  }
 
   /**
    * Iterate over groups of mods, breaking them into sub-groups that satisfy the target stats
@@ -1651,7 +1679,7 @@ function* getPotentialModsToSatisfyTargetStats(usableMods, character, target) {
     }
   }
 
-  yield* targetStatRecursor([usableMods, setRestrictions], targetStats, true);
+  yield* targetStatRecursor([allMods, setRestrictions], targetStats, true);
 }
 
 /**
