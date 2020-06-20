@@ -249,24 +249,31 @@ function fetchProfile(allyCode) {
 
 function fetchCharacterStats(characters = null) {
   if (null !== characters) {
-    const statCalculatorData = require('../../constants/statCalculatorData.json')
-    const eng_us = require('../../constants/statCalculatorEng_us.json')
-    swgohStatCalc.setGameData(statCalculatorData)
+    return fetch('https://api.mods-optimizer.swgoh.grandivory.com/stat-calc-data')
+      .catch(() => {
+        throw new Error('The game data used to calculate character stats is currently being rebuilt. ' +
+          'Please wait 60 seconds and try again')
+      })
+      .then(response => response.json())
+      .then(statCalculatorData => {
+        const eng_us = require('../../constants/statCalculatorEng_us.json');
+        swgohStatCalc.setGameData(statCalculatorData);
 
-    const characterData = Object.keys(characters).map(charID => ({
-      'defId': charID,
-      'rarity': characters[charID].stars,
-      'level': characters[charID].level,
-      'gear': characters[charID].gearLevel,
-      'equipped': characters[charID].gearPieces,
-      'relic': {
-        'currentTier': characters[charID].relicTier
-      }
-    }))
+        const characterData = Object.keys(characters).map(charID => ({
+          'defId': charID,
+          'rarity': characters[charID].stars,
+          'level': characters[charID].level,
+          'gear': characters[charID].gearLevel,
+          'equipped': characters[charID].gearPieces,
+          'relic': {
+            'currentTier': characters[charID].relicTier
+          }
+        }));
 
-    swgohStatCalc.calcRosterStats(characterData, { widhoutModCalc: true, language: eng_us })
+        swgohStatCalc.calcRosterStats(characterData, { widhoutModCalc: true, language: eng_us });
 
-    return Promise.resolve(characterData)
+        return characterData;
+      })
   } else {
     return Promise.resolve(null);
   }
