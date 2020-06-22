@@ -20,6 +20,12 @@ export function toggleHideSelectedCharacters(state, action) {
   });
 }
 
+export function toggleCharacterEditSortView(state, action) {
+  return Object.assign({}, state, {
+    characterEditSortView: !state.characterEditSortView
+  })
+}
+
 export function changeSetRestrictions(state, action) {
   return Object.assign({}, state, {
     setRestrictions: action.setRestrictions

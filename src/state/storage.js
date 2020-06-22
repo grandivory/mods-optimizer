@@ -20,6 +20,7 @@ export function saveState(state) {
     'allyCode',
     'characterFilter',
     'characterEditMode',
+    'characterEditSortView',
     'hideSelectedCharacters',
     'keepOldMods',
     'modsFilter',
@@ -45,6 +46,7 @@ export const defaultState = {
   allyCode: '',
   characterFilter: '',
   characterEditMode: 'basic',
+  characterEditSortView: false,
   characterTemplates: {},
   error: null,
   flashMessage: null,
@@ -148,6 +150,7 @@ export function deserializeState(state) {
   return Object.assign({}, defaultState, {
     allyCode: state.allyCode,
     characterEditMode: state.characterEditMode || defaultState.characterEditMode,
+    characterEditSortView: state.characterEditSortView || defaultState.characterEditSortView,
     characterFilter: state.characterFilter || defaultState.characterFilter,
     hideSelectedCharacters: state.hideSelectedCharacters || defaultState.hideSelectedCharacters,
     keepOldMods: state.keepOldMods,

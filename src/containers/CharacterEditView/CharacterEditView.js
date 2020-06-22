@@ -20,6 +20,7 @@ import {
   selectCharacter,
   toggleCharacterLock,
   toggleHideSelectedCharacters,
+  toggleCharacterEditSortView,
   unlockAllCharacters,
   unlockSelectedCharacters,
   unselectAllCharacters,
@@ -108,7 +109,9 @@ class CharacterEditView extends PureComponent {
   }
 
   render() {
-    return <div className={'character-edit'}>
+    const classes = this.props.sortView ? 'character-edit sort-view' : 'character-edit';
+
+    return <div className={classes}>
       <Sidebar content={[this.filterForm(), this.globalSettings(), this.sidebarActions()]} />
       <div className={'available-characters'}
         onDragEnter={CharacterEditView.availableCharactersDragEnter}
@@ -134,6 +137,9 @@ class CharacterEditView extends PureComponent {
             <button className={'small'} onClick={this.props.clearSelectedCharacters}>Clear</button>
             <button className={'small'} onClick={this.props.lockSelectedCharacters}>Lock All</button>
             <button className={'small'} onClick={this.props.unlockSelectedCharacters}>Unlock All</button>
+            <button className={'small'} onClick={this.props.toggleCharacterEditSortView}>
+              {this.props.sortView ? 'Normal' : 'Expand'} View
+            </button>
           </div>
         </h4>
         <h5>Character Templates <Help header={'Character Templates'}>{this.characterTemplatesHelp()}</Help></h5>
@@ -742,6 +748,7 @@ const mapStateToProps = (state) => {
     globalSettings: profile.globalSettings,
     characterFilter: state.characterFilter,
     hideSelectedCharacters: state.hideSelectedCharacters,
+    sortView: state.characterEditSortView,
     gameSettings: state.gameSettings,
     highlightedCharacters: availableCharacters.filter(characterFilter),
     availableCharacters: availableCharacters.filter(c => !characterFilter(c)),
@@ -758,6 +765,7 @@ const mapDispatchToProps = dispatch => ({
   showError: (error) => dispatch(showError(error)),
   changeCharacterFilter: (filter) => dispatch(changeCharacterFilter(filter)),
   toggleHideSelectedCharacters: () => dispatch(toggleHideSelectedCharacters()),
+  toggleCharacterEditSortView: () => dispatch(toggleCharacterEditSortView()),
   reviewOldAssignments: () => {
     dispatch(updateModListFilter({
       view: 'sets',

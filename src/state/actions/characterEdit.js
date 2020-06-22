@@ -12,6 +12,7 @@ const defaultTemplates = groupByKey(require('../../constants/characterTemplates.
 export const CHANGE_CHARACTER_EDIT_MODE = 'CHANGE_CHARACTER_EDIT_MODE';
 export const CHANGE_CHARACTER_FILTER = 'CHANGE_CHARACTER_FILTER';
 export const TOGGLE_HIDE_SELECTED_CHARACTERS = 'TOGGLE_HIDE_SELECTED_CHARACTERS';
+export const TOGGLE_CHARACTER_EDIT_SORT_VIEW = 'TOGGLE_CHARACTER_EDIT_SORT_VIEW';
 export const CHANGE_SET_RESTRICTIONS = 'CHANGE_SET_RESTRICTIONS';
 export const SELECT_SET_BONUS = 'SELECT_SET_BONUS';
 export const REMOVE_SET_BONUS = 'REMOVE_SET_BONUS';
@@ -423,6 +424,12 @@ export function changeCharacterFilter(newFilter) {
 export function toggleHideSelectedCharacters() {
   return {
     type: TOGGLE_HIDE_SELECTED_CHARACTERS
+  };
+}
+
+export function toggleCharacterEditSortView() {
+  return {
+    type: TOGGLE_CHARACTER_EDIT_SORT_VIEW
   };
 }
 

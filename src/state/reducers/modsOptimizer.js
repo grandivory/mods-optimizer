@@ -23,6 +23,7 @@ import {
   ADD_TARGET_STAT,
   REMOVE_TARGET_STAT,
   CHANGE_TARGET_STATS,
+  TOGGLE_CHARACTER_EDIT_SORT_VIEW,
 } from "../actions/characterEdit";
 import { TOGGLE_KEEP_OLD_MODS } from "../actions/data";
 import { CHANGE_MODS_FILTER } from "../actions/explore";
@@ -48,6 +49,7 @@ import {
   removeSetBonus,
   selectSetBonus,
   toggleHideSelectedCharacters,
+  toggleCharacterEditSortView,
   changeTargetStats,
   addTargetStat,
   removeTargetStat,
@@ -127,6 +129,8 @@ export default function modsOptimizer(state, action) {
       return saveState(changeCharacterFilter(state, action));
     case TOGGLE_HIDE_SELECTED_CHARACTERS:
       return saveState(toggleHideSelectedCharacters(state, action));
+    case TOGGLE_CHARACTER_EDIT_SORT_VIEW:
+      return saveState(toggleCharacterEditSortView(state, action));
     case CHANGE_SET_RESTRICTIONS:
       return changeSetRestrictions(state, action);
     case SELECT_SET_BONUS:
