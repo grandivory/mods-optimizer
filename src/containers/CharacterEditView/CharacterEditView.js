@@ -497,7 +497,7 @@ class CharacterEditView extends PureComponent {
     return <div>
       <h3>
         Select a character template. The targets used in this template will be
-        applied to any charcters you already have in your selected list.
+        applied to any characters you already have in your selected list.
       </h3>
       {this.templateSelectElement(select => templateSelection = select)}
       <div className={'actions'}>

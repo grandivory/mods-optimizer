@@ -209,7 +209,7 @@ class CharacterList extends PureComponent {
       </span>
       <span className={`icon level ${levelActive}`}
         onClick={() => this.props.toggleUpgradeMods(characterIndex)}
-        title={levelActive ? 'Level this charcter\'s mods to 15' : 'Do not level this character\'s mods to 15'} />
+        title={levelActive ? 'Level this character\'s mods to 15' : 'Do not level this character\'s mods to 15'} />
       <span className={`icon slice ${sliceActive}`}
         onClick={() => this.props.toggleSliceMods(character.baseID)}
         title={sliceActive ? 'Slice this character\'s mods to 6E' : 'Do not slice this character\'s mods to 6E'} />
