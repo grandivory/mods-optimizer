@@ -427,6 +427,11 @@ class CharacterEditView extends PureComponent {
         <span className={'purple'}>Note:</span> no matter what use case you select, your current
         arena team will always be placed at the top of the list.
       </p>
+      <p><span className={'blue'}>Provided by&nbsp;
+        <a href={'https://swgoh.spineless.net/'} target={'_blank'} rel={'noopener noreferrer'}>
+          https://swgoh.spineless.net/
+        </a>
+      </span></p>
       <hr />
       <form>
         <label htmlFor={'use-case'}>Select your use case:</label>
