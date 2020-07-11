@@ -67,7 +67,7 @@ export function populateDatabase(state) {
       db.saveProfiles(profiles, nothing, error =>
         dispatch(showFlash(
           'Storage Error',
-          'Error saving your profile: ' + error.message + ' Your progress is not saved.'
+          'Error saving your profile: ' + error.message
         ))
       );
       db.saveLastRuns(lastRuns, nothing, error =>
@@ -94,7 +94,6 @@ export function populateDatabase(state) {
         ))
       );
     }
-
   };
 }
 

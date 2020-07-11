@@ -424,7 +424,10 @@ class Database {
   saveCharacterTemplate(name, selectedCharacters, onsuccess = nothing, onerror = nothing) {
     const templateObject = {
       name: name,
-      selectedCharacters: selectedCharacters.map(({ id, target }) => ({ id: id, target: target.serialize() }))
+      selectedCharacters: selectedCharacters.map(({ id, target }) => ({
+        id: id,
+        target: 'undefined' !== typeof target.serialize ? target.serialize() : target
+      }))
     };
 
     const saveTemplateRequest = this.database.transaction(['characterTemplates'], 'readwrite')
@@ -456,7 +459,10 @@ class Database {
       const templateObject = {
         name: template.name,
         selectedCharacters:
-          template.selectedCharacters.map(({ id, target }) => ({ id: id, target: target.serialize() }))
+          template.selectedCharacters.map(({ id, target }) => ({
+            id: id,
+            target: 'undefined' !== typeof target.serialize ? target.serialize() : target
+          }))
       };
 
       const singleRequest = saveTemplatesRequest.objectStore('characterTemplates').put(templateObject);
