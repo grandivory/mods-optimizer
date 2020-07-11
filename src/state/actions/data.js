@@ -5,7 +5,7 @@ import swgohStatCalc from 'swgoh-stat-calc'
 import Mod from "../../domain/Mod";
 import { GameSettings, OptimizerSettings, PlayerValues } from "../../domain/CharacterDataClasses";
 import cleanAllyCode from "../../utils/cleanAllyCode";
-import { hideFlash, setIsBusy, showError, showFlash, hideModal } from "./app";
+import { hideFlash, setIsBusy, showError, showFlash, hideModal, updateProfile } from "./app";
 import getDatabase from "../storage/Database";
 import nothing from "../../utils/nothing";
 import PlayerProfile from "../../domain/PlayerProfile";
@@ -514,6 +514,45 @@ function showFetchResult(fetchData, errorMessages, usedHotUtils, usedSession) {
       dispatch(showError(statsErrorMessage));
     }
   }
+}
+
+export function fetchCharacterList(mode, overwrite, allyCode) {
+  return function (dispatch) {
+    dispatch(setIsBusy(true))
+
+    return post(
+      'https://api.mods-optimizer.swgoh.grandivory.com/characterlist',
+      {
+        allyCode: allyCode,
+        mode: mode
+      }
+    )
+      .then(characterList => dispatch(applyCharacterList(overwrite, characterList)))
+      .catch(error => {
+        dispatch(showError(error.message))
+      })
+      .finally(() => dispatch(setIsBusy(false)))
+  }
+}
+
+function applyCharacterList(overwrite, characterList) {
+  return updateProfile(profile => {
+    const startingList = overwrite ? [] : profile.selectedCharacters;
+    const startingCharacterIDs = startingList.map(selectedCharacter => selectedCharacter.id)
+    const charactersToApply = characterList.filter(characterID => !startingCharacterIDs.includes(characterID))
+
+    const newSelectedCharacters = startingList.concat(
+      charactersToApply.map(characterID => {
+        const character = profile.characters[characterID]
+
+        return character ?
+          { id: characterID, target: character.defaultTarget() } :
+          null
+      }).filter(x => null !== x)
+    )
+
+    return profile.withSelectedCharacters(newSelectedCharacters)
+  })
 }
 
 //***********************/

@@ -16,10 +16,6 @@
   max-width: initial;
 }
 
-.character-edit .selected-characters .character-list-actions {
-  display: inline-block;
-}
-
 .character-edit .available-characters {
   overflow-y: auto;
   flex-grow: 1;
@@ -211,6 +207,22 @@
   background-repeat: repeat-x;
   animation: Progress 1s linear infinite;
   transition: width .5s;
+}
+
+.modal.generate-character-list {
+  max-width: 40em;
+}
+
+.modal.generate-character-list form {
+  display: inline-block;
+}
+
+.modal.generate-character-list label {
+  display: block;
+}
+
+.modal.generate-character-list .toggle-wrapper {
+  margin-top: 1em;
 }
 
 @keyframes Progress {

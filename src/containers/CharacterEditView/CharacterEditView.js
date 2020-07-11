@@ -42,6 +42,7 @@ import FileInput from "../../components/FileInput/FileInput";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import Toggle from "../../components/Toggle/Toggle";
 import Help from "../../components/Help/Help"
+import { fetchCharacterList } from "../../state/actions/data";
 
 const defaultTemplates = require('../../constants/characterTemplates.json');
 
@@ -139,6 +140,12 @@ class CharacterEditView extends PureComponent {
             <button className={'small'} onClick={this.props.unlockSelectedCharacters}>Unlock All</button>
             <button className={'small'} onClick={this.props.toggleCharacterEditSortView}>
               {this.props.sortView ? 'Normal' : 'Expand'} View
+            </button>
+            <button
+              className={'small'}
+              onClick={() => this.props.showModal('generate-character-list', this.generateCharacterListModal())}
+            >
+              Auto-generate List
             </button>
           </div>
         </h4>
@@ -402,6 +409,52 @@ class CharacterEditView extends PureComponent {
       </p>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>OK</button>
+      </div>
+    </div>;
+  }
+
+  generateCharacterListModal() {
+    let useCase, overwrite;
+
+    return <div>
+      <h3 className={'gold'}>Auto-generate Character List</h3>
+      <p>
+        This utility will auto-generate a character list for you based on your current roster and selected use case.
+        This is intended to be an easy starting point, and is by no means the final say in how your characters should be
+        ordered or what targets should be chosen.
+      </p>
+      <hr />
+      <form>
+        <label htmlFor={'use-case'}>Select your use case:</label>
+        <select name={'use-case'} ref={(input) => useCase = input}>
+          <option value={''}>Grand Arena / Territory Wars</option>
+          <option value={1}>Light-side Geonosis TB</option>
+          <option value={2}>Dark-side Geonosis TB</option>
+        </select>
+        <Toggle
+          name={'overwrite'}
+          ref={(toggle) => overwrite = toggle}
+          inputLabel={'Overwrite existing list?'}
+          leftValue={false}
+          leftLabel={'Append'}
+          rightValue={true}
+          rightLabel={'Overwrite'}
+        />
+      </form>
+      <hr />
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
+        <button
+          type={'button'}
+          onClick={() => {
+            this.props.generateCharacterList(
+              useCase.value,
+              overwrite.value,
+              this.props.allyCode)
+          }}
+        >
+          Generate
+        </button>
       </div>
     </div>;
   }
@@ -744,6 +797,7 @@ const mapStateToProps = (state) => {
   };
 
   return {
+    allyCode: state.allyCode,
     mods: profile.mods,
     globalSettings: profile.globalSettings,
     characterFilter: state.characterFilter,
@@ -786,6 +840,10 @@ const mapDispatchToProps = dispatch => ({
   optimizeMods: () => dispatch(optimizeMods()),
   updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold)),
   updateForceCompleteModSets: (forceCompleteModSets) => dispatch(updateForceCompleteModSets(forceCompleteModSets)),
+  generateCharacterList: (mode, behavior, allyCode) => {
+    dispatch(fetchCharacterList(mode, behavior, allyCode));
+    dispatch(hideModal());
+  },
   saveTemplate: (name) => dispatch(saveTemplate(name)),
   saveTemplates: (templates) => dispatch(saveTemplates(templates)),
   appendTemplate: (templateName) => {

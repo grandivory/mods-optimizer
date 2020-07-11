@@ -43,7 +43,9 @@ class Toggle extends React.PureComponent {
   }
 
   render() {
-    return <div className={`toggle-wrapper ${this.props.className}`}>
+    const className = this.props.className ? `toggle-wrapper ${this.props.className}` : 'toggle-wrapper';
+
+    return <div className={className}>
       <div className={'toggle-label'}>{this.props.inputLabel}</div>
       <label>
         <input type={'checkbox'}
