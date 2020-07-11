@@ -15,7 +15,6 @@ import {
 import { deserializeState } from "../storage";
 import getDatabase from "../storage/Database";
 import nothing from "../../utils/nothing";
-import OptimizationPlan from "../../domain/OptimizationPlan";
 
 export const CHANGE_SECTION = 'CHANGE_SECTION';
 export const SHOW_MODAL = 'SHOW_MODAL';
