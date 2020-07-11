@@ -1,6 +1,8 @@
 // @flow
 
 import React from "react";
+import { hideModal, showModal } from "../../state/actions/app";
+import { deleteMods } from "../../state/actions/storage";
 import memoize from "memoize-one";
 import ModDetail from '../../components/ModDetail/ModDetail';
 import ModFilter from '../../components/ModFilter/ModFilter';
@@ -24,11 +26,37 @@ class ExploreView extends React.PureComponent {
       [
         <Sidebar key={'sidebar'} content={ExploreView.sidebar()} />,
         <div className='mods' key={'mods'}>
-          <h3>Showing {this.props.displayedMods.length} out of {this.props.modCount} mods.</h3>
+          <h3>
+            Showing {this.props.displayedMods.length} out of {this.props.modCount} mods.&nbsp;
+            <button className={'small red'} onClick={() => { this.props.showModal(this.deleteModsModal()) }}>
+              Delete All Displayed Mods
+            </button>
+          </h3>
           {modElements}
         </div>
       ]
     );
+  }
+
+  /**
+   * Render the "Are you sure?" modal for deleting all displayed mods
+   * @returns {*}
+   */
+  deleteModsModal() {
+    return <div>
+      <h2>Delete All Displayed Mods</h2>
+      <p>
+        This will remove all mods displayed under the current filter from the mods optimizer.<br />
+        Are you sure you want to delete all of these mods?
+      </p>
+      <div className={'actions'}>
+        <button type={'button'} onClick={() => { this.props.hideModal() }}>No</button>
+        <button type={'button'} onClick={() => { this.props.deleteMods(this.props.displayedMods) }} className={'red'}>
+          Yes, Delete Mods
+        </button>
+      </div>
+    </div >;
+
   }
 
   /**
@@ -227,6 +255,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = (dispatch) => ({
+  showModal: (content) => dispatch(showModal('', content)),
+  hideModal: () => dispatch(hideModal()),
+  deleteMods: (mods) => { dispatch(deleteMods(mods)); dispatch(hideModal()) }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExploreView);

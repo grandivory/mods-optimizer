@@ -3,7 +3,7 @@ import getDatabase from "../storage/Database";
 import { mapObject } from "../../utils/mapObject";
 import OptimizerRun from "../../domain/OptimizerRun";
 import nothing from "../../utils/nothing";
-import { showError, showFlash } from "./app";
+import { showError, showFlash, updateProfile } from "./app";
 import groupByKey from "../../utils/groupByKey";
 import Mod from '../../domain/Mod';
 import { fetchHotUtilsStatus } from './data';
@@ -435,6 +435,66 @@ export function replaceModsForProfiles(newProfiles) {
       ))
     );
   }
+}
+
+/**
+ * Remove a mod from a player's profile
+ * @param mod {Mod}
+ * @returns {Function}
+ */
+export function deleteMod(mod) {
+  return updateProfile(
+    profile => {
+      const oldMods = profile.mods;
+
+      return profile.withMods(oldMods.filter(oldMod => oldMod !== mod));
+    },
+    function (dispatch, getState) {
+      const profile = getState().profile;
+      const db = getDatabase();
+
+      db.deleteLastRun(
+        profile.allyCode,
+        nothing,
+        error => dispatch(showFlash(
+          'Storage Error',
+          'Error updating your saved results: ' +
+          error.message +
+          ' The optimizer may not recalculate correctly until you fetch data again'
+        ))
+      );
+    }
+  );
+}
+
+/**
+ * Remove a set of mods from a player's profile
+ * @param mods {Array<Mod>}
+ * @returns {Function}
+ */
+export function deleteMods(mods) {
+  return updateProfile(
+    profile => {
+      const oldMods = profile.mods;
+
+      return profile.withMods(oldMods.filter(oldMod => !mods.includes(oldMod)));
+    },
+    function (dispatch, getState) {
+      const profile = getState().profile;
+      const db = getDatabase();
+
+      db.deleteLastRun(
+        profile.allyCode,
+        nothing,
+        error => dispatch(showFlash(
+          'Storage Error',
+          'Error updating your saved results: ' +
+          error.message +
+          ' The optimizer may not recalculate correctly until you fetch data again'
+        ))
+      );
+    }
+  )
 }
 
 /**

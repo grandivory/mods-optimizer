@@ -1,9 +1,7 @@
 // @flow
 
-import { showFlash, updateProfile } from "./app";
+import { updateProfile } from "./app";
 import groupByKey from "../../utils/groupByKey";
-import getDatabase from "../storage/Database";
-import nothing from "../../utils/nothing";
 
 export const CHANGE_OPTIMIZER_VIEW = 'CHANGE_OPTIMIZER_VIEW';
 export const CHANGE_MOD_SET_FILTER = 'CHANGE_MOD_SET_FILTER';
@@ -139,36 +137,6 @@ export function reassignAllMods(modAssignments) {
 
     return profile.withMods(Object.values(Object.assign({}, modsById, modsUpdate)));
   })
-}
-
-/**
- * Remove a mod from a player's profile
- * @param mod {Mod}
- * @returns {Function}
- */
-export function deleteMod(mod) {
-  return updateProfile(
-    profile => {
-      const oldMods = profile.mods;
-
-      return profile.withMods(oldMods.filter(oldMod => oldMod !== mod));
-    },
-    function (dispatch, getState) {
-      const profile = getState().profile;
-      const db = getDatabase();
-
-      db.deleteLastRun(
-        profile.allyCode,
-        nothing,
-        error => dispatch(showFlash(
-          'Storage Error',
-          'Error updating your saved results: ' +
-          error.message +
-          ' The optimizer may not recalculate correctly until you fetch data again'
-        ))
-      );
-    }
-  );
 }
 
 /**
