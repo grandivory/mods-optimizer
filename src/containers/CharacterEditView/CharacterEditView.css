@@ -213,6 +213,10 @@
   max-width: 40em;
 }
 
+.modal.generate-character-list span.purple {
+  font-weight: bold;
+}
+
 .modal.generate-character-list form {
   display: inline-block;
 }

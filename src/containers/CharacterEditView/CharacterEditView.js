@@ -423,13 +423,17 @@ class CharacterEditView extends PureComponent {
         This is intended to be an easy starting point, and is by no means the final say in how your characters should be
         ordered or what targets should be chosen.
       </p>
+      <p>
+        <span className={'purple'}>Note:</span> no matter what use case you select, your current
+        arena team will always be placed at the top of the list.
+      </p>
       <hr />
       <form>
         <label htmlFor={'use-case'}>Select your use case:</label>
         <select name={'use-case'} ref={(input) => useCase = input}>
           <option value={''}>Grand Arena / Territory Wars</option>
-          <option value={1}>Light-side Geonosis TB</option>
-          <option value={2}>Dark-side Geonosis TB</option>
+          <option value={1}>Light-side Territory Battle</option>
+          <option value={2}>Dark-side Territory Battle</option>
         </select>
         <Toggle
           name={'overwrite'}
