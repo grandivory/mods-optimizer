@@ -6,6 +6,9 @@ import { CharacterSettings, DamageType } from "../domain/CharacterDataClasses";
 import TargetStat from "../domain/TargetStat";
 
 const characterSettings = {
+  'C3POCHEWBACCA': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 80, 10, 0, 50, 0, 25, 0, 0, 0, 0, true)]
+  ),
   'AAYLASECURA': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 75, 50, 0, 25, 0, 100, 0, 0, 0, 0, true),
