@@ -25,6 +25,9 @@ const characterSettings = {
     ],
     ['AA', 'Snackbar', 'ABC']
   ),
+  'ADMIRALPIETT': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 25, 15, 0, 20, 0, 10, 0, 0, 0, 0, true)]
+  ),
   'AHSOKATANO': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
@@ -452,6 +455,11 @@ const characterSettings = {
     ['GAT', 'Imperial Grancor Maneuver', 'Wampanader', 'ABC', 'Titans'],
     DamageType.special
   ),
+  'GRANDMASTERLUKE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 20, 100, 25, 15, 0, 0, 10, 0, 0, 0, 0, 0, true)],
+    ['GMLS', 'JMLS', 'GLLS'],
+    DamageType.special
+  ),
   'GRANDMASTERYODA': new CharacterSettings(
     [
       new OptimizationPlan('Speedy', 0, 0, 100, 50, 25, 0, 0, 80, 25, 0, 0, 0, 0, true),
@@ -675,6 +683,10 @@ const characterSettings = {
   'MISSIONVAO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 75, 0, 50, 0, 0, 0, 0, true)]
   ),
+  'MONMOTHMA': new CharacterSettings(
+    [new OptimizationPlan('Leader', 5, 5, 100, 0, 0, 25, 10, 0, 0, 0, 0, 0, 0, true)],
+    ['MM']
+  ),
   'MOTHERTALZIN': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 0, 50, 0, 0, 25, 10, 0, 0, 0, 0, true),
@@ -860,6 +872,11 @@ const characterSettings = {
   'SITHMARAUDER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
     ['SM']
+  ),
+  'SITHPALPATINE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 5, 100, 25, 0, 0, 0, 20, 10, 0, 0, 0, 0, true)],
+    ['SEE'],
+    DamageType.special
   ),
   'SITHTROOPER': new CharacterSettings(
     [
