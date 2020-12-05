@@ -535,6 +535,9 @@ const characterSettings = {
   'HUMANTHUG': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('Really?')]
   ),
+  'IG11': new CharacterSettings(
+    [new OptimizationPlan('Tanky', 25, 0, 50, 0, 0, 10, 5, 0, 5, 5, 5, 0, 0, true)]
+  ),
   'IG86SENTINELDROID': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
   ),
@@ -628,6 +631,11 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE')],
     ['Fisty', 'Fister']
   ),
+  'KUIIL': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 10, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    [],
+    DamageType.special
+  ),
   'KYLOREN': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
     ['Old Kylo', 'zylo', 'FO']
@@ -682,6 +690,9 @@ const characterSettings = {
   ),
   'MISSIONVAO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 75, 0, 50, 0, 0, 0, 0, true)]
+  ),
+  'MOFFGIDEONS1': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'MONMOTHMA': new CharacterSettings(
     [new OptimizationPlan('Leader', 5, 5, 100, 0, 0, 25, 10, 0, 0, 0, 0, 0, 0, true)],
