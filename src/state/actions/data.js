@@ -254,7 +254,13 @@ function fetchCharacterStats(characters = null) {
         throw new Error('The game data used to calculate character stats is currently being rebuilt. ' +
           'Please wait 60 seconds and try again')
       })
-      .then(response => response.json())
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          response.text().then(text => { throw new Error(text) })
+        }
+      })
       .then(statCalculatorData => {
         const eng_us = require('../../constants/statCalculatorEng_us.json');
         swgohStatCalc.setGameData(statCalculatorData);
