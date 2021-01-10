@@ -958,6 +958,9 @@ const characterSettings = {
       new OptimizationPlan('Non-relic', 0, 0, 100, 80, 0, 0, 10, 0, 20, 0, 0, 0, 0, true)
     ]
   ),
+  'THEMANDALORIANBESKARARMOR': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 5, 100, 0, 15, 0, 30, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'TIEFIGHTERPILOT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
     ['TFP', 'Auto Lightzader']
