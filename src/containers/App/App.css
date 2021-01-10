@@ -34,6 +34,10 @@
   color: #e64343;
 }
 
+.center {
+  text-align: center !important;
+}
+
 .box {
   display: inline-block !important;
   border: 1px solid dodgerblue !important;

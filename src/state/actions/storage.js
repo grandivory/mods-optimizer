@@ -555,9 +555,9 @@ export function setPlayerProfiles(profiles) {
   };
 }
 
-export function setHotUtilsSubscription(responseCode) {
+export function setHotUtilsSubscription(hasAccess) {
   return {
     type: SET_HOTUTILS_SUBSCRIPTION,
-    subscription: !!responseCode
+    subscription: !!hasAccess
   }
 }
