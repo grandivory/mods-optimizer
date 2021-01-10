@@ -489,7 +489,6 @@ const mapStateToProps = (state) => {
 
   if (state.profile) {
     appProps.profile = state.profile;
-    appProps.profile.hotUtilsSessionId = '4157ABCA-5DE5-4374-A8CD-6ED478F52334';
   }
 
   return appProps;
