@@ -500,6 +500,35 @@ function applyCharacterList(overwrite, characterList) {
 // HotUtils Integration */
 //***********************/
 
+export function setHotUtilsSessionId(allyCode, sessionId) {
+  return function (dispatch, getState) {
+    const state = getState();
+    const db = getDatabase();
+
+    db.getProfile(
+      allyCode,
+      profile => {
+        if (!profile) {
+          dispatch(showError(
+            'You\'ve attempted to link a HotUtils session ID to an ally code with no data. Please fetch data for that ally code and try again'
+          ))
+        } else {
+          const newProfile = profile.withHotUtilsSessionId(sessionId);
+          db.saveProfile(
+            newProfile,
+            () => dispatch(setProfile(newProfile)),
+            error => dispatch(showFlash(
+              'Storage Error',
+              'Error applying HotUtils session ID to your profile. Please try again.'
+            ))
+          )
+        }
+      },
+      error => dispatch(showError(error.message))
+    )
+  };
+}
+
 /**
  * Fetch a player profile from the API
  * @param allyCode {string} The ally code to request

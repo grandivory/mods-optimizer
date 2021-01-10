@@ -20,7 +20,7 @@ import {
   showError,
   showModal
 } from "../../state/actions/app";
-import { checkVersion, refreshPlayerData, toggleKeepOldMods } from "../../state/actions/data";
+import { checkVersion, refreshPlayerData, toggleKeepOldMods, setHotUtilsSessionId } from "../../state/actions/data";
 import FlashMessage from "../../components/Modal/FlashMessage";
 import { saveAs } from 'file-saver';
 import { exportDatabase, loadProfile } from "../../state/actions/storage";
@@ -35,10 +35,12 @@ class App extends PureComponent {
     const queryParams = new URLSearchParams(document.location.search);
 
     if (queryParams.has('allyCode')) {
-      if (queryParams.has('SessionID')) {
+      if (queryParams.has('SessionID') && queryParams.has('NoPull')) {
+        props.setHotUtilsSessionId(queryParams.get('allyCode'), queryParams.get('SessionID'));
+      } else if (queryParams.has('SessionID')) {
         props.refreshPlayerData(queryParams.get('allyCode'), true, true, queryParams.get('SessionID'), false);
-      } else {
-        props.refreshplayerData(queryParams.get('allyCode'), true, false, null);
+      } else if (!queryParams.has('NoPull')) {
+        props.refreshPlayerData(queryParams.get('allyCode'), true, false, null);
       }
     }
 
@@ -498,6 +500,7 @@ const mapDispatchToProps = dispatch => ({
   changeSection: newSection => dispatch(changeSection(newSection)),
   refreshPlayerData: (allyCode, keepOldMods, useHotUtils, sessionId, useSession = true) =>
     dispatch(refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId, useSession)),
+  setHotUtilsSessionId: (allyCode, sessionId) => dispatch(setHotUtilsSessionId(allyCode, sessionId)),
   checkVersion: () => dispatch(checkVersion()),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),
