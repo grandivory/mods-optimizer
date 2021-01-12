@@ -509,9 +509,8 @@ export function setHotUtilsSessionId(allyCode, sessionId) {
       allyCode,
       profile => {
         if (!profile) {
-          dispatch(showError(
-            'You\'ve attempted to link a HotUtils session ID to an ally code with no data. Please fetch data for that ally code and try again'
-          ))
+          // If there's no profile to put the Session ID into, then do a pull of data and pass in the session ID
+          dispatch(refreshPlayerData(allyCode, false, sessionId, false));
         } else {
           const newProfile = profile.withHotUtilsSessionId(sessionId);
           db.saveProfile(
