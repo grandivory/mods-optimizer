@@ -38,9 +38,9 @@ class App extends PureComponent {
       if (queryParams.has('SessionID') && queryParams.has('NoPull')) {
         props.setHotUtilsSessionId(queryParams.get('allyCode'), queryParams.get('SessionID'));
       } else if (queryParams.has('SessionID')) {
-        props.refreshPlayerData(queryParams.get('allyCode'), true, true, queryParams.get('SessionID'), false);
+        props.refreshPlayerData(queryParams.get('allyCode'), true, queryParams.get('SessionID'), false);
       } else if (!queryParams.has('NoPull')) {
-        props.refreshPlayerData(queryParams.get('allyCode'), true, false, null);
+        props.refreshPlayerData(queryParams.get('allyCode'), true, null);
       }
     }
 
@@ -146,7 +146,7 @@ class App extends PureComponent {
           <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodyInput = input}
             onKeyUp={(e) => {
               if (e.key === 'Enter') {
-                this.props.refreshPlayerData(e.target.value, this.props.keepOldMods, false, null);
+                this.props.refreshPlayerData(e.target.value, this.props.keepOldMods, null);
               }
               // Don't change the input if the user is trying to select something
               if (window.getSelection().toString() !== '') {
@@ -196,7 +196,6 @@ class App extends PureComponent {
               this.props.refreshPlayerData(
                 this.props.allyCode || allyCodyInput.value,
                 this.props.keepOldMods,
-                this.props.hotUtilsSubscription,
                 null
               );
             }}>
@@ -366,7 +365,7 @@ class App extends PureComponent {
         onKeyUp={(e) => {
           if (e.key === 'Enter') {
             this.props.hideModal();
-            this.props.refreshPlayerData(e.target.value, false, false, null);
+            this.props.refreshPlayerData(e.target.value, false, null);
           }
           // Don't change the input if the user is trying to select something
           if (window.getSelection().toString() !== '') {
@@ -385,7 +384,7 @@ class App extends PureComponent {
         <button type={'button'}
           onClick={() => {
             this.props.hideModal();
-            this.props.refreshPlayerData(allyCodeInput.value, false, false, null);
+            this.props.refreshPlayerData(allyCodeInput.value, false, null);
           }}>
           Fetch my data!
         </button>
@@ -439,8 +438,8 @@ class App extends PureComponent {
           this.props.refreshPlayerData(
             this.props.allyCode,
             this.props.keepOldMods,
-            true,
-            this.props.profile.hotUtilsSessionId
+            this.props.profile.hotUtilsSessionId,
+            true
           );
         }}>
           Fetch my data
@@ -498,8 +497,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   changeSection: newSection => dispatch(changeSection(newSection)),
-  refreshPlayerData: (allyCode, keepOldMods, useHotUtils, sessionId, useSession = true) =>
-    dispatch(refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId, useSession)),
+  refreshPlayerData: (allyCode, keepOldMods, sessionId, useSession = true) =>
+    dispatch(refreshPlayerData(allyCode, keepOldMods, sessionId, useSession)),
   setHotUtilsSessionId: (allyCode, sessionId) => dispatch(setHotUtilsSessionId(allyCode, sessionId)),
   checkVersion: () => dispatch(checkVersion()),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
