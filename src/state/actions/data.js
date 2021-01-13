@@ -538,9 +538,9 @@ function fetchProfile(allyCode, sessionId) {
     'https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2/',
     {
       'action': 'getprofile',
+      'sessionId': sessionId,
       'payload': {
         'allyCode': allyCode,
-        'sessionId': sessionId
       }
     }
   ).then(response => {
