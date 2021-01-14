@@ -550,8 +550,6 @@ function fetchProfile(allyCode, sessionId) {
 
     const playerProfile = response.mods.profiles[0];
 
-    console.dir(playerProfile);
-
     // Convert mods to the serialized format recognized by the optimizer
     const profileMods = playerProfile.mods.map(Mod.fromHotUtils);
 
