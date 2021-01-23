@@ -5,7 +5,7 @@ import swgohStatCalc from 'swgoh-stat-calc'
 import Mod from "../../domain/Mod";
 import { GameSettings, OptimizerSettings, PlayerValues } from "../../domain/CharacterDataClasses";
 import cleanAllyCode from "../../utils/cleanAllyCode";
-import { hideFlash, setIsBusy, showError, showFlash, hideModal, updateProfile } from "./app";
+import { hideFlash, setIsBusy, showError, showFlash, hideModal, showModal, updateProfile } from "./app";
 import getDatabase from "../storage/Database";
 import nothing from "../../utils/nothing";
 import PlayerProfile from "../../domain/PlayerProfile";
@@ -385,9 +385,6 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
  */
 function showFetchResult(fetchData, errorMessages, usedSession) {
   return function (dispatch) {
-    const lastUpdate = new Date(fetchData.profile.updated);
-    const nextUpdate = new Date(lastUpdate.getTime() + 60 * 60 * 1000); // plus one hour
-
     const fetchResults = [];
 
     if (errorMessages.length) {
@@ -501,8 +498,7 @@ function applyCharacterList(overwrite, characterList) {
 //***********************/
 
 export function setHotUtilsSessionId(allyCode, sessionId) {
-  return function (dispatch, getState) {
-    const state = getState();
+  return function (dispatch) {
     const db = getDatabase();
 
     db.getProfile(
@@ -630,34 +626,20 @@ export function createHotUtilsProfile(profile, sessionId) {
   }
 }
 
+var modMoveActive = false;
+
 export function moveModsWithHotUtils(profile, sessionId) {
   return function (dispatch) {
     dispatch(setIsBusy(true));
-    return fetch(
-      'https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2',
+    return post('https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2',
       {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          'action': 'movemods',
-          'sessionId': sessionId,
-          'payload': profile
-        }),
-        mode: "cors",
+        'action': 'movemods',
+        'sessionId': sessionId,
+        'payload': profile
       }
     )
       .then(response => {
-        if (response.status === 504) {
-          // In this particular case, a 504 doesn't mean a failure.
-          // Start polling the status to figure out when the mod move is complete.
-          return pollForModMoveStatus(profile.allyCode);
-        } else if (response.ok) {
-          return response.json();
-        } else {
-          return response.text().then(errorText => Promise.reject(new Error(errorText)))
-        }
-      })
-      .then(response => {
+        dispatch(setIsBusy(false));
         if (response.errorMessage) {
           dispatch(hideModal());
           dispatch(showError(response.errorMessage));
@@ -668,15 +650,22 @@ export function moveModsWithHotUtils(profile, sessionId) {
               dispatch(showError(response.responseMessage));
               break;
             default:
-              // This could be 1 or 2 depending on how the mod movement eventually completed.
-              dispatch(hideModal());
-              dispatch(reassignAllMods(profile.units.map(({ id, modIds }) =>
-                ({ id, assignedMods: modIds })
-              )));
-              dispatch(showFlash(
-                'Mods successfully moved',
-                'Your mods have been moved. You may log into Galaxy of Heroes to see your characters.'
-              ));
+              if (response.taskId === 0) {
+                dispatch(hideModal());
+                dispatch(showFlash(
+                  "No Action Taken",
+                  "There were no mods to move!"
+                ))
+              } else {
+                modMoveActive = true;
+                // Show the progress modal
+                dispatch(showModal(
+                  'mod-move-progress',
+                  modProgressModal(response.taskId, sessionId, 0, dispatch)
+                ));
+                // Start polling for udpates
+                return pollForModMoveStatus(response.taskId, sessionId, dispatch);
+              }
               break;
           }
         }
@@ -691,14 +680,15 @@ export function moveModsWithHotUtils(profile, sessionId) {
   }
 }
 
-function pollForModMoveStatus(allyCode) {
+function pollForModMoveStatus(taskId, sessionId, dispatch) {
   return new Promise((resolve, reject) => {
     post(
       'https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2',
       {
         'action': 'checkmovestatus',
+        'sessionId': sessionId,
         'payload': {
-          'allyCode': allyCode
+          'taskId': taskId
         }
       }
     ).then(response => {
@@ -709,21 +699,104 @@ function pollForModMoveStatus(allyCode) {
           case 0:
             reject(new Error(response.responseMessage));
             break;
-          case 1:
-            // If the move is still ongoing, then poll again after a few seconds.
-            setTimeout(
-              () => resolve(pollForModMoveStatus(allyCode)),
-              10000
-            );
-            break;
-          case 2:
-            resolve(response)
-            break;
           default:
-            reject(new Error('Unknown response from HotUtils'))
+            if (!response.running) {
+              modMoveActive = false;
+              const updatedMods = response.mods.profiles[0].mods.map(Mod.fromHotUtils);
+              dispatch(updateProfile(profile => profile.withMods(updatedMods)));
+
+              dispatch(hideModal());
+              if (response.progress.index === response.progress.count) {
+                dispatch(showFlash(
+                  'Mods successfully moved',
+                  'Your mods have been moved. You may log into Galaxy of Heroes to see your characters.'
+                ));
+              } else {
+                dispatch(showFlash(
+                  'Mod move cancelled',
+                  'Your mod move has been cancelled. ' + response.progress.index + ' characters have already been updated.'
+                ));
+              }
+            } else {
+              // Update the modal
+              if (modMoveActive) {
+                const progress = 100 * response.progress.index / response.progress.count;
+                dispatch(showModal(
+                  'mod-move-progress',
+                  modProgressModal(taskId, sessionId, progress, dispatch)
+                ))
+              }
+              // If the move is still ongoing, then poll again after a few seconds.
+              setTimeout(
+                () => resolve(pollForModMoveStatus(taskId, sessionId, dispatch)),
+                2000
+              );
+            }
             break;
         }
       }
     }).catch(error => reject(error))
   });
+}
+
+function cancelModMove(taskId, sessionId) {
+  return function (dispatch) {
+    return post(
+      'https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2',
+      {
+        'action': 'cancelmove',
+        'sessionId': sessionId,
+        'payload': {
+          'taskId': taskId
+        }
+      }
+    )
+      .then(response => {
+        if (response.errorMessage) {
+          dispatch(hideModal());
+          dispatch(showError(response.errorMessage));
+        } else {
+          switch (response.responseCode) {
+            case 0:
+              dispatch(hideModal());
+              dispatch(showError(response.responseMessage));
+              break;
+            default:
+              modMoveActive = false;
+              dispatch(showModal(
+                'cancel-mod-move',
+                modCancelModal()
+              ))
+            // Any other functionality around cancellation will happen on the next response from `pollForModMoveStatus`
+          }
+        }
+      })
+      .catch(error => {
+        dispatch(showError(error.message));
+      })
+  }
+}
+
+function modProgressModal(taskId, sessionId, progress, dispatch) {
+  return <div>
+    <h3>Moving Your Mods...</h3>
+    <div className={'progress'}>
+      <span className={'progress-bar'} id={'progress-bar'} style={{ width: `${progress}%` }} />
+    </div>
+    <div className={'actions'}>
+      <button type={'button'} className={'red'} onClick={() => dispatch(cancelModMove(taskId, sessionId))}>Cancel</button>
+    </div>
+  </div>;
+}
+
+function modCancelModal() {
+  return <div>
+    <h3>Moving Your Mods...</h3>
+    <div className={'canceling'}>
+      <p><strong className={'red-text'}>Cancelling...</strong></p>
+    </div>
+    <div className={'actions'}>
+      <button type={'button'} className={'red'} disabled={true}>Cancel</button>
+    </div>
+  </div>;
 }
