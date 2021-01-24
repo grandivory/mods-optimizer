@@ -67,7 +67,7 @@ class App extends PureComponent {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     // Once we get a profile, check to see if the previous version is such that we should show the change log
-    if ((this.props.previousVersion < '1.7') && (!prevProps.profile && this.props.profile)) {
+    if ((this.props.previousVersion < '1.8') && (!prevProps.profile && this.props.profile)) {
       this.props.showModal('changelog-modal', this.changeLogModal());
     }
   }
@@ -309,21 +309,15 @@ class App extends PureComponent {
    */
   changeLogModal() {
     return <div>
-      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.7!</h2>
+      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.8!</h2>
       <h3>Here's a short summary of the changes included in this version:</h3>
       <ul>
         <li>
-          Added the ability to use percent-based relative target stats. Relative targets can now be set using either
-          absolute differences (+/-) or percents.
-        </li>
-        <li>
-          Added several new character templates.
-        </li>
-        <li>
-          Added direct integration with HotUtils! Now, any subscriber to HotUtils will automatically get all of their
-          mods pulled up-to-date with every fetch. Anyone who gets a session link from the HotUtils bot or site can also
-          use their HotUtils session to fetch unequipped mods, create a mod profile, or even move their mods directly
-          in-game!
+          Updated the integration with <a href={'https://www.hotutils.com'} target={'_blank'} rel={'noopener noreferrer'}>HotUtils</a> to version 2! This brings some great advantages to both HotUtils
+          subscribers and non-subscribers. ALL players can now fetch their mod
+          data <strong>as often as they'd like</strong>, with no cooldown between fetches! A HotUtils subscription is
+          still required to fetch unequipped mods. A progress bar is now also shown when using HotUtils to move your
+          mods in-game, and that move can be cancelled at any time!
         </li>
       </ul>
       <h3>Happy Modding!</h3>
