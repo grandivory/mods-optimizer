@@ -157,7 +157,7 @@ class Review extends React.PureComponent {
       .filter(({ id }) => this.props.characters[id].playerValues.level >= 50)
       .map(({ id, assignedMods, target }) => ({
         id: id,
-        assignedMods: assignedMods,
+        modIds: assignedMods,
         target: target.name
       }));
 
@@ -165,14 +165,11 @@ class Review extends React.PureComponent {
       .filter(([id]) => this.props.characters[id].optimizerSettings.isLocked)
       .map(([id, mods]) => ({
         id: id,
-        assignedMods: mods.map(({ id }) => id),
+        modIds: mods.map(({ id }) => id),
         target: 'locked'
       }));
 
-    return {
-      'allyCode': this.props.allyCode,
-      'modAssignments': assignedMods.concat(lockedMods)
-    };
+    return assignedMods.concat(lockedMods);
   }
 
   render() {
@@ -546,17 +543,23 @@ class Review extends React.PureComponent {
   }
 
   hotUtilsCreateProfileModal() {
+    let categoryInput;
     let profileNameInput;
     let error;
 
-    const checkNameAndCreateProfile = function (name) {
-      if ('' === name) {
-        error.textContent = 'You must provide a name for your profile';
+    const checkNameAndCreateProfile = function () {
+      if ('' === categoryInput.value || '' === profileNameInput.value) {
+        error.textContent = 'You must provide a category and name for your profile';
       } else {
         error.textContent = '';
 
-        const profile = this.generateHotUtilsProfile();
-        profile.profileName = profileNameInput.value;
+        const profile = {
+          set: {
+            category: categoryInput.value,
+            name: profileNameInput.value,
+            units: this.generateHotUtilsProfile()
+          }
+        }
 
         this.props.createHotUtilsProfile(profile, this.props.hotUtilsSessionId);
       }
@@ -576,25 +579,44 @@ class Review extends React.PureComponent {
         HotUtils.
       </p>
       <hr />
-      <label htmlFor={'profileName'}>
+      <p className={'center'}>
         Please enter a name for your new profile.
         Please note that using the same name as an existing profile will cause it to be overwritten.
-      </label>
-      <br />
-      <input
-        type={'text'}
-        name={'profileName'}
-        ref={input => profileNameInput = input}
-        onKeyUp={(e) => {
-          if (e.key === 'Enter') {
-            checkNameAndCreateProfile(e.target.value);
-          }
-        }}
-      />
+      </p>
+      <div className={'form-row'}>
+        <label htmlFor={'categoryName'}>Category:</label>
+        <input
+          id={'categoryName'}
+          type={'text'}
+          name={'categoryName'}
+          defaultValue={'Grandivory'}
+          ref={input => categoryInput = input}
+          onKeyUp={(e) => {
+            if (e.key === 'Enter') {
+              checkNameAndCreateProfile();
+            }
+          }}
+        />
+      </div>
+      <div className={'form-row'}>
+
+        <label htmlFor={'profileName'}>Profile Name:</label>
+        <input
+          id={'profileName'}
+          type={'text'}
+          name={'profileName'}
+          ref={input => profileNameInput = input}
+          onKeyUp={(e) => {
+            if (e.key === 'Enter') {
+              checkNameAndCreateProfile();
+            }
+          }}
+        />
+      </div>
       <p className={'error'} ref={field => error = field}></p>
       <div className={'actions'}>
         <button type={'button'} className={'red'} onClick={this.props.hideModal}>Cancel</button>
-        <button type={'button'} onClick={() => checkNameAndCreateProfile(profileNameInput.value)}>
+        <button type={'button'} onClick={() => checkNameAndCreateProfile()}>
           Create Profile
         </button>
       </div>
@@ -628,7 +650,9 @@ class Review extends React.PureComponent {
       <div className={'actions'}>
         <button type={'button'} className={'red'} onClick={this.props.hideModal}>Cancel</button>
         <button type={'button'} onClick={() => {
-          const profile = this.generateHotUtilsProfile();
+          const profile = {
+            units: this.generateHotUtilsProfile()
+          };
 
           this.props.moveModsWithHotUtils(profile, this.props.hotUtilsSessionId);
         }}>

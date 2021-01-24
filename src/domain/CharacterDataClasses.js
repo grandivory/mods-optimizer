@@ -228,6 +228,19 @@ class PlayerValues {
     );
   }
 
+  static fromHotUtils(valuesJson) {
+    return new PlayerValues(
+      valuesJson.level,
+      valuesJson.rarity,
+      valuesJson.gearLevel,
+      valuesJson.equipment,
+      valuesJson.power,
+      null,
+      null,
+      valuesJson.relicTier
+    );
+  }
+
   static deserialize(valuesJson) {
     if (valuesJson) {
       return new PlayerValues(

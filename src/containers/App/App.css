@@ -34,6 +34,10 @@
   color: #e64343;
 }
 
+.center {
+  text-align: center !important;
+}
+
 .box {
   display: inline-block !important;
   border: 1px solid dodgerblue !important;
@@ -361,6 +365,27 @@ nav button.active {
 .modal .fetch-results {
   max-width: 40em;
 }
+
+.modal .progress {
+  height: 1em;
+  width: 17em;
+  margin: .5em auto;
+  border-radius: .5em;
+  border: 1px solid limegreen;
+  padding: 0;
+  overflow: hidden;
+}
+
+.modal .progress .progress-bar {
+  display: block;
+  height: 100%;
+  background-image: repeating-linear-gradient(-45deg, #8fff3a, #46801a 1em, #8fff3a 2em);
+  background-size: 2.828em 1em;
+  background-repeat: repeat-x;
+  animation: Progress 1s linear infinite;
+  transition: width .5s;
+}
+
 
 strong {
   font-weight: bold;

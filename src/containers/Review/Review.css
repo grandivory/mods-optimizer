@@ -146,14 +146,34 @@ pre.summary {
   text-align: left;
 }
 
-.modal.hotutils-modal input {
-  font-size: 1.2em;
-  width: 30em;
+.modal.hotutils-modal .form-row {
   margin: 1em 0;
 }
 
+.modal.hotutils-modal label {
+  display: inline-block;
+  margin-right: .5em;
+  width: 10em;
+  text-align: right;
+}
+
+.modal.hotutils-modal input {
+  font-size: 1.2em;
+}
+
 .modal.hotutils-modal p.error {
-  margin-top: -1em;
   visibility: visible;
   text-align: center;
+}
+
+.modal.mod-move-progress h3 {
+  color: #a35ef9;
+}
+
+.modal.cancel-mod-move .canceling {
+  height: 1em;
+  width: 17em;
+  text-align: center;
+  margin: .5em auto;
+  padding: 0;
 }

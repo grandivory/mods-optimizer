@@ -20,7 +20,7 @@ import {
   showError,
   showModal
 } from "../../state/actions/app";
-import { checkVersion, refreshPlayerData, toggleKeepOldMods } from "../../state/actions/data";
+import { checkVersion, refreshPlayerData, toggleKeepOldMods, setHotUtilsSessionId } from "../../state/actions/data";
 import FlashMessage from "../../components/Modal/FlashMessage";
 import { saveAs } from 'file-saver';
 import { exportDatabase, loadProfile } from "../../state/actions/storage";
@@ -35,10 +35,12 @@ class App extends PureComponent {
     const queryParams = new URLSearchParams(document.location.search);
 
     if (queryParams.has('allyCode')) {
-      if (queryParams.has('SessionID')) {
-        props.refreshPlayerData(queryParams.get('allyCode'), true, true, queryParams.get('SessionID'), false);
-      } else {
-        props.refreshplayerData(queryParams.get('allyCode'), true, false, null);
+      if (queryParams.has('SessionID') && queryParams.has('NoPull')) {
+        props.setHotUtilsSessionId(queryParams.get('allyCode'), queryParams.get('SessionID'));
+      } else if (queryParams.has('SessionID')) {
+        props.refreshPlayerData(queryParams.get('allyCode'), true, queryParams.get('SessionID'), false);
+      } else if (!queryParams.has('NoPull')) {
+        props.refreshPlayerData(queryParams.get('allyCode'), true, null);
       }
     }
 
@@ -65,7 +67,7 @@ class App extends PureComponent {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     // Once we get a profile, check to see if the previous version is such that we should show the change log
-    if ((this.props.previousVersion < '1.7') && (!prevProps.profile && this.props.profile)) {
+    if ((this.props.previousVersion < '1.8') && (!prevProps.profile && this.props.profile)) {
       this.props.showModal('changelog-modal', this.changeLogModal());
     }
   }
@@ -144,7 +146,7 @@ class App extends PureComponent {
           <input id={'ally-code'} type={'text'} inputMode={'numeric'} size={12} ref={input => allyCodyInput = input}
             onKeyUp={(e) => {
               if (e.key === 'Enter') {
-                this.props.refreshPlayerData(e.target.value, this.props.keepOldMods, false, null);
+                this.props.refreshPlayerData(e.target.value, this.props.keepOldMods, null);
               }
               // Don't change the input if the user is trying to select something
               if (window.getSelection().toString() !== '') {
@@ -194,7 +196,6 @@ class App extends PureComponent {
               this.props.refreshPlayerData(
                 this.props.allyCode || allyCodyInput.value,
                 this.props.keepOldMods,
-                this.props.hotUtilsSubscription,
                 null
               );
             }}>
@@ -308,21 +309,15 @@ class App extends PureComponent {
    */
   changeLogModal() {
     return <div>
-      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.7!</h2>
+      <h2 className={'gold'}>Grandivory's Mods Optimizer has updated to version 1.8!</h2>
       <h3>Here's a short summary of the changes included in this version:</h3>
       <ul>
         <li>
-          Added the ability to use percent-based relative target stats. Relative targets can now be set using either
-          absolute differences (+/-) or percents.
-        </li>
-        <li>
-          Added several new character templates.
-        </li>
-        <li>
-          Added direct integration with HotUtils! Now, any subscriber to HotUtils will automatically get all of their
-          mods pulled up-to-date with every fetch. Anyone who gets a session link from the HotUtils bot or site can also
-          use their HotUtils session to fetch unequipped mods, create a mod profile, or even move their mods directly
-          in-game!
+          Updated the integration with <a href={'https://www.hotutils.com'} target={'_blank'} rel={'noopener noreferrer'}>HotUtils</a> to version 2! This brings some great advantages to both HotUtils
+          subscribers and non-subscribers. ALL players can now fetch their mod
+          data <strong>as often as they'd like</strong>, with no cooldown between fetches! A HotUtils subscription is
+          still required to fetch unequipped mods. A progress bar is now also shown when using HotUtils to move your
+          mods in-game, and that move can be cancelled at any time!
         </li>
       </ul>
       <h3>Happy Modding!</h3>
@@ -364,7 +359,7 @@ class App extends PureComponent {
         onKeyUp={(e) => {
           if (e.key === 'Enter') {
             this.props.hideModal();
-            this.props.refreshPlayerData(e.target.value, false, false, null);
+            this.props.refreshPlayerData(e.target.value, false, null);
           }
           // Don't change the input if the user is trying to select something
           if (window.getSelection().toString() !== '') {
@@ -383,7 +378,7 @@ class App extends PureComponent {
         <button type={'button'}
           onClick={() => {
             this.props.hideModal();
-            this.props.refreshPlayerData(allyCodeInput.value, false, false, null);
+            this.props.refreshPlayerData(allyCodeInput.value, false, null);
           }}>
           Fetch my data!
         </button>
@@ -437,8 +432,8 @@ class App extends PureComponent {
           this.props.refreshPlayerData(
             this.props.allyCode,
             this.props.keepOldMods,
-            true,
-            this.props.profile.hotUtilsSessionId
+            this.props.profile.hotUtilsSessionId,
+            true
           );
         }}>
           Fetch my data
@@ -496,8 +491,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   changeSection: newSection => dispatch(changeSection(newSection)),
-  refreshPlayerData: (allyCode, keepOldMods, useHotUtils, sessionId, useSession = true) =>
-    dispatch(refreshPlayerData(allyCode, keepOldMods, useHotUtils, sessionId, useSession)),
+  refreshPlayerData: (allyCode, keepOldMods, sessionId, useSession = true) =>
+    dispatch(refreshPlayerData(allyCode, keepOldMods, sessionId, useSession)),
+  setHotUtilsSessionId: (allyCode, sessionId) => dispatch(setHotUtilsSessionId(allyCode, sessionId)),
   checkVersion: () => dispatch(checkVersion()),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),
