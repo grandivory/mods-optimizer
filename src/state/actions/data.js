@@ -226,7 +226,7 @@ function fetchCharacterStats(characters = null) {
           'rarity': characters[charID].stars,
           'level': characters[charID].level,
           'gear': characters[charID].gearLevel,
-          'equipped': characters[charID].gearPieces,
+          'equipped': characters[charID].gearPieces.map(id => ({ 'equipmentId': id })),
           'relic': {
             'currentTier': characters[charID].relicTier
           }
