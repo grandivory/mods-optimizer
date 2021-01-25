@@ -541,7 +541,7 @@ function fetchProfile(allyCode, sessionId) {
     }
   ).then(response => {
     if (response.errorMessage) {
-      throw new Error(response.ErrorMessage);
+      throw new Error(response.errorMessage);
     }
 
     const playerProfile = response.mods.profiles[0];
