@@ -15,6 +15,7 @@ import {
 import { deserializeState } from "../storage";
 import getDatabase from "../storage/Database";
 import nothing from "../../utils/nothing";
+import groupByKey from "../../utils/groupByKey";
 
 export const CHANGE_SECTION = 'CHANGE_SECTION';
 export const SHOW_MODAL = 'SHOW_MODAL';
@@ -106,8 +107,32 @@ export function restoreProgress(progressData) {
       if (!stateObj.version && stateObj.profiles && !stateObj.gameSettings) {
         dispatch(replaceModsForProfiles(stateObj.profiles));
       } else if (stateObj.version > '1.4' && stateObj.version !== 'develop') {
+        // Get all of the current profiles from the database - if any have HotUtils session IDs, we'll keep those,
+        // overwriting anything stored in the file
+        const db = getDatabase();
+        db.getProfiles(
+          profiles => {
+            const profileByAllyCode = groupByKey(profiles, profile => profile.allyCode);
+
+            const updatedProfiles = stateObj.profiles.map(profile => {
+              const oldProfile = profileByAllyCode[profile.allyCode];
+
+              return {
+                ...profile,
+                hotUtilsSessionId: oldProfile ? oldProfile.hotUtilsSessionId : null
+              }
+            });
+
+            dispatch(saveProfiles(updatedProfiles, stateObj.allyCode));
+          },
+          error =>
+            // On error, just save the profiles directly from the file
+            dispatch(saveProfiles(stateObj.profiles, stateObj.allyCode))
+        );
+
+
+
         dispatch(saveGameSettings(stateObj.gameSettings));
-        dispatch(saveProfiles(stateObj.profiles, stateObj.allyCode));
         dispatch(saveLastRuns(stateObj.lastRuns));
         if (stateObj.characterTemplates) {
           dispatch(saveTemplates(stateObj.characterTemplates))

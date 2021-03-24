@@ -161,7 +161,7 @@
   margin: 0 0 .5em;
 }
 
-.modal select {
+.modal div.dropdown {
   margin-bottom: 1em;
 }
 

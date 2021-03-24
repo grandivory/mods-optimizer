@@ -83,12 +83,14 @@ class CharacterEditForm extends PureComponent {
 
     const slotToPrimaryRestriction = slot =>
       <div key={`mod-block-${slot}`} className={'mod-block'}>
-        <select name={`${slot}-primary`} id={`${slot}-primary`}
-          defaultValue={this.props.target.primaryStatRestrictions[slot]}>
-          <option value={''}>Any</option>
-          {this.props[`${slot}Primaries`].map(
-            primary => <option key={primary} value={primary}>{primary}</option>)}
-        </select>
+        <div className={'dropdown'}>
+          <select name={`${slot}-primary`} id={`${slot}-primary`}
+            defaultValue={this.props.target.primaryStatRestrictions[slot]}>
+            <option value={''}>Any</option>
+            {this.props[`${slot}Primaries`].map(
+              primary => <option key={primary} value={primary}>{primary}</option>)}
+          </select>
+        </div>
         <div className={`mod-image mod-image-${slot}`} />
       </div>;
 
@@ -111,9 +113,11 @@ class CharacterEditForm extends PureComponent {
         <div className={'form-row center'}>
           <label htmlFor='mod-dots' id={'mod-dots-label'}>
             Use only mods with at least&nbsp;
-            <select name={'mod-dots'} id={'mod-dots'} defaultValue={character.optimizerSettings.minimumModDots}>
-              {[1, 2, 3, 4, 5, 6].map(dots => <option key={dots} value={dots}>{dots}</option>)}
-            </select>
+            <span className={'dropdown'}>
+              <select name={'mod-dots'} id={'mod-dots'} defaultValue={character.optimizerSettings.minimumModDots}>
+                {[1, 2, 3, 4, 5, 6].map(dots => <option key={dots} value={dots}>{dots}</option>)}
+              </select>
+            </span>
             &nbsp;dot(s)
           </label>
         </div>
@@ -303,10 +307,12 @@ class CharacterEditForm extends PureComponent {
           value={targetStat.target.optimizeForTarget}
         />
         <button type={'button'} className={'red small'} onClick={() => this.props.removeTargetStat(index)}>-</button>
-        <select name={'target-stat-name[]'} defaultValue={targetStat.target.stat}>
-          <option value={''}>No Target</option>
-          {possibleTargetStats.map(stat => <option key={stat} value={stat}>{stat}</option>)}
-        </select>
+        <span className={'dropdown'}>
+          <select name={'target-stat-name[]'} defaultValue={targetStat.target.stat}>
+            <option value={''}>No Target</option>
+            {possibleTargetStats.map(stat => <option key={stat} value={stat}>{stat}</option>)}
+          </select>
+        </span>
         &nbsp;must be between&nbsp;
         <input
           type={'number'}
@@ -321,17 +327,21 @@ class CharacterEditForm extends PureComponent {
           defaultValue={targetStat.target.maximum} />
         <br />
         compared to&nbsp;
-        <select name={'target-stat-relative-character[]'} defaultValue={targetStat.target.relativeCharacterId || ''}>
-          <option value={''}>No one</option>
-          {gameSettings.map(
-            gs => <option key={gs.baseID} value={gs.baseID}>{gs.getDisplayName()}</option>
-          )}
-        </select>
+        <span className={'dropdown'}>
+          <select name={'target-stat-relative-character[]'} defaultValue={targetStat.target.relativeCharacterId || ''}>
+            <option value={''}>No one</option>
+            {gameSettings.map(
+              gs => <option key={gs.baseID} value={gs.baseID}>{gs.getDisplayName()}</option>
+            )}
+          </select>
+        </span>
         &nbsp;using&nbsp;
-        <select name={'target-stat-type[]'} defaultValue={targetStat.target.type || '+'}>
-          <option value='+'>+/-</option>
-          <option value='%'>%</option>
-        </select>
+        <span className={'dropdown'}>
+          <select name={'target-stat-type[]'} defaultValue={targetStat.target.type || '+'}>
+            <option value='+'>+/-</option>
+            <option value='%'>%</option>
+          </select>
+        </span>
       </div>
     );
 

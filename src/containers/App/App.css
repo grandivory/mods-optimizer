@@ -38,6 +38,10 @@
   text-align: center !important;
 }
 
+.left {
+  text-align: left !important;
+}
+
 .box {
   display: inline-block !important;
   border: 1px solid dodgerblue !important;

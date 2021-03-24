@@ -55,6 +55,9 @@ const characterSettings = {
   'ARCTROOPER501ST': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 80, 25, 0, 0, 100, 0, 10, 0, 0, 0, 0, true)],
   ),
+  'ARMORER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, true)],
+  ),
   'ASAJVENTRESS': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 10, 10, 20, 0, 0, 0, 0, true),
@@ -257,6 +260,9 @@ const characterSettings = {
       new OptimizationPlan('hSTR Phase 3', 50, 0, 75, 0, 15, 0, 5, 0, 0, 0, 0, 0, 0, true)
     ],
     ['NS', 'hSTR NS']
+  ),
+  'DARKTROOPER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 10, 50, 0, 0, 5, 60, 0, 0, 2.5, 2.5, 0, 0, true)]
   ),
   'DARTHMALAK': new CharacterSettings(
     [new OptimizationPlan('PvP', 15, 25, 100, 10, 10, 0, 10, 0, 10, 0, 0, 0, 0, true)]

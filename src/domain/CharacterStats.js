@@ -30,7 +30,10 @@ class CharacterStats {
     armor,
     specDmg,
     specCritRating,
-    resistance
+    resistance,
+    critDmg,
+    critAvoid,
+    accuracy
   ) {
     // General stats
     this.health = health;
@@ -38,6 +41,9 @@ class CharacterStats {
     this.speed = speed;
     this.potency = potency * 100;
     this.tenacity = tenacity * 100;
+    this.critDmg = critDmg * 100;
+    this.critAvoid = critAvoid / 24;
+    this.accuracy = accuracy / 12;
 
     // Physical stats
     this.physDmg = physDmg;
@@ -52,11 +58,6 @@ class CharacterStats {
     // Derived stats
     this.physCritChance = physCritRating / 24 + 10;
     this.specCritChance = specCritRating / 24 + 10;
-
-    // Constant stats
-    this.critDmg = 150;
-    this.accuracy = 0;
-    this.critAvoid = 0;
   }
 
   /**
@@ -104,7 +105,10 @@ class CharacterStats {
       this.armor + that.armor,
       this.specDmg + that.specDmg,
       this.specCritRating + that.specCritRating,
-      this.resistance + that.resistance
+      this.resistance + that.resistance,
+      (this.critDmg + that.critDmg) / 100,
+      (this.critAvoid + that.critAvoid) * 24,
+      (this.accuracy + that.accuracy) * 12
     )
   }
 
@@ -125,7 +129,10 @@ class CharacterStats {
         baseStatsJson.armor,
         baseStatsJson.specDmg,
         baseStatsJson.specCritRating,
-        baseStatsJson.resistance
+        baseStatsJson.resistance,
+        baseStatsJson.critDmg / 100,
+        baseStatsJson.critAvoid * 24,
+        baseStatsJson.accuracy * 12
       );
     } else {
       return null;
@@ -133,9 +140,9 @@ class CharacterStats {
   }
 }
 
-const NullCharacterStats = new CharacterStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+const NullCharacterStats = new CharacterStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 Object.freeze(NullCharacterStats);
 
 export default CharacterStats;
 
-export {NullCharacterStats};
+export { NullCharacterStats };

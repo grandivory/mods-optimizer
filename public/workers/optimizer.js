@@ -800,8 +800,8 @@ function getStatValueForCharacterWithMods(modSet, character, stat, target) {
       "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
     );
   }
-  if (stat === "Health+Protection")
-  {
+
+  if (stat === "Health+Protection") {
     const healthProperty = statTypeMap["Health"][0];
     const protProperty = statTypeMap["Protection"][0];
     const baseValue = character.playerValues.equippedStats[healthProperty] + character.playerValues.equippedStats[protProperty];
@@ -813,8 +813,7 @@ function getStatValueForCharacterWithMods(modSet, character, stat, target) {
       setStat.displayType === "Health" || setStat.displayType === "Protection" ? setValueSum + setStat.value : setValueSum
         , 0);
     return baseValue + setValue; 
-  }
-  else{
+  } else{
     const statProperty = statTypeMap[stat][0];
     const baseValue = character.playerValues.equippedStats[statProperty];
 
@@ -824,7 +823,15 @@ function getStatValueForCharacterWithMods(modSet, character, stat, target) {
       // Check to see if the stat is the target stat. If it is, add its value to the total.
       setStat.displayType === stat ? setValueSum + setStat.value : setValueSum
         , 0);
-    return baseValue + setValue;
+    let returnValue = baseValue + setValue;
+
+    // Change target stat to a percentage for Armor and Resistance
+    // so Reo'Ris shuts up about it in the Discord.
+    if (['armor', 'resistance'].includes(statProperty)) {
+      returnValue = 100 * returnValue / (character.playerValues.level * 7.5 + returnValue);
+    }
+
+    return returnValue;
   }
 }
 
