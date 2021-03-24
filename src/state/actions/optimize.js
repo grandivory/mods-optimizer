@@ -83,7 +83,7 @@ export function finishModOptimization(result, settings) {
                       <ul className={'missed-goals'}>
                         {missedGoals.map(([missedGoal, value], index) =>
                           <li key={index}>
-                            {`Missed goal stat for ${missedGoal.stat}. Value of ${value} was not between ${missedGoal.minimum} and ${missedGoal.maximum}.`}
+                            {`Missed goal stat for ${missedGoal.stat}. Value of ${value % 1 ? value.toFixed(2) : value} was not between ${missedGoal.minimum} and ${missedGoal.maximum}.`}
                           </li>
                         )}
                       </ul>
