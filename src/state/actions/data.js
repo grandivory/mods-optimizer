@@ -257,7 +257,6 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
         const characterStats = fetchData.characterStats.reduce(
           (characters, unit) => {
             const stats = unit.stats;
-if (unit.defId ==='JEDIKNIGHTLUKE') {console.log(stats);}
             const baseStats = stats.base ?
               new CharacterStats(
                 stats.base['Health'] || 0,
