@@ -68,6 +68,11 @@
   display: inline-block;
 }
 
+.target-level-options .breakable-group .mod-block .dropdown {
+  margin: 0;
+  margin-bottom: 1em;
+}
+
 .target-level-options .group h4 {
   margin-bottom: .5em;
 }

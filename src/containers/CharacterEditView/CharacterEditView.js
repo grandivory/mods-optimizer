@@ -435,11 +435,13 @@ class CharacterEditView extends PureComponent {
       <hr />
       <form>
         <label htmlFor={'use-case'}>Select your use case:</label>
-        <select name={'use-case'} ref={(input) => useCase = input}>
-          <option value={''}>Grand Arena / Territory Wars</option>
-          <option value={1}>Light-side Territory Battle</option>
-          <option value={2}>Dark-side Territory Battle</option>
-        </select>
+        <div className={'dropdown'}>
+          <select name={'use-case'} ref={(input) => useCase = input}>
+            <option value={''}>Grand Arena / Territory Wars</option>
+            <option value={1}>Light-side Territory Battle</option>
+            <option value={2}>Dark-side Territory Battle</option>
+          </select>
+        </div>
         <Toggle
           name={'overwrite'}
           ref={(toggle) => overwrite = toggle}
@@ -595,12 +597,14 @@ class CharacterEditView extends PureComponent {
     const defaultTemplateOptions = defaultTemplateNames
       .map((name, index) => <option key={`default-${index}`} value={name}>{name}</option>);
 
-    return <select ref={refFunction}>
-      {userTemplateOptions}
-      {userTemplateOptions.length &&
-        <option disabled={true} value={''}>------------------------------------------------</option>}
-      {defaultTemplateOptions}
-    </select>;
+    return <div className={'dropdown'}>
+      <select ref={refFunction}>
+        {userTemplateOptions}
+        {userTemplateOptions.length &&
+          <option disabled={true} value={''}>------------------------------------------------</option>}
+        {defaultTemplateOptions}
+      </select>
+    </div>;
   }
 
   exportTemplateModal() {
@@ -610,9 +614,11 @@ class CharacterEditView extends PureComponent {
 
     return <div>
       <h3>Please select a character template to export</h3>
-      <select ref={select => templateNameInput = select}>
-        {templateOptions}
-      </select>
+      <div className={'dropdown'}>
+        <select ref={select => templateNameInput = select}>
+          {templateOptions}
+        </select>
+      </div>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'}
@@ -658,9 +664,11 @@ class CharacterEditView extends PureComponent {
 
     return <div>
       <h3>Please select a character template to delete</h3>
-      <select ref={select => templateNameInput = select}>
-        {templateOptions}
-      </select>
+      <div className={'dropdown'}>
+        <select ref={select => templateNameInput = select}>
+          {templateOptions}
+        </select>
+      </div>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'} className={'red'}
