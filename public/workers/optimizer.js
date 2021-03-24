@@ -709,7 +709,6 @@ function modSetSatisfiesCharacterRestrictions(modSet, character, target) {
  * @param target {OptimizationPlan}
  */
 function getMissedGoals(modSet, character, goalStats, target) {
-  console.log("goalstats", goalStats);
   const missedStats = goalStats.map(goalStat => {
     const characterValue = getStatValueForCharacterWithMods(modSet, character, goalStat.stat, target);
 
