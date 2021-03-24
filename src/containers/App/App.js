@@ -461,8 +461,8 @@ class App extends PureComponent {
         Galaxy of Heroes. You assume all risk in using this tool. Grandivory's Mods Optimizer is not associated with
         HotUtils.
       </p>
-      <p><a href={'https://www.hotutils.app/'} target={'_blank'} rel={'noopener noreferrer'}>
-        https://www.hotutils.app/
+      <p><a href={'https://www.hotutils.com/'} target={'_blank'} rel={'noopener noreferrer'}>
+        https://www.hotutils.com/
       </a></p>
       <p><img className={'fit'} src={'/img/hotsauce512.png'} alt={'hotsauce'} /></p>
     </div>;
