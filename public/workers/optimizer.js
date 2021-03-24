@@ -806,17 +806,19 @@ function getStatValueForCharacterWithMods(modSet, character, stat, target) {
   const setStats = getFlatStatsFromModSet(modSet, character, target);
 
   const setValue = setStats.reduce((setValueSum, setStat) =>
+
     // Check to see if the stat is the target stat. If it is, add its value to the total.
     setStat.displayType === stat ? setValueSum + setStat.value : setValueSum
     , 0);
 
-    let returnValue = baseValue + setValue;
+  let returnValue = baseValue + setValue;
 
-    // Change target stat to a percentage for Armor and Resistance
-    // so Reo'Ris shuts up about it in the Discord.
-    if (['armor', 'resistance'].includes(statProperty)) {
-      returnValue = 100 * returnValue / (character.playerValues.level * 7.5 + returnValue);
-    }
+  // Change target stat to a percentage for Armor and Resistance
+  // so Reo'Ris shuts up about it in the Discord.
+  if (['armor', 'resistance'].includes(statProperty)) {
+    returnValue = 100 * returnValue / (character.playerValues.level * 7.5 + returnValue);
+  }
+
   return returnValue;
 }
 
