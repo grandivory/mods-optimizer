@@ -272,6 +272,7 @@ class CharacterEditForm extends PureComponent {
     const possibleTargetStats = [
       'Health',
       'Protection',
+      'Health+Protection',
       'Speed',
       'Critical Damage',
       'Potency',
