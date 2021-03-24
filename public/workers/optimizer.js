@@ -795,22 +795,37 @@ function modSetFulfillsTargetStatRestriction(modSet, character, target) {
  * @param target {OptimizationPlan}
  */
 function getStatValueForCharacterWithMods(modSet, character, stat, target) {
-  if (statTypeMap[stat].length > 1) {
+  if (statTypeMap[stat]?.length > 1) {
     throw new Error(
       "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
     );
   }
-  const statProperty = statTypeMap[stat][0];
-  const baseValue = character.playerValues.equippedStats[statProperty];
+  if (stat === "Health+Protection")
+  {
+    const healthProperty = statTypeMap["Health"][0];
+    const protProperty = statTypeMap["Protection"][0];
+    const baseValue = character.playerValues.equippedStats[healthProperty] + character.playerValues.equippedStats[protProperty];
 
-  const setStats = getFlatStatsFromModSet(modSet, character, target);
+    const setStats = getFlatStatsFromModSet(modSet, character, target);
+  
+    const setValue = setStats.reduce((setValueSum, setStat) =>
+      // Check to see if the stat is health or protection. If it is, add its value to the total.
+      setStat.displayType === "Health" || setStat.displayType === "Protection" ? setValueSum + setStat.value : setValueSum
+        , 0);
+    return baseValue + setValue; 
+  }
+  else{
+    const statProperty = statTypeMap[stat][0];
+    const baseValue = character.playerValues.equippedStats[statProperty];
 
-  const setValue = setStats.reduce((setValueSum, setStat) =>
-    // Check to see if the stat is the target stat. If it is, add its value to the total.
-    setStat.displayType === stat ? setValueSum + setStat.value : setValueSum
-    , 0);
-
-  return baseValue + setValue;
+    const setStats = getFlatStatsFromModSet(modSet, character, target);
+  
+    const setValue = setStats.reduce((setValueSum, setStat) =>
+      // Check to see if the stat is the target stat. If it is, add its value to the total.
+      setStat.displayType === stat ? setValueSum + setStat.value : setValueSum
+        , 0);
+    return baseValue + setValue;
+  }
 }
 
 /**
@@ -1693,14 +1708,22 @@ function getStatValuesForCharacter(character, stats) {
   const characterValues = {};
   stats.forEach(stat => {
     const characterStatProperties = statTypeMap[stat];
-    if (1 < characterStatProperties.length) {
+    if (1 < characterStatProperties?.length) {
       throw new Error(
         "Trying to set an ambiguous target stat. Offense, Crit Chance, etc. need to be broken into physical or special."
       );
     }
-
-    characterValues[stat] =
-      character.playerValues.equippedStats[characterStatProperties[0]] || 0;
+    if (stat === "Health+Protection")
+    {
+      throw new Error(
+        "Cannot optimize Health+Protection. Use as Report Only."
+      );
+    }
+    else
+    {
+      characterValues[stat] =
+        character.playerValues.equippedStats[characterStatProperties[0]] || 0;
+    }
   })
 
   return characterValues;
