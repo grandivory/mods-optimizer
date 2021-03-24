@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import RangeInput from "../../components/RangeInput/RangeInput";
-import React, { PureComponent } from "react";
+import React from "react";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import Toggle from "../../components/Toggle/Toggle";
 import OptimizationPlan from "../../domain/OptimizationPlan";
@@ -26,7 +26,7 @@ import setBonuses from "../../constants/setbonuses";
 import TargetStat from "../../domain/TargetStat";
 import characterSettings from "../../constants/characterSettings";
 
-class CharacterEditForm extends PureComponent {
+class CharacterEditForm extends React.Component {
   constructor(props) {
     super(props);
     if (!props.setRestrictions) {
@@ -305,29 +305,39 @@ class CharacterEditForm extends PureComponent {
           rightLabel={'Report Only'}
           rightValue={false}
           value={targetStat.target.optimizeForTarget}
+          disabled={targetStat.target.stat === 'Health+Protection'}
         />
         <button type={'button'} className={'red small'} onClick={() => this.props.removeTargetStat(index)}>-</button>
         <span className={'dropdown'}>
-          <select name={'target-stat-name[]'} defaultValue={targetStat.target.stat}>
+          <select name={'target-stat-name[]'} defaultValue={targetStat.target.stat}
+            onChange={event => {
+              if (event.target.value === 'Health+Protection') {
+                this.targetStatsShouldOptimize[index].updateValue(false);
+                this.targetStatsShouldOptimize[index].disable();
+              } else {
+                this.targetStatsShouldOptimize[index].enable();
+              }
+            }}
+          >
             <option value={''}>No Target</option>
             {possibleTargetStats.map(stat => <option key={stat} value={stat}>{stat}</option>)}
           </select>
         </span>
-        &nbsp;must be between&nbsp;
-        <input
+      &nbsp; must be between &nbsp;
+    <input
           type={'number'}
           step={'any'}
           name={'target-stat-min[]'}
           defaultValue={targetStat.target.minimum} />
-        &nbsp;and&nbsp;
+      &nbsp; and &nbsp;
         <input
           type={'number'}
           step={'any'}
           name={'target-stat-max[]'}
           defaultValue={targetStat.target.maximum} />
         <br />
-        compared to&nbsp;
-        <span className={'dropdown'}>
+    compared to &nbsp;
+    <span className={'dropdown'}>
           <select name={'target-stat-relative-character[]'} defaultValue={targetStat.target.relativeCharacterId || ''}>
             <option value={''}>No one</option>
             {gameSettings.map(
@@ -335,14 +345,14 @@ class CharacterEditForm extends PureComponent {
             )}
           </select>
         </span>
-        &nbsp;using&nbsp;
-        <span className={'dropdown'}>
+      &nbsp; using &nbsp;
+    <span className={'dropdown'}>
           <select name={'target-stat-type[]'} defaultValue={targetStat.target.type || '+'}>
             <option value='+'>+/-</option>
             <option value='%'>%</option>
           </select>
         </span>
-      </div>
+      </div >
     );
 
     return <div>

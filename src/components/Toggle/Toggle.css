@@ -17,6 +17,10 @@ div.toggle-wrapper label {
   margin: 0;
 }
 
+div.toggle-wrapper.disabled label {
+  opacity: .6;
+}
+
 .toggle-left-value,
 .toggle-right-value {
   cursor: pointer;
