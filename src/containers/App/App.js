@@ -234,6 +234,10 @@ class App extends PureComponent {
               this.props.exportDatabase(progressData => {
                 progressData.version = this.props.version;
                 progressData.allyCode = this.props.allyCode;
+
+                // Remove the HotUtils session ID from the output
+                progressData.profiles.forEach(profile => delete profile.hotUtilsSessionId)
+
                 const progressDataSerialized = JSON.stringify(progressData);
                 const userData = new Blob([progressDataSerialized], { type: 'application/json;charset=utf-8' });
                 saveAs(userData, `modsOptimizer-${(new Date()).toISOString().slice(0, 10)}.json`);
