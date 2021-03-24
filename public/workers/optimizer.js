@@ -709,6 +709,7 @@ function modSetSatisfiesCharacterRestrictions(modSet, character, target) {
  * @param target {OptimizationPlan}
  */
 function getMissedGoals(modSet, character, goalStats, target) {
+  console.log("goalstats", goalStats);
   const missedStats = goalStats.map(goalStat => {
     const characterValue = getStatValueForCharacterWithMods(modSet, character, goalStat.stat, target);
 
@@ -810,7 +811,14 @@ function getStatValueForCharacterWithMods(modSet, character, stat, target) {
     setStat.displayType === stat ? setValueSum + setStat.value : setValueSum
     , 0);
 
-  return baseValue + setValue;
+    let returnValue = baseValue + setValue;
+
+    // Change target stat to a percentage for Armor and Resistance
+    // so Reo'Ris shuts up about it in the Discord.
+    if (['armor', 'resistance'].includes(statProperty)) {
+      returnValue = 100 * returnValue / (character.playerValues.level * 7.5 + returnValue);
+    }
+  return returnValue;
 }
 
 /**
