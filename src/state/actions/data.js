@@ -232,7 +232,7 @@ function fetchCharacterStats(characters = null) {
           }
         }));
 
-        swgohStatCalc.calcRosterStats(characterData, { widhoutModCalc: true, language: eng_us });
+        swgohStatCalc.calcRosterStats(characterData, { withoutModCalc: true, language: eng_us });
 
         return characterData;
       })
@@ -257,7 +257,6 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
         const characterStats = fetchData.characterStats.reduce(
           (characters, unit) => {
             const stats = unit.stats;
-
             const baseStats = stats.base ?
               new CharacterStats(
                 stats.base['Health'] || 0,
@@ -270,7 +269,10 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
                 stats.base['Armor'] || 0,
                 stats.base['Special Damage'] || 0,
                 stats.base['Special Critical Chance'] || 0,
-                stats.base['Resistance'] || 0
+                stats.base['Resistance'] || 0,
+                stats.base['Critical Damage'] || 0,
+                stats.base['Physical Critical Avoidance'] || 0,
+                stats.base['Physical Accuracy'] || 0
               ) :
               NullCharacterStats;
 
@@ -288,7 +290,10 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
                 stats.gear['Armor'] || 0,
                 stats.gear['Special Damage'] || 0,
                 stats.gear['Special Critical Chance'] || 0,
-                stats.gear['Resistance'] || 0
+                stats.gear['Resistance'] || 0,
+                stats.gear['Critical Damage'] || 0,
+                stats.gear['Physical Critical Avoidance'] || 0,
+                stats.gear['Physical Accuracy'] || 0
               );
               equippedStats = baseStats.plus(gearStats);
             }
