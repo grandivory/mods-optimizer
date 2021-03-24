@@ -806,7 +806,6 @@ function getStatValueForCharacterWithMods(modSet, character, stat, target) {
   const setStats = getFlatStatsFromModSet(modSet, character, target);
 
   const setValue = setStats.reduce((setValueSum, setStat) =>
-
     // Check to see if the stat is the target stat. If it is, add its value to the total.
     setStat.displayType === stat ? setValueSum + setStat.value : setValueSum
     , 0);

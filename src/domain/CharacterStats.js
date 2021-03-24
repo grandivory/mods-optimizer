@@ -58,7 +58,6 @@ class CharacterStats {
     // Derived stats
     this.physCritChance = physCritRating / 24 + 10;
     this.specCritChance = specCritRating / 24 + 10;
-
   }
 
   /**
@@ -146,4 +145,4 @@ Object.freeze(NullCharacterStats);
 
 export default CharacterStats;
 
-export {NullCharacterStats};
+export { NullCharacterStats };

@@ -15,7 +15,7 @@ import characterSettings from "../../constants/characterSettings";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import groupByKey from "../../utils/groupByKey";
 import { addPlayerProfile, setGameSettings, setProfile, setHotUtilsSubscription } from "./storage";
-import { changeOptimizerView, reassignAllMods } from "./review";
+import { changeOptimizerView } from "./review";
 import CharacterStats, { NullCharacterStats } from "../../domain/CharacterStats";
 
 export const TOGGLE_KEEP_OLD_MODS = 'TOGGLE_KEEP_OLD_MODS';
