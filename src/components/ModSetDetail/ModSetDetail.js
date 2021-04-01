@@ -38,6 +38,7 @@ class ModSetDetail extends React.PureComponent {
 
       let originalStat = diffSummary[stat.displayType];
       let originalStatValue = diffStat ? character.playerValues.equippedStats[statProperty] + originalStat.value : null;
+      const optimizationValue = stat.getOptimizationValue(character, target);
 
       if (['armor', 'resistance'].includes(statProperty)) {
         // Convert armor and resistance to percent stats
@@ -69,6 +70,7 @@ class ModSetDetail extends React.PureComponent {
         currentStat: originalStat,
         recommendedValue: statValue,
         recommendedStat: stat,
+        optimizationValue: optimizationValue,
         diffStat: diffStat,
         missedGoal: missedGoals.find(([goal]) => goal.stat === stat.displayType)
       };
@@ -91,8 +93,6 @@ class ModSetDetail extends React.PureComponent {
           }
         </tr>;
       }
-
-      const optimizationValue = stat.recommendedStat ? stat.recommendedStat.getOptimizationValue(character, target) : 0;
 
       const missedMessage = stat.missedGoal
         ? `Value must be between ${stat.missedGoal[0].minimum} and ${stat.missedGoal[0].maximum}`
@@ -121,8 +121,8 @@ class ModSetDetail extends React.PureComponent {
           }
         </td>
         <td className={'optimizer-value ' +
-          (optimizationValue > 0 ? 'increase' : optimizationValue < 0 ? 'decrease' : '')}>
-          {optimizationValue.toFixed(2)}
+          (stat.optimizationValue > 0 ? 'increase' : stat.optimizationValue < 0 ? 'decrease' : '')}>
+          {(stat.optimizationValue || 0).toFixed(2)}
         </td>
         {stat.diffStat &&
           <td className={'stat-diff' +
