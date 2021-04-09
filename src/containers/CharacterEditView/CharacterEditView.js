@@ -736,7 +736,7 @@ class CharacterEditView extends PureComponent {
       <p>Do you want to continue?</p>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
-        <button type={'button'} onClick={() => this.props.optimizeMods()}>Optimize!</button>
+        <button type={'button'} onClick={() => { this.props.hideModal(); this.props.optimizeMods(); }}>Optimize!</button>
       </div>
     </div>;
   }

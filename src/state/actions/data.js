@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import swgohStatCalc from 'swgoh-stat-calc'
 import Mod from "../../domain/Mod";
 import { GameSettings, OptimizerSettings, PlayerValues } from "../../domain/CharacterDataClasses";
 import cleanAllyCode from "../../utils/cleanAllyCode";
@@ -16,7 +15,6 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 import groupByKey from "../../utils/groupByKey";
 import { addPlayerProfile, setGameSettings, setProfile, setHotUtilsSubscription } from "./storage";
 import { changeOptimizerView } from "./review";
-import CharacterStats, { NullCharacterStats } from "../../domain/CharacterStats";
 
 export const TOGGLE_KEEP_OLD_MODS = 'TOGGLE_KEEP_OLD_MODS';
 
@@ -132,9 +130,6 @@ export function refreshPlayerData(allyCode, keepOldMods, sessionId, useSession =
         data.profile = profile;
         return profile.characters;
       })
-      // Fetch stats for all of the player's characters
-      .then(profileCharacters => fetchCharacterStats(profileCharacters))
-      .then(characterStats => data.characterStats = characterStats)
       // Process all of the data that's been collected
       .then(() => {
         const db = getDatabase();
@@ -179,7 +174,7 @@ export function refreshPlayerData(allyCode, keepOldMods, sessionId, useSession =
 }
 
 /**
- * Fetch base character data from the API
+ * Fetch base character data from the swgoh.gg API
  * @returns {Promise<Array | string[]>}
  */
 function fetchCharacters() {
@@ -203,44 +198,6 @@ function fetchCharacters() {
     });
 }
 
-function fetchCharacterStats(characters = null) {
-  if (null !== characters) {
-    return fetch('https://api.mods-optimizer.swgoh.grandivory.com/stat-calc-data')
-      .catch(() => {
-        throw new Error('The game data used to calculate character stats is currently being rebuilt. ' +
-          'Please wait 60 seconds and try again')
-      })
-      .then(response => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          response.text().then(text => { throw new Error(text) })
-        }
-      })
-      .then(statCalculatorData => {
-        const eng_us = require('../../constants/statCalculatorEng_us.json');
-        swgohStatCalc.setGameData(statCalculatorData);
-
-        const characterData = Object.keys(characters).map(charID => ({
-          'defId': charID,
-          'rarity': characters[charID].stars,
-          'level': characters[charID].level,
-          'gear': characters[charID].gearLevel,
-          'equipped': characters[charID].gearPieces.map(id => ({ 'equipmentId': id })),
-          'relic': {
-            'currentTier': characters[charID].relicTier
-          }
-        }));
-
-        swgohStatCalc.calcRosterStats(characterData, { withoutModCalc: true, language: eng_us });
-
-        return characterData;
-      })
-  } else {
-    return Promise.resolve(null);
-  }
-}
-
 function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
   return function (dispatch) {
     db.getProfile(
@@ -253,77 +210,16 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
         const sessionId = fetchData.profile.sessionId ? fetchData.profile.sessionId : baseProfile.hotUtilsSessionId;
         const oldProfile = baseProfile.withHotUtilsSessionId(sessionId);
 
-        // Collect character stats
-        const characterStats = fetchData.characterStats.reduce(
-          (characters, unit) => {
-            const stats = unit.stats;
-            const baseStats = stats.base ?
-              new CharacterStats(
-                stats.base['Health'] || 0,
-                stats.base['Protection'] || 0,
-                stats.base['Speed'] || 0,
-                stats.base['Potency'] || 0,
-                stats.base['Tenacity'] || 0,
-                stats.base['Physical Damage'] || 0,
-                stats.base['Physical Critical Chance'] || 0,
-                stats.base['Armor'] || 0,
-                stats.base['Special Damage'] || 0,
-                stats.base['Special Critical Chance'] || 0,
-                stats.base['Resistance'] || 0,
-                stats.base['Critical Damage'] || 0,
-                stats.base['Physical Critical Avoidance'] || 0,
-                stats.base['Physical Accuracy'] || 0
-              ) :
-              NullCharacterStats;
-
-            let equippedStats = NullCharacterStats;
-
-            if (stats.gear) {
-              const gearStats = new CharacterStats(
-                stats.gear['Health'] || 0,
-                stats.gear['Protection'] || 0,
-                stats.gear['Speed'] || 0,
-                stats.gear['Potency'] || 0,
-                stats.gear['Tenacity'] || 0,
-                stats.gear['Physical Damage'] || 0,
-                stats.gear['Physical Critical Chance'] || 0,
-                stats.gear['Armor'] || 0,
-                stats.gear['Special Damage'] || 0,
-                stats.gear['Special Critical Chance'] || 0,
-                stats.gear['Resistance'] || 0,
-                stats.gear['Critical Damage'] || 0,
-                stats.gear['Physical Critical Avoidance'] || 0,
-                stats.gear['Physical Accuracy'] || 0
-              );
-              equippedStats = baseStats.plus(gearStats);
-            }
-
-            return Object.assign(characters, {
-              [unit.defId]: {
-                baseStats: baseStats,
-                equippedStats: equippedStats
-              }
-            });
-          },
-          {}
-        )
-
         // Collect the new character objects by combining the default characters with the player values
         // and the optimizer settings from the current profile.
         const newCharacters = mapObjectByKeyAndValue(fetchData.profile.characters, (id, playerValues) => {
-          const playerValuesWithStats = characterStats[id] ?
-            playerValues
-              .withBaseStats(characterStats[id].baseStats)
-              .withEquippedStats(characterStats[id].equippedStats) :
-            playerValues;
-
           if (oldProfile.characters.hasOwnProperty(id)) {
             return oldProfile.characters[id]
-              .withPlayerValues(playerValuesWithStats)
+              .withPlayerValues(playerValues)
               .withOptimizerSettings(oldProfile.characters[id].optimizerSettings);
           } else {
             return (new Character(id))
-              .withPlayerValues(playerValuesWithStats)
+              .withPlayerValues(playerValues)
               .withOptimizerSettings(new OptimizerSettings(
                 characterSettings[id] ? characterSettings[id].targets[0] : new OptimizationPlan(),
                 [],
@@ -434,28 +330,13 @@ function showFetchResult(fetchData, errorMessages, usedSession) {
       );
     }
 
-    // Look for any characters in the profile that we didn't get stats for
-    const missingCharacters = Object.keys(fetchData.profile.characters)
-      .filter(charId => !fetchData.characterStats.find(stats => {
-        const unit = stats.unit ? stats.unit : stats;
-        return unit.defId === charId && !stats.stats.error;
-      }))
-
-    const statsErrorMessage = missingCharacters.length > 0 ?
-      'Missing stats for characters: ' + missingCharacters.join(', ') +
-      '. These characters may not optimize properly.'
-      : null;
-
     dispatch(changeOptimizerView('edit'));
     dispatch(showFlash(
-      missingCharacters.length ? 'API Errors' : 'Success!',
+      'Success!',
       <div className={'fetch-results'}>
         {fetchResults}
       </div>
     ));
-    if (statsErrorMessage) {
-      dispatch(showError(statsErrorMessage));
-    }
   }
 }
 
@@ -538,7 +419,7 @@ function fetchProfile(allyCode, sessionId) {
   return post(
     'https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2/',
     {
-      'action': 'getprofile',
+      'action': 'getprofile-staging',
       'sessionId': sessionId,
       'payload': {
         'allyCode': allyCode,

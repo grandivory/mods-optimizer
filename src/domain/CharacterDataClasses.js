@@ -2,7 +2,7 @@
  * A class to hold static settings for each character that the optimizer knows about.
  */
 import OptimizationPlan from "./OptimizationPlan";
-import CharacterStats from "./CharacterStats";
+import CharacterStats, { NullCharacterStats } from "./CharacterStats";
 import groupByKey from "../utils/groupByKey";
 
 class CharacterSettings {
@@ -229,14 +229,51 @@ class PlayerValues {
   }
 
   static fromHotUtils(valuesJson) {
+    const baseStats = valuesJson.stats.base ?
+      new CharacterStats(
+        valuesJson.stats.base['health'] || 0,
+        valuesJson.stats.base['protection'] || 0,
+        valuesJson.stats.base['speed'] || 0,
+        valuesJson.stats.base['potency'] || 0,
+        valuesJson.stats.base['tenacity'] || 0,
+        valuesJson.stats.base['Physical Damage'] || 0,
+        valuesJson.stats.base['Physical Critical Chance'] || 0,
+        valuesJson.stats.base['armor'] || 0,
+        valuesJson.stats.base['Special Damage'] || 0,
+        valuesJson.stats.base['Special Critical Chance'] || 0,
+        valuesJson.stats.base['resistance'] || 0,
+        valuesJson.stats.base['Critical Damage'] || 0,
+        valuesJson.stats.base['Physical Critical Avoidance'] || 0,
+        valuesJson.stats.base['Physical Accuracy'] || 0
+      ) : NullCharacterStats;
+
+    const gearStats = valuesJson.stats.gear ?
+      new CharacterStats(
+        valuesJson.stats.gear['health'] || 0,
+        valuesJson.stats.gear['protection'] || 0,
+        valuesJson.stats.gear['speed'] || 0,
+        valuesJson.stats.gear['potency'] || 0,
+        valuesJson.stats.gear['tenacity'] || 0,
+        valuesJson.stats.gear['Physical Damage'] || 0,
+        valuesJson.stats.gear['Physical Critical Chance'] || 0,
+        valuesJson.stats.gear['armor'] || 0,
+        valuesJson.stats.gear['Special Damage'] || 0,
+        valuesJson.stats.gear['Special Critical Chance'] || 0,
+        valuesJson.stats.gear['resistance'] || 0,
+        valuesJson.stats.gear['Critical Damage'] || 0,
+        valuesJson.stats.gear['Physical Critical Avoidance'] || 0,
+        valuesJson.stats.gear['Physical Accuracy'] || 0
+      ) : NullCharacterStats;
+
+
     return new PlayerValues(
       valuesJson.level,
       valuesJson.rarity,
       valuesJson.gearLevel,
       valuesJson.equipment,
       valuesJson.power,
-      null,
-      null,
+      baseStats,
+      baseStats.plus(gearStats),
       valuesJson.relicTier
     );
   }
