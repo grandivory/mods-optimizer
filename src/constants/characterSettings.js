@@ -79,6 +79,7 @@ const characterSettings = {
   'B2SUPERBATTLEDROID': new CharacterSettings(
     [new OptimizationPlan('Survival', 50, 50, 0, 0, 50, 25, 0, 0, 0, 0, 0, 50, 0, true)]
   ),
+  // 'BADBATCHHUNTER': new CharacterSettings(),
   'BARRISSOFFEE': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 50, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
@@ -140,6 +141,9 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['Rogue 1']
   ),
+  // 'BOKATAN': new CharacterSettings(
+  //   []
+  // ),
   'BOSSK': new CharacterSettings(
     [
       new OptimizationPlan('Leader', 10, 10, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true),
@@ -278,7 +282,7 @@ const characterSettings = {
     DamageType.special
   ),
   'DARTHSIDIOUS': new CharacterSettings(
-    [optimizationStrategy["Special Damage with Potency"].rename('PvP')],
+    [new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 50, 0, 0, 0, 0, 0, 0)],
     ['Auto Lightzader']
   ),
   'DARTHSION': new CharacterSettings(
