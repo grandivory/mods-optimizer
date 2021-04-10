@@ -419,7 +419,7 @@ function fetchProfile(allyCode, sessionId) {
   return post(
     'https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2/',
     {
-      'action': 'getprofile-staging',
+      'action': 'getprofile',
       'sessionId': sessionId,
       'payload': {
         'allyCode': allyCode,
