@@ -2,12 +2,10 @@ import React from "react";
 
 import './Dropdown.css'
 
-export class Dropdown extends React.PureComponent {
-    render() {
-        return (
-            <div className={'dropdown'}>
-                <select {...this.props} />
-            </div>
-        );
+export const Dropdown = React.forwardRef(
+    function Dropdown(props, ref) {
+        return <div className={'dropdown'}>
+            <select {...props} ref={ref} />
+        </div>;
     }
-};
+);
