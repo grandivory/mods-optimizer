@@ -1,0 +1,23 @@
+.dropdown {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin: .25em;
+  }
+
+  .dropdown select {
+    padding-right: 1em;
+  }
+
+  .dropdown::after {
+    content: '';
+    position: absolute;
+    display: block;
+    right: .2em;
+    top: calc(50% - .1em);
+    width: 0;
+    height: 0;
+    border: .4em solid transparent;
+    border-top-color: dodgerblue;
+    pointer-events: none
+  }

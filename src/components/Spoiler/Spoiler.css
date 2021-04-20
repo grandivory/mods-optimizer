@@ -1,0 +1,58 @@
+.spoiler {
+    width: 100%;
+    border: 1px solid white;
+    border-radius: 1em;
+}
+
+.spoiler .title {
+    cursor: pointer;
+    position: relative;
+    color: #a35ef9;
+}
+
+.spoiler .title::before {
+    content: '';
+    position: absolute;
+    left: 1em;
+    top: calc(50% - .2em);
+    display: block;
+    width: 0;
+    height: 0;
+    line-height: 0;
+    margin-right: .5em;
+    border: .4em solid transparent;
+    border-top-color: dodgerblue;
+    pointer-events: none;
+    transition: all .5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+
+.spoiler .divider {
+    height: 1px;
+    width: 0%;
+    margin: auto;
+    background-color: white;
+    transition: width .5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.spoiler .content {
+    height: 0;
+    overflow: hidden;
+    padding: 0 .5em;
+    transition: all .5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.spoiler.open .title::before {
+    transform: rotate(180deg);
+    top: calc(50% - .6em);
+}
+
+.spoiler.open .divider {
+    width: 100%;
+}
+
+.spoiler.open .content {
+    height: var(--content-height);
+    padding-top: .5em;
+    padding-bottom: .5em;
+}

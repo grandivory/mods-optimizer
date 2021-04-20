@@ -30,6 +30,7 @@ import Credits from "../../components/Credits/Credits";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import Help from "../../components/Help/Help"
 import { createHotUtilsProfile, moveModsWithHotUtils } from '../../state/actions/data';
+import { Dropdown } from '../../components/Dropdown/Dropdown';
 
 const sortOptions = {
   'currentCharacter': 'currentCharacter',
@@ -377,26 +378,22 @@ class Review extends React.PureComponent {
         onChange={viewAs => this.props.changeFilter(Object.assign({}, filter, { view: viewAs }))}
       />
       <label htmlFor={'show'}>Show me:</label>
-      <div className={'dropdown'}>
-        <select id={'show'}
-          value={filter.show}
-          onChange={e => this.props.changeFilter(Object.assign({}, filter, { show: e.target.value }))}
-        >
-          <option value={showOptions.all}>All assignments</option>
-          <option value={showOptions.change}>Changing characters</option>
-          <option value={showOptions.upgrades}>Mod Upgrades</option>
-        </select>
-      </div>
+      <Dropdown id={'show'}
+        value={filter.show}
+        onChange={e => this.props.changeFilter(Object.assign({}, filter, { show: e.target.value }))}
+      >
+        <option value={showOptions.all}>All assignments</option>
+        <option value={showOptions.change}>Changing characters</option>
+        <option value={showOptions.upgrades}>Mod Upgrades</option>
+      </Dropdown>
       <label htmlFor={'tag'}>Show characters by tag:</label>
-      <div className={'dropdown'}>
-        <select id={'tag'}
-          value={filter.tag || ''}
-          onChange={e => this.props.changeFilter(Object.assign({}, filter, { tag: e.target.value }))}
-        >
-          <option value={''}>All</option>
-          {tagOptions}
-        </select>
-      </div>
+      <Dropdown id={'tag'}
+        value={filter.tag || ''}
+        onChange={e => this.props.changeFilter(Object.assign({}, filter, { tag: e.target.value }))}
+      >
+        <option value={''}>All</option>
+        {tagOptions}
+      </Dropdown>
     </div>;
   }
 

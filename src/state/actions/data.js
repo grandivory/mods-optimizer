@@ -15,6 +15,7 @@ import OptimizationPlan from "../../domain/OptimizationPlan";
 import groupByKey from "../../utils/groupByKey";
 import { addPlayerProfile, setGameSettings, setProfile, setHotUtilsSubscription } from "./storage";
 import { changeOptimizerView } from "./review";
+import { filterObject } from '../../utils/filterObject';
 
 export const TOGGLE_KEEP_OLD_MODS = 'TOGGLE_KEEP_OLD_MODS';
 
@@ -340,7 +341,7 @@ function showFetchResult(fetchData, errorMessages, usedSession) {
   }
 }
 
-export function fetchCharacterList(mode, overwrite, allyCode) {
+export function fetchCharacterList(mode, overwrite, allyCode, parameters) {
   return function (dispatch) {
     dispatch(setIsBusy(true))
 
@@ -348,7 +349,8 @@ export function fetchCharacterList(mode, overwrite, allyCode) {
       'https://api.mods-optimizer.swgoh.grandivory.com/characterlist',
       {
         allyCode: allyCode,
-        mode: mode
+        mode: mode,
+        parameters: filterObject(parameters, (key, value) => !!value || value === 0)
       }
     )
       .then(characterList => dispatch(applyCharacterList(overwrite, characterList)))

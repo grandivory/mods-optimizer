@@ -16,6 +16,7 @@ import {
   toggleUpgradeMods, changeMinimumModDots
 } from "../../state/actions/characterEdit";
 import characterSettings from "../../constants/characterSettings";
+import { Dropdown } from "../../components/Dropdown/Dropdown";
 
 class CharacterList extends PureComponent {
   characterBlockDragStart(index) {
@@ -146,12 +147,10 @@ class CharacterList extends PureComponent {
         </div>
         <div className={'target'}>
           <label>Target:</label>
-          <div className={'dropdown'}>
-            <select value={selectedPlan} onChange={onSelect.bind(this)}>
-              {options}
-              <option value={'custom'}>Custom</option>
-            </select>
-          </div>
+          <Dropdown value={selectedPlan} onChange={onSelect.bind(this)}>
+            {options}
+            <option value={'custom'}>Custom</option>
+          </Dropdown>
           <button
             type={'button'}
             onClick={() => this.props.showModal(

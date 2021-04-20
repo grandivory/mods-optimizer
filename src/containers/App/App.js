@@ -25,6 +25,7 @@ import FlashMessage from "../../components/Modal/FlashMessage";
 import { saveAs } from 'file-saver';
 import { exportDatabase, loadProfile } from "../../state/actions/storage";
 import Help from '../../components/Help/Help';
+import { Dropdown } from '../../components/Dropdown/Dropdown';
 
 class App extends PureComponent {
 
@@ -164,23 +165,21 @@ class App extends PureComponent {
         }
         {/* If there is an active ally code, show a dropdown */}
         {this.props.allyCode &&
-          <div className={'dropdown'}>
-            <select
-              id={'ally-code'}
-              value={this.props.allyCode}
-              onChange={e => {
-                if ('' === e.target.value) {
-                  this.props.showModal('', this.addAllyCodeModal());
-                } else {
-                  this.props.switchProfile(e.target.value);
-                }
-              }}>
-              {Object.entries(this.props.playerProfiles).map(([allyCode, playerName]) =>
-                <option key={allyCode} value={allyCode}>{playerName}</option>
-              )}
-              <option key={'new'} value={''}>New Code...</option>
-            </select>
-          </div>
+          <Dropdown
+            id={'ally-code'}
+            value={this.props.allyCode}
+            onChange={e => {
+              if ('' === e.target.value) {
+                this.props.showModal('', this.addAllyCodeModal());
+              } else {
+                this.props.switchProfile(e.target.value);
+              }
+            }}>
+            {Object.entries(this.props.playerProfiles).map(([allyCode, playerName]) =>
+              <option key={allyCode} value={allyCode}>{playerName}</option>
+            )}
+            <option key={'new'} value={''}>New Code...</option>
+          </Dropdown>
         }
         {this.props.allyCode &&
           <button type={'button'}

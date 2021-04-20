@@ -25,6 +25,7 @@ import "./CharacterEditForm.css";
 import setBonuses from "../../constants/setbonuses";
 import TargetStat from "../../domain/TargetStat";
 import characterSettings from "../../constants/characterSettings";
+import { Dropdown } from "../../components/Dropdown/Dropdown";
 
 class CharacterEditForm extends React.Component {
   constructor(props) {
@@ -83,14 +84,12 @@ class CharacterEditForm extends React.Component {
 
     const slotToPrimaryRestriction = slot =>
       <div key={`mod-block-${slot}`} className={'mod-block'}>
-        <div className={'dropdown'}>
-          <select name={`${slot}-primary`} id={`${slot}-primary`}
-            defaultValue={this.props.target.primaryStatRestrictions[slot]}>
-            <option value={''}>Any</option>
-            {this.props[`${slot}Primaries`].map(
-              primary => <option key={primary} value={primary}>{primary}</option>)}
-          </select>
-        </div>
+        <Dropdown name={`${slot}-primary`} id={`${slot}-primary`}
+          defaultValue={this.props.target.primaryStatRestrictions[slot]}>
+          <option value={''}>Any</option>
+          {this.props[`${slot}Primaries`].map(
+            primary => <option key={primary} value={primary}>{primary}</option>)}
+        </Dropdown>
         <div className={`mod-image mod-image-${slot}`} />
       </div>;
 

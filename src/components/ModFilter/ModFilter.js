@@ -8,6 +8,7 @@ import setBonuses from "../../constants/setbonuses";
 import { connect } from "react-redux";
 import { changeModsFilter } from "../../state/actions/explore";
 import Pips from "../Pips/Pips";
+import { Dropdown } from '../Dropdown/Dropdown';
 
 function cycleState(e) {
   e.target.value = e.target.valueAsNumber + 1;
@@ -493,15 +494,13 @@ class ModFilter extends React.PureComponent {
 
     return <div>
       <div className={'toggle-label'}>Sort By:</div>
-      <div className={'dropdown'}>
-        <select name={'sort-option'} defaultValue={this.props.filter.sort}>
-          <option value={''}>default</option>
-          <option value={'rolls'}># of Stat Upgrades</option>
-          <option value={'offenseScore'}>Offense Score</option>
-          <option value={'character'}>Character</option>
-          {sortOptions}
-        </select>
-      </div>
+      <Dropdown name={'sort-option'} defaultValue={this.props.filter.sort}>
+        <option value={''}>default</option>
+        <option value={'rolls'}># of Stat Upgrades</option>
+        <option value={'offenseScore'}>Offense Score</option>
+        <option value={'character'}>Character</option>
+        {sortOptions}
+      </Dropdown>
     </div>;
   }
 

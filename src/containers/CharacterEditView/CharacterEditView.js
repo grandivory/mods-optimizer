@@ -45,6 +45,8 @@ import Help from "../../components/Help/Help"
 import { fetchCharacterList } from "../../state/actions/data";
 import collectByKey from "../../utils/collectByKey";
 import keysWhere from "../../utils/keysWhere";
+import { Spoiler } from "../../components/Spoiler/Spoiler";
+import { Dropdown } from "../../components/Dropdown/Dropdown";
 
 const defaultTemplates = require('../../constants/characterTemplates.json');
 
@@ -421,7 +423,7 @@ class CharacterEditView extends PureComponent {
   }
 
   generateCharacterListModal() {
-    let useCase, overwrite;
+    let form;
 
     return <div>
       <h3 className={'gold'}>Auto-generate Character List</h3>
@@ -431,7 +433,7 @@ class CharacterEditView extends PureComponent {
         ordered or what targets should be chosen.
       </p>
       <p>
-        <span className={'purple'}>Note:</span> no matter what use case you select, your current
+        <span className={'purple'}>Note:</span> unless you specify otherwise in "Advanced Settings" below, your current
         arena team will always be placed at the top of the list.
       </p>
       <p><span className={'blue'}>Provided by&nbsp;
@@ -440,24 +442,76 @@ class CharacterEditView extends PureComponent {
         </a>
       </span></p>
       <hr />
-      <form>
+      <form ref={(element) => form = element}>
         <label htmlFor={'use-case'}>Select your use case:</label>
-        <div className={'dropdown'}>
-          <select name={'use-case'} ref={(input) => useCase = input}>
-            <option value={''}>Grand Arena / Territory Wars</option>
-            <option value={1}>Light-side Territory Battle</option>
-            <option value={2}>Dark-side Territory Battle</option>
-          </select>
-        </div>
+        <Dropdown name={'use-case'}>
+          <option value={''}>Grand Arena / Territory Wars</option>
+          <option value={1}>Light-side Territory Battle</option>
+          <option value={2}>Dark-side Territory Battle</option>
+          <option value={3}>Arena only</option>
+        </Dropdown>
         <Toggle
           name={'overwrite'}
-          ref={(toggle) => overwrite = toggle}
           inputLabel={'Overwrite existing list?'}
           leftValue={false}
           leftLabel={'Append'}
           rightValue={true}
           rightLabel={'Overwrite'}
         />
+        <Spoiler title={'Advanced Settings'}>
+          <div className={'form-row'}>
+            <label htmlFor={'alignment-filter'}>Alignment:</label>
+            <Dropdown name={'alignment-filter'} defaultValue={0}>
+              <option value={0}>All Characters</option>
+              <option value={1}>Light Side Only</option>
+              <option value={2}>Dark Side Only</option>
+            </Dropdown>
+          </div>
+          <div className={'form-row'}>
+            <label htmlFor={'minimum-gear-level'}>Minimum Gear Level:</label>
+            <Dropdown name={'minimum-gear-level'} defaultValue={1}>
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={4}>4</option>
+              <option value={5}>5</option>
+              <option value={6}>6</option>
+              <option value={7}>7</option>
+              <option value={8}>8</option>
+              <option value={9}>9</option>
+              <option value={10}>10</option>
+              <option value={11}>11</option>
+              <option value={12}>12</option>
+              <option value={13}>13</option>
+            </Dropdown>
+          </div>
+          {/* <div className={'form-row'}>
+            <label htmlFor={'gear-level-threshold'}>Gear level threshold:</label>
+            <Dropdown name={'gear-level-threshold'} defaultValue={12}>
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={4}>4</option>
+              <option value={5}>5</option>
+              <option value={6}>6</option>
+              <option value={7}>7</option>
+              <option value={8}>8</option>
+              <option value={9}>9</option>
+              <option value={10}>10</option>
+              <option value={11}>11</option>
+              <option value={12}>12</option>
+              <option value={13}>13</option>
+            </Dropdown>
+          </div> */}
+          <div className={'form-row'}>
+            <label htmlFor={'ignore-arena'}>Ignore arena teams:</label>
+            <input name={'ignore-arena'} type={'checkbox'} defaultChecked={false} />
+          </div>
+          <div className={'form-row'}>
+            <label htmlFor={'max-list-size'}>Maximum list size:&nbsp;</label>
+            <input name={'max-list-size'} type={'text'} inputMode={'numeric'} size={3} />
+          </div>
+        </Spoiler>
       </form>
       <hr />
       <div className={'actions'}>
@@ -465,10 +519,18 @@ class CharacterEditView extends PureComponent {
         <button
           type={'button'}
           onClick={() => {
+            const parameters = {
+              'alignmentFilter': form['alignment-filter'].value,
+              'minimumGearLevel': form['minimum-gear-level'].value,
+              'ignoreArena': form['ignore-arena'].checked,
+              'top': form['max-list-size'].value
+            }
+
             this.props.generateCharacterList(
-              useCase.value,
-              overwrite.value,
-              this.props.allyCode)
+              form['use-case'].value,
+              form.overwrite.value,
+              this.props.allyCode,
+              parameters)
           }}
         >
           Generate
@@ -604,14 +666,12 @@ class CharacterEditView extends PureComponent {
     const defaultTemplateOptions = defaultTemplateNames
       .map((name, index) => <option key={`default-${index}`} value={name}>{name}</option>);
 
-    return <div className={'dropdown'}>
-      <select ref={refFunction}>
-        {userTemplateOptions}
-        {userTemplateOptions.length &&
-          <option disabled={true} value={''}>------------------------------------------------</option>}
-        {defaultTemplateOptions}
-      </select>
-    </div>;
+    return <Dropdown ref={refFunction}>
+      {userTemplateOptions}
+      {userTemplateOptions.length &&
+        <option disabled={true} value={''}>------------------------------------------------</option>}
+      {defaultTemplateOptions}
+    </Dropdown>;
   }
 
   exportTemplateModal() {
@@ -621,11 +681,9 @@ class CharacterEditView extends PureComponent {
 
     return <div>
       <h3>Please select a character template to export</h3>
-      <div className={'dropdown'}>
-        <select ref={select => templateNameInput = select}>
-          {templateOptions}
-        </select>
-      </div>
+      <Dropdown ref={select => templateNameInput = select}>
+        {templateOptions}
+      </Dropdown>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'}
@@ -671,11 +729,9 @@ class CharacterEditView extends PureComponent {
 
     return <div>
       <h3>Please select a character template to delete</h3>
-      <div className={'dropdown'}>
-        <select ref={select => templateNameInput = select}>
-          {templateOptions}
-        </select>
-      </div>
+      <Dropdown ref={select => templateNameInput = select}>
+        {templateOptions}
+      </Dropdown>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
         <button type={'button'} className={'red'}
@@ -880,8 +936,8 @@ const mapDispatchToProps = dispatch => ({
   optimizeMods: () => dispatch(optimizeMods()),
   updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold)),
   updateForceCompleteModSets: (forceCompleteModSets) => dispatch(updateForceCompleteModSets(forceCompleteModSets)),
-  generateCharacterList: (mode, behavior, allyCode) => {
-    dispatch(fetchCharacterList(mode, behavior, allyCode));
+  generateCharacterList: (mode, behavior, allyCode, parameters) => {
+    dispatch(fetchCharacterList(mode, behavior, allyCode, parameters));
     dispatch(hideModal());
   },
   saveTemplate: (name) => dispatch(saveTemplate(name)),

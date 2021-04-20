@@ -86,9 +86,6 @@
   height: 1em;
 }
 
-.character-edit.sort-view .character-list .top-block.drop-character {
-}
-
 .character-edit.sort-view .character-list .character-block-wrapper {
   margin-right: 1em;
 }
@@ -161,10 +158,6 @@
   margin: 0 0 .5em;
 }
 
-.modal div.dropdown {
-  margin-bottom: 1em;
-}
-
 .modal form select {
   margin-bottom: 0;
 }
@@ -207,6 +200,14 @@
 
 .modal.generate-character-list .toggle-wrapper {
   margin-top: 1em;
+}
+
+.modal.generate-character-list .form-row {
+  margin-bottom: .25em;
+}
+.modal.generate-character-list .form-row label {
+  display: inline;
+  vertical-align: middle;
 }
 
 @keyframes Progress {
