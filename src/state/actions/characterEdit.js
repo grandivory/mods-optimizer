@@ -270,7 +270,7 @@ export function changeCharacterEditMode(mode) {
  * @param newTarget OptimizationPlan The new target to use for the character
  * @returns {Function}
  */
-export function finishEditCharacterTarget(characterIndex, newTarget) {
+export function finishEditCharacterTarget(characterIndex, newTarget, closeForm) {
   return updateProfile(
     profile => {
       if (characterIndex >= profile.selectedCharacters.length) {
@@ -283,14 +283,20 @@ export function finishEditCharacterTarget(characterIndex, newTarget) {
       const oldCharacter = profile.characters[characterID];
       const newCharacter = oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withTarget(newTarget));
 
+      // incremental optimization, set the stopAt
+      profile.stopAt = closeForm?"": newCharacter.baseID;
+
       return profile.withCharacters(Object.assign({}, profile.characters, {
         [newCharacter.baseID]: newCharacter
       })).withSelectedCharacters(newSelectedCharacters);
     },
     dispatch => {
-      dispatch(hideModal());
-      dispatch(changeSetRestrictions(null));
-      dispatch(changeTargetStats(null));
+      if(closeForm)
+      { 
+        dispatch(hideModal());
+        dispatch(changeSetRestrictions(null));
+        dispatch(changeTargetStats(null));
+      }
     }
   );
 }
