@@ -5,6 +5,7 @@ import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import Toggle from "../../components/Toggle/Toggle";
 import OptimizationPlan from "../../domain/OptimizationPlan";
 import { hideModal } from "../../state/actions/app";
+import { optimizeMods } from "../../state/actions/optimize";
 import {
   changeCharacterEditMode,
   changeMinimumModDots,
@@ -53,7 +54,6 @@ class CharacterEditForm extends React.Component {
     if (!character) {
       return null;
     }
-
     const defaultTarget = characterSettings[character.baseID] ?
       characterSettings[character.baseID].targets.find(defaultTarget => defaultTarget.name === target.name) :
       null;
@@ -62,6 +62,7 @@ class CharacterEditForm extends React.Component {
     // exist), or custom (name is 'custom') This determines whether to display a "Reset target to default" button, a
     // "Delete target" button, or nothing.
     let resetButton;
+
     if ('custom' === target.name) {
       resetButton = null;
     } else if (defaultTarget) {
@@ -98,7 +99,7 @@ class CharacterEditForm extends React.Component {
       noValidate={'advanced' === this.props.editMode}
       onSubmit={(e) => {
         e.preventDefault();
-        this.saveTarget();
+        this.saveTarget(true);
       }}
       ref={form => this.form = form}>
       <div className={'character-view column'}>
@@ -193,6 +194,7 @@ class CharacterEditForm extends React.Component {
           </div>
             {'basic' === this.props.editMode && this.basicForm(target)}
             {'advanced' === this.props.editMode && this.advancedForm(target)}
+            {this.targets(this.props.modAssignments.filter(x => x && x.id && x.id === character.baseID)[0]?.missedGoals)}
           </div>
         </div>
       </div>
@@ -655,7 +657,36 @@ class CharacterEditForm extends React.Component {
     </div>;
   }
 
-  saveTarget() {
+  targets (missedGoals) {
+    if (!missedGoals) return;
+    const targetStatRows =  missedGoals && missedGoals.map((missedGoal, index) =>
+    <div className={'form-row'} key={index}>
+      <label>{missedGoal[0].stat}</label>
+      <label>({missedGoal[0].minimum})-({missedGoal[0].maximum})</label>
+      <label>{missedGoal[0].minimum > missedGoal[1] ? " ↓ ":" ↑ "}</label>
+      <label>{missedGoal[1]}</label>
+      </div>
+    );
+    const rerunButton = (
+      <div className={'form-footer'}>
+        <button type={'button'} onClick={() => this.runCalc()}>Save and Run</button>
+      </div>
+    )
+    return (
+      <div id={'missed-form'}>
+        {targetStatRows}
+        {missedGoals.length>0?rerunButton:""}
+      </div>
+    );
+  }
+
+  runCalc() {
+    this.saveTarget(false);
+    console.log("Running target again");
+    this.props.optimizeMods();
+  }
+
+  saveTarget(closeForm) {
     const planName = 'lock' !== this.form['plan-name'].value ? this.form['plan-name'].value : 'custom';
     let newTarget;
     let primaryStatRestrictions = {};
@@ -755,19 +786,20 @@ class CharacterEditForm extends React.Component {
       this.props.characterIndex,
       newTarget,
       +this.form['mod-dots'].value,
-      this.form['slice-mods'].checked
+      this.form['slice-mods'].checked,
+      closeForm
     );
   }
 }
 
 const mapStateToProps = (state) => {
   const mods = state.profile.mods;
-
   return {
     editMode: state.characterEditMode,
     gameSettings: state.gameSettings,
     setRestrictions: state.setRestrictions,
     targetStats: state.targetStats,
+    modAssignments: state.profile.modAssignments,
     arrowPrimaries: Array.from(new Set(mods.filter(mod => mod.slot === 'arrow').map(mod => mod.primaryStat.type))),
     trianglePrimaries:
       Array.from(new Set(mods.filter(mod => mod.slot === 'triangle').map(mod => mod.primaryStat.type))),
@@ -782,11 +814,11 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeTargetStats(null));
   },
   hideModal: () => dispatch(hideModal()),
-  submitForm: (characterID, characterIndex, target, minimumModDots, sliceMods) => {
+  submitForm: (characterID, characterIndex, target, minimumModDots, sliceMods, close) => {
     dispatch(changeMinimumModDots(characterID, minimumModDots));
     dispatch(changeSliceMods(characterID, sliceMods));
     dispatch(unlockCharacter(characterID));
-    dispatch(finishEditCharacterTarget(characterIndex, target));
+    dispatch(finishEditCharacterTarget(characterIndex, target, close));
   },
   resetCharacterTargetToDefault: (characterID, targetName) =>
     dispatch(resetCharacterTargetToDefault(characterID, targetName)),
@@ -797,7 +829,8 @@ const mapDispatchToProps = (dispatch) => ({
   removeSetBonus: (setBonus) => dispatch(removeSetBonus(setBonus)),
   populateTargetStats: (targetStats) => dispatch(changeTargetStats(targetStats)),
   addTargetStat: (targetStat) => dispatch(addTargetStat(targetStat)),
-  removeTargetStat: (index) => dispatch(removeTargetStat(index))
+  removeTargetStat: (index) => dispatch(removeTargetStat(index)),
+  optimizeMods: () => dispatch(optimizeMods()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterEditForm);

@@ -7,6 +7,7 @@ export default class OptimizerRun {
   mods;
   selectedCharacters;
   globalSettings;
+  stopAt;
 
   /**
    * Note that all of the parameters for an OptimizerRun are pure Objects - no classes with extra methods built-in
@@ -18,8 +19,9 @@ export default class OptimizerRun {
    * @param globalSettings {Object} 
    * @param modChangeThreshold {number}
    * @param lockUnselectedCharacters {boolean}
+   * @param stopAt {string}
    */
-  constructor(allyCode, characters, mods, selectedCharacters, globalSettings) {
+  constructor(allyCode, characters, mods, selectedCharacters, globalSettings, stopAt) {
     this.allyCode = allyCode;
     // We care about everything stored for the character except the default settings
     mapObject(characters, character => {
@@ -30,6 +32,7 @@ export default class OptimizerRun {
     this.mods = mods;
     this.selectedCharacters = selectedCharacters;
     this.globalSettings = globalSettings;
+    this.stopAt = stopAt;
   }
 
   serialize() {
@@ -38,7 +41,8 @@ export default class OptimizerRun {
       characters: this.characters,
       mods: this.mods,
       selectedCharacters: this.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()})),
-      globalSettings: this.globalSettings
+      globalSettings: this.globalSettings,
+      stopAt: this.stopAt
     };
   }
 
@@ -49,7 +53,8 @@ export default class OptimizerRun {
         runJson.characters,
         runJson.mods,
         runJson.selectedCharacters,
-        runJson.globalSettings
+        runJson.globalSettings,
+        runJson.stopAt
       );  
     } else {
       return this.deserializeVersionOneFive(runJson);
@@ -65,7 +70,8 @@ export default class OptimizerRun {
       Object.assign({}, PlayerProfile.defaultGlobalSettings, {
         modChangeThreshold: runJson.modChangeThreshold,
         lockUnselectedCharacters: runJson.lockUnselectedCharacters
-      })
+      }),
+      runJson.stopAt
     );
   }
 }

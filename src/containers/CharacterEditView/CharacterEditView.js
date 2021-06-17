@@ -286,6 +286,9 @@ class CharacterEditView extends PureComponent {
       <button
         type={'button'}
         onClick={() => {
+          // TODO: Need to reset stopAt here, since by pressing this button we don't want incremental optimization
+          // this.props.profile.stopAt = "";
+
           const selectedTargets = this.props.selectedCharacters.map(({ target }) => target);
           const hasTargetStats = selectedTargets.some(target => target.targetStats &&
             target.targetStats.filter(targetStat => targetStat.optimizeForTarget).length)
@@ -905,7 +908,8 @@ const mapStateToProps = (state) => {
     selectedCharacters: profile.selectedCharacters,
     lastSelectedCharacter: profile.selectedCharacters.length - 1,
     showReviewButton: profile.modAssignments && Object.keys(profile.modAssignments).length,
-    characterTemplates: Object.keys(state.characterTemplates)
+    characterTemplates: Object.keys(state.characterTemplates),
+    stopAt: profile.stopAt,
   };
 };
 
