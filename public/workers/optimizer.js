@@ -63,7 +63,6 @@ self.onmessage = function (message) {
 
         lastRun.characters = lastRunCharacters;
       }
-
       lastRun.modAssignments = profile.modAssignments;
 
       lastRun.selectedCharacters = lastRun.selectedCharacters instanceof Array ?
@@ -1190,7 +1189,8 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       previousCharacter.optimizerSettings &&
       character.optimizerSettings.minimumModDots === previousCharacter.optimizerSettings.minimumModDots &&
       character.optimizerSettings.sliceMods === previousCharacter.optimizerSettings.sliceMods &&
-      character.optimizerSettings.isLocked === previousCharacter.optimizerSettings.isLocked
+      character.optimizerSettings.isLocked === previousCharacter.optimizerSettings.isLocked &&
+      previousRun.modAssignments[index]
     ) {
       const assignedMods = previousRun.modAssignments[index].assignedMods;
       const messages = previousRun.modAssignments[index].messages;

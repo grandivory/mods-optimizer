@@ -658,7 +658,6 @@ class CharacterEditForm extends React.Component {
   }
 
   targets (missedGoals) {
-    if (!missedGoals) return;
     const targetStatRows =  missedGoals && missedGoals.map((missedGoal, index) =>
     <div className={'form-row'} key={index}>
       <label>{missedGoal[0].stat}</label>
@@ -675,14 +674,13 @@ class CharacterEditForm extends React.Component {
     return (
       <div id={'missed-form'}>
         {targetStatRows}
-        {missedGoals.length>0?rerunButton:""}
+        {rerunButton}
       </div>
     );
   }
 
   runCalc() {
     this.saveTarget(false);
-    console.log("Running target again");
     this.props.optimizeMods();
   }
 

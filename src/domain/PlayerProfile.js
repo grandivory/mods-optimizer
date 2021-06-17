@@ -95,6 +95,21 @@ export default class PlayerProfile {
     }
   }
 
+  clearStopAt() {
+    return new PlayerProfile(
+      this.allyCode,
+      this.playerName,
+      this.characters,
+      this.mods,
+      this.selectedCharacters,
+      this.modAssignments,
+      this.globalSettings,
+      this.previousSettings,
+      this.hotUtilsSessionId,
+      ""
+    );
+}
+
   withMods(mods) {
     if (mods) {
       return new PlayerProfile(

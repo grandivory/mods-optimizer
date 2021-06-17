@@ -274,7 +274,7 @@ export function finishEditCharacterTarget(characterIndex, newTarget, closeForm) 
   return updateProfile(
     profile => {
       if (characterIndex >= profile.selectedCharacters.length) {
-        return profile;
+        return profile.clearStopAt();
       }
       const newSelectedCharacters = profile.selectedCharacters.slice();
       const [{ id: characterID }] = newSelectedCharacters.splice(characterIndex, 1);

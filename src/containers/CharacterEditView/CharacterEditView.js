@@ -286,8 +286,6 @@ class CharacterEditView extends PureComponent {
       <button
         type={'button'}
         onClick={() => {
-          // TODO: Need to reset stopAt here, since by pressing this button we don't want incremental optimization
-          // this.props.profile.stopAt = "";
 
           const selectedTargets = this.props.selectedCharacters.map(({ target }) => target);
           const hasTargetStats = selectedTargets.some(target => target.targetStats &&

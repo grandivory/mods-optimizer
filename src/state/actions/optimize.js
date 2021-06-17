@@ -25,6 +25,7 @@ export function startModOptimization() {
  * @returns {*}
  */
 export function finishModOptimization(result, settings) {
+
   return updateProfile(
     profile => profile.withModAssignments(result),
     (dispatch, getState, newProfile) => {
@@ -39,8 +40,15 @@ export function finishModOptimization(result, settings) {
           ' The optimizer may not recalculate correctly on your next optimization'
         ))
       );
-
+      const stopAt = newProfile.stopAt;
+      const incremental = stopAt && stopAt !== "";
       dispatch(setIsBusy(false));
+      if (incremental)
+      {
+        return;
+      }
+      else
+      {
       dispatch(updateModListFilter({
         view: 'sets',
         sort: 'assignedCharacter'
@@ -96,6 +104,7 @@ export function finishModOptimization(result, settings) {
         ));
       }
     }
+  }
   );
 }
 
@@ -114,6 +123,7 @@ let optimizationWorker = null;
 export function optimizeMods() {
   return function (dispatch, getState) {
     const profile = getState().profile;
+    const incremental = profile.stopAt && profile.stopAt !== "";
     // If any of the characters being optimized don't have stats, then show an error message
     if (Object.values(profile.characters)
       .filter(char => null === char.playerValues.baseStats || null === char.playerValues.equippedStats)
@@ -128,6 +138,19 @@ export function optimizeMods() {
       new Worker(`/workers/optimizer.js?version=${process.env.REACT_APP_VERSION || 'local'}`);
 
     optimizationWorker.onmessage = function (message) {
+      if (incremental)
+      {
+        if (message.data.type === 'OptimizationSuccess')
+        {
+          dispatch(setIsBusy(false));
+          dispatch(finishModOptimization(
+            message.data.result,
+            profile.toOptimizerRun()
+          ));
+        }
+        return;
+        // don't show modals for incremental optimization.
+      } 
       switch (message.data.type) {
         case 'OptimizationSuccess':
           dispatch(setIsBusy(false));
