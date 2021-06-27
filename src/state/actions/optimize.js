@@ -140,13 +140,18 @@ export function optimizeMods() {
     optimizationWorker.onmessage = function (message) {
       if (incremental)
       {
-        if (message.data.type === 'OptimizationSuccess')
-        {
-          dispatch(setIsBusy(false));
-          dispatch(finishModOptimization(
-            message.data.result,
-            profile.toOptimizerRun()
-          ));
+        switch (message.data.type) {
+          case 'OptimizationSuccess':
+            dispatch(setIsBusy(false));
+            dispatch(finishModOptimization(
+              message.data.result,
+              profile.toOptimizerRun()
+            ));
+            break;
+          case 'Progress':
+            // TODO: Get some kind of visualization of progress for long running incremental optimizations here
+            break;
+          default: // do nothing
         }
         return;
         // don't show modals for incremental optimization.
