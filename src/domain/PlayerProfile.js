@@ -246,7 +246,6 @@ export default class PlayerProfile {
       this.mods.map(mod => mod.serialize()),
       this.selectedCharacters,
       this.globalSettings,
-      this.incrementalOptimizeIndex,
     );
   }
 
