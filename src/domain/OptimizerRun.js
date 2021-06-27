@@ -7,7 +7,6 @@ export default class OptimizerRun {
   mods;
   selectedCharacters;
   globalSettings;
-  incrementalOptimizeIndex;
 
   /**
    * Note that all of the parameters for an OptimizerRun are pure Objects - no classes with extra methods built-in
@@ -19,9 +18,8 @@ export default class OptimizerRun {
    * @param globalSettings {Object} 
    * @param modChangeThreshold {number}
    * @param lockUnselectedCharacters {boolean}
-   * @param incrementalOptimizeIndex {number}
    */
-  constructor(allyCode, characters, mods, selectedCharacters, globalSettings, incrementalOptimizeIndex) {
+  constructor(allyCode, characters, mods, selectedCharacters, globalSettings) {
     this.allyCode = allyCode;
     // We care about everything stored for the character except the default settings
     mapObject(characters, character => {
@@ -32,7 +30,6 @@ export default class OptimizerRun {
     this.mods = mods;
     this.selectedCharacters = selectedCharacters;
     this.globalSettings = globalSettings;
-    this.incrementalOptimizeIndex = incrementalOptimizeIndex;
   }
 
   serialize() {
@@ -42,7 +39,6 @@ export default class OptimizerRun {
       mods: this.mods,
       selectedCharacters: this.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()})),
       globalSettings: this.globalSettings,
-      incrementalOptimizeIndex: this.incrementalOptimizeIndex
     };
   }
 
@@ -54,7 +50,6 @@ export default class OptimizerRun {
         runJson.mods,
         runJson.selectedCharacters,
         runJson.globalSettings,
-        runJson.incrementalOptimizeIndex
       );  
     } else {
       return this.deserializeVersionOneFive(runJson);
@@ -71,7 +66,6 @@ export default class OptimizerRun {
         modChangeThreshold: runJson.modChangeThreshold,
         lockUnselectedCharacters: runJson.lockUnselectedCharacters
       }),
-      runJson.incrementalOptimizeIndex
     );
   }
 }
