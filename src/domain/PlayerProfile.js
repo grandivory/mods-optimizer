@@ -96,7 +96,7 @@ export default class PlayerProfile {
     }
   }
 
-  clearincrementalOptimizeIndex() {
+  resetIncrementalOptimizeIndex() {
     return new PlayerProfile(
       this.allyCode,
       this.playerName,

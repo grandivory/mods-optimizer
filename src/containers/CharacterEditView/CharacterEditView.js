@@ -28,7 +28,8 @@ import {
   updateLockUnselectedCharacters,
   updateModChangeThreshold,
   updateForceCompleteModSets,
-  applyTemplateTargets
+  applyTemplateTargets,
+  resetIncrementalIndex
 } from "../../state/actions/characterEdit";
 import { changeOptimizerView, updateModListFilter } from "../../state/actions/review";
 import { optimizeMods } from "../../state/actions/optimize";
@@ -286,7 +287,7 @@ class CharacterEditView extends PureComponent {
       <button
         type={'button'}
         onClick={() => {
-
+          this.props.resetIncrementalIndex();
           const selectedTargets = this.props.selectedCharacters.map(({ target }) => target);
           const hasTargetStats = selectedTargets.some(target => target.targetStats &&
             target.targetStats.filter(targetStat => targetStat.optimizeForTarget).length)
@@ -935,6 +936,7 @@ const mapDispatchToProps = dispatch => ({
   toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID)),
   updateLockUnselectedCharacters: (lock) => dispatch(updateLockUnselectedCharacters(lock)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
+  resetIncrementalIndex: () => dispatch(resetIncrementalIndex()),
   optimizeMods: () => dispatch(optimizeMods()),
   updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold)),
   updateForceCompleteModSets: (forceCompleteModSets) => dispatch(updateForceCompleteModSets(forceCompleteModSets)),

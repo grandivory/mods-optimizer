@@ -274,7 +274,7 @@ export function finishEditCharacterTarget(characterIndex, newTarget, closeForm) 
   return updateProfile(
     profile => {
       if (characterIndex >= profile.selectedCharacters.length) {
-        return profile.clearincrementalOptimizeIndex();
+        return profile.resetIncrementalOptimizeIndex();
       }
       const newSelectedCharacters = profile.selectedCharacters.slice();
       const [{ id: characterID }] = newSelectedCharacters.splice(characterIndex, 1);
@@ -712,6 +712,15 @@ export function replaceTemplate(name) {
       );
     }
   }
+}
+
+export function resetIncrementalIndex() {
+  return updateProfile(
+    profile => {
+      const newProfile = profile.resetIncrementalOptimizeIndex();
+      return newProfile;
+    }
+  )
 }
 
 export function applyTemplateTargets(name) {
