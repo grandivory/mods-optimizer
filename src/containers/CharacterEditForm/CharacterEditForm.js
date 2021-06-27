@@ -687,12 +687,12 @@ class CharacterEditForm extends React.Component {
       </div>
       );
     }
-    const targetStatRows =  missedGoals && missedGoals.map((missedGoal, index) =>
+    const targetStatRows =  missedGoals && missedGoals.map(([targetStat, resultValue], index) =>
     <div className={'form-row'} key={index}>
-      <label>{missedGoal[0].stat}</label>
-      <label>({missedGoal[0].minimum})-({missedGoal[0].maximum})</label>
-      <label>{missedGoal[0].minimum > missedGoal[1] ? " ↓ ":" ↑ "}</label>
-      <label>{missedGoal[1]}</label>
+      <label>{targetStat.stat}</label>
+      <label>({targetStat.minimum})-({targetStat.maximum})</label>
+      <label>{targetStat.minimum > resultValue ? " ↓ ":" ↑ "}</label>
+      <label>{resultValue}</label>
       </div>
     );
 
