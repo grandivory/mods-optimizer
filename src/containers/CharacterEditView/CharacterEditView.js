@@ -907,7 +907,7 @@ const mapStateToProps = (state) => {
     lastSelectedCharacter: profile.selectedCharacters.length - 1,
     showReviewButton: profile.modAssignments && Object.keys(profile.modAssignments).length,
     characterTemplates: Object.keys(state.characterTemplates),
-    stopAt: profile.stopAt,
+    incrementalOptimizeIndex: profile.incrementalOptimizeIndex,
   };
 };
 

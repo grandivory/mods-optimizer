@@ -40,8 +40,8 @@ export function finishModOptimization(result, settings) {
           ' The optimizer may not recalculate correctly on your next optimization'
         ))
       );
-      const stopAt = newProfile.stopAt;
-      const incremental = stopAt && stopAt !== "";
+      const incrementalOptimizeIndex = newProfile.incrementalOptimizeIndex;
+      const incremental = incrementalOptimizeIndex >= 0;
       dispatch(setIsBusy(false));
       if (incremental)
       {
@@ -123,7 +123,7 @@ let optimizationWorker = null;
 export function optimizeMods() {
   return function (dispatch, getState) {
     const profile = getState().profile;
-    const incremental = profile.stopAt && profile.stopAt !== "";
+    const incremental = profile.incrementalOptimizeIndex >= 0;
     // If any of the characters being optimized don't have stats, then show an error message
     if (Object.values(profile.characters)
       .filter(char => null === char.playerValues.baseStats || null === char.playerValues.equippedStats)

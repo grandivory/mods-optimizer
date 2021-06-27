@@ -274,7 +274,7 @@ export function finishEditCharacterTarget(characterIndex, newTarget, closeForm) 
   return updateProfile(
     profile => {
       if (characterIndex >= profile.selectedCharacters.length) {
-        return profile.clearStopAt();
+        return profile.clearincrementalOptimizeIndex();
       }
       const newSelectedCharacters = profile.selectedCharacters.slice();
       const [{ id: characterID }] = newSelectedCharacters.splice(characterIndex, 1);
@@ -283,8 +283,8 @@ export function finishEditCharacterTarget(characterIndex, newTarget, closeForm) 
       const oldCharacter = profile.characters[characterID];
       const newCharacter = oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withTarget(newTarget));
 
-      // incremental optimization, set the stopAt
-      profile.stopAt = closeForm?"": newCharacter.baseID;
+      // incremental optimization, set the incrementalOptimizeIndex
+      profile.incrementalOptimizeIndex = closeForm?-1: characterIndex;
 
       return profile.withCharacters(Object.assign({}, profile.characters, {
         [newCharacter.baseID]: newCharacter

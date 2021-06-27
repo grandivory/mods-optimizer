@@ -194,7 +194,7 @@ class CharacterEditForm extends React.Component {
           </div>
             {'basic' === this.props.editMode && this.basicForm(target)}
             {'advanced' === this.props.editMode && this.advancedForm(target)}
-            {this.targets(this.props.modAssignments.filter(x => x && x.id && x.id === character.baseID)[0]?.missedGoals)}
+            {this.missedGoalsSection(this.props.modAssignments[this.props.characterIndex])}
           </div>
         </div>
       </div>
@@ -657,7 +657,36 @@ class CharacterEditForm extends React.Component {
     </div>;
   }
 
-  targets (missedGoals) {
+  missedGoalsSection (modAssignments) {
+    const rerunButton = (
+      <div className={'form-footer'}>
+        <button type={'button'} onClick={() => this.runIncrementalCalc()}>Incremental Run</button>
+      </div>
+    )
+    
+    if (modAssignments === null)
+    {
+      return(
+        <div id={'missed-form'}>
+          <div className={'form-row'}>
+            <label>No optimiziation history yet</label>
+          </div>
+        {rerunButton}
+      </div>
+      );
+    }
+    const missedGoals = modAssignments.missedGoals;
+    if (missedGoals.length === 0)
+    {
+      return(
+        <div id={'missed-form'}>
+          <div className={'form-row'}>
+            <label>All targets were met last run!</label>
+          </div>
+        {rerunButton}
+      </div>
+      );
+    }
     const targetStatRows =  missedGoals && missedGoals.map((missedGoal, index) =>
     <div className={'form-row'} key={index}>
       <label>{missedGoal[0].stat}</label>
@@ -666,11 +695,7 @@ class CharacterEditForm extends React.Component {
       <label>{missedGoal[1]}</label>
       </div>
     );
-    const rerunButton = (
-      <div className={'form-footer'}>
-        <button type={'button'} onClick={() => this.runCalc()}>Save and Run</button>
-      </div>
-    )
+
     return (
       <div id={'missed-form'}>
         {targetStatRows}
@@ -679,7 +704,7 @@ class CharacterEditForm extends React.Component {
     );
   }
 
-  runCalc() {
+  runIncrementalCalc() {
     this.saveTarget(false);
     this.props.optimizeMods();
   }

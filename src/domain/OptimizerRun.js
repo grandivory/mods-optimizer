@@ -7,7 +7,7 @@ export default class OptimizerRun {
   mods;
   selectedCharacters;
   globalSettings;
-  stopAt;
+  incrementalOptimizeIndex;
 
   /**
    * Note that all of the parameters for an OptimizerRun are pure Objects - no classes with extra methods built-in
@@ -19,9 +19,9 @@ export default class OptimizerRun {
    * @param globalSettings {Object} 
    * @param modChangeThreshold {number}
    * @param lockUnselectedCharacters {boolean}
-   * @param stopAt {string}
+   * @param incrementalOptimizeIndex {number}
    */
-  constructor(allyCode, characters, mods, selectedCharacters, globalSettings, stopAt) {
+  constructor(allyCode, characters, mods, selectedCharacters, globalSettings, incrementalOptimizeIndex) {
     this.allyCode = allyCode;
     // We care about everything stored for the character except the default settings
     mapObject(characters, character => {
@@ -32,7 +32,7 @@ export default class OptimizerRun {
     this.mods = mods;
     this.selectedCharacters = selectedCharacters;
     this.globalSettings = globalSettings;
-    this.stopAt = stopAt;
+    this.incrementalOptimizeIndex = incrementalOptimizeIndex;
   }
 
   serialize() {
@@ -42,7 +42,7 @@ export default class OptimizerRun {
       mods: this.mods,
       selectedCharacters: this.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()})),
       globalSettings: this.globalSettings,
-      stopAt: this.stopAt
+      incrementalOptimizeIndex: this.incrementalOptimizeIndex
     };
   }
 
@@ -54,7 +54,7 @@ export default class OptimizerRun {
         runJson.mods,
         runJson.selectedCharacters,
         runJson.globalSettings,
-        runJson.stopAt
+        runJson.incrementalOptimizeIndex
       );  
     } else {
       return this.deserializeVersionOneFive(runJson);
@@ -71,7 +71,7 @@ export default class OptimizerRun {
         modChangeThreshold: runJson.modChangeThreshold,
         lockUnselectedCharacters: runJson.lockUnselectedCharacters
       }),
-      runJson.stopAt
+      runJson.incrementalOptimizeIndex
     );
   }
 }

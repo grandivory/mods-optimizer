@@ -16,7 +16,7 @@ export default class PlayerProfile {
   modAssignments;
   globalSettings;
   hotUtilsSessionId;
-  stopAt;
+  incrementalOptimizeIndex;
   // Deprecated
   previousSettings;
 
@@ -29,7 +29,8 @@ export default class PlayerProfile {
    * @param modAssignments {Array<Object>} An array of character definitions and assigned mods
    * @param globalSettings {Object} An object containing settings that apply in the context of a player, rather than a
    *                                character
-   * @param stopAt {string} Specify to terminate optimization at a specific character, for incremental optimization
+   * @param incrementalOptimizeIndex {number} Specify to terminate optimization at a specific character, for incremental optimization
+   * 
    * @param previousSettings {Object} Deprecated - An object that holds the previous values for characters, mods,
    *                                  selectedCharacters, and modChangeThreshold. If none of these have changed, then
    *                                  modAssignments shouldn't change on a reoptimization.
@@ -43,7 +44,7 @@ export default class PlayerProfile {
     globalSettings = PlayerProfile.defaultGlobalSettings,
     previousSettings = {},
     hotUtilsSessionId = null,
-    stopAt
+    incrementalOptimizeIndex = -1,
   ) {
     this.allyCode = allyCode;
     this.playerName = playerName;
@@ -54,7 +55,7 @@ export default class PlayerProfile {
     this.globalSettings = globalSettings;
     this.previousSettings = previousSettings;
     this.hotUtilsSessionId = hotUtilsSessionId;
-    this.stopAt = stopAt;
+    this.incrementalOptimizeIndex = incrementalOptimizeIndex;
   }
 
   withPlayerName(name) {
@@ -69,7 +70,7 @@ export default class PlayerProfile {
         this.globalSettings,
         this.previousSettings,
         this.hotUtilsSessionId,
-        this.stopAt
+        this.incrementalOptimizeIndex,
       )
     } else {
       return this;
@@ -88,14 +89,14 @@ export default class PlayerProfile {
         this.globalSettings,
         this.previousSettings,
         this.hotUtilsSessionId,
-        this.stopAt
+        this.incrementalOptimizeIndex,
       );
     } else {
       return this;
     }
   }
 
-  clearStopAt() {
+  clearincrementalOptimizeIndex() {
     return new PlayerProfile(
       this.allyCode,
       this.playerName,
@@ -106,7 +107,7 @@ export default class PlayerProfile {
       this.globalSettings,
       this.previousSettings,
       this.hotUtilsSessionId,
-      ""
+      -1,
     );
 }
 
@@ -122,7 +123,7 @@ export default class PlayerProfile {
         this.globalSettings,
         this.previousSettings,
         this.hotUtilsSessionId,
-        this.stopAt
+        this.incrementalOptimizeIndex,
       );
     } else {
       return this;
@@ -141,7 +142,7 @@ export default class PlayerProfile {
         this.globalSettings,
         this.previousSettings,
         this.hotUtilsSessionId,
-        this.stopAt
+        this.incrementalOptimizeIndex,
       );
     } else {
       return this;
@@ -160,7 +161,7 @@ export default class PlayerProfile {
         this.globalSettings,
         this.previousSettings,
         this.hotUtilsSessionId,
-        this.stopAt
+        this.incrementalOptimizeIndex,
       );
     } else {
       return this;
@@ -178,7 +179,7 @@ export default class PlayerProfile {
       globalSettings,
       this.previousSettings,
       this.hotUtilsSessionId,
-      this.stopAt
+      this.incrementalOptimizeIndex,
     );
   }
 
@@ -194,7 +195,7 @@ export default class PlayerProfile {
         this.globalSettings,
         previousSettings,
         this.hotUtilsSessionId,
-        this.stopAt
+        this.incrementalOptimizeIndex,
       );
     } else {
       return this;
@@ -215,7 +216,7 @@ export default class PlayerProfile {
       this.globalSettings,
       {},
       this.hotUtilsSessionId,
-      this.stopAt
+      this.incrementalOptimizeIndex,
     );
   }
 
@@ -230,7 +231,7 @@ export default class PlayerProfile {
       this.globalSettings,
       this.previousSettings,
       id,
-      this.stopAt
+      this.incrementalOptimizeIndex,
     )
   }
 
@@ -245,7 +246,7 @@ export default class PlayerProfile {
       this.mods.map(mod => mod.serialize()),
       this.selectedCharacters,
       this.globalSettings,
-      this.stopAt
+      this.incrementalOptimizeIndex,
     );
   }
 
@@ -262,7 +263,7 @@ export default class PlayerProfile {
       globalSettings: this.globalSettings,
       previousSettings: this.previousSettings,
       hotUtilsSessionId: this.hotUtilsSessionId,
-      stopAt: this.stopAt
+      incrementalOptimizeIndex: this.incrementalOptimizeIndex,
     };
   }
 
@@ -283,7 +284,7 @@ export default class PlayerProfile {
         Object.assign({}, PlayerProfile.defaultGlobalSettings, profileJson.globalSettings),
         profileJson.previousSettings || {},
         profileJson.hotUtilsSessionId || null,
-        profileJson.stopAt || ""
+        profileJson.incrementalOptimizeIndex || -1,
       )
     } else {
       return null;
@@ -318,7 +319,7 @@ export default class PlayerProfile {
       globalSettings,
       profileJson.previousSettings || {},
       null,
-      profileJson.stopAt || ""
+      -1,
     );
   }
 }

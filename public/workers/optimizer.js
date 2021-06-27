@@ -73,7 +73,7 @@ self.onmessage = function (message) {
         ({ id: id, target: deserializeTarget(target) })
       );
       
-      const stopAt = profile.stopAt;
+      const incrementalOptimizeIndex = profile.incrementalOptimizeIndex;
 
       const optimizerResults = optimizeMods(
         allMods,
@@ -81,7 +81,7 @@ self.onmessage = function (message) {
         selectedCharacters,
         profile.globalSettings,
         lastRun,
-        stopAt
+        incrementalOptimizeIndex
       );
 
       optimizationSuccessMessage(optimizerResults);
@@ -1111,11 +1111,11 @@ Object.freeze(chooseTwoOptions);
  * @param globalSettings {Object} The settings to apply to every character being optimized
  * @param previousRun {Object} The settings from the last time the optimizer was run, used to limit expensive
  *                             recalculations for optimizing mods
- * @param stopAt {string} id of character to stop optimization at for incremental runs
+ * @param incrementalOptimizeIndex {number} index of character to stop optimization at for incremental runs
  * @return {Object} An array with an entry for each item in `order`. Each entry will be of the form
  *                  {id, target, assignedMods, messages}
  */
-function optimizeMods(availableMods, characters, order, globalSettings, previousRun = {}, stopAt = "") {
+function optimizeMods(availableMods, characters, order, globalSettings, previousRun = {}, incrementalOptimizeIndex = -1) {
   // We only want to recalculate mods if settings have changed between runs. If global settings or locked
   // characters have changed, recalculate all characters
   let recalculateMods = !previousRun.globalSettings ||
@@ -1154,15 +1154,10 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
     .concat(globalSettings.lockUnselectedCharacters ? unselectedCharacters : []);
 
   // For each not-locked character in the list, find the best mod set for that character
-  let breakForStopAt = false;
   const optimizerResults = order.reduce((modSuggestions, { id: characterID, target }, index) => {
     const character = characters[characterID];
     const previousCharacter = previousRun.characters ? previousRun.characters[characterID] : null;
-    if (stopAt === character.baseID)
-    {
-      breakForStopAt = true;
-    }
-    else if (breakForStopAt)
+    if (incrementalOptimizeIndex >= 0  && incrementalOptimizeIndex < index)
     {
       modSuggestions.push(null);
       return modSuggestions;

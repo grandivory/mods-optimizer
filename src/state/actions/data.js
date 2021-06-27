@@ -248,7 +248,7 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
           finalMods = Object.values(newMods);
         }
 
-        const newProfile = oldProfile.withCharacters(newCharacters).withMods(finalMods).clearStopAt();
+        const newProfile = oldProfile.withCharacters(newCharacters).withMods(finalMods).clearincrementalOptimizeIndex();
         db.saveProfile(
           newProfile,
           nothing,
