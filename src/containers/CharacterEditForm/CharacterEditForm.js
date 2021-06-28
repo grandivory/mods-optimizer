@@ -664,7 +664,7 @@ class CharacterEditForm extends React.Component {
       </div>
     )
     
-    if (modAssignments === null)
+    if (modAssignments === undefined || modAssignments === null)
     {
       return(
         <div id={'missed-form'}>
