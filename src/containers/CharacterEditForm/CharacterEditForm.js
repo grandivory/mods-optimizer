@@ -194,7 +194,7 @@ class CharacterEditForm extends React.Component {
           </div>
             {'basic' === this.props.editMode && this.basicForm(target)}
             {'advanced' === this.props.editMode && this.advancedForm(target)}
-            {this.missedGoalsSection(this.props.modAssignments[this.props.characterIndex])}
+            {this.missedGoalsSection(character.baseID === this.props.modAssignments[this.props.characterIndex]?.id ? this.props.modAssignments[this.props.characterIndex] : null)}
           </div>
         </div>
       </div>
@@ -669,7 +669,7 @@ class CharacterEditForm extends React.Component {
       return(
         <div id={'missed-form'}>
           <div className={'form-row'}>
-            <label>No optimiziation history yet</label>
+            <label>No optimization history yet</label>
           </div>
         {rerunButton}
       </div>
@@ -681,7 +681,7 @@ class CharacterEditForm extends React.Component {
       return(
         <div id={'missed-form'}>
           <div className={'form-row'}>
-            <label>All targets were met last run!</label>
+            <label>All targets met!</label>
           </div>
         {rerunButton}
       </div>
