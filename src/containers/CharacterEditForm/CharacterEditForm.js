@@ -667,7 +667,7 @@ class CharacterEditForm extends React.Component {
   }
 
   missedGoalsSection(modAssignments) {
-    if (modAssignments === null || (this.props.targetStats || []).length === 0) {
+    if ((this.props.targetStats || []).length === 0) {
       return;
     }
 
@@ -682,17 +682,29 @@ class CharacterEditForm extends React.Component {
         </div>
       );
 
+      if (modAssignments === null) {
+        return (
+          <div id={'missed-form'}>
+            <div className={'form-row'}>
+              <span>No optimization data yet!</span>
+            </div>
+            {rerunButton}
+          </div>
+        )
+      }
+
       const missedGoals = modAssignments.missedGoals;
       if (missedGoals.length === 0) {
         return (
           <div id={'missed-form'}>
             <div className={'form-row'}>
-              <label>No missed targets from last run</label>
+              <span>No missed targets from last run</span>
             </div>
             {rerunButton}
           </div>
         );
       }
+
       const targetStatRows = missedGoals.map(([targetStat, resultValue], index) =>
         <div className={'form-row'} key={index}>
           <span>{targetStat.stat}</span>

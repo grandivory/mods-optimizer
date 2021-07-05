@@ -29,7 +29,7 @@ const mapStateToProps = (state) => {
     character: state.progress.character,
     step: state.progress.step,
     progress: state.progress.progress,
-    isIncremental: !!state.profile.incrementalOptimizeIndex
+    isIncremental: state.profile.incrementalOptimizeIndex !== null
   }
 };
 

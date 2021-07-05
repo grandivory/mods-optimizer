@@ -53,7 +53,7 @@ export function finishModOptimization(result, settings) {
       dispatch(updateProgress({}));
 
       // If this was an incremental optimization, leave the user on their current page
-      if (!!newProfile.incrementalOptimizeIndex) {
+      if (newProfile.incrementalOptimizeIndex !== null) {
         return;
       }
 

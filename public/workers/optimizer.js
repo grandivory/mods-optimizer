@@ -1151,7 +1151,7 @@ function optimizeMods(availableMods, characters, order, incrementalOptimizeIndex
     .filter(id => characters[id].optimizerSettings.isLocked)
     .concat(globalSettings.lockUnselectedCharacters ? unselectedCharacters : []);
 
-  const endIndex = incrementalOptimizeIndex ? incrementalOptimizeIndex + 1 : order.length;
+  const endIndex = incrementalOptimizeIndex !== null ? incrementalOptimizeIndex + 1 : order.length;
 
   // For each not-locked character in the list, find the best mod set for that character
   const optimizerResults = order.slice(0, endIndex).reduce((modSuggestions, { id: characterID, target }, index) => {

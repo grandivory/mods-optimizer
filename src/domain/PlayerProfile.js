@@ -44,7 +44,7 @@ export default class PlayerProfile {
     globalSettings = PlayerProfile.defaultGlobalSettings,
     previousSettings = {},
     hotUtilsSessionId = null,
-    incrementalOptimizeIndex = -1,
+    incrementalOptimizeIndex = null,
   ) {
     this.allyCode = allyCode;
     this.playerName = playerName;
