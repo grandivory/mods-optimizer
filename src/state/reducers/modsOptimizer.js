@@ -27,7 +27,7 @@ import {
 } from "../actions/characterEdit";
 import { TOGGLE_KEEP_OLD_MODS } from "../actions/data";
 import { CHANGE_MODS_FILTER } from "../actions/explore";
-import { CANCEL_OPTIMIZE_MODS, OPTIMIZE_MODS } from "../actions/optimize";
+import { CANCEL_OPTIMIZE_MODS, OPTIMIZE_MODS, UPDATE_PROGRESS } from "../actions/optimize";
 import { CHANGE_MOD_SET_FILTER, CHANGE_MODLIST_FILTER, CHANGE_OPTIMIZER_VIEW, } from "../actions/review";
 import {
   changeSection,
@@ -56,7 +56,7 @@ import {
 } from "./characterEdit";
 import { toggleKeepOldMods } from "./data";
 import { changeModsFilter } from "./explore";
-import { cancelOptimizeMods, optimizeMods } from "./optimize";
+import { cancelOptimizeMods, optimizeMods, updateProgress } from "./optimize";
 import { changeModListFilter, changeModSetFilter, changeOptimizerView, } from "./review";
 import {
   ADD_PLAYER_PROFILE,
@@ -152,6 +152,8 @@ export default function modsOptimizer(state, action) {
 
     case OPTIMIZE_MODS:
       return optimizeMods(state);
+    case UPDATE_PROGRESS:
+      return updateProgress(state, action);
     case CANCEL_OPTIMIZE_MODS:
       return saveState(cancelOptimizeMods(state, action));
 

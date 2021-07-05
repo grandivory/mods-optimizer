@@ -11,6 +11,7 @@ import {
   changeMinimumModDots,
   changeSetRestrictions,
   changeSliceMods,
+  closeEditCharacterForm,
   deleteTarget,
   finishEditCharacterTarget,
   removeSetBonus,
@@ -27,6 +28,9 @@ import setBonuses from "../../constants/setbonuses";
 import TargetStat from "../../domain/TargetStat";
 import characterSettings from "../../constants/characterSettings";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
+import OptimizerProgress from '../../components/OptimizerProgress/OptimizerProgress';
+import areObjectsEquivalent from '../../utils/areObjectsEquivalent';
+import { Spoiler } from '../../components/Spoiler/Spoiler';
 
 class CharacterEditForm extends React.Component {
   constructor(props) {
@@ -99,7 +103,8 @@ class CharacterEditForm extends React.Component {
       noValidate={'advanced' === this.props.editMode}
       onSubmit={(e) => {
         e.preventDefault();
-        this.saveTarget(true);
+        this.saveTarget();
+        this.props.closeForm();
       }}
       ref={form => this.form = form}>
       <div className={'character-view column'}>
@@ -189,12 +194,16 @@ class CharacterEditForm extends React.Component {
             </div>
             <div className={'instructions'}>
               Give each stat type a value. These values are used as the "goodness" of each stat to calculate the optimum
-            mods to equip. <strong>These are not the amount of each stat you want!</strong> Instead, they are multiplied
-            with the amount of each stat on a mod to determine a score for each mod.
-          </div>
+              mods to equip. <strong>These are not the amount of each stat you want!</strong> Instead, they are multiplied
+              with the amount of each stat on a mod to determine a score for each mod.
+            </div>
             {'basic' === this.props.editMode && this.basicForm(target)}
             {'advanced' === this.props.editMode && this.advancedForm(target)}
-            {this.missedGoalsSection(character.baseID === this.props.modAssignments[this.props.characterIndex]?.id ? this.props.modAssignments[this.props.characterIndex] : null)}
+            {this.missedGoalsSection(
+              character.baseID === this.props.modAssignments[this.props.characterIndex]?.id ?
+                this.props.modAssignments[this.props.characterIndex] :
+                null
+            )}
           </div>
         </div>
       </div>
@@ -324,21 +333,21 @@ class CharacterEditForm extends React.Component {
             {possibleTargetStats.map(stat => <option key={stat} value={stat}>{stat}</option>)}
           </select>
         </span>
-      &nbsp; must be between &nbsp;
-    <input
+        &nbsp; must be between &nbsp;
+        <input
           type={'number'}
           step={'any'}
           name={'target-stat-min[]'}
           defaultValue={targetStat.target.minimum} />
-      &nbsp; and &nbsp;
+        &nbsp; and &nbsp;
         <input
           type={'number'}
           step={'any'}
           name={'target-stat-max[]'}
           defaultValue={targetStat.target.maximum} />
         <br />
-    compared to &nbsp;
-    <span className={'dropdown'}>
+        compared to &nbsp;
+        <span className={'dropdown'}>
           <select name={'target-stat-relative-character[]'} defaultValue={targetStat.target.relativeCharacterId || ''}>
             <option value={''}>No one</option>
             {gameSettings.map(
@@ -346,8 +355,8 @@ class CharacterEditForm extends React.Component {
             )}
           </select>
         </span>
-      &nbsp; using &nbsp;
-    <span className={'dropdown'}>
+        &nbsp; using &nbsp;
+        <span className={'dropdown'}>
           <select name={'target-stat-type[]'} defaultValue={targetStat.target.type || '+'}>
             <option value='+'>+/-</option>
             <option value='%'>%</option>
@@ -657,59 +666,65 @@ class CharacterEditForm extends React.Component {
     </div>;
   }
 
-  missedGoalsSection (modAssignments) {
-    const rerunButton = (
-      <div className={'form-footer'}>
-        <button type={'button'} onClick={() => this.runIncrementalCalc()}>Incremental Run</button>
-      </div>
-    )
-    
-    if (modAssignments === undefined || modAssignments === null)
-    {
-      return(
-        <div id={'missed-form'}>
-          <div className={'form-row'}>
-            <label>No optimization history yet</label>
-          </div>
-        {rerunButton}
-      </div>
-      );
+  missedGoalsSection(modAssignments) {
+    if (modAssignments === null || (this.props.targetStats || []).length === 0) {
+      return;
     }
-    const missedGoals = modAssignments.missedGoals;
-    if (missedGoals.length === 0)
-    {
-      return(
-        <div id={'missed-form'}>
-          <div className={'form-row'}>
-            <label>All targets met!</label>
-          </div>
-        {rerunButton}
-      </div>
-      );
-    }
-    const targetStatRows =  missedGoals.map(([targetStat, resultValue], index) =>
-    <div className={'form-row'} key={index}>
-      <label>{targetStat.stat}</label>
-      <label>({targetStat.minimum})-({targetStat.maximum})</label>
-      <label>{targetStat.minimum > resultValue ? " ↓ ":" ↑ "}</label>
-      <label>{resultValue}</label>
-      </div>
-    );
 
-    return (
-      <div id={'missed-form'}>
-        {targetStatRows}
-        {rerunButton}
+    const resultsInner = (() => {
+      if (!areObjectsEquivalent(this.props.progress, {})) {
+        return <OptimizerProgress />;
+      }
+
+      const rerunButton = (
+        <div className={'actions'}>
+          <button type={'button'} onClick={() => this.runIncrementalCalc()}>Run Incremental Optimization</button>
+        </div>
+      );
+
+      const missedGoals = modAssignments.missedGoals;
+      if (missedGoals.length === 0) {
+        return (
+          <div id={'missed-form'}>
+            <div className={'form-row'}>
+              <label>No missed targets from last run</label>
+            </div>
+            {rerunButton}
+          </div>
+        );
+      }
+      const targetStatRows = missedGoals.map(([targetStat, resultValue], index) =>
+        <div className={'form-row'} key={index}>
+          <span>{targetStat.stat}</span>
+          <span>({targetStat.minimum})-({targetStat.maximum})</span>
+          <span>{targetStat.minimum > resultValue ? " ↓ " : " ↑ "}</span>
+          <span>{resultValue}</span>
+        </div>
+      );
+
+      return (
+        <div id={'missed-form'}>
+          {targetStatRows}
+          {rerunButton}
+        </div>
+      );
+    })();
+
+    return <div className={'incremental-optimization'}>
+      <div className={'title'}>Incremental Optimization</div>
+      <hr />
+      <div className={'content'}>
+        {resultsInner}
       </div>
-    );
+    </div>;
   }
 
   runIncrementalCalc() {
-    this.saveTarget(false);
+    this.saveTarget();
     this.props.optimizeMods();
   }
 
-  saveTarget(closeForm) {
+  saveTarget() {
     const planName = 'lock' !== this.form['plan-name'].value ? this.form['plan-name'].value : 'custom';
     let newTarget;
     let primaryStatRestrictions = {};
@@ -809,8 +824,7 @@ class CharacterEditForm extends React.Component {
       this.props.characterIndex,
       newTarget,
       +this.form['mod-dots'].value,
-      this.form['slice-mods'].checked,
-      closeForm
+      this.form['slice-mods'].checked
     );
   }
 }
@@ -827,7 +841,8 @@ const mapStateToProps = (state) => {
     trianglePrimaries:
       Array.from(new Set(mods.filter(mod => mod.slot === 'triangle').map(mod => mod.primaryStat.type))),
     circlePrimaries: Array.from(new Set(mods.filter(mod => mod.slot === 'circle').map(mod => mod.primaryStat.type))),
-    crossPrimaries: Array.from(new Set(mods.filter(mod => mod.slot === 'cross').map(mod => mod.primaryStat.type)))
+    crossPrimaries: Array.from(new Set(mods.filter(mod => mod.slot === 'cross').map(mod => mod.primaryStat.type))),
+    progress: state.progress
   }
 };
 
@@ -837,12 +852,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeTargetStats(null));
   },
   hideModal: () => dispatch(hideModal()),
-  submitForm: (characterID, characterIndex, target, minimumModDots, sliceMods, close) => {
+  submitForm: (characterID, characterIndex, target, minimumModDots, sliceMods) => {
     dispatch(changeMinimumModDots(characterID, minimumModDots));
     dispatch(changeSliceMods(characterID, sliceMods));
     dispatch(unlockCharacter(characterID));
-    dispatch(finishEditCharacterTarget(characterIndex, target, close));
+    dispatch(finishEditCharacterTarget(characterIndex, target));
   },
+  closeForm: () => dispatch(closeEditCharacterForm()),
   resetCharacterTargetToDefault: (characterID, targetName) =>
     dispatch(resetCharacterTargetToDefault(characterID, targetName)),
   deleteTarget: (characterID, targetName) => dispatch(deleteTarget(characterID, targetName)),

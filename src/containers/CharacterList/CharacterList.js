@@ -13,7 +13,7 @@ import {
   lockCharacter, moveSelectedCharacter,
   selectCharacter, toggleCharacterLock,
   unselectCharacter, toggleSliceMods,
-  toggleUpgradeMods, changeMinimumModDots
+  toggleUpgradeMods, changeMinimumModDots, setOptimizeIndex
 } from "../../state/actions/characterEdit";
 import characterSettings from "../../constants/characterSettings";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
@@ -112,10 +112,7 @@ class CharacterList extends PureComponent {
       e.target.value = target.name;
 
       if ('custom' === optimizationTarget) {
-        this.props.showModal(
-          '',
-          <CharacterEditForm character={character} characterIndex={index} target={target.rename('custom')} />
-        );
+        this.showEditCharacterModal(character, index, target.rename('custom'));
       } else if ('lock' === optimizationTarget) {
         this.props.lockCharacter(character.baseID);
       } else {
@@ -153,14 +150,7 @@ class CharacterList extends PureComponent {
           </Dropdown>
           <button
             type={'button'}
-            onClick={() => this.props.showModal(
-              '',
-              <CharacterEditForm
-                character={character}
-                characterIndex={index}
-                target={target}
-              />
-            )}>
+            onClick={() => this.showEditCharacterModal(character, index, target)}>
             Edit
           </button>
         </div>
@@ -275,6 +265,18 @@ class CharacterList extends PureComponent {
       </div>
     )
   }
+
+  showEditCharacterModal(character, index, target) {
+    this.props.setOptimizeIndex(index);
+    this.props.showModal(
+      '',
+      <CharacterEditForm
+        character={character}
+        characterIndex={index}
+        target={target}
+      />
+    );
+  }
 }
 
 const mapStateToProps = (state) => {
@@ -297,7 +299,8 @@ const mapDispatchToProps = (dispatch) => ({
   toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID)),
   toggleSliceMods: (characterID) => dispatch(toggleSliceMods(characterID)),
   toggleUpgradeMods: (characterIndex) => dispatch(toggleUpgradeMods(characterIndex)),
-  changeMinimumModDots: (characterID, newMinimum) => dispatch(changeMinimumModDots(characterID, newMinimum))
+  changeMinimumModDots: (characterID, newMinimum) => dispatch(changeMinimumModDots(characterID, newMinimum)),
+  setOptimizeIndex: (index) => dispatch(setOptimizeIndex(index))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterList);

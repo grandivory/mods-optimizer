@@ -264,7 +264,7 @@ export function loadProfile(allyCode) {
       allyCode,
       profile => {
         const cleanedSelectedCharacters =
-          profile.selectedCharacters?.filter(({ id }) => Object.keys(profile.characters).includes(id));
+          profile.selectedCharacters.filter(({ id }) => Object.keys(profile.characters).includes(id));
         const cleanedProfile = profile.withSelectedCharacters(cleanedSelectedCharacters);
 
         dispatch(setProfile(cleanedProfile));

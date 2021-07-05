@@ -29,7 +29,7 @@ import {
   updateModChangeThreshold,
   updateForceCompleteModSets,
   applyTemplateTargets,
-  resetIncrementalIndex
+  setOptimizeIndex
 } from "../../state/actions/characterEdit";
 import { changeOptimizerView, updateModListFilter } from "../../state/actions/review";
 import { optimizeMods } from "../../state/actions/optimize";
@@ -48,6 +48,7 @@ import collectByKey from "../../utils/collectByKey";
 import keysWhere from "../../utils/keysWhere";
 import { Spoiler } from "../../components/Spoiler/Spoiler";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
+import OptimizerProgress from '../../components/OptimizerProgress/OptimizerProgress';
 
 const defaultTemplates = require('../../constants/characterTemplates.json');
 
@@ -158,16 +159,16 @@ class CharacterEditView extends PureComponent {
         <div className={'template-buttons'}>
           <div className={'row'}>
             Manage:
-              <button className={'small'}
+            <button className={'small'}
               disabled={!this.props.selectedCharacters.length}
               onClick={() => this.props.showModal('save-template', this.saveTemplateModal())}>
               Save
-              </button>
+            </button>
             <button className={'small'}
               disabled={!this.userTemplates().length}
               onClick={() => this.props.showModal('export-template', this.exportTemplateModal())}>
               Export
-              </button>
+            </button>
             <FileInput label={'Load'}
               className={'small'}
               handler={(file) => this.readFile(
@@ -193,22 +194,22 @@ class CharacterEditView extends PureComponent {
               disabled={!this.userTemplates().length}
               onClick={() => this.props.showModal('delete-template', this.deleteTemplateModal())}>
               Delete
-              </button>
+            </button>
           </div>
           <div className={'row'}>
             Apply:
-              <button className={'small'}
+            <button className={'small'}
               onClick={() => this.props.showModal('append-template', this.appendTemplateModal())}>
               Append
-              </button>
+            </button>
             <button className={'small'}
               onClick={() => this.props.showModal('replace-template', this.replaceTemplateModal())}>
               Replace
-              </button>
+            </button>
             <button className={'small'}
               onClick={() => this.props.showModal('template-targets', this.templateTargetsModal())}>
               Apply targets only
-              </button>
+            </button>
           </div>
         </div>
         <CharacterList selfDrop={true} draggable={true} />
@@ -298,6 +299,7 @@ class CharacterEditView extends PureComponent {
           if (duplicateCharacters.length > 0 || hasTargetStats) {
             this.props.showModal('notice', this.optimizeWithWarningsModal(duplicateCharacters, hasTargetStats));
           } else {
+            this.props.showModal('optimizer-progress', <OptimizerProgress />, false);
             this.props.optimizeMods();
           }
         }}
@@ -309,7 +311,7 @@ class CharacterEditView extends PureComponent {
         this.props.showReviewButton ?
           <button type={'button'} onClick={this.props.reviewOldAssignments}>
             Review recommendations
-        </button> :
+          </button> :
           null
       }
       <button type={'button'} className={'blue'} onClick={this.props.lockAllCharacters}>
@@ -390,7 +392,7 @@ class CharacterEditView extends PureComponent {
         Every character in the game has been given starting values for all stats that can be used by the optimizer to
         pick the best mods. These values have been named for their general purpose - hSTR Phase 1, PvP, and PvE, for
         example. Some characters have multiple different targets that you can select from. <strong>These targets, while
-        directionally good for characters, are only a base suggestion!</strong> There are many reasons that you might
+          directionally good for characters, are only a base suggestion!</strong> There are many reasons that you might
         want to pick different values than those listed by default in the optimizer: you might want to optimize for a
         different purpose (such as a phase 3 Sith Triumvirate Raid team, where speed can be detrimental), you might
         want to choose something different to optimize against, or you might simply have a better set of values that
@@ -767,26 +769,26 @@ class CharacterEditView extends PureComponent {
         <h3>You have selected characters with target stats</h3>
         <p>
           Using a target stat can be very slow - <strong>up to multiple hours for a single character</strong> - and can
-        rapidly drain your battery if you are on a laptop or mobile device. If you want the optimization to go faster,
-        there are a few things you can do:
-      </p>
+          rapidly drain your battery if you are on a laptop or mobile device. If you want the optimization to go faster,
+          there are a few things you can do:
+        </p>
         <hr />
         <ul>
           <li>
             Set very narrow targets for your stats. The narrower the target, the faster the optimizer can rule sets out.
-        </li>
+          </li>
           <li>
             Add additional restrictions, like specific sets or primary stats.
-        </li>
+          </li>
           <li>
             Set targets that are hard to hit. If only a few sets can even manage to hit a target, the optimizer only needs
             to check those sets.
-        </li>
+          </li>
           <li>
             If you've already completed a run for the character with a target stat, don't change their settings or those
             of any characters above them. If the optimizer doesn't think it needs to recalculate the best mod set, it will
             leave the previous recommendation in place.
-        </li>
+          </li>
         </ul>
         <hr />
       </div>
@@ -794,7 +796,10 @@ class CharacterEditView extends PureComponent {
       <p>Do you want to continue?</p>
       <div className={'actions'}>
         <button type={'button'} onClick={() => this.props.hideModal()}>Cancel</button>
-        <button type={'button'} onClick={() => { this.props.hideModal(); this.props.optimizeMods(); }}>Optimize!</button>
+        <button type={'button'} onClick={() => {
+          this.props.showModal('optimizer-progress', <OptimizerProgress />, false);
+          this.props.optimizeMods();
+        }}>Optimize!</button>
       </div>
     </div>;
   }
@@ -907,8 +912,7 @@ const mapStateToProps = (state) => {
     selectedCharacters: profile.selectedCharacters,
     lastSelectedCharacter: profile.selectedCharacters.length - 1,
     showReviewButton: profile.modAssignments && Object.keys(profile.modAssignments).length,
-    characterTemplates: Object.keys(state.characterTemplates),
-    incrementalOptimizeIndex: profile.incrementalOptimizeIndex,
+    characterTemplates: Object.keys(state.characterTemplates)
   };
 };
 
@@ -936,8 +940,8 @@ const mapDispatchToProps = dispatch => ({
   toggleCharacterLock: (characterID) => dispatch(toggleCharacterLock(characterID)),
   updateLockUnselectedCharacters: (lock) => dispatch(updateLockUnselectedCharacters(lock)),
   resetAllCharacterTargets: () => dispatch(resetAllCharacterTargets()),
-  resetIncrementalIndex: () => dispatch(resetIncrementalIndex()),
   optimizeMods: () => dispatch(optimizeMods()),
+  resetIncrementalIndex: () => dispatch(setOptimizeIndex(null)),
   updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold)),
   updateForceCompleteModSets: (forceCompleteModSets) => dispatch(updateForceCompleteModSets(forceCompleteModSets)),
   generateCharacterList: (mode, behavior, allyCode, parameters) => {

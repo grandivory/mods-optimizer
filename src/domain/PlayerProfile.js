@@ -30,7 +30,7 @@ export default class PlayerProfile {
    * @param globalSettings {Object} An object containing settings that apply in the context of a player, rather than a
    *                                character
    * @param incrementalOptimizeIndex {number} Specify to terminate optimization at a specific character, for incremental optimization
-   * 
+   *
    * @param previousSettings {Object} Deprecated - An object that holds the previous values for characters, mods,
    *                                  selectedCharacters, and modChangeThreshold. If none of these have changed, then
    *                                  modAssignments shouldn't change on a reoptimization.
@@ -96,7 +96,7 @@ export default class PlayerProfile {
     }
   }
 
-  resetIncrementalOptimizeIndex() {
+  withOptimizeIndex(index) {
     return new PlayerProfile(
       this.allyCode,
       this.playerName,
@@ -107,9 +107,9 @@ export default class PlayerProfile {
       this.globalSettings,
       this.previousSettings,
       this.hotUtilsSessionId,
-      -1,
+      index
     );
-}
+  }
 
   withMods(mods) {
     if (mods) {
@@ -245,7 +245,7 @@ export default class PlayerProfile {
       mapObject(this.characters, character => character.serialize()),
       this.mods.map(mod => mod.serialize()),
       this.selectedCharacters,
-      this.globalSettings,
+      this.globalSettings
     );
   }
 
@@ -283,7 +283,7 @@ export default class PlayerProfile {
         Object.assign({}, PlayerProfile.defaultGlobalSettings, profileJson.globalSettings),
         profileJson.previousSettings || {},
         profileJson.hotUtilsSessionId || null,
-        profileJson.incrementalOptimizeIndex || -1,
+        profileJson.incrementalOptimizeIndex || null,
       )
     } else {
       return null;
@@ -318,7 +318,7 @@ export default class PlayerProfile {
       globalSettings,
       profileJson.previousSettings || {},
       null,
-      -1,
+      null,
     );
   }
 }

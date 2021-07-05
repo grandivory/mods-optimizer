@@ -270,12 +270,9 @@ export function changeCharacterEditMode(mode) {
  * @param newTarget OptimizationPlan The new target to use for the character
  * @returns {Function}
  */
-export function finishEditCharacterTarget(characterIndex, newTarget, closeForm) {
+export function finishEditCharacterTarget(characterIndex, newTarget) {
   return updateProfile(
     profile => {
-      if (characterIndex >= profile.selectedCharacters.length) {
-        return profile.resetIncrementalOptimizeIndex();
-      }
       const newSelectedCharacters = profile.selectedCharacters.slice();
       const [{ id: characterID }] = newSelectedCharacters.splice(characterIndex, 1);
       newSelectedCharacters.splice(characterIndex, 0, { id: characterID, target: newTarget });
@@ -283,22 +280,20 @@ export function finishEditCharacterTarget(characterIndex, newTarget, closeForm) 
       const oldCharacter = profile.characters[characterID];
       const newCharacter = oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withTarget(newTarget));
 
-      // incremental optimization, set the incrementalOptimizeIndex
-      profile.incrementalOptimizeIndex = closeForm?-1: characterIndex;
-
       return profile.withCharacters(Object.assign({}, profile.characters, {
         [newCharacter.baseID]: newCharacter
       })).withSelectedCharacters(newSelectedCharacters);
-    },
-    dispatch => {
-      if(closeForm)
-      { 
-        dispatch(hideModal());
-        dispatch(changeSetRestrictions(null));
-        dispatch(changeTargetStats(null));
-      }
     }
   );
+}
+
+export function closeEditCharacterForm() {
+  return function (dispatch) {
+    dispatch(hideModal());
+    dispatch(changeSetRestrictions(null));
+    dispatch(changeTargetStats(null));
+    dispatch(setOptimizeIndex(null));
+  }
 }
 
 /**
@@ -714,13 +709,8 @@ export function replaceTemplate(name) {
   }
 }
 
-export function resetIncrementalIndex() {
-  return updateProfile(
-    profile => {
-      const newProfile = profile.resetIncrementalOptimizeIndex();
-      return newProfile;
-    }
-  )
+export function setOptimizeIndex(index) {
+  return updateProfile(profile => profile.withOptimizeIndex(index));
 }
 
 export function applyTemplateTargets(name) {

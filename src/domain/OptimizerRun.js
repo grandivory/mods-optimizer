@@ -1,4 +1,4 @@
-import {mapObject} from "../utils/mapObject";
+import { mapObject } from "../utils/mapObject";
 import PlayerProfile from "./PlayerProfile";
 
 export default class OptimizerRun {
@@ -15,7 +15,7 @@ export default class OptimizerRun {
    * @param characters {Object<String, Object>}
    * @param mods {Array<Object>}
    * @param selectedCharacters {Array<Object>}
-   * @param globalSettings {Object} 
+   * @param globalSettings {Object}
    * @param modChangeThreshold {number}
    * @param lockUnselectedCharacters {boolean}
    */
@@ -37,7 +37,7 @@ export default class OptimizerRun {
       allyCode: this.allyCode,
       characters: this.characters,
       mods: this.mods,
-      selectedCharacters: this.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()})),
+      selectedCharacters: this.selectedCharacters.map(({ id, target }) => ({ id: id, target: target.serialize() })),
       globalSettings: this.globalSettings,
     };
   }
@@ -49,8 +49,8 @@ export default class OptimizerRun {
         runJson.characters,
         runJson.mods,
         runJson.selectedCharacters,
-        runJson.globalSettings,
-      );  
+        runJson.globalSettings
+      );
     } else {
       return this.deserializeVersionOneFive(runJson);
     }
@@ -65,7 +65,7 @@ export default class OptimizerRun {
       Object.assign({}, PlayerProfile.defaultGlobalSettings, {
         modChangeThreshold: runJson.modChangeThreshold,
         lockUnselectedCharacters: runJson.lockUnselectedCharacters
-      }),
+      })
     );
   }
 }

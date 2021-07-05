@@ -6,7 +6,13 @@ export function optimizeMods(state) {
   });
 }
 
-export function cancelOptimizeMods(state, action) {
+export function updateProgress(state, action) {
+  return Object.assign({}, state, {
+    progress: action.progress
+  });
+}
+
+export function cancelOptimizeMods(state) {
   return Object.assign({}, state, {
     isBusy: false,
     flashMessage: null,

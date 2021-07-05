@@ -79,6 +79,7 @@ export const defaultState = {
   playerProfiles: {}, // A simple map from ally codes to player names for all available profiles
   previousVersion: process.env.REACT_APP_VERSION || 'local',
   profile: null, // All the data about the current character
+  progress: {},
   section: 'optimize',
   showSidebar: true,
   version: process.env.REACT_APP_VERSION || 'local'

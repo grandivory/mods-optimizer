@@ -1,6 +1,6 @@
 // @flow
 
-import { hideModal, setIsBusy, showError, showFlash, showModal, updateProfile } from "./app";
+import { hideModal, setIsBusy, showError, showFlash, updateProfile } from "./app";
 import React from "react";
 import CharacterAvatar from "../../components/CharacterAvatar/CharacterAvatar";
 import getDatabase from "../storage/Database";
@@ -9,6 +9,7 @@ import Character from "../../domain/Character";
 import nothing from "../../utils/nothing";
 
 export const OPTIMIZE_MODS = 'OPTIMIZE_MODS';
+export const UPDATE_PROGRESS = 'UPDATE_PROGRESS';
 export const CANCEL_OPTIMIZE_MODS = 'CANCEL_OPTIMIZE_MODS';
 export const FINISH_OPTIMIZE_MODS = 'FINISH_OPTIMIZE_MODS';
 
@@ -16,6 +17,13 @@ export function startModOptimization() {
   return {
     type: OPTIMIZE_MODS
   };
+}
+
+export function updateProgress(progress) {
+  return {
+    type: UPDATE_PROGRESS,
+    progress: progress
+  }
 }
 
 /**
@@ -40,15 +48,15 @@ export function finishModOptimization(result, settings) {
           ' The optimizer may not recalculate correctly on your next optimization'
         ))
       );
-      const incrementalOptimizeIndex = newProfile.incrementalOptimizeIndex;
-      const incremental = incrementalOptimizeIndex >= 0;
+
       dispatch(setIsBusy(false));
-      if (incremental)
-      {
+      dispatch(updateProgress({}));
+
+      // If this was an incremental optimization, leave the user on their current page
+      if (!!newProfile.incrementalOptimizeIndex) {
         return;
       }
-      else
-      {
+
       dispatch(updateModListFilter({
         view: 'sets',
         sort: 'assignedCharacter'
@@ -104,7 +112,6 @@ export function finishModOptimization(result, settings) {
         ));
       }
     }
-  }
   );
 }
 
@@ -123,7 +130,6 @@ let optimizationWorker = null;
 export function optimizeMods() {
   return function (dispatch, getState) {
     const profile = getState().profile;
-    const incremental = profile.incrementalOptimizeIndex >= 0;
     // If any of the characters being optimized don't have stats, then show an error message
     if (Object.values(profile.characters)
       .filter(char => null === char.playerValues.baseStats || null === char.playerValues.equippedStats)
@@ -138,31 +144,14 @@ export function optimizeMods() {
       new Worker(`/workers/optimizer.js?version=${process.env.REACT_APP_VERSION || 'local'}`);
 
     optimizationWorker.onmessage = function (message) {
-      if (incremental)
-      {
-        switch (message.data.type) {
-          case 'OptimizationSuccess':
-            dispatch(setIsBusy(false));
-            dispatch(finishModOptimization(
-              message.data.result,
-              profile.toOptimizerRun()
-            ));
-            break;
-          case 'Progress':
-            // TODO: Get some kind of visualization of progress for long running incremental optimizations here
-            break;
-          default: // do nothing
-        }
-        return;
-        // don't show modals for incremental optimization.
-      } 
       switch (message.data.type) {
         case 'OptimizationSuccess':
           dispatch(setIsBusy(false));
-          dispatch(showModal(
-            'optimizer-progress',
-            optimizerProgressModal(null, 'Rendering your results', 100, dispatch)
-          ));
+          dispatch(updateProgress({
+            character: null,
+            step: 'Rendering your results',
+            progress: 100
+          }));
           // Set a timeout so the modal has time to display
           setTimeout(
             () =>
@@ -175,11 +164,7 @@ export function optimizeMods() {
           break;
         case 'Progress':
           dispatch(setIsBusy(false));
-          dispatch(showModal(
-            'optimizer-progress',
-            optimizerProgressModal(message.data.character, message.data.step, message.data.progress, dispatch),
-            false
-          ));
+          dispatch(updateProgress(message.data));
           break;
         default: // Do nothing
       }
@@ -197,35 +182,9 @@ export function optimizeMods() {
   };
 }
 
-/**
- * Renders a modal showing the progress of the optimization
- * @param character {Character}
- * @param step {string}
- * @param progress {number} The progress percent to show, from 0 to 100
- * @param dispatch {function} The dispatch function for Redux
- * @returns {*}
- */
-function optimizerProgressModal(character, step, progress, dispatch) {
-  return <div>
-    <h3>Optimizing Your Mods...</h3>
-    <div className={'progressBox'}>
-      {character &&
-        <div className={'character'}><CharacterAvatar character={character} /></div>
-      }
-      <div className={'step'}>{step}</div>
-      <div className={'progress'}>
-        <span className={'progress-bar'} id={'progress-bar'} style={{ width: `${progress}%` }} />
-      </div>
-    </div>
-    <div className={'actions'}>
-      <button type={'button'} className={'red'} onClick={() => dispatch(cancelOptimizer())}>Cancel</button>
-    </div>
-  </div>;
-}
-
 export function cancelOptimizer() {
   return function (dispatch) {
     optimizationWorker.terminate();
-    dispatch(cancelOptimizeMods());
-  };
+    dispatch(updateProgress({}));
+  }
 }

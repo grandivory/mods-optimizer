@@ -215,3 +215,26 @@
 .character-edit-form #delete-button {
   float: left;
 }
+
+.character-edit-form .incremental-optimization {
+  border-radius: 1em;
+  border: 1px solid white;
+  margin-top: 1em;
+}
+
+.character-edit-form .incremental-optimization .title {
+  color: #a35ef9;
+  margin: .25em;
+}
+
+.character-edit-form .incremental-optimization hr {
+  margin: 0;
+}
+
+.character-edit-form .incremental-optimization .content {
+  margin: .25em;
+}
+
+.character-edit-form .incremental-optimization .actions {
+  text-align: center;
+}
