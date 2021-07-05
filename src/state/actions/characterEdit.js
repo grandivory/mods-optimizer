@@ -270,11 +270,11 @@ export function changeCharacterEditMode(mode) {
  * @param newTarget OptimizationPlan The new target to use for the character
  * @returns {Function}
  */
-export function finishEditCharacterTarget(characterIndex, newTarget) {
+export function finishEditCharacterTarget(characterIndex, newTarget, closeForm) {
   return updateProfile(
     profile => {
       if (characterIndex >= profile.selectedCharacters.length) {
-        return profile;
+        return profile.resetIncrementalOptimizeIndex();
       }
       const newSelectedCharacters = profile.selectedCharacters.slice();
       const [{ id: characterID }] = newSelectedCharacters.splice(characterIndex, 1);
@@ -283,14 +283,20 @@ export function finishEditCharacterTarget(characterIndex, newTarget) {
       const oldCharacter = profile.characters[characterID];
       const newCharacter = oldCharacter.withOptimizerSettings(oldCharacter.optimizerSettings.withTarget(newTarget));
 
+      // incremental optimization, set the incrementalOptimizeIndex
+      profile.incrementalOptimizeIndex = closeForm?-1: characterIndex;
+
       return profile.withCharacters(Object.assign({}, profile.characters, {
         [newCharacter.baseID]: newCharacter
       })).withSelectedCharacters(newSelectedCharacters);
     },
     dispatch => {
-      dispatch(hideModal());
-      dispatch(changeSetRestrictions(null));
-      dispatch(changeTargetStats(null));
+      if(closeForm)
+      { 
+        dispatch(hideModal());
+        dispatch(changeSetRestrictions(null));
+        dispatch(changeTargetStats(null));
+      }
     }
   );
 }
@@ -706,6 +712,15 @@ export function replaceTemplate(name) {
       );
     }
   }
+}
+
+export function resetIncrementalIndex() {
+  return updateProfile(
+    profile => {
+      const newProfile = profile.resetIncrementalOptimizeIndex();
+      return newProfile;
+    }
+  )
 }
 
 export function applyTemplateTargets(name) {

@@ -38,7 +38,7 @@ export default class OptimizerRun {
       characters: this.characters,
       mods: this.mods,
       selectedCharacters: this.selectedCharacters.map(({id, target}) => ({id: id, target: target.serialize()})),
-      globalSettings: this.globalSettings
+      globalSettings: this.globalSettings,
     };
   }
 
@@ -49,7 +49,7 @@ export default class OptimizerRun {
         runJson.characters,
         runJson.mods,
         runJson.selectedCharacters,
-        runJson.globalSettings
+        runJson.globalSettings,
       );  
     } else {
       return this.deserializeVersionOneFive(runJson);
@@ -65,7 +65,7 @@ export default class OptimizerRun {
       Object.assign({}, PlayerProfile.defaultGlobalSettings, {
         modChangeThreshold: runJson.modChangeThreshold,
         lockUnselectedCharacters: runJson.lockUnselectedCharacters
-      })
+      }),
     );
   }
 }

@@ -63,7 +63,6 @@ self.onmessage = function (message) {
 
         lastRun.characters = lastRunCharacters;
       }
-
       lastRun.modAssignments = profile.modAssignments;
 
       lastRun.selectedCharacters = lastRun.selectedCharacters instanceof Array ?
@@ -73,13 +72,16 @@ self.onmessage = function (message) {
       const selectedCharacters = profile.selectedCharacters.map(({ id, target }) =>
         ({ id: id, target: deserializeTarget(target) })
       );
+      
+      const incrementalOptimizeIndex = profile.incrementalOptimizeIndex;
 
       const optimizerResults = optimizeMods(
         allMods,
         characters,
         selectedCharacters,
         profile.globalSettings,
-        lastRun
+        lastRun,
+        incrementalOptimizeIndex
       );
 
       optimizationSuccessMessage(optimizerResults);
@@ -1109,10 +1111,11 @@ Object.freeze(chooseTwoOptions);
  * @param globalSettings {Object} The settings to apply to every character being optimized
  * @param previousRun {Object} The settings from the last time the optimizer was run, used to limit expensive
  *                             recalculations for optimizing mods
+ * @param incrementalOptimizeIndex {number} index of character to stop optimization at for incremental runs
  * @return {Object} An array with an entry for each item in `order`. Each entry will be of the form
  *                  {id, target, assignedMods, messages}
  */
-function optimizeMods(availableMods, characters, order, globalSettings, previousRun = {}) {
+function optimizeMods(availableMods, characters, order, globalSettings, previousRun = {}, incrementalOptimizeIndex = -1) {
   // We only want to recalculate mods if settings have changed between runs. If global settings or locked
   // characters have changed, recalculate all characters
   let recalculateMods = !previousRun.globalSettings ||
@@ -1154,7 +1157,11 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
   const optimizerResults = order.reduce((modSuggestions, { id: characterID, target }, index) => {
     const character = characters[characterID];
     const previousCharacter = previousRun.characters ? previousRun.characters[characterID] : null;
-
+    if (incrementalOptimizeIndex >= 0  && incrementalOptimizeIndex < index)
+    {
+      modSuggestions.push(null);
+      return modSuggestions;
+    }
     // If the character is locked, skip it
     if (character.optimizerSettings.isLocked) {
       modSuggestions.push(null);
@@ -1177,7 +1184,8 @@ function optimizeMods(availableMods, characters, order, globalSettings, previous
       previousCharacter.optimizerSettings &&
       character.optimizerSettings.minimumModDots === previousCharacter.optimizerSettings.minimumModDots &&
       character.optimizerSettings.sliceMods === previousCharacter.optimizerSettings.sliceMods &&
-      character.optimizerSettings.isLocked === previousCharacter.optimizerSettings.isLocked
+      character.optimizerSettings.isLocked === previousCharacter.optimizerSettings.isLocked &&
+      previousRun.modAssignments[index]
     ) {
       const assignedMods = previousRun.modAssignments[index].assignedMods;
       const messages = previousRun.modAssignments[index].messages;
