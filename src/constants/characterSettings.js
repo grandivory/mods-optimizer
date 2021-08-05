@@ -634,7 +634,8 @@ const characterSettings = {
     DamageType.special
   ),
   'JEDIMASTERKENOBI': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 25, 0, 0, 0, 10, 0, 0, 0, 0, 0, true)],
+
+    [new OptimizationPlan('PvP', 0, 0, 100, 25, 0, 0, 10, 0, 0, 0, 0, 0, 0, true)],
     ['JMK'],
     DamageType.physical
   ),
