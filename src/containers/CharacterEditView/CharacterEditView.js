@@ -296,7 +296,29 @@ class CharacterEditView extends PureComponent {
             collectByKey(this.props.selectedCharacters, ({ id }) => id),
             targets => targets.length > 1);
 
-          if (duplicateCharacters.length > 0 || hasTargetStats) {
+          const minCharacterIndices = this.props.selectedCharacters.reduce((indices, { id }, charIndex) => ({
+            [id]: charIndex,
+            ...indices
+          }));
+          console.log(minCharacterIndices);
+
+          const invalidTargets = this.props.selectedCharacters.filter(({ target }, index) =>
+            target.targetStats.find(targetStat => targetStat.relativeCharacterId && minCharacterIndices[targetStat.relativeCharacterId] > index)
+          ).map(({ id }) => id)
+          console.log(invalidTargets);
+
+          if (invalidTargets.length > 0) {
+            this.props.showError([
+              <p>You have invalid targets set!</p>,
+              <p>For relative targets, the compared character MUST be earlier in the selected characters list.</p>,
+              <p>Please fix the following characters:</p>,
+              <ul>
+                {invalidTargets.map(id => <li>
+                  {this.props.gameSettings[id] ? this.props.gameSettings[id].name : id}
+                </li>)}
+              </ul>
+            ]);
+          } else if (duplicateCharacters.length > 0 || hasTargetStats) {
             this.props.showModal('notice', this.optimizeWithWarningsModal(duplicateCharacters, hasTargetStats));
           } else {
             this.props.showModal('optimizer-progress', <OptimizerProgress />, false);
@@ -917,7 +939,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  showModal: (clazz, content) => dispatch(showModal(clazz, content)),
+  showModal: (clazz, content, cancelable) => dispatch(showModal(clazz, content, cancelable)),
   hideModal: () => dispatch(hideModal()),
   showError: (error) => dispatch(showError(error)),
   changeCharacterFilter: (filter) => dispatch(changeCharacterFilter(filter)),
