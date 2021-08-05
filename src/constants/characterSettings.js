@@ -73,13 +73,28 @@ const characterSettings = {
       new OptimizationPlan('PvP', 0, 0, 100, 80, 20, 0, 50, 0, 25, 0, 0, 0, 0, true)
     ]
   ),
+  'BADBATCHECHO': new CharacterSettings(
+    [optimizationStrategy["Speedy debuffer"].rename('PvP')]
+  ),
+  'BADBATCHHUNTER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 25, 0, 10, 0, 0, 0, 0, 0, 0, true)],
+    DamageType.physical
+  ),
+  'BADBATCHOMEGA': new CharacterSettings(
+    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
+  ),
+  'BADBATCHTECH': new CharacterSettings(
+    [optimizationStrategy["Speedy debuffer"].rename('PvP')]
+  ),
+  'BADBATCHWRECKER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 20, 20, 0, 50, 50, 0, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'B1BATTLEDROIDV2': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 75, 0, 0, 0, 0, 0, 0, true)]
   ),
   'B2SUPERBATTLEDROID': new CharacterSettings(
     [new OptimizationPlan('Survival', 50, 50, 0, 0, 50, 25, 0, 0, 0, 0, 0, 50, 0, true)]
   ),
-  // 'BADBATCHHUNTER': new CharacterSettings(),
   'BARRISSOFFEE': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 50, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
@@ -220,6 +235,14 @@ const characterSettings = {
   'COLONELSTARCK': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 10, 5, 0, 5, 0, 5, 0, 0, 0, 0)],
     ['Tony Stark', 'Troopers']
+  ),
+  'COMMANDERAHSOKA': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 5, 0, 100, 50, 0, 0, 0, 30, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Crit.Dmg', 5, 0, 25, 100, 0, 0, 0, 30, 0, 0, 0, 0, 0, true)
+    ],
+    ['CAT'],
+    DamageType.special
   ),
   'COMMANDERLUKESKYWALKER': new CharacterSettings(
     [
@@ -609,6 +632,12 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 0, 10, 0, 0, 0, 0, 0, true)],
     [],
     DamageType.special
+  ),
+  'JEDIMASTERKENOBI': new CharacterSettings(
+
+    [new OptimizationPlan('PvP', 0, 0, 100, 25, 0, 0, 10, 0, 0, 0, 0, 0, 0, true)],
+    ['JMK'],
+    DamageType.physical
   ),
   'JOLEEBINDO': new CharacterSettings(
     [
