@@ -77,8 +77,7 @@ const characterSettings = {
     [optimizationStrategy["Speedy debuffer"].rename('PvP')]
   ),
   'BADBATCHHUNTER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 50, 25, 0, 10, 0, 0, 0, 0, 0, 0, true)],
-    DamageType.physical
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 25, 0, 10, 0, 0, 0, 0, 0, 0, true)]
   ),
   'BADBATCHOMEGA': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
@@ -634,10 +633,8 @@ const characterSettings = {
     DamageType.special
   ),
   'JEDIMASTERKENOBI': new CharacterSettings(
-
     [new OptimizationPlan('PvP', 0, 0, 100, 25, 0, 0, 10, 0, 0, 0, 0, 0, 0, true)],
-    ['JMK'],
-    DamageType.physical
+    ['JMK']
   ),
   'JOLEEBINDO': new CharacterSettings(
     [
