@@ -56,7 +56,7 @@ function processVersion(version) {
   return function (dispatch, getState) {
     const state = getState();
 
-    if (state.version < version) {
+    if (state.version !== version) {
       dispatch(showFlash(
         'Version out-of-date!',
         [
