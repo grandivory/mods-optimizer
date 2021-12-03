@@ -727,6 +727,9 @@ const characterSettings = {
   'MAUL': new CharacterSettings(
     [optimizationStrategy["Special Damage with Potency"].rename('PvP')]
   ),
+  'MAULS7': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 25, 100, 0, 5, 0, 50, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'MISSIONVAO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 75, 0, 50, 0, 0, 0, 0, true)]
   ),
