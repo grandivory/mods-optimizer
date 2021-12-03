@@ -966,7 +966,10 @@ const characterSettings = {
     ['Troopers']
   ),
   'STORMTROOPER': new CharacterSettings(
-    [new OptimizationPlan('Speedy Tank', 25, 25, 50, 0, 0, 25, 0, 0, 0, 25, 25, 0, 0, true)],
+    [
+      new OptimizationPlan('Speedy Tank', 25, 25, 50, 0, 0, 25, 0, 0, 0, 25, 25, 0, 0, true),
+      new OptimizationPlan('LV Lead', 100, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
+    ],
     ['Troopers']
   ),
   'STORMTROOPERHAN': new CharacterSettings(
