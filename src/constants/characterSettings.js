@@ -890,7 +890,10 @@ const characterSettings = {
     DamageType.mixed
   ),
   'ROYALGUARD': new CharacterSettings(
-    [new OptimizationPlan('Tanky', 50, 50, 25, 0, 0, 25, 0, 0, 0, 5, 5, 0, 0, true)],
+    [
+      new OptimizationPlan('LV Lead', 100, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Tanky', 50, 50, 25, 0, 0, 25, 0, 0, 0, 5, 5, 0, 0, true)
+    ],
     ['RG', 'Red Guard']
   ),
   'SABINEWRENS3': new CharacterSettings(
