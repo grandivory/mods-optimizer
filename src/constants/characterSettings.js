@@ -700,6 +700,9 @@ const characterSettings = {
     ],
     ['Murderbears']
   ),
+  'LORDVADER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 15, 100, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'LUKESKYWALKER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
     ['farmboi']
