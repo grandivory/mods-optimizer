@@ -127,7 +127,7 @@ const characterSettings = {
   ),
   'BB8': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 5, 5, 100, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 5, 5, 100, 0, 0, 10, 0, 0, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 1', 10, -5, 100, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, true),
       optimizationStrategy.Speed,
       new OptimizationPlan('Tanky', 5, 25, 100, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, true)
