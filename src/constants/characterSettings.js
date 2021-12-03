@@ -155,9 +155,9 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['Rogue 1']
   ),
-  // 'BOKATAN': new CharacterSettings(
-  //   []
-  // ),
+  'BOKATAN': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 100, 10, 0, 10, 0, 50, 0, 0, 0, 0, true)]
+  ),
   'BOSSK': new CharacterSettings(
     [
       new OptimizationPlan('Leader', 10, 10, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true),
@@ -728,7 +728,7 @@ const characterSettings = {
     [optimizationStrategy["Special Damage with Potency"].rename('PvP')]
   ),
   'MAULS7': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 25, 100, 0, 5, 0, 50, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 25, 25, 100, 0, 15, 0, 50, 0, 0, 0, 0, 0, 0, true)]
   ),
   'MISSIONVAO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 75, 0, 50, 0, 0, 0, 0, true)]
