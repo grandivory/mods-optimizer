@@ -685,6 +685,7 @@ const characterSettings = {
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
       new OptimizationPlan('Tanky', 100, 100, 50, 0, 0, 75, 0, 0, 0, 37.5, 37.5, 0, 0, true),
+      new OptimizationPlan('LV Lead', 100, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     ['kru', 'matt', 'Snape', 'FO']
   ),
