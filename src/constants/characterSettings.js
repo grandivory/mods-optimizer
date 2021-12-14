@@ -678,7 +678,7 @@ const characterSettings = {
     DamageType.special
   ),
   'KYLOREN': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 25, 0, 25, 0, 0, 0, 0, true)],
     ['Old Kylo', 'zylo', 'FO']
   ),
   'KYLORENUNMASKED': new CharacterSettings(
