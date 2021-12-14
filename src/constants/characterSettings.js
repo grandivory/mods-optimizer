@@ -481,7 +481,10 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
   ),
   'GLREY': new CharacterSettings(
-    [new OptimizationPlan('PvP', 50, 0, 100, 50, 0, 10, 25, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP - Health', 50, 0, 100, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP - Offense', 15, 0, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'GRANDADMIRALTHRAWN': new CharacterSettings(
     [optimizationStrategy["Speed with survivability"].rename('PvP')],
