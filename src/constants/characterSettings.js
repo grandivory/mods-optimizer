@@ -684,7 +684,7 @@ const characterSettings = {
   'KYLORENUNMASKED': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
-      new OptimizationPlan('Tanky', 100, 100, 50, 0, 0, 75, 0, 0, 0, 37.5, 37.5, 0, 0, true)
+      new OptimizationPlan('Tanky', 100, 100, 50, 0, 0, 75, 0, 0, 0, 37.5, 37.5, 0, 0, true),
     ],
     ['kru', 'matt', 'Snape', 'FO']
   ),
@@ -938,7 +938,7 @@ const characterSettings = {
     ['SM']
   ),
   'SITHPALPATINE': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 5, 100, 25, 0, 0, 0, 20, 10, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 20, 5, 100, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, true)],
     ['SEE'],
     DamageType.special
   ),
