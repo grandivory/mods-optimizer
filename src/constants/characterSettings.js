@@ -26,7 +26,7 @@ const characterSettings = {
     ['AA', 'Snackbar', 'ABC']
   ),
   'ADMIRALPIETT': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 25, 15, 0, 20, 0, 10, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 0, 0, 100, 25, 15, 0, 10, 0, 10, 0, 0, 0, 0, true)]
   ),
   'AHSOKATANO': new CharacterSettings(
     [
