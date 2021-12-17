@@ -77,16 +77,16 @@ const characterSettings = {
     [optimizationStrategy["Speedy debuffer"].rename('PvP')]
   ),
   'BADBATCHHUNTER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 50, 25, 0, 10, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 0, 0, 100, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, true)]
   ),
   'BADBATCHOMEGA': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
+    [new OptimizationPlan('PvP', 0, 0, 50, 0, 25, 0, 100, 0, 0, 0, 0, 0, 0, true)]
   ),
   'BADBATCHTECH': new CharacterSettings(
     [optimizationStrategy["Speedy debuffer"].rename('PvP')]
   ),
   'BADBATCHWRECKER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 20, 20, 0, 50, 50, 0, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 10, 30, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'B1BATTLEDROIDV2': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 75, 0, 0, 0, 0, 0, 0, true)]
