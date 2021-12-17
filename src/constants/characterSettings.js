@@ -300,7 +300,7 @@ const characterSettings = {
     DamageType.special
   ),
   'DARTHREVAN': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 50, 10, 0, 0, 15, 10, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 5, 0, 0, 10, 5, 0, 0, 0, 0, true)],
     [],
     DamageType.special
   ),
