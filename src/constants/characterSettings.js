@@ -1011,6 +1011,7 @@ const characterSettings = {
   ),
   'THEMANDALORIAN': new CharacterSettings(
     [
+      new OptimizationPlan('PvP', 5, 5, 100, 15, 0, 0, 5, 0, 30, 0, 0, 0, 0, true),
       new OptimizationPlan('Relic 7', 0, 0, 100, 80, 0, 0, 20, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Non-relic', 0, 0, 100, 80, 0, 0, 10, 0, 20, 0, 0, 0, 0, true)
     ]
