@@ -26,7 +26,7 @@ const characterSettings = {
     ['AA', 'Snackbar', 'ABC']
   ),
   'ADMIRALPIETT': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 25, 15, 0, 20, 0, 10, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 0, 0, 100, 25, 15, 0, 10, 0, 10, 0, 0, 0, 0, true)]
   ),
   'AHSOKATANO': new CharacterSettings(
     [
@@ -77,22 +77,26 @@ const characterSettings = {
     [optimizationStrategy["Speedy debuffer"].rename('PvP')]
   ),
   'BADBATCHHUNTER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 50, 25, 0, 10, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 0, 0, 100, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, true)]
   ),
   'BADBATCHOMEGA': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
+    [new OptimizationPlan('PvP', 0, 0, 50, 0, 25, 0, 100, 0, 0, 0, 0, 0, 0, true)]
   ),
   'BADBATCHTECH': new CharacterSettings(
     [optimizationStrategy["Speedy debuffer"].rename('PvP')]
   ),
   'BADBATCHWRECKER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 20, 20, 0, 50, 50, 0, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 10, 30, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'B1BATTLEDROIDV2': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 75, 0, 0, 0, 0, 0, 0, true)]
   ),
   'B2SUPERBATTLEDROID': new CharacterSettings(
-    [new OptimizationPlan('Survival', 50, 50, 0, 0, 50, 25, 0, 0, 0, 0, 0, 50, 0, true)]
+    [
+      new OptimizationPlan('Survival', 50, 50, 0, 0, 50, 25, 0, 0, 0, 0, 0, 50, 0, true),
+      new OptimizationPlan('Tenacity', 50, 50, 0, 0, 50, 100, 0, 0, 0, 0, 0, 0, 100, true),
+      new OptimizationPlan('Potency', 50, 50, 0, 0, 100, 50, 0, 0, 0, 0, 0, 0, 100, true)
+    ]
   ),
   'BARRISSOFFEE': new CharacterSettings(
     [
@@ -200,6 +204,7 @@ const characterSettings = {
   'CHEWBACCALEGENDARY': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('Tenacity', 25, 25, 100, 0, 0, 80, 10, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Chew Mix', 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 3 Greedo', 0, 0, 75, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)
     ],
@@ -300,7 +305,7 @@ const characterSettings = {
     DamageType.special
   ),
   'DARTHREVAN': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 50, 10, 0, 0, 15, 10, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 3, 0, 100, 50, 5, 0, 0, 10, 5, 0, 0, 0, 0, true)],
     [],
     DamageType.special
   ),
@@ -481,7 +486,10 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
   ),
   'GLREY': new CharacterSettings(
-    [new OptimizationPlan('PvP', 50, 0, 100, 50, 0, 10, 25, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP - Health', 50, 0, 100, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP - Offense', 15, 0, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'GRANDADMIRALTHRAWN': new CharacterSettings(
     [optimizationStrategy["Speed with survivability"].rename('PvP')],
@@ -634,7 +642,7 @@ const characterSettings = {
     DamageType.special
   ),
   'JEDIMASTERKENOBI': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 25, 0, 0, 10, 0, 0, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 5, 0, 100, 25, 0, 0, 10, 0, 0, 0, 0, 0, 0, true)],
     ['JMK']
   ),
   'JOLEEBINDO': new CharacterSettings(
@@ -675,13 +683,14 @@ const characterSettings = {
     DamageType.special
   ),
   'KYLOREN': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 25, 0, 25, 0, 0, 0, 0, true)],
     ['Old Kylo', 'zylo', 'FO']
   ),
   'KYLORENUNMASKED': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
-      new OptimizationPlan('Tanky', 100, 100, 50, 0, 0, 75, 0, 0, 0, 37.5, 37.5, 0, 0, true)
+      new OptimizationPlan('Tanky', 100, 100, 50, 0, 0, 75, 0, 0, 0, 37.5, 37.5, 0, 0, true),
+      new OptimizationPlan('LV Lead', 100, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     ['kru', 'matt', 'Snape', 'FO']
   ),
@@ -891,8 +900,8 @@ const characterSettings = {
   ),
   'ROYALGUARD': new CharacterSettings(
     [
-      new OptimizationPlan('LV Lead', 100, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('Tanky', 50, 50, 25, 0, 0, 25, 0, 0, 0, 5, 5, 0, 0, true)
+      new OptimizationPlan('Tanky', 50, 50, 25, 0, 0, 25, 0, 0, 0, 5, 5, 0, 0, true),
+      new OptimizationPlan('LV Lead', 100, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     ['RG', 'Red Guard']
   ),
@@ -935,7 +944,7 @@ const characterSettings = {
     ['SM']
   ),
   'SITHPALPATINE': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 5, 100, 25, 0, 0, 0, 20, 10, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 20, 5, 100, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, true)],
     ['SEE'],
     DamageType.special
   ),
@@ -986,7 +995,7 @@ const characterSettings = {
     [new OptimizationPlan('Tanky', 40, 40, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
   ),
   'SUPREMELEADERKYLOREN': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 0, 100, 100, 0, 0, 40, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 20, 0, 100, 100, 0, 0, 40, 0, 0, 0, 0, 0, 0, true)]
   ),
   'T3_M4': new CharacterSettings(
     [
@@ -1007,6 +1016,7 @@ const characterSettings = {
   ),
   'THEMANDALORIAN': new CharacterSettings(
     [
+      new OptimizationPlan('PvP', 5, 5, 100, 15, 0, 0, 5, 0, 30, 0, 0, 0, 0, true),
       new OptimizationPlan('Relic 7', 0, 0, 100, 80, 0, 0, 20, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Non-relic', 0, 0, 100, 80, 0, 0, 10, 0, 20, 0, 0, 0, 0, true)
     ]
@@ -1092,7 +1102,10 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 50, 50, 25, 0, 25, 50, 0, 0, 0, 0, 0, 0, 50, true)]
   ),
   'ZAMWESELL': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 40, 50, 0, 25, 0, 40, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 40, 50, 0, 25, 0, 40, 0, 0, 0, 0, true),
+      new OptimizationPlan('Omicron', 10, 10, 100, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'ZEBS3': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 40, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)]
