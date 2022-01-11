@@ -131,7 +131,7 @@ class CharacterList extends PureComponent {
       onDragOver={this.characterBlockDragOver()}
       onDragLeave={this.characterBlockDragLeave()}
       onDrop={this.characterBlockDrop(index)}
-      onDoubleClick={() => this.props.unselectCharacter(character.baseID)}>
+      onDoubleClick={() => this.props.unselectCharacter(index)}>
       <div className={character.optimizerSettings.isLocked ? `${baseClass} locked` : baseClass}
         draggable={draggable}
         onDragStart={this.characterBlockDragStart(index)}>
