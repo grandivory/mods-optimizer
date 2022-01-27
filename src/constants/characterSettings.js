@@ -155,6 +155,11 @@ const characterSettings = {
       new OptimizationPlan('hSTR Phase 3 Greedo', 0, 0, 20, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
+  'BOBAFETTSCION': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true)
+    ]
+  ),
   'BODHIROOK': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['Rogue 1']
