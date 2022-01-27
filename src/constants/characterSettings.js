@@ -53,7 +53,7 @@ const characterSettings = {
     ['JKA']
   ),
   'ARCTROOPER501ST': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 80, 25, 0, 0, 100, 0, 10, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 0, 0, 100, 0, 0, 0, 50, 0, 15, 0, 0, 0, 0, true)],
   ),
   'ARMORER': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -268,18 +268,18 @@ const characterSettings = {
     DamageType.mixed
   ),
   'CT5555': new CharacterSettings(
-    [new OptimizationPlan('PvP', 30, 30, 50, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 15, 30, 50, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, true)]
   ),
   'CT7567': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 10, 0, 100, 0, 10, 20, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 5, 0, 100, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, true),
       optimizationStrategy.Speed.rename('Chex Mix')
     ],
     ['Titans']
   ),
   'CT210408': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 50, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 50, 0, 75, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Nuke', 0, 0, 50, 100, 0, 0, 75, 0, 25, 0, 0, 0, 0, true)
     ],
     [],
