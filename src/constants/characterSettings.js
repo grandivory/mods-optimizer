@@ -539,6 +539,7 @@ const characterSettings = {
     [
       new OptimizationPlan('Fast Han', 0, 0, 100, 100, 25, 0, 50, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Slow Han', 0, 0, 0, 100, 25, 0, 50, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Non-relic', 0, 0, 100, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('Chex Mix', 0, 0, 0, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true, {}, {},
         [new TargetStat('Speed', 170, 174)]
       )
