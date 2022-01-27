@@ -572,7 +572,10 @@ const characterSettings = {
     ['ROLO']
   ),
   'HOTHREBELSCOUT': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
+    [
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
+      new OptimizationPlan('Mothma Lead', 5, 10, 100, 0, 5, 5, 75, 0, 100, 5, 0, 0, 0, true)
+    ],
     ['HRS', 'Hoth Bros']
   ),
   'HOTHREBELSOLDIER': new CharacterSettings(
@@ -819,6 +822,7 @@ const characterSettings = {
   'PAO': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
+      new OptimizationPlan('Mothma Lead', 10, 30, 100, 0, 5, 5, 100, 0, 0, 5, 0, 0, 0, true),
       optimizationStrategy["Speedy Chex Mix"].rename('Chex Mix')
     ],
     ['Rogue 1', 'Chex Mix']
