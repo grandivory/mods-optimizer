@@ -316,7 +316,7 @@ const characterSettings = {
   'DARTHSION': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 15, 15, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0, true),
-      new OptimizationPlan('Tanky', 20, 20, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('Tanky', 10, 20, 100, 0, 15, 0, 0, 0, 0, 10, 0, 0, 100, true)
     ],
     ['Nightmare']
   ),
