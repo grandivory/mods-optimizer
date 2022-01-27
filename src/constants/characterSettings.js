@@ -418,6 +418,11 @@ const characterSettings = {
       new OptimizationPlan('hSTR P2 Jedi', 0, 0, 60, 100, 0, 0, 75, 0, 75, 0, 0, 0, 0, true)
     ]
   ),
+  'FENNECSHAND': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 0, 100, 50, 0, 0, 0, 0, true)
+    ]
+  ),
   'FINN': new CharacterSettings(
     [
       optimizationStrategy["Slow Crit, Physical Damage, Potency"].rename('PvP'),
