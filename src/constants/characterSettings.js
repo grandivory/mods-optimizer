@@ -11,7 +11,7 @@ const characterSettings = {
   ),
   'AAYLASECURA': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 75, 50, 0, 25, 0, 100, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 0, 0, 100, 0, 75, 0, 10, 0, 100, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P1 Jedi', 0, -5, 100, 75, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
@@ -53,7 +53,7 @@ const characterSettings = {
     ['JKA']
   ),
   'ARCTROOPER501ST': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 80, 25, 0, 0, 100, 0, 10, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 0, 0, 100, 0, 0, 0, 50, 0, 15, 0, 0, 0, 0, true)],
   ),
   'ARMORER': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -155,6 +155,11 @@ const characterSettings = {
       new OptimizationPlan('hSTR Phase 3 Greedo', 0, 0, 20, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
+  'BOBAFETTSCION': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true)
+    ]
+  ),
   'BODHIROOK': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['Rogue 1']
@@ -183,7 +188,10 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
   ),
   'CARADUNE': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 0, 80, 100, 20, 0, 25, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 10, 0, 80, 100, 20, 0, 25, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Mothma Lead', 10, 10, 100, 0, 20, 20, 5, 0, 0, 5, 0, 0, 0, true)
+    ]
   ),
   'CARTHONASI': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
@@ -268,18 +276,18 @@ const characterSettings = {
     DamageType.mixed
   ),
   'CT5555': new CharacterSettings(
-    [new OptimizationPlan('PvP', 30, 30, 50, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 15, 30, 50, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, true)]
   ),
   'CT7567': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 10, 0, 100, 0, 10, 20, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 5, 0, 100, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, true),
       optimizationStrategy.Speed.rename('Chex Mix')
     ],
     ['Titans']
   ),
   'CT210408': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 50, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 50, 0, 75, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Nuke', 0, 0, 50, 100, 0, 0, 75, 0, 25, 0, 0, 0, 0, true)
     ],
     [],
@@ -288,6 +296,7 @@ const characterSettings = {
   'DAKA': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 25, 0, 100, 0, 25, 15, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Tanky', 75, 0, 100, 0, 30, 15, 0, 0, 0, 0, 0, 0, 100, true),
       new OptimizationPlan('hSTR Phase 4', 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 3', 50, 0, 75, 0, 15, 0, 5, 0, 0, 0, 0, 0, 0, true)
     ],
@@ -297,7 +306,7 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 10, 10, 50, 0, 0, 5, 60, 0, 0, 2.5, 2.5, 0, 0, true)]
   ),
   'DARTHMALAK': new CharacterSettings(
-    [new OptimizationPlan('PvP', 15, 25, 100, 10, 10, 0, 10, 0, 10, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 10, 50, 100, 0, 10, 0, 10, 0, 0, 10, 0, 0, 0, true)]
   ),
   'DARTHNIHILUS': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -316,7 +325,7 @@ const characterSettings = {
   'DARTHSION': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 15, 15, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0, true),
-      new OptimizationPlan('Tanky', 20, 20, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('Tanky', 10, 20, 100, 0, 15, 0, 0, 0, 0, 10, 0, 0, 100, true)
     ],
     ['Nightmare']
   ),
@@ -344,7 +353,7 @@ const characterSettings = {
   ),
   'DENGAR': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 0, 50, 0, 25, 0, 75, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 0, 0, 100, 0, 60, 0, 0, 0, 100, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 50, 0, 0, 100, 0, 25, 0, 0, 0, 0, true)
     ]
   ),
@@ -409,6 +418,11 @@ const characterSettings = {
       new OptimizationPlan('hSTR P2 Jedi', 0, 0, 60, 100, 0, 0, 75, 0, 75, 0, 0, 0, 0, true)
     ]
   ),
+  'FENNECSHAND': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 0, 100, 50, 0, 0, 0, 0, true)
+    ]
+  ),
   'FINN': new CharacterSettings(
     [
       optimizationStrategy["Slow Crit, Physical Damage, Potency"].rename('PvP'),
@@ -469,7 +483,8 @@ const characterSettings = {
   'GENERALSKYWALKER': new CharacterSettings(
     [
       new OptimizationPlan('PvP - Defense', 10, 25, 100, 0, 20, 0, 10, 0, 0, 10, 10, 0, 0, true),
-      new OptimizationPlan('PvP - Offense', 0, 0, 100, 100, 20, 0, 20, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('PvP - Offense', 0, 0, 100, 100, 20, 0, 20, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP - Parry', 0, 75, 100, 0, 25, 0, 50, 0, 0, 10, 0, 0, 0, true)
     ],
     ['GAS']
   ),
@@ -536,8 +551,9 @@ const characterSettings = {
   ),
   'HANSOLO': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('Fast Han'),
-      new OptimizationPlan('Slow Han', 0, 0, 0, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('Fast Han', 0, 0, 100, 100, 25, 0, 50, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Slow Han', 0, 0, 0, 100, 25, 0, 50, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Non-relic', 0, 0, 100, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('Chex Mix', 0, 0, 0, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true, {}, {},
         [new TargetStat('Speed', 170, 174)]
       )
@@ -566,7 +582,10 @@ const characterSettings = {
     ['ROLO']
   ),
   'HOTHREBELSCOUT': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
+    [
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
+      new OptimizationPlan('Mothma Lead', 5, 10, 100, 0, 5, 5, 75, 0, 100, 5, 0, 0, 0, true)
+    ],
     ['HRS', 'Hoth Bros']
   ),
   'HOTHREBELSOLDIER': new CharacterSettings(
@@ -813,6 +832,7 @@ const characterSettings = {
   'PAO': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
+      new OptimizationPlan('Mothma Lead', 10, 30, 100, 0, 5, 5, 100, 0, 0, 5, 0, 0, 0, true),
       optimizationStrategy["Speedy Chex Mix"].rename('Chex Mix')
     ],
     ['Rogue 1', 'Chex Mix']
