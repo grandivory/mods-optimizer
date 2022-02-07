@@ -875,6 +875,7 @@ const characterSettings = {
   'QUIGONJINN': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
+      new OptimizationPlan('Omicron', 5, 0, 100, 0, 5, 0, 50, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P1 Jedi', 0, -5, 100, 75, 0, 0, 25, 25, 50, 0, 0, 0, 0, true)
     ],
     ['QGJ'],
