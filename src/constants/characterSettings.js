@@ -747,7 +747,10 @@ const characterSettings = {
     [new OptimizationPlan('PvE', 40, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'MACEWINDU': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE')],
+    [
+      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE'),
+      new OptimizationPlan('JMK Lead', 100, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
+    ],
     [],
     DamageType.mixed
   ),
