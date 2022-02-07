@@ -512,7 +512,7 @@ const characterSettings = {
     DamageType.special
   ),
   'GRANDMASTERLUKE': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 20, 100, 25, 15, 0, 0, 10, 0, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 0, 25, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['GMLS', 'JMLS', 'GLLS'],
     DamageType.special
   ),
