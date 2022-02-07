@@ -306,7 +306,10 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 10, 10, 50, 0, 0, 5, 60, 0, 0, 2.5, 2.5, 0, 0, true)]
   ),
   'DARTHMALAK': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 50, 100, 0, 10, 0, 10, 0, 0, 10, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 10, 50, 100, 0, 10, 0, 10, 0, 0, 10, 0, 0, 0, true),
+      new OptimizationPlan('Tenacity', 0, 50, 100, 0, 10, 100, 10, 0, 0, 10, 0, 0, 0, true)
+    ]
   ),
   'DARTHNIHILUS': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
