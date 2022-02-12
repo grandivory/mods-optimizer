@@ -1,6 +1,6 @@
 .mod-stats {
   text-align: left;
-  width: 13em;
+  width: 17em;
   position: relative;
 }
 
@@ -49,6 +49,18 @@
 
 .mod-stats .class-D {
   color: #ccfffe;
+}
+
+.stat-rating {
+  float: right;
+  cursor: zoom-in;
+  font-size: 0.5em;
+}
+
+.mod-rating {
+  cursor: zoom-in;
+  font-size: 1em;
+  padding-bottom: 1em;
 }
 
 .mod-stats .avatar {

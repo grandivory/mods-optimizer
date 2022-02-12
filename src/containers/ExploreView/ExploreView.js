@@ -11,10 +11,10 @@ import './ExploreView.css';
 import { connect } from "react-redux";
 import Sidebar from "../../components/Sidebar/Sidebar";
 
-import offenseScore from "../../utils/subjectiveScoring";
+import { offenseScore, modSecondaryStatScore } from "../../utils/subjectiveScoring";
 
 class ExploreView extends React.PureComponent {
-  render() {
+  render () {
     const modElements = this.props.displayedMods.map(mod => {
       const assignedCharacter = this.props.modAssignments[mod.id] ?
         this.props.characters[this.props.modAssignments[mod.id]] :
@@ -42,7 +42,7 @@ class ExploreView extends React.PureComponent {
    * Render the "Are you sure?" modal for deleting all displayed mods
    * @returns {*}
    */
-  deleteModsModal() {
+  deleteModsModal () {
     return <div>
       <h2>Delete All Displayed Mods</h2>
       <p>
@@ -63,7 +63,7 @@ class ExploreView extends React.PureComponent {
    * Render the sidebar content
    * @returns {*}
    */
-  static sidebar() {
+  static sidebar () {
     return <div className={'filters'} key={'filters'}>
       <ModFilter />
     </div>;
@@ -192,6 +192,14 @@ const getFilteredMods = memoize(
         filteredMods = filteredMods.sort((left, right) => {
           const leftValue = offenseScore(left);
           const rightValue = offenseScore(right);
+
+          return rightValue - leftValue;
+        });
+        break;
+      case 'secondaryStatScore':
+        filteredMods = filteredMods.sort((left, right) => {
+          const leftValue = modSecondaryStatScore(left).overall;
+          const rightValue = modSecondaryStatScore(right).overall;
 
           return rightValue - leftValue;
         });
