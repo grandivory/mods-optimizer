@@ -1,6 +1,6 @@
 .mod-stats {
   text-align: left;
-  width: 17em;
+  width: 16em;
   position: relative;
 }
 
@@ -53,12 +53,13 @@
 
 .stat-rating {
   float: right;
-  cursor: zoom-in;
-  font-size: 0.5em;
+  cursor: default;
+  font-size: 0.8em;
 }
 
 .mod-rating {
-  cursor: zoom-in;
+  float: left;
+  cursor: default;
   font-size: 1em;
   padding-bottom: 1em;
 }

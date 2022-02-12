@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import SellModButton from "../SellModButton/SellModButton";
 import { modSecondaryStatScore } from '../../utils/subjectiveScoring'
 
-function printStatRating (score, bonus = 0, forceBlack = false) {
+function printStatRating(score, bonus = 0, forceBlack = false) {
   const total = score + bonus;
   const symbol = (bonus > 0 || forceBlack) ? '★' : '☆';
 
@@ -32,12 +32,12 @@ function printStatRating (score, bonus = 0, forceBlack = false) {
     case total >= 1:
       return '½';
     default:
-      return '⚐';
+      return '∅';
   }
 }
 
 class ModStats extends React.PureComponent {
-  render () {
+  render() {
     const mod = this.props.mod;
     const character = mod.characterID ? this.props.characters[mod.characterID] : null;
     const showAvatar = 'showAvatar' in this.props;
@@ -87,7 +87,7 @@ class ModStats extends React.PureComponent {
    * @param stat object The stat to display, with 'value' and 'type' fields
    * @param index integer The array index of this stat for this mod
    */
-  static showStatElement (stat, score, index) {
+  static showStatElement(stat, score, index) {
     return <li key={index} className={'class-' + stat.getClass()}>
       <span className={'rolls'}>({stat.rolls})</span> {stat.show()}
       <span title={'Score: ' + score.score + (score.bonus ? ' + ' + score.bonus : '')} className="stat-rating">{printStatRating(score.score, score.bonus)}</span>

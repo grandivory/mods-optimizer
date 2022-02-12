@@ -10,7 +10,7 @@ import { changeModsFilter } from "../../state/actions/explore";
 import Pips from "../Pips/Pips";
 import { Dropdown } from '../Dropdown/Dropdown';
 
-function cycleState (e) {
+function cycleState(e) {
   e.target.value = e.target.valueAsNumber + 1;
   if (e.target.value > 1) {
     e.target.value = -1;
@@ -24,18 +24,18 @@ function cycleState (e) {
   }
 }
 
-function selectElement (element) {
+function selectElement(element) {
   element.value = 1;
   element.classList.remove('unselect');
   element.classList.add('select');
 }
 
-function unselectElement (element) {
+function unselectElement(element) {
   element.value = 0;
   element.classList.remove('select', 'unselect');
 }
 
-function classForValue (value) {
+function classForValue(value) {
   switch (value) {
     case 1: return 'select';
     case -1: return 'unselect';
@@ -64,7 +64,7 @@ class ModFilter extends React.PureComponent {
    * Render the slot filter inputs
    * @returns {JSX Element}
    */
-  slotFilter () {
+  slotFilter() {
     const selectAll = (e) => {
       e.preventDefault();
       ModSet.slots.forEach(slot => selectElement(document.getElementById(`slot-filter-${slot}`)));
@@ -106,7 +106,7 @@ class ModFilter extends React.PureComponent {
    * Render the set filter inputs
    * @returns {JSX Element}
    */
-  setFilter () {
+  setFilter() {
     const selectAll = (e) => {
       e.preventDefault();
       Object.keys(setBonuses)
@@ -150,7 +150,7 @@ class ModFilter extends React.PureComponent {
    * Render the pips filter inputs
    * @returns {*}
    */
-  rarityFilter () {
+  rarityFilter() {
     const selectAll = (e) => {
       e.preventDefault();
       [1, 2, 3, 4, 5, 6]
@@ -196,7 +196,7 @@ class ModFilter extends React.PureComponent {
    * Render the mod tier filter inputs
    * @returns {*}
    */
-  tierFilter () {
+  tierFilter() {
     const tiers = {
       5: 'gold',
       4: 'purple',
@@ -249,7 +249,7 @@ class ModFilter extends React.PureComponent {
    * Render the level filter inputs
    * @returns {*}
    */
-  levelFilter () {
+  levelFilter() {
     const selectAll = (e) => {
       e.preventDefault();
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -290,7 +290,7 @@ class ModFilter extends React.PureComponent {
     </div>;
   }
 
-  equippedFilter () {
+  equippedFilter() {
     const selectAll = (e) => {
       e.preventDefault();
       ['equipped', 'unequipped'].forEach(equipState =>
@@ -339,7 +339,7 @@ class ModFilter extends React.PureComponent {
    * @param mods [Mod] the list of mods being filtered
    * @returns {JSX Element}
    */
-  primaryStatFilter (mods) {
+  primaryStatFilter(mods) {
     const primaryStats = mods.map(mod => mod.primaryStat.type)
       .reduce((acc, stat) => acc.includes(stat) ? acc : acc.concat([stat]), [])
       .sort();
@@ -385,7 +385,7 @@ class ModFilter extends React.PureComponent {
    * @param mods [Mod] the list of mods being filtered
    * @returns {JSX Element}
    */
-  secondaryStatFilter (mods) {
+  secondaryStatFilter(mods) {
     const secondaryStats = mods.map(mod => mod.secondaryStats)
       .reduce((acc, stats) => acc.concat(stats), [])
       .map(stat => stat.type)
@@ -432,7 +432,7 @@ class ModFilter extends React.PureComponent {
    * Render filters that will show or hide mods based on whether the optimizer
    * has assigned them to any characters
    */
-  optimizerFilter () {
+  optimizerFilter() {
     const selectAll = (e) => {
       e.preventDefault();
       ['assigned', 'unassigned'].forEach(assignedState =>
@@ -481,7 +481,7 @@ class ModFilter extends React.PureComponent {
    * @param mods [Mod] the list of mods being sorted
    * @returns {JSX Element}
    */
-  sortOption (mods) {
+  sortOption(mods) {
     const secondaryStats = mods.map(mod => mod.secondaryStats)
       .reduce((acc, stats) => acc.concat(stats), [])
       .map(stat => stat.type)
@@ -508,7 +508,7 @@ class ModFilter extends React.PureComponent {
   /**
    * Reset all filters so that all values are selected
    */
-  resetFilters () {
+  resetFilters() {
     [...document.getElementById('mod-filters').getElementsByTagName('input')]
       .forEach(element => unselectElement(element));
     [...document.getElementById('mod-filters').getElementsByTagName('select')].forEach(element => {
@@ -520,7 +520,7 @@ class ModFilter extends React.PureComponent {
    * @returns Object an object with keys for 'slot', 'set', 'primary', 'secondary', each containing an
    *                 array of selected values, plus 'sort', containing the value to sort by
    */
-  collectFilters (form) {
+  collectFilters(form) {
     const filters = {};
 
     [...form.elements].filter(element => element.name.includes('-filter-')).forEach(element => {
@@ -536,7 +536,7 @@ class ModFilter extends React.PureComponent {
     return filters;
   }
 
-  render () {
+  render() {
     const mods = this.props.mods;
     const onSubmit = (e) => {
       e.preventDefault();
