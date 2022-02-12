@@ -460,7 +460,7 @@ class CharacterEditView extends PureComponent {
       </p>
       <p>
         <span className={'purple'}>Note:</span> unless you specify otherwise in "Advanced Settings" below, your current
-        arena team will no longer be placed at the top of the list.
+        arena team will not be placed at the top of the list.
       </p>
       <p><span className={'blue'}>Provided by&nbsp;
         <a href={'https://swgoh.spineless.net/'} target={'_blank'} rel={'noopener noreferrer'}>
