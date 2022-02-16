@@ -58,7 +58,7 @@
 }
 
 .mod-rating {
-  float: left;
+  text-align: left;
   cursor: default;
   font-size: 1em;
   padding-bottom: 1em;

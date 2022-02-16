@@ -9,7 +9,7 @@ import statRoll from '../constants/statRoll'
  *
  * @param mod Mod
  */
-export function offenseScore (mod) {
+export function offenseScore(mod) {
   // weights for the set (mod type), primary attribute and secondary attributes
   const setScore = {
     'offense': 50,
@@ -57,86 +57,20 @@ export function offenseScore (mod) {
  * @param {stat} Stat 
  * @param {mod} Mod
  *  
- * @returns {{score: number, bonus: number }} Score and bonus of a single stat
+ * @returns {{score: number, percentage: number }} Score of a single stat and average percentage/roll.
  */
-export function singleSecondaryStatScore (stat, mod) {
-
-  // Bonus for matching set
-  const bonusMultiplier = {
-    'offense': {
-      'Speed': 0.5,
-      'Offense': 0.3,
-      'Offense %': 0.3,
-      'Critical Chance %': 0.2
-    },
-    'critdamage': {
-      'Speed': 0.5,
-      'Offense': 0.2,
-      'Offense %': 0.2,
-      'Critical Chance %': 0.2
-    },
-    'speed': {
-      'Speed': 0.5
-    },
-    'critchance': {
-      'Speed': 0.5,
-      'Offense': 0.2,
-      'Offense %': 0.2,
-      'Critical Chance %': 0.3,
-    },
-    'potency': {
-      'Speed': 0.5,
-      'Potency %': 0.5
-    },
-    'defense': {
-      'Speed': 0.5,
-      'Defense': 0.3,
-      'Defense %': 0.3,
-      'Health': 0.2,
-      'Health %': 0.2,
-      'Protection': 0.2,
-      'Protection %': 0.2
-    },
-    'health': {
-      'Speed': 0.5,
-      'Health': 0.2,
-      'Health %': 0.2,
-      'Protection': 0.2,
-      'Protection %': 0.2
-    },
-    'tenacity': {
-      'Speed': 0.5,
-      'Tenacity %': 0.5
-    }
-  }
-
+export function singleSecondaryStatScore(stat, mod) {
   const min = statRoll[stat.type][mod.pips].min;
   const max = statRoll[stat.type][mod.pips].max;
   const range = max - min;
   const avg = stat.value / stat.rolls;
-  let baseScore = (avg - min) / range * 100; // (s)
-  // SIMULATE 6E if the mod is 5A (15)
-  // if (mod.pips === 5 && mod.level === 15) {
-  //   const newStat = stat.upgradeSecondary();
-  //   const min = statRoll[stat.type][mod.pips + 1].min;
-  //   const max = statRoll[stat.type][mod.pips + 1].max;
-  //   const range = max - min;
-  //   const avg = newStat.value / stat.rolls;
-  //   baseScore = (avg - min) / range * 100; // (s)
-  // }
-  const score = baseScore * stat.rolls / statRoll['MAX_ROLLS']; // (S)
-
-  let bonus;
-  if (bonusMultiplier[mod.set.name].hasOwnProperty(stat.type)) {
-    if (baseScore >= 60 && stat.rolls >= 3)
-      bonus = score * bonusMultiplier[mod.set.name][stat.type]; // (B)
-  }
+  const percentage = (avg - min) / range * 100; // (s)
+  const score = percentage * stat.rolls / statRoll['MAX_ROLLS']; // (S)
 
   return {
     score: Math.round(score * 100) / 100 || 0,
-    bonus: Math.round(bonus * 100) / 100 || 0
+    percentage: Math.round(percentage * 100) / 100 || 0
   }
-
 }
 
 /**
@@ -146,21 +80,94 @@ export function singleSecondaryStatScore (stat, mod) {
  * Final score is then scaled to 0-100.
  * 
  * @param {mod} Mod 
- * @returns {{ overall: number, statScores: array of { score: number, bonus: number}}} Overall score of a mod and each of its individual stats
+ * @returns {Object} Object with total score, mod score, secondary stat score, bonus, badges and the index of secondaries met with requirements for bonus.
  */
+export function modSecondaryStatScore(mod) {
+  // Calculate score for each secondary stat
+  const statScores = mod.secondaryStats.length > 0 ? mod.secondaryStats.map(
+    (stat, index) => singleSecondaryStatScore(stat, mod)
+  ) : [];
 
-export function modSecondaryStatScore (mod) {
+  // Bonus Badges
+  const bonuses = [
+    {
+      badge: '⚡️',
+      stats: ['Speed'],
+      minPercentage: 60,
+      minRolls: 3,
+      multiplier: 0.6
+    },
+    {
+      badge: '⚔️',
+      stats: ['Offense', 'Critical Chance'],
+      minPercentage: 60,
+      minRolls: 4,
+      multiplier: 0.3
+    },
+    {
+      badge: '🛡️',
+      stats: ['Health', 'Protection', 'Defense'],
+      minPercentage: 60,
+      minRolls: 4,
+      multiplier: 0.3
+    },
+    {
+      badge: '☠️',
+      stats: ['Potency'],
+      minPercentage: 60,
+      minRolls: 3,
+      multiplier: 0.2
+    },
+    {
+      badge: '✊',
+      stats: ['Tenacity'],
+      minPercentage: 60,
+      minRolls: 3,
+      multiplier: 0.2
+    }
+  ];
 
-  const maxRolls = mod.pips === 6 ? mod.pips + mod.tier + 1 : mod.pips === 5 ? mod.pips + mod.tier - 2 : 4;
+  // Give badges and bonus if conditions are met
+  let bonusScore = 0, bonusIndex = [];
+  const badges = mod.secondaryStats.length > 0 ? bonuses.flatMap(
+    (bonus) => {
+      let totalStatRolls = 0;
+      let totalStatScore = 0;
+
+      let statIndex = []
+      mod.secondaryStats.forEach((stat, index) => {
+        if (bonus.stats.includes(stat.displayType)) {
+          totalStatRolls += stat.rolls;
+          totalStatScore += statScores[index].score;
+          statIndex.push(index);
+        }
+      });
+
+      const averagePercentage = totalStatScore * statRoll['MAX_ROLLS'] / totalStatRolls;
+
+      if (totalStatRolls >= bonus.minRolls && averagePercentage >= bonus.minPercentage) {
+        bonusScore += totalStatScore * bonus.multiplier;
+        bonusIndex = bonusIndex.concat(statIndex);
+        return bonus.badge;
+      }
+      else
+        return [];
+    }
+  ) : [];
+
+  // the rest
+  const maxRolls = mod.pips === 6 ? mod.pips + mod.tier + 1 : mod.pips === 5 ? mod.pips + mod.tier - 2 : 8;
   const maxScore = maxRolls * 20;
-  const statScores = mod.secondaryStats.length > 0 ?
-    mod.secondaryStats.map(
-      (stat, index) => singleSecondaryStatScore(stat, mod)
-    ) : [];
+  const modScore = statScores.reduce((acc, cur) => acc + cur.score, 0) / maxScore * 100;
+  const totalScore = modScore + bonusScore;
 
   return {
-    overall: (statScores.reduce((acc, cur) => acc + cur.score + cur.bonus, 0) / maxScore * 100).toFixed(2),
-    statScores: statScores
+    totalScore: Math.round(totalScore * 100) / 100,
+    modScore: Math.round(modScore * 100) / 100,
+    statScores: statScores,
+    bonusScore: Math.round(bonusScore * 100) / 100,
+    bonusIndex: bonusIndex,
+    badges: badges
   }
 
 }

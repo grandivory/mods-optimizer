@@ -6,34 +6,11 @@ import { connect } from "react-redux";
 import SellModButton from "../SellModButton/SellModButton";
 import { modSecondaryStatScore } from '../../utils/subjectiveScoring'
 
-function printStatRating(score, bonus = 0, forceBlack = false) {
-  const total = score + bonus;
-  const symbol = (bonus > 0 || forceBlack) ? '★' : '☆';
-
-  switch (true) {
-    case total >= 90:
-      return symbol.repeat(5);
-    case total >= 80:
-      return '½' + symbol.repeat(4);
-    case total >= 70:
-      return symbol.repeat(4);
-    case total >= 60:
-      return '½' + symbol.repeat(3);
-    case total >= 50:
-      return symbol.repeat(3);
-    case total >= 40:
-      return '½' + symbol.repeat(2);
-    case total >= 30:
-      return symbol.repeat(2);
-    case total >= 20:
-      return '½' + symbol.repeat(1);
-    case total >= 10:
-      return symbol.repeat(1);
-    case total >= 1:
-      return '½';
-    default:
-      return '∅';
-  }
+function printStarRating(score, forceBlack = false) {
+  const symbol = forceBlack ? '★' : '☆';
+  const stars = Math.floor(score / 20);
+  const modulus = score % 20;
+  return `${modulus >= 15 ? '¾' : modulus >= 10 ? '½' : modulus >= 5 ? '¼' : stars >= 1 ? '' : '∅'}${symbol.repeat(stars)}`;
 }
 
 class ModStats extends React.PureComponent {
@@ -44,7 +21,7 @@ class ModStats extends React.PureComponent {
     const modStatScore = modSecondaryStatScore(mod);
     const statsDisplay = mod.secondaryStats.length > 0 ?
       mod.secondaryStats.map(
-        (stat, index) => ModStats.showStatElement(stat, modStatScore.statScores[index], index)
+        (stat, index) => ModStats.showStatElement(stat, modStatScore.statScores[index], modStatScore.bonusIndex, index)
       ) : [<li key={0}>None</li>];
 
     const assignedCharacter = this.props.assignedCharacter;
@@ -60,7 +37,7 @@ class ModStats extends React.PureComponent {
         <ul className='secondary'>
           {statsDisplay}
         </ul>
-        <h4 className="mod-rating" title={'Overall Score: ' + modStatScore.overall}>{printStatRating(modStatScore.overall, undefined, true)}</h4>
+        <h4 className="mod-rating" title={`Mod Score: ${modStatScore.modScore} ${(modStatScore.bonusScore > 0 ? ` + ${modStatScore.bonusScore}` : '')} (${modStatScore.totalScore})`}>{printStarRating(modStatScore.modScore, true)}{(modStatScore.badges.length > 0 ? ' + ' + modStatScore.badges.join() : '')}</h4>
         {showAvatar && character &&
           <div className={'assigned-character'}>
             <h4>Assigned To</h4>
@@ -87,13 +64,12 @@ class ModStats extends React.PureComponent {
    * @param stat object The stat to display, with 'value' and 'type' fields
    * @param index integer The array index of this stat for this mod
    */
-  static showStatElement(stat, score, index) {
+  static showStatElement(stat, score, bonusIndex, index) {
     return <li key={index} className={'class-' + stat.getClass()}>
       <span className={'rolls'}>({stat.rolls})</span> {stat.show()}
-      <span title={'Score: ' + score.score + (score.bonus ? ' + ' + score.bonus : '')} className="stat-rating">{printStatRating(score.score, score.bonus)}</span>
+      <span title={'Score: ' + score.score + ' (' + score.percentage + '%)'} className="stat-rating">{printStarRating(score.score, bonusIndex.includes(index))}</span>
     </li>;
   }
-
 }
 
 const mapStateToProps = (state) => ({

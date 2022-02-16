@@ -198,8 +198,8 @@ const getFilteredMods = memoize(
         break;
       case 'secondaryStatScore':
         filteredMods = filteredMods.sort((left, right) => {
-          const leftValue = modSecondaryStatScore(left).overall;
-          const rightValue = modSecondaryStatScore(right).overall;
+          const leftValue = modSecondaryStatScore(left).totalScore;
+          const rightValue = modSecondaryStatScore(right).totalScore;
 
           return rightValue - leftValue;
         });
