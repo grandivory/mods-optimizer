@@ -6,13 +6,6 @@ import { connect } from "react-redux";
 import SellModButton from "../SellModButton/SellModButton";
 import { modSecondaryStatScore } from '../../utils/subjectiveScoring'
 
-function printStarRating(score, forceBlack = false) {
-  const symbol = forceBlack ? '★' : '☆';
-  const stars = Math.floor(score / 20);
-  const modulus = score % 20;
-  return `${modulus >= 15 ? '¾' : modulus >= 10 ? '½' : modulus >= 5 ? '¼' : stars >= 1 ? '' : '∅'}${symbol.repeat(stars)}`;
-}
-
 class ModStats extends React.PureComponent {
   render() {
     const mod = this.props.mod;
@@ -21,7 +14,7 @@ class ModStats extends React.PureComponent {
     const modStatScore = modSecondaryStatScore(mod);
     const statsDisplay = mod.secondaryStats.length > 0 ?
       mod.secondaryStats.map(
-        (stat, index) => ModStats.showStatElement(stat, modStatScore.statScores[index], modStatScore.bonusIndex, index)
+        (stat, index) => ModStats.showStatElement(stat, modStatScore.statScores[index], modStatScore.bonusIndex.includes(index), index)
       ) : [<li key={0}>None</li>];
 
     const assignedCharacter = this.props.assignedCharacter;
@@ -37,7 +30,7 @@ class ModStats extends React.PureComponent {
         <ul className='secondary'>
           {statsDisplay}
         </ul>
-        <h4 className="mod-rating" title={`Mod Score: ${modStatScore.modScore} ${(modStatScore.bonusScore > 0 ? ` + ${modStatScore.bonusScore}` : '')} (${modStatScore.totalScore})`}>{printStarRating(modStatScore.modScore, true)}{(modStatScore.badges.length > 0 ? ' + ' + modStatScore.badges.join() : '')}</h4>
+        <h4 className="mod-rating" title={`Mod Score: ${modStatScore.modScore} ${(modStatScore.bonusScore > 0 ? ` + ${modStatScore.bonusScore}` : '')} (${modStatScore.totalScore})`}>{ModStats.printStarRating(modStatScore.modScore, true)}{(modStatScore.badges.length > 0 ? ' + ' : '')}{ModStats.printBadges(modStatScore.badges)}</h4>
         {showAvatar && character &&
           <div className={'assigned-character'}>
             <h4>Assigned To</h4>
@@ -62,13 +55,37 @@ class ModStats extends React.PureComponent {
    * Write out the string to display a stat's value, category, and class
    *
    * @param stat object The stat to display, with 'value' and 'type' fields
+   * @param score object The score of the stat, with 'value' and 'percentage' fields
+   * @param bonus bool True if a stat is met with the bonus requirements
    * @param index integer The array index of this stat for this mod
    */
-  static showStatElement(stat, score, bonusIndex, index) {
+  static showStatElement(stat, score, bonus, index) {
     return <li key={index} className={'class-' + stat.getClass()}>
       <span className={'rolls'}>({stat.rolls})</span> {stat.show()}
-      <span title={'Score: ' + score.score + ' (' + score.percentage + '%)'} className="stat-rating">{printStarRating(score.score, bonusIndex.includes(index))}</span>
+      <span title={'Score: ' + score.score + ' (' + score.percentage + '%)'} className="stat-rating">{ModStats.printStarRating(score.score, bonus)}</span>
     </li>;
+  }
+
+  /**
+   * Write out bonus badges
+   *
+   * @param {badges} object The badges to display, with 'badge' and 'flag' fields
+   */
+  static printBadges(badges) {
+    return badges.map((badge, index) => <span key={index} className={'badge-' + badge.flag}> {badge.badge} </span>);
+  }
+
+  /**
+   * Write out star rating
+   *
+   * @param {score} number The score to be displayed as stars 
+   * @param {black} bool Whether to display black or hollow stars
+   */
+  static printStarRating(score, black = false) {
+    const symbol = black ? '★' : '☆';
+    const stars = Math.floor(score / 20);
+    const modulus = score % 20;
+    return `${modulus >= 15 ? '¾' : modulus >= 10 ? '½' : modulus >= 5 ? '¼' : stars >= 1 ? '' : '∅'}${symbol.repeat(stars)}`;
   }
 }
 

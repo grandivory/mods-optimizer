@@ -64,6 +64,18 @@
   padding-bottom: 1em;
 }
 
+.mod-rating .badge-0 {
+  text-shadow: none;
+}
+
+.mod-rating .badge-1 {
+  text-shadow: 0 2px 2px white, 1px 1px 3px white;
+}
+
+.mod-rating .badge-2 {
+  text-shadow: 0 2px 2px gold, 1px 1px 3px gold;
+}
+
 .mod-stats .avatar {
   display: inline-block;
   vertical-align: middle;

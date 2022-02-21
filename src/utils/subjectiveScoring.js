@@ -89,66 +89,111 @@ export function modSecondaryStatScore(mod) {
   ) : [];
 
   // Bonus Badges
+  // Flat scores are based on the real-world average values @ 5 rolls (as of 2020)
+  // https://docs.google.com/spreadsheets/d/1SiK7RjaXSlfKTR3m3-Sdba4GuXTIrNpJQNUYK04ut-o/edit#gid=122944735
+  // e.g.
+  // minFlatScore matches (5) 23 Speed and not (3) 15 Speed
+  // minPercentageScore matches (3) Speed 15 and not (5) 23 Speed
+  // (5) 23 Speed is an average high speed stat
+  // (3) 15 Speed is a high percentage stat
+  // both stats get the same bonus
   const bonuses = [
     {
       badge: '⚡️',
       stats: ['Speed'],
+      minFlatScore: 53, // (5) 53% .53*20*5
       minPercentage: 60,
       minRolls: 3,
+      sets: ['speed'],
+      primaries: {},
       multiplier: 0.6
     },
     {
       badge: '⚔️',
       stats: ['Offense', 'Critical Chance'],
+      minFlatScore: 50, // (5) 50%
       minPercentage: 60,
       minRolls: 4,
+      sets: ['critchance', 'critdamage', 'offense'],
+      primaries: {
+        'triangle': ['Critical Chance', 'Critical Damage', 'Offense'],
+        'cross': ['Offense']
+      },
       multiplier: 0.3
     },
     {
       badge: '🛡️',
       stats: ['Health', 'Protection', 'Defense'],
+      minFlatScore: 53, // (5) 53%
       minPercentage: 60,
       minRolls: 4,
-      multiplier: 0.3
+      sets: ['health', 'defense'],
+      primaries: {
+        'triangle': ['Health', 'Protection'],
+        'cross': ['Health', 'Protection']
+      },
+      multiplier: 0.3,
     },
     {
       badge: '☠️',
       stats: ['Potency'],
+      minFlatScore: 52, // (5) 52%
       minPercentage: 60,
       minRolls: 3,
+      sets: ['potency'],
+      primaries: {
+        'cross': ['Potency']
+      },
       multiplier: 0.2
     },
     {
       badge: '✊',
       stats: ['Tenacity'],
+      minFlatScore: 50, // (5) 50%
       minPercentage: 60,
       minRolls: 3,
+      sets: ['tenacity'],
+      primaries: {
+        'cross': ['Tenacity']
+      },
       multiplier: 0.2
     }
   ];
 
-  // Give badges and bonus if conditions are met
+  // Give badges and bonuses if conditions are met
   let bonusScore = 0, bonusIndex = [];
   const badges = mod.secondaryStats.length > 0 ? bonuses.flatMap(
     (bonus) => {
-      let totalStatRolls = 0;
-      let totalStatScore = 0;
+      let bonusStatRolls = 0;
+      let bonusStatScore = 0;
+      let statIndex = [];
 
-      let statIndex = []
       mod.secondaryStats.forEach((stat, index) => {
         if (bonus.stats.includes(stat.displayType)) {
-          totalStatRolls += stat.rolls;
-          totalStatScore += statScores[index].score;
+          bonusStatRolls += stat.rolls;
+          bonusStatScore += statScores[index].score;
           statIndex.push(index);
         }
       });
 
-      const averagePercentage = totalStatScore * statRoll['MAX_ROLLS'] / totalStatRolls;
+      const averagePercentage = bonusStatScore * statRoll['MAX_ROLLS'] / bonusStatRolls;
 
-      if (totalStatRolls >= bonus.minRolls && averagePercentage >= bonus.minPercentage) {
-        bonusScore += totalStatScore * bonus.multiplier;
+      if (bonusStatRolls >= bonus.minRolls && (averagePercentage >= bonus.minPercentage || bonusStatScore >= bonus.minFlatScore)) {
+        bonusScore += bonusStatScore * bonus.multiplier;
         bonusIndex = bonusIndex.concat(statIndex);
-        return bonus.badge;
+
+        const ALIGN_BONUS = 10;
+        let alignBonusFlag = 0;
+        if (bonus.sets.includes(mod.set.name)) {
+          bonusScore += ALIGN_BONUS;
+          alignBonusFlag++
+        }
+        if (bonus.primaries.hasOwnProperty(mod.slot) && bonus.primaries[mod.slot].includes(mod.primaryStat.displayType)) {
+          bonusScore += ALIGN_BONUS;
+          alignBonusFlag++;
+        }
+
+        return { badge: bonus.badge, flag: alignBonusFlag };
       }
       else
         return [];
