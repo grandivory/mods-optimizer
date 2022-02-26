@@ -30,7 +30,17 @@ class ModStats extends React.PureComponent {
         <ul className='secondary'>
           {statsDisplay}
         </ul>
-        <h4 className="mod-rating" title={`Mod Score: ${modStatScore.modScore} ${(modStatScore.bonusScore > 0 ? ` + ${modStatScore.bonusScore}` : '')} (${modStatScore.totalScore})`}>{ModStats.printStarRating(modStatScore.modScore, true)}{(modStatScore.badges.length > 0 ? ' + ' : '')}{ModStats.printBadges(modStatScore.badges)}</h4>
+        <h4
+          className="mod-rating"
+        >
+          <span title={
+            `Mod Score: ${modStatScore.modScore}` +
+            (modStatScore.bonusScore > 0 ? ` + ${modStatScore.bonusScore} (${modStatScore.totalScore})` : '')}
+          >
+            {ModStats.printStarRating(modStatScore.modScore, true)}{(modStatScore.badges.length > 0 ? ' + ' : '')}
+          </span>
+          {ModStats.printBadges(modStatScore.badges)}
+        </h4>
         {showAvatar && character &&
           <div className={'assigned-character'}>
             <h4>Assigned To</h4>
@@ -69,16 +79,18 @@ class ModStats extends React.PureComponent {
   /**
    * Write out bonus badges
    *
-   * @param {badges} object The badges to display, with 'badge' and 'flag' fields
+   * @param {badges} object The badges to display, with 'badge', 'flag', and 'title' fields
    */
   static printBadges(badges) {
-    return badges.map((badge, index) => <span key={index} className={'badge-' + badge.flag}> {badge.badge} </span>);
+    return badges.map((badge, index) =>
+      <span key={index} title={badge.title} className={'badge-' + badge.flag}> {badge.badge} </span>
+    );
   }
 
   /**
    * Write out star rating
    *
-   * @param {score} number The score to be displayed as stars 
+   * @param {score} number The score to be displayed as stars
    * @param {black} bool Whether to display black or hollow stars
    */
   static printStarRating(score, black = false) {
