@@ -6,36 +6,6 @@ import { connect } from "react-redux";
 import SellModButton from "../SellModButton/SellModButton";
 import { modSecondaryStatScore } from '../../utils/subjectiveScoring'
 
-function printStatRating(score, bonus = 0, forceBlack = false) {
-  const total = score + bonus;
-  const symbol = (bonus > 0 || forceBlack) ? '★' : '☆';
-
-  switch (true) {
-    case total >= 90:
-      return symbol.repeat(5);
-    case total >= 80:
-      return '½' + symbol.repeat(4);
-    case total >= 70:
-      return symbol.repeat(4);
-    case total >= 60:
-      return '½' + symbol.repeat(3);
-    case total >= 50:
-      return symbol.repeat(3);
-    case total >= 40:
-      return '½' + symbol.repeat(2);
-    case total >= 30:
-      return symbol.repeat(2);
-    case total >= 20:
-      return '½' + symbol.repeat(1);
-    case total >= 10:
-      return symbol.repeat(1);
-    case total >= 1:
-      return '½';
-    default:
-      return '∅';
-  }
-}
-
 class ModStats extends React.PureComponent {
   render() {
     const mod = this.props.mod;
@@ -44,7 +14,7 @@ class ModStats extends React.PureComponent {
     const modStatScore = modSecondaryStatScore(mod);
     const statsDisplay = mod.secondaryStats.length > 0 ?
       mod.secondaryStats.map(
-        (stat, index) => ModStats.showStatElement(stat, modStatScore.statScores[index], index)
+        (stat, index) => ModStats.showStatElement(stat, modStatScore.statScores[index], modStatScore.bonusIndex.includes(index), index)
       ) : [<li key={0}>None</li>];
 
     const assignedCharacter = this.props.assignedCharacter;
@@ -60,7 +30,7 @@ class ModStats extends React.PureComponent {
         <ul className='secondary'>
           {statsDisplay}
         </ul>
-        <h4 className="mod-rating" title={'Overall Score: ' + modStatScore.overall}>{printStatRating(modStatScore.overall, undefined, true)}</h4>
+        <h4 className="mod-rating" title={`Mod Score: ${modStatScore.modScore} ${(modStatScore.bonusScore > 0 ? ` + ${modStatScore.bonusScore}` : '')} (${modStatScore.totalScore})`}>{ModStats.printStarRating(modStatScore.modScore, true)}{(modStatScore.badges.length > 0 ? ' + ' : '')}{ModStats.printBadges(modStatScore.badges)}</h4>
         {showAvatar && character &&
           <div className={'assigned-character'}>
             <h4>Assigned To</h4>
@@ -85,15 +55,38 @@ class ModStats extends React.PureComponent {
    * Write out the string to display a stat's value, category, and class
    *
    * @param stat object The stat to display, with 'value' and 'type' fields
+   * @param score object The score of the stat, with 'value' and 'percentage' fields
+   * @param bonus bool True if a stat is met with the bonus requirements
    * @param index integer The array index of this stat for this mod
    */
-  static showStatElement(stat, score, index) {
+  static showStatElement(stat, score, bonus, index) {
     return <li key={index} className={'class-' + stat.getClass()}>
       <span className={'rolls'}>({stat.rolls})</span> {stat.show()}
-      <span title={'Score: ' + score.score + (score.bonus ? ' + ' + score.bonus : '')} className="stat-rating">{printStatRating(score.score, score.bonus)}</span>
+      <span title={'Score: ' + score.score + ' (' + score.percentage + '%)'} className="stat-rating">{ModStats.printStarRating(score.score, bonus)}</span>
     </li>;
   }
 
+  /**
+   * Write out bonus badges
+   *
+   * @param {badges} object The badges to display, with 'badge' and 'flag' fields
+   */
+  static printBadges(badges) {
+    return badges.map((badge, index) => <span key={index} className={'badge-' + badge.flag}> {badge.badge} </span>);
+  }
+
+  /**
+   * Write out star rating
+   *
+   * @param {score} number The score to be displayed as stars 
+   * @param {black} bool Whether to display black or hollow stars
+   */
+  static printStarRating(score, black = false) {
+    const symbol = black ? '★' : '☆';
+    const stars = Math.floor(score / 20);
+    const modulus = score % 20;
+    return `${modulus >= 15 ? '¾' : modulus >= 10 ? '½' : modulus >= 5 ? '¼' : stars >= 1 ? '' : '∅'}${symbol.repeat(stars)}`;
+  }
 }
 
 const mapStateToProps = (state) => ({
