@@ -47,16 +47,16 @@ export function offenseScore(mod) {
 
 /**
  * Return a score of a single secondary stat based on its degree of value, rolls, and matching set.
- * 
+ *
  * First, determine a base score (0-100) (s) representing magnitude of the value yielded from stat rolls.
  * Second, scale the base score up/down adhering to number of rolls (S).
  * Last, if stat type matches mod type and the score is considerably good, give additional bonus (B).
- * 
+ *
  * Max score is 20 / roll excluding bonus
- * 
- * @param {stat} Stat 
+ *
+ * @param {stat} Stat
  * @param {mod} Mod
- *  
+ *
  * @returns {{score: number, percentage: number }} Score of a single stat and average percentage/roll.
  */
 export function singleSecondaryStatScore(stat, mod) {
@@ -74,12 +74,12 @@ export function singleSecondaryStatScore(stat, mod) {
 }
 
 /**
- * Return a score of a mod based on all of its secondary stats. 
- * 
+ * Return a score of a mod based on all of its secondary stats.
+ *
  * Base score is 20 * max rolls of the mod.
  * Final score is then scaled to 0-100.
- * 
- * @param {mod} Mod 
+ *
+ * @param {mod} Mod
  * @returns {Object} Object with total score, mod score, secondary stat score, bonus, badges and the index of secondaries met with requirements for bonus.
  */
 export function modSecondaryStatScore(mod) {
@@ -100,6 +100,7 @@ export function modSecondaryStatScore(mod) {
   const bonuses = [
     {
       badge: '⚡️',
+      title: 'Good Speed',
       stats: ['Speed'],
       minFlatScore: 53, // (5) 53% .53*20*5
       minPercentage: 60,
@@ -110,6 +111,7 @@ export function modSecondaryStatScore(mod) {
     },
     {
       badge: '⚔️',
+      title: 'Good Offense',
       stats: ['Offense', 'Critical Chance'],
       minFlatScore: 50, // (5) 50%
       minPercentage: 60,
@@ -123,6 +125,7 @@ export function modSecondaryStatScore(mod) {
     },
     {
       badge: '🛡️',
+      title: 'Good Defense',
       stats: ['Health', 'Protection', 'Defense'],
       minFlatScore: 53, // (5) 53%
       minPercentage: 60,
@@ -136,6 +139,7 @@ export function modSecondaryStatScore(mod) {
     },
     {
       badge: '☠️',
+      title: 'Good Potency',
       stats: ['Potency'],
       minFlatScore: 52, // (5) 52%
       minPercentage: 60,
@@ -148,6 +152,7 @@ export function modSecondaryStatScore(mod) {
     },
     {
       badge: '✊',
+      title: 'Good Tenacity',
       stats: ['Tenacity'],
       minFlatScore: 50, // (5) 50%
       minPercentage: 60,
@@ -193,7 +198,7 @@ export function modSecondaryStatScore(mod) {
           alignBonusFlag++;
         }
 
-        return { badge: bonus.badge, flag: alignBonusFlag };
+        return { badge: bonus.badge, flag: alignBonusFlag, title: bonus.title };
       }
       else
         return [];
