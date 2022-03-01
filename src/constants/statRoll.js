@@ -6,6 +6,7 @@
 // Ref:
 //  https://wiki.swgoh.help/wiki/Mods
 //  https://forums.galaxy-of-heroes.starwars.ea.com/discussion/178037/a-very-brief-overview-of-upcoming-mod-changes
+//  https://docs.google.com/spreadsheets/d/1SiK7RjaXSlfKTR3m3-Sdba4GuXTIrNpJQNUYK04ut-o/edit#gid=122944735
 
 const statRoll = {
   'MIN_ROLLS': 1,
@@ -24,7 +25,8 @@ const statRoll = {
     3: { min: 3, max: 6 },
     4: { min: 4, max: 8 },
     5: { min: 4, max: 10 },
-    6: { min: 8, max: 16 }
+    // 6: { min: 8, max: 16 }
+    6: { min: 7, max: 16 }
   },
   'Defense %': {
     1: { min: 0.5, max: 1 },
@@ -32,7 +34,8 @@ const statRoll = {
     3: { min: 0.65, max: 1.3 },
     4: { min: 0.75, max: 1.5 },
     5: { min: 0.85, max: 1.7 },
-    6: { min: 1.989, max: 3.978 }
+    // 6: { min: 1.989, max: 3.978 }
+    6: { min: 2, max: 4 }
   },
   'Health': {
     1: { min: 99, max: 199 },
@@ -56,7 +59,8 @@ const statRoll = {
     3: { min: 14, max: 28 },
     4: { min: 18, max: 36 },
     5: { min: 23, max: 46 },
-    6: { min: 26, max: 51 }
+    // 6: { min: 26, max: 51 }
+    6: { min: 25, max: 51 }
   },
   'Offense %': {
     1: { min: 0.125, max: 0.25 },

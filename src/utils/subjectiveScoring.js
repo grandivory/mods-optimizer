@@ -64,8 +64,16 @@ export function singleSecondaryStatScore(stat, mod) {
   const max = statRoll[stat.type][mod.pips].max;
   const range = max - min;
   const avg = stat.value / stat.rolls;
-  const percentage = avg >= min ? (avg - min) / range * 100 : 0; // (s)
-  const score = avg >= min ? percentage * stat.rolls / statRoll['MAX_ROLLS'] : 0; // (S)
+
+  let percentage = 0, score = 0;
+
+  if (avg >= min) {
+    percentage = (avg - min) / range * 100; // (s)
+    score = percentage * stat.rolls / statRoll['MAX_ROLLS']; // (S)
+  } else {
+    console.table(stat);
+    console.log(`Found a secondary stat with value lower than defined range, this should be reported to the developer. (Mod's rarity: ${mod.pips} level: ${mod.level})`);
+  }
 
   return {
     score: Math.round(score * 100) / 100 || 0,
