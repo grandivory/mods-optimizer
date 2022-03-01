@@ -772,6 +772,12 @@ const characterSettings = {
   'MAGNAGUARD': new CharacterSettings(
     [new OptimizationPlan('Balanced', 20, 20, 100, 25, 50, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)]
   ),
+  'MARAJADE': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 0, 10, 100, 25, 25, 0, 0, 25, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('Survivability', 0, 10, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)
+    ]
+  ),
   'MAUL': new CharacterSettings(
     [optimizationStrategy["Special Damage with Potency"].rename('PvP')]
   ),
