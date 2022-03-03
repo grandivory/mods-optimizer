@@ -101,7 +101,7 @@ const characterSettings = {
   ),
   'BARRISSOFFEE': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 50, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 70, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P1 Jedi', 75, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
@@ -166,7 +166,7 @@ const characterSettings = {
     ['Rogue 1']
   ),
   'BOKATAN': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 100, 10, 0, 10, 0, 50, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 10, 0, 50, 0, 0, 0, 0, true)]
   ),
   'BOSSK': new CharacterSettings(
     [
@@ -186,7 +186,10 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
   'CANDEROUSORDO': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
+    [
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
+      new OptimizationPlan('Maul Lead', 0, 0, 0, 50, 75, 0, 100, 0, 25, 0, 0, 0, 0, true)
+    ]
   ),
   'CARADUNE': new CharacterSettings(
     [
@@ -318,7 +321,7 @@ const characterSettings = {
     DamageType.special
   ),
   'DARTHREVAN': new CharacterSettings(
-    [new OptimizationPlan('PvP', 3, 0, 100, 50, 5, 0, 0, 10, 5, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 5, 0, 100, 50, 5, 0, 0, 10, 5, 0, 0, 0, 0, true)],
     [],
     DamageType.special
   ),
@@ -340,6 +343,9 @@ const characterSettings = {
     ],
     [],
     DamageType.special
+  ),
+  'DASHRENDAR': new CharacterSettings(
+    [new OptimizationPlan('Leader', 10, 0, 100, 0, 15, 0, 0, 0, 50, 0, 0, 0, 0, true)]
   ),
   'DATHCHA': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
@@ -513,7 +519,7 @@ const characterSettings = {
     ]
   ),
   'GRANDADMIRALTHRAWN': new CharacterSettings(
-    [optimizationStrategy["Speed with survivability"].rename('PvP')],
+    [new OptimizationPlan('PvP', 10, 20, 100, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, true)],
     ['GAT', 'Imperial Grancor Maneuver', 'Wampanader', 'ABC', 'Titans'],
     DamageType.special
   ),
@@ -707,6 +713,9 @@ const characterSettings = {
     [],
     DamageType.special
   ),
+  'KYLEKATARN': new CharacterSettings(
+    [new OptimizationPlan('Mothma Lead', 5, 0, 100, 0, 5, 5, 50, 0, 0, 5, 0, 0, 0, true)]
+  ),
   'KYLOREN': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 25, 0, 25, 0, 0, 0, 0, true)],
     ['Old Kylo', 'zylo', 'FO']
@@ -762,6 +771,12 @@ const characterSettings = {
   ),
   'MAGNAGUARD': new CharacterSettings(
     [new OptimizationPlan('Balanced', 20, 20, 100, 25, 50, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)]
+  ),
+  'MARAJADE': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 0, 10, 100, 25, 25, 0, 0, 25, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('Survivability', 0, 10, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'MAUL': new CharacterSettings(
     [optimizationStrategy["Special Damage with Potency"].rename('PvP')]
@@ -873,7 +888,7 @@ const characterSettings = {
     ['Machine Gun']
   ),
   'QIRA': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 10, 0, 50, 0, 25, 0, 0, 0, 0, true)],
     ['solo']
   ),
   'QUIGONJINN': new CharacterSettings(
@@ -1114,12 +1129,15 @@ const characterSettings = {
     ['Murderbears']
   ),
   'YOUNGCHEWBACCA': new CharacterSettings(
-    [new OptimizationPlan('PvE', 50, 0, 100, 50, 0, 0, 25, 0, 50, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvE', 50, 0, 100, 50, 0, 0, 25, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('Tanky', 60, 0, 100, 0, 0, 10, 0, 0, 0, 5, 0, 0, 0, true)
+    ],
     ['Dwight', 'solo']
   ),
   'YOUNGHAN': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
+      new OptimizationPlan('PvP', 10, 0, 100, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('HAAT', 0, 0, 80, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
     ],
     ['YOLO', 'solo', 'Jim']
