@@ -117,8 +117,8 @@ const characterSettings = {
   ),
   'BASTILASHANDARK': new CharacterSettings(
     [
-      new OptimizationPlan('7-star', 0, 0, 100, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('Low Star', 10, 20, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('PvP', 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Offensive', 0, 0, 100, 50, 5, 0, 0, 25, 0, 0, 0, 0, 0, true)
     ],
     [],
     DamageType.special
