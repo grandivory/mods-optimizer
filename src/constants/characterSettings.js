@@ -54,7 +54,11 @@ const characterSettings = {
     ['JKA']
   ),
   'ARCTROOPER501ST': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 0, 0, 0, 50, 0, 15, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 0, 0, 0, 50, 0, 15, 0, 0, 0, 0, true),
+      new OptimizationPlan('KAM', 10, 0, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('KAM/CA', 10, 0, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 100, true),
+    ],
   ),
   'ARMORER': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -280,11 +284,16 @@ const characterSettings = {
     DamageType.mixed
   ),
   'CT5555': new CharacterSettings(
-    [new OptimizationPlan('PvP', 15, 30, 50, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 15, 30, 50, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('KAM', 30, 15, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('KAM/CA', 30, 15, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, true)
+    ]
   ),
   'CT7567': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 5, 0, 100, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('KAM', 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
       optimizationStrategy.Speed.rename('Chex Mix')
     ],
     ['Titans']
@@ -292,7 +301,9 @@ const characterSettings = {
   'CT210408': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 100, 50, 0, 75, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('Nuke', 0, 0, 50, 100, 0, 0, 75, 0, 25, 0, 0, 0, 0, true)
+      new OptimizationPlan('Nuke', 0, 0, 50, 100, 0, 0, 75, 0, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('KAM', 5, 0, 50, 100, 0, 0, 20, 20, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('KAM/CA', 5, 0, 50, 100, 0, 0, 20, 20, 50, 0, 0, 0, 100, true)
     ],
     [],
     DamageType.mixed
@@ -970,7 +981,9 @@ const characterSettings = {
   'SHAAKTI': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('Nuke', 25, 25, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('Nuke', 25, 25, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('KAM', 20, 10, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('KAM/CA', 20, 10, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, true)
     ]
   ),
   'SHORETROOPER': new CharacterSettings(
