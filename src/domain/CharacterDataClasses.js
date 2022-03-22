@@ -48,8 +48,10 @@ class CharacterSettings {
 }
 
 const alignments = {
-  'Light Side': 'light',
-  'Dark Side': 'dark'
+  0: 'noforce',
+  1: 'neutral',
+  2: 'light',
+  3: 'dark'
 };
 
 /**
@@ -73,14 +75,14 @@ class GameSettings {
     this.baseID = baseID;
     this.name = name;
     if (avatarUrl.startsWith('/')) {
-      this.avatarUrl = `https://swgoh.gg${avatarUrl}`;
+      this.avatarUrl = `https://api.hotutils.com/images${avatarUrl}`;
     } else {
       this.avatarUrl = avatarUrl;
     }
     this.tags = tags;
     this.description = description;
     this.alignment = Object.values(alignments).includes(alignment) ? alignment :
-      Object.keys(alignments).includes(alignment) ? alignments[alignment] :
+      Object.keys(alignments).includes(`${alignment}`) ? alignments[alignment] :
         null;
     Object.freeze(this);
   }
