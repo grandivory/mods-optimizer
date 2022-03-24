@@ -61,8 +61,7 @@ export function offenseScore(mod) {
  */
 export function singleSecondaryStatScore(stat, mod) {
   const min = statRoll[stat.type][mod.pips].min;
-  // For non-upgradeable mods (<= 4*), use the max value from 6* instead to reflect the potential they missed.
-  const max = mod.pips >= 5 ? statRoll[stat.type][mod.pips].max : statRoll[stat.type][6].max;
+  const max = statRoll[stat.type][mod.pips].max;
   const range = max - min;
   const avg = stat.value / stat.rolls;
 
