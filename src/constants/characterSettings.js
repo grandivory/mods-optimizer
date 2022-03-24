@@ -389,7 +389,7 @@ const characterSettings = {
     DamageType.special
   ),
   'DROIDEKA': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 5, 50, 0, 0, 10, 100, 0, 25, 20, 20, 0, 0, true)]
+    [new OptimizationPlan('PvP', 0, 10, 0, 0, 10, 20, 100, 0, 0, 0, 0, 0, 0, true)]
   ),
   'EETHKOTH': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
