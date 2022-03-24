@@ -347,6 +347,11 @@ const characterSettings = {
     ],
     ['Nightmare']
   ),
+  'DARTHTALON': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 15, 25, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
+    ]
+  ),
   'DARTHTRAYA': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 0, 50, 10, 0, 0, 0, 0, true),
