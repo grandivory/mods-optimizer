@@ -267,7 +267,7 @@ const characterSettings = {
   'COMMANDERLUKESKYWALKER': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 25, 0, 50, 0, 0, 0, 0, true),
-      new OptimizationPlan('Threepio', 10, 10, 100, 0, 10, 50, 50, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Chewpio', 10, 10, 100, 0, 10, 50, 50, 0, 0, 0, 0, 0, 0, true),
       optimizationStrategy["Speedy Chex Mix"].rename('Chex Mix'),
       new OptimizationPlan('Raids', 0, 0, 100, 0, 25, 0, 25, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Slow and Strong', 0, 0, 0, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true)
