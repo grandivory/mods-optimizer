@@ -111,10 +111,10 @@ export function refreshPlayerData(allyCode, keepOldMods, sessionId, useSession =
     // First, fetch character definitions from swgoh.gg
     return fetchCharacters()
       .catch(() => {
-        messages.push('Error when fetching character definitions from swgoh.gg. ' +
+        messages.push('Error when fetching character definitions from HotUtils. ' +
           'Some characters may not optimize properly until you fetch again.'
         );
-        messages.push('This is an error with an API that the optimizer uses (swgoh.gg) and NOT ' +
+        messages.push('This is an error with an API that the optimizer uses (HotUtils) and NOT ' +
           'an error in the optimizer itself. Feel free to discuss it on the ' +
           'optimizer\'s discord server, but know that there are no changes that ' +
           'can be made to the optimizer to fix this issue.'
@@ -181,17 +181,22 @@ export function refreshPlayerData(allyCode, keepOldMods, sessionId, useSession =
 function fetchCharacters() {
   return fetch('https://api.mods-optimizer.swgoh.grandivory.com/characters/')
     .then(response => response.json())
-    .then(characters => {
-      const gameSettings = characters.map(character => {
+    .then(response => {
+      const gameSettings = response.units.map(unit => {
+        const categories = unit.affiliation
+          .concat(unit.profession)
+          .concat(unit.role)
+          .concat(unit.species)
+          .map(category => category.display)
+          .concat(unit.shipSlot ? ['Crew Member'] : []);
+
         return new GameSettings(
-          character.base_id,
-          character.name,
-          character.image,
-          character.categories
-            .concat([character.alignment, character.role])
-            .concat(null !== character.ship_slot ? ['Crew Member'] : []),
-          character.description,
-          character.alignment
+          unit.baseId,
+          unit.name,
+          unit.baseImage,
+          categories,
+          unit.description,
+          unit.alignment
         );
       });
 
