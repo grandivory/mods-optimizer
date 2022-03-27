@@ -1129,6 +1129,7 @@ const characterSettings = {
   'WAMPA': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 10, 0, 80, 100, 10, 0, 50, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('Omicron', 100, 0, 75, 0, 0, 75, 75, 0, 0, 20, 0, 0, 0, true),
       new OptimizationPlan('Raids', 10, 0, 80, 100, 10, 0, 50, 0, 0, 0, 0, 0, 0, true)
     ],
     ['beast', 'Wampanader']
