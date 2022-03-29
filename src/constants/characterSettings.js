@@ -1043,6 +1043,9 @@ const characterSettings = {
     ],
     ['Troopers']
   ),
+  'STARKILLER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 100, 75, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'STORMTROOPER': new CharacterSettings(
     [
       new OptimizationPlan('Speedy Tank', 25, 25, 50, 0, 0, 25, 0, 0, 0, 25, 25, 0, 0, true),
