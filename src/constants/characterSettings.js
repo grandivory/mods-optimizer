@@ -1064,7 +1064,10 @@ const characterSettings = {
     [new OptimizationPlan('Tanky', 40, 40, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
   ),
   'SUPREMELEADERKYLOREN': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 0, 100, 100, 0, 0, 40, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP - Speed', 10, 0, 100, 50, 0, 0, 30, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP - Offense', 20, 0, 100, 100, 0, 0, 40, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'T3_M4': new CharacterSettings(
     [
