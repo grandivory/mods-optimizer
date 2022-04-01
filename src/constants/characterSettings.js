@@ -1010,7 +1010,7 @@ const characterSettings = {
     ['SM']
   ),
   'SITHPALPATINE': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 5, 100, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 40, 5, 100, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, true)],
     ['SEE'],
     DamageType.special
   ),
