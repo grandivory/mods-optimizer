@@ -267,7 +267,7 @@ const characterSettings = {
   'COMMANDERLUKESKYWALKER': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 25, 0, 50, 0, 0, 0, 0, true),
-      new OptimizationPlan('Threepio', 10, 10, 100, 0, 10, 50, 50, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Chewpio', 10, 10, 100, 0, 10, 50, 50, 0, 0, 0, 0, 0, 0, true),
       optimizationStrategy["Speedy Chex Mix"].rename('Chex Mix'),
       new OptimizationPlan('Raids', 0, 0, 100, 0, 25, 0, 25, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Slow and Strong', 0, 0, 0, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true)
@@ -347,6 +347,11 @@ const characterSettings = {
     ],
     ['Nightmare']
   ),
+  'DARTHTALON': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 15, 25, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
+    ]
+  ),
   'DARTHTRAYA': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 0, 50, 10, 0, 0, 0, 0, true),
@@ -384,7 +389,10 @@ const characterSettings = {
     DamageType.special
   ),
   'DROIDEKA': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 5, 50, 0, 0, 10, 100, 0, 25, 20, 20, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 0, 10, 0, 0, 10, 20, 100, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Maul Kickstarter', 0, 5, 100, 0, 5, 5, 20, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'EETHKOTH': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
@@ -535,7 +543,7 @@ const characterSettings = {
     DamageType.special
   ),
   'GRANDMASTERLUKE': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 25, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 0, 25, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['GMLS', 'JMLS', 'GLLS'],
     DamageType.special
   ),
@@ -1035,6 +1043,9 @@ const characterSettings = {
     ],
     ['Troopers']
   ),
+  'STARKILLER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 100, 75, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'STORMTROOPER': new CharacterSettings(
     [
       new OptimizationPlan('Speedy Tank', 25, 25, 50, 0, 0, 25, 0, 0, 0, 25, 25, 0, 0, true),
@@ -1053,7 +1064,10 @@ const characterSettings = {
     [new OptimizationPlan('Tanky', 40, 40, 100, 0, 25, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
   ),
   'SUPREMELEADERKYLOREN': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 0, 100, 100, 0, 0, 40, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP - Speed', 10, 0, 100, 50, 0, 0, 30, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP - Offense', 20, 0, 100, 100, 0, 0, 40, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'T3_M4': new CharacterSettings(
     [
@@ -1102,7 +1116,7 @@ const characterSettings = {
   ),
   'VADER': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 40, 0, 20, 0, 20, 0, 0, 0, 0, true),
       new OptimizationPlan('Raids', 0, 0, 100, 50, 25, 0, 25, 0, 25, 0, 0, 0, 0, true)
     ],
     ['Auto Lightzader', 'Wampanader', 'Nightmare']
@@ -1121,6 +1135,9 @@ const characterSettings = {
   'WAMPA': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 10, 0, 80, 100, 10, 0, 50, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('Omicron', 100, 0, 75, 0, 0, 75, 50, 0, 0, 20, 0, 0, 0, true),
+      new OptimizationPlan('Omicron/Health', 100, 0, 75, 0, 0, 10, 10, 0, 0, 10, 0, 0, 0, true),
+      new OptimizationPlan('Omicron/Tenacity', 30, 0, 15, 0, 0, 100, 30, 0, 0, 20, 0, 0, 0, true),
       new OptimizationPlan('Raids', 10, 0, 80, 100, 10, 0, 50, 0, 0, 0, 0, 0, 0, true)
     ],
     ['beast', 'Wampanader']
