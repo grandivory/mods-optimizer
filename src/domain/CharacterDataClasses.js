@@ -54,6 +54,13 @@ const alignments = {
   3: 'dark'
 };
 
+const alignmentTags = {
+  'noforce': [],
+  'neutral': ['neutral'],
+  'light': ['lightside', 'ls'],
+  'dark': ['darkside', 'ds']
+};
+
 /**
  * Class to hold Character information that doesn't change, except with a game update.
  */
@@ -79,11 +86,12 @@ class GameSettings {
     } else {
       this.avatarUrl = avatarUrl;
     }
-    this.tags = tags;
     this.description = description;
     this.alignment = Object.values(alignments).includes(alignment) ? alignment :
       Object.keys(alignments).includes(`${alignment}`) ? alignments[alignment] :
         null;
+    this.tags = tags.concat(alignmentTags[this.alignment]);
+
     Object.freeze(this);
   }
 
