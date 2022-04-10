@@ -804,7 +804,10 @@ const characterSettings = {
     ]
   ),
   'MAGNAGUARD': new CharacterSettings(
-    [new OptimizationPlan('Balanced', 20, 20, 100, 25, 50, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 30, 30, 100, 0, 20, 20, 0, 0, 0, 25, 0, 0, 100, true),
+      new OptimizationPlan('Balanced', 20, 20, 100, 25, 50, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)
+    ]
   ),
   'MARAJADE': new CharacterSettings(
     [
