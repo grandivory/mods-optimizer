@@ -633,6 +633,12 @@ const characterSettings = {
   'HUMANTHUG': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('Really?')]
   ),
+  'IDENVERSIOEMPIRE': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 50, 0, 25, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Wampa Slayer', 0, 0, 100, 30, 100, 0, 10, 0, 0, 0, 0, 0, 0, true)
+    ]
+  ),
   'IG11': new CharacterSettings(
     [new OptimizationPlan('Tanky', 25, 0, 50, 0, 0, 10, 5, 0, 5, 5, 5, 0, 0, true)]
   ),
