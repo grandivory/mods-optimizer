@@ -231,7 +231,10 @@ const characterSettings = {
     ['Murderbears']
   ),
   'CHIEFNEBIT': new CharacterSettings(
-    [new OptimizationPlan('PvP', 50, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 50, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Detonator', 60, 60, 100, 0, 0, 0, 0, 0, 0, 50, 0, 0, 25, true)
+    ],
     ['nebs']
   ),
   'CHIRRUTIMWE': new CharacterSettings(
@@ -364,7 +367,10 @@ const characterSettings = {
     [new OptimizationPlan('Leader', 10, 0, 100, 0, 15, 0, 0, 0, 50, 0, 0, 0, 0, true)]
   ),
   'DATHCHA': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
+    [
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
+      new OptimizationPlan('Detonator', 100, 100, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 100, true)
+    ],
     [],
     DamageType.mixed
   ),
@@ -658,17 +664,26 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
   'JAWA': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
+    [
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
+      new OptimizationPlan('Detonator', 100, 100, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 100, true)
+    ],
     [],
     DamageType.mixed
   ),
   'JAWAENGINEER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 0, 100, 0, 50, 10, 0, 0, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 10, 0, 100, 0, 50, 10, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Detonator', 20, 10, 100, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, true)
+    ],
     [],
     DamageType.mixed
   ),
   'JAWASCAVENGER': new CharacterSettings(
-    [new OptimizationPlan('PvE', 0, 0, 100, 25, 50, 0, 25, 0, 100, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvE', 0, 0, 100, 25, 50, 0, 25, 0, 100, 0, 0, 0, 0, true),
+      new OptimizationPlan('Detonator', 100, 100, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 100, true)
+    ]
   ),
   'JEDIKNIGHTCONSULAR': new CharacterSettings(
     [new OptimizationPlan('Healer', 50, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)],
