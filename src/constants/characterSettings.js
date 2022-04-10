@@ -456,7 +456,8 @@ const characterSettings = {
   ),
   'FENNECSHAND': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 0, 100, 50, 0, 0, 0, 0, true)
+      new OptimizationPlan('PvP - Offense', 0, 0, 100, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP - Crit.Dmg', 0, 0, 100, 100, 0, 0, 0, 100, 50, 0, 0, 0, 0, true)
     ]
   ),
   'FINN': new CharacterSettings(
