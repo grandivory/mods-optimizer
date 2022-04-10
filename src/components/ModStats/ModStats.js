@@ -72,7 +72,7 @@ class ModStats extends React.PureComponent {
   static showStatElement(stat, score, bonus, index) {
     return <li key={index} className={'class-' + stat.getClass()}>
       <span className={'rolls'}>({stat.rolls})</span> {stat.show()}
-      <span title={'Score: ' + score.score + ' (' + score.percentage + '%)'} className="stat-rating">{ModStats.printStarRating(score.score, bonus)}</span>
+      <span title={'Score: ' + score.score + ' (' + score.percentage + '%)'} className="stat-rating">{ModStats.printStarRating(score.percentage, bonus)}</span>
     </li>;
   }
 
