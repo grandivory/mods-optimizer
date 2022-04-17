@@ -1066,9 +1066,8 @@ const characterSettings = {
   ),
   'SNOWTROOPER': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 0, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true),
-      new OptimizationPlan('Fast PvP', 0, 0, 100, 50, 0, 0, 50, 0, 100, 0, 0, 0, 0, true),
-      new OptimizationPlan('Fast PvE', 0, 0, 80, 50, 0, 0, 25, 0, 100, 0, 0, 0, 0, true)
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('Iden Lead', 10, 10, 50, 100, 10, 0, 30, 0, 25, 0, 0, 0, 0, true)
     ],
     ['Troopers']
   ),
