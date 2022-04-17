@@ -34,6 +34,7 @@
   width: 8em;
   position: relative;
   border: 1px solid transparent;
+  will-change: transform;
 }
 
 .character-edit .available-characters .character.locked {
@@ -88,6 +89,7 @@
 
 .character-edit.sort-view .character-list .character-block-wrapper {
   margin-right: 1em;
+  will-change: transform;
 }
 
 .character-edit.sort-view .character-list .character-block-wrapper.drop-character .character-block {
@@ -205,6 +207,7 @@
 .modal.generate-character-list .form-row {
   margin-bottom: .25em;
 }
+
 .modal.generate-character-list .form-row label {
   display: inline;
   vertical-align: middle;
