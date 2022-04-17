@@ -379,7 +379,8 @@ const characterSettings = {
   ),
   'DEATHTROOPER': new CharacterSettings(
     [
-      new OptimizationPlan('Damage', 0, 0, 80, 100, 25, 0, 25, 0, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 25, 0, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('Iden Lead', 10, 10, 100, 100, 40, 0, 25, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true, {}, {},
         [new TargetStat('Speed', 175, 179)]
       )
