@@ -409,6 +409,9 @@ const characterSettings = {
     [],
     DamageType.mixed
   ),
+  'EIGHTHBROTHER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 5, 100, 75, 0, 0, 100, 0, 30, 0, 0, 0, 0, true)]
+  ),
   'EMBO': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 20, 100, 100, 0, 0, 25, 0, 25, 0, 0, 0, 0, true),
@@ -463,6 +466,9 @@ const characterSettings = {
       new OptimizationPlan('PvP - Offense', 0, 0, 100, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('PvP - Crit.Dmg', 0, 0, 100, 100, 0, 0, 0, 100, 50, 0, 0, 0, 0, true)
     ]
+  ),
+  'FIFTHBROTHER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 10, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'FINN': new CharacterSettings(
     [
@@ -884,6 +890,9 @@ const characterSettings = {
     ],
     ['NS', 'hSTR NS']
   ),
+  'NINTHSISTER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 40, 50, 100, 0, 0, 40, 0, 0, 0, 30, 0, 0, 0, true)]
+  ),
   'NUTEGUNRAY': new CharacterSettings(
     [
       optimizationStrategy["Speed with survivability"].rename('PvP'),
@@ -1014,6 +1023,12 @@ const characterSettings = {
       new OptimizationPlan('hSTR Phase 2', 20, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     ['Rogue 1', 'SRP']
+  ),
+  'SECONDSISTER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 5, 100, 75, 0, 0, 0, 100, 30, 0, 0, 0, 0, true)]
+  ),
+  'SEVENTHSISTER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 10, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'SHAAKTI': new CharacterSettings(
     [
