@@ -499,7 +499,10 @@ const characterSettings = {
     ['FOST', 'FO']
   ),
   'FOSITHTROOPER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 25, 100, 0, 0, 80, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 0, 0, 25, 100, 0, 0, 80, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Tanky', 40, 0, 100, 50, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'FULCRUMAHSOKA': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
