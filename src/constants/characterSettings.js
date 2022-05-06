@@ -593,6 +593,7 @@ const characterSettings = {
   'GRIEVOUS': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 100, 0, 80, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Fast', 20, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Nuke', 100, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     ['GG']
