@@ -191,8 +191,8 @@ const characterSettings = {
   ),
   'CANDEROUSORDO': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
-      new OptimizationPlan('Maul Lead', 0, 0, 0, 50, 75, 0, 100, 0, 25, 0, 0, 0, 0, true)
+      new OptimizationPlan('Maul Lead', 0, 0, 0, 50, 0, 0, 100, 0, 25, 0, 0, 0, 0, true),
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')
     ]
   ),
   'CARADUNE': new CharacterSettings(
