@@ -191,8 +191,8 @@ const characterSettings = {
   ),
   'CANDEROUSORDO': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
-      new OptimizationPlan('Maul Lead', 0, 0, 0, 50, 75, 0, 100, 0, 25, 0, 0, 0, 0, true)
+      new OptimizationPlan('Maul Lead', 0, 0, 0, 50, 0, 0, 100, 0, 25, 0, 0, 0, 0, true),
+      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')
     ]
   ),
   'CARADUNE': new CharacterSettings(
@@ -409,6 +409,9 @@ const characterSettings = {
     [],
     DamageType.mixed
   ),
+  'EIGHTHBROTHER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 5, 100, 75, 0, 0, 100, 0, 30, 0, 0, 0, 0, true)]
+  ),
   'EMBO': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 20, 100, 100, 0, 0, 25, 0, 25, 0, 0, 0, 0, true),
@@ -464,6 +467,9 @@ const characterSettings = {
       new OptimizationPlan('PvP - Crit.Dmg', 0, 0, 100, 100, 0, 0, 0, 100, 50, 0, 0, 0, 0, true)
     ]
   ),
+  'FIFTHBROTHER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 10, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'FINN': new CharacterSettings(
     [
       optimizationStrategy["Slow Crit, Physical Damage, Potency"].rename('PvP'),
@@ -489,11 +495,14 @@ const characterSettings = {
     ['FOTP', 'FO']
   ),
   'FIRSTORDERTROOPER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 20, 100, 50, 50, 25, 0, 0, 0, 5, 5, 0, 0, true)],
+    [new OptimizationPlan('PvP', 30, 40, 100, 0, 0, 10, 0, 0, 0, 30, 0, 0, 0, true)],
     ['FOST', 'FO']
   ),
   'FOSITHTROOPER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 25, 100, 0, 0, 80, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 0, 0, 25, 100, 0, 0, 80, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Tanky', 40, 0, 100, 50, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'FULCRUMAHSOKA': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
@@ -587,6 +596,7 @@ const characterSettings = {
   'GRIEVOUS': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 100, 0, 80, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Fast', 20, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Nuke', 100, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     ['GG']
@@ -884,6 +894,9 @@ const characterSettings = {
     ],
     ['NS', 'hSTR NS']
   ),
+  'NINTHSISTER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 40, 50, 100, 0, 0, 40, 0, 0, 0, 30, 0, 0, 0, true)]
+  ),
   'NUTEGUNRAY': new CharacterSettings(
     [
       optimizationStrategy["Speed with survivability"].rename('PvP'),
@@ -1014,6 +1027,12 @@ const characterSettings = {
       new OptimizationPlan('hSTR Phase 2', 20, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     ['Rogue 1', 'SRP']
+  ),
+  'SECONDSISTER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 5, 100, 75, 0, 0, 0, 100, 30, 0, 0, 0, 0, true)]
+  ),
+  'SEVENTHSISTER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 10, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'SHAAKTI': new CharacterSettings(
     [
