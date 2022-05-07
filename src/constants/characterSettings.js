@@ -495,7 +495,7 @@ const characterSettings = {
     ['FOTP', 'FO']
   ),
   'FIRSTORDERTROOPER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 20, 100, 50, 50, 25, 0, 0, 0, 5, 5, 0, 0, true)],
+    [new OptimizationPlan('PvP', 30, 40, 100, 0, 0, 10, 0, 0, 0, 30, 0, 0, 0, true)],
     ['FOST', 'FO']
   ),
   'FOSITHTROOPER': new CharacterSettings(
