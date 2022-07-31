@@ -329,6 +329,9 @@ const characterSettings = {
       new OptimizationPlan('Tenacity', 0, 50, 100, 0, 10, 100, 10, 0, 0, 10, 0, 0, 0, true)
     ]
   ),
+  'DARTHMALGUS': new CharacterSettings(
+    [new OptimizationPlan('PvP', 50, 10, 100, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, true)]
+  ),
   'DARTHNIHILUS': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true),
