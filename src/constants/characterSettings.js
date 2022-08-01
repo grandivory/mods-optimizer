@@ -566,6 +566,9 @@ const characterSettings = {
     ['GAT', 'Imperial Grancor Maneuver', 'Wampanader', 'ABC', 'Titans'],
     DamageType.special
   ),
+  'GRANDINQUISITOR': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 0, 100, 75, 0, 0, 30, 0, 10, 0, 0, 0, 0, true)]
+  ),
   'GRANDMASTERLUKE': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 25, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['GMLS', 'JMLS', 'GLLS'],
