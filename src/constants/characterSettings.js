@@ -28,6 +28,9 @@ const characterSettings = {
   'ADMIRALPIETT': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 25, 15, 0, 10, 0, 10, 0, 0, 0, 0, true)]
   ),
+  'ADMIRALRADDUS': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true)]
+  ),
   'AHSOKATANO': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
@@ -262,6 +265,7 @@ const characterSettings = {
   'COMMANDERAHSOKA': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 5, 0, 100, 50, 0, 0, 0, 30, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Health', 10, 0, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Crit.Dmg', 5, 0, 25, 100, 0, 0, 0, 30, 0, 0, 0, 0, 0, true)
     ],
     ['CAT'],
@@ -328,6 +332,9 @@ const characterSettings = {
       new OptimizationPlan('PvP', 10, 50, 100, 0, 10, 0, 10, 0, 0, 10, 0, 0, 0, true),
       new OptimizationPlan('Tenacity', 0, 50, 100, 0, 10, 100, 10, 0, 0, 10, 0, 0, 0, true)
     ]
+  ),
+  'DARTHMALGUS': new CharacterSettings(
+    [new OptimizationPlan('PvP', 50, 10, 100, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, true)]
   ),
   'DARTHNIHILUS': new CharacterSettings(
     [
@@ -491,7 +498,7 @@ const characterSettings = {
     DamageType.mixed
   ),
   'FIRSTORDERTIEPILOT': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
+    [new OptimizationPlan('PvP', 20, 0, 100, 100, 10, 0, 50, 0, 0, 0, 0, 0, 0, true)],
     ['FOTP', 'FO']
   ),
   'FIRSTORDERTROOPER': new CharacterSettings(
@@ -562,6 +569,9 @@ const characterSettings = {
     ['GAT', 'Imperial Grancor Maneuver', 'Wampanader', 'ABC', 'Titans'],
     DamageType.special
   ),
+  'GRANDINQUISITOR': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 0, 100, 75, 0, 0, 30, 0, 10, 0, 0, 0, 0, true)]
+  ),
   'GRANDMASTERLUKE': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 25, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['GMLS', 'JMLS', 'GLLS'],
@@ -571,6 +581,7 @@ const characterSettings = {
     [
       new OptimizationPlan('Speedy', 0, 0, 100, 50, 25, 0, 0, 80, 25, 0, 0, 0, 0, true),
       new OptimizationPlan('Offense', 0, 0, 50, 100, 0, 0, 0, 100, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('Health', 20, 0, 100, 0, 5, 0, 0, 20, 5, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P1 Yodalicious', 0, -5, 100, 100, 0, 0, 0, 100, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P2 Bastila', 0, 0, 60, 100, 0, 0, 0, 75, 80, 0, 0, 0, 0, true)
     ],
@@ -723,7 +734,10 @@ const characterSettings = {
     ['JKL']
   ),
   'JEDIKNIGHTREVAN': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 0, 10, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 50, 0, 0, 0, 10, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Health', 10, 0, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true)
+    ],
     [],
     DamageType.special
   ),
@@ -927,7 +941,7 @@ const characterSettings = {
     ['Murderbears']
   ),
   'PHASMA': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 25, 25, 0, 25, 0, 25, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 20, 10, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['FO']
   ),
   'PLOKOON': new CharacterSettings(
