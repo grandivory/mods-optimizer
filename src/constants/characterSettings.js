@@ -783,6 +783,9 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE')],
     ['Fisty', 'Fister']
   ),
+  'KRRSANTAN': new CharacterSettings(
+    [new OptimizationPlan('PvP', 30, 30, 100, 0, 10, 10, 0, 0, 0, 25, 0, 0, 0, true)]
+  ),
   'KUIIL': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     [],
