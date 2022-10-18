@@ -184,6 +184,9 @@ const characterSettings = {
       new OptimizationPlan('Non-leader', 10, 0, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
+  'BOUSHH': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 25, 0, 0, 0, 0, 0, true)]
+  ),
   'C3POLEGENDARY': new CharacterSettings(
     [
       optimizationStrategy["Speedy debuffer"],
@@ -1180,6 +1183,9 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
     [],
     DamageType.mixed
+  ),
+  'UNDERCOVERLANDO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 0, 100, 50, 0, 0, 25, 0, 25, 0, 0, 0, 0, true)]
   ),
   'URORRURRR': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
