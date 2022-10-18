@@ -146,6 +146,9 @@ const characterSettings = {
     ],
     ['bb8', 'Wampanader', 'ABC']
   ),
+  'BENSOLO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 100, 0, 10, 0, 0, 70, 0, 0, 0, 0, 0, true)]
+  ),
   'BIGGSDARKLIGHTER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
     ['Wiggs', 'Chiggs']
