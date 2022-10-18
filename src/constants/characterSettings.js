@@ -525,7 +525,7 @@ const characterSettings = {
     ['ATF', 'FAT']
   ),
   'GAMORREANGUARD': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 0, 100, 0, 50, 25, 25, 0, 0, 5, 5, 0, 0, true)],
+    [new OptimizationPlan('PvP', 75, 0, 100, 0, 75, 100, 0, 0, 0, 50, 0, 0, 0, true)],
     ['Piggy']
   ),
   'GARSAXON': new CharacterSettings(
