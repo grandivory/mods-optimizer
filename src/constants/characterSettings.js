@@ -695,6 +695,9 @@ const characterSettings = {
   'JANGOFETT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
+  'JABBATHEHUTT': new CharacterSettings(
+    [new OptimizationPlan('PvP', 15, 0, 100, 0, 25, 50, 0, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'JAWA': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
