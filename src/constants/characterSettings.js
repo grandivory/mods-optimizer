@@ -6,6 +6,9 @@ import { CharacterSettings, DamageType } from "../domain/CharacterDataClasses";
 import TargetStat from "../domain/TargetStat";
 
 const characterSettings = {
+  '50RT': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 10, 100, 0, 20, 0, 0, 0, 0, 25, 0, 0, 0, true)]
+  ),
   'C3POCHEWBACCA': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 80, 10, 0, 50, 0, 25, 0, 0, 0, 0, true)]
   ),
@@ -146,6 +149,9 @@ const characterSettings = {
     ],
     ['bb8', 'Wampanader', 'ABC']
   ),
+  'BENSOLO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 100, 0, 10, 0, 0, 70, 0, 0, 0, 0, 0, true)]
+  ),
   'BIGGSDARKLIGHTER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
     ['Wiggs', 'Chiggs']
@@ -180,6 +186,9 @@ const characterSettings = {
       new OptimizationPlan('Leader', 10, 10, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Non-leader', 10, 0, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true)
     ]
+  ),
+  'BOUSHH': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 25, 0, 0, 0, 0, 0, true)]
   ),
   'C3POLEGENDARY': new CharacterSettings(
     [
@@ -421,7 +430,7 @@ const characterSettings = {
   ),
   'EMBO': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 20, 100, 100, 0, 0, 25, 0, 25, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 0, 20, 100, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 3', 0, 0, 50, 25, 0, 0, 75, 0, 100, 0, 0, 0, 0, true)
     ]
   ),
@@ -516,7 +525,7 @@ const characterSettings = {
     ['ATF', 'FAT']
   ),
   'GAMORREANGUARD': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 0, 100, 0, 50, 25, 25, 0, 0, 5, 5, 0, 0, true)],
+    [new OptimizationPlan('PvP', 75, 0, 100, 0, 75, 100, 0, 0, 0, 50, 0, 0, 0, true)],
     ['Piggy']
   ),
   'GARSAXON': new CharacterSettings(
@@ -695,6 +704,9 @@ const characterSettings = {
   'JANGOFETT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
+  'JABBATHEHUTT': new CharacterSettings(
+    [new OptimizationPlan('PvP', 15, 0, 100, 0, 25, 50, 0, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'JAWA': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE'),
@@ -776,6 +788,9 @@ const characterSettings = {
   'KITFISTO': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE')],
     ['Fisty', 'Fister']
+  ),
+  'KRRSANTAN': new CharacterSettings(
+    [new OptimizationPlan('PvP', 30, 30, 100, 0, 10, 10, 0, 0, 0, 25, 0, 0, 0, true)]
   ),
   'KUIIL': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -1171,6 +1186,9 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
     [],
     DamageType.mixed
+  ),
+  'UNDERCOVERLANDO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 0, 100, 50, 0, 0, 25, 0, 25, 0, 0, 0, 0, true)]
   ),
   'URORRURRR': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
