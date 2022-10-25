@@ -32,7 +32,14 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 0, 0, 100, 25, 15, 0, 10, 0, 10, 0, 0, 0, 0, true)]
   ),
   'ADMIRALRADDUS': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 10, 20, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 10, 20, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true, {
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %"
+      }),
+    ]
   ),
   'AHSOKATANO': new CharacterSettings(
     [
@@ -217,7 +224,15 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
   'CASSIANANDOR': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 20, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 0, 20, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('AdRad', 10, 20, 100, 0, 25, 0, 0, 10, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('AdRad w/ Primaries', 10, 20, 100, 0, 25, 0, 0, 10, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Chance %",
+        "cross": "Potency %",
+        "circle": "Protection %"
+      }),
+    ],
     ['Rogue 1', 'SuperStar2D2'],
     DamageType.mixed
   ),
@@ -239,7 +254,14 @@ const characterSettings = {
     ['Chex Mix']
   ),
   'CHIEFCHIRPA': new CharacterSettings(
-    [optimizationStrategy.Speed.rename('Speed')],
+    [
+      optimizationStrategy.Speed.rename('Speed'),
+      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Chance %",
+        "cross": "Protection %",
+        "circle": "Protection %"
+      })
+    ],
     ['Murderbears']
   ),
   'CHIEFNEBIT': new CharacterSettings(
@@ -460,12 +482,24 @@ const characterSettings = {
     DamageType.special
   ),
   'EWOKELDER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 25, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 25, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 25, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %"
+      }),
+    ],
     ['EE', 'Murderbears']
   ),
   'EWOKSCOUT': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
+      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
+        "cross": "Offense %",
+        "circle": "Protection %"
+      }),
       new OptimizationPlan('hSTR Phase 2', 0, 0, 50, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
     ],
     ['Murderbears']
@@ -521,7 +555,15 @@ const characterSettings = {
     ]
   ),
   'FULCRUMAHSOKA': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')],
+    [
+      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('Omicron', 10, 0, 50, 100, 0, -30, 75, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('Omicron w/ Primaries', 10, 0, 50, 0, 0, -30, 100, 0, 50, 0, 0, 0, 0, true, {
+        "arrow": "Offense %",
+        "triangle": "Critical Damage %",
+        "cross": "Offense %"
+      }),
+    ],
     ['ATF', 'FAT']
   ),
   'GAMORREANGUARD': new CharacterSettings(
@@ -665,7 +707,7 @@ const characterSettings = {
     ['HRS', 'Hoth Bros']
   ),
   'HUMANTHUG': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('Really?')]
+    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PVP')]
   ),
   'IDENVERSIOEMPIRE': new CharacterSettings(
     [
@@ -768,11 +810,28 @@ const characterSettings = {
     [new OptimizationPlan('Tank', 50, 25, 100, 0, 25, 0, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
   ),
   'JYNERSO': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 50, 50, 0, 20, 0, 75, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 50, 50, 0, 20, 0, 75, 0, 0, 0, 0, true),
+      new OptimizationPlan('AdRad', 10, 0, 100, 100, 25, 0, 20, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('AdRad w/ Primaries', 10, 0, 100, 0, 25, 0, 20, 0, 50, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
+        "cross": "Potency %",
+        "circle": "Health %"
+      }),
+    ],
     ['Rogue 1', 'Auto Lightzader', 'Imperial Grancor Maneuver', 'SuperStar2D2']
   ),
   'K2SO': new CharacterSettings(
-    [new OptimizationPlan('Tanky', 20, 20, 100, 0, 50, 50, 0, 0, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('Tanky', 20, 20, 100, 0, 50, 50, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('AdRad', 20, 40, 50, 0, 50, 50, 0, 0, 0, 10, 10, 0, 0, true),
+      new OptimizationPlan('AdRad w/ Primaries', 20, 40, 50, 0, 50, 50, 0, 0, 0, 10, 10, 0, 0, true, {
+        "arrow": "Protection %",
+        "triangle": "Protection %",
+        "cross": "Tenacity %",
+        "circle": "Protection %"
+      }),
+    ],
     ['Rogue 1', 'Cass-2SO', 'K2']
   ),
   'KANANJARRUSS3': new CharacterSettings(
@@ -825,6 +884,11 @@ const characterSettings = {
   'LOGRAY': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Protection %",
+        "cross": "Potency %",
+        "circle": "Protection %"
+      }),
       new OptimizationPlan('hSTR Phase 2', 5, 5, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     ['Murderbears']
@@ -952,7 +1016,14 @@ const characterSettings = {
     ['Rogue 1', 'Chex Mix']
   ),
   'PAPLOO': new CharacterSettings(
-    [new OptimizationPlan('Fast Tank', 25, 25, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true)],
+    [
+      new OptimizationPlan('Fast Tank', 25, 25, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 25, 25, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true, {
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %"
+      }),
+    ],
     ['Murderbears']
   ),
   'PHASMA': new CharacterSettings(
@@ -1053,6 +1124,12 @@ const characterSettings = {
   'SCARIFREBEL': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 20, 20, 100, 0, 25, 10, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('AdRad', 30, 20, 100, 0, 25, 10, 0, 0, 0, 10, 0, 0, 0, true),
+      new OptimizationPlan('AdRad w/ Primaries', 30, 20, 100, 0, 25, 10, 0, 0, 0, 10, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Protection %",
+        "cross": "Protection %"
+      }),
       new OptimizationPlan('hSTR Phase 2', 20, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     ['Rogue 1', 'SRP']
@@ -1120,12 +1197,23 @@ const characterSettings = {
     ['Troopers']
   ),
   'STARKILLER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 25, 0, 100, 75, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 25, 0, 100, 75, 0, 0, 50, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 25, 0, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %"
+      })
+    ]
   ),
   'STORMTROOPER': new CharacterSettings(
     [
       new OptimizationPlan('Speedy Tank', 25, 25, 50, 0, 0, 25, 0, 0, 0, 25, 25, 0, 0, true),
-      new OptimizationPlan('LV Lead', 100, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('LV Lead', 100, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Iden Lead', 0, 75, 50, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, true),
+      new OptimizationPlan('Iden Lead w/ Primaries', 0, 100, 50, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, true, {
+        "arrow": "Defense %",
+        "triangle": "Defense %",
+        "cross": "Defense %"
+      })
     ],
     ['Troopers']
   ),
@@ -1234,6 +1322,11 @@ const characterSettings = {
   'WICKET': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
+        "cross": "Offense %",
+        "circle": "Protection %"
+      }),
       new OptimizationPlan('hSTR Phase 2', 0, 0, 80, 50, 0, 0, 100, 0, 10, 0, 0, 0, 0, true)
     ],
     ['Murderbears']
