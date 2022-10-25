@@ -92,7 +92,7 @@ class CharacterList extends PureComponent {
     const draggable = this.props.draggable;
 
     const selectedPlan = target.name;
-    const priorityOrder = selectedPlan in defaultTargets ? defaultTargets[selectedPlan].priorityOrderStr() : null;
+    const priorityOrder = target.priorityOrderStr();
     const options = character.targets()
       .map(characterTarget => characterTarget.name)
       .filter(targetName => 'custom' !== targetName)
@@ -102,7 +102,9 @@ class CharacterList extends PureComponent {
           !defaultTargets[targetName].equals(
             character.optimizerSettings.targets.find(target => target.name === targetName)
           ) ? '*' : '';
-        const priorityOrder = defaultTargets[targetName].priorityOrderStr() || null;
+        const priorityOrder = (
+            character.optimizerSettings.targets.find(target => target.name === targetName) || defaultTargets[targetName]
+        ).priorityOrderStr() || null;
         return <option value={targetName} key={targetName} title={priorityOrder}>{changeIndicator}{targetName}</option>;
       });
 
