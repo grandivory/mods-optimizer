@@ -92,6 +92,7 @@ class CharacterList extends PureComponent {
     const draggable = this.props.draggable;
 
     const selectedPlan = target.name;
+    const priorityOrder = target.priorityOrderStr();
     const options = character.targets()
       .map(characterTarget => characterTarget.name)
       .filter(targetName => 'custom' !== targetName)
@@ -101,8 +102,10 @@ class CharacterList extends PureComponent {
           !defaultTargets[targetName].equals(
             character.optimizerSettings.targets.find(target => target.name === targetName)
           ) ? '*' : '';
-
-        return <option value={targetName} key={targetName}>{changeIndicator}{targetName}</option>;
+        const priorityOrder = (
+            character.optimizerSettings.targets.find(target => target.name === targetName) || defaultTargets[targetName]
+        ).priorityOrderStr() || null;
+        return <option value={targetName} key={targetName} title={priorityOrder}>{changeIndicator}{targetName}</option>;
       });
 
     const onSelect = function (e) {
@@ -144,7 +147,7 @@ class CharacterList extends PureComponent {
         </div>
         <div className={'target'}>
           <label>Target:</label>
-          <Dropdown value={selectedPlan} onChange={onSelect.bind(this)}>
+          <Dropdown value={selectedPlan} onChange={onSelect.bind(this)} title={priorityOrder}>
             {options}
             <option value={'custom'}>Custom</option>
           </Dropdown>

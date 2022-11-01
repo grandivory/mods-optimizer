@@ -2,6 +2,7 @@
 
 import areObjectsEquivalent from "../utils/areObjectsEquivalent";
 import TargetStat from "./TargetStat";
+import Stat from "./Stat";
 
 /**
  * A class to represent the weights that should be applied to each potential stat that a mod can have when
@@ -346,6 +347,32 @@ class OptimizationPlan {
     } else {
       return null;
     }
+  }
+
+  /**
+   * Generate the priority order string
+   *
+   * @returns {String} String representing the priority order
+   */
+  priorityOrderStr() {
+    // order name / value (not null)
+    const priorityOrder = Object.entries(this)
+      .filter(o => o[0].startsWith('raw') && o[1] > 0)  // Filter on "raw****" not null values
+      .sort(([,a],[,b]) => b-a)  // ordering by values
+      .map(o => [Stat.displayNames[o[0][3].toLowerCase() + o[0].substring(4)], o[1]]) // Get human-friendly name and values
+
+    // Add '>' or '='
+    let lastValue = 0;
+    let result = [];
+    for(const [name, value] of priorityOrder) {
+      if (lastValue) {
+        result.push(lastValue > value ? '>' : '=');
+      }
+      lastValue = value;
+      result.push(name);
+    }
+
+    return result.join(' ');
   }
 }
 
