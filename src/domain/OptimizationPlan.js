@@ -350,29 +350,34 @@ class OptimizationPlan {
   }
 
   /**
-   * Generate the priority order string
+   * Generate a description to indicate the priority order of stats in the Optimization Plan
    *
    * @returns {String} String representing the priority order
    */
-  priorityOrderStr() {
-    // order name / value (not null)
+  priorityDescription() {
+    // An array of stat names to target values
     const priorityOrder = Object.entries(this)
-      .filter(o => o[0].startsWith('raw') && o[1] > 0)  // Filter on "raw****" not null values
-      .sort(([,a],[,b]) => b-a)  // ordering by values
-      .map(o => [Stat.displayNames[o[0][3].toLowerCase() + o[0].substring(4)], o[1]]) // Get human-friendly name and values
+      // Filter to only stat property names and positive values
+      .filter(([propName, propValue]) => propName.startsWith('raw') && propValue > 0)
+      // Map the "raw" stat names onto their non-raw counterparts, but keep the original values
+      .map(([propName, propValue]) => [propName[3].toLowerCase() + propName.substring(4), propValue])
+      // Order so that the highest values come first
+      .sort(([, aValue], [, bValue]) => bValue - aValue)
+      // Map to display names for each stat
+      .map(([propName, propValue]) => [Stat.displayNames[propName], propValue])
 
-    // Add '>' or '='
-    let lastValue = 0;
-    let result = [];
-    for(const [name, value] of priorityOrder) {
-      if (lastValue) {
-        result.push(lastValue > value ? '>' : '=');
+    // Add '>' or '=' between each property based on if they're equal or not
+    let lastStatValue = 0;
+    let priorityOrderParts = [];
+    for (const [statName, statValue] of priorityOrder) {
+      if (lastStatValue) {
+        priorityOrderParts.push(lastStatValue > statValue ? '>' : '=');
       }
-      lastValue = value;
-      result.push(name);
+      lastStatValue = statValue;
+      priorityOrderParts.push(statName);
     }
 
-    return result.join(' ');
+    return priorityOrderParts.join(' ');
   }
 }
 

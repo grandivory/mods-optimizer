@@ -92,21 +92,22 @@ class CharacterList extends PureComponent {
     const draggable = this.props.draggable;
 
     const selectedPlan = target.name;
-    const priorityOrder = target.priorityOrderStr();
     const options = character.targets()
-      .map(characterTarget => characterTarget.name)
-      .filter(targetName => 'custom' !== targetName)
-      .map(targetName => {
+      .filter(target => 'custom' !== target.name)
+      .map(target => {
+        const targetName = target.name;
         const changeIndicator = Object.keys(defaultTargets).includes(targetName) &&
           character.optimizerSettings.targets.map(target => target.name).includes(targetName) &&
           !defaultTargets[targetName].equals(
             character.optimizerSettings.targets.find(target => target.name === targetName)
           ) ? '*' : '';
-        const priorityOrder = (
-            character.optimizerSettings.targets.find(target => target.name === targetName) || defaultTargets[targetName]
-        ).priorityOrderStr() || null;
-        return <option value={targetName} key={targetName} title={priorityOrder}>{changeIndicator}{targetName}</option>;
-      });
+
+        const targetDescription = target.priorityDescription();
+
+        return <option value={targetName} key={targetName} title={targetDescription}>
+          {changeIndicator}{targetName}
+        </option>;
+      })
 
     const onSelect = function (e) {
       const optimizationTarget = e.target.value;
@@ -147,7 +148,7 @@ class CharacterList extends PureComponent {
         </div>
         <div className={'target'}>
           <label>Target:</label>
-          <Dropdown value={selectedPlan} onChange={onSelect.bind(this)} title={priorityOrder}>
+          <Dropdown value={selectedPlan} onChange={onSelect.bind(this)} title={target.priorityDescription()}>
             {options}
             <option value={'custom'}>Custom</option>
           </Dropdown>
