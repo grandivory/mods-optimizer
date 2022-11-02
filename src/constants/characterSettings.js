@@ -33,11 +33,18 @@ const characterSettings = {
   ),
   'ADMIRALRADDUS': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 10, 20, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('PvP w/ Primaries', 10, 20, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Protection', 10, 20, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Protection w/ Primaries', 10, 20, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true, {
         "triangle": "Protection %",
         "cross": "Protection %",
         "circle": "Protection %"
+      }),
+      new OptimizationPlan('Health', 20, 10, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Health w/ Primaries', 20, 10, 100, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %"
       }),
     ]
   ),
