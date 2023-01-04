@@ -1275,6 +1275,9 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
     ['TFP', 'Auto Lightzader']
   ),
+  'TRIPLEZERO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 0, 30, 0, 0, 20, 0, 0, 0, 0, 0, true)]
+  ),
   'TUSKENRAIDER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
   ),
