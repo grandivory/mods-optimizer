@@ -446,6 +446,9 @@ const characterSettings = {
     ['Imperial Grancor Maneuver'],
     DamageType.special
   ),
+  'DOCTORAPHRA': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 90, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, true)]
+  ),
   'DROIDEKA': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 10, 0, 0, 10, 20, 100, 0, 0, 0, 0, 0, 0, true),
