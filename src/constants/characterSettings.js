@@ -814,7 +814,7 @@ const characterSettings = {
     ]
   ),
   'JUHANI': new CharacterSettings(
-    [new OptimizationPlan('Tank', 50, 25, 100, 0, 25, 0, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 100, 90, 0, 5, 0, 0, 0, 0, 15, 0, 0, 0, true)]
   ),
   'JYNERSO': new CharacterSettings(
     [
