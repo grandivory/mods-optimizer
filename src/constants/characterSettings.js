@@ -694,6 +694,9 @@ const characterSettings = {
       new OptimizationPlan('PvP', 0, 0, 100, 75, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
     ]
   ),
+  'HONDO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 5, 100, 75, 0, 0, 0, 75, 0, 0, 0, 0, 0, true)]
+  ),
   'HOTHHAN': new CharacterSettings(
     [new OptimizationPlan('PvP', 20, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['CHS', 'CHolo', 'Snolo', 'Hoth Han']
