@@ -1125,6 +1125,7 @@ const characterSettings = {
     ]
   ),
   'SAVAGEOPRESS': new CharacterSettings(
+    [new OptimizationPlan('PvP/Omicron', 100, 0, 0, 0, 0, 0, 10, 0, 0, 50, 0, 0, 0, true)],
     [new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)],
     ['zavage']
   ),
