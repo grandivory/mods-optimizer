@@ -412,7 +412,7 @@ const characterSettings = {
     DamageType.special
   ),
   'DASHRENDAR': new CharacterSettings(
-    [new OptimizationPlan('Leader', 10, 0, 100, 0, 15, 0, 0, 0, 50, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 0, 100, 60, 5, 0, 50, 0, 10, 0, 0, 0, 0, true)]
   ),
   'DATHCHA': new CharacterSettings(
     [
@@ -912,8 +912,8 @@ const characterSettings = {
   ),
   'MACEWINDU': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE'),
-      new OptimizationPlan('JMK Lead', 100, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('PvP', 15, 0, 100, 0, 50, 0, 0, 50, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Slow/Tanky', 100, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     [],
     DamageType.mixed
