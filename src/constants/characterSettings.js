@@ -204,6 +204,9 @@ const characterSettings = {
   'BOUSHH': new CharacterSettings(
     [new OptimizationPlan('PvP', 5, 0, 100, 50, 0, 0, 0, 25, 25, 0, 0, 0, 0, true)]
   ),
+  'BT1': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 75, 5, 0, 50, 0, 10, 0, 0, 0, 0, true)]
+  ),
   'C3POLEGENDARY': new CharacterSettings(
     [
       optimizationStrategy["Speedy debuffer"],
