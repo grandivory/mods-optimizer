@@ -376,7 +376,7 @@ const characterSettings = {
   ),
   'DARTHNIHILUS': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 30, 0, 100, 0, 50, 60, 0, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Tanky', 40, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 100, true)
     ],
     ['Nightmare'],
