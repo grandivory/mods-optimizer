@@ -202,7 +202,7 @@ const characterSettings = {
     ]
   ),
   'BOUSHH': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 25, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 0, 100, 50, 0, 0, 0, 25, 25, 0, 0, 0, 0, true)]
   ),
   'C3POLEGENDARY': new CharacterSettings(
     [
@@ -405,7 +405,7 @@ const characterSettings = {
   ),
   'DARTHTRAYA': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 0, 50, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 15, 10, 100, 0, 5, 0, 0, 15, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Tanky', 25, 75, 65, 0, 0, 65, 0, 0, 0, 0, 0, 0, 100, true)
     ],
     [],
