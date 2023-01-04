@@ -1130,6 +1130,9 @@ const characterSettings = {
       new OptimizationPlan('hSTR Phase 2', 20, 20, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
+  'SANASTARROS': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 5, 0, 0, 20, 0, 0, 0, 0, 0, true)]
+  ),
   'SAVAGEOPRESS': new CharacterSettings(
     [new OptimizationPlan('PvP/Omicron', 100, 0, 0, 0, 0, 0, 10, 0, 0, 50, 0, 0, 0, true)],
     [new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)],
