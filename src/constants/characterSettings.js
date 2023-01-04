@@ -455,7 +455,7 @@ const characterSettings = {
     DamageType.mixed
   ),
   'EIGHTHBROTHER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 5, 100, 75, 0, 0, 100, 0, 30, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 5, 100, 50, 0, 0, 30, 0, 5, 0, 0, 0, 0, true)]
   ),
   'EMBO': new CharacterSettings(
     [
