@@ -660,7 +660,7 @@ const characterSettings = {
     ]
   ),
   'GREEFKARGA': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 0, 100, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 5, 100, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'GRIEVOUS': new CharacterSettings(
     [
