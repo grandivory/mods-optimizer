@@ -202,7 +202,7 @@ const characterSettings = {
     ]
   ),
   'BOUSHH': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 0, 100, 50, 0, 0, 0, 25, 25, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 0, 100, 50, 10, 0, 0, 20, 25, 0, 0, 0, 0, true)]
   ),
   'BT1': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 75, 5, 0, 50, 0, 10, 0, 0, 0, 0, true)]
@@ -1137,8 +1137,10 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 0, 0, 100, 50, 5, 0, 0, 20, 0, 0, 0, 0, 0, true)]
   ),
   'SAVAGEOPRESS': new CharacterSettings(
-    [new OptimizationPlan('PvP/Omicron', 100, 0, 0, 0, 0, 0, 10, 0, 0, 50, 0, 0, 0, true)],
-    [new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP/Omicron', 100, 0, 0, 0, 0, 0, 10, 0, 0, 50, 0, 0, 0, true),
+      new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)
+    ],
     ['zavage']
   ),
   'SCARIFREBEL': new CharacterSettings(
