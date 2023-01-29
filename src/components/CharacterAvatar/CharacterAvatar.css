@@ -103,7 +103,8 @@
 }
 
 .avatar.gear-13.align-light::after,
-.avatar.gear-13.align-dark::after {
+.avatar.gear-13.align-dark::after,
+.avatar.gear-13.align-neutral::after {
   width: 120%;
   height: 120%;
   left: -10%;
@@ -115,6 +116,10 @@
 
 .avatar.gear-13.align-dark::after {
   background-position-y: 50%
+}
+
+.avatar.gear-13.align-neutral::after {
+  background-position-y: 100%;
 }
 
 .avatar .star {
