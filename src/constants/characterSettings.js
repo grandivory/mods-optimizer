@@ -202,7 +202,10 @@ const characterSettings = {
     ]
   ),
   'BOUSHH': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 25, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 0, 100, 50, 10, 0, 0, 20, 25, 0, 0, 0, 0, true)]
+  ),
+  'BT1': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 75, 5, 0, 50, 0, 10, 0, 0, 0, 0, true)]
   ),
   'C3POLEGENDARY': new CharacterSettings(
     [
@@ -376,7 +379,7 @@ const characterSettings = {
   ),
   'DARTHNIHILUS': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 10, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 30, 0, 100, 0, 50, 60, 0, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Tanky', 40, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 100, true)
     ],
     ['Nightmare'],
@@ -405,14 +408,14 @@ const characterSettings = {
   ),
   'DARTHTRAYA': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 0, 50, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP', 15, 10, 100, 0, 5, 0, 0, 15, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Tanky', 25, 75, 65, 0, 0, 65, 0, 0, 0, 0, 0, 0, 100, true)
     ],
     [],
     DamageType.special
   ),
   'DASHRENDAR': new CharacterSettings(
-    [new OptimizationPlan('Leader', 10, 0, 100, 0, 15, 0, 0, 0, 50, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 0, 100, 60, 5, 0, 50, 0, 10, 0, 0, 0, 0, true)]
   ),
   'DATHCHA': new CharacterSettings(
     [
@@ -443,6 +446,9 @@ const characterSettings = {
     ['Imperial Grancor Maneuver'],
     DamageType.special
   ),
+  'DOCTORAPHRA': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 90, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, true)]
+  ),
   'DROIDEKA': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 10, 0, 0, 10, 20, 100, 0, 0, 0, 0, 0, 0, true),
@@ -455,7 +461,7 @@ const characterSettings = {
     DamageType.mixed
   ),
   'EIGHTHBROTHER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 5, 100, 75, 0, 0, 100, 0, 30, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 5, 100, 50, 0, 0, 30, 0, 5, 0, 0, 0, 0, true)]
   ),
   'EMBO': new CharacterSettings(
     [
@@ -628,7 +634,7 @@ const characterSettings = {
     DamageType.special
   ),
   'GRANDINQUISITOR': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 0, 100, 75, 0, 0, 30, 0, 10, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 5, 100, 50, 0, 0, 30, 0, 5, 0, 0, 0, 0, true)]
   ),
   'GRANDMASTERLUKE': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 25, 100, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -660,7 +666,7 @@ const characterSettings = {
     ]
   ),
   'GREEFKARGA': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 0, 100, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 5, 100, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'GRIEVOUS': new CharacterSettings(
     [
@@ -693,6 +699,9 @@ const characterSettings = {
     [
       new OptimizationPlan('PvP', 0, 0, 100, 75, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
     ]
+  ),
+  'HONDO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 5, 100, 75, 0, 0, 0, 75, 0, 0, 0, 0, 0, true)]
   ),
   'HOTHHAN': new CharacterSettings(
     [new OptimizationPlan('PvP', 20, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -814,7 +823,7 @@ const characterSettings = {
     ]
   ),
   'JUHANI': new CharacterSettings(
-    [new OptimizationPlan('Tank', 50, 25, 100, 0, 25, 0, 0, 0, 0, 12.5, 12.5, 0, 0, true)]
+    [new OptimizationPlan('PvP', 5, 100, 90, 0, 5, 0, 0, 0, 0, 15, 0, 0, 0, true)]
   ),
   'JYNERSO': new CharacterSettings(
     [
@@ -872,7 +881,7 @@ const characterSettings = {
   ),
   'KYLORENUNMASKED': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('PvP', 75, 50, 100, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, true),
       new OptimizationPlan('Tanky', 100, 100, 50, 0, 0, 75, 0, 0, 0, 37.5, 37.5, 0, 0, true),
       new OptimizationPlan('LV Lead', 100, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
@@ -912,8 +921,8 @@ const characterSettings = {
   ),
   'MACEWINDU': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE'),
-      new OptimizationPlan('JMK Lead', 100, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
+      new OptimizationPlan('PvP', 15, 0, 100, 0, 50, 0, 0, 50, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Slow/Tanky', 100, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     [],
     DamageType.mixed
@@ -1124,8 +1133,14 @@ const characterSettings = {
       new OptimizationPlan('hSTR Phase 2', 20, 20, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ]
   ),
+  'SANASTARROS': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 50, 5, 0, 0, 20, 0, 0, 0, 0, 0, true)]
+  ),
   'SAVAGEOPRESS': new CharacterSettings(
-    [new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP/Omicron', 100, 0, 0, 0, 0, 0, 10, 0, 0, 50, 0, 0, 0, true),
+      new OptimizationPlan('Balanced', 50, 0, 100, 25, 25, 25, 25, 0, 25, 12.5, 12.5, 0, 0, true)
+    ],
     ['zavage']
   ),
   'SCARIFREBEL': new CharacterSettings(
@@ -1270,6 +1285,9 @@ const characterSettings = {
   'TIEFIGHTERPILOT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
     ['TFP', 'Auto Lightzader']
+  ),
+  'TRIPLEZERO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 0, 30, 0, 0, 20, 0, 0, 0, 0, 0, true)]
   ),
   'TUSKENRAIDER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
