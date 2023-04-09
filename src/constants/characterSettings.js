@@ -1285,6 +1285,9 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
     ['TFP', 'Auto Lightzader']
   ),
+  'TRENCH': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 10, 100, 0, 30, 0, 0, 20, 0, 0, 0, 0, 0, true)]
+  ),
   'TRIPLEZERO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 0, 30, 0, 0, 20, 0, 0, 0, 0, 0, true)]
   ),
