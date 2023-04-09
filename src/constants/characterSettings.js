@@ -536,6 +536,7 @@ const characterSettings = {
   'FINN': new CharacterSettings(
     [
       optimizationStrategy["Slow Crit, Physical Damage, Potency"].rename('PvP'),
+      new OptimizationPlan('Tanky', 30, 100, 100, 0, 5, 5, 50, 0, 0, 10, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 1', 0, -5, 80, 100, 0, 0, 50, 0, 75, 0, 0, 0, 0, true)
     ],
     ['Zinn']
