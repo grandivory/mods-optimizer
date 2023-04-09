@@ -1384,6 +1384,9 @@ const characterSettings = {
   ),
   'ZEBS3': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 40, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)]
+  ),
+  'ZORIIBLISS_V2': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 10, 100, 50, 10, 0, 20, 0, 0, 0, 0, 0, 0, true)]
   )
 };
 
