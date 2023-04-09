@@ -1053,7 +1053,7 @@ const characterSettings = {
     DamageType.mixed
   ),
   'POE': new CharacterSettings(
-    [optimizationStrategy["Speedy debuffer"].rename('Speed')]
+    [new OptimizationPlan('PvP', 5, 10, 100, 0, 40, 20, 0, 0, 0, 5, 0, 0, 0, true)]
   ),
   'POGGLETHELESSER': new CharacterSettings(
     [optimizationStrategy["Speedy debuffer"].rename('PvE')]
