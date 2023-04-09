@@ -1240,10 +1240,7 @@ const characterSettings = {
     ['Troopers']
   ),
   'STORMTROOPERHAN': new CharacterSettings(
-    [
-      optimizationStrategy.Speed.rename('Speed'),
-      new OptimizationPlan('PvE', 50, 50, 50, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, true)
-    ],
+    [new OptimizationPlan('PvP', 25, 50, 50, 0, 100, 10, 0, 0, 0, 20, 0, 0, 0, true)],
     ['STHan']
   ),
   'SUNFAC': new CharacterSettings(
