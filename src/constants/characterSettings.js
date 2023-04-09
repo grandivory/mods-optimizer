@@ -1117,7 +1117,7 @@ const characterSettings = {
     ['JTR', 'RJT', 'Jedi Rey', 'Jey Z']
   ),
   'ROSETICO': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
+    [new OptimizationPlan('PvP', 5, 5, 100, 50, 30, 0, 20, 0, 25, 0, 0, 0, 0, true)],
     [],
     DamageType.mixed
   ),
