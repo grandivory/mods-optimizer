@@ -205,7 +205,14 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 5, 0, 100, 50, 10, 0, 0, 20, 25, 0, 0, 0, 0, true)]
   ),
   'BT1': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 80, 100, 5, 0, 80, 0, 10, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 5, 0, 80, 0, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 50, 5, 0, 80, 0, 10, 0, 0, 0, 0, true, {
+        "arrow": "Offense %",
+        "triangle": "Critical Damage %",
+        "cross": "Offense %"
+      })
+    ]
   ),
   'C3POLEGENDARY': new CharacterSettings(
     [
