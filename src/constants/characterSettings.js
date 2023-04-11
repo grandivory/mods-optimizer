@@ -482,7 +482,10 @@ const characterSettings = {
     ]
   ),
   'EMPERORPALPATINE': new CharacterSettings(
-    [optimizationStrategy["Special Damage with Potency"].rename('PvP')],
+    [
+      optimizationStrategy["Special Damage with Potency"].rename('PvP'),
+      new OptimizationPlan('Tanky', 0, 100, 70, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, true),
+    ],
     ['EP', 'Palp', 'EzPz', 'Nightmare'],
     DamageType.special
   ),
