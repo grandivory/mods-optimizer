@@ -1327,7 +1327,7 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 5, 0, 100, 50, 0, 0, 25, 0, 25, 0, 0, 0, 0, true)]
   ),
   'URORRURRR': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
+    [new OptimizationPlan('PvP', 10, 20, 100, 0, 10, 0, 0, 0, 0, 10, 0, 0, 0, true)]
   ),
   'VADER': new CharacterSettings(
     [
