@@ -1309,6 +1309,9 @@ const characterSettings = {
   'TUSKENCHIEFTAIN': new CharacterSettings(
     [new OptimizationPlan('PvP', 15, 10, 100, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
+  'TUSKENHUNTRESS': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 75, 10, 0, 40, 0, 10, 0, 0, 0, 0, true)]
+  ),
   'TUSKENRAIDER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
   ),
