@@ -50,7 +50,12 @@ const characterSettings = {
   ),
   'AHSOKATANO': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('PvP', 20, 0, 100, 50, 0, 0, 25, 0, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 0, 100, 50, 0, 0, 25, 0, 10, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
+        "cross": "Offense %",
+        "circle": "Health %"
+      }),
       new OptimizationPlan('Padme Lead', 10, 0, 100, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true),
       new OptimizationPlan('Slow Damage', 25, 0, 0, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
     ],
@@ -207,7 +212,7 @@ const characterSettings = {
   'BT1': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 100, 5, 0, 80, 0, 10, 0, 0, 0, 0, true),
-      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 50, 5, 0, 80, 0, 10, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 50, 5, 0, 50, 0, 10, 0, 0, 0, 0, true, {
         "arrow": "Offense %",
         "triangle": "Critical Damage %",
         "cross": "Offense %"
