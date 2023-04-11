@@ -1376,7 +1376,7 @@ const characterSettings = {
   'YOUNGCHEWBACCA': new CharacterSettings(
     [
       new OptimizationPlan('PvE', 50, 0, 100, 50, 0, 0, 25, 0, 50, 0, 0, 0, 0, true),
-      new OptimizationPlan('Tanky', 60, 0, 100, 0, 0, 10, 0, 0, 0, 5, 0, 0, 0, true)
+      new OptimizationPlan('Tanky', 100, 0, 50, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0, true)
     ],
     ['Dwight', 'solo']
   ),
