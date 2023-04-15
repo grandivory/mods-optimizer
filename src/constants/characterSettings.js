@@ -50,7 +50,12 @@ const characterSettings = {
   ),
   'AHSOKATANO': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('PvP', 20, 0, 100, 50, 0, 0, 25, 0, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 0, 100, 50, 0, 0, 25, 0, 10, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
+        "cross": "Offense %",
+        "circle": "Health %"
+      }),
       new OptimizationPlan('Padme Lead', 10, 0, 100, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true),
       new OptimizationPlan('Slow Damage', 25, 0, 0, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
     ],
@@ -205,7 +210,14 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 5, 0, 100, 50, 10, 0, 0, 20, 25, 0, 0, 0, 0, true)]
   ),
   'BT1': new CharacterSettings(
-    [new OptimizationPlan('PvP', 0, 0, 100, 75, 5, 0, 50, 0, 10, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 100, 5, 0, 80, 0, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 50, 5, 0, 50, 0, 10, 0, 0, 0, 0, true, {
+        "arrow": "Offense %",
+        "triangle": "Critical Damage %",
+        "cross": "Offense %"
+      })
+    ]
   ),
   'C3POLEGENDARY': new CharacterSettings(
     [
@@ -396,8 +408,8 @@ const characterSettings = {
   ),
   'DARTHSION': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 15, 15, 100, 20, 15, 0, 20, 0, 20, 0, 0, 0, 0, true),
-      new OptimizationPlan('Tanky', 10, 20, 100, 0, 15, 0, 0, 0, 0, 10, 0, 0, 100, true)
+      new OptimizationPlan('PvP', 25, 30, 100, 0, 5, 0, 0, 0, 0, 20, 0, 0, 0, true),
+      new OptimizationPlan('PvP/CA', 25, 30, 100, 0, 5, 0, 0, 0, 0, 20, 0, 0, 100, true)
     ],
     ['Nightmare']
   ),
@@ -470,7 +482,10 @@ const characterSettings = {
     ]
   ),
   'EMPERORPALPATINE': new CharacterSettings(
-    [optimizationStrategy["Special Damage with Potency"].rename('PvP')],
+    [
+      optimizationStrategy["Special Damage with Potency"].rename('PvP'),
+      new OptimizationPlan('Tanky', 0, 100, 70, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, true),
+    ],
     ['EP', 'Palp', 'EzPz', 'Nightmare'],
     DamageType.special
   ),
@@ -536,6 +551,7 @@ const characterSettings = {
   'FINN': new CharacterSettings(
     [
       optimizationStrategy["Slow Crit, Physical Damage, Potency"].rename('PvP'),
+      new OptimizationPlan('Tanky', 30, 100, 100, 0, 5, 5, 50, 0, 0, 10, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 1', 0, -5, 80, 100, 0, 0, 50, 0, 75, 0, 0, 0, 0, true)
     ],
     ['Zinn']
@@ -1052,7 +1068,7 @@ const characterSettings = {
     DamageType.mixed
   ),
   'POE': new CharacterSettings(
-    [optimizationStrategy["Speedy debuffer"].rename('Speed')]
+    [new OptimizationPlan('PvP', 5, 10, 100, 0, 40, 20, 0, 0, 0, 5, 0, 0, 0, true)]
   ),
   'POGGLETHELESSER': new CharacterSettings(
     [optimizationStrategy["Speedy debuffer"].rename('PvE')]
@@ -1116,7 +1132,7 @@ const characterSettings = {
     ['JTR', 'RJT', 'Jedi Rey', 'Jey Z']
   ),
   'ROSETICO': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
+    [new OptimizationPlan('PvP', 5, 5, 100, 50, 30, 0, 20, 0, 25, 0, 0, 0, 0, true)],
     [],
     DamageType.mixed
   ),
@@ -1220,8 +1236,8 @@ const characterSettings = {
   ),
   'STARKILLER': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 25, 0, 100, 75, 0, 0, 50, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('PvP w/ Primaries', 25, 0, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 10, 0, 100, 50, 0, 0, 30, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 10, 0, 100, 50, 0, 0, 30, 0, 0, 0, 0, 0, 0, true, {
         "triangle": "Critical Damage %"
       })
     ]
@@ -1240,10 +1256,7 @@ const characterSettings = {
     ['Troopers']
   ),
   'STORMTROOPERHAN': new CharacterSettings(
-    [
-      optimizationStrategy.Speed.rename('Speed'),
-      new OptimizationPlan('PvE', 50, 50, 50, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, true)
-    ],
+    [new OptimizationPlan('PvP', 25, 50, 50, 0, 100, 10, 0, 0, 0, 20, 0, 0, 0, true)],
     ['STHan']
   ),
   'SUNFAC': new CharacterSettings(
@@ -1258,6 +1271,7 @@ const characterSettings = {
   'T3_M4': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 10, 10, 100, 0, 25, 10, 0, 10, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('Damage', 10, 20, 100, 50, 50, 10, 0, 20, 25, 0, 0, 0, 0, true),
       new OptimizationPlan('Nuke', 10, 50, 100, 0, 25, 10, 0, 0, 10, 0, 0, 0, 0, true)
     ],
     [],
@@ -1286,8 +1300,17 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
     ['TFP', 'Auto Lightzader']
   ),
+  'TRENCH': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 10, 100, 0, 30, 0, 0, 20, 0, 0, 0, 0, 0, true)]
+  ),
   'TRIPLEZERO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 0, 30, 0, 0, 20, 0, 0, 0, 0, 0, true)]
+  ),
+  'TUSKENCHIEFTAIN': new CharacterSettings(
+    [new OptimizationPlan('PvP', 15, 10, 100, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, true)]
+  ),
+  'TUSKENHUNTRESS': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 75, 10, 0, 40, 0, 10, 0, 0, 0, 0, true)]
   ),
   'TUSKENRAIDER': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
@@ -1304,7 +1327,7 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 5, 0, 100, 50, 0, 0, 25, 0, 25, 0, 0, 0, 0, true)]
   ),
   'URORRURRR': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
+    [new OptimizationPlan('PvP', 10, 20, 100, 0, 10, 0, 0, 0, 0, 10, 0, 0, 0, true)]
   ),
   'VADER': new CharacterSettings(
     [
@@ -1359,7 +1382,7 @@ const characterSettings = {
   'YOUNGCHEWBACCA': new CharacterSettings(
     [
       new OptimizationPlan('PvE', 50, 0, 100, 50, 0, 0, 25, 0, 50, 0, 0, 0, 0, true),
-      new OptimizationPlan('Tanky', 60, 0, 100, 0, 0, 10, 0, 0, 0, 5, 0, 0, 0, true)
+      new OptimizationPlan('Tanky', 100, 0, 50, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0, true)
     ],
     ['Dwight', 'solo']
   ),
@@ -1385,6 +1408,9 @@ const characterSettings = {
   ),
   'ZEBS3': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 40, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)]
+  ),
+  'ZORIIBLISS_V2': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 10, 100, 50, 10, 0, 20, 0, 0, 0, 0, 0, 0, true)]
   )
 };
 
