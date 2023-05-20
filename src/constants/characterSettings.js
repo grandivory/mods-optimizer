@@ -1326,7 +1326,7 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')]
   ),
   'TUSKENSHAMAN': new CharacterSettings(
-    [new OptimizationPlan('PvE', 0, 0, 100, 0, 50, 25, 0, 0, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 10, 5, 100, 0, 30, 10, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'UGNAUGHT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')],
