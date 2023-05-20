@@ -1296,6 +1296,16 @@ const characterSettings = {
   'THEMANDALORIANBESKARARMOR': new CharacterSettings(
     [new OptimizationPlan('PvP', 5, 5, 100, 0, 15, 0, 30, 0, 0, 0, 0, 0, 0, true)]
   ),
+  'THIRDSISTER': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 30, 5, 100, 50, 0, 0, 50, 0, 0, 5, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 30, 5, 100, 0, 0, 0, 50, 0, 0, 5, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
+        "circle": "Health %",
+        "cross": "Health %"
+      })
+    ]
+  ),
   'TIEFIGHTERPILOT': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
     ['TFP', 'Auto Lightzader']
