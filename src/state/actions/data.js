@@ -187,6 +187,7 @@ function fetchCharacters() {
           .concat(unit.profession)
           .concat(unit.role)
           .concat(unit.species)
+          .concat(unit.other).filter(Boolean)
           .map(category => category.display)
           .concat(unit.shipSlot ? ['Crew Member'] : []);
 
