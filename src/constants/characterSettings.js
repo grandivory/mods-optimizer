@@ -230,6 +230,17 @@ const characterSettings = {
   'CADBANE': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
+  'CALKESTIS': new CharacterSettings(
+    [
+      new OptimizationPlan('UA TM Gain', 25, 0, 40, 30, 0, 15, 30, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Stunning', 30, 0, 40, 0, 30, 15, 20, 0, 0, 0, 0, 0, 0, true, {
+        "cross": "Potency %"
+      }, {
+          "potency": 1,
+          "health": 2
+      })
+    ]
+  ),
   'CANDEROUSORDO': new CharacterSettings(
     [
       new OptimizationPlan('Maul Lead', 0, 0, 0, 50, 0, 0, 100, 0, 25, 0, 0, 0, 0, true),
