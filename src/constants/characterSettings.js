@@ -277,6 +277,11 @@ const characterSettings = {
     ['zody'],
     DamageType.mixed
   ),
+  'CEREJUNDA': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 15, 30, 10, 0, 0, 10, 20, 0, 0, 10, 0, 0, 0, true)
+    ]
+  ),
   'CHEWBACCALEGENDARY': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
@@ -977,6 +982,9 @@ const characterSettings = {
   ),
   'MAULS7': new CharacterSettings(
     [new OptimizationPlan('PvP', 25, 25, 100, 0, 15, 0, 50, 0, 0, 0, 0, 0, 0, true)]
+  ),
+  'MERRIN': new CharacterSettings(
+    [new OptimizationPlan('PvP', 35, 0, 0, 0, 30, 30, 0, 35, 0, 0, 0, 0, 0, true)]
   ),
   'MISSIONVAO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 75, 0, 50, 0, 0, 0, 0, true)]
