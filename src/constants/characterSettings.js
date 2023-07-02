@@ -234,10 +234,17 @@ const characterSettings = {
     [
       new OptimizationPlan('UA TM Gain', 25, 0, 40, 80, -10, 15, 40, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('UA TM Gain w/ Primaries', 25, 0, 40, 80, -10, 15, 40, 0, 0, 0, 0, 0, 0, true, {
-          "triangle": "Critical Damage %",
-          "cross": "Health %",
-          "circle": "Health %"
-        })
+        "triangle": "Critical Damage %",
+        "cross": "Health %",
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('UA TM Gain w/ Primaries & Set', 25, 0, 40, 80, -10, 15, 40, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
+        "cross": "Health %",
+        "circle": "Health %"
+      }, {
+        "health": 3
+      })
     ]
   ),
   'CANDEROUSORDO': new CharacterSettings(
@@ -278,7 +285,21 @@ const characterSettings = {
   ),
   'CEREJUNDA': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 20, 30, 20, 0, 0, 10, 25, 0, 0, 10, 0, 0, 0, true)
+      new OptimizationPlan('PvP', 20, 30, 20, 0, 0, 10, 25, 0, 0, 10, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 30, 20, 0, 0, 10, 25, 0, 0, 10, 0, 0, 0, true, {
+        "arrow": "Protection %",
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Set', 20, 30, 20, 0, 0, 10, 25, 0, 0, 10, 0, 0, 0, true, {
+        "arrow": "Protection %",
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %"
+      }, {
+        "health": 3
+      })
     ]
   ),
   'CHEWBACCALEGENDARY': new CharacterSettings(
