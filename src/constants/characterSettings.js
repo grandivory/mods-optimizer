@@ -232,13 +232,12 @@ const characterSettings = {
   ),
   'CALKESTIS': new CharacterSettings(
     [
-      new OptimizationPlan('UA TM Gain', 25, 0, 40, 30, 0, 15, 30, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('Stunning', 30, 0, 40, 0, 30, 15, 20, 0, 0, 0, 0, 0, 0, true, {
-        "cross": "Potency %"
-      }, {
-          "potency": 1,
-          "health": 2
-      })
+      new OptimizationPlan('UA TM Gain', 25, 0, 40, 80, -10, 15, 40, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('UA TM Gain w/ Primaries', 25, 0, 40, 80, -10, 15, 40, 0, 0, 0, 0, 0, 0, true, {
+          "triangle": "Critical Damage %",
+          "cross": "Health %",
+          "circle": "Health %"
+        })
     ]
   ),
   'CANDEROUSORDO': new CharacterSettings(
@@ -279,7 +278,7 @@ const characterSettings = {
   ),
   'CEREJUNDA': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 15, 30, 10, 0, 0, 10, 20, 0, 0, 10, 0, 0, 0, true)
+      new OptimizationPlan('PvP', 20, 30, 20, 0, 0, 10, 25, 0, 0, 10, 0, 0, 0, true)
     ]
   ),
   'CHEWBACCALEGENDARY': new CharacterSettings(
@@ -984,7 +983,8 @@ const characterSettings = {
     [new OptimizationPlan('PvP', 25, 25, 100, 0, 15, 0, 50, 0, 0, 0, 0, 0, 0, true)]
   ),
   'MERRIN': new CharacterSettings(
-    [new OptimizationPlan('PvP', 35, 0, 0, 0, 30, 30, 0, 35, 0, 0, 0, 0, 0, true)]
+    [new OptimizationPlan('PvP', 35, 0, 0, 0, 30, 30, 0, 40, 0, 0, 0, 0, 0, true)],
+    DamageType.special,
   ),
   'MISSIONVAO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 75, 0, 50, 0, 0, 0, 0, true)]
