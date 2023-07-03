@@ -1005,7 +1005,8 @@ const characterSettings = {
   ),
   'MERRIN': new CharacterSettings(
     [new OptimizationPlan('PvP', 35, 0, 0, 0, 30, 30, 0, 40, 0, 0, 0, 0, 0, true)],
-    DamageType.special,
+    [],
+    DamageType.special
   ),
   'MISSIONVAO': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 100, 0, 0, 75, 0, 50, 0, 0, 0, 0, true)]
