@@ -313,8 +313,22 @@ const characterSettings = {
   ),
   'CHIEFCHIRPA': new CharacterSettings(
     [
+      new OptimizationPlan('PvP', 12, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 12, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 12, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %"
+      }, {
+        "speed": 1,
+        "health": 1
+      }),
       optimizationStrategy.Speed.rename('Speed'),
-      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('Speed w/ Primaries', 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
         "triangle": "Critical Chance %",
         "cross": "Protection %",
         "circle": "Protection %"
@@ -547,22 +561,37 @@ const characterSettings = {
   ),
   'EWOKELDER': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 25, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('PvP w/ Primaries', 25, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 25, 0, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 25, 0, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, true, {
         "triangle": "Health %",
-        "cross": "Health %",
+        "cross": "Tenacity %",
         "circle": "Health %"
       }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 25, 0, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Tenacity %",
+        "circle": "Health %"
+      }, {
+        "health": 3
+      })
     ],
     ['EE', 'Murderbears']
   ),
   'EWOKSCOUT': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP'),
-      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true, {
-        "triangle": "Critical Damage %",
-        "cross": "Offense %",
-        "circle": "Protection %"
+      new OptimizationPlan('PvP', 15, 0, 100, 0, 50, 0, 50, 0, 20, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 15, 0, 100, 0, 50, 0, 50, 0, 20, 0, 0, 0, 0, true, {
+        "triangle": "Offense %",
+        "cross": "Potency %",
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 15, 0, 100, 0, 50, 0, 50, 0, 20, 0, 0, 0, 0, true, {
+        "triangle": "Offense %",
+        "cross": "Potency %",
+        "circle": "Health %"
+      }, {
+        "offense": 1,
+        "potency": 1
       }),
       new OptimizationPlan('hSTR Phase 2', 0, 0, 50, 100, 0, 0, 50, 0, 25, 0, 0, 0, 0, true)
     ],
@@ -951,11 +980,19 @@ const characterSettings = {
   ),
   'LOGRAY': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true, {
-        "triangle": "Protection %",
+      new OptimizationPlan('PvP', 10, 0, 100, 40, 50, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 10, 0, 100, 40, 50, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
         "cross": "Potency %",
-        "circle": "Protection %"
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 10, 0, 100, 40, 50, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
+        "cross": "Potency %",
+        "circle": "Health %"
+      }, {
+        "potency": 1,
+        "health": 2
       }),
       new OptimizationPlan('hSTR Phase 2', 5, 5, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
@@ -1090,12 +1127,20 @@ const characterSettings = {
   ),
   'PAPLOO': new CharacterSettings(
     [
-      new OptimizationPlan('Fast Tank', 25, 25, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
-      new OptimizationPlan('PvP w/ Primaries', 25, 25, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true, {
-        "triangle": "Protection %",
-        "cross": "Protection %",
-        "circle": "Protection %"
+      new OptimizationPlan('PvP', 20, 0, 100, 0, 0, 10, 0, 0, 0, 5, 5, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 0, 100, 0, 0, 10, 0, 0, 0, 5, 5, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %"
       }),
+      new OptimizationPlan('HPvP w/ Primaries and Sets', 20, 0, 100, 0, 0, 10, 0, 0, 0, 5, 5, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %"
+      }, {
+        "health": 3
+      }),
+      new OptimizationPlan('Fast Tank', 25, 25, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
     ],
     ['Murderbears']
   ),
@@ -1328,7 +1373,21 @@ const characterSettings = {
     DamageType.mixed
   ),
   'TEEBO': new CharacterSettings(
-    [new OptimizationPlan('PvP', 25, 25, 100, 0, 50, 25, 0, 0, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 10, 0, 100, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 10, 0, 100, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Potency %",
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 10, 0, 100, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Potency %",
+        "circle": "Health %"
+      }, {
+        "potency": 3
+      })
+    ],
     ['Teebotine', 'Murderbears']
   ),
   'THEMANDALORIAN': new CharacterSettings(
@@ -1424,11 +1483,19 @@ const characterSettings = {
   ),
   'WICKET': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
-      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 5, 0, 100, 100, 0, 0, 40, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 5, 0, 100, 100, 0, 0, 40, 0, 50, 0, 0, 0, 0, true, {
         "triangle": "Critical Damage %",
         "cross": "Offense %",
-        "circle": "Protection %"
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 5, 0, 100, 100, 0, 0, 60, 0, 50, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
+        "cross": "Offense %",
+        "circle": "Health %"
+      }, {
+        "critdamage": 1,
+        "health": 1
       }),
       new OptimizationPlan('hSTR Phase 2', 0, 0, 80, 50, 0, 0, 100, 0, 10, 0, 0, 0, 0, true)
     ],
