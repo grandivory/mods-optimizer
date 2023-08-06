@@ -482,39 +482,40 @@ class CharacterEditView extends PureComponent {
           <option value={2}>Dark-side Territory Battle</option>
           <option value={3}>Arena only</option>
         </Dropdown>
-        <p/>
-        <Spoiler title={'Omicron Boosts'}>
-          <div className={'form-row'}>
-            <label htmlFor={'omicron-gac'}>Grand Arena:</label>
-            <input id={'omicron-gac'} name={'omicron-gac'} type={'checkbox'} 
-            defaultChecked={this.props.globalSettings.omicronBoostsGac}
-            onChange={(event) => this.props.updateOmicronBoostsGac(event.target.checked)} />
-          </div>
-          <div className={'form-row'}>
-            <label htmlFor={'omicron-tw'}>Territory Wars:</label>
-            <input id={'omicron-tw'} name={'omicron-tw'} type={'checkbox'}
-            defaultChecked={this.props.globalSettings.omicronBoostsTw}
-            onChange={(event) => this.props.updateOmicronBoostsTw(event.target.checked)} />
-          </div>
-          <div className={'form-row'}>
-            <label htmlFor={'omicron-tb'}>Territory Battles:</label>
-            <input id={'omicron-tb'} name={'omicron-tb'} type={'checkbox'}
-            defaultChecked={this.props.globalSettings.omicronBoostsTb}
-            onChange={(event) => this.props.updateOmicronBoostsTb(event.target.checked)} />
-          </div>
-          <div className={'form-row'}>
-            <label htmlFor={'omicron-raids'}>Raids:</label>
-            <input id={'omicron-raids'} name={'omicron-raids'} type={'checkbox'}
-            defaultChecked={this.props.globalSettings.omicronBoostsRaids}
-            onChange={(event) => this.props.updateOmicronBoostsRaids(event.target.checked)} />
-          </div>
-          <div className={'form-row'}>
-            <label htmlFor={'omicron-conquest'}>Conquest:</label>
-            <input id={'omicron-conquest'} name={'omicron-conquest'} type={'checkbox'}
-            defaultChecked={this.props.globalSettings.omicronBoostsConquest}
-            onChange={(event) => this.props.updateOmicronBoostsConquest(event.target.checked)} />
-          </div>
-        </Spoiler>
+        <div className={`character-list-omicronboosts`}>
+          <Spoiler title={'Omicron Boosts'}>
+            <div className={'form-row'}>
+              <label htmlFor={'omicron-gac'}>Grand Arena:</label>
+              <input id={'omicron-gac'} name={'omicron-gac'} type={'checkbox'} 
+              defaultChecked={this.props.globalSettings.omicronBoostsGac}
+              onChange={(event) => this.props.updateOmicronBoostsGac(event.target.checked)} />
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor={'omicron-tw'}>Territory Wars:</label>
+              <input id={'omicron-tw'} name={'omicron-tw'} type={'checkbox'}
+              defaultChecked={this.props.globalSettings.omicronBoostsTw}
+              onChange={(event) => this.props.updateOmicronBoostsTw(event.target.checked)} />
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor={'omicron-tb'}>Territory Battles:</label>
+              <input id={'omicron-tb'} name={'omicron-tb'} type={'checkbox'}
+              defaultChecked={this.props.globalSettings.omicronBoostsTb}
+              onChange={(event) => this.props.updateOmicronBoostsTb(event.target.checked)} />
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor={'omicron-raids'}>Raids:</label>
+              <input id={'omicron-raids'} name={'omicron-raids'} type={'checkbox'}
+              defaultChecked={this.props.globalSettings.omicronBoostsRaids}
+              onChange={(event) => this.props.updateOmicronBoostsRaids(event.target.checked)} />
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor={'omicron-conquest'}>Conquest:</label>
+              <input id={'omicron-conquest'} name={'omicron-conquest'} type={'checkbox'}
+              defaultChecked={this.props.globalSettings.omicronBoostsConquest}
+              onChange={(event) => this.props.updateOmicronBoostsConquest(event.target.checked)} />
+            </div>
+          </Spoiler>
+        </div>
         <Toggle
           name={'overwrite'}
           inputLabel={'Overwrite existing list?'}
@@ -550,32 +551,10 @@ class CharacterEditView extends PureComponent {
               <option value={13}>13</option>
             </Dropdown>
           </div>
-          {/* <div className={'form-row'}>
-            <label htmlFor={'gear-level-threshold'}>Gear level threshold:</label>
-            <Dropdown name={'gear-level-threshold'} defaultValue={12}>
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-              <option value={6}>6</option>
-              <option value={7}>7</option>
-              <option value={8}>8</option>
-              <option value={9}>9</option>
-              <option value={10}>10</option>
-              <option value={11}>11</option>
-              <option value={12}>12</option>
-              <option value={13}>13</option>
-            </Dropdown>
-          </div> */}
           <div className={'form-row'}>
             <label htmlFor={'ignore-arena'}>Ignore arena teams:</label>
             <input id={'ignore-arena'} name={'ignore-arena'} type={'checkbox'} defaultChecked={true} />
           </div>
-          {/* <div className={'form-row'}>
-            <label htmlFor={'ignore-synergy'}>Ignore synergy:</label>
-            <input id={'ignore-synergy'} name={'ignore-synergy'} type={'checkbox'} defaultChecked={false} />
-          </div> */}
           <div className={'form-row'}>
             <label htmlFor={'max-list-size'}>Maximum list size:&nbsp;</label>
             <input id={'max-list-size'} name={'max-list-size'} type={'text'} inputMode={'numeric'} size={3} />
@@ -592,8 +571,6 @@ class CharacterEditView extends PureComponent {
               'alignmentFilter': form['alignment-filter'].value,
               'minimumGearLevel': form['minimum-gear-level'].value,
               'ignoreArena': form['ignore-arena'].checked,
-              //'gearLevelThreshold': form['gear-level-threshold'].value,
-              //'ignoreSynergy': form['ignore-synergy'].checked,
               'top': form['max-list-size'].value,
               'omicronGac': form['omicron-gac'].checked,
               'omicronTw': form['omicron-tw'].checked,

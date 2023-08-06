@@ -119,6 +119,10 @@
   padding-right: 1em;
 }
 
+.character-list-omicronboosts {
+  margin-top: .5em;
+}
+
 .global-settings h3 .icon {
   font-size: .83em;
 }
