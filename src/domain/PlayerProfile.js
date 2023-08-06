@@ -326,5 +326,10 @@ export default class PlayerProfile {
 PlayerProfile.defaultGlobalSettings = {
   modChangeThreshold: 0,
   lockUnselectedCharacters: false,
-  forceCompleteSets: false
+  forceCompleteSets: false,
+  omicronBoostsGac: false,
+  omicronBoostsTw: false,
+  omicronBoostsTb: false,
+  omicronBoostsRaids: false,
+  omicronBoostsConquest: false
 };

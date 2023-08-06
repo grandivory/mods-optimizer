@@ -28,6 +28,11 @@ import {
   updateLockUnselectedCharacters,
   updateModChangeThreshold,
   updateForceCompleteModSets,
+  updateOmicronBoostsGac,
+  updateOmicronBoostsTw,
+  updateOmicronBoostsTb,
+  updateOmicronBoostsRaids,
+  updateOmicronBoostsConquest,
   applyTemplateTargets,
   setOptimizeIndex
 } from "../../state/actions/characterEdit";
@@ -251,10 +256,11 @@ class CharacterEditView extends PureComponent {
     return <div className={'global-settings'} key={'global-settings'}>
       <h3>Global Settings <Help header={'Global Settings'}>{this.globalSettingsHelp()}</Help></h3>
       <div className={'form-row'}>
-        <label>Threshold to Change Mods:</label><br />
+        <label htmlFor={'mod-threshold'}>Threshold to Change Mods:</label><br />
         <RangeInput
           min={0}
           max={100}
+          id={'mod-threshold'}
           step={1}
           isPercent={true}
           editable={true}
@@ -264,13 +270,13 @@ class CharacterEditView extends PureComponent {
       </div>
       <div className={'form-row'}>
         <label htmlFor={'lock-unselected'}>Lock all unselected characters:</label>
-        <input type={'checkbox'}
+        <input id={'lock-unselected'} type={'checkbox'}
           defaultChecked={this.props.globalSettings.lockUnselectedCharacters}
           onChange={(event) => this.props.updateLockUnselectedCharacters(event.target.checked)} />
       </div>
       <div className={'form-row'}>
         <label htmlFor={'force-complete-sets'}>Don't break mod sets:</label>
-        <input type={'checkbox'}
+        <input id={'force-complete-sets'} type={'checkbox'}
           defaultChecked={this.props.globalSettings.forceCompleteSets}
           onChange={(event) => this.props.updateForceCompleteModSets(event.target.checked)} />
       </div>
@@ -470,12 +476,46 @@ class CharacterEditView extends PureComponent {
       <hr />
       <form ref={(element) => form = element}>
         <label htmlFor={'use-case'}>Select your use case:</label>
-        <Dropdown name={'use-case'}>
-          <option value={''}>Grand Arena / Territory Wars</option>
+        <Dropdown id={'use-case'} name={'use-case'}>
+          <option value={''}>GAC / TW / ROTE (default)</option>
           <option value={1}>Light-side Territory Battle</option>
           <option value={2}>Dark-side Territory Battle</option>
           <option value={3}>Arena only</option>
         </Dropdown>
+        <div className={`character-list-omicronboosts`}>
+          <Spoiler title={'Omicron Boosts'}>
+            <div className={'form-row'}>
+              <label htmlFor={'omicron-gac'}>Grand Arena:</label>
+              <input id={'omicron-gac'} name={'omicron-gac'} type={'checkbox'} 
+              defaultChecked={this.props.globalSettings.omicronBoostsGac}
+              onChange={(event) => this.props.updateOmicronBoostsGac(event.target.checked)} />
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor={'omicron-tw'}>Territory Wars:</label>
+              <input id={'omicron-tw'} name={'omicron-tw'} type={'checkbox'}
+              defaultChecked={this.props.globalSettings.omicronBoostsTw}
+              onChange={(event) => this.props.updateOmicronBoostsTw(event.target.checked)} />
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor={'omicron-tb'}>Territory Battles:</label>
+              <input id={'omicron-tb'} name={'omicron-tb'} type={'checkbox'}
+              defaultChecked={this.props.globalSettings.omicronBoostsTb}
+              onChange={(event) => this.props.updateOmicronBoostsTb(event.target.checked)} />
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor={'omicron-raids'}>Raids:</label>
+              <input id={'omicron-raids'} name={'omicron-raids'} type={'checkbox'}
+              defaultChecked={this.props.globalSettings.omicronBoostsRaids}
+              onChange={(event) => this.props.updateOmicronBoostsRaids(event.target.checked)} />
+            </div>
+            <div className={'form-row'}>
+              <label htmlFor={'omicron-conquest'}>Conquest:</label>
+              <input id={'omicron-conquest'} name={'omicron-conquest'} type={'checkbox'}
+              defaultChecked={this.props.globalSettings.omicronBoostsConquest}
+              onChange={(event) => this.props.updateOmicronBoostsConquest(event.target.checked)} />
+            </div>
+          </Spoiler>
+        </div>
         <Toggle
           name={'overwrite'}
           inputLabel={'Overwrite existing list?'}
@@ -487,7 +527,7 @@ class CharacterEditView extends PureComponent {
         <Spoiler title={'Advanced Settings'}>
           <div className={'form-row'}>
             <label htmlFor={'alignment-filter'}>Alignment:</label>
-            <Dropdown name={'alignment-filter'} defaultValue={0}>
+            <Dropdown id={'alignment-filter'} name={'alignment-filter'} defaultValue={0}>
               <option value={0}>All Characters</option>
               <option value={1}>Light Side Only</option>
               <option value={2}>Dark Side Only</option>
@@ -495,7 +535,7 @@ class CharacterEditView extends PureComponent {
           </div>
           <div className={'form-row'}>
             <label htmlFor={'minimum-gear-level'}>Minimum Gear Level:</label>
-            <Dropdown name={'minimum-gear-level'} defaultValue={1}>
+            <Dropdown id={'minimum-gear-level'} name={'minimum-gear-level'} defaultValue={1}>
               <option value={1}>1</option>
               <option value={2}>2</option>
               <option value={3}>3</option>
@@ -511,31 +551,13 @@ class CharacterEditView extends PureComponent {
               <option value={13}>13</option>
             </Dropdown>
           </div>
-          {/* <div className={'form-row'}>
-            <label htmlFor={'gear-level-threshold'}>Gear level threshold:</label>
-            <Dropdown name={'gear-level-threshold'} defaultValue={12}>
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-              <option value={6}>6</option>
-              <option value={7}>7</option>
-              <option value={8}>8</option>
-              <option value={9}>9</option>
-              <option value={10}>10</option>
-              <option value={11}>11</option>
-              <option value={12}>12</option>
-              <option value={13}>13</option>
-            </Dropdown>
-          </div> */}
           <div className={'form-row'}>
             <label htmlFor={'ignore-arena'}>Ignore arena teams:</label>
-            <input name={'ignore-arena'} type={'checkbox'} defaultChecked={true} />
+            <input id={'ignore-arena'} name={'ignore-arena'} type={'checkbox'} defaultChecked={true} />
           </div>
           <div className={'form-row'}>
             <label htmlFor={'max-list-size'}>Maximum list size:&nbsp;</label>
-            <input name={'max-list-size'} type={'text'} inputMode={'numeric'} size={3} />
+            <input id={'max-list-size'} name={'max-list-size'} type={'text'} inputMode={'numeric'} size={3} />
           </div>
         </Spoiler>
       </form>
@@ -549,7 +571,12 @@ class CharacterEditView extends PureComponent {
               'alignmentFilter': form['alignment-filter'].value,
               'minimumGearLevel': form['minimum-gear-level'].value,
               'ignoreArena': form['ignore-arena'].checked,
-              'top': form['max-list-size'].value
+              'top': form['max-list-size'].value,
+              'omicronGac': form['omicron-gac'].checked,
+              'omicronTw': form['omicron-tw'].checked,
+              'omicronTb': form['omicron-tb'].checked,
+              'omicronRaids': form['omicron-raids'].checked,
+              'omicronConquest': form['omicron-conquest'].checked
             }
 
             this.props.generateCharacterList(
@@ -966,6 +993,11 @@ const mapDispatchToProps = dispatch => ({
   resetIncrementalIndex: () => dispatch(setOptimizeIndex(null)),
   updateModChangeThreshold: (threshold) => dispatch(updateModChangeThreshold(threshold)),
   updateForceCompleteModSets: (forceCompleteModSets) => dispatch(updateForceCompleteModSets(forceCompleteModSets)),
+  updateOmicronBoostsGac: (enabled) => dispatch(updateOmicronBoostsGac(enabled)),
+  updateOmicronBoostsTw: (enabled) => dispatch(updateOmicronBoostsTw(enabled)),
+  updateOmicronBoostsTb: (enabled) => dispatch(updateOmicronBoostsTb(enabled)),
+  updateOmicronBoostsRaids: (enabled) => dispatch(updateOmicronBoostsRaids(enabled)),
+  updateOmicronBoostsConquest: (enabled) => dispatch(updateOmicronBoostsConquest(enabled)),
   generateCharacterList: (mode, behavior, allyCode, parameters) => {
     dispatch(fetchCharacterList(mode, behavior, allyCode, parameters));
     dispatch(hideModal());
