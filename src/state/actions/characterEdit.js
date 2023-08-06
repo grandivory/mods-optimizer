@@ -468,6 +468,46 @@ export function updateForceCompleteModSets(forceCompleteModSets) {
   );
 }
 
+export function updateOmicronBoostsGac(boostGacOmicrons) {
+  return updateProfile(profile =>
+    profile.withGlobalSettings(
+      Object.assign({}, profile.globalSettings, { omicronBoostsGac: boostGacOmicrons })
+    )
+  );
+}
+
+export function updateOmicronBoostsTw(boostTwOmicrons) {
+  return updateProfile(profile =>
+    profile.withGlobalSettings(
+      Object.assign({}, profile.globalSettings, { omicronBoostsTw: boostTwOmicrons })
+    )
+  );
+}
+
+export function updateOmicronBoostsTb(boostTbOmicrons) {
+  return updateProfile(profile =>
+    profile.withGlobalSettings(
+      Object.assign({}, profile.globalSettings, { omicronBoostsTb: boostTbOmicrons })
+    )
+  );
+}
+
+export function updateOmicronBoostsRaids(boostRaidOmicrons) {
+  return updateProfile(profile =>
+    profile.withGlobalSettings(
+      Object.assign({}, profile.globalSettings, { omicronBoostsRaids: boostRaidOmicrons })
+    )
+  );
+}
+
+export function updateOmicronBoostsConquest(boostConquestOmicrons) {
+  return updateProfile(profile =>
+    profile.withGlobalSettings(
+      Object.assign({}, profile.globalSettings, { omicronBoostsConquest: boostConquestOmicrons })
+    )
+  );
+}
+
 /**
  * Fill the set restrictions to display on the character edit form
  * @param setRestrictions
