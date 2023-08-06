@@ -599,8 +599,7 @@ class CharacterEditView extends PureComponent {
               'omicronTw': form['omicron-tw'].checked,
               'omicronTb': form['omicron-tb'].checked,
               'omicronRaids': form['omicron-raids'].checked,
-              'omicronConquest': form['omicron-conquest'].checked,
-              'devMode': true
+              'omicronConquest': form['omicron-conquest'].checked
             }
 
             this.props.generateCharacterList(
