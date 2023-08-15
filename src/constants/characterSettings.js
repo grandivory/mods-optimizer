@@ -1325,6 +1325,11 @@ const characterSettings = {
     ],
     ['zavage']
   ),
+  'SAWGERRERA': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 20, 0, 100, 0, 20, 0, 20, 0, 0, 0, 0, 0, 0, true)
+    ]
+  ),
   'SCARIFREBEL': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 20, 20, 100, 0, 25, 10, 0, 0, 0, 0, 0, 0, 0, true),
