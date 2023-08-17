@@ -12,7 +12,7 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-redux": "^5.1.2",
-    "react-scripts": "^3.4.3",
+    "react-scripts": "^5.0.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
   },
