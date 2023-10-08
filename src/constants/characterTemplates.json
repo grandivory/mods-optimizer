@@ -2067,6 +2067,215 @@
         ]
     },
     {
+        "name": "Krayt - Cad T6 (Fatal based)",
+        "selectedCharacters": [
+            {
+                "id": "CADBANE",
+                "target": {
+                    "name": "Krayt",
+                    "health": 0,
+                    "protection": 0,
+                    "speed": 100,
+                    "critDmg": 0,
+                    "potency": 0,
+                    "tenacity": 0,
+                    "physDmg": 0,
+                    "specDmg": 0,
+                    "critChance": 0,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {},
+                    "setRestrictions": {
+                        "speed": 1
+                    },
+                    "targetStats": [
+                        {
+                            "stat": "Speed",
+                            "type": "+",
+                            "minimum": 310,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        }
+                    ],
+                    "useOnlyFullSets": false
+                }
+            },
+            {
+                "id": "BOUSHH",
+                "target": {
+                    "name": "Krayt",
+                    "health": 0,
+                    "protection": 0,
+                    "speed": 100,
+                    "critDmg": 0,
+                    "potency": 0,
+                    "tenacity": 0,
+                    "physDmg": 0,
+                    "specDmg": 100,
+                    "critChance": 0,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {},
+                    "setRestrictions": {
+                        "offense": 1
+                    },
+                    "targetStats": [
+                        {
+                            "stat": "Speed",
+                            "type": "+",
+                            "minimum": 311,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        },
+                        {
+                            "stat": "Special Damage",
+                            "type": "+",
+                            "minimum": 15000,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        }
+                    ],
+                    "useOnlyFullSets": false
+                }
+            },
+            {
+                "id": "KRRSANTAN",
+                "target": {
+                    "name": "Krayt",
+                    "health": 0,
+                    "protection": 0,
+                    "speed": 45,
+                    "critDmg": 0,
+                    "potency": 30,
+                    "tenacity": 0,
+                    "physDmg": 32,
+                    "specDmg": 0,
+                    "critChance": 0,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {},
+                    "setRestrictions": {},
+                    "targetStats": [
+                        {
+                            "stat": "Speed",
+                            "type": "+",
+                            "minimum": 289,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        },
+                        {
+                            "stat": "Potency",
+                            "type": "+",
+                            "minimum": 100,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        }
+                    ],
+                    "useOnlyFullSets": false
+                }
+            },
+            {
+                "id": "BOBAFETT",
+                "target": {
+                    "name": "Krayt",
+                    "health": 0,
+                    "protection": 0,
+                    "speed": 100,
+                    "critDmg": 0,
+                    "potency": 0,
+                    "tenacity": 0,
+                    "physDmg": 95,
+                    "specDmg": 0,
+                    "critChance": 0,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {
+                        "arrow": "Offense %",
+                        "triangle": "Critical Damage %",
+                        "cross": "Offense %"
+                    },
+                    "setRestrictions": {
+                        "critdamage": 1,
+                        "health": 1
+                    },
+                    "targetStats": [
+                        {
+                            "stat": "Speed",
+                            "type": "+",
+                            "minimum": 266,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        }
+                    ],
+                    "useOnlyFullSets": false
+                }
+            },
+            {
+                "id": "GREEDO",
+                "target": {
+                    "name": "Krayt",
+                    "health": 0,
+                    "protection": 0,
+                    "speed": 0,
+                    "critDmg": 0,
+                    "potency": 0,
+                    "tenacity": 0,
+                    "physDmg": 0,
+                    "specDmg": 0,
+                    "critChance": 0,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {
+                        "cross": "Potency %"
+                    },
+                    "setRestrictions": {
+                        "potency": 2
+                    },
+                    "targetStats": [
+                        {
+                            "stat": "Speed",
+                            "type": "+",
+                            "minimum": 224,
+                            "maximum": 224,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        },
+                        {
+                            "stat": "Potency",
+                            "type": "+",
+                            "minimum": 97,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        }
+                    ],
+                    "useOnlyFullSets": false
+                }
+            }
+        ]
+    },
+    {
         "name": "LSTB - 50 Shards of KAM",
         "selectedCharacters": [
             {
