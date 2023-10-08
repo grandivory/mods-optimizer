@@ -1500,6 +1500,73 @@
         ]
     },
     {
+        "name": "GL Leia - Tier 2",
+        "selectedCharacters": [
+            {
+                "id": "HOTHLEIA",
+                "target": {
+                    "name": "GL Leia - Tier 2",
+                    "health": 0,
+                    "protection": 0,
+                    "speed": 100,
+                    "critDmg": 50,
+                    "potency": 70,
+                    "tenacity": 30,
+                    "physDmg": 25,
+                    "specDmg": 0,
+                    "critChance": 30,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {
+                        "arrow": "Critical Avoidance %",
+                        "triangle": "Critical Damage %",
+                        "cross": "Potency %"
+                    },
+                    "setRestrictions": {
+                        "potency": 2,
+                        "health": 1
+                    },
+                    "targetStats": [],
+                    "useOnlyFullSets": false
+                }
+            },
+            {
+                "id": "HOTHHAN",
+                "target": {
+                    "name": "GL Leia - Tier 2",
+                    "health": 20,
+                    "protection": 0,
+                    "speed": 100,
+                    "critDmg": 0,
+                    "potency": 25,
+                    "tenacity": 30,
+                    "physDmg": 0,
+                    "specDmg": 0,
+                    "critChance": 0,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {
+                        "arrow": "Critical Avoidance %",
+                        "triangle": "Health %",
+                        "circle": "Health %",
+                        "cross": "Health %"
+                    },
+                    "setRestrictions": {
+                        "health": 3
+                    },
+                    "targetStats": [],
+                    "useOnlyFullSets": false
+                }
+            }
+        ]
+    },
+    {
         "name": "HAAT - ABC",
         "selectedCharacters": [
             {
