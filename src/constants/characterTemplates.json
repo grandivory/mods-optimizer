@@ -5603,10 +5603,62 @@
         "name": "PvP - Phoenix",
         "selectedCharacters": [
             {
+                "id": "HERASYNDULLAS3",
+                "target": {
+                    "name": "PvP - Phoenix",
+                    "health": 20,
+                    "protection": 0,
+                    "speed": 100,
+                    "critDmg": 0,
+                    "potency": 25,
+                    "tenacity": 20,
+                    "physDmg": 0,
+                    "specDmg": 0,
+                    "critChance": 0,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {
+                        "cross": "Potency %"
+                    },
+                    "setRestrictions": {},
+                    "targetStats": [],
+                    "useOnlyFullSets": false
+                }
+            },
+            {
+                "id": "ZEBS3",
+                "target": {
+                    "name": "PvP - Phoenix",
+                    "health": 40,
+                    "protection": 0,
+                    "speed": 100,
+                    "critDmg": 0,
+                    "potency": 50,
+                    "tenacity": 0,
+                    "physDmg": 20,
+                    "specDmg": 0,
+                    "critChance": 0,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {
+                        "cross": "Potency %"
+                    },
+                    "setRestrictions": {},
+                    "targetStats": [],
+                    "useOnlyFullSets": false
+                }
+            },
+            {
                 "id": "EZRABRIDGERS3",
                 "target": {
-                    "name": "PvP",
-                    "health": 0,
+                    "name": "PvP - Phoenix",
+                    "health": 5,
                     "protection": 0,
                     "speed": 100,
                     "critDmg": 100,
@@ -5620,8 +5672,12 @@
                     "accuracy": 0,
                     "critAvoid": 0,
                     "upgradeMods": true,
-                    "primaryStatRestrictions": {},
-                    "setRestrictions": {},
+                    "primaryStatRestrictions": {
+                        "circle": "Health %"
+                    },
+                    "setRestrictions": {
+                        "critchance": 1
+                    },
                     "targetStats": [],
                     "useOnlyFullSets": false
                 }
@@ -5629,71 +5685,27 @@
             {
                 "id": "KANANJARRUSS3",
                 "target": {
-                    "name": "Tanky",
-                    "health": 0,
-                    "protection": 40,
-                    "speed": 100,
-                    "critDmg": 0,
-                    "potency": 30,
-                    "tenacity": 0,
-                    "physDmg": 0,
-                    "specDmg": 0,
-                    "critChance": 50,
-                    "armor": 0,
-                    "resistance": 0,
-                    "accuracy": 0,
-                    "critAvoid": 0,
-                    "upgradeMods": true,
-                    "primaryStatRestrictions": {},
-                    "setRestrictions": {},
-                    "targetStats": [],
-                    "useOnlyFullSets": false
-                }
-            },
-            {
-                "id": "HERASYNDULLAS3",
-                "target": {
-                    "name": "Speed",
-                    "health": 0,
+                    "name": "PvP - Phoenix",
+                    "health": 40,
                     "protection": 0,
                     "speed": 100,
                     "critDmg": 0,
-                    "potency": 25,
+                    "potency": 0,
                     "tenacity": 0,
-                    "physDmg": 0,
+                    "physDmg": 10,
                     "specDmg": 0,
-                    "critChance": 0,
-                    "armor": 0,
-                    "resistance": 0,
+                    "critChance": 30,
+                    "armor": 5,
+                    "resistance": 5,
                     "accuracy": 0,
                     "critAvoid": 0,
                     "upgradeMods": true,
-                    "primaryStatRestrictions": {},
-                    "setRestrictions": {},
-                    "targetStats": [],
-                    "useOnlyFullSets": false
-                }
-            },
-            {
-                "id": "ZEBS3",
-                "target": {
-                    "name": "PvP",
-                    "health": 0,
-                    "protection": 40,
-                    "speed": 100,
-                    "critDmg": 0,
-                    "potency": 50,
-                    "tenacity": 0,
-                    "physDmg": 0,
-                    "specDmg": 0,
-                    "critChance": 0,
-                    "armor": 0,
-                    "resistance": 0,
-                    "accuracy": 0,
-                    "critAvoid": 0,
-                    "upgradeMods": true,
-                    "primaryStatRestrictions": {},
-                    "setRestrictions": {},
+                    "primaryStatRestrictions": {
+                        "arrow": "Speed"
+                    },
+                    "setRestrictions": {
+                        "tenacity": 1
+                    },
                     "targetStats": [],
                     "useOnlyFullSets": false
                 }
@@ -5701,13 +5713,13 @@
             {
                 "id": "CHOPPERS3",
                 "target": {
-                    "name": "PvP",
-                    "health": 20,
-                    "protection": 40,
+                    "name": "PvP - Phoenix",
+                    "health": 50,
+                    "protection": 0,
                     "speed": 100,
                     "critDmg": 0,
-                    "potency": 0,
-                    "tenacity": 10,
+                    "potency": 20,
+                    "tenacity": 20,
                     "physDmg": 0,
                     "specDmg": 0,
                     "critChance": 0,
