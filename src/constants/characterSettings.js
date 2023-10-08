@@ -384,7 +384,21 @@ const characterSettings = {
     ['Rogue 1', 'Chaze', 'Chiggs', 'Chex Mix']
   ),
   'CHOPPERS3': new CharacterSettings(
-    [new OptimizationPlan('PvP', 20, 40, 100, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 50, 0, 100, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 50, 0, 100, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "cross": "Tenacity %",
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 50, 0, 100, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "cross": "Tenacity %",
+        "circle": "Health %"
+      }, {
+        "health": 3
+      })
+    ]
   ),
   'CLONESERGEANTPHASEI': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
@@ -634,7 +648,12 @@ const characterSettings = {
   ),
   'EZRABRIDGERS3': new CharacterSettings(
     [
-      optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP'),
+      new OptimizationPlan('PvP', 5, 0, 100, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 5, 0, 100, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %",
+        "cross": "Offense %",
+        "circle": "Health %"
+      }),
       new OptimizationPlan('hSTR P1 Jedi', 0, -5, 100, 75, 0, 0, 50, 0, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P2 Jedi', 0, 0, 60, 100, 0, 0, 75, 0, 75, 0, 0, 0, 0, true)
     ]
@@ -808,7 +827,18 @@ const characterSettings = {
     ['Raid Han', 'rHan', 'OG Han', 'Zolo', 'Chex Mix', 'Titans']
   ),
   'HERASYNDULLAS3': new CharacterSettings(
-    [optimizationStrategy["Speedy debuffer"].rename('Speed')]
+    [
+      new OptimizationPlan('PvP', 20, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, true, {
+        "cross": "Potency %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 20, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, true, {
+        "cross": "Potency %"
+      }, {
+        "speed": 1,
+        "health": 1
+      })
+    ]
   ),
   'HERMITYODA': new CharacterSettings(
     [optimizationStrategy.Speed],
@@ -975,7 +1005,24 @@ const characterSettings = {
     ['Rogue 1', 'Cass-2SO', 'K2']
   ),
   'KANANJARRUSS3': new CharacterSettings(
-    [new OptimizationPlan('Tanky', 40, 10, 100, 0, 30, 0, 0, 0, 50, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 40, 0, 100, 0, 0, 0, 10, 0, 30, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 40, 0, 100, 0, 0, 0, 10, 0, 30, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 40, 0, 100, 0, 0, 0, 10, 0, 30, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %"
+      }, {
+        "health": 2,
+        "tenacity": 1
+      })
+    ]
   ),
   'KIADIMUNDI': new CharacterSettings(
     [
@@ -1642,7 +1689,18 @@ const characterSettings = {
     ]
   ),
   'ZEBS3': new CharacterSettings(
-    [new OptimizationPlan('PvP', 40, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 40, 0, 100, 0, 50, 0, 20, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 40, 0, 100, 0, 50, 0, 20, 0, 0, 0, 0, 0, 0, true, {
+        "cross": "Potency %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 40, 0, 100, 0, 50, 0, 20, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "cross": "Potency %"
+      }, {
+        "health": 3
+      })
+    ]
   ),
   'ZORIIBLISS_V2': new CharacterSettings(
     [new OptimizationPlan('PvP', 5, 10, 100, 50, 10, 0, 20, 0, 0, 0, 0, 0, 0, true)]
