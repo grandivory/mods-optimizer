@@ -783,6 +783,26 @@ const characterSettings = {
   'GEONOSIANSPY': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
   ),
+  'GLLEIA': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 20, 15, 100, 0, 15, 0, 5, 0, 0, 10, 10, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 15, 100, 0, 15, 0, 5, 0, 0, 10, 10, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Health %",
+        "circle": "Health %",
+        "cross": "Health %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 20, 15, 100, 0, 15, 0, 5, 0, 0, 10, 10, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Health %",
+        "circle": "Health %",
+        "cross": "Health %"
+      }, {
+        "speed": 1
+      })
+    ],
+    ['Murderbears']
+  ),
   'GLREY': new CharacterSettings(
     [
       new OptimizationPlan('PvP - Health', 50, 0, 100, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, true),
