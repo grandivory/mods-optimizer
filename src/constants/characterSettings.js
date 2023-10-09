@@ -264,6 +264,28 @@ const characterSettings = {
       optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvE')
     ]
   ),
+  'CAPTAINDROGAN': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 10, 0, 100, 0, 10, 10, 0, 70, 20, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 10, 0, 100, 0, 10, 10, 0, 70, 20, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Offense %",
+        "cross": "Offense %",
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Set', 10, 0, 100, 0, 10, 10, 0, 70, 20, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Offense %",
+        "cross": "Offense %",
+        "circle": "Health %"
+      }, {
+        "offense": 1,
+        "health": 1
+      })
+    ],
+    [],
+    DamageType.special
+  ),
   'CAPTAINREX': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 20, 0, 100, 0, 60, 10, 0, 0, 100, 0, 0, 0, 0, true),
