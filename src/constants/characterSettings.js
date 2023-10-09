@@ -1057,27 +1057,6 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvE')],
     ['Fisty', 'Fister']
   ),
-  'PRINCESSKNEESAA': new CharacterSettings(
-    [
-      new OptimizationPlan('PvP', 20, 0, 100, 50, 40, 0, 10, 0, 80, 0, 0, 0, 0, true),
-      new OptimizationPlan('PvP w/ Primaries', 20, 0, 100, 50, 40, 0, 10, 0, 80, 0, 0, 0, 0, true, {
-        "arrow": "Speed",
-        "triangle": "Critical Damage %",
-        "cross": "Potency %",
-        "circle": "Health %"
-      }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 20, 0, 100, 50, 40, 0, 10, 0, 80, 0, 0, 0, 0, true, {
-        "arrow": "Speed",
-        "triangle": "Critical Damage %",
-        "cross": "Potency %",
-        "circle": "Health %"
-      }, {
-        "potency": 1,
-        "critchance": 1,
-        "health": 1
-      })
-    ]
-  ),
   'KRRSANTAN': new CharacterSettings(
     [new OptimizationPlan('PvP', 30, 30, 100, 0, 10, 10, 0, 0, 0, 25, 0, 0, 0, true)]
   ),
@@ -1305,6 +1284,27 @@ const characterSettings = {
   ),
   'POGGLETHELESSER': new CharacterSettings(
     [optimizationStrategy["Speedy debuffer"].rename('PvE')]
+  ),
+  'PRINCESSKNEESAA': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 20, 0, 100, 50, 40, 0, 10, 0, 80, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 0, 100, 50, 40, 0, 10, 0, 80, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Critical Damage %",
+        "cross": "Potency %",
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Set', 20, 0, 100, 50, 40, 0, 10, 0, 80, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Critical Damage %",
+        "cross": "Potency %",
+        "circle": "Health %"
+      }, {
+        "potency": 1,
+        "critchance": 1,
+        "health": 1
+      })
+    ]
   ),
   'PRINCESSLEIA': new CharacterSettings(
     [
