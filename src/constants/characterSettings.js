@@ -930,7 +930,23 @@ const characterSettings = {
     ['IPD']
   ),
   'IMPERIALSUPERCOMMANDO': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
+    [
+      new OptimizationPlan('PvP', 0, 15, 100, 0, 20, 0, 100, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 0, 15, 100, 0, 20, 0, 100, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Offense %",
+        "triangle": "Offense %",
+        "circle": "Protection %",
+        "cross": "Offense %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 0, 15, 100, 0, 20, 0, 100, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Offense %",
+        "triangle": "Offense %",
+        "circle": "Protection %",
+        "cross": "Offense %"
+      }, {
+        "offense": 1
+      })
+    ],
     ['ISC']
   ),
   'JANGOFETT': new CharacterSettings(
