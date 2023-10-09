@@ -1412,6 +1412,25 @@ const characterSettings = {
     ],
     ['Rogue 1', 'SRP']
   ),
+  'SCOUTTROOPER_V3': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 5, 10, 100, 0, 30, 10, 15, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 5, 10, 100, 0, 30, 10, 15, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Offense %",
+        "cross": "Potency %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Set', 5, 10, 100, 0, 30, 10, 15, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Offense %",
+        "cross": "Potency %"
+      }, {
+        "speed": 1,
+        "potency": 1
+      })
+    ],
+    ['Rogue 1', 'SRP']
+  ),
   'SECONDSISTER': new CharacterSettings(
     [new OptimizationPlan('PvP', 5, 5, 100, 75, 0, 0, 0, 100, 30, 0, 0, 0, 0, true)],
     [],
