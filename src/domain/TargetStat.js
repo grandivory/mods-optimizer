@@ -12,7 +12,7 @@ export default class TargetStat {
   optimizeForTarget;
 
 
-  constructor(stat, type, minimum, maximum, relativeCharacterId = null, optimizeForTarget = true) {
+  constructor(stat, type='+', minimum=0, maximum=0, relativeCharacterId = null, optimizeForTarget = true) {
     this.stat = stat;
     this.type = type;
     this.minimum = minimum;

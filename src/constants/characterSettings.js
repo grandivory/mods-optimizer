@@ -561,7 +561,7 @@ const characterSettings = {
       new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 25, 0, 25, 0, 0, 0, 0, true),
       new OptimizationPlan('Iden Lead', 10, 10, 100, 100, 40, 0, 25, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true, {}, {},
-        [new TargetStat('Speed', 175, 179)]
+        [new TargetStat('Speed', '+', 175, 179)]
       )
     ],
     ['Troopers', 'Chex Mix']
@@ -842,7 +842,7 @@ const characterSettings = {
     [
       new OptimizationPlan('Crits', 0, 0, 100, 50, 25, 0, 25, 0, 100, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR Phase 3', 0, 0, 0, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true, {}, {},
-        [new TargetStat('Speed', 170, 174)]
+        [new TargetStat('Speed', '+', 170, 174)]
       )
     ]
   ),
@@ -863,7 +863,7 @@ const characterSettings = {
       new OptimizationPlan('Slow Han', 0, 0, 0, 100, 25, 0, 50, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Non-relic', 0, 0, 100, 100, 25, 0, 50, 0, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('Chex Mix', 0, 0, 0, 100, 0, 0, 50, 0, 50, 0, 0, 0, 0, true, {}, {},
-        [new TargetStat('Speed', 170, 174)]
+        [new TargetStat('Speed', '+', 170, 174)]
       )
     ],
     ['Raid Han', 'rHan', 'OG Han', 'Zolo', 'Chex Mix', 'Titans']
