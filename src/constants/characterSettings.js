@@ -937,9 +937,9 @@ const characterSettings = {
           "cross": "Health %",
           "circle": "Health %",
         }, {
-          "Health %": 1,
-          "Speed": 1,
-        },
+        "Health %": 1,
+        "Speed": 1,
+      },
       ),
     ],
   ),
@@ -1023,9 +1023,9 @@ const characterSettings = {
           "circle": "Health %",
           "cross": "Offense %",
         }, {
-          "Health %": 1,
-          "Offense %": 1,
-        },
+        "Health %": 1,
+        "Offense %": 1,
+      },
       ),
     ],
     ['JKCK'],
@@ -1122,8 +1122,8 @@ const characterSettings = {
           "cross": "Protection %",
           "circle": "Protection %",
         }, {
-          "Health %": 3,
-        },
+        "Health %": 3,
+      },
       ),
     ],
   ),
@@ -1351,25 +1351,25 @@ const characterSettings = {
     ],
     ['Murderbears']
   ),
-  'PAZVIZSLA': createCharacterSettings(
+  'PAZVIZSLA': new CharacterSettings(
     [
-      createOptimizationPlan('Health', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true,
+      new OptimizationPlan('Health', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true,
         {
           "triangle": "Health %",
           "cross": "Health %",
           "circle": "Health %",
         }, {
-          "Health %": 3,
-        },
+        "Health %": 3,
+      },
       ),
-      createOptimizationPlan('Protection', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true,
+      new OptimizationPlan('Protection', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true,
         {
           "triangle": "Protection %",
           "cross": "Protection %",
           "circle": "Protection %",
         }, {
-          "Health %": 3,
-        },
+        "Health %": 3,
+      },
       ),
     ],
   ),
@@ -1606,8 +1606,8 @@ const characterSettings = {
           "triangle": "Critical Damage %",
           "cross": "Offense %",
         }, {
-          "Speed": 1,
-        },
+        "Speed": 1,
+      },
       ),
     ],
   ),
