@@ -928,6 +928,21 @@ const characterSettings = {
   'IG11': new CharacterSettings(
     [new OptimizationPlan('Tanky', 25, 0, 50, 0, 0, 10, 5, 0, 5, 5, 5, 0, 0, true)]
   ),
+  'IG12': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 20, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true,
+        {
+          "arrow": "Speed",
+          "triangle": "Health %",
+          "cross": "Health %",
+          "circle": "Health %",
+        }, {
+          "Health %": 1,
+          "Speed": 1,
+        },
+      ),
+    ],
+  ),
   'IG86SENTINELDROID': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
   ),
@@ -998,6 +1013,22 @@ const characterSettings = {
       new OptimizationPlan('PvE', 0, 0, 100, 25, 50, 0, 25, 0, 100, 0, 0, 0, 0, true),
       new OptimizationPlan('Detonator', 100, 100, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 100, true)
     ]
+  ),
+  'JEDIKNIGHTCAL': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 25, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true,
+        {
+          "arrow": "Speed",
+          "triangle": "Critical Damage %",
+          "circle": "Health %",
+          "cross": "Offense %",
+        }, {
+          "Health %": 1,
+          "Offense %": 1,
+        },
+      ),
+    ],
+    ['JKCK'],
   ),
   'JEDIKNIGHTCONSULAR': new CharacterSettings(
     [new OptimizationPlan('Healer', 50, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -1081,6 +1112,20 @@ const characterSettings = {
         "tenacity": 1
       })
     ]
+  ),
+  'KELLERANBEQ': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 20, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true,
+        {
+          "arrow": "Protection %",
+          "triangle": "Protection %",
+          "cross": "Protection %",
+          "circle": "Protection %",
+        }, {
+          "Health %": 3,
+        },
+      ),
+    ],
   ),
   'KIADIMUNDI': new CharacterSettings(
     [
@@ -1306,6 +1351,28 @@ const characterSettings = {
     ],
     ['Murderbears']
   ),
+  'PAZVIZSLA': createCharacterSettings(
+    [
+      createOptimizationPlan('Health', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true,
+        {
+          "triangle": "Health %",
+          "cross": "Health %",
+          "circle": "Health %",
+        }, {
+          "Health %": 3,
+        },
+      ),
+      createOptimizationPlan('Protection', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true,
+        {
+          "triangle": "Protection %",
+          "cross": "Protection %",
+          "circle": "Protection %",
+        }, {
+          "Health %": 3,
+        },
+      ),
+    ],
+  ),
   'PHASMA': new CharacterSettings(
     [new OptimizationPlan('PvP', 20, 10, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['FO']
@@ -1530,6 +1597,19 @@ const characterSettings = {
       new OptimizationPlan('Iden Lead', 10, 10, 50, 100, 10, 0, 30, 0, 25, 0, 0, 0, 0, true)
     ],
     ['Troopers']
+  ),
+  'STAP': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 10, 10, 0, 50, 0, 10, 0, 0, 0, 0, true,
+        {
+          "arrow": "Speed",
+          "triangle": "Critical Damage %",
+          "cross": "Offense %",
+        }, {
+          "Speed": 1,
+        },
+      ),
+    ],
   ),
   'STARKILLER': new CharacterSettings(
     [
