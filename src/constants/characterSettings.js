@@ -227,7 +227,22 @@ const characterSettings = {
     ]
   ),
   'BOUSHH': new CharacterSettings(
-    [new OptimizationPlan('PvP', 5, 0, 100, 50, 10, 0, 0, 20, 25, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 5, 0, 100, 0, 10, 0, 0, 20, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 5, 0, 100, 0, 10, 0, 0, 20, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Offense %",
+        "cross": "Offense %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Set', 5, 0, 100, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Offense %",
+        "cross": "Offense %"
+      }, {
+        "speed": 1,
+        "potency": 1
+      }),
+    ],
     [],
     DamageType.special
   ),
