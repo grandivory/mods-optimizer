@@ -158,8 +158,15 @@ const characterSettings = {
   ),
   'BAZEMALBUS': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 50, 0, 20, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
-      new OptimizationPlan('PvP w/ Primaries', 50, 0, 20, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true, {
+      new OptimizationPlan('PvP', 50, 0, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 50, 0, 100, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Health %",
+        "circle": "Health %",
+        "cross": "Health %"
+      }),
+      new OptimizationPlan('PvP Slow', 50, 0, 20, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
+      new OptimizationPlan('PvP Slow w/ Primaries', 50, 0, 20, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Health %",
         "circle": "Health %",
