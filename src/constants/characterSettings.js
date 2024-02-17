@@ -158,6 +158,13 @@ const characterSettings = {
   ),
   'BAZEMALBUS': new CharacterSettings(
     [
+      new OptimizationPlan('PvP', 50, 0, 20, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 50, 0, 20, 0, 0, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Health %",
+        "circle": "Health %",
+        "cross": "Health %"
+      }),
       new OptimizationPlan('Slow Tank', 50, 50, 0, 0, 10, 25, 0, 0, 0, 12.5, 12.5, 0, 0, true),
       new OptimizationPlan('hSTR Phase 4', 10, 10, -100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
@@ -931,10 +938,10 @@ const characterSettings = {
   'IG12': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 20, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true, {
-          "arrow": "Speed",
-          "triangle": "Health %",
-          "cross": "Health %",
-          "circle": "Health %",
+        "arrow": "Speed",
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %",
       }, {
         "health": 1,
         "speed": 1,
@@ -1015,10 +1022,10 @@ const characterSettings = {
   'JEDIKNIGHTCAL': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 25, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true, {
-          "arrow": "Speed",
-          "triangle": "Critical Damage %",
-          "circle": "Health %",
-          "cross": "Offense %",
+        "arrow": "Speed",
+        "triangle": "Critical Damage %",
+        "circle": "Health %",
+        "cross": "Offense %",
       }, {
         "health": 1,
         "offense": 1
@@ -1112,10 +1119,10 @@ const characterSettings = {
   'KELLERANBEQ': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 20, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
-          "arrow": "Protection %",
-          "triangle": "Protection %",
-          "cross": "Protection %",
-          "circle": "Protection %",
+        "arrow": "Protection %",
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %",
       }, {
         "health": 3,
       })
@@ -1348,16 +1355,16 @@ const characterSettings = {
   'PAZVIZSLA': new CharacterSettings(
     [
       new OptimizationPlan('Health', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
-          "triangle": "Health %",
-          "cross": "Health %",
-          "circle": "Health %",
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %",
       }, {
         "health": 3,
       }),
       new OptimizationPlan('Protection', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
-          "triangle": "Protection %",
-          "cross": "Protection %",
-          "circle": "Protection %",
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %",
       }, {
         "health": 3,
       })
@@ -1494,12 +1501,11 @@ const characterSettings = {
   ),
   'SCARIFREBEL': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 20, 20, 100, 0, 25, 10, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('AdRad', 30, 20, 100, 0, 25, 10, 0, 0, 0, 10, 0, 0, 0, true),
-      new OptimizationPlan('AdRad w/ Primaries', 30, 20, 100, 0, 25, 10, 0, 0, 0, 10, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 30, 10, 100, 0, 25, 10, 0, 0, 0, 10, 10, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 30, 10, 100, 0, 25, 10, 0, 0, 0, 10, 10, 0, 0, true, {
         "arrow": "Speed",
-        "triangle": "Protection %",
-        "cross": "Protection %"
+        "triangle": "Health %",
+        "cross": "Health %"
       }),
       new OptimizationPlan('hSTR Phase 2', 20, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
@@ -1591,9 +1597,9 @@ const characterSettings = {
   'STAP': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 10, 10, 0, 50, 0, 10, 0, 0, 0, 0, true, {
-          "arrow": "Speed",
-          "triangle": "Critical Damage %",
-          "cross": "Offense %",
+        "arrow": "Speed",
+        "triangle": "Critical Damage %",
+        "cross": "Offense %",
       }, {
         "speed": 1,
       })
