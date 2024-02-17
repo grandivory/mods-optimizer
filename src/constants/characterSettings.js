@@ -774,7 +774,22 @@ const characterSettings = {
     ['Piggy']
   ),
   'GARSAXON': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
+    [
+      new OptimizationPlan('PvP', 0, 0, 100, 0, 25, 0, 75, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 0, 25, 0, 75, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Offense %",
+        "cross": "Offense %"
+      }),
+      new OptimizationPlan('PvP w/ Primaries and Sets', 0, 0, 100, 0, 25, 0, 75, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Offense %",
+        "cross": "Offense %"
+      }, {
+        "offense": 1,
+        "potency": 1
+      })
+    ]
   ),
   'GENERALHUX': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 10, 0, 0, 0, 0, 0, 0, 15, true)],
