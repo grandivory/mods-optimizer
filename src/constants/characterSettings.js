@@ -1080,6 +1080,21 @@ const characterSettings = {
       }, {
         "health": 1,
         "offense": 1
+      }),
+      new OptimizationPlan('PvP Debuffer', 5, 0, 100, 0, 35, 0, 20, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP Debuffer w/ Primaries', 5, 0, 100, 0, 35, 0, 20, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Offense %",
+        "cross": "Potency %",
+        "circle": "Health %",
+      }),
+      new OptimizationPlan('PvP Debuffer w/ Primaries & Sets', 5, 0, 100, 0, 35, 0, 20, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Offense %",
+        "cross": "Potency %",
+        "circle": "Health %",
+      }, {
+        "potency": 1
       })
     ],
     ['JKCK'],
