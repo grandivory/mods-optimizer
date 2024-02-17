@@ -1271,7 +1271,10 @@ const characterSettings = {
     [optimizationStrategy["Special Damage with Potency"].rename('PvP')]
   ),
   'MAULS7': new CharacterSettings(
-    [new OptimizationPlan('PvP', 25, 25, 100, 0, 15, 0, 50, 0, 0, 0, 0, 0, 0, true)]
+    [
+      new OptimizationPlan('PvP', 25, 25, 100, 0, 15, 0, 50, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('DS Mando', 0, 0, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, true)
+    ]
   ),
   'MERRIN': new CharacterSettings(
     [
