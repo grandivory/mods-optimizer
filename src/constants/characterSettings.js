@@ -1270,6 +1270,18 @@ const characterSettings = {
         "circle": "Health %"
       }, {
         "potency": 3
+      }),
+      new OptimizationPlan('Tenacity', 15, 0, 0, 0, 20, 60, 0, 30, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Tenacity w/ Primaries', 15, 0, 0, 0, 20, 60, 0, 30, 0, 0, 0, 0, 0, true, {
+        "cross": "Tenacity %",
+        "circle": "Health %"
+      }),
+      new OptimizationPlan('Tenacity w/ Primaries & Set', 15, 0, 0, 0, 0, 60, 0, 30, 0, 0, 0, 0, 0, true, {
+        "cross": "Tenacity %",
+        "circle": "Health %"
+      }, {
+        "tenacity": 2,
+        "potency": 1
       })
     ],
     [],
