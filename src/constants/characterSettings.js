@@ -241,21 +241,7 @@ const characterSettings = {
       }, {
         "speed": 1,
         "potency": 1
-      }),
-      new OptimizationPlan('Crit.Dmg', 5, 0, 100, 50, 10, 0, 0, 20, 25, 0, 0, 0, 0, true),
-      new OptimizationPlan('Crit.Dmg w/ Primaries', 5, 0, 100, 50, 10, 0, 0, 20, 25, 0, 0, 0, 0, true, {
-        "arrow": "Speed",
-        "triangle": "Critical Damage %",
-        "cross": "Offense %"
-      }),
-      new OptimizationPlan('Crit.Dmg w/ Primaries & Set', 5, 0, 100, 50, 10, 0, 0, 20, 25, 0, 0, 0, 0, true, {
-        "arrow": "Speed",
-        "triangle": "Critical Damage %",
-        "cross": "Offense %"
-      }, {
-        "speed": 1,
-        "potency": 1
-      }),
+      })
     ],
     [],
     DamageType.special
