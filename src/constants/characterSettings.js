@@ -234,7 +234,7 @@ const characterSettings = {
         "triangle": "Offense %",
         "cross": "Offense %"
       }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 5, 0, 100, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 5, 0, 100, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Offense %",
         "cross": "Offense %"
@@ -276,7 +276,7 @@ const characterSettings = {
         "cross": "Health %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 40, 0, 0, 0, -10, 15, 10, 0, 0, 12.5, 12.5, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 40, 0, 0, 0, -10, 15, 10, 0, 0, 12.5, 12.5, 0, 0, true, {
         "arrow": "Health %",
         "triangle": "Health %",
         "cross": "Health %",
@@ -302,7 +302,7 @@ const characterSettings = {
         "cross": "Offense %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 10, 0, 100, 0, 10, 10, 0, 70, 20, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 10, 0, 100, 0, 10, 10, 0, 70, 20, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Offense %",
         "cross": "Offense %",
@@ -324,7 +324,7 @@ const characterSettings = {
         "cross": "Potency %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 20, 0, 100, 0, 60, 10, 0, 0, 100, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 20, 0, 100, 0, 60, 10, 0, 0, 100, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Critical Chance %",
         "cross": "Potency %",
@@ -375,7 +375,7 @@ const characterSettings = {
         "cross": "Health %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 40, 15, 20, 0, 0, 10, 10, 0, 0, 12.5, 12.5, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 40, 15, 20, 0, 0, 10, 10, 0, 0, 12.5, 12.5, 0, 0, true, {
         "arrow": "Health %",
         "triangle": "Health %",
         "cross": "Health %",
@@ -442,7 +442,7 @@ const characterSettings = {
         "cross": "Tenacity %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 50, 0, 100, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 50, 0, 100, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "cross": "Tenacity %",
         "circle": "Health %"
@@ -667,7 +667,7 @@ const characterSettings = {
         "cross": "Tenacity %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 25, 0, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 25, 0, 100, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, true, {
         "triangle": "Health %",
         "cross": "Tenacity %",
         "circle": "Health %"
@@ -685,7 +685,7 @@ const characterSettings = {
         "cross": "Potency %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 15, 0, 100, 0, 50, 0, 50, 0, 20, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 15, 0, 100, 0, 50, 0, 50, 0, 20, 0, 0, 0, 0, true, {
         "triangle": "Offense %",
         "cross": "Potency %",
         "circle": "Health %"
@@ -781,7 +781,7 @@ const characterSettings = {
         "triangle": "Offense %",
         "cross": "Offense %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 0, 0, 100, 0, 25, 0, 75, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 0, 0, 100, 0, 25, 0, 75, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Offense %",
         "cross": "Offense %"
@@ -836,7 +836,7 @@ const characterSettings = {
         "circle": "Health %",
         "cross": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 20, 15, 100, 0, 15, 0, 5, 0, 0, 10, 10, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 20, 15, 100, 0, 15, 0, 5, 0, 0, 10, 10, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Health %",
         "circle": "Health %",
@@ -918,7 +918,7 @@ const characterSettings = {
       new OptimizationPlan('PvP w/ Primaries', 20, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, true, {
         "cross": "Potency %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 20, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 20, 0, 100, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, true, {
         "cross": "Potency %"
       }, {
         "speed": 1,
@@ -1015,7 +1015,7 @@ const characterSettings = {
         "circle": "Protection %",
         "cross": "Offense %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 0, 15, 100, 0, 20, 0, 100, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 0, 15, 100, 0, 20, 0, 100, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Offense %",
         "triangle": "Offense %",
         "circle": "Protection %",
@@ -1157,7 +1157,7 @@ const characterSettings = {
         "cross": "Health %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 40, 0, 100, 0, 0, 0, 10, 0, 30, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 40, 0, 100, 0, 0, 0, 10, 0, 30, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Health %",
         "cross": "Health %",
@@ -1232,7 +1232,7 @@ const characterSettings = {
         "cross": "Potency %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 10, 0, 100, 40, 50, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 10, 0, 100, 40, 50, 0, 0, 0, 0, 0, 0, 0, 0, true, {
         "triangle": "Critical Damage %",
         "cross": "Potency %",
         "circle": "Health %"
@@ -1283,7 +1283,7 @@ const characterSettings = {
         "cross": "Offense %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 10, 0, 80, 0, 0, 0, 100, 0, 0, 12.5, 12.5, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 10, 0, 80, 0, 0, 0, 100, 0, 0, 12.5, 12.5, 0, 0, true, {
         "arrow": "Offense %",
         "triangle": "Offense %",
         "cross": "Offense %",
@@ -1317,7 +1317,7 @@ const characterSettings = {
         "cross": "Potency %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 15, 0, 0, 0, 100, 0, 0, 40, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 15, 0, 0, 0, 100, 0, 0, 40, 0, 0, 0, 0, 0, true, {
         "cross": "Potency %",
         "circle": "Health %"
       }, {
@@ -1328,7 +1328,7 @@ const characterSettings = {
         "cross": "Tenacity %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('Tenacity w/ Primaries & Set', 15, 0, 0, 0, 0, 60, 0, 30, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('Tenacity w/ Primaries & Sets', 15, 0, 0, 0, 0, 60, 0, 30, 0, 0, 0, 0, 0, true, {
         "cross": "Tenacity %",
         "circle": "Health %"
       }, {
@@ -1427,7 +1427,7 @@ const characterSettings = {
         "cross": "Health %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('HPvP w/ Primaries and Sets', 20, 0, 100, 0, 0, 10, 0, 0, 0, 5, 5, 0, 0, true, {
+      new OptimizationPlan('HPvP w/ Primaries & Sets', 20, 0, 100, 0, 0, 10, 0, 0, 0, 5, 5, 0, 0, true, {
         "triangle": "Health %",
         "cross": "Health %",
         "circle": "Health %"
@@ -1480,7 +1480,7 @@ const characterSettings = {
         "cross": "Potency %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 20, 0, 100, 50, 40, 0, 10, 0, 80, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 20, 0, 100, 50, 40, 0, 10, 0, 80, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Critical Damage %",
         "cross": "Potency %",
@@ -1605,7 +1605,7 @@ const characterSettings = {
         "triangle": "Offense %",
         "cross": "Potency %"
       }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 5, 10, 100, 0, 30, 10, 15, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 5, 10, 100, 0, 30, 10, 15, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Offense %",
         "cross": "Potency %"
@@ -1755,7 +1755,7 @@ const characterSettings = {
         "cross": "Health %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries & Set', 30, 0, 100, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 30, 0, 100, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, true, {
         "arrow": "Health %",
         "triangle": "Health %",
         "cross": "Health %",
@@ -1773,7 +1773,7 @@ const characterSettings = {
         "cross": "Potency %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 10, 0, 100, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 10, 0, 100, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, true, {
         "triangle": "Health %",
         "cross": "Potency %",
         "circle": "Health %"
@@ -1886,7 +1886,7 @@ const characterSettings = {
         "cross": "Offense %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 5, 0, 100, 100, 0, 0, 60, 0, 50, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 5, 0, 100, 100, 0, 0, 60, 0, 50, 0, 0, 0, 0, true, {
         "triangle": "Critical Damage %",
         "cross": "Offense %",
         "circle": "Health %"
@@ -1931,7 +1931,7 @@ const characterSettings = {
       new OptimizationPlan('PvP w/ Primaries', 40, 0, 100, 0, 50, 0, 20, 0, 0, 0, 0, 0, 0, true, {
         "cross": "Potency %"
       }),
-      new OptimizationPlan('PvP w/ Primaries and Sets', 40, 0, 100, 0, 50, 0, 20, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 40, 0, 100, 0, 50, 0, 20, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "cross": "Potency %"
       }, {
