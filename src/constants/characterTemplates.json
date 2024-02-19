@@ -6821,44 +6821,44 @@
         ]
     },
     {
-        "name": "ROTE - Reva Mission w/ 8th Brother",
+        "name": "ROTE - Reva w/ 8th Brother 50 Shards of KAM",
         "selectedCharacters": [
             {
                 "id": "SEVENTHSISTER",
                 "target": {
                     "name": "Reva Mission/8th",
-                    "health": 0,
+                    "health": -50,
                     "protection": 20,
                     "speed": 100,
-                    "critDmg": 10,
-                    "potency": 0,
-                    "tenacity": 20,
-                    "physDmg": 0,
+                    "critDmg": 0,
+                    "potency": 10,
+                    "tenacity": 5,
+                    "physDmg": 5,
                     "specDmg": 0,
                     "critChance": 0,
-                    "armor": 0,
-                    "resistance": 0,
+                    "armor": 2.5,
+                    "resistance": 2.5,
                     "accuracy": 0,
                     "critAvoid": 0,
                     "upgradeMods": true,
                     "primaryStatRestrictions": {
-                        "triangle": "Critical Damage %"
+                        "arrow": "Protection %"
                     },
                     "setRestrictions": {},
                     "targetStats": [
                         {
                             "stat": "Speed",
                             "type": "+",
-                            "minimum": 350,
-                            "maximum": 90000,
+                            "minimum": 300,
+                            "maximum": 100000000,
                             "relativeCharacterId": null,
                             "optimizeForTarget": false
                         },
                         {
                             "stat": "Protection",
                             "type": "+",
-                            "minimum": 70000,
-                            "maximum": 150000,
+                            "minimum": 90000,
+                            "maximum": 100000000,
                             "relativeCharacterId": null,
                             "optimizeForTarget": false
                         }
@@ -6870,33 +6870,25 @@
                 "id": "FIFTHBROTHER",
                 "target": {
                     "name": "Reva Mission/8th",
-                    "health": 0,
+                    "health": -50,
                     "protection": 20,
-                    "speed": 100,
-                    "critDmg": 10,
-                    "potency": 0,
-                    "tenacity": 20,
-                    "physDmg": 0,
+                    "speed": 90,
+                    "critDmg": 0,
+                    "potency": 5,
+                    "tenacity": 0,
+                    "physDmg": 10,
                     "specDmg": 0,
                     "critChance": 0,
-                    "armor": 0,
-                    "resistance": 0,
-                    "accuracy": 0,
+                    "armor": 2.5,
+                    "resistance": 2.5,
+                    "accuracy": 100,
                     "critAvoid": 0,
                     "upgradeMods": true,
                     "primaryStatRestrictions": {
-                        "triangle": "Critical Damage %"
+                        "arrow": "Accuracy %"
                     },
                     "setRestrictions": {},
                     "targetStats": [
-                        {
-                            "stat": "Speed",
-                            "type": "+",
-                            "minimum": 345,
-                            "maximum": 400,
-                            "relativeCharacterId": null,
-                            "optimizeForTarget": false
-                        },
                         {
                             "stat": "Speed",
                             "type": "+",
@@ -6908,67 +6900,8 @@
                         {
                             "stat": "Protection",
                             "type": "+",
-                            "minimum": 100000,
-                            "maximum": 150000,
-                            "relativeCharacterId": null,
-                            "optimizeForTarget": false
-                        }
-                    ],
-                    "useOnlyFullSets": false
-                }
-            },
-            {
-                "id": "GRANDINQUISITOR",
-                "target": {
-                    "name": "Reva Mission/8th",
-                    "health": 0,
-                    "protection": 30,
-                    "speed": 100,
-                    "critDmg": 50,
-                    "potency": 0,
-                    "tenacity": 0,
-                    "physDmg": 50,
-                    "specDmg": 0,
-                    "critChance": 0,
-                    "armor": 0,
-                    "resistance": 0,
-                    "accuracy": 0,
-                    "critAvoid": 0,
-                    "upgradeMods": true,
-                    "primaryStatRestrictions": {
-                        "triangle": "Critical Damage %"
-                    },
-                    "setRestrictions": {},
-                    "targetStats": [
-                        {
-                            "stat": "Speed",
-                            "type": "+",
-                            "minimum": 310,
-                            "maximum": 350,
-                            "relativeCharacterId": null,
-                            "optimizeForTarget": false
-                        },
-                        {
-                            "stat": "Speed",
-                            "type": "+",
-                            "minimum": -100,
-                            "maximum": -1,
-                            "relativeCharacterId": "FIFTHBROTHER",
-                            "optimizeForTarget": false
-                        },
-                        {
-                            "stat": "Protection",
-                            "type": "+",
-                            "minimum": 75000,
-                            "maximum": 120000,
-                            "relativeCharacterId": null,
-                            "optimizeForTarget": false
-                        },
-                        {
-                            "stat": "Physical Damage",
-                            "type": "+",
-                            "minimum": 9500,
-                            "maximum": 120000,
+                            "minimum": 102000,
+                            "maximum": 100000000,
                             "relativeCharacterId": null,
                             "optimizeForTarget": false
                         }
@@ -6980,54 +6913,46 @@
                 "id": "EIGHTHBROTHER",
                 "target": {
                     "name": "Reva Mission/8th",
-                    "health": 0,
-                    "protection": 50,
-                    "speed": 100,
-                    "critDmg": 30,
-                    "potency": 0,
+                    "health": -50,
+                    "protection": 25,
+                    "speed": 75,
+                    "critDmg": 0,
+                    "potency": 10,
                     "tenacity": 0,
-                    "physDmg": 75,
+                    "physDmg": 27,
                     "specDmg": 0,
                     "critChance": 0,
-                    "armor": 0,
-                    "resistance": 0,
+                    "armor": 5,
+                    "resistance": 5,
                     "accuracy": 0,
-                    "critAvoid": 0,
+                    "critAvoid": 100,
                     "upgradeMods": true,
                     "primaryStatRestrictions": {
-                        "triangle": "Critical Damage %"
+                        "arrow": "Critical Avoidance %"
                     },
                     "setRestrictions": {},
                     "targetStats": [
                         {
                             "stat": "Speed",
                             "type": "+",
-                            "minimum": 270,
-                            "maximum": 330,
-                            "relativeCharacterId": null,
-                            "optimizeForTarget": false
-                        },
-                        {
-                            "stat": "Speed",
-                            "type": "+",
                             "minimum": -100,
                             "maximum": -1,
-                            "relativeCharacterId": "GRANDINQUISITOR",
+                            "relativeCharacterId": "FIFTHBROTHER",
                             "optimizeForTarget": false
                         },
                         {
                             "stat": "Protection",
                             "type": "+",
-                            "minimum": 75000,
-                            "maximum": 120000,
+                            "minimum": 90000,
+                            "maximum": 100000000,
                             "relativeCharacterId": null,
                             "optimizeForTarget": false
                         },
                         {
                             "stat": "Physical Damage",
                             "type": "+",
-                            "minimum": 9500,
-                            "maximum": 120000,
+                            "minimum": 9000,
+                            "maximum": 100000000,
                             "relativeCharacterId": null,
                             "optimizeForTarget": false
                         }
@@ -7036,33 +6961,35 @@
                 }
             },
             {
-                "id": "NINTHSISTER",
+                "id": "GRANDINQUISITOR",
                 "target": {
                     "name": "Reva Mission/8th",
-                    "health": 0,
-                    "protection": 70,
-                    "speed": 40,
-                    "critDmg": 0,
+                    "health": -50,
+                    "protection": 20,
+                    "speed": 50,
+                    "critDmg": -50,
                     "potency": 0,
-                    "tenacity": 100,
-                    "physDmg": 0,
+                    "tenacity": 0,
+                    "physDmg": 50,
                     "specDmg": 0,
-                    "critChance": 0,
-                    "armor": 5,
-                    "resistance": 5,
+                    "critChance": -5,
+                    "armor": 0,
+                    "resistance": 0,
                     "accuracy": 0,
-                    "critAvoid": 0,
+                    "critAvoid": 100,
                     "upgradeMods": true,
                     "primaryStatRestrictions": {
-                        "cross": "Tenacity %"
+                        "arrow": "Critical Avoidance %",
+                        "cross": "Protection %",
+                        "circle": "Protection %"
                     },
                     "setRestrictions": {},
                     "targetStats": [
                         {
                             "stat": "Speed",
                             "type": "+",
-                            "minimum": 230,
-                            "maximum": 300,
+                            "minimum": 265,
+                            "maximum": 100000000,
                             "relativeCharacterId": null,
                             "optimizeForTarget": false
                         },
@@ -7075,11 +7002,58 @@
                             "optimizeForTarget": false
                         },
                         {
-                            "stat": "Tenacity",
+                            "stat": "Protection",
                             "type": "+",
-                            "minimum": 150,
-                            "maximum": 200,
+                            "minimum": 95000,
+                            "maximum": 100000000,
                             "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        },
+                        {
+                            "stat": "Physical Damage",
+                            "type": "+",
+                            "minimum": 9000,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        }
+                    ],
+                    "useOnlyFullSets": false
+                }
+            },
+
+            {
+                "id": "NINTHSISTER",
+                "target": {
+                    "name": "Reva Mission/8th",
+                    "health": -50,
+                    "protection": 70,
+                    "speed": 40,
+                    "critDmg": 0,
+                    "potency": 0,
+                    "tenacity": 0,
+                    "physDmg": 0,
+                    "specDmg": 0,
+                    "critChance": 0,
+                    "armor": 5,
+                    "resistance": 5,
+                    "accuracy": 0,
+                    "critAvoid": 100,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {
+                        "arrow": "Critical Avoidance %",
+                        "triangle": "Protection %",
+                        "cross": "Protection %",
+                        "circle": "Protection %"
+                    },
+                    "setRestrictions": {},
+                    "targetStats": [
+                        {
+                            "stat": "Speed",
+                            "type": "+",
+                            "minimum": -100,
+                            "maximum": -1,
+                            "relativeCharacterId": "GRANDINQUISITOR",
                             "optimizeForTarget": false
                         },
                         {
