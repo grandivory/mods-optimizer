@@ -1058,7 +1058,14 @@ const characterSettings = {
   ),
   'JEDIKNIGHTCAL': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 25, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 25, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 25, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Critical Damage %",
+        "circle": "Health %",
+        "cross": "Offense %",
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 25, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Critical Damage %",
         "circle": "Health %",
