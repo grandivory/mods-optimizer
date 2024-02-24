@@ -1170,7 +1170,14 @@ const characterSettings = {
   ),
   'KELLERANBEQ': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 20, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 20, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Protection %",
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %",
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 20, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Protection %",
         "triangle": "Protection %",
         "cross": "Protection %",
