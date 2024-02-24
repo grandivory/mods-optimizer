@@ -1765,6 +1765,30 @@ const characterSettings = {
       })
     ]
   ),
+  'TARONMALICOS': new CharacterSettings(
+    [
+      new OptimizationPlan('Fast Build', 20, 0, 100, 50, 0, 0, 40, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Fast Build w/ Primaries', 20, 0, 100, 50, 0, 0, 40, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %"
+      }),
+      new OptimizationPlan('Fast Build w/ Primaries & Sets', 20, 0, 100, 50, 0, 0, 40, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %"
+      }, {
+        "offense": 1,
+        "health": 1
+      }),
+      new OptimizationPlan('Slow Build', 40, 0, 100, 50, 0, 0, 60, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Slow Build w/ Primaries', 40, 0, 100, 50, 0, 0, 60, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %"
+      }),
+      new OptimizationPlan('Slow Build w/ Primaries & Sets', 40, 0, 100, 50, 0, 0, 60, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %"
+      }, {
+        "offense": 1,
+        "health": 1
+      }),
+    ]
+  ),
   'TEEBO': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 10, 0, 100, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, true),
