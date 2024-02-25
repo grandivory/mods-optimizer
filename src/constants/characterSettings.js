@@ -1448,7 +1448,7 @@ const characterSettings = {
         "cross": "Health %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('HPvP w/ Primaries & Sets', 20, 0, 100, 0, 0, 10, 0, 0, 0, 5, 5, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 20, 0, 100, 0, 0, 10, 0, 0, 0, 5, 5, 0, 0, true, {
         "triangle": "Health %",
         "cross": "Health %",
         "circle": "Health %"
@@ -1461,14 +1461,26 @@ const characterSettings = {
   ),
   'PAZVIZSLA': new CharacterSettings(
     [
-      new OptimizationPlan('Health', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
+      new OptimizationPlan('Health', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true),
+      new OptimizationPlan('Health w/ Primaries', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %",
+      }),
+      new OptimizationPlan('Health w/ Primaries & Sets', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
         "triangle": "Health %",
         "cross": "Health %",
         "circle": "Health %",
       }, {
         "health": 3,
       }),
-      new OptimizationPlan('Protection', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
+      new OptimizationPlan('Protection', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true),
+      new OptimizationPlan('Protection w/ Primaries', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %",
+      }),
+      new OptimizationPlan('Protection w/ Primaries & Sets', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
         "triangle": "Protection %",
         "cross": "Protection %",
         "circle": "Protection %",
