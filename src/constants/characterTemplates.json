@@ -521,7 +521,10 @@
                     "critAvoid": 0,
                     "upgradeMods": true,
                     "primaryStatRestrictions": {
-                        "arrow": "Critical Avoidance %"
+                        "arrow": "Critical Avoidance %",
+                        "triangle": "Offense %",
+                        "cross": "Potency %",
+                        "circle":"Health %"
                     },
                     "setRestrictions": {
                         "speed": 1
@@ -587,7 +590,10 @@
                     "critAvoid": 0,
                     "upgradeMods": true,
                     "primaryStatRestrictions": {
-                        "arrow": "Critical Avoidance %"
+                        "arrow": "Critical Avoidance %",
+                        "triangle": "Offense %",
+                        "cross": "Potency %",
+                        "circle":"Health %"
                     },
                     "setRestrictions": {
                         "speed": 1
