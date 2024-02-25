@@ -974,7 +974,14 @@ const characterSettings = {
   ),
   'IG12': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 20, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 20, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %",
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 20, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Health %",
         "cross": "Health %",
