@@ -638,6 +638,93 @@
         ]
     },
     {
+        "name": "Endor Raid - Piett & Han",
+        "selectedCharacters": [
+            {
+                "id": "ADMIRALPIETT",
+                "target": {
+                    "name": "Endor Raid",
+                    "health": 0,
+                    "protection": 0,
+                    "speed": 100,
+                    "critDmg": 25,
+                    "potency": 15,
+                    "tenacity": 0,
+                    "physDmg": 10,
+                    "specDmg": 0,
+                    "critChance": 10,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {},
+                    "setRestrictions": {},
+                    "targetStats": [
+                        {
+                            "stat": "Speed",
+                            "type": "+",
+                            "minimum": 320,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        },
+                        {
+                            "stat": "Physical Damage",
+                            "type": "+",
+                            "minimum": 7700,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        }
+                    ],
+                    "useOnlyFullSets": false
+                }
+            },
+            {
+                "id": "HANSOLO",
+                "target": {
+                    "name": "Endor Raid",
+                    "health": 0,
+                    "protection": 0,
+                    "speed": 80,
+                    "critDmg": 0,
+                    "potency": 25,
+                    "tenacity": 0,
+                    "physDmg": 80,
+                    "specDmg": 0,
+                    "critChance": 0,
+                    "armor": 0,
+                    "resistance": 0,
+                    "accuracy": 0,
+                    "critAvoid": 0,
+                    "upgradeMods": true,
+                    "primaryStatRestrictions": {},
+                    "setRestrictions": {},
+                    "targetStats": [
+                        {
+                            "stat": "Physical Damage",
+                            "type": "+",
+                            "minimum": 10000,
+                            "maximum": 100000000,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        },
+                        {
+                            "stat": "Speed",
+                            "type": "+",
+                            "minimum": 260,
+                            "maximum": 290,
+                            "relativeCharacterId": null,
+                            "optimizeForTarget": false
+                        }
+                    ],
+                    "useOnlyFullSets": false
+                }
+            }
+        ]
+    },
+    {
         "name": "Events - C3PO",
         "selectedCharacters": [
             {
