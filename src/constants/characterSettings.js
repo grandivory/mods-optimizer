@@ -1715,7 +1715,13 @@ const characterSettings = {
   ),
   'STAP': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 10, 10, 0, 50, 0, 10, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 0, 0, 100, 10, 10, 0, 50, 0, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 10, 10, 0, 50, 0, 10, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Critical Damage %",
+        "cross": "Offense %",
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 0, 0, 100, 10, 10, 0, 50, 0, 10, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Critical Damage %",
         "cross": "Offense %",
