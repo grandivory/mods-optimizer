@@ -974,7 +974,14 @@ const characterSettings = {
   ),
   'IG12': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 20, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 20, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %",
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 20, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Health %",
         "cross": "Health %",
@@ -1058,7 +1065,14 @@ const characterSettings = {
   ),
   'JEDIKNIGHTCAL': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 25, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 25, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 25, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Critical Damage %",
+        "circle": "Health %",
+        "cross": "Offense %",
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 25, 0, 100, 25, 0, 0, 75, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Critical Damage %",
         "circle": "Health %",
@@ -1170,7 +1184,14 @@ const characterSettings = {
   ),
   'KELLERANBEQ': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 20, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 20, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 20, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+        "arrow": "Protection %",
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %",
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 20, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, {
         "arrow": "Protection %",
         "triangle": "Protection %",
         "cross": "Protection %",
@@ -1427,7 +1448,7 @@ const characterSettings = {
         "cross": "Health %",
         "circle": "Health %"
       }),
-      new OptimizationPlan('HPvP w/ Primaries & Sets', 20, 0, 100, 0, 0, 10, 0, 0, 0, 5, 5, 0, 0, true, {
+      new OptimizationPlan('PvP w/ Primaries & Sets', 20, 0, 100, 0, 0, 10, 0, 0, 0, 5, 5, 0, 0, true, {
         "triangle": "Health %",
         "cross": "Health %",
         "circle": "Health %"
@@ -1440,14 +1461,26 @@ const characterSettings = {
   ),
   'PAZVIZSLA': new CharacterSettings(
     [
-      new OptimizationPlan('Health', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
+      new OptimizationPlan('Health', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true),
+      new OptimizationPlan('Health w/ Primaries', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
+        "triangle": "Health %",
+        "cross": "Health %",
+        "circle": "Health %",
+      }),
+      new OptimizationPlan('Health w/ Primaries & Sets', 75, 50, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
         "triangle": "Health %",
         "cross": "Health %",
         "circle": "Health %",
       }, {
         "health": 3,
       }),
-      new OptimizationPlan('Protection', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
+      new OptimizationPlan('Protection', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true),
+      new OptimizationPlan('Protection w/ Primaries', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %",
+      }),
+      new OptimizationPlan('Protection w/ Primaries & Sets', 50, 75, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
         "triangle": "Protection %",
         "cross": "Protection %",
         "circle": "Protection %",
@@ -1682,7 +1715,13 @@ const characterSettings = {
   ),
   'STAP': new CharacterSettings(
     [
-      new OptimizationPlan('PvP', 0, 0, 100, 10, 10, 0, 50, 0, 10, 0, 0, 0, 0, true, {
+      new OptimizationPlan('PvP', 0, 0, 100, 10, 10, 0, 50, 0, 10, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 0, 0, 100, 10, 10, 0, 50, 0, 10, 0, 0, 0, 0, true, {
+        "arrow": "Speed",
+        "triangle": "Critical Damage %",
+        "cross": "Offense %",
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 0, 0, 100, 10, 10, 0, 50, 0, 10, 0, 0, 0, 0, true, {
         "arrow": "Speed",
         "triangle": "Critical Damage %",
         "cross": "Offense %",
@@ -1763,6 +1802,30 @@ const characterSettings = {
       }, {
         "defense": 3
       })
+    ]
+  ),
+  'TARONMALICOS': new CharacterSettings(
+    [
+      new OptimizationPlan('Fast Build', 20, 0, 100, 50, 0, 0, 40, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Fast Build w/ Primaries', 20, 0, 100, 50, 0, 0, 40, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %"
+      }),
+      new OptimizationPlan('Fast Build w/ Primaries & Sets', 20, 0, 100, 50, 0, 0, 40, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %"
+      }, {
+        "offense": 1,
+        "health": 1
+      }),
+      new OptimizationPlan('Slow Build', 40, 0, 100, 50, 0, 0, 60, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Slow Build w/ Primaries', 40, 0, 100, 50, 0, 0, 60, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %"
+      }),
+      new OptimizationPlan('Slow Build w/ Primaries & Sets', 40, 0, 100, 50, 0, 0, 60, 0, 0, 0, 0, 0, 0, true, {
+        "triangle": "Critical Damage %"
+      }, {
+        "offense": 1,
+        "health": 1
+      }),
     ]
   ),
   'TEEBO': new CharacterSettings(
