@@ -30,7 +30,6 @@ import characterSettings from "../../constants/characterSettings";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
 import OptimizerProgress from '../../components/OptimizerProgress/OptimizerProgress';
 import areObjectsEquivalent from '../../utils/areObjectsEquivalent';
-import { Spoiler } from '../../components/Spoiler/Spoiler';
 
 class CharacterEditForm extends React.Component {
   constructor(props) {
