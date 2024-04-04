@@ -1369,6 +1369,9 @@ const characterSettings = {
   'MOFFGIDEONS1': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
+  'MOFFGIDEONS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 3, 20, 100, 0, 4, 3, 2, 3, 4, 4, 4, 0, 0, true)]
+  ),
   'MONMOTHMA': new CharacterSettings(
     [new OptimizationPlan('Leader', 5, 5, 100, 0, 0, 25, 10, 0, 0, 0, 0, 0, 0, true)],
     ['MM']
