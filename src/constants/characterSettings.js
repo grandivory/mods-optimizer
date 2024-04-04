@@ -528,6 +528,9 @@ const characterSettings = {
   'DARKTROOPER': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 50, 0, 0, 5, 60, 0, 0, 2.5, 2.5, 0, 0, true)]
   ),
+  'DARTHBANE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 50, 3, 100, 9, 3, 10, 25, 10, 0, 2, 2, 3, 3, true)]
+  ),
   'DARTHMALAK': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 10, 50, 100, 0, 10, 0, 10, 0, 0, 10, 0, 0, 0, true),
