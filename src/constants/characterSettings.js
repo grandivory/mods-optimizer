@@ -220,11 +220,17 @@ const characterSettings = {
   'BOKATAN': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 100, 25, 0, 10, 0, 50, 0, 0, 0, 0, true)]
   ),
+  'BOOMADIER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 50, 3, 100, 9, 3, 10, 25, 10, 0, 2, 2, 3, 3, true)]
+  ),
   'BOSSK': new CharacterSettings(
     [
       new OptimizationPlan('Leader', 10, 10, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('Non-leader', 10, 0, 100, 0, 10, 25, 0, 0, 0, 0, 0, 0, 0, true)
     ]
+  ),
+  'BOSSNASS': new CharacterSettings(
+    [new OptimizationPlan('PvP', 4, 22, 100, 0, 28, 15, 2, 3, 2, 2, 2, 0, 0, true)]
   ),
   'BOUSHH': new CharacterSettings(
     [
@@ -335,6 +341,9 @@ const characterSettings = {
         "health": 1
       })
     ]
+  ),
+  'CAPTAINTARPALS': new CharacterSettings(
+    [new OptimizationPlan('PvP', 50, 3, 100, 9, 3, 10, 25, 10, 0, 2, 2, 3, 3, true)]
   ),
   'CARADUNE': new CharacterSettings(
     [
@@ -964,7 +973,7 @@ const characterSettings = {
     ['HRS', 'Hoth Bros']
   ),
   'HUMANTHUG': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PVP')]
+    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
   'IDENVERSIOEMPIRE': new CharacterSettings(
     [
