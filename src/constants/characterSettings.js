@@ -913,6 +913,9 @@ const characterSettings = {
     ],
     ['GG']
   ),
+  'GUNGANPHALANX': new CharacterSettings(
+    [new OptimizationPlan('PvP', 12, 44, 100, 0, 15, 0, 0, 0, 0, 5, 5, 0, 0, true)]
+  ),
   'HANSOLO': new CharacterSettings(
     [
       new OptimizationPlan('Fast Han', 0, 0, 100, 100, 10, 0, 25, 0, 0, 0, 0, 0, 0, true),
@@ -1046,17 +1049,22 @@ const characterSettings = {
     ['ISC']
   ),
   'JANGOFETT': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
+    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
   ),
   'JABBATHEHUTT': new CharacterSettings(
     [new OptimizationPlan('PvP', 15, 0, 100, 0, 25, 50, 0, 0, 0, 0, 0, 0, 0, true)],
     [],
     DamageType.special
   ),
+  'JARJARBINKS': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 20, 100, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    [],
+    DamageType.special
+  ),
   'JAWA': new CharacterSettings(
     [
       optimizationStrategy["Speed, Crit, Mixed Damage, Potency"].rename('PvE'),
-      new OptimizationPlan('Detonator', 100, 100, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 100, true)
+      new OptimizationPlan('Detonator', 100, 100, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 100, true),
     ],
     [],
     DamageType.mixed
@@ -1064,7 +1072,7 @@ const characterSettings = {
   'JAWAENGINEER': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 10, 0, 100, 0, 50, 10, 0, 0, 0, 0, 0, 0, 0, true),
-      new OptimizationPlan('Detonator', 20, 10, 100, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, true)
+      new OptimizationPlan('Detonator', 20, 10, 100, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, true),
     ],
     [],
     DamageType.mixed
@@ -1072,7 +1080,7 @@ const characterSettings = {
   'JAWASCAVENGER': new CharacterSettings(
     [
       new OptimizationPlan('PvE', 0, 0, 100, 25, 50, 0, 25, 0, 100, 0, 0, 0, 0, true),
-      new OptimizationPlan('Detonator', 100, 100, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 100, true)
+      new OptimizationPlan('Detonator', 100, 100, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 100, true),
     ]
   ),
   'JEDIKNIGHTCAL': new CharacterSettings(
@@ -1287,6 +1295,11 @@ const characterSettings = {
   'LUMINARAUNDULI': new CharacterSettings(
     [new OptimizationPlan('PvE', 40, 0, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
+  'LUTHENRAEL': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 10, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    ['Luthen'],
+    DamageType.mixed
+  ),
   'MACEWINDU': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 15, 0, 100, 0, 50, 0, 0, 50, 0, 0, 0, 0, 0, true),
@@ -1332,6 +1345,11 @@ const characterSettings = {
       new OptimizationPlan('Survivability', 0, 10, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)
     ],
     [],
+    DamageType.special
+  ),
+  'MASTERQUIGON': new CharacterSettings(
+    [new OptimizationPlan('PvP', 15, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    ['MQG', 'Quadme', 'Queeni'],
     DamageType.special
   ),
   'MAUL': new CharacterSettings(
@@ -1385,6 +1403,10 @@ const characterSettings = {
     [new OptimizationPlan('Leader', 5, 5, 100, 0, 0, 25, 10, 0, 0, 0, 0, 0, 0, true)],
     ['MM']
   ),
+  'MORGANELSBETH': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 20, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    ['Morgan', 'NS']
+  ),
   'MOTHERTALZIN': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 0, 50, 0, 0, 25, 10, 0, 0, 0, 0, true),
@@ -1427,6 +1449,10 @@ const characterSettings = {
     ],
     ['NS', 'hSTR NS']
   ),
+  'NIGHTTROOPER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 50, 0, 100, 10, 0, 10, 25, 0, 0, 0, 0, 0, 0, true)],
+    ['NS', 'NT']
+  ),
   'NINTHSISTER': new CharacterSettings(
     [new OptimizationPlan('PvP', 40, 50, 100, 0, 0, 40, 0, 0, 0, 30, 0, 0, 0, true)]
   ),
@@ -1439,6 +1465,10 @@ const characterSettings = {
   'OLDBENKENOBI': new CharacterSettings(
     [new OptimizationPlan('Speed', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['OB']
+  ),
+  'PADAWANOBIWAN': new CharacterSettings(
+    [new OptimizationPlan('PvE', 0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    ['POW', 'Quadme', 'Queeni'],
   ),
   'PADMEAMIDALA': new CharacterSettings(
     [
@@ -1550,6 +1580,10 @@ const characterSettings = {
   'QIRA': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 100, 50, 10, 0, 50, 0, 25, 0, 0, 0, 0, true)],
     ['solo']
+  ),
+  'QUEENAMIDALA': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 10, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    ['Quadme', 'Queeni']
   ),
   'QUIGONJINN': new CharacterSettings(
     [
