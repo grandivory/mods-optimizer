@@ -85,10 +85,10 @@ const characterSettings = {
       new OptimizationPlan('PvP', 0, 0, 100, 0, 0, 0, 50, 0, 15, 0, 0, 0, 0, true),
       new OptimizationPlan('KAM', 10, 0, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('KAM/CA', 10, 0, 100, 0, 0, 0, 50, 0, 0, 0, 0, 0, 100, true),
-    ],
+    ]
   ),
   'ARMORER': new CharacterSettings(
-    [new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, true)],
+    [new OptimizationPlan('PvP', 10, 10, 100, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'ASAJVENTRESS': new CharacterSettings(
     [
@@ -1049,7 +1049,7 @@ const characterSettings = {
     ['ISC']
   ),
   'JANGOFETT': new CharacterSettings(
-    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')],
+    [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
   ),
   'JABBATHEHUTT': new CharacterSettings(
     [new OptimizationPlan('PvP', 15, 0, 100, 0, 25, 50, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -1117,7 +1117,7 @@ const characterSettings = {
         "potency": 1
       })
     ],
-    ['JKCK'],
+    ['JKCK']
   ),
   'JEDIKNIGHTCONSULAR': new CharacterSettings(
     [new OptimizationPlan('Healer', 50, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)],
@@ -1468,7 +1468,7 @@ const characterSettings = {
   ),
   'PADAWANOBIWAN': new CharacterSettings(
     [new OptimizationPlan('PvE', 0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
-    ['POW', 'Quadme', 'Queeni'],
+    ['POW', 'Quadme', 'Queeni']
   ),
   'PADMEAMIDALA': new CharacterSettings(
     [
