@@ -894,6 +894,22 @@ const characterSettings = {
     ['GMT', 'Auto Lightzader', 'Imperial Grancor Maneuver'],
     DamageType.mixed
   ),
+  'GREATMOTHERS': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 10, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 16, true),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 10, 5, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 16, true, {
+          "triangle": "Health %",
+          "cross": "Health %",
+          "circle": "Health %",
+        }, {
+          "health": 1,
+          "speed": 1,
+        },
+      ),
+    ],
+    ['NS'],
+    DamageType.special
+  ),
   'GREEDO': new CharacterSettings(
     [
       new OptimizationPlan('Crits', 0, 0, 100, 50, 25, 0, 25, 0, 100, 0, 0, 0, 0, true),
@@ -1467,7 +1483,17 @@ const characterSettings = {
     ['OB']
   ),
   'PADAWANOBIWAN': new CharacterSettings(
-    [new OptimizationPlan('PvE', 0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    [
+      new OptimizationPlan('PvP', 0, 0, 40, 78, 5, 0, 65, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 0, 0, 40, 78, 5, 0, 65, 0, 0, 0, 0, 0, 0, true, {
+          "triangle": "Critical Damage %",
+          "cross": "Offense %",
+        }, {
+          "offense": 1,
+          "potency": 1,
+        },
+    ),
+    ],
     ['POW', 'Quadme', 'Queeni']
   ),
   'PADMEAMIDALA': new CharacterSettings(
