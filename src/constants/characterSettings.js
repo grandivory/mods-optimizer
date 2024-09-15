@@ -321,6 +321,26 @@ const characterSettings = {
     [],
     DamageType.special
   ),
+  'CAPTAINENOCH': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 10, 20, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries', 10, 20, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
+        "arrow": "Protection %",
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %",
+      }),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 10, 20, 100, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, true, {
+        "arrow": "Protection %",
+        "triangle": "Protection %",
+        "cross": "Protection %",
+        "circle": "Protection %",
+      }, {
+        "speed": 1,
+        "defense": 1,
+      }),
+    ],
+  ),
   'CAPTAINREX': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 20, 0, 100, 0, 60, 10, 0, 0, 100, 0, 0, 0, 0, true),
@@ -606,6 +626,19 @@ const characterSettings = {
       )
     ],
     ['Troopers', 'Chex Mix']
+  ),
+  'DEATHTROOPERPERIDEA': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 0, 0, 24, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('PvP w/ Primaries & Sets', 0, 0, 24, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, true, {
+          "arrow": "Speed",
+          "triangle": "Critical Damage %",
+          "cross": "Offense %"
+        }, {
+          "critdamage": 1,
+        },
+      ),
+    ],
   ),
   'DENGAR': new CharacterSettings(
     [
