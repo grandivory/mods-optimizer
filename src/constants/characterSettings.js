@@ -2112,6 +2112,69 @@ const characterSettings = {
   ),
   'ZORIIBLISS_V2': new CharacterSettings(
     [new OptimizationPlan('PvP', 5, 10, 100, 50, 10, 0, 20, 0, 0, 0, 0, 0, 0, true)]
+  ),
+  'GLAHSOKATANO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 30, 0, 75, 0, 0, 0, 10, 100, 100, 0, true)]
+  ),
+'BATCHERS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 30, 0, 100, 10, 10, 0, 0, 0, 50, 0, true)]
+  ),
+'BAYLANSKOLL': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 50, 0, 10, 0, 10, 100, 100, 0, true)]
+  ),
+'APPO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 100, 0, 25, 50, 0, 0, 0, 0, true)]
+  ),
+'OPERATIVE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 0, 50, 0, 0, 20, 0, 0, 0, true)]
+  ),
+'CROSSHAIRS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 80, 20, 10, 0, 0, 0, 0, 0, true)]
+  ),
+'DISGUISEDCLONETROOPER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 0, 50, 0, 0, 20, 0, 0, 0, true)]
+  ),
+'EZRAEXILE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 100, 0, 20, 10, 0, 0, 0, 0, true)]
+  ),
+'GENERALSYNDULLA': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 0, 50, 0, 0, 20, 0, 0, 0, true)]
+  ),
+'HUNTERS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 30, 0, 100, 10, 10, 0, 0, 0, 50, 0, true)]
+  ),
+'HUYANG': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 0, 50, 0, 0, 20, 0, 0, 0, true)]
+  ),
+'JOCASTANU': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 100, 0, 20, 10, 0, 0, 0, 0, true)]
+  ),
+'MARROK': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 0, 0, 0, 0, 20, 100, 100, 0, true)]
+  ),
+'OMEGAS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 0, 50, 0, 0, 20, 0, 0, 0, true)]
+  ),
+'PADAWANSABINE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 100, 0, 20, 0, 0, 0, 0, 0, true)]
+  ),
+'SCORCH': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 100, 0, 20, 10, 0, 0, 0, 0, true)]
+  ),
+'DARKREY': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 100, 0, 0, 0, 10, 0, 0, 0, true)]
+  ),
+'SM33': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 0, 50, 0, 0, 20, 0, 0, 0, true)]
+  ),
+'SHINHATI': new CharacterSettings(
+    [new OptimizationPlan('PvP', 25, 0, 100, 0, 20, 0, 0, 0, 0, 0, true)]
+  ),
+'VANGUARDTEMPLEGUARD': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 0, 0, 0, 0, 20, 100, 100, 0, true)]
+  ),
+'WRECKERS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 30, 0, 100, 10, 10, 0, 0, 0, 50, 0, true)]
   )
 };
 
