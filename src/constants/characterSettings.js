@@ -80,6 +80,10 @@ const characterSettings = {
     ],
     ['JKA']
   ),
+  'APPO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 50, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, true)],
+    ["Vader's Fist"]
+  ),
   'ARCTROOPER501ST': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 100, 0, 0, 0, 50, 0, 15, 0, 0, 0, 0, true),
@@ -155,6 +159,15 @@ const characterSettings = {
     ],
     [],
     DamageType.special
+  ),
+  'BATCHERS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 30, 50, 10, 0, 20, 0, 10, 0, 0, 0, 0, true)],
+    ['New Batch']
+  ),
+  'BAYLANSKOLL': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 10, 20, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
+    ]
   ),
   'BAZEMALBUS': new CharacterSettings(
     [
@@ -520,6 +533,10 @@ const characterSettings = {
     [],
     DamageType.mixed
   ),
+  'CROSSHAIRS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 40, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, true)],
+    ['New Batch']
+  ),
   'CT5555': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 15, 30, 50, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, true),
@@ -553,6 +570,23 @@ const characterSettings = {
       new OptimizationPlan('hSTR Phase 3', 50, 0, 75, 0, 15, 0, 5, 0, 0, 0, 0, 0, 0, true)
     ],
     ['NS', 'hSTR NS']
+  ),
+  'DARKREY': new CharacterSettings(
+    [
+      new OptimizationPlan('PvP', 25, 0, 100, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, true),
+      new OptimizationPlan('Health', 25, 0, 100, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, true,
+        {
+          "arrow": "Health %",
+          "triangle": "Health %",
+          "cross": "Health %",
+          "circle": "Health %"
+        },
+        {
+          "health": 1,
+          "speed": 1
+        }
+      )
+    ]
   ),
   'DARKTROOPER': new CharacterSettings(
     [new OptimizationPlan('PvP', 10, 10, 50, 0, 0, 5, 60, 0, 0, 2.5, 2.5, 0, 0, true)]
@@ -650,6 +684,10 @@ const characterSettings = {
     [optimizationStrategy["Speed, Crit, Special Damage, Potency"].rename('PvP')],
     ['Imperial Grancor Maneuver'],
     DamageType.special
+  ),
+  'DISGUISEDCLONETROOPER': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 20, 100, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, true)],
+    ["Vader's Fist"]
   ),
   'DOCTORAPHRA': new CharacterSettings(
     [new OptimizationPlan('PvP', 0, 0, 90, 0, 100, 0, 0, 20, 0, 0, 0, 0, 0, true)],
@@ -753,6 +791,9 @@ const characterSettings = {
       new OptimizationPlan('hSTR P1 Jedi', 0, -5, 100, 75, 0, 0, 50, 0, 50, 0, 0, 0, 0, true),
       new OptimizationPlan('hSTR P2 Jedi', 0, 0, 60, 100, 0, 0, 75, 0, 75, 0, 0, 0, 0, true)
     ]
+  ),
+  'EZRAEXILE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 10, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true)]
   ),
   'FENNECSHAND': new CharacterSettings(
     [
@@ -860,6 +901,9 @@ const characterSettings = {
     ],
     ['GAS']
   ),
+  'GENERALSYNDULLA': new CharacterSettings(
+    [new OptimizationPlan('PvP', 5, 10, 100, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, true)]
+  ),
   'GEONOSIANBROODALPHA': new CharacterSettings(
     [
       new OptimizationPlan('Tanky', 20, 20, 100, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, true),
@@ -871,6 +915,9 @@ const characterSettings = {
   ),
   'GEONOSIANSPY': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, and Physical Damage"].rename('PvP')]
+  ),
+  'GLAHSOKATANO': new CharacterSettings(
+    [new OptimizationPlan('PvP', 15, 0, 100, 0, 0, 0, 0, 0, 0, 18, 18, 0, 0, true)]
   ),
   'GLLEIA': new CharacterSettings(
     [
@@ -1026,6 +1073,13 @@ const characterSettings = {
   ),
   'HUMANTHUG': new CharacterSettings(
     [optimizationStrategy["Speed, Crit, Physical Damage, Potency"].rename('PvP')]
+  ),
+  'HUNTERS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 20, 100, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    ['New Batch']
+  ),
+  'HUYANG': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 0, 100, 50, 0, 0, 25, 0, 10, 0, 0, 0, 0, true)]
   ),
   'IDENVERSIOEMPIRE': new CharacterSettings(
     [
@@ -1195,6 +1249,11 @@ const characterSettings = {
   'JEDIMASTERKENOBI': new CharacterSettings(
     [new OptimizationPlan('PvP', 5, 0, 100, 25, 0, 0, 10, 0, 0, 0, 0, 0, 0, true)],
     ['JMK']
+  ),
+  'JOCASTANU': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 50, 100, 10, 0, 0, 30, 0, 0, 0, 0, 0, 0, true)],
+    [],
+    DamageType.special
   ),
   'JOLEEBINDO': new CharacterSettings(
     [
@@ -1396,6 +1455,11 @@ const characterSettings = {
     [],
     DamageType.special
   ),
+  'MARROK': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 10, 100, 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, true)],
+    [],
+    DamageType.special
+  ),
   'MASTERQUIGON': new CharacterSettings(
     [new OptimizationPlan('PvP', 15, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['MQG', 'Quadme', 'Queeni'],
@@ -1515,6 +1579,15 @@ const characterSettings = {
     [new OptimizationPlan('Speed', 10, 10, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, true)],
     ['OB']
   ),
+  'OMEGAS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 0, 100, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, true)],
+    ['New Batch'],
+    DamageType.special
+  ),
+  'OPERATIVE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 40, 0, 100, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, true)],
+    ["Vader's Fist"]
+  ),
   'PADAWANOBIWAN': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 0, 0, 40, 78, 5, 0, 65, 0, 0, 0, 0, 0, 0, true),
@@ -1528,6 +1601,9 @@ const characterSettings = {
     ),
     ],
     ['POW', 'Quadme', 'Queeni']
+  ),
+  'PADAWANSABINE': new CharacterSettings(
+    [new OptimizationPlan('PvP', 0, 0, 100, 20, 0, 0, 25, 0, 10, 0, 0, 0, 0, true)]
   ),
   'PADMEAMIDALA': new CharacterSettings(
     [
@@ -1738,6 +1814,10 @@ const characterSettings = {
     ],
     ['Rogue 1', 'SRP']
   ),
+  'SCORCH': new CharacterSettings(
+    [new OptimizationPlan('PvP', 20, 20, 100, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, true)],
+    ["Vader's Fist"]
+  ),
   'SCOUTTROOPER_V3': new CharacterSettings(
     [
       new OptimizationPlan('PvP', 5, 10, 100, 0, 30, 10, 15, 0, 0, 0, 0, 0, 0, true),
@@ -1772,6 +1852,9 @@ const characterSettings = {
       new OptimizationPlan('KAM', 20, 10, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true),
       new OptimizationPlan('KAM/CA', 20, 10, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, true)
     ]
+  ),
+  'SHINHATI': new CharacterSettings(
+    [new OptimizationPlan('PvP', 50, 0, 100, 10, 0, 10, 25, 0, 0, 0, 0, 0, 0, true)]
   ),
   'SHORETROOPER': new CharacterSettings(
     [
@@ -2068,6 +2151,10 @@ const characterSettings = {
       new OptimizationPlan('hSTR Phase 2', 0, 0, 80, 50, 0, 0, 100, 0, 10, 0, 0, 0, 0, true)
     ],
     ['Murderbears']
+  ),
+  'WRECKERS3': new CharacterSettings(
+    [new OptimizationPlan('PvP', 10, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true)],
+    ['New Batch']
   ),
   'YOUNGCHEWBACCA': new CharacterSettings(
     [
