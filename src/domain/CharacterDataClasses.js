@@ -81,11 +81,9 @@ class GameSettings {
   ) {
     this.baseID = baseID;
     this.name = name;
-    if (avatarUrl.startsWith('/')) {
-      this.avatarUrl = `https://api.hotutils.com/images${avatarUrl}`;
-    } else {
-      this.avatarUrl = avatarUrl;
-    }
+    // HotUtils V2's unit feed sends absolute image URLs (its public image mirror), so nothing is prefixed here any
+    // more. The legacy HotUtils image host this used to prefix is being switched off.
+    this.avatarUrl = avatarUrl;
     this.description = description;
     this.alignment = Object.values(alignments).includes(alignment) ? alignment :
       Object.keys(alignments).includes(`${alignment}`) ? alignments[alignment] :

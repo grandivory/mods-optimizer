@@ -34,6 +34,13 @@ import {
 import { changeOptimizerView } from "./review";
 import { filterObject } from "../../utils/filterObject";
 
+/**
+ * The optimizer API base. REACT_APP_API_BASE overrides it for local development (e.g. http://localhost:3031, the
+ * mods-optimizer-api repo's local_server.py) -- production builds use the deployed API.
+ */
+const API_BASE =
+  process.env.REACT_APP_API_BASE || "https://api.mods-optimizer.swgoh.grandivory.com";
+
 export const TOGGLE_KEEP_OLD_MODS = "TOGGLE_KEEP_OLD_MODS";
 
 export function toggleKeepOldMods() {
@@ -57,7 +64,7 @@ export function checkVersion() {
 }
 
 function fetchVersion() {
-  return fetch("https://api.mods-optimizer.swgoh.grandivory.com/versionapi", {
+  return fetch(`${API_BASE}/versionapi`, {
     method: "POST",
     body: {},
     mode: "cors",
@@ -229,7 +236,7 @@ export function refreshPlayerData(
  * @returns {Promise<Array | string[]>}
  */
 function fetchCharacters() {
-  return fetch("https://api.mods-optimizer.swgoh.grandivory.com/characters/")
+  return fetch(`${API_BASE}/characters/`)
     .then((response) => response.json())
     .then((response) => {
       const gameSettings = response.units.map((unit) => {
@@ -440,7 +447,7 @@ export function fetchCharacterList(mode, overwrite, allyCode, parameters) {
     dispatch(setIsBusy(true));
 
     return post(
-      "https://api.mods-optimizer.swgoh.grandivory.com/characterlist",
+      `${API_BASE}/characterlist`,
       {
         allyCode: allyCode,
         mode: mode,
@@ -526,7 +533,7 @@ export function setHotUtilsSessionId(allyCode, sessionId) {
  * @returns {Promise<T | never>}
  */
 function fetchProfile(allyCode, sessionId) {
-  return post("https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2/", {
+  return post(`${API_BASE}/hotutils-v2`, {
     action: "getprofile",
     sessionId: sessionId,
     payload: {
@@ -565,7 +572,7 @@ export function fetchHotUtilsStatus(allyCode) {
 
   return function (dispatch) {
     return (
-      post("https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2", {
+      post(`${API_BASE}/hotutils-v2`, {
         action: "checksubscription",
         payload: {
           allyCode: cleanedAllyCode,
@@ -585,7 +592,7 @@ export function fetchHotUtilsStatus(allyCode) {
 export function createHotUtilsProfile(profile, sessionId) {
   return function (dispatch) {
     dispatch(setIsBusy(true));
-    return post("https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2", {
+    return post(`${API_BASE}/hotutils-v2`, {
       action: "createprofile",
       sessionId: sessionId,
       payload: profile,
@@ -630,7 +637,7 @@ var modMoveActive = false;
 export function moveModsWithHotUtils(profile, sessionId) {
   return function (dispatch) {
     dispatch(setIsBusy(true));
-    return post("https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2", {
+    return post(`${API_BASE}/hotutils-v2`, {
       action: "movemods",
       sessionId: sessionId,
       payload: profile,
@@ -684,7 +691,7 @@ export function moveModsWithHotUtils(profile, sessionId) {
 
 function pollForModMoveStatus(taskId, sessionId, dispatch) {
   return new Promise((resolve, reject) => {
-    post("https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2", {
+    post(`${API_BASE}/hotutils-v2`, {
       action: "checkmovestatus",
       sessionId: sessionId,
       payload: {
@@ -756,7 +763,7 @@ function pollForModMoveStatus(taskId, sessionId, dispatch) {
 
 function cancelModMove(taskId, sessionId) {
   return function (dispatch) {
-    return post("https://api.mods-optimizer.swgoh.grandivory.com/hotutils-v2", {
+    return post(`${API_BASE}/hotutils-v2`, {
       action: "cancelmove",
       sessionId: sessionId,
       payload: {
