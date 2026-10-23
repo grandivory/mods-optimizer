@@ -17,8 +17,8 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "cross-env HTTPS=true react-scripts start",
-    "build": "cross-env react-scripts build",
+    "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider HTTPS=true react-scripts start",
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "test": "cross-env CI=true react-scripts test --env=jsdom --coverage",
     "eject": "cross-env react-scripts eject",
     "lint": "node node_modules/eslint/bin/eslint.js --config node_modules/eslint-config-react-app/index.js",

@@ -236,7 +236,7 @@ export function refreshPlayerData(
  * @returns {Promise<Array | string[]>}
  */
 function fetchCharacters() {
-  return fetch(`${API_BASE}/characters/`)
+  return fetch(`${API_BASE}/characters-staging/`)
     .then((response) => response.json())
     .then((response) => {
       const gameSettings = response.units.map((unit) => {
@@ -533,7 +533,7 @@ export function setHotUtilsSessionId(allyCode, sessionId) {
  * @returns {Promise<T | never>}
  */
 function fetchProfile(allyCode, sessionId) {
-  return post(`${API_BASE}/hotutils-v2`, {
+  return post(`${API_BASE}/hotutils`, {
     action: "getprofile",
     sessionId: sessionId,
     payload: {
@@ -572,7 +572,7 @@ export function fetchHotUtilsStatus(allyCode) {
 
   return function (dispatch) {
     return (
-      post(`${API_BASE}/hotutils-v2`, {
+      post(`${API_BASE}/hotutils`, {
         action: "checksubscription",
         payload: {
           allyCode: cleanedAllyCode,
@@ -592,7 +592,7 @@ export function fetchHotUtilsStatus(allyCode) {
 export function createHotUtilsProfile(profile, sessionId) {
   return function (dispatch) {
     dispatch(setIsBusy(true));
-    return post(`${API_BASE}/hotutils-v2`, {
+    return post(`${API_BASE}/hotutils`, {
       action: "createprofile",
       sessionId: sessionId,
       payload: profile,
@@ -637,7 +637,7 @@ var modMoveActive = false;
 export function moveModsWithHotUtils(profile, sessionId) {
   return function (dispatch) {
     dispatch(setIsBusy(true));
-    return post(`${API_BASE}/hotutils-v2`, {
+    return post(`${API_BASE}/hotutils`, {
       action: "movemods",
       sessionId: sessionId,
       payload: profile,
@@ -691,7 +691,7 @@ export function moveModsWithHotUtils(profile, sessionId) {
 
 function pollForModMoveStatus(taskId, sessionId, dispatch) {
   return new Promise((resolve, reject) => {
-    post(`${API_BASE}/hotutils-v2`, {
+    post(`${API_BASE}/hotutils`, {
       action: "checkmovestatus",
       sessionId: sessionId,
       payload: {
@@ -763,7 +763,7 @@ function pollForModMoveStatus(taskId, sessionId, dispatch) {
 
 function cancelModMove(taskId, sessionId) {
   return function (dispatch) {
-    return post(`${API_BASE}/hotutils-v2`, {
+    return post(`${API_BASE}/hotutils`, {
       action: "cancelmove",
       sessionId: sessionId,
       payload: {
