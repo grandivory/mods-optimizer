@@ -236,7 +236,7 @@ export function refreshPlayerData(
  * @returns {Promise<Array | string[]>}
  */
 function fetchCharacters() {
-  return fetch(`${API_BASE}/characters-staging/`)
+  return fetch(`${API_BASE}/characters/`)
     .then((response) => response.json())
     .then((response) => {
       const gameSettings = response.units.map((unit) => {
