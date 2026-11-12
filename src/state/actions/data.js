@@ -527,9 +527,59 @@ function applyCharacterList(overwrite, characterList) {
 // HotUtils Integration */
 //***********************/
 
-export function setHotUtilsSessionId(allyCode, sessionId) {
+/**
+ * Store a HotUtils session ID on a profile.
+ *
+ * @param allyCode {string}
+ * @param sessionId {string}
+ * @param options {{fetch?: boolean, playerName?: string|null, keepOldMods?: boolean}} With `fetch` (the HotUtils sign-in
+ *   popup), the profile is created when it does not exist yet (named `playerName`, so it shows in the account list at
+ *   once), selected, and then the full HotUtils fetch runs with the new session ID. Without it, the original behaviour.
+ */
+export function setHotUtilsSessionId(allyCode, sessionId, options = {}) {
   return function (dispatch) {
     const db = getDatabase();
+
+    if (options.fetch) {
+      const cleanedAllyCode = cleanAllyCode(allyCode);
+      db.getProfile(
+        cleanedAllyCode,
+        (profile) => {
+          let newProfile = profile
+            ? profile.withHotUtilsSessionId(sessionId)
+            : new PlayerProfile(
+                cleanedAllyCode,
+                options.playerName || ""
+              ).withHotUtilsSessionId(sessionId);
+          if (options.playerName && !newProfile.playerName) {
+            newProfile = newProfile.withPlayerName(options.playerName);
+          }
+          // Database.saveProfile never calls its success callback (it listens for a transaction "success" event, which
+          // IndexedDB does not fire), so the state is updated here rather than in that callback. The fetch below reads
+          // the profile back in a later readwrite transaction on the same store, which IndexedDB orders after this save.
+          db.saveProfile(newProfile, nothing, (error) =>
+            dispatch(
+              showFlash(
+                "Storage Error",
+                "Error applying HotUtils session ID to your profile. Please try again."
+              )
+            )
+          );
+          dispatch(addPlayerProfile(newProfile));
+          dispatch(setProfile(newProfile));
+          dispatch(
+            refreshPlayerData(
+              cleanedAllyCode,
+              !!options.keepOldMods,
+              sessionId,
+              true
+            )
+          );
+        },
+        (error) => dispatch(showError(error.message))
+      );
+      return;
+    }
 
     db.getProfile(
       allyCode,
