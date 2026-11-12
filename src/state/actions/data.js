@@ -467,29 +467,59 @@ export function fetchCharacterList(mode, overwrite, allyCode, parameters) {
   };
 }
 
+/**
+ * Apply an auto-generated character list to the profile's selected characters.
+ *
+ * Each entry of the list is either a character ID (the character gets its default target) or an object
+ * `{id, target}`, where `target` is a serialized OptimizationPlan or null. A non-null target is saved into the
+ * character's targets (so it shows in the target dropdown) and used for that character; null means the default target.
+ *
+ * @param overwrite {Boolean} Whether to replace the current selected characters (true) or append to them (false)
+ * @param characterList {Array<String|{id: String, target: Object|null}>}
+ */
 function applyCharacterList(overwrite, characterList) {
   return updateProfile((profile) => {
     const startingList = overwrite ? [] : profile.selectedCharacters;
     const startingCharacterIDs = startingList.map(
       (selectedCharacter) => selectedCharacter.id
     );
-    const charactersToApply = characterList.filter(
-      (characterID) => !startingCharacterIDs.includes(characterID)
-    );
+    const entriesToApply = characterList
+      .map((entry) =>
+        "string" === typeof entry
+          ? { id: entry, target: null }
+          : { id: entry.id, target: entry.target || null }
+      )
+      .filter(({ id }) => !startingCharacterIDs.includes(id));
 
+    const updatedCharacters = {};
     const newSelectedCharacters = startingList.concat(
-      charactersToApply
-        .map((characterID) => {
+      entriesToApply
+        .map(({ id: characterID, target: serializedTarget }) => {
           const character = profile.characters[characterID];
 
-          return character
-            ? { id: characterID, target: character.defaultTarget() }
-            : null;
+          if (!character) {
+            return null;
+          }
+
+          if (!serializedTarget) {
+            return { id: characterID, target: character.defaultTarget() };
+          }
+
+          const target = OptimizationPlan.deserialize(serializedTarget);
+          updatedCharacters[characterID] = character.withOptimizerSettings(
+            character.optimizerSettings.withTarget(target)
+          );
+
+          return { id: characterID, target: target };
         })
         .filter((x) => null !== x)
     );
 
-    return profile.withSelectedCharacters(newSelectedCharacters);
+    return profile
+      .withCharacters(
+        Object.assign({}, profile.characters, updatedCharacters)
+      )
+      .withSelectedCharacters(newSelectedCharacters);
   });
 }
 
