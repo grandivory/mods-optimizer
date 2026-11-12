@@ -773,13 +773,13 @@ class CharacterEditView extends PureComponent {
           />
           <div className={"form-row"}>
             <label htmlFor={"include-weights"}>
-              Use HotUtils stat weights:
+              HotUtils Weights:
             </label>
             <input
               id={"include-weights"}
               name={"include-weights"}
               type={"checkbox"}
-              defaultChecked={false}
+              defaultChecked={true}
             />
           </div>
           <Spoiler title={"Advanced Settings"}>
