@@ -19,9 +19,34 @@ export function feedTargetsOf(units) {
 }
 
 /**
+ * Refresh the selected characters that use a feed target's name ("HotUtils Meta") to the feed's new plan, so a selected
+ * character optimizes with the same weights its saved target now has. A selection on any other target, or on a
+ * character the feed has no target for, is kept as it is.
+ *
+ * @param selectedCharacters {Array<{id: String, target: OptimizationPlan}>} The profile's selected characters
+ * @param feedTargets {Object<String, Object>} A serialized OptimizationPlan per base ID (feedTargetsOf)
+ * @returns {Array<{id: String, target: OptimizationPlan}>} The same list, those selections refreshed
+ */
+export function withFeedSelections(selectedCharacters, feedTargets) {
+  if (!feedTargets || 0 === Object.keys(feedTargets).length) {
+    return selectedCharacters;
+  }
+
+  return selectedCharacters.map((selected) => {
+    const serializedTarget = feedTargets[selected.id];
+
+    return serializedTarget &&
+      selected.target &&
+      selected.target.name === serializedTarget.name
+      ? { id: selected.id, target: OptimizationPlan.deserialize(serializedTarget) }
+      : selected;
+  });
+}
+
+/**
  * Save each character's feed target into its targets, like a target the player made: one with the same name is
  * replaced (OptimizerSettings.withTarget), so fetching again overwrites "HotUtils Meta" instead of adding a second one.
- * Only the saved targets change; which target a selected character uses is not touched.
+ * Selections are refreshed separately (withFeedSelections).
  *
  * @param characters {Object<String, Character>} Characters by base ID
  * @param feedTargets {Object<String, Object>} A serialized OptimizationPlan per base ID (feedTargetsOf)

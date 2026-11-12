@@ -33,7 +33,10 @@ import {
 } from "./storage";
 import { changeOptimizerView } from "./review";
 import { filterObject } from "../../utils/filterObject";
-import withFeedTargets, { feedTargetsOf } from "../../utils/withFeedTargets";
+import withFeedTargets, {
+  feedTargetsOf,
+  withFeedSelections,
+} from "../../utils/withFeedTargets";
 
 /**
  * The optimizer API base. REACT_APP_API_BASE overrides it for local development (e.g. http://localhost:3031, the
@@ -339,9 +342,16 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
           finalMods = Object.values(newMods);
         }
 
+        // A selected character using "HotUtils Meta" switches to the feed's new plan too; other selections are kept.
         const newProfile = oldProfile
           .withCharacters(newCharacters)
-          .withMods(finalMods);
+          .withMods(finalMods)
+          .withSelectedCharacters(
+            withFeedSelections(
+              oldProfile.selectedCharacters,
+              fetchData.feedTargets
+            )
+          );
         db.saveProfile(newProfile, nothing, (error) =>
           dispatch(
             showFlash(

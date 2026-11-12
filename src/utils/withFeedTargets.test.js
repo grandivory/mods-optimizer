@@ -1,4 +1,7 @@
-import withFeedTargets, { feedTargetsOf } from "./withFeedTargets";
+import withFeedTargets, {
+  feedTargetsOf,
+  withFeedSelections,
+} from "./withFeedTargets";
 import Character from "../domain/Character";
 import OptimizationPlan from "../domain/OptimizationPlan";
 import { OptimizerSettings } from "../domain/CharacterDataClasses";
@@ -115,5 +118,39 @@ describe("withFeedTargets", () => {
 
     expect(withFeedTargets(characters, {})).toBe(characters);
     expect(withFeedTargets(characters, undefined)).toBe(characters);
+  });
+});
+
+describe("withFeedSelections", () => {
+  it("switches a selection on HotUtils Meta to the feed's new plan and keeps every other selection", () => {
+    const oldMeta = OptimizationPlan.deserialize(metaTarget(100, 26));
+    const mine = new OptimizationPlan("Mine", 10, 0, 100);
+    const kept = { id: "SUPREMELEADERKYLOREN", target: mine };
+    const notInFeed = { id: "GLREY", target: oldMeta };
+
+    const refreshed = withFeedSelections(
+      [{ id: "LORDVADER", target: oldMeta }, kept, notInFeed],
+      {
+        LORDVADER: metaTarget(90, 40),
+        SUPREMELEADERKYLOREN: metaTarget(90, 40),
+      }
+    );
+
+    expect(refreshed).toHaveLength(3);
+    expect(refreshed[0].id).toEqual("LORDVADER");
+    expect(refreshed[0].target.name).toEqual("HotUtils Meta");
+    expect(refreshed[0].target.rawSpeed).toEqual(90);
+    expect(refreshed[0].target.rawPhysDmg).toEqual(40);
+    expect(refreshed[1]).toBe(kept); // selected on the player's own target
+    expect(refreshed[2]).toBe(notInFeed); // no feed target for this character
+  });
+
+  it("changes nothing when the feed carries no targets", () => {
+    const selected = [
+      { id: "LORDVADER", target: OptimizationPlan.deserialize(metaTarget(100, 26)) },
+    ];
+
+    expect(withFeedSelections(selected, {})).toBe(selected);
+    expect(withFeedSelections(selected, undefined)).toBe(selected);
   });
 });
