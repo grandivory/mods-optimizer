@@ -33,6 +33,10 @@ import {
 } from "./storage";
 import { changeOptimizerView } from "./review";
 import { filterObject } from "../../utils/filterObject";
+import withFeedTargets, {
+  feedTargetsOf,
+  withFeedSelections,
+} from "../../utils/withFeedTargets";
 
 /**
  * The optimizer API base. REACT_APP_API_BASE overrides it for local development (e.g. http://localhost:3031, the
@@ -164,8 +168,9 @@ export function refreshPlayerData(
           );
           return null;
         })
-        .then((gameSettings) => {
-          data.gameSettings = gameSettings;
+        .then((characters) => {
+          data.gameSettings = characters ? characters.gameSettings : null;
+          data.feedTargets = characters ? characters.feedTargets : {};
         })
         // Then, fetch the player's data from hotutils
         .then(() =>
@@ -232,8 +237,9 @@ export function refreshPlayerData(
 }
 
 /**
- * Fetch base character data from the swgoh.gg API
- * @returns {Promise<Array | string[]>}
+ * Fetch base character data from the /characters/ feed (HotUtils)
+ * @returns {Promise<{gameSettings: Object<String, GameSettings>, feedTargets: Object<String, Object>}>} The game
+ *          settings by base ID, and the "HotUtils Meta" target each character carries (empty when the feed has none)
  */
 function fetchCharacters() {
   return fetch(`${API_BASE}/characters/`)
@@ -259,7 +265,10 @@ function fetchCharacters() {
         );
       });
 
-      return groupByKey(gameSettings, (gs) => gs.baseID);
+      return {
+        gameSettings: groupByKey(gameSettings, (gs) => gs.baseID),
+        feedTargets: feedTargetsOf(response.units),
+      };
     });
 }
 
@@ -279,7 +288,7 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
 
         // Collect the new character objects by combining the default characters with the player values
         // and the optimizer settings from the current profile.
-        const newCharacters = mapObjectByKeyAndValue(
+        const playerCharacters = mapObjectByKeyAndValue(
           fetchData.profile.characters,
           (id, playerValues) => {
             if (oldProfile.characters.hasOwnProperty(id)) {
@@ -309,6 +318,13 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
           }
         );
 
+        // Save each character's "HotUtils Meta" target from the feed into its targets, replacing the one an earlier
+        // fetch saved. A feed without targets changes nothing.
+        const newCharacters = withFeedTargets(
+          playerCharacters,
+          fetchData.feedTargets
+        );
+
         const newMods = groupByKey(fetchData.profile.mods, (mod) => mod.id);
 
         // If "Remember Existing Mods" is selected, then only overwrite the mods we see in this profile
@@ -326,9 +342,16 @@ function updatePlayerData(allyCode, fetchData, db, keepOldMods) {
           finalMods = Object.values(newMods);
         }
 
+        // A selected character using "HotUtils Meta" switches to the feed's new plan too; other selections are kept.
         const newProfile = oldProfile
           .withCharacters(newCharacters)
-          .withMods(finalMods);
+          .withMods(finalMods)
+          .withSelectedCharacters(
+            withFeedSelections(
+              oldProfile.selectedCharacters,
+              fetchData.feedTargets
+            )
+          );
         db.saveProfile(newProfile, nothing, (error) =>
           dispatch(
             showFlash(
