@@ -32,6 +32,7 @@ import { saveAs } from "file-saver";
 import { exportDatabase, loadProfile } from "../../state/actions/storage";
 import Help from "../../components/Help/Help";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
+import { openHotUtilsSignIn } from "../../utils/hotUtilsSignIn";
 
 class App extends PureComponent {
   constructor(props) {
@@ -262,23 +263,13 @@ class App extends PureComponent {
             </button>
             <button
               type={"button"}
-              disabled={
-                !(
-                  this.props.hotUtilsSubscription &&
-                  this.props.profile &&
-                  this.props.profile.hotUtilsSessionId
-                )
-              }
               onClick={() => {
-                if (
-                  this.props.hotUtilsSubscription &&
-                  this.props.profile.hotUtilsSessionId
-                ) {
-                  this.props.showModal(
-                    "pull-unequipped-modal",
-                    this.fetchUnequippedModal()
-                  );
-                }
+                // Always available: with a HotUtils session ID for this profile the fetch runs as before; without one,
+                // the modal's button opens the HotUtils sign-in window first (hotUtilsSignIn.js).
+                this.props.showModal(
+                  "pull-unequipped-modal",
+                  this.fetchUnequippedModal()
+                );
               }}
             >
               Fetch with HotUtils
@@ -467,8 +458,10 @@ class App extends PureComponent {
             to version 2! This brings some great advantages to both HotUtils
             subscribers and non-subscribers. ALL players can now fetch their mod
             data <strong>as often as they'd like</strong>, with no cooldown
-            between fetches! A HotUtils subscription is still required to fetch
-            unequipped mods. A progress bar is now also shown when using
+            between fetches! Anyone can fetch their unequipped mods with
+            HotUtils by signing in with their EA account; a HotUtils
+            subscription is required to move mods in-game. A progress bar is
+            now also shown when using
             HotUtils to move your mods in-game, and that move can be cancelled
             at any time!
           </li>
@@ -606,6 +599,9 @@ class App extends PureComponent {
    * Renders a modal stating that pulling unequipped mods using HotUtils will log you out of the game
    */
   fetchUnequippedModal() {
+    const sessionId = this.props.profile
+      ? this.props.profile.hotUtilsSessionId
+      : null;
     return (
       <div key={"hotutils-move-mods-modal"}>
         <h2>Fetch your unequipped mods using HotUtils</h2>
@@ -618,6 +614,12 @@ class App extends PureComponent {
           </strong>
           .
         </p>
+        {!sessionId && (
+          <p>
+            A HotUtils window will open so you can sign in with your EA
+            account first.
+          </p>
+        )}
         <p>
           <strong>Use at your own risk!</strong> HotUtils functionality breaks
           the terms of service for Star Wars: Galaxy of Heroes. You assume all
@@ -636,12 +638,30 @@ class App extends PureComponent {
             type={"button"}
             onClick={() => {
               this.props.hideModal();
-              this.props.refreshPlayerData(
-                this.props.allyCode,
-                this.props.keepOldMods,
-                this.props.profile.hotUtilsSessionId,
-                true
+              if (sessionId) {
+                this.props.refreshPlayerData(
+                  this.props.allyCode,
+                  this.props.keepOldMods,
+                  sessionId,
+                  true
+                );
+                return;
+              }
+              // No HotUtils session ID for this profile: sign in with HotUtils in a popup. It answers with the
+              // session ID, ally code and player name; that account is added or selected, then fetched in full.
+              const opened = openHotUtilsSignIn(
+                ({ linkId, allyCode, playerName }) =>
+                  this.props.setHotUtilsSessionId(allyCode, linkId, {
+                    fetch: true,
+                    playerName,
+                    keepOldMods: this.props.keepOldMods,
+                  })
               );
+              if (!opened) {
+                this.props.showError(
+                  "Your browser blocked the HotUtils sign-in window. Allow pop-ups for this site and try again."
+                );
+              }
             }}
           >
             Fetch my data
@@ -731,12 +751,11 @@ class App extends PureComponent {
         <dl>
           <dt>HotUtils</dt>
           <dd>
-            One of the advantages of being a subscriber to HotUtils is that it
-            can pull all of your mod data, including unequipped mods, at any
-            time, and without any cooldown period. Normally, your player and mod
-            data can only be updated once every hour. With a HotUtils
-            subscription, you can also mvoe your mods directly from the
-            optimizer, without having to move them manually in-game.
+            HotUtils can pull all of your mod data, including unequipped mods,
+            at any time: press "Fetch with HotUtils" and sign in with your EA
+            account. With a HotUtils subscription, you can also move your mods
+            directly from the optimizer, without having to move them manually
+            in-game.
           </dd>
           <dt>C-3PO</dt>
           <dd>
@@ -816,8 +835,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(refreshPlayerData(allyCode, keepOldMods, sessionId, useSession)),
   loadC3PO: (modsFile, keepOldMods) =>
     dispatch(loadC3PO(modsFile, keepOldMods)),
-  setHotUtilsSessionId: (allyCode, sessionId) =>
-    dispatch(setHotUtilsSessionId(allyCode, sessionId)),
+  setHotUtilsSessionId: (allyCode, sessionId, options) =>
+    dispatch(setHotUtilsSessionId(allyCode, sessionId, options)),
   checkVersion: () => dispatch(checkVersion()),
   showModal: (clazz, content) => dispatch(showModal(clazz, content)),
   hideModal: () => dispatch(hideModal()),
