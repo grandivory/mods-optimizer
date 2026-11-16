@@ -700,7 +700,7 @@ class CharacterEditView extends PureComponent {
         <form ref={(element) => (form = element)}>
           <label htmlFor={"source"}>Select your provider:</label>
           <Dropdown id={"source"} name={"source"}>
-            <option value={"spineless"}>swgoh.spineless.net</option>
+            <option value={"spineless"}>Stack Rank</option>
             <option value={"hotutils"}>HotUtils</option>
           </Dropdown>
           <label htmlFor={"use-case"}>Select your use case:</label>
