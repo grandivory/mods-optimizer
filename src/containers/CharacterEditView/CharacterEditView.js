@@ -680,6 +680,14 @@ class CharacterEditView extends PureComponent {
           <span className={"blue"}>
             Provided by&nbsp;
             <a
+              href={"https://swgoh.spineless.net/"}
+              target={"_blank"}
+              rel={"noopener noreferrer"}
+            >
+              https://swgoh.spineless.net/
+            </a>
+            &nbsp;and&nbsp;
+            <a
               href={"https://hotutils.com"}
               target={"_blank"}
               rel={"noopener noreferrer"}
@@ -690,6 +698,11 @@ class CharacterEditView extends PureComponent {
         </p>
         <hr />
         <form ref={(element) => (form = element)}>
+          <label htmlFor={"source"}>Select your provider:</label>
+          <Dropdown id={"source"} name={"source"}>
+            <option value={"spineless"}>swgoh.spineless.net</option>
+            <option value={"hotutils"}>HotUtils</option>
+          </Dropdown>
           <label htmlFor={"use-case"}>Select your use case:</label>
           <Dropdown id={"use-case"} name={"use-case"}>
             <option value={""}>GAC / TW / ROTE (default)</option>
@@ -847,6 +860,7 @@ class CharacterEditView extends PureComponent {
             type={"button"}
             onClick={() => {
               const parameters = {
+                source: form["source"].value,
                 alignmentFilter: form["alignment-filter"].value,
                 minimumGearLevel: form["minimum-gear-level"].value,
                 ignoreArena: form["ignore-arena"].checked,
